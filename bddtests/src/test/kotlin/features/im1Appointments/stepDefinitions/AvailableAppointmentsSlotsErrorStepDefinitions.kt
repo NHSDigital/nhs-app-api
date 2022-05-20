@@ -21,13 +21,12 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
         }
     }
 
-    @Then("^I see appropriate warning message for loading time-outs$")
-    fun iSeeAppropriateWarningMessageForLoadingTimesOutWithPrefixAndUrl() {
-        errorDialogPage.assertShutterParagraphText(availableAppointmentsPage.tryLoadingGPAppointmentsAgain)
-            .assertShutterParagraphText(availableAppointmentsPage.contactGpSurgeryDirectly)
-            .assertShutterParagraphText(availableAppointmentsPage.urgentMedicalAdvice)
-            .assertPageHeader(availableAppointmentsPage.cannotShowGpAppointmets)
-            .assertPageTitle(availableAppointmentsPage.cannotShowGpAppointmets)
+    @Then("^I see appropriate warning message for loading time-outs with '(.*)'$")
+    fun iSeeAppropriateWarningMessageForLoadingTimesOutWithPrefix(prefix: String) {
+        errorDialogPage.assertWarningParagraphText(availableAppointmentsPage.getTryAgainNowParagraph(prefix))
+                .assertWarningParagraphText(availableAppointmentsPage.ifItContinues)
+                .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
+                .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
     }
 
     @Then("^I see appropriate warning message when there is a loading error with '(.*)'$")

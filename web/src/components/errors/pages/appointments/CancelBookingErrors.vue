@@ -37,9 +37,8 @@
     <message-dialog-generic
       v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_TOO_LATE_TO_CANCEL"
       :id="errorId" override-style="plain">
-      <error-title title="appointments.error.cannotCancel"/>
-      <error-paragraph from="appointments.error.cannotCancelAppointmentInTheApp" />
-      <error-paragraph from="appointments.error.contactYouSurgeryToCancel" />
+      <error-title title="appointments.error.contactYouSurgeryToCancel"/>
+      <error-paragraph from="appointments.error.itIsTooLateToCancel" />
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />

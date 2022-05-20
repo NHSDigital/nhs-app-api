@@ -189,8 +189,8 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate warning message for loading time-outs
-    When I click the warning 'Contact us if you keep seeing this message, quoting error code zs' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zs'
+    Then I see appropriate try again book/cancel warning message when there is an error with 'zs'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available

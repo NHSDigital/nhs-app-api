@@ -27,9 +27,7 @@
       v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
       :id="errorId" override-style="plain">
       <error-title title="appointments.confirmation.error.theAppointmentIsNoLongerAvailable"/>
-      <error-link v-if="isNativeApp"
-                  from="appointments.confirmation.error.pleaseChooseADifferentAppointment"
-                  :action="appointmentsBookingPath"/>
+      <error-paragraph from="appointments.confirmation.error.pleaseChooseADifferentAppointment" />
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
@@ -98,7 +96,6 @@ import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustom
 import {
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
-  APPOINTMENT_BOOKING_PATH,
 } from '@/router/paths';
 
 export default {
@@ -125,17 +122,11 @@ export default {
     return {
       backUrl: APPOINTMENTS_PATH,
       appointmentsPath: GP_APPOINTMENTS_PATH,
-      appointmentsBookingPath: APPOINTMENT_BOOKING_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       genericStatusCodes: genericStatus,
       appointmentStatusCodes: appointmentStatus,
       errorId: `error-dialog-${this.error.status}`,
     };
-  },
-  computed: {
-    isNativeApp() {
-      return this.$store.state.device.isNativeApp;
-    },
   },
 };
 </script>

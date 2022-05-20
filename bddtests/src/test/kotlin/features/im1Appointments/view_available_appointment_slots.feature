@@ -192,15 +192,15 @@ Feature: View Available Appointment Slots Frontend
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs
-    When I click the warning 'Contact us if you keep seeing this message, quoting error code zs' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zs'
+    Then I see appropriate warning message for loading time-outs with 'zs'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: TPP user can try again after a timeout fetching appointment slots and be successful
     Given the first request to the TPP for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs
+    Then I see appropriate warning message for loading time-outs with 'zt'
     When I click the 'Try again' button
     Then I am able to filter on available slots
 
@@ -208,7 +208,7 @@ Feature: View Available Appointment Slots Frontend
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs
+    Then I see appropriate warning message for loading time-outs with 'ze'
     When I click the 'Try again' button
     Then I am able to filter on available slots
 
@@ -216,7 +216,7 @@ Feature: View Available Appointment Slots Frontend
     Given the first request to EMIS for available appointment slots metadata times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs
+    Then I see appropriate warning message for loading time-outs with 'ze'
     When I click the 'Try again' button
     Then I am able to filter on available slots
 

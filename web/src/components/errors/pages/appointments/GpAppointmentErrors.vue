@@ -39,18 +39,16 @@
 
     <message-dialog-generic v-else-if="error.status === genericStatusCodes.GATEWAY_TIMEOUT"
                             :id="errorId" override-style="plain">
-      <error-title title="appointments.error.cannotShowGpAppointments"/>
-      <error-paragraph from="appointments.error.tryLoadingAppointmentsAgain"/>
-      <error-button from="generic.tryAgain" @click="$router.go()" />
-      <error-paragraph from="appointments.error.contactYouGPSurgeryDirectly"/>
+      <error-title title="appointments.error.thereIsAProblemLoading"/>
+      <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
+                       :variable="error.serviceDeskReference"/>
       <contact-111
-        :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
-        :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
-      <error-link from="appointments.error.contactWithErrorCode"
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
+      <error-button from="generic.tryAgain" @click="$router.go()" />
+      <error-link from="generic.contactUs"
                   :action="contactUsUrl"
-                  target="_blank"
-                  :query-param="contactUsParam"
-                  :params="{errorCode: error.serviceDeskReference}"/>
+                  target="_blank"/>
     </message-dialog-generic>
 
     <div v-else-if="error.status === appointmentStatusCodes.GP_SESSION_ERROR">
@@ -69,7 +67,6 @@
 </template>
 
 <script>
-import get from 'lodash/fp/get';
 import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorButton from '@/components/errors/ErrorButton';
@@ -123,17 +120,6 @@ export default {
       appointmentStatusCodes: appointmentStatus,
       errorId: `error-dialog-${this.error.status}`,
     };
-  },
-  computed: {
-    contactUsParam() {
-      return {
-        ErrCodeParam: 'errorcode',
-        ErrCodeValue: this.serviceDeskReference,
-      };
-    },
-    serviceDeskReference() {
-      return get('$store.state.myAppointments.error.serviceDeskReference')(this) || '';
-    },
   },
 };
 </script>
