@@ -134,14 +134,14 @@
       Given I am an EMIS patient with linked profiles whose GP system is unavailable
       And I am logged in
       When I navigate to linked profiles from the home page via more
-      And I see appropriate linked profiles try again error message when there is no GP session
+      And I see appropriate linked profiles try again shutter screen when there is no GP session
       And the More_LP23LinkedProfile page is saved to disk
 
     Scenario: 'M-LP19: Proxy shutter linked profiles unavailable' page is captured
       Given I am an EMIS patient with linked profiles whose GP system is unavailable
       And I am logged in
       When I navigate to linked profiles from the home page via more
-      And I see appropriate linked profiles try again error message when there is no GP session
+      And I see appropriate linked profiles try again shutter screen when there is no GP session
       And I click the 'Try again' button
       Then I see what I can do next with a linked accounts error message and reference code '3e'
       And the More_LP19ShutterLinkedProfile page is saved to disk
