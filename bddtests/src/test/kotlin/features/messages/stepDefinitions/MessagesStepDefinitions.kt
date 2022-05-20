@@ -190,14 +190,14 @@ class MessagesStepDefinitions {
     fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingMessages(){
         errorDialogPage.assertPageTitle("Messages error")
             .assertPageHeader("Messages error")
-            .assertParagraphText("There is a problem getting your messages.");
+            .assertShutterParagraphText("There is a problem getting your messages.");
     }
 
     @Then( "^an error is displayed indicating that there was a problem getting a message$")
     fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingAMessage(){
         errorDialogPage.assertPageTitle("Message error")
             .assertPageHeader("Message error")
-            .assertParagraphText("There is a problem getting your message.");
+            .assertShutterParagraphText("There is a problem getting your message.");
     }
 
     @Then("^I click on the '(.*)' link in the message$")

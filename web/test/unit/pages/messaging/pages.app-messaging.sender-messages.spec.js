@@ -111,8 +111,8 @@ describe('messaging sender messages', () => {
         expect($store.dispatch).toBeCalledWith('messaging/load', { sender: 'Test Sender' });
       });
 
-      it('will show the error container', () => {
-        expect(wrapper.find('[data-purpose="error-container"]').exists()).toBe(true);
+      it('will show the shutter container', () => {
+        expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(true);
       });
 
       it('will not show the messages section', () => {
@@ -173,8 +173,8 @@ describe('messaging sender messages', () => {
         expect(dependency.redirectTo).not.toBeCalled();
       });
 
-      it('will not show the error container', () => {
-        expect(wrapper.find('[data-purpose="error-container"]').exists()).not.toBe(true);
+      it('will not show the shutter container', () => {
+        expect(wrapper.find('[data-purpose="shutter-container"]').exists()).not.toBe(true);
       });
 
       describe('back link', () => {

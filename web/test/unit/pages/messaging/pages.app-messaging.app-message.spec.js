@@ -94,8 +94,8 @@ describe('messaging message', () => {
           expect(redirectTo).not.toHaveBeenCalled();
         });
 
-        it('will show the error container', () => {
-          expect(wrapper.find('[data-purpose="error-container"]').exists()).toBe(true);
+        it('will show the shutter container', () => {
+          expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(true);
         });
 
         it('will not show the message section', () => {
@@ -154,8 +154,8 @@ describe('messaging message', () => {
           expect(wrapper.find(`.${panelItemClass}`).exists()).toBe(true);
         });
 
-        it('will not show the error container', () => {
-          expect(wrapper.find('[data-purpose="error-container"]').exists()).toBe(false);
+        it('will not show the shutter container', () => {
+          expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(false);
         });
       });
     });

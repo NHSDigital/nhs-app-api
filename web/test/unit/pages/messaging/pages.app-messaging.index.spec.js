@@ -67,8 +67,8 @@ describe('messaging index', () => {
       await wrapper.vm.$nextTick();
     });
 
-    it('will show the error container', () => {
-      expect(wrapper.find('[data-purpose="error-container"]').exists()).toBe(true);
+    it('will show the shutter container', () => {
+      expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(true);
     });
 
     it('will not show senders section', () => {

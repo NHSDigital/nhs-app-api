@@ -146,6 +146,7 @@ export default {
     },
     {
       route: GP_MESSAGES_VIEW_MESSAGE_PATH,
+      errorOverrideStyles: { 403: 'plain', 400: 'plain' },
       action: {
         400: 'gpMessages/clearErrorsAndLoadDetails',
       },

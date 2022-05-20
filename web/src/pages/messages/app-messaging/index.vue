@@ -1,11 +1,11 @@
 <template>
   <div v-if="showTemplate && loaded" id="mainDiv">
     <div v-if="error">
-      <error-container>
+      <shutter-container>
         <error-title title="messages.error.messagesError" />
         <error-paragraph from="messages.error.problemGettingMessages" />
         <error-button from="generic.tryAgain" @click="reload" />
-      </error-container>
+      </shutter-container>
     </div>
     <div v-else>
       <ul v-if="hasSenders" id="inboxMessages" :class="$style['nhs-app-message']">
@@ -49,7 +49,7 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
+import ShutterContainer from '@/components/shutters/ShutterContainer';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
@@ -62,7 +62,7 @@ export default {
   components: {
     DesktopGenericBackLink,
     ErrorButton,
-    ErrorContainer,
+    ShutterContainer,
     ErrorParagraph,
     ErrorTitle,
   },
