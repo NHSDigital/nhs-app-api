@@ -25,7 +25,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 
 ### eConsult update
 
-1. The weekly eConsult updates are raised through Cherwell service requests each week (search for "NHS App Supplier Standard Change Request"). They are provided as an xlsx file, with additions and deletions on separate worksheets. Contact a member of the Tier 2 support team to forward the file if you do not have access to Cherwell.
+1. The eConsult updates are raised through Service Now service requests (search for "NHS App Supplier Standard Change Request"), usually on a weekly basis. A member of the T2 support team should then post the file in the sjr-third-party-updates Slack channel. They are provided as an xlsx file, with additions and deletions on separate worksheets. Contact a member of the T3 support team to forward the file if you do not have access to Service Now.
 
 2. Update `sjr-config/utils/rulecreation/econsult.csv` with the practice changes. For removals, just delete the row where you find the ODS code to be removed. Additions should be added as entries to ccg "Other" at the end of the file. There is no need to match to a particular CCG. You can do this by first saving the the additions sheet as a csv e.g. `200727-additions.csv`. Then run
 
@@ -46,7 +46,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 
 ### Engage update
 
-1. The Engage updates are posted in the #sjr-third-party-updates Slack channel by Mark Goldthorpe.
+1. The Engage updates are raised through Service Now service requests (search for "NHS App Supplier Standard Change Request"). A member of the T2 support team should then post the file in the sjr-third-party-updates Slack channel. They are provided as an xlsx file, with additions and deletions on separate worksheets. Contact a member of the T3 support team to forward the file if you do not have access to Service Now.
 
 2. Update `sjr-config/utils/rulecreation/engage.csv` with the practice changes. For removals, just delete the row where you find the ODS code to be removed. Additions should be added to the end of the file.
 
@@ -78,7 +78,7 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 	
 	*Stages to run* with Integration Tests and Generate Code Coverage stages *unset*
 
-4. Create a new Release from your Tag using the NHSApp Release Pipeline in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=4) 
+4. Create a new Release from your Tag using the NHSApp Release Pipeline (Multicluster) in ADO [https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=16](https://dev.azure.com/nhsapp/NHS%20App/_release?_a=releases&view=mine&definitionId=16) 
 
 5. Progress the release through to staging, and give it a quick test there to ensure it looks ok. You may need to seek approval to deploy to staging. When you are happy, notify the relevant release channel that you are deploying to cold and get approval for that step (Production Deploy). Test in cold with a live account [https://www-cold.production.nhsapp.service.nhs.uk/](https://www-cold.production.nhsapp.service.nhs.uk/). When you are happy get approval for the Production Release step. If you deploy to cold and for some reason don't progress to switching live, let Ops know so they can clear the release down to save space.
 

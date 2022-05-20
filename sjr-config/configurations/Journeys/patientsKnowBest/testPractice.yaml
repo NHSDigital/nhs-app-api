@@ -6,7 +6,6 @@ journeys:
   silverIntegrations:
     carePlans:
       - pkb
-    consultations: []
     healthTrackers:
       - pkb
     libraries:
@@ -15,5 +14,10 @@ journeys:
       - pkb
     messages:
       - pkb
+    recordSharing:
+      - pkb  
     secondaryAppointments:
       - pkb
+    testResults:
+      - pkb
+  

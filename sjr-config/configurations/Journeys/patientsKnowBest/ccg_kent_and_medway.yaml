@@ -399,15 +399,17 @@ journeys:
   silverIntegrations:
     carePlans:
       - pkb
+    healthTrackers:
+      - pkb  
     libraries:
       - pkb
     medicines:
       - pkb
     messages:
       - pkb
+    recordSharing:
+      - pkb  
     secondaryAppointments:
-      - pkb
-    healthTrackers:
       - pkb
     testResults:
       - pkb

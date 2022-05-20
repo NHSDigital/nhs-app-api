@@ -135,6 +135,8 @@ journeys:
       - pkb
     messages:
       - pkb
+    recordSharing:
+      - pkb  
     secondaryAppointments:
       - pkb
     testResults:
