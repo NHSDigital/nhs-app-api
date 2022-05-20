@@ -113,7 +113,6 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^a warning message is displayed indicating that the slot has already been taken$")
     fun aWarningMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
         errorDialogPage
-            .assertWarningParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.chooseDifferent)
             .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
             .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
     }

@@ -17,6 +17,9 @@ class ErrorDialogPage : HybridPageObject() {
     private val shutterTextFinderFormat = "$shutterContainerLocator//p[@data-purpose='%s']"
     private val shutterTextLocator = String.format(shutterTextFinderFormat, "msg-text")
 
+    private val shutterBackFinderFormat = "$shutterContainerLocator//p//a[@data-purpose='%s']"
+    private val shutterBackButtonLocator = String.format(shutterBackFinderFormat, "main-back-button")
+
     fun assertPageTitle(title: String): ErrorDialogPage {
         var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
         while (retryCount > 0) {
@@ -120,6 +123,22 @@ class ErrorDialogPage : HybridPageObject() {
 
     fun assertLinkWithPrefix(linkText: String, url: String? = null, prefix: String) : HybridPageElement {
         var locator = "$errorContainerLocator//a[contains(text(),'$linkText')]"
+        var message: String? = null
+
+        if (!url.isNullOrBlank()) {
+            locator += "[starts-with(@href, '$url')]"
+            message = "Expected the link called $linkText with target of $url to be available"
+        }
+
+        // Assert that the prefix is contained in the link text
+        val element = getElement(locator)
+        assertTrue(getElement(locator).textValue.contains("$linkText $prefix"))
+
+        return element.assertIsVisible(message)
+    }
+
+    fun assertShutterLinkWithPrefix(linkText: String, url: String? = null, prefix: String) : HybridPageElement {
+        var locator = "$shutterBackButtonLocator[contains(text(),'$linkText')]"
         var message: String? = null
 
         if (!url.isNullOrBlank()) {

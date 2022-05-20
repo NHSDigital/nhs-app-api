@@ -112,7 +112,8 @@ class CancelAppointmentStepDefinitions {
         val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
         val message = cancelAppointmentSteps.cancelAppointmentPage.tooLateToCancel
 
-        errorDialogPage.assertWarningParagraphText(message)
+        errorDialogPage.assertShutterParagraphText(message)
+            .assertShutterParagraphText(cancelAppointmentSteps.cancelAppointmentPage.contactGpToCancel)
             .assertPageHeader(pageHeader)
             .assertPageTitle(pageTitle)
     }

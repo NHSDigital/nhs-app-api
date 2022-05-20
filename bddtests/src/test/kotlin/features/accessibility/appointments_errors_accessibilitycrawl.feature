@@ -2,15 +2,12 @@
 @appointment-errors-accessibility
 Feature: appointment errors accessibility
 
-  Scenario Outline: Timeout getting appointment slots is captured
+  Scenario: Timeout getting appointment slots is captured
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs with '<Error Code>'
+    Then I see appropriate warning message for loading time-outs
     And the Errors_AB04C_TimeoutGettingAppointmentSlots page is saved to disk
-    Examples:
-      | Error Code |
-      | ze      |
 
   Scenario Outline: Appointment slot conflict is captured
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
@@ -65,7 +62,7 @@ Feature: appointment errors accessibility
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message for loading time-outs with 'ze'
+    Then I see appropriate warning message for loading time-outs
     And the Errors_AGP09_TimeoutGettingAppointmentHistory page is saved to disk
 
   Scenario Outline: Appointment booking is unavailable is captured
