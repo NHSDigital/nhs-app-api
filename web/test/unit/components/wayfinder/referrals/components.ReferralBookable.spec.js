@@ -12,7 +12,6 @@ describe('Referral Bookable Card', () => {
   describe('Requested specialty is set', () => {
     const wrapper = mountReferralBookable({
       propsData: {
-        bookingReference: '608119956620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
@@ -29,10 +28,10 @@ describe('Referral Bookable Card', () => {
     });
 
     it('will display the requested specialty', () => {
-      const bookingreferenceTarget = wrapper.find('#requested-specialty-1');
+      const requestedSpecialty = wrapper.find('#requested-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(true);
-      expect(bookingreferenceTarget.text()).toBe('Cardiology');
+      expect(requestedSpecialty.exists()).toBe(true);
+      expect(requestedSpecialty.text()).toBe('Cardiology');
     });
 
     it('will display the referred by value', () => {
@@ -68,7 +67,6 @@ describe('Referral Bookable Card', () => {
   describe('Requested specialty is not set', () => {
     const wrapper = mountReferralBookable({
       propsData: {
-        bookingReference: '608119956620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
@@ -85,15 +83,15 @@ describe('Referral Bookable Card', () => {
     });
 
     it('will hide the ready to book message', () => {
-      const bookingreferenceTarget = wrapper.find('#referral-ready-to-book-1');
+      const readyToBook = wrapper.find('#referral-ready-to-book-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(false);
+      expect(readyToBook.exists()).toBe(false);
     });
 
     it('will hide the requested specialty', () => {
-      const bookingreferenceTarget = wrapper.find('#requested-specialty-1');
+      const requestedSpecialty = wrapper.find('#requested-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(false);
+      expect(requestedSpecialty.exists()).toBe(false);
     });
   });
 });

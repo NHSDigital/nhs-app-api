@@ -12,7 +12,6 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is set', () => {
     const wrapper = mountReferralInReview({
       propsData: {
-        bookingReference: '6081 1995 6620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
@@ -93,7 +92,6 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is empty', () => {
     const wrapper = mountReferralInReview({
       propsData: {
-        bookingReference: '6081 1995 6620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',

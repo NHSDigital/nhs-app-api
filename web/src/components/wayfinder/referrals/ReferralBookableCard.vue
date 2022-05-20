@@ -48,10 +48,6 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    bookingReference: {
-      type: String,
-      default: '',
-    },
     referredBy: {
       type: String,
       default: '',

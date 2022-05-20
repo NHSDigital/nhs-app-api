@@ -14,6 +14,10 @@
             null, {specialty: requestedSpecialty}) }}
     </p>
 
+    <p v-else :id="`contact-no-specialty-${referralId}`" class="nhsuk-u-margin-bottom-3">
+      {{ $t('wayfinder.referrals.overdue.youNeedToContact') }}
+    </p>
+
     <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
       <strong>
         <span :id="`referral-date-header-${referralId}`">
@@ -63,10 +67,6 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    bookingReference: {
-      type: String,
-      default: '',
-    },
     referredBy: {
       type: String,
       default: '',

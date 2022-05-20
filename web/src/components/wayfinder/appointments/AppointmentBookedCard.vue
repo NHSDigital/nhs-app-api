@@ -5,7 +5,7 @@
     </h3>
     <p :id="`datetime-${appointmentId}`">
       <strong>{{ appointmentDateTime | fullDate }}</strong><br>
-      <span>{{ appointmentDateTime | formatDate('h:mma') }}</span>
+      <span>{{ appointmentDateTime | formatDate('h.mma') }}</span>
     </p>
     <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}

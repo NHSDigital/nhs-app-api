@@ -70,10 +70,6 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    bookingReference: {
-      type: String,
-      required: true,
-    },
     referredBy: {
       type: String,
       required: true,

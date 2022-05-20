@@ -52,7 +52,7 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val bookableOverdueReferralHeading = HybridPageElement(
-        webDesktopLocator = "//h3[contains(text(),\"Review by clinic is overdue\")]",
+        webDesktopLocator = "//h3[contains(text(),\"Review by clinic overdue\")]",
         page = this,
         helpfulName = "Bookable Overdue H3"
     )

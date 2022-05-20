@@ -12,7 +12,6 @@ describe('Referral Ready Overdue Card', () => {
   describe('Requested specialty is set', () => {
     const wrapper = mountReferralReviewOverdue({
       propsData: {
-        bookingReference: '608119956620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
@@ -26,21 +25,27 @@ describe('Referral Ready Overdue Card', () => {
       const headerTarget = wrapper.find('h3');
 
       expect(headerTarget.exists()).toBe(true);
-      expect(headerTarget.text()).toBe('Review by clinic is overdue');
+      expect(headerTarget.text()).toBe('Review by clinic overdue');
     });
 
     it('will display the requested specialty', () => {
-      const bookingreferenceTarget = wrapper.find('#requested-specialty-1');
+      const requestedSpecialty = wrapper.find('#requested-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(true);
-      expect(bookingreferenceTarget.text()).toBe('Cardiology');
+      expect(requestedSpecialty.exists()).toBe(true);
+      expect(requestedSpecialty.text()).toBe('Cardiology');
     });
 
     it('will display the contact message with requested specialty ', () => {
-      const bookingreferenceTarget = wrapper.find('#contact-specialty-1');
+      const contactWithSpecialty = wrapper.find('#contact-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(true);
-      expect(bookingreferenceTarget.text()).toBe('You need to contact Cardiology as a review of this referral is overdue.');
+      expect(contactWithSpecialty.exists()).toBe(true);
+      expect(contactWithSpecialty.text()).toBe('Your healthcare provider has requested for you to be referred to Cardiology. A review of this request is overdue. You need to contact the clinic.');
+    });
+
+    it('will hide the contact message without requested specialty ', () => {
+      const contactWithNoSpecialty = wrapper.find('#contact-no-specialty-1');
+
+      expect(contactWithNoSpecialty.exists()).toBe(false);
     });
 
     it('will display the referred by value', () => {
@@ -87,7 +92,6 @@ describe('Referral Ready Overdue Card', () => {
   describe('Requested specialty is not set', () => {
     const wrapper = mountReferralReviewOverdue({
       propsData: {
-        bookingReference: '608119956620',
         deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
@@ -100,19 +104,26 @@ describe('Referral Ready Overdue Card', () => {
       const headerTarget = wrapper.find('h3');
 
       expect(headerTarget.exists()).toBe(true);
-      expect(headerTarget.text()).toBe('Review by clinic is overdue');
+      expect(headerTarget.text()).toBe('Review by clinic overdue');
     });
 
     it('will hide the requested specialty', () => {
-      const bookingreferenceTarget = wrapper.find('#requested-specialty-1');
+      const requestedSpecialty = wrapper.find('#requested-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(false);
+      expect(requestedSpecialty.exists()).toBe(false);
+    });
+
+    it('will display the contact message without requested specialty ', () => {
+      const contactWithNoSpecialty = wrapper.find('#contact-no-specialty-1');
+
+      expect(contactWithNoSpecialty.exists()).toBe(true);
+      expect(contactWithNoSpecialty.text()).toBe('Your healthcare provider has requested for you to be referred. A review of this request is overdue. You need to contact the clinic.');
     });
 
     it('will hide the contact message with requested specialty ', () => {
-      const bookingreferenceTarget = wrapper.find('#contact-specialty-1');
+      const contactWithSpecialty = wrapper.find('#contact-specialty-1');
 
-      expect(bookingreferenceTarget.exists()).toBe(false);
+      expect(contactWithSpecialty.exists()).toBe(false);
     });
   });
 });

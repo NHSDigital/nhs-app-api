@@ -59,8 +59,9 @@ export default {
       bookOrManageThisReferral: 'Book or manage this referral',
     },
     overdue: {
-      title: 'Review by clinic is overdue',
-      youNeedToContactSpecialty: 'You need to contact {specialty} as a review of this referral is overdue.',
+      title: 'Review by clinic overdue',
+      youNeedToContact: 'Your healthcare provider has requested for you to be referred. A review of this request is overdue. You need to contact the clinic.',
+      youNeedToContactSpecialty: 'Your healthcare provider has requested for you to be referred to {specialty}. A review of this request is overdue. You need to contact the clinic.',
       contactTheClinic: 'Contact the clinic',
     },
   },

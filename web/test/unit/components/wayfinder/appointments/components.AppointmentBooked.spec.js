@@ -47,7 +47,7 @@ describe('Appointment Booked Card', () => {
     });
 
     it('will display formatted time', () => {
-      expect(wrapper.find('#datetime-1 > span').text()).toContain('10:00am');
+      expect(wrapper.find('#datetime-1 > span').text()).toContain('10.00am');
     });
   });
 });

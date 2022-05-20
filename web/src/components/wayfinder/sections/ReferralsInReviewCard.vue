@@ -8,7 +8,7 @@
         :requested-specialty="referral.serviceSpecialty"
         :referred-date="referral.referredDateTime"
         :review-date="referral.reviewDueDate"
-        :booking-reference="referral.referralId"
+        :referral-id="referral.referralId"
         :referred-by="referral.referrerOrganisation"
         :deep-link-url="referral.deepLinkUrl"/>
 
