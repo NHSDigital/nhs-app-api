@@ -97,7 +97,7 @@ class ErrorDialogPage : HybridPageObject() {
     }
 
     fun assertWarningLink(linkText: String, url: String? = null) : HybridPageElement {
-        var locator = "${warningContainerLocator}ContainerLocator//a[contains(text(),'$linkText')]"
+        var locator = "${warningContainerLocator}//a[contains(text(),'$linkText')]"
         var message: String? = null
 
         if (!url.isNullOrBlank()) {
