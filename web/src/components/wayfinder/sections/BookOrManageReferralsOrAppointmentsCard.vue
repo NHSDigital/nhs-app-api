@@ -89,13 +89,13 @@ export default {
   },
   methods: {
     isBookable(referral) {
-      return referral.status === 'Bookable';
+      return referral.status === 'bookable';
     },
     isBookableWasCancelled(referral) {
-      return referral.status === 'BookableWasCancelled';
+      return referral.status === 'bookableWasCancelled';
     },
     isReviewOverdue(referral) {
-      return referral.status === 'InReview' && isBefore(referral.reviewDueDate);
+      return referral.status === 'inReview' && isBefore(referral.reviewDueDate);
     },
   },
 };

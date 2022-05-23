@@ -38,7 +38,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "InReview"
+                    "code": "inReview"
                   }
                 }
               ],
@@ -85,7 +85,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "Bookable"
+                    "code": "bookable"
                   }
                 }
               ],
@@ -126,7 +126,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "Bookable"
+                    "code": "bookable"
                   }
                 }
               ],
@@ -167,7 +167,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "InReview"
+                    "code": "inReview"
                   }
                 }
               ],
@@ -214,7 +214,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "BookableWasCancelled"
+                    "code": "bookableWasCancelled"
                   }
                 }
               ],
@@ -255,7 +255,7 @@
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                   "valueCoding": {
                     "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                    "code": "BookableWasCancelled"
+                    "code": "bookableWasCancelled"
                   }
                 }
               ],

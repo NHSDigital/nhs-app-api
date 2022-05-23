@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Willow GP Surgery",
                         ReviewDueDate = null,
                         ServiceSpecialty = "Paediatrics",
-                        Status = ReferralStatus.Bookable.ToString(),
+                        Status = ReferralStatus.bookable.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=861710366336",
                     },
                     new Referral
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Willow GP Surgery",
                         ReviewDueDate = null,
                         ServiceSpecialty = null,
-                        Status = ReferralStatus.Bookable.ToString(),
+                        Status = ReferralStatus.bookable.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=530793722623",
                     },
                     new Referral
@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Birch GP Surgery",
                         ReviewDueDate = null,
                         ServiceSpecialty = "Neurology",
-                        Status = ReferralStatus.BookableWasCancelled.ToString(),
+                        Status = ReferralStatus.bookableWasCancelled.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=839416493852",
                     },
                     new Referral
@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Birch GP Surgery",
                         ReviewDueDate = null,
                         ServiceSpecialty = null,
-                        Status = ReferralStatus.BookableWasCancelled.ToString(),
+                        Status = ReferralStatus.bookableWasCancelled.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=879675036211",
                     },
                 },
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Willow GP Surgery",
                         ReviewDueDate = new DateTime(2022, 05, 08),
                         ServiceSpecialty = "Cardiology",
-                        Status = ReferralStatus.InReview.ToString(),
+                        Status = ReferralStatus.inReview.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=156168111459",
                     },
                     new Referral
@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ReferrerOrganisation = "Willow GP Surgery",
                         ReviewDueDate = new DateTime(2022, 05, 08),
                         ServiceSpecialty = null,
-                        Status = ReferralStatus.InReview.ToString(),
+                        Status = ReferralStatus.inReview.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/ers/referrals?ubrn=628932202760",
                     },
                 },

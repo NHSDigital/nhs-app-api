@@ -101,8 +101,8 @@ components:
           type: string
           description: Possible referral states.
           enum:
-            - Bookable
-            - BookableWasCancelled
+            - bookable
+            - bookableWasCancelled
         reviewDueDate:
           type: string
           format: date-time
@@ -144,7 +144,7 @@ components:
           type: string
           description: Possible referral states.
           enum:
-            - InReview
+            - inReview
         reviewDueDate:
           type: string
           format: date-time

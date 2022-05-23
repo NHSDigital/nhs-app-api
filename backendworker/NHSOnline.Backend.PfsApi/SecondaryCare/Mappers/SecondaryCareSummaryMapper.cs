@@ -14,7 +14,6 @@ using Code = Hl7.Fhir.Model.Code;
 using Coding = Hl7.Fhir.Model.Coding;
 using Extension = Hl7.Fhir.Model.Extension;
 using FhirUrl = Hl7.Fhir.Model.FhirUrl;
-using OperationOutcome = Hl7.Fhir.Model.OperationOutcome;
 using Period = Hl7.Fhir.Model.Period;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
@@ -25,7 +24,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
         private const string ReferralStateResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State";
         private const string ReviewDueDateResourceUrl = "https://fhir.nhs.net/ReviewDueDate";
         private const string AppointmentStatusResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status";
-        private const string InReviewStatus = "InReview";
 
         private readonly ILogger<ISecondaryCareSummaryMapper> _logger;
 
@@ -60,7 +58,10 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                                 return null;
                             }
 
-                            if (referral.Status == InReviewStatus)
+                            if (string.Equals(
+                                    referral.Status,
+                                    ReferralStatus.inReview.ToString(),
+                                    StringComparison.Ordinal))
                             {
                                 referralsInReview.Add(referral);
                                 break;

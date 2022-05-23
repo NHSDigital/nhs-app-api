@@ -48,10 +48,10 @@ export default {
   },
   methods: {
     isBooked(appointment) {
-      return appointment.appointmentStatus === 'Booked';
+      return appointment.appointmentStatus === 'booked';
     },
     isCancelled(appointment) {
-      return appointment.appointmentStatus === 'Cancelled';
+      return appointment.appointmentStatus === 'cancelled';
     },
   },
 };
