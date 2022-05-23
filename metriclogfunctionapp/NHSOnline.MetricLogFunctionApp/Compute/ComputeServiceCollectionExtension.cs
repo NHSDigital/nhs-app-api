@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
 using NHSOnline.MetricLogFunctionApp.Compute.Logging;
-using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
-using NHSOnline.MetricLogFunctionApp.Resilience;
+using NHSOnline.MetricLogFunctionApp.Compute.ReferrerLogin;
 
 namespace NHSOnline.MetricLogFunctionApp.Compute;
 
@@ -18,6 +17,7 @@ internal static class ComputeServiceCollectionExtension
     private static void AddFunctions(IServiceCollection serviceCollection)
     {
         serviceCollection.AddFirstLogins();
+        serviceCollection.AddReferrerLogin();
     }
 
     private static void AddInfrastructure(IServiceCollection serviceCollection)

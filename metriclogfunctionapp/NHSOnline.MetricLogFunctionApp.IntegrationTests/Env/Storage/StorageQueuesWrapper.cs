@@ -82,6 +82,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Storage
         internal QueueWrapper CommsHubSummaryAudit => CreateQueueWrapper("comms-hub-summary-audit-dev-local");
 
         internal QueueWrapper TestDataGenerate => CreateQueueWrapper("testdata-generate-dev-local");
+        internal QueueWrapper ReferrerLogin => CreateQueueWrapper("referrer-login-dev-local");
 
         internal async Task Initialise()
         {
