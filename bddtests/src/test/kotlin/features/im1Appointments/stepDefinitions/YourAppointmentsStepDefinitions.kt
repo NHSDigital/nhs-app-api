@@ -250,15 +250,6 @@ class YourAppointmentsStepDefinitions {
                 .assertPageTitle("Sorry, there is a problem with GP appointment booking")
     }
 
-    @Then("^I see appropriate try again book/cancel warning message when there is an error with '(.*)'$")
-    fun iSeeAppropriateTryAgainBookCancelWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
-        errorDialogPage.assertWarningParagraphText(tryAgainParagraph)
-                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
-                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
-    }
-
     @Then("^I click the session error back link$")
     fun iClickTheBackLink(){
         appointmentGpSessionError.clickBackLink()

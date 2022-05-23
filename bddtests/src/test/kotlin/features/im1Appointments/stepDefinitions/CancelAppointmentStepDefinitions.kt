@@ -113,6 +113,7 @@ class CancelAppointmentStepDefinitions {
         val message = cancelAppointmentSteps.cancelAppointmentPage.tooLateToCancel
 
         errorDialogPage.assertWarningParagraphText(message)
+            .assertWarningParagraphText(cancelAppointmentSteps.cancelAppointmentPage.contactGpToCancel)
             .assertPageHeader(pageHeader)
             .assertPageTitle(pageTitle)
     }

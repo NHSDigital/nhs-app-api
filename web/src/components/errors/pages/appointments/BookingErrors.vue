@@ -54,19 +54,18 @@
     <message-dialog-generic
       v-else-if="error && error.status === genericStatusCodes.GATEWAY_TIMEOUT"
       :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemLoading"/>
-      <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
-                       :variable="error.serviceDeskReference"/>
-      <contact-111
-        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
-        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
+      <error-title title="appointments.error.cannotShowGpAppointments"/>
+      <error-paragraph from="appointments.error.tryLoadingAppointmentsAgain"/>
       <error-button from="generic.tryAgain" @click="$router.go()" />
-      <error-link from="generic.contactUs"
+      <error-paragraph from="appointments.error.contactYourGPSurgeryDirectly"/>
+      <contact-111
+        :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
+        :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
+      <error-link from="appointments.error.contactWithErrorCode"
                   :action="contactUsUrl"
-                  target="_blank" />
-      <error-link from="generic.back"
-                  :action="appointmentsPath"
-                  :desktop-only="true" />
+                  target="_blank"
+                  :query-param="contactUsParam"
+                  :params="{errorCode: error.serviceDeskReference}"/>
     </message-dialog-generic>
 
     <error-container v-else id="error-dialog-unknown">
@@ -81,6 +80,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorButton from '@/components/errors/ErrorButton';
@@ -137,6 +137,15 @@ export default {
   computed: {
     errorId() {
       return this.error ? `error-dialog-${this.error.status}` : 'unknown-error';
+    },
+    contactUsParam() {
+      return {
+        ErrCodeParam: 'errorcode',
+        ErrCodeValue: this.serviceDeskReference,
+      };
+    },
+    serviceDeskReference() {
+      return get('$store.state.availableAppointments.error.serviceDeskReference')(this) || '';
     },
   },
 };

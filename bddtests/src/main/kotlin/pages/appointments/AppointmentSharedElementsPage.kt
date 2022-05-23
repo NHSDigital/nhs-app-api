@@ -15,11 +15,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 abstract class AppointmentSharedElementsPage : HybridPageObject() {
+    val cannotShowGpAppointmets = "Cannot show GP appointments"
+    val contactGpSurgeryDirectly = "You can contact your GP surgery directly if you need to book " +
+            "or change an upcoming appointment now."
+    val contactUsQuotingErrorCode = "Contact us if you keep seeing this message, quoting error code "
     val problemTitle = "Sorry, there is a problem - Appointments"
     val problemHeader = "Sorry, there is a problem"
     val problemLoadingTitle = "Sorry, there is a problem with loading GP appointments"
     val unavailableTitle = "GP appointment booking unavailable"
     val tryAgainNow = "Try again now."
+    val tryLoadingGPAppointmentsAgain = "You can try loading GP appointments again."
+    val urgentMedicalAdvice = "For urgent medical advice, go to 111.nhs.uk or call 111."
     val goBackAndTryAgainProblem = "Go back and try again. If the problem continues and you need to book or cancel " +
             "an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk " +
             "or call 111."
