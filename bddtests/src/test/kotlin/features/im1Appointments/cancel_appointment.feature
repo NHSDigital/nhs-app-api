@@ -166,12 +166,12 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
+    Then I see appropriate warning message when there is an error
     When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
-      | Reason   | Prefix |
-      | Reason 1 | xx     |
+      | Reason   |
+      | Reason 1 |
 
   #502
   Scenario Outline: EMIS user sees appropriate warning message when it returns unknown exception when cancelling appointment
@@ -182,12 +182,12 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
-    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error
+    When I click the warning 'Contact us if you keep seeing this message, quoting error code 4e' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4e'
     Then a new tab has been opened by the link
     Examples:
-      | Reason           | Prefix |
-      | Unable to attend | 4e     |
+      | Reason           |
+      | Unable to attend |
 
   #504
   Scenario Outline: A <GP System> user sees appropriate warning message when there is a timeout
@@ -198,12 +198,12 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
-    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error
+    When I click the warning 'Contact us if you keep seeing this message, quoting error code ze' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=ze'
     Then a new tab has been opened by the link
     Examples:
-      | Reason             | Prefix | GP System |
-      | No longer required | ze     | EMIS      |
+      | Reason             | GP System |
+      | No longer required | EMIS      |
 
     # covered in Manual Regression Test pack
   @tech-debt   @NHSO-4061

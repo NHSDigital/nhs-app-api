@@ -102,13 +102,17 @@ export default {
     findOutWhatToDo: 'What to do if you think you might have coronavirus',
   },
   error: {
+    backToAppointments: 'Back to appointments',
+    cannotAccessGpAppointments: 'Cannot access GP appointments',
     cannotCancel: 'Cannot cancel appointment',
     cannotCancelAppointmentInTheApp: 'The appointment cannot be cancelled in the NHS App because it\'s within an hour.',
     cannotShowGpAppointments: 'Cannot show GP appointments',
     contactYourSurgeryToCancel: 'Contact your GP surgery as soon as possible to let them know you need to cancel.',
     contactYourGPSurgeryDirectly: 'You can contact your GP surgery directly if you need to book or change an upcoming appointment now.',
+    contactSurgeryToBookCancelOrPrescription: 'If you need to book or cancel an appointment or get a prescription now, contact your GP surgery directly.',
     contactWithErrorCode: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
     itIsTooLateToCancel: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
+    goBackAndTryAgain: 'Go back and try again.',
     theAppointmentMayBeCancelledOrInThePast: 'This may be because the appointment is already cancelled or it occurs in the past.',
     thereIsAProblem: 'Sorry, there is a problem',
     thereIsAProblemAppointments: 'Sorry, there is a problem - Your GP Appointments',
@@ -118,7 +122,6 @@ export default {
     tryAgainNowOrContactUs: 'Try again now. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     tryAgainOrContactUs: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     tryLoadingAppointmentsAgain: 'You can try loading GP appointments again.',
-    youCannotCancelThisAppointment: 'Sorry, you cannot cancel this appointment',
     ifTheProblemContinuesAndYouNeedToBook: {
       text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to',
       label: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
@@ -127,14 +130,13 @@ export default {
       text: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to ',
       label: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
-    tryAgainOrContactSurgeryOrOneOneOne: {
-      text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to',
-      label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+    forurgentMedicalAdviceGoTo: {
+      text: 'For urgent medical advice, go to',
+      label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     cannotShowAppointments: 'Cannot show appointments',
     cannotAccessAppointments: 'Cannot access appointments',
     contactYourSurgeryDirectly: 'Contact your GP surgery directly if you need to book an appointment or get a prescription now.',
-    goBackAndTryAgain: 'Go back and try again.',
     ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     forUrgentMedicalAdvice: {
       text: 'For urgent medical advice, go to',

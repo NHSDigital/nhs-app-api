@@ -99,11 +99,11 @@ Feature: appointment errors accessibility
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    Then I see appropriate warning message when there is an error
     And the Errors_AGP14 page is saved to disk
     Examples:
-      | Prefix | GP System |
-      | ze     | EMIS      |
+      | GP System |
+      | EMIS      |
 
   Scenario: GP15A error is captured
     Given EMIS returns corrupted response once when trying to retrieve my appointments
@@ -128,11 +128,11 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
+    Then I see appropriate warning message when there is an error
     And the Errors_AGP14_500_CorruptDataCancellingAppointment page is saved to disk
     Examples:
-      | Reason   | Prefix |
-      | Reason 1 | xx     |
+      | Reason   |
+      | Reason 1 |
 
   Scenario Outline: EMIS user sees appropriate warning message when it returns unknown exception when cancelling appointment
     Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
@@ -142,11 +142,11 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
+    Then I see appropriate warning message when there is an error
     And the Errors_AGP14_502_UnknownExceptionCancellingAppointment page is saved to disk
     Examples:
-      | Reason           | Prefix |
-      | Unable to attend | 4e     |
+      | Reason           |
+      | Unable to attend |
 
   Scenario Outline: A <GP System> user sees appropriate warning message when there is a timeout
     Given  <GP System> will time out when trying to cancel with '<Reason>'
@@ -156,8 +156,8 @@ Feature: appointment errors accessibility
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see appropriate go back try again warning message when there is an error with '<Prefix>'
+    Then I see appropriate warning message when there is an error
     And the Errors_AGP14_504_TimeoutCancellingAppointment page is saved to disk
     Examples:
-      | Reason             | Prefix | GP System |
-      | No longer required | ze     | EMIS      |
+      | Reason             | GP System |
+      | No longer required | EMIS      |

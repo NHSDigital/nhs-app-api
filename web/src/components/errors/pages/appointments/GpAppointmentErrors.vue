@@ -2,11 +2,15 @@
   <div v-if="showTemplate">
     <message-dialog-generic v-if="error.status === genericStatusCodes.BAD_REQUEST"
                             :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemAppointments"
-                   header="appointments.error.thereIsAProblem" />
+      <error-title title="appointments.error.cannotAccessGpAppointments"
+                   header="appointments.error.cannotAccessGpAppointments" />
+      <error-link v-if="isNativeApp"
+                  from="appointments.error.goBackAndTryAgain"
+                  :action="backUrl"/>
+      <error-paragraph from="appointments.error.contactSurgeryToBookCancelOrPrescription" />
       <contact-111
-        :text="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.text')"
-        :aria-label="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.label')"/>
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
@@ -130,6 +134,9 @@ export default {
     };
   },
   computed: {
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
+    },
     contactUsParam() {
       return {
         ErrCodeParam: 'errorcode',

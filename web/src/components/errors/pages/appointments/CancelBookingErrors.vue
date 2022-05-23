@@ -2,11 +2,15 @@
   <div v-if="showTemplate">
     <message-dialog-generic
       v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemAppointments"
-                   header="appointments.error.thereIsAProblem" />
+      <error-title title="appointments.error.cannotAccessGpAppointments"
+                   header="appointments.error.cannotAccessGpAppointments" />
+      <error-link v-if="isNativeApp"
+                  from="appointments.error.goBackAndTryAgain"
+                  :action="appointmentsBookingPath"/>
+      <error-paragraph from="appointments.error.contactSurgeryToBookCancelOrPrescription" />
       <contact-111
-        :text="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.text')"
-        :aria-label="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.label')"/>
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
@@ -27,9 +31,9 @@
     <message-dialog-generic
       v-else-if="error.status === appointmentStatusCodes.APPOINTMENT_DOES_NOT_EXIST"
       :id="errorId" override-style="plain">
-      <error-title title="appointments.error.youCannotCancelThisAppointment"/>
+      <error-title title="appointments.error.cannotCancel" />
       <error-paragraph from="appointments.error.theAppointmentMayBeCancelledOrInThePast" />
-      <error-link from="generic.back"
+      <error-link from="appointments.error.backToAppointments"
                   :action="appointmentsPath"
                   :desktop-only="true" />
     </message-dialog-generic>
@@ -49,16 +53,20 @@
                               || error.status === genericStatusCodes.BAD_GATEWAY
                               || error.status === genericStatusCodes.GATEWAY_TIMEOUT"
                             :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemAppointments"
-                   header="appointments.error.thereIsAProblem" />
-      <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                       :variable="error.serviceDeskReference"/>
+      <error-title title="appointments.error.cannotAccessGpAppointments"
+                   header="appointments.error.cannotAccessGpAppointments" />
+      <error-link v-if="isNativeApp"
+                  from="appointments.error.goBackAndTryAgain"
+                  :action="appointmentsBookingPath"/>
+      <error-paragraph from="appointments.error.contactSurgeryToBookCancelOrPrescription" />
       <contact-111
-        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
-        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
-      <error-link from="generic.contactUs"
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
+      <error-link from="appointments.error.contactWithErrorCode"
                   :action="contactUsUrl"
-                  target="_blank"/>
+                  target="_blank"
+                  :query-param="contactUsParam"
+                  :params="{errorCode: error.serviceDeskReference}"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
@@ -76,6 +84,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorContainer from '@/components/errors/ErrorContainer';
@@ -91,6 +100,7 @@ import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import {
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
+  APPOINTMENT_BOOKING_PATH,
 } from '@/router/paths';
 
 export default {
@@ -117,11 +127,26 @@ export default {
     return {
       backUrl: APPOINTMENTS_PATH,
       appointmentsPath: GP_APPOINTMENTS_PATH,
+      appointmentsBookingPath: APPOINTMENT_BOOKING_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       genericStatusCodes: genericStatus,
       appointmentStatusCodes: appointmentStatus,
       errorId: `error-dialog-${this.error.status}`,
     };
+  },
+  computed: {
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
+    },
+    contactUsParam() {
+      return {
+        ErrCodeParam: 'errorcode',
+        ErrCodeValue: this.serviceDeskReference,
+      };
+    },
+    serviceDeskReference() {
+      return get('$store.state.myAppointments.error.serviceDeskReference')(this) || '';
+    },
   },
 };
 </script>

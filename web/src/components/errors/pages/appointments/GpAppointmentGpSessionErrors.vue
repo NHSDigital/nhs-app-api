@@ -1,10 +1,13 @@
 <template>
   <div>
     <message-dialog-generic v-if="!hasRetried" :id="errorId" override-style="plain">
-      <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
-      <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
-      <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
+      <error-title title="appointments.error.cannotShowGpAppointments"/>
+      <error-paragraph from="appointments.error.tryLoadingAppointmentsAgain"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
+      <error-paragraph from="appointments.error.contactYourGPSurgeryDirectly" />
+      <contact-111
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>

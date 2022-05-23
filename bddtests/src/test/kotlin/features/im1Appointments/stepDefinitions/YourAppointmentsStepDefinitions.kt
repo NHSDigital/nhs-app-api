@@ -245,23 +245,14 @@ class YourAppointmentsStepDefinitions {
                 yourAppointmentsUISteps.yourAppointmentsPage.contactUsKeepGettingParagraph(prefix).startText, url)
     }
 
-    @Then("^I see appropriate go back try again warning message when there is an error with '(.*)'$")
-    fun iSeeAppropriateGoBackTryAgainWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getGoBackAndTryAgainParagraph(prefix)
+    @Then("^I see appropriate warning message when there is no GP session$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
         errorDialogPage
-            .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
-            .assertWarningParagraphText(tryAgainParagraph)
-            .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemHeader)
-            .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemTitle)
-    }
-
-    @Then("^I see appropriate warning message when there is no GP session")
-    fun iSeeAppropriateWarningMessageWhenThereIsNoGpSession() {
-        errorDialogPage
-            .assertWarningParagraphText("You are not currently able to book and manage GP appointments online.")
-            .assertWarningParagraphText("This may be a temporary problem.")
-            .assertPageHeader("Sorry, there is a problem with GP appointment booking")
-            .assertPageTitle("Sorry, there is a problem with GP appointment booking")
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryLoadingGPAppointmentsAgain)
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactGpSurgeryDirectly)
+                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.urgentMedicalAdvice)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointmets)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointmets)
     }
 
     @Then("^I click the session error back link$")

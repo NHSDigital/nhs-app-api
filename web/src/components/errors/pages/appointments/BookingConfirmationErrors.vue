@@ -1,15 +1,20 @@
 <template>
   <div v-if="showTemplate">
-    <message-dialog-generic v-if="error.status === genericStatusCodes.BAD_REQUEST"
-                            :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemAppointments"
-                   header="appointments.error.thereIsAProblem" />
+    <message-dialog-generic
+      v-if="error.status === genericStatusCodes.BAD_REQUEST"
+      :id="errorId" override-style="plain">
+      <error-title title="appointments.error.cannotAccessGpAppointments"
+                   header="appointments.error.cannotAccessGpAppointments" />
+      <error-link v-if="isNativeApp"
+                  from="appointments.error.goBackAndTryAgain"
+                  :action="appointmentsBookingPath"/>
+      <error-paragraph from="appointments.error.contactSurgeryToBookCancelOrPrescription" />
       <contact-111
-        :text="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.text')"
-        :aria-label="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.label')"/>
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
-                  :desktop-only="true" />
+                  :desktop-only="true"/>
     </message-dialog-generic>
 
     <error-page v-else-if="error.status === genericStatusCodes.FORBIDDEN"
@@ -52,24 +57,28 @@
                   :desktop-only="true" />
     </error-container>
 
-    <error-container v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
-                       || error.status === genericStatusCodes.BAD_GATEWAY
-                       || error.status === genericStatusCodes.GATEWAY_TIMEOUT"
-                     :id="errorId">
-      <error-title title="appointments.error.thereIsAProblemAppointments"
-                   header="appointments.error.thereIsAProblem" />
-      <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                       :variable="error.serviceDeskReference"/>
+    <message-dialog-generic v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
+                              || error.status === genericStatusCodes.BAD_GATEWAY
+                              || error.status === genericStatusCodes.GATEWAY_TIMEOUT"
+                            :id="errorId" override-style="plain">
+      <error-title title="appointments.error.cannotAccessGpAppointments"
+                   header="appointments.error.cannotAccessGpAppointments" />
+      <error-link v-if="isNativeApp"
+                  from="appointments.error.goBackAndTryAgain"
+                  :action="appointmentsBookingPath"/>
+      <error-paragraph from="appointments.error.contactSurgeryToBookCancelOrPrescription" />
       <contact-111
-        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
-        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
-      <error-link from="generic.contactUs"
+        :text="$t('appointments.error.forurgentMedicalAdviceGoTo.text')"
+        :aria-label="$t('appointments.error.forurgentMedicalAdviceGoTo.label')"/>
+      <error-link from="appointments.error.contactWithErrorCode"
                   :action="contactUsUrl"
-                  target="_blank"/>
+                  target="_blank"
+                  :query-param="contactUsParam"
+                  :params="{errorCode: error.serviceDeskReference}"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
-    </error-container>
+    </message-dialog-generic>
 
     <error-container v-else id="error-dialog-unknown">
       <error-title title="apiErrors.pageHeader"
@@ -83,6 +92,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
 import ErrorContainer from '@/components/errors/ErrorContainer';
@@ -136,6 +146,15 @@ export default {
   computed: {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
+    },
+    contactUsParam() {
+      return {
+        ErrCodeParam: 'errorcode',
+        ErrCodeValue: this.serviceDeskReference,
+      };
+    },
+    serviceDeskReference() {
+      return get('$store.state.availableAppointments.error.serviceDeskReference')(this) || '';
     },
   },
 };

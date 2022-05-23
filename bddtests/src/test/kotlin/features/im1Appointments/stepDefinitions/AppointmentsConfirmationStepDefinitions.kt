@@ -81,13 +81,15 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
-     @Then("^I see appropriate warning message " +
+    @Then("^I see appropriate warning message " +
             "when there is an error sending data on appointment confirmation page$")
     fun thenISeeAppropriateWarningMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
-        errorDialogPage
-            .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.problemHeader)
-            .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.problemTitle)
-            .assertWarningParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.goBackAndTryAgainProblem)
+        val header = appointmentsConfirmationSteps.appointmentsConfirmation.cannotAccessGpAppointments
+        val message = appointmentsConfirmationSteps.appointmentsConfirmation.bookOrCancelAppointment
+        errorDialogPage.assertPageHeader(header)
+                .assertPageTitle(header)
+                .assertWarningParagraphText(message)
+                .assertWarningParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.urgentMedicalAdvice)
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")

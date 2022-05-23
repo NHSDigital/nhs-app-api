@@ -10,15 +10,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         internal AppointmentsTemporaryProblemPageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, there is a problem with GP appointment booking");
-
-        private WebText UnableToBookText => WebText.WithTagAndText(
-            _interactor, "p", "You are not currently able to book and manage GP appointments online.");
-
-        private WebText TemporaryProblemText => WebText.WithTagAndText(
-            _interactor, "p", "This may be a temporary problem.");
-
-        private WebButton TryAgainButton => WebButton.WithText( _interactor, "Try again");
+            "h1", "Cannot show GP appointments");
+        private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
+            "p", "You can try loading GP appointments again.");
+        private WebButton TryAgainButton =>  WebButton.WithText(_interactor,"Try again");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
@@ -26,7 +21,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         {
             TitleText.AssertVisible();
             UnableToBookText.AssertVisible();
-            TemporaryProblemText.AssertVisible();
             TryAgainButton.AssertVisible();
         }
 

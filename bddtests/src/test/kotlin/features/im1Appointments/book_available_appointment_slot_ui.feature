@@ -169,12 +169,12 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Back' link
+    Then I see appropriate warning message when there is an error
+    When I click the warning 'Back' link
     Then the Your Appointments page is displayed
     Examples:
-      | Prefix | GP System |
-      | xx     | TPP       |
+      | GP System |
+      | TPP       |
 
   #502
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
@@ -186,12 +186,13 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error
+    When I click the warning 'Contact us if you keep seeing this message, quoting error code 4s' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4s'
     Then a new tab has been opened by the link
     Examples:
-      | Prefix | GP System |
-      | 4s     | VISION    |
+      | GP System |
+      | VISION    |
+
 
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
@@ -203,12 +204,12 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate submit error message when there is an error with '<Prefix>'
-    When I click the error 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning message when there is an error
+    When I click the warning 'Contact us if you keep seeing this message, quoting error code ze' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=ze'
     Then a new tab has been opened by the link
     Examples:
-      | Prefix | GP System |
-      | ze     | EMIS      |
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when Back button selected.
     Given there are <GP System> appointments available to book

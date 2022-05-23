@@ -97,8 +97,8 @@ class CancelAppointmentStepDefinitions {
 
     @Then("^I see an appropriate warning message when it is already cancelled$")
     fun iSeeAnAppropriateWarningMessageWhenItIsAlreadyCancelled() {
-        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
-        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
+        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
+        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
         val message = cancelAppointmentSteps.cancelAppointmentPage.alreadyCancelled
 
         errorDialogPage.assertWarningParagraphText(message)
@@ -118,13 +118,13 @@ class CancelAppointmentStepDefinitions {
             .assertPageTitle(pageTitle)
     }
 
-    @Then("^I see appropriate submit error message when there is an error with '(.*)'$")
-    fun iSeeAppropriateSubmitErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val goBackParagraph = cancelAppointmentSteps.cancelAppointmentPage.getGoBackAndTryAgainParagraph(prefix)
-        errorDialogPage.assertParagraphText(goBackParagraph)
-                .assertParagraphText(cancelAppointmentSteps.cancelAppointmentPage.ifItContinuesBookOrCancel)
-                .assertPageHeader(cancelAppointmentSteps.cancelAppointmentPage.problemHeader)
-                .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.problemTitle)
+    @Then("^I see appropriate warning message when there is an error$")
+    fun iSeeAppropriateWarningMessageWhenThereIsAnError() {
+        val goBackParagraph = cancelAppointmentSteps.cancelAppointmentPage.urgentMedicalAdvice
+        errorDialogPage.assertWarningParagraphText(goBackParagraph)
+            .assertWarningParagraphText(cancelAppointmentSteps.cancelAppointmentPage.bookOrCancelAppointment)
+            .assertPageHeader(cancelAppointmentSteps.cancelAppointmentPage.cannotAccessGpAppointments)
+            .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.cannotAccessGpAppointments)
     }
 
     @Then("^I will be on the \"Cancellation reason\" screen$")
