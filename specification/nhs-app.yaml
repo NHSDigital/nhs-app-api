@@ -54,7 +54,7 @@ info:
 
     For more details see [Network access for APIs](https://digital.nhs.uk/developer/guides-and-documentation/network-access-for-apis).
 
-    ## Authorisation
+    ## Security and Authorisation
     This API is [application-restricted](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation#application-restricted-apis),
     meaning we authenticate the calling application but not the end user. In particular, the three FHIR `CommunicationRequest` endpoints use signed JWT authentication - you authenticate your application by sending a signed JSON web token (JWT) to our OAuth 2.0 authorisation server. For more details see [Application-restricted RESTful APIs - signed JWT authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication).
     
