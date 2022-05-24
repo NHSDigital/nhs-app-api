@@ -31,12 +31,6 @@ items:
       enum: [AppMessage, PushNotification]
       description: Indicates whether this event related to an in-app message or push notification.
       nullable: false
-    nhsNumber:
-      type: string
-      description: NHS number of the recipient.
-      example: "9903002157"
-      format: "^\\d{10}$"
-      nullable: false
     communicationCreatedDateTime:
       type: string
       format: date-time
