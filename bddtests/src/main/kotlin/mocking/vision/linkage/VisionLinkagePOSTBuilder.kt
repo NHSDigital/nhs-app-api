@@ -12,7 +12,7 @@ import mocking.vision.models.linkage.LinkageKeyPostRequest
 import org.apache.http.HttpStatus
 
 class VisionLinkagePOSTBuilder(orgId: String, linkageKeyPostRequest: LinkageKeyPostRequest): IErrorMappingBuilder,
-        MappingBuilder(method = "POST", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
+        MappingBuilder("POST", "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
 
     init {
         requestBuilder.andJsonBody(linkageKeyPostRequest,"equalToJson", GsonFactory.asIs)

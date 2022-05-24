@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 8"));
 
-            Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
+            VerifyNoOtherLoggerCalls();
         }
 
         [TestMethod]
@@ -59,9 +59,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
 
-            Context.Mocks.Auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: BadRequest"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: BadRequest"));
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+
+            VerifyNoOtherLoggerCalls();
         }
 
         [TestMethod]
@@ -80,9 +82,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             actionResult.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("zu");
 
-            Context.Mocks.Auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
+            Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Error, "Aggregator Secondary Care Summary API timed out", Times.Once());
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: Timeout"));
+
+            VerifyNoOtherLoggerCalls();
         }
 
         [TestMethod]
@@ -104,6 +109,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Information, "Aggregator Secondary Care Summary API failed minimum age requirement", Times.Once());
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: FailedSecondaryCareMinimumAgeRequirement"));
+
+            VerifyNoOtherLoggerCalls();
         }
 
         [TestMethod]
@@ -145,6 +152,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
 
+            VerifyNoOtherLoggerCalls();
+        }
+
+        private void VerifyNoOtherLoggerCalls()
+        {
             Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
             Context.Mocks.ServiceLogger.VerifyNoOtherCalls();
             Context.Mocks.Auditor.VerifyNoOtherCalls();

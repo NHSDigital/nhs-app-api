@@ -38,15 +38,35 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         private ServiceCollection ServiceCollection { get; }
         private ServiceProvider ServiceProvider { get; set; }
 
+        private const string NhsNumber = "1111111111";
+        private const string NhsLoginIdToken = "nhs-login-id-token";
+        private const string ClientAssertion = "client-assertion";
+
+        // APIM Auth
+        private const string ApimOathBaseUrl = "http://stubs.local.bitraft.io:8080/";
+        private const string ApimOathUrl = "http://stubs.local.bitraft.io:8080/oauth2/token";
+        private const string ApimCertPath = "test-path";
+        private const string ApimCertPass = "test-phrase";
+        private const string ApimKey = "key";
+        private const string ApimKid = "kid";
+        private static string ApimRequestContent =>
+            $"subject_token={NhsLoginIdToken}&" +
+            $"client_assertion={ClientAssertion}&" +
+            "subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Aid_token&" +
+            "client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer&" +
+            "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange";
+
+        // Aggregator
         private static string SecondaryCareApiBaseUrl = "http://stubs.local.bitraft.io:8080/fhir/secondary-care/";
         private static readonly string SecondaryCareSummaryUrl = $"{SecondaryCareApiBaseUrl}summary/$evaluate";
 
-        private const string ApimOathBaseUrl = "http://stubs.local.bitraft.io:8080/";
-        private const string ApimOathUrl = "http://stubs.local.bitraft.io:8080/oauth2/token";
-        private const string ApimCertPath = "testPath";
-        private const string ApimCertPass = "testPhrase";
-        private const string ApimKey = "key";
-        private const string ApimKid = "kid";
+        // Aggregator Headers
+        private const string OAuthAccessToken = "oauth-access-token";
+        private const string NHSDTargetIdentifierHeaderValue =
+            "ewrCoCDCoCAic3lzdGVtIjogInVybjppZXRmOnJmYzozOTg2IiwKwqAgwqAgInZh" +
+            "bHVlIjogImRiNzE2OThiLWNkN2MtNGRkNS05NWM0LTBhYTk3NzY1OTVmNSIKfQ==";
+        private static readonly Guid CorrelationId = Guid.Parse("64fc48ff-af19-43f9-a92c-9374970b7e85");
+        private static readonly Guid RequestId = Guid.Parse("7fd33937-b9ea-4152-824e-88168ac29b48");
 
         public SecondaryCareControllerTestContext()
         {
@@ -123,19 +143,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         internal sealed class TestData
         {
-            public static string OAuthAccessToken => "qwertyhgfdsaswedrfghgfds";
-            private const string NhsNumber = "1111111111";
-
             public Dictionary<string, string> RequestHeaders { get; } = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                {"X-NHS-Number", NhsNumber},
-                {"Authorization", $"Bearer {OAuthAccessToken}"}
+                {"Authorization", $"Bearer {OAuthAccessToken}"},
+                {"NHSD-Target-Identifier", NHSDTargetIdentifierHeaderValue},
+                {"X-Correlation-Id", CorrelationId.ToString()},
+                {"X-Request-Id", RequestId.ToString()}
             };
 
             public P9UserSession P9UserSession { get; } = new P9UserSession(
                 "csrfToken",
                 NhsNumber,
-                new CitizenIdUserSession{ NhsLoginIdToken = "token" },
+                new CitizenIdUserSession{ NhsLoginIdToken = NhsLoginIdToken },
                 "im1ConnectionToken");
 
             public SummaryResponse SummaryResponse { get; } = new SummaryResponse
@@ -307,7 +326,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 = new Mock<IHttpTimeoutConfigurationSettings>();
 
             internal Mock<IApimJwtHelper> ApimJwtHelper { get; }
-            = new Mock<IApimJwtHelper>();
+                = new Mock<IApimJwtHelper>();
+
+            internal Mock<IGuidCreator> GuidCreator { get; }
+                = new Mock<IGuidCreator>();
 
             public TestMocks()
             {
@@ -321,22 +343,27 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_PFX"])
-                    .Returns(ApimOathBaseUrl);
+                    .Returns(ApimCertPath);
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_PFX_PASSPHRASE"])
-                    .Returns(ApimOathBaseUrl);
+                    .Returns(ApimCertPass);
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_KEY"])
-                    .Returns(ApimOathBaseUrl);
+                    .Returns(ApimKey);
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_KID"])
-                    .Returns(ApimOathBaseUrl);
+                    .Returns(ApimKid);
 
                 HttpTimeoutConfigurationSettings
                     .Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);
+
+                GuidCreator
+                    .SetupSequence(c => c.CreateGuid())
+                    .Returns(CorrelationId)
+                    .Returns(RequestId);
 
                 ApimJwtHelper
                     .Setup(x => x.CreateApimJwt(
@@ -345,15 +372,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ApimCertPass,
                         ApimKey,
                         ApimKid))
-                    .Returns("qwerthygfd");
+                    .Returns(ClientAssertion);
 
                 MockHttpMessageHandler
                     .When(HttpMethod.Post, ApimOathUrl)
+                    .WithContent(ApimRequestContent)
                     .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
                     {
                         ExpiresIn = "123",
                         IssuedTokenType = "urn:ietf:params:oauth:token-type:access_token",
-                        AccessToken = TestData.OAuthAccessToken,
+                        AccessToken = OAuthAccessToken,
                         TokenType = "Bearer"
                     }));
             }
@@ -368,6 +396,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .AddSingleton(Configuration.Object)
                     .AddSingleton(HttpTimeoutConfigurationSettings.Object)
                     .AddSingleton(ApimJwtHelper.Object)
+                    .AddSingleton(GuidCreator.Object)
                     .AddSingleton(MockHttpMessageHandler)
                     .AddMockLoggers();
             }

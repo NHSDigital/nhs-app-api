@@ -1,6 +1,7 @@
 package mocking.models
 
 class Request(@Suppress("unused")
+              val url: String?,
               val urlPath: String?,
               val urlPattern: String?,
               val method: String,

@@ -4,14 +4,39 @@ package mocking.wayfinder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
+import java.net.URLEncoder
 
 private const val TIMEOUT_DELAY_IN_MILLISECONDS = 30000;
 
-class EvaluateBuilder
-    : WayfinderMappingBuilder("GET","/fhir/secondary-care/summary/\$evaluate") {
+/*
+ * Base 64 encoding of the Aggregators Target Identifier within the scope of BaRS (Booking and Referrals Standard)
+ *
+ * {
+ *     "system": "urn:ietf:rfc:3986",
+ *     "value": "db71698b-cd7c-4dd5-95c4-0aa9776595f5"
+ * }
+ *
+ */
+private const val NHSD_TARGET_IDENTIFIER =
+    "ewrCoCDCoCAic3lzdGVtIjogInVybjppZXRmOnJmYzozOTg2IiwKwqAgwqAgInZh" +
+    "bHVlIjogImRiNzE2OThiLWNkN2MtNGRkNS05NWM0LTBhYTk3NzY1OTVmNSIKfQ=="
+
+private fun getEncodedPatientIdQueryName() = URLEncoder.encode("patient:identifier", "UTF-8")
+private fun getPatientIdQueryValue() = "https://fhir.nhs.uk/Id/nhs-number|${SerenityHelpers.getPatient().nhsNumbers[0]}"
+private fun getPath(): String {
+    val path = "/fhir/secondary-care/summary/\$evaluate"
+    val queryName = getEncodedPatientIdQueryName()
+    val queryValue = URLEncoder.encode(getPatientIdQueryValue(), "UTF-8")
+
+    return "$path?$queryName=$queryValue"
+}
+
+class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
     init {
-        requestBuilder.andHeader("X-NHS-Number", SerenityHelpers.getPatient().nhsNumbers[0])
+        requestBuilder
+            .andHeader("NHSD-Target-Identifier", NHSD_TARGET_IDENTIFIER)
+            .andQueryParameter(URLEncoder.encode("patient:identifier", "UTF-8"), getPatientIdQueryValue())
     }
 
     fun returnAfterThirtySecondsForTimeout(): Mapping {

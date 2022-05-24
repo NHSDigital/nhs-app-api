@@ -6,22 +6,21 @@ import org.apache.http.HttpStatus
 private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
 
-abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean = false) {
+// See https://wiremock.org/docs/request-matching/#url-matching
+enum class WiremockUrlMatch {
+    Url,
+    UrlPath,
+    UrlPattern,
+}
+
+abstract class MappingBuilder(
+        method: String,
+        var urlPathOrPattern: String,
+        var urlMatchType: WiremockUrlMatch = WiremockUrlMatch.UrlPath
+) {
 
     open var delayMillisecs = 0
-
-    internal val requestBuilder = RequestBuilder(method, url)
-
-    private var isPattern: Boolean = false
-    private var urlPattern: String = ""
-
-    init {
-        isPattern = isUrlPattern
-
-        if (isPattern) {
-            urlPattern = url
-        }
-    }
+    internal val requestBuilder = RequestBuilder(method, urlPathOrPattern)
 
     fun respondWithBody(body: String, statusCode: Int = HttpStatus.SC_OK): Mapping {
         return respondWith(statusCode) {
@@ -39,11 +38,13 @@ abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean
 
         if (milliSecondDelay > 0) responseBuilder.andDelay(milliSecondDelay)
 
-        if (isPattern) {
-            return Mapping(requestBuilder.buildForDynamicPath(urlPattern), responseBuilder.build())
+        val request = when (urlMatchType) {
+            WiremockUrlMatch.Url -> requestBuilder.buildForUrl()
+            WiremockUrlMatch.UrlPath -> requestBuilder.buildForUrlPath()
+            WiremockUrlMatch.UrlPattern -> requestBuilder.buildForUrlPattern(urlPathOrPattern)
         }
 
-        return Mapping(requestBuilder.build(), responseBuilder.build())
+        return Mapping(request, responseBuilder.build())
     }
 
     fun respondWithSuccessJson(jsonBody: Any): Mapping {
@@ -58,7 +59,7 @@ abstract class MappingBuilder(method: String, url: String, isUrlPattern: Boolean
 
         if (milliSecondDelay > 0) responseBuilder.andDelay(milliSecondDelay)
 
-        return Mapping(requestBuilder.build(), responseBuilder.build())
+        return Mapping(requestBuilder.buildForUrlPath(), responseBuilder.build())
     }
 
     open fun respondWithServiceUnavailable(): Mapping {

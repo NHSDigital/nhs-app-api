@@ -11,7 +11,7 @@ import mocking.vision.models.linkage.LinkageKeyGetResponse
 import org.apache.http.HttpStatus
 
 class VisionLinkageGETBuilder(orgId: String, nhsNumber: String) : IErrorMappingBuilder,
-        MappingBuilder(method = "GET", url = "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
+        MappingBuilder("GET", "/vision/linkage/organisations/$orgId/onlineservices/linkage") {
 
     init {
         requestBuilder

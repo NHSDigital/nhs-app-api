@@ -14,7 +14,8 @@ class WiremockSetup(val configuration: MockingConfiguration) {
     private val gson = Gson()
 
     fun postMapping(mapping: Mapping): Response {
-        return SerenityRest.given()
+        return SerenityRest
+                .given()
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .and()
                 .body(gson.toJson(mapping))

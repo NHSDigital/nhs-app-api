@@ -281,7 +281,11 @@ namespace NHSOnline.Backend.Support
 
         public static class SecondaryCareConstants
         {
-            public const string NhsNumberHeader = "X-NHS-Number";
+            public const string PatientIdentifierQuery = "patient:identifier";
+            public const string PatientIdentifierPrefix = "https://fhir.nhs.uk/Id/nhs-number|";
+            public const string CorrelationIdHeaderKey = "X-Correlation-Id";
+            public const string RequestIdHeaderKey = "X-Request-Id";
+            public const string NHSDTargetIdentifierHeaderKey = "NHSD-Target-Identifier";
         }
 
         public static class AuthenticationSchemeGroupings
