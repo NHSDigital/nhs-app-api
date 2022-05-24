@@ -1153,7 +1153,7 @@ class EvaluateBuilder
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
                                             "valueCoding": {
                                                 "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                                "code": "InReview"
+                                                "code": "inReview"
                                             }
                                         }
                                     ],
