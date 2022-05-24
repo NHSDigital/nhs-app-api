@@ -12,15 +12,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         private WebText TitleText => WebText.WithTagAndText(_interactor,
             "h1", "Sorry, there is a problem getting your repeat prescription information");
 
-        private WebPanel ErrorPanel => WebPanel.WithTitle(_interactor, "Error");
-
-        private WebText UnableToBookText => ErrorPanel.ContainingTagWithText(
+        private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
             "p", "You are not currently able to order or view repeat prescriptions online.");
 
-        private WebText TemporaryProblemText => ErrorPanel.ContainingTagWithText(
+        private WebText TemporaryProblemText => WebText.WithTagAndText(_interactor,
             "p", "This may be a temporary problem.");
 
-        private WebButton TryAgainButton => ErrorPanel.ContainingButtonWithText("Try again");
+        private WebButton TryAgainButton => WebButton.WithText(_interactor, "Try again");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
