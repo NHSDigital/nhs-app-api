@@ -10,7 +10,7 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-pull_docker_image "nhsapp.azurecr.io/nhsonline-nginx:v1.18.0"
+pull_docker_image "nhsapp.azurecr.io/nhsonline-nginx:v1.20.2"
 
 docker build \
   --target=release \

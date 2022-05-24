@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:experimental
 
 ARG DOCKER_IMAGE_WEB_BUILD=nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0
-ARG DOCKER_IMAGE_WEB_RUNTIME=nhsapp.azurecr.io/nhsonline-nginx:v1.18.0
+ARG DOCKER_IMAGE_WEB_RUNTIME=nhsapp.azurecr.io/nhsonline-nginx:v1.20.2
 
 # run for hot reload of files while developing
 FROM ${DOCKER_IMAGE_WEB_BUILD} as dev-serve
