@@ -6,9 +6,9 @@ BEGIN
     SELECT "LoginId", MIN("Timestamp") AS "FirstP5LoginDate", MIN("Timestamp") AS "FirstP5LoginTimestamp"
     FROM "events"."LoginMetric"
     WHERE ("ProofLevel" = 'P5')
-      AND ("LoginId" = loginId)
       AND ("Timestamp" >= startDateTime)
       AND ("Timestamp" < endDateTime)
+      AND ("LoginId" = loginId)
     GROUP BY "LoginId"
     ON CONFLICT("LoginId") DO UPDATE
         SET "FirstP5LoginDate" =
@@ -30,9 +30,9 @@ BEGIN
     SELECT "LoginId", MIN("Timestamp") AS "FirstP9LoginDate", MIN("Timestamp") AS "FirstP9LoginTimestamp"
     FROM "events"."LoginMetric"
     WHERE ("ProofLevel" = 'P9')
-      AND ("LoginId" = loginId)
       AND ("Timestamp" >= startDateTime)
       AND ("Timestamp" < endDateTime)
+      AND ("LoginId" = loginId)
     GROUP BY "LoginId"
     ON CONFLICT("LoginId") DO UPDATE
         SET "FirstP9LoginDate" =
@@ -120,9 +120,9 @@ BEGIN
                   ,"LoginId"
              FROM "events"."LoginMetric"
              WHERE
-                     "Timestamp" >= startDateTime AND
-                     "Timestamp" < endDateTime AND
-                     "LoginId" = loginId
+                     "Timestamp" >= startDateTime
+               AND "Timestamp" < endDateTime
+               AND ("LoginId" = loginId)
              GROUP BY 2
          ) t2
          ON t1."LoginId"=t2."LoginId"
@@ -130,35 +130,53 @@ BEGIN
     WHERE
             "Timestamp" >= startDateTime and
             "Timestamp" < endDateTime
-      AND t1."LoginId" = loginId
-    ON CONFLICT ("LoginId") DO UPDATE
-        SET
-            "LatestOdsCode" =
-                ( CASE
-                      WHEN ( Excluded."LatestOdsCode" <> "FirstLogins"."LatestOdsCode" OR "FirstLogins"."LatestOdsCode" IS NULL)
-                          THEN Excluded."LatestOdsCode"
-                      ELSE "FirstLogins"."LatestOdsCode"
-                    END),
-            "LatestProofLevel" =
-                ( CASE
-                      WHEN ( Excluded."LatestProofLevel" <> "FirstLogins"."LatestProofLevel"  OR "FirstLogins"."LatestProofLevel" IS NULL)
-                          THEN Excluded."LatestProofLevel"
-                      ELSE "FirstLogins"."LatestProofLevel"
-                    END),
-            "LatestLoginTimestamp" =
-                ( CASE
-                      WHEN ( Excluded."LatestLoginTimestamp" > "FirstLogins"."LatestLoginTimestamp" OR "FirstLogins"."LatestLoginTimestamp" IS NULL )
-                          THEN Excluded."LatestLoginTimestamp"
-                      ELSE "FirstLogins"."LatestLoginTimestamp"
-                    END),
-            "SingleLoginFlag" =
-                ( CASE
-                      WHEN ( Excluded."LatestLoginTimestamp" = "FirstLogins"."FirstP5LoginTimestamp" AND Excluded."LatestLoginTimestamp" = "FirstLogins"."FirstP9LoginTimestamp")
-                          OR ( Excluded."LatestLoginTimestamp" = "FirstLogins"."FirstP5LoginTimestamp" AND "FirstLogins"."FirstP9LoginTimestamp" IS NULL)
-                          OR ( Excluded."LatestLoginTimestamp" = "FirstLogins"."FirstP9LoginTimestamp" AND "FirstLogins"."FirstP5LoginTimestamp" IS NULL)
-                          THEN 'Y'
-                      ELSE 'N'
-                    END);
+      AND (t1."LoginId" = loginId)
+    ON CONFLICT ("LoginId") DO NOTHING;
+
+    UPDATE "compute"."FirstLogins"
+    SET
+        "LatestOdsCode" =
+            ( CASE
+                  WHEN ( "t1"."LatestOdsCode" <> "FirstLogins"."LatestOdsCode" OR "FirstLogins"."LatestOdsCode" IS NULL)
+                      THEN "t1"."LatestOdsCode"
+                  ELSE "FirstLogins"."LatestOdsCode"
+                END),
+        "LatestProofLevel" =
+            ( CASE
+                  WHEN ( "t1"."LatestProofLevel" <> "FirstLogins"."LatestProofLevel"  OR "FirstLogins"."LatestProofLevel" IS NULL)
+                      THEN "t1"."LatestProofLevel"
+                  ELSE "FirstLogins"."LatestProofLevel"
+                END),
+        "LatestLoginTimestamp" =
+            ( CASE
+                  WHEN ( "t1"."LatestLoginTimestamp" > "FirstLogins"."LatestLoginTimestamp" OR "FirstLogins"."LatestLoginTimestamp" IS NULL )
+                      THEN "t1"."LatestLoginTimestamp"
+                  ELSE "FirstLogins"."LatestLoginTimestamp"
+                END),
+        "SingleLoginFlag" =
+            ( CASE
+                  WHEN ( "t1"."LatestLoginTimestamp" = "FirstLogins"."FirstP5LoginTimestamp" AND "t1"."LatestLoginTimestamp" = "FirstLogins"."FirstP9LoginTimestamp")
+                      OR ( "t1"."LatestLoginTimestamp" = "FirstLogins"."FirstP5LoginTimestamp" AND "FirstLogins"."FirstP9LoginTimestamp" IS NULL)
+                      OR ( "t1"."LatestLoginTimestamp" = "FirstLogins"."FirstP9LoginTimestamp" AND "FirstLogins"."FirstP5LoginTimestamp" IS NULL)
+                      THEN 'Y'
+                  ELSE 'N'
+                END)
+    FROM
+        (
+            SELECT
+                max("Timestamp") as "LatestLoginTimestamp"
+                 ,"LoginId"
+                 ,"OdsCode" as "LatestOdsCode"
+                 ,"ProofLevel" as "LatestProofLevel"
+            FROM "events"."LoginMetric"
+            WHERE
+                    "Timestamp" >= startDateTime
+              AND "Timestamp" < endDateTime
+              AND ("LoginId" = loginId)
+            GROUP BY "LoginId", "LatestOdsCode", "LatestProofLevel"
+        ) AS t1
+    WHERE "FirstLogins"."LoginId" = t1."LoginId";
+
 END;
 
 $$ LANGUAGE plpgsql;
