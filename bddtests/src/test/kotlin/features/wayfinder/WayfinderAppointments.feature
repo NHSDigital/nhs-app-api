@@ -11,6 +11,7 @@ Feature: Wayfinder Appointments
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see an appointment to confirm
 
+  @smoketest
   Scenario: A user with booked appointments can see them in the Appointments and Referrals screen
     Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
     And I am logged in
