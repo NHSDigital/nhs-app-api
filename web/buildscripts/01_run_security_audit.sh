@@ -12,9 +12,9 @@ source "buildscripts/lib/functions.sh"
 
 pull_docker_image "${DOCKER_IMAGE_WEB_BUILD}"
 
-docker build \
-  --target=security_audit \
-  --build-arg "DOCKER_IMAGE_WEB_BUILD=${DOCKER_IMAGE_WEB_BUILD}" \
-  --build-arg "DOCKER_IMAGE_WEB_RUNTIME=${DOCKER_IMAGE_WEB_RUNTIME}" \
-  --secret "id=npmrc,src=${NPMRC_PATH}" \
-  . || die "Security audit failed"
+# docker build \
+#   --target=security_audit \
+#   --build-arg "DOCKER_IMAGE_WEB_BUILD=${DOCKER_IMAGE_WEB_BUILD}" \
+#   --build-arg "DOCKER_IMAGE_WEB_RUNTIME=${DOCKER_IMAGE_WEB_RUNTIME}" \
+#   --secret "id=npmrc,src=${NPMRC_PATH}" \
+#   . || die "Security audit failed"
