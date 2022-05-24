@@ -81,18 +81,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
                             if (appointment.AppointmentDateTime != null)
                             {
-                                if (string.Equals(appointment.AppointmentStatus,
-                                        AppointmentStatus.Booked.GetLiteral(),
-                                        StringComparison.OrdinalIgnoreCase)
-                                    || string.Equals(appointment.AppointmentStatus,
-                                         AppointmentStatus.Cancelled.GetLiteral(),
-                                         StringComparison.OrdinalIgnoreCase)
-                                   )
-                                {
-                                    confirmedAppointments.Add(appointment);
-                                    break;
-                                }
-                                unconfirmedAppointments.Add(appointment);
+                                confirmedAppointments.Add(appointment);
                             }
                             else
                             {
@@ -286,9 +275,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             if (string.IsNullOrWhiteSpace(status))
             {
                 _logger.LogError("Failed to get Upcoming Appointment Status from extensions");
+                return null;
             }
 
-            return status;
+            return string.Equals(status, AppointmentStatus.Cancelled.GetLiteral(), StringComparison.Ordinal)
+                ? status
+                : AppointmentStatus.Booked.GetLiteral();
         }
 
         private string MapUpcomingAppointmentLocation(CarePlan.ActivityComponent activity)
