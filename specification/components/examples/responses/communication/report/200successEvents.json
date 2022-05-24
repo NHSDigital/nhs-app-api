@@ -5,7 +5,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1234",
         "channel": "AppMessage",
-        "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:20:52Z",
         "event": "Completed",
         "eventDetail": null
@@ -16,7 +15,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1234",
         "channel": "PushNotification",
-        "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:20:52Z",
         "event": "Completed",
         "eventDetail": null
@@ -27,7 +25,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1235",
         "channel": "AppMessage",
-        "nhsNumber": "9074732933",
         "communicationCreatedDateTime": "2021-08-05T23:32:52Z",
         "event": "Rejected",
         "eventDetail": "NHS number not found"
@@ -38,7 +35,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1235",
         "channel": "PushNotification",
-        "nhsNumber": "9074732933",
         "communicationCreatedDateTime": "2021-08-05T23:32:52Z",
         "event": "Rejected",
         "eventDetail": "NHS number not found"
@@ -49,7 +45,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1236",
         "channel": "AppMessage",
-        "nhsNumber": "9482026470",
         "communicationCreatedDateTime": "2021-08-05T13:40:52Z",
         "event": "Completed",
         "eventDetail": null
@@ -60,7 +55,6 @@
         "campaignId": null,
         "requestReference": null,
         "channel": "AppMessage",
-        "nhsNumber": "9133760004",
         "communicationCreatedDateTime": "2021-08-05T14:59:16Z",
         "event": "Failed",
         "eventDetail": "Failure details"
@@ -71,7 +65,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1237",
         "channel": "AppMessage",
-        "nhsNumber": "9692113612",
         "communicationCreatedDateTime": "2021-08-05T13:28:52Z",
         "event": "Read",
         "eventDetail": null
@@ -82,7 +75,6 @@
         "campaignId": "Influenza_202108",
         "requestReference": "AN_1238",
         "channel": "AppMessage",
-        "nhsNumber": "9482026470",
         "communicationCreatedDateTime": "2021-08-05T13:50:52Z",
         "event": "Read",
         "eventDetail": null
