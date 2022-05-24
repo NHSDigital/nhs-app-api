@@ -8,10 +8,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private readonly IIOSDriverWrapper _driver;
         private IOSCreateSessionUpstreamSystemTimeoutErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
-        private IOSLabel ThisCouldBeText => IOSLabel.WithText(_driver, "This can be one of two problems:");
-        private IOSLabel CannotGetLoginDetailsText => IOSLabel.WithText(_driver, "we cannot get your NHS login details");
-        private IOSLabel CannotConnectToGpSurgeryText => IOSLabel.WithText(_driver, "we cannot connect to your GP surgery");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in");
+        private IOSLabel ThisCouldBeText => IOSLabel.WithText(_driver, "There was an error either:");
+        private IOSLabel ConnectingToGpSurgeryText => IOSLabel.WithText(_driver, "connecting to your GP Surgery");
+        private IOSLabel GettingLoginDetailsText => IOSLabel.WithText(_driver, "getting your NHS log in details");
         private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back and try logging in again.");
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
@@ -29,8 +29,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         public IOSCreateSessionUpstreamSystemTimeoutErrorPage AssertPageElements()
         {
             ThisCouldBeText.AssertVisible();
-            CannotGetLoginDetailsText.AssertVisible();
-            CannotConnectToGpSurgeryText.AssertVisible();
+            ConnectingToGpSurgeryText.AssertVisible();
+            GettingLoginDetailsText.AssertVisible();
             GoBackText.AssertVisible();
             IfYouNeedText.AssertVisible();
             ForUrgentMedicalAdvice.AssertVisible();

@@ -96,3 +96,10 @@ Feature: Login error messages
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     Then I click an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=zn' and error prefix of 'zn'
     And a new tab has been opened by the link
+
+#502
+  Scenario: Cannot log in when NHS Login returns internal server error response and I see error code with "3n" prefix
+    Given I attempt to log in as an EMIS and received internal server error from CID
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    Then I click an error 'Contact us if you keep seeing this message, quoting error code' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=3n' and error prefix of '3n'
+    And a new tab has been opened by the link

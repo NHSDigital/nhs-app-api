@@ -11,15 +11,15 @@
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginErrorPage"
                                  x:Name="Page"
                                  CloseCommand="{Binding CloseRequestedCommand, Source={x:Reference Name=Page}}"
-                                 PageDescription="Login failed">
+                                PageDescription="Cannot log in">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
 
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout>
-                        <elements:Paragraph Text="We cannot get your details from your GP surgery." />
+                        <elements:Paragraph Text="There was an error trying to connect to your GP Surgery." />
                         <elements:Paragraph Text="Go back and try logging in again." />
                         <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
                         <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />

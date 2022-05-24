@@ -10,20 +10,20 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorBadResponseFromUpstreamSystemPage"
                                  x:Name="Page"
-                                 PageDescription="Login failed">
+                                 PageDescription="Cannot log in">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
 
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout>
-                        <elements:Paragraph Text="This can be one of two problems:" />
+                        <elements:Paragraph Text="There was an error either:" />
                        
                         <elements:ListContainer>
                             <StackLayout>
-                                <elements:UnorderedListItem Text="we cannot get your NHS login details" />
-                                <elements:UnorderedListItem Text="we cannot connect to your GP surgery" />
+                                <elements:UnorderedListItem Text="connecting to your GP Surgery" />
+                                <elements:UnorderedListItem Text="getting your NHS log in details" />
                             </StackLayout>
                         </elements:ListContainer>
 

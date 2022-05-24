@@ -9,12 +9,12 @@
                                  xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls"
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorNoNhsNumberPage"
-                                 PageDescription="Login failed"
+                                 PageDescription="Cannot log in"
                                  x:Name="Page">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" />
+                <elements:Heading1 Text="Cannot log in" />
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout>
                         <elements:Paragraph Text="We cannot match your NHS number to a GP surgery." />

@@ -73,7 +73,7 @@ export default {
     notAvailableInWales: 'The NHS App is not available in Wales because health services are managed separately from England.',
     reference: 'Reference: ',
     termsNotAccepted: 'You need to accept NHS login terms of use to continue',
-    thisCanBeOneOfTwoProblems: 'This can be one of two problems:',
+    thereWasAnErrorEither: 'There was an error either:',
     weCannotConnectToSurgeryOrMatchYourNhsNumber: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
     weCannotGetYourDetailsFromYourGpSurgery: 'We cannot get your details from your GP surgery.',
     weCannotLoginYouIn: 'We cannot log you in to the NHS App.',
@@ -189,16 +189,16 @@ export default {
         linkText: 'contact us',
       },
     ],
-    weCannotGetYourLoginDetailsOrConnectToYourSurgery: {
+    connectToGetYourSurgeryOrGettingYourLoginDetails: {
       item1: {
         id: '1',
-        text: 'we cannot get your NHS login details',
-        label: 'we cannot get your NHS login details',
+        text: 'connecting to your GP Surgery',
+        label: 'connecting to your GP Surgery',
       },
       item2: {
         id: '2',
-        text: 'we cannot connect to your GP surgery',
-        label: 'we cannot connect to your GP surgery',
+        text: 'getting your NHS log in details',
+        label: 'getting your NHS log in details',
       },
     },
     youCannotUse: 'You cannot use the NHS app if you have not accepted NHS login terms of use.',

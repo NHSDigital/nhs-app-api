@@ -84,7 +84,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 var validator = new SessionValidator(_logger);
                 validator.LogErrorMessages(model);
-
                 if (!validator.IsPostValid(model))
                 {
                     return _errorResultBuilder.BuildResult(new ErrorTypes.LoginBadRequest());

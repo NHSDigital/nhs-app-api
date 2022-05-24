@@ -72,6 +72,16 @@ class CitizenIdSessionCreateJourney {
         }
     }
 
+    fun createInternalServerErrorFor(patient: Patient) {
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        mockingStepsInitialise(patient, redirectUri)
+
+        mockingClient.forCitizenId.mock {
+            tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
+                .respondWithServerError()
+        }
+    }
+
     private fun mockingStepsInitialise(patient: Patient, redirectUri: String): String {
         mockingClient.forCitizenId.mock {
             initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)

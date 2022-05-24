@@ -17,10 +17,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             Navigation = new AndroidSlimCloseNavigation(driver);
         }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
-        private AndroidLabel ThisCouldBeText => AndroidLabel.WithText(_driver, "This can be one of two problems:");
-        private AndroidLabel CannotGetLoginDetailsText => AndroidLabel.WithText(_driver, "we cannot get your NHS login details");
-        private AndroidLabel CannotConnectToGpSurgeryText => AndroidLabel.WithText(_driver, "we cannot connect to your GP surgery");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
+        private AndroidLabel ThisCouldBeText => AndroidLabel.WithText(_driver, "There was an error either:");
+        private AndroidLabel ConnectingToGpSurgeryText => AndroidLabel.WithText(_driver, "connecting to your GP Surgery");
+        private AndroidLabel GettingLoginDetailsText => AndroidLabel.WithText(_driver, "getting your NHS log in details");
         private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back and try logging in again.");
         private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
         private AndroidLabel ForUrgentMedicalAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
@@ -48,8 +48,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public AndroidCreateSessionUpstreamSystemTimeoutErrorPage AssertPageElements()
         {
             ThisCouldBeText.AssertVisible();
-            CannotGetLoginDetailsText.AssertVisible();
-            CannotConnectToGpSurgeryText.AssertVisible();
+            ConnectingToGpSurgeryText.AssertVisible();
+            GettingLoginDetailsText.AssertVisible();
             GoBackText.AssertVisible();
             IfYouNeedText.AssertVisible();
             ForUrgentMedicalAdvice.AssertVisible();

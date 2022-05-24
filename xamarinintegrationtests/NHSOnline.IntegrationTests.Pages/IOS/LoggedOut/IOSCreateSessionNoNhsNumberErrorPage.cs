@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSCreateSessionNoNhsNumberErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in");
 
         private IOSLabel CannotMatchNhsNumberText => IOSLabel
             .WithText(

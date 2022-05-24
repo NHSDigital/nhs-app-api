@@ -430,10 +430,10 @@ describe('authReturn layout', () => {
       [400, 'Cannot log in'],
       [468, 'Cannot log in'],
       [500, 'Cannot log in'],
-      [403, 'Login failed'],
-      [469, 'Login failed'],
-      [502, 'Login failed'],
-      [504, 'Login failed'],
+      [403, 'Cannot log in'],
+      [469, 'Cannot log in'],
+      [502, 'Cannot log in'],
+      [504, 'Cannot log in'],
     ])('on error %i the heading content of h1 should be %s', (status, headingTitle) => {
       beforeEach(() => {
         wrapper = mountAuthReturnLayout({ status });

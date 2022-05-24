@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _connectionRequest.OdsCode = "A0B1C2";
             _registrationRequest = fixture.Freeze<Im1RegistrationRequest>();
             _registrationRequest.OdsCode = "A0B1C2";
-            _systemUnderTest = fixture.Create<Im1ConnectionValidator>(); 
+            _systemUnderTest = fixture.Create<Im1ConnectionValidator>();
         }
 
         [DataTestMethod]
@@ -187,13 +187,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             result.Should().BeFalse();
             invalidParams.Should().BeEquivalentTo(expectedInvalidParams);
         }
-        
+
         [TestMethod]
         public void IsPatientIm1ConnectionRequestValid_ValidData_ReturnsTrue()
         {
             // Arrange
             var request = new Im1RegistrationRequest
-            {      
+            {
                 AccountId = "AccountID",
                 LinkageKey = "1234",
                 OdsCode = "A1B2C3",

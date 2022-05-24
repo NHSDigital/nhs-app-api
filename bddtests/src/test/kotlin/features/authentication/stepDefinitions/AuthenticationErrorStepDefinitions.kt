@@ -2,11 +2,11 @@ package features.authentication.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.Supplier
-import io.cucumber.java.en.Given
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.sharedSteps.BrowserSteps
+import io.cucumber.java.en.Given
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journeys.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journeys.termsAndConditions.TermsAndConditionsJourneyFactory
@@ -145,4 +145,20 @@ class AuthenticationErrorStepDefinitions {
         login.using(patient)
     }
 
+    private fun setupAndRespondWithInternalServerError(patient: Patient, gpSystem: Supplier) {
+        SerenityHelpers.setPatient(patient)
+
+        CitizenIdSessionCreateJourney().createInternalServerErrorFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
+
+        browser.goToApp()
+        login.using(patient)
+    }
+
+    @Given("I attempt to log in as an EMIS and received internal server error from CID")
+    fun iAttemptToLogInAsAnEMISUserAndReceivedTheCIDInternalServerError() {
+        val supplier = Supplier.EMIS
+        val patient = Patient.getDefault(supplier)
+        setupAndRespondWithInternalServerError(patient, supplier)
+    }
 }

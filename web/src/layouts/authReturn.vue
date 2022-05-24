@@ -82,7 +82,7 @@
                     <error-container v-else-if="statusCode===469">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
                       <error-paragraph from="login.authReturn.cannotMatchNhsNumberToSurgery" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph-with-links
@@ -129,9 +129,7 @@
                     <error-container v-else-if="statusCode===403">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
-                      <error-paragraph
-                        from="login.authReturn.weCannotGetYourDetailsFromYourGpSurgery" />
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -157,10 +155,10 @@
                     <error-container v-else-if="statusCode===502">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
-                      <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
+                      <error-paragraph from="login.authReturn.thereWasAnErrorEither" />
                       <error-unordered-list
-                        from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
+                        from="login.authReturn.connectToGetYourSurgeryOrGettingYourLoginDetails" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -173,10 +171,10 @@
                     <error-container v-else-if="statusCode===504">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
-                      <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
+                        {{ $t('login.authReturn.cannotLogin') }} </h1>
+                      <error-paragraph from="login.authReturn.thereWasAnErrorEither" />
                       <error-unordered-list
-                        from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
+                        from="login.authReturn.connectToGetYourSurgeryOrGettingYourLoginDetails" />
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouNeedToBook" />
                       <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
@@ -313,7 +311,9 @@ export default {
         title = this.$t('login.authReturn.termsNotAccepted');
       } else if (this.statusCode === 465) {
         title = this.$t('login.authReturn.under13.title');
-      } else if (this.statusCode === 400 || this.statusCode === 500 || this.statusCode === 468) {
+      } else if (this.statusCode === 400 || this.statusCode === 500 || this.statusCode === 468
+                 || this.statusCode === 403 || this.statusCode === 469 || this.statusCode === 502
+                 || this.statusCode === 504) {
         title = this.$t('login.authReturn.cannotLogin');
       } else {
         title = this.$t('login.authReturn.loginFailed');
