@@ -22,6 +22,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     [BusinessRule("BR-IC-01.4", "While within any journey that engages Web Integration, if Internet connectivity is lost on a device, error screen with back to home link is displayed which enables going back to Home view for the User")]
     public class OnDemandGpSessionBackToHomeConnectionErrorTests
     {
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public async Task APatientCanGoBackToHomeWhenThereIsAConnectionErrorCreatingOnDemandGpSessionAndroid(IAndroidDriverWrapper driver)
         {

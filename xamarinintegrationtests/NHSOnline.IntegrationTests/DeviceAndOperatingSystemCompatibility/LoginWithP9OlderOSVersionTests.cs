@@ -11,6 +11,7 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
     [TestClass]
     public class LoginWithP9OlderOSVersionTests
     {
+		[NhsAppFlakyTest]
         [NhsAppIOSTest(IOSDevice = IOSDevice.iPhoneX, OSVersion = IOSVersion.Eleven)]
         public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS11(IIOSDriverWrapper driver)
         {

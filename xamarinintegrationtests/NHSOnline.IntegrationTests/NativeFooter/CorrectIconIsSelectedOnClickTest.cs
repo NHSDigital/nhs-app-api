@@ -62,6 +62,7 @@ namespace NHSOnline.IntegrationTests.NativeFooter
                 .Navigation.AssertYourHealthSelected();
         }
 
+		[NhsAppFlakyTest]
         [NhsAppIOSTest]
         public void APatientCanNavigateToEachHubUsingTheBottomNavAndCanSeeTheRelevantBottomNavIconHighlightedIOS(
             IIOSDriverWrapper driver)

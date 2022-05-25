@@ -29,6 +29,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     [BusinessRule("BR-IC-02.1", "When native back button is chosen while Internet connectivity error screen with try again link/button is displayed, try again action is triggered to retrieve last screen before Internet connectivity was lost")]
     public class TryAgainConnectionErrorTests
     {
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public async Task APatientCanTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
@@ -328,7 +329,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
         }
-
+        
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public async Task APatientCanUseNativeBackToTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
