@@ -1,4 +1,4 @@
-package pages.externalSites
+package pages.gpAtHand.externalSites
 
 import pages.HybridPageElement
 import pages.HybridPageObject

@@ -14,9 +14,9 @@ import net.thucydides.core.annotations.Steps
 import pages.HealthAdvicePage
 import pages.assertElementNotPresent
 import pages.assertIsVisible
-import pages.externalSites.AdviceAboutCoronavirusPage
-import pages.externalSites.HealthAToZPage
-import pages.externalSites.OneOneOneOnlinePage
+import pages.gpAtHand.externalSites.AdviceAboutCoronavirusPage
+import pages.gpAtHand.externalSites.HealthAToZPage
+import pages.gpAtHand.externalSites.OneOneOneOnlinePage
 import utils.SerenityHelpers
 
 open class HealthAdviceStepDefinitions {

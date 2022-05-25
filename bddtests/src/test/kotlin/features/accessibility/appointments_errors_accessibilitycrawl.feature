@@ -111,14 +111,14 @@ Feature: appointment errors accessibility
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    And I see appropriate try again warning message when there is an error with 'xx'
+    And I see appropriate GP warning when there is a loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
     And the Errors_AGP15A_UnexpectedErrorBookingAppointment page is saved to disk
 
   Scenario: GP15b error is captured
     Given EMIS is unavailable for available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message when there is a loading error with '4e'
+    Then I see appropriate warning when there is a loading error with '4e' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4e'
     And the Errors_AGP15B_UnexpectedErrorRetrievingAppointmentSlots page is saved to disk
 
   Scenario Outline: VISION user sees appropriate warning message when it returns corrupt data when cancelling appointment

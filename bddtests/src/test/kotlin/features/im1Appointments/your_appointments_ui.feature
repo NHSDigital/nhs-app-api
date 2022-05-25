@@ -120,15 +120,26 @@ Feature: Your Appointments Frontend
       | VISION    |
 
   #500
-  Scenario: TPP user sees appropriate error message when it returns corrupt data
+  Scenario: TPP user sees appropriate error message when it returns corrupt data and can use contact us link
     Given TPP returns corrupted response for my appointments
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again warning message when there is an error with 'xx'
-    When I click the warning 'Report a problem' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then I see appropriate warning when there is an appointment loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
+    When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+
+  Scenario: TPP user sees appropriate error message when it returns corrupt data and can use 111 link
+    Given TPP returns corrupted response for my appointments
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    And I am logged in
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
+    Then I see appropriate warning when there is an appointment loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
+    When I click the warning '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
     Then a new tab has been opened by the link
 
   Scenario: EMIS user retries to view my appointments after it returns corrupt data
@@ -137,7 +148,7 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    And I see appropriate try again warning message when there is an error with 'xx'
+    And I see appropriate warning when there is an appointment loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
     And I click the 'Try again' button
     Then the page title is "Your GP appointments"
     And I am informed I have no historical appointments
@@ -161,15 +172,25 @@ Feature: Your Appointments Frontend
       | VISION    | 3s     |
 
   #502
-  Scenario: TPP user sees appropriate error message when it returns unknown exception viewing appointments
+  Scenario: TPP user sees appropriate error message when it returns unknown exception viewing appointments and can use contact us link
     Given an unknown exception occurs when I want to view my TPP appointments
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again warning message when there is an error with '4t'
+    Then I see appropriate warning when there is an appointment loading error with '4t' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4t'
     When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
+
+  Scenario: TPP user sees appropriate error message when it returns unknown exception viewing appointments and can use 111 link
+    Given an unknown exception occurs when I want to view my TPP appointments
+    And I am logged in
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
+    Then I see appropriate warning when there is an appointment loading error with '4t' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4t'
+    When I click the warning '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then a new tab has been opened by the link
 
   Scenario: A TPP user sees appropriate error message when GP system is throttling
     Given TPP is throttling when I want to view my appointments
@@ -177,7 +198,7 @@ Feature: Your Appointments Frontend
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
-    Then I see appropriate try again warning message when there is an error with '4t'
+    Then I see appropriate warning when there is an appointment loading error with '4t' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4t'
     When I click the warning 'Back' link
     Then the Appointments Hub page is displayed
 

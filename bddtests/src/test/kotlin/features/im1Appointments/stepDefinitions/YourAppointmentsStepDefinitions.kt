@@ -233,13 +233,16 @@ class YourAppointmentsStepDefinitions {
         appointmentForbiddenError.assertNHS111Online()
     }
 
-    @Then("^I see appropriate try again warning message when there is an error with '(.*)'$")
-    fun iSeeAppropriateTryAgainWarningMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        errorDialogPage.assertReferenceCode(prefix)
-                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
-                .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
-                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
+    @Then(
+        "^I see appropriate warning when there is an appointment loading error with '(.*)' link with a url of '(.*)'$")
+    fun iSeeAppropriateWarningMessageWhenThereIsAnAppointmentLoadingErrorWithPrefix(prefix: String, url: String) {
+        errorDialogPage
+            .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointments)
+            .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointments)
+            .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryLoadingGPAppointmentsAgain)
+            .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactGpSurgeryDirectlyBooking)
+            .assertWarningLink(
+                yourAppointmentsUISteps.yourAppointmentsPage.contactUsKeepGettingParagraph(prefix).startText, url)
     }
 
     @Then("^I see appropriate go back try again warning message when there is an error with '(.*)'$")

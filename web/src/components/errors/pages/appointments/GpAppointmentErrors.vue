@@ -26,13 +26,19 @@
 
     <message-dialog-generic v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
       || error.status === genericStatusCodes.BAD_GATEWAY" :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemLoading"/>
-      <error-paragraph from="appointments.error.tryAgainNow"/>
-      <contact-111
-        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
-        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
+      <error-title title="appointments.error.cannotShowGpAppointments"
+                   header="appointments.error.cannotShowGpAppointments" />
+      <error-paragraph from="appointments.error.tryLoadingAppointmentsAgain"/>
       <error-button from="generic.tryAgain" @click="$router.go()" />
-      <report-a-problem :reference="error.serviceDeskReference"/>
+      <error-paragraph from="appointments.error.contactYourSurgeryDirectly"/>
+      <contact-111
+        :text="$t('appointments.error.forUrgentMedicalAdvice.text')"
+        :aria-label="$t('appointments.error.forUrgentMedicalAdvice.label')"/>
+      <error-link from="appointments.error.contactWithErrorCode"
+                  :action="contactUsUrl"
+                  target="_blank"
+                  :query-param="contactUsParam"
+                  :params="{errorCode: error.serviceDeskReference}"/>
       <error-link from="generic.back"
                   :action="backUrl"
                   :desktop-only="true"/>
@@ -82,7 +88,6 @@ import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import GpAppointmentGpSessionErrors from '@/components/errors/pages/appointments/GpAppointmentGpSessionErrors';
 import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
-import ReportAProblem from '@/components/errors/ReportAProblem';
 
 import {
   APPOINTMENTS_PATH,
@@ -105,7 +110,6 @@ export default {
     ErrorTitle,
     GpAppointmentGpSessionErrors,
     MessageDialogGeneric,
-    ReportAProblem,
   },
   mixins: [ErrorPageMixin],
   props: {

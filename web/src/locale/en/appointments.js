@@ -131,6 +131,15 @@ export default {
       text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to',
       label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
+    cannotShowAppointments: 'Cannot show appointments',
+    cannotAccessAppointments: 'Cannot access appointments',
+    contactYourSurgeryDirectly: 'Contact your GP surgery directly if you need to book an appointment or get a prescription now.',
+    goBackAndTryAgain: 'Go back and try again.',
+    ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
+    forUrgentMedicalAdvice: {
+      text: 'For urgent medical advice, go to',
+      label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
+    },
   },
   guidance: {
     additionalGpServices: {

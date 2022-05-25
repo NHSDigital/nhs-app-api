@@ -30,11 +30,23 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
             .assertPageTitle(availableAppointmentsPage.cannotShowGpAppointmets)
     }
 
-    @Then("^I see appropriate warning message when there is a loading error with '(.*)'$")
-    fun iSeeAppropriateErrorWarningMessageWhenThereIsALoadingErrorWithPrefix(prefix: String) {
-        errorDialogPage.assertWarningParagraphText(availableAppointmentsPage.getGoBackAndTryAgainParagraph(prefix))
-                .assertWarningParagraphText(availableAppointmentsPage.ifItContinues)
-                .assertPageHeader(availableAppointmentsPage.problemLoadingTitle)
-                .assertPageTitle(availableAppointmentsPage.problemLoadingTitle)
+    @Then("^I see appropriate GP warning when there is a loading error with '(.*)' link with a url of '(.*)'$")
+    fun iSeeAppropriateGpWarningMessageWhenThereIsALoadingErrorWithPrefix(prefix: String, url: String) {
+        errorDialogPage
+            .assertPageHeader(availableAppointmentsPage.cannotShowGpAppointments)
+            .assertPageTitle(availableAppointmentsPage.cannotShowGpAppointments)
+            .assertWarningParagraphText(availableAppointmentsPage.tryLoadingGPAppointmentsAgain)
+            .assertWarningParagraphText(availableAppointmentsPage.contactGpSurgeryDirectlyBooking)
+            .assertWarningLink(availableAppointmentsPage.contactUsKeepGettingParagraph(prefix).startText, url)
+    }
+
+    @Then("^I see appropriate warning when there is a loading error with '(.*)' link with a url of '(.*)'$")
+    fun iSeeAppropriateWarningMessageWhenThereIsALoadingErrorWithPrefix(prefix: String, url: String) {
+        errorDialogPage
+            .assertPageHeader(availableAppointmentsPage.cannotShowAppointments)
+            .assertPageTitle(availableAppointmentsPage.cannotShowAppointments)
+            .assertWarningParagraphText(availableAppointmentsPage.goBackTryAgain)
+            .assertWarningParagraphText(availableAppointmentsPage.bookAppointment)
+            .assertWarningLink(availableAppointmentsPage.contactUsKeepGettingParagraph(prefix).startText, url)
     }
 }

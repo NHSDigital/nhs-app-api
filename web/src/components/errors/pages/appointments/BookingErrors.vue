@@ -37,15 +37,18 @@
       v-else-if="error && (error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
         || error.status === genericStatusCodes.BAD_GATEWAY)"
       :id="errorId" override-style="plain">
-      <error-title title="appointments.error.thereIsAProblemLoading"/>
-      <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                       :variable="error.serviceDeskReference"/>
+      <error-title title="appointments.error.cannotShowAppointments"
+                   header="appointments.error.cannotShowAppointments" />
+      <error-paragraph from="appointments.error.goBackAndTryAgain" />
+      <error-paragraph from="appointments.error.ifYouNeedToBook" />
       <contact-111
-        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
-        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
-      <error-link from="generic.contactUs"
+        :text="$t('appointments.error.forUrgentMedicalAdvice.text')"
+        :aria-label="$t('appointments.error.forUrgentMedicalAdvice.label')"/>
+      <error-link from="appointments.error.contactWithErrorCode"
                   :action="contactUsUrl"
-                  target="_blank"/>
+                  target="_blank"
+                  :query-param="contactUsParam"
+                  :params="{errorCode: error.serviceDeskReference}"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>

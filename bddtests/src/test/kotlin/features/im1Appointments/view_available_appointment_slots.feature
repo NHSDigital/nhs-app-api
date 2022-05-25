@@ -168,23 +168,40 @@ Feature: View Available Appointment Slots Frontend
     | VISION    |
 
   #500
-  Scenario: TPP user sees appropriate shutter message when GP system returns corrupt data
+  Scenario: TPP user sees appropriate shutter message when GP system returns corrupt data and can use contact us link
     Given TPP returns corrupt data for appointment slots
     And 'NHS UK' responds to requests for '/nhs-app-contact-us'
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message when there is a loading error with 'xx'
+    Then I see appropriate warning when there is a loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
     When I click the warning 'Contact us' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
+  Scenario: TPP user sees appropriate shutter message when GP system returns corrupt data and can use 111 link
+    Given TPP returns corrupt data for appointment slots
+    And 'NHS UK' responds to requests for '/nhs-app-contact-us'
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see appropriate warning when there is a loading error with 'xx' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=xx'
+    When I click the warning '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then a new tab has been opened by the link
+
   #502
-  Scenario: EMIS user sees appropriate error message when GP system is unavailable
+  Scenario: EMIS user sees appropriate error message when GP system is unavailable and can use contact us link
     Given EMIS is unavailable for available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate warning message when there is a loading error with '4e'
+    Then I see appropriate warning when there is a loading error with '4e' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4e'
     When I click the warning 'Back' link
     Then the Your Appointments page is displayed
+
+  Scenario: EMIS user sees appropriate error message when GP system is unavailable and can use 111 link
+    Given EMIS is unavailable for available appointment slots
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see appropriate warning when there is a loading error with '4e' link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=4e'
+    When I click the warning '111.nhs.uk' link with a url of 'http://stubs.local.bitraft.io:8080/external/111/home'
+    Then a new tab has been opened by the link
 
   #504
   Scenario: VISION user opens up contact us after a timeout
