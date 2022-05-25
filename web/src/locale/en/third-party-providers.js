@@ -93,7 +93,7 @@ export default {
           descriptionText: 'This includes your hospital, mental health and social care appointments',
         },
         thirdPartyWarning: {
-          featureName: 'Hospital and other appointments',
+          featureName: 'View and manage your hospital and other appointments',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
