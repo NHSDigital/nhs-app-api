@@ -6,6 +6,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -30,6 +31,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<MedicalRecordViewMetric>, MedicalRecordViewMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<MedicalRecordViewMetric>, MedicalRecordViewEventParser>();
+
+            serviceCollection.AddTransient<IAuditLogEtl<NotificationToggleMetric>, NotificationToggleMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<NotificationToggleMetric>, NotificationToggleEventParser>();
 
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));

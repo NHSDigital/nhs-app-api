@@ -36,6 +36,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<NominatedPharmacyUpdateMetricRow> NominatedPharmacyUpdateMetric =>
             Table<NominatedPharmacyUpdateMetricRow>();
 
+        internal PostgresTable<NotificationToggleMetricRow> NotificationToggleMetric => Table<NotificationToggleMetricRow>();
+
         internal PostgresTable<OrganDonationRegistrationCreateMetricRow> OrganDonationRegistrationCreateMetric =>
             Table<OrganDonationRegistrationCreateMetricRow>();
 

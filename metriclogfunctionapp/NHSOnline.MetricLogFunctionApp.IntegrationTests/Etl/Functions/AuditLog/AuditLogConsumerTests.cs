@@ -38,6 +38,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             var medicalRecordViewMetricRows = await env.Postgres.Events.MedicalRecordViewMetric.FetchAll();
             medicalRecordViewMetricRows.Should().HaveCount(1);
 
+            var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
+            notificationToggleMetricRows.Should().HaveCount(1);
+
             using (new AssertionScope())
             {
                 var loginMetricRow1 = loginMetricRows.First(r => r.SessionId == "TestSession1");
@@ -89,6 +92,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 medicalRecordViewMetricRow1.HasSummaryRecordAccess.Should().Be(true);
                 medicalRecordViewMetricRow1.HasDetailedRecordAccess.Should().Be(false);
                 medicalRecordViewMetricRow1.AuditId.Should().Be("AuditId7");
+
+                var notificationToggleMetricRow = notificationToggleMetricRows.First(r => r.LoginId == "NhsLoginSubject-Test");
+                notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.008Z"));
+                notificationToggleMetricRow.NotificationToggle.Should().Be("On");
+                notificationToggleMetricRow.AuditId.Should().Be("AuditId8");
             }
         }
 
@@ -119,6 +127,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             var medicalRecordViewMetricRows = await env.Postgres.Events.MedicalRecordViewMetric.FetchAll();
             medicalRecordViewMetricRows.Should().HaveCount(1);
 
+            var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
+            notificationToggleMetricRows.Should().HaveCount(1);
+
             using (new AssertionScope())
             {
                 var loginMetricRow1 = loginMetricRows.First(r => r.SessionId == "TestSession1");
@@ -170,6 +181,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 medicalRecordViewMetricRow1.HasSummaryRecordAccess.Should().Be(true);
                 medicalRecordViewMetricRow1.HasDetailedRecordAccess.Should().Be(false);
                 medicalRecordViewMetricRow1.AuditId.Should().Be("AuditId7");
+
+                var notificationToggleMetricRow = notificationToggleMetricRows.First(r => r.LoginId == "NhsLoginSubject-Test");
+                notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.008Z"));
+                notificationToggleMetricRow.NotificationToggle.Should().Be("On");
+                notificationToggleMetricRow.AuditId.Should().Be("AuditId8");
             }
         }
 
@@ -214,6 +230,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 AuditId = "AuditId4"
             });
 
+            await env.Postgres.Events.NotificationToggleMetric.Insert(new NotificationToggleMetricRow
+            {
+                LoginId = "NhsLoginSubject-Test",
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 5),
+                NotificationToggle = "On",
+                AuditId = "AuditId5"
+            });
+
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
                     "Login_Success",
@@ -224,7 +248,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3),
                     "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods3", "ref3"),
                 BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4),
-                    "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods4", "ref4"));
+                    "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods4", "ref4"),
+                BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5),
+                    "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref5"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -242,6 +268,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var medicalRecordViewMetricRows = await env.Postgres.Events.MedicalRecordViewMetric.FetchAll();
             var medicalRecordViewMetricRow = medicalRecordViewMetricRows.Should().ContainSingle().Subject;
+
+            var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
+            var notificationToggleMetricRow = notificationToggleMetricRows.Should().ContainSingle().Subject;
 
             using (new AssertionScope())
             {
@@ -275,6 +304,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 medicalRecordViewMetricRow.HasSummaryRecordAccess.Should().Be(true);
                 medicalRecordViewMetricRow.HasDetailedRecordAccess.Should().Be(false);
                 medicalRecordViewMetricRow.AuditId.Should().Be("AuditId4");
+
+                notificationToggleMetricRow.LoginId.Should().Be("NhsLoginSubject-Test");
+                notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.005Z"));
+                notificationToggleMetricRow.NotificationToggle.Should().Be("On");
+                notificationToggleMetricRow.AuditId.Should().Be("AuditId5");
             }
         }
 
@@ -300,6 +334,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var medicalRecordViewMetricRows = await env.Postgres.Events.MedicalRecordViewMetric.FetchAll();
             medicalRecordViewMetricRows.Should().BeEmpty();
+
+            var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
+            notificationToggleMetricRows.Should().BeEmpty();
         }
 
         [NhsAppTest]
@@ -324,6 +361,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var medicalRecordViewMetricRows = await env.Postgres.Events.MedicalRecordViewMetric.FetchAll();
             medicalRecordViewMetricRows.Should().BeEmpty();
+
+            var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
+            notificationToggleMetricRows.Should().BeEmpty();
         }
 
         private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
@@ -361,7 +401,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods4", "ref4"),
                 BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref5"),
                 BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref6"),
-                BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref7")
+                BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref7"),
+                BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref8")
             };
     }
 }

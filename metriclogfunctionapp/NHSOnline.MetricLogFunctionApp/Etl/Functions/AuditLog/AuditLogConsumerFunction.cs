@@ -11,6 +11,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -22,6 +23,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
         private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
+        private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -31,6 +33,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
             IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
+            IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -39,6 +42,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
             _medicalRecordViewEtl = medicalRecordViewEtl;
+            _notificationToggleEtl = notificationToggleEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -78,6 +82,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _secondaryCareSummaryEtl.Execute(events);
+                await _notificationToggleEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
                 await _medicalRecordViewEtl.Execute(events);
             }

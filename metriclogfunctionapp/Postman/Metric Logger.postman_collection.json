@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "992844b5-f991-44ae-8cb2-0847d90c27ca",
 		"name": "Metric Logger",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13794420"
 	},
 	"item": [
 		{
@@ -74,6 +75,35 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Notification Toggle Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"NotificationToggle_Response\",\r\n        \"Details\": \"Notification toggled. optIn=true\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -209,6 +239,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Notification Toggle Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"NotificationToggle_Response\",\r\n        \"Details\": \"Notification toggled. optIn=true\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
