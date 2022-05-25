@@ -39,7 +39,8 @@
       :id="errorId" override-style="plain">
       <error-title title="appointments.error.cannotShowAppointments"
                    header="appointments.error.cannotShowAppointments" />
-      <error-paragraph from="appointments.error.goBackAndTryAgain" />
+      <error-link from="appointments.error.goBackAndTryAgain"
+                  :action="appointmentsPath"/>
       <error-paragraph from="appointments.error.ifYouNeedToBook" />
       <contact-111
         :text="$t('appointments.error.forUrgentMedicalAdvice.text')"

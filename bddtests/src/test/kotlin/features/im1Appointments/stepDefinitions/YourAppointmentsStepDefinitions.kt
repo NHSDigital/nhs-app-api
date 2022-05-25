@@ -251,8 +251,8 @@ class YourAppointmentsStepDefinitions {
                 .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryLoadingGPAppointmentsAgain)
                 .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactGpSurgeryDirectly)
                 .assertWarningParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.urgentMedicalAdvice)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointmets)
-                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointmets)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointments)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.cannotShowGpAppointments)
     }
 
     @Then("^I click the session error back link$")

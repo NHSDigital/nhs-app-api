@@ -17,6 +17,9 @@ class ErrorDialogPage : HybridPageObject() {
     private val shutterTextFinderFormat = "$shutterContainerLocator//p[@data-purpose='%s']"
     private val shutterTextLocator = String.format(shutterTextFinderFormat, "msg-text")
 
+    private val goBackAndTryAgainText = "Go back and try again."
+    private val goBackAndTryAgainUrl = "appointments/gp-appointments"
+
     fun assertPageTitle(title: String): ErrorDialogPage {
         var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
         while (retryCount > 0) {
@@ -48,20 +51,9 @@ class ErrorDialogPage : HybridPageObject() {
         message.assertIsVisible()
         return this
     }
-
-    fun assertWarningParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
-        val locator = "$warningMessageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
-        return assertTextMatches(locator, paragraph);
-    }
     
     fun assertShutterParagraphText(paragraphText: String): ErrorDialogPage {
         val message = getElement("$shutterTextLocator[normalize-space()=\"$paragraphText\"]")
-        message.assertIsVisible()
-        return this
-    }
-
-    fun assertReferenceCode(referenceCode: String): ErrorDialogPage {
-        val message = getElement("//div[contains(text(), 'Reference: $referenceCode')]")
         message.assertIsVisible()
         return this
     }
@@ -94,6 +86,10 @@ class ErrorDialogPage : HybridPageObject() {
             message = "Expected the link called $linkText with target of $url to be available"
         }
         return getElement(locator).assertIsVisible(message)
+    }
+
+    fun assertGoBackAndTryAgainLink() : HybridPageElement{
+        return assertWarningLink(goBackAndTryAgainText, goBackAndTryAgainUrl);
     }
 
     fun assertWarningLink(linkText: String, url: String? = null) : HybridPageElement {

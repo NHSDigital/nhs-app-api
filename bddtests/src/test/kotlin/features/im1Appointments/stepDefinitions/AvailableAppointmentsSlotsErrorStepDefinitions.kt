@@ -26,8 +26,8 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
         errorDialogPage.assertWarningParagraphText(availableAppointmentsPage.tryLoadingGPAppointmentsAgain)
             .assertWarningParagraphText(availableAppointmentsPage.contactGpSurgeryDirectly)
             .assertWarningParagraphText(availableAppointmentsPage.urgentMedicalAdvice)
-            .assertPageHeader(availableAppointmentsPage.cannotShowGpAppointmets)
-            .assertPageTitle(availableAppointmentsPage.cannotShowGpAppointmets)
+            .assertPageHeader(availableAppointmentsPage.cannotShowGpAppointments)
+            .assertPageTitle(availableAppointmentsPage.cannotShowGpAppointments)
     }
 
     @Then("^I see appropriate GP warning when there is a loading error with '(.*)' link with a url of '(.*)'$")
@@ -45,8 +45,9 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
         errorDialogPage
             .assertPageHeader(availableAppointmentsPage.cannotShowAppointments)
             .assertPageTitle(availableAppointmentsPage.cannotShowAppointments)
-            .assertWarningParagraphText(availableAppointmentsPage.goBackTryAgain)
             .assertWarningParagraphText(availableAppointmentsPage.bookAppointment)
             .assertWarningLink(availableAppointmentsPage.contactUsKeepGettingParagraph(prefix).startText, url)
+
+        errorDialogPage.assertGoBackAndTryAgainLink()
     }
 }
