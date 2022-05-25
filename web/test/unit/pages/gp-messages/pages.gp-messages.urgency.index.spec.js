@@ -62,11 +62,11 @@ describe('gp messages urgency page', () => {
       });
 
       it('will emit UPDATE_HEADER with no recipients as event', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'messages.youCannotSendMessages');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'messages.cannotSendGpSurgeryMessages');
       });
 
       it('will emit UPDATE_TITLE with no recipients as event', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'messages.youCannotSendMessages');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'messages.cannotSendGpSurgeryMessages');
       });
     });
 

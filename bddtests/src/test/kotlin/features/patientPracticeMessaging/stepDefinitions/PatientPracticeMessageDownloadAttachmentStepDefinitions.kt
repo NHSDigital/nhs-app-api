@@ -26,5 +26,6 @@ class PatientPracticeMessageDownloadAttachmentStepDefinitions {
     @Then("^I see the invalid attachment message$")
     fun iSeeInvalidAttachmentMessage() {
         patientPracticeMessagingDownloadAttachmentPage.assertInvalidMessage()
+        patientPracticeMessagingDownloadAttachmentPage.assertReasonsWhyFileCannotBeViewed()
     }
 }

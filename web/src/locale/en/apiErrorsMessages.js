@@ -8,10 +8,10 @@ export default {
       retryButtonText: 'Try again',
     },
     403: {
-      pageTitle: 'Messaging unavailable',
-      pageHeader: 'Messaging unavailable',
-      header: 'You are not currently able to use messaging.',
-      subheader: '',
+      pageTitle: 'Cannot access GP messaging',
+      pageHeader: 'Cannot access GP messaging',
+      header: 'This feature has been turned off by your GP Surgery.',
+      subheader: 'Contact your GP for more information or to access GP services.',
       message: {
         text: 'Contact your GP surgery for more information. For urgent medical advice, go to {111link} or call 111.',
         label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',

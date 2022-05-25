@@ -27,10 +27,12 @@
         </generic-button>
       </div>
       <div v-else id="noRecipients">
+        <p id="messagesNotTurnedOn">{{ $t('messages.gpSurgeryMessagesNotTurnedOn') }}</p>
+        <p id="conactYourGp">{{ $t('messages.contactGpForMoreInformation') }}</p>
         <p id="subHeader"
            class="nhsuk-hint"
-           :aria-label="$t('messages.contactSurgeryForMoreInformationOrGoToOneOneOne')">
-          {{ $t('messages.contactSurgeryForMoreInformationOr') }}
+           :aria-label="$t('messages.forUrgentMedicalAdviceGoToOneOneOne')">
+          {{ $t('messages.forUrgentMedicalAdvice') }}
           <a style="display:inline" href="https://111.nhs.uk">
             {{ $t('messages.nhs111Link') }}
           </a>
@@ -105,8 +107,8 @@ export default {
     const { messageRecipients } = this.$store.state.gpMessages;
 
     if (!messageRecipients || isEmptyArray(messageRecipients)) {
-      EventBus.$emit(UPDATE_HEADER, 'messages.youCannotSendMessages');
-      EventBus.$emit(UPDATE_TITLE, 'messages.youCannotSendMessages');
+      EventBus.$emit(UPDATE_HEADER, 'messages.cannotSendGpSurgeryMessages');
+      EventBus.$emit(UPDATE_TITLE, 'messages.cannotSendGpSurgeryMessages');
     }
 
     this.loading = false;

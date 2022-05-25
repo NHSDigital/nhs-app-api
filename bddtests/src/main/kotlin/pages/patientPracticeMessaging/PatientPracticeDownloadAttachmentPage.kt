@@ -21,8 +21,19 @@ class PatientPracticeDownloadAttachmentPage: HybridPageObject() {
     }
 
     fun assertInvalidMessage() {
-       pageElement("//h1[normalize-space(text())='This file is not available in the NHS App']")
+       pageElement("//h1[normalize-space(text())='Cannot view file in the NHS App']")
                 .assertIsDisplayed("Expected Invalid Message")
+    }
+
+    fun assertReasonsWhyFileCannotBeViewed() {
+        pageElement("//p[normalize-space(text())='This file cannot be viewed because either:']")
+            .assertIsDisplayed("Expected reason paragraph to be displayed")
+
+        pageElement("//li[normalize-space(text())=\"it's too large\"]")
+            .assertIsDisplayed("Expected first bullet point to be displayed")
+
+        pageElement("//li[normalize-space(text())='the file type cannot be sent in the app']")
+            .assertIsDisplayed("Expected second bullet point to be displayed")
     }
 
     fun hasAttachmentDownloaded(expectedFileName: String): Boolean {

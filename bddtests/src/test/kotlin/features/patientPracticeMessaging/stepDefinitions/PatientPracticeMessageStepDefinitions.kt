@@ -218,7 +218,9 @@ class PatientPracticeMessageStepDefinitions {
     @Then("^I see a message indicating that I have no recipients for patient practice messaging$")
     fun iSeeThePatientPracticeMessagingUrgencyRecipientsPageWithNoRecipientsMessage() {
         patientPracticeMessagingUrgencyPage.assertNoRecipientsHeader()
-        patientPracticeMessagingUrgencyPage.assertNoRecipientsMessage()
+        patientPracticeMessagingUrgencyPage.assertGpMessagesNotTurnedOnMessage()
+        patientPracticeMessagingUrgencyPage.assertContactYourGpMessage()
+        patientPracticeMessagingUrgencyPage.assertForUrgentMedicalAdviceMessage()
     }
 
     @Then("^I see a message explaining patient practice messaging is not for urgent advice$")

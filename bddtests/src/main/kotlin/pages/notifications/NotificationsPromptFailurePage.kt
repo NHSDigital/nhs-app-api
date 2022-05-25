@@ -17,7 +17,7 @@ class NotificationsPromptFailurePage : HybridPageObject() {
 
     private val title by lazy {
         HybridPageElement(
-                webDesktopLocator = "//h1[normalize-space(text())='Sorry, we could not set your notifications choice']",
+                webDesktopLocator = "//h1[normalize-space(text())='Cannot update notification preferences']",
                 page = this,
                 helpfulName = "header")
     }

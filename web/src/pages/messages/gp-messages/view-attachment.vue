@@ -2,7 +2,15 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <p v-if="!isViewable">{{ $t('messages.toAccessContactSurgery') }}</p>
+      <template v-if="!isViewable">
+        <p>{{ $t('messages.cannotViewAttachement.title') }}</p>
+        <ul>
+          <li v-for="reason in $t('messages.cannotViewAttachement.reasons')" :key="reason">
+            {{ reason }}
+          </li>
+        </ul>
+        <p>{{ $t('messages.toAccessContactSurgery') }}</p>
+      </template>
       <div v-else>
         <div id="document" class="attachmentContainer nhsuk-u-margin-top-5" v-html="attachment"/>
         <glossary/>
@@ -58,8 +66,8 @@ export default {
     }
 
     if (!this.isViewable) {
-      EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.gpMessagesAttachmentUnavailable');
-      EventBus.$emit(UPDATE_TITLE, 'navigation.pages.titles.gpMessagesAttachmentUnavailable');
+      EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.gpMessagesAttachmentCannotView');
+      EventBus.$emit(UPDATE_TITLE, 'navigation.pages.titles.gpMessagesAttachmentCannotView');
     }
 
     if (this.document) {

@@ -82,7 +82,7 @@ Feature: IM1 Messaging & Push Notifications
     Then I see the invalid attachment message
     And the IM_FileNotAvailable page is saved to disk
 
-  Scenario: The 'IM18 You cannot currently send messages' page is captured
+  Scenario: The 'IM18 Cannot send GP surgery messages' page is captured
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
     And I am logged in
@@ -92,4 +92,4 @@ Feature: IM1 Messaging & Push Notifications
     And I have no recipients for patient practice messaging
     When I click the Send a message button on the patient practice messaging inbox
     Then I see a message indicating that I have no recipients for patient practice messaging
-    And the IM_YouCannotCurrentlySendMessages page is saved to disk
+    And the IM_CannotSendGpSurgeryMessages page is saved to disk

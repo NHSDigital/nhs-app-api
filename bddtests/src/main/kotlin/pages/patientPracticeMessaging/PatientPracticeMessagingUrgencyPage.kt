@@ -46,18 +46,35 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
 
     fun assertNoRecipientsHeader() {
         Assert.assertEquals(
-                "Header should contain text 'You currently cannot send messages'",
-                "You cannot currently send messages",
+                "Header should contain text 'Cannot send GP surgery messages'",
+                "Cannot send GP surgery messages",
                 header.getPageTitle().text)
     }
 
-    fun assertNoRecipientsMessage() {
-        val noRecipientsMessage = HybridPageElement(
-                "//div[@id='noRecipients']//p",
+    fun assertGpMessagesNotTurnedOnMessage() {
+        val messagesNotTurnedOn = HybridPageElement(
+            "//div[@id='noRecipients']//p[@id='messagesNotTurnedOn']",
+            page=this
+        )
+        Assert.assertEquals("At the moment, your GP Surgery has not turned on messaging in the NHS App.",
+            messagesNotTurnedOn.text)
+    }
+
+    fun assertContactYourGpMessage() {
+        val contactYourGp = HybridPageElement(
+            "//div[@id='noRecipients']//p[@id='conactYourGp']",
+            page=this
+        )
+        Assert.assertEquals("Contact your GP for more information or to access GP services.",
+            contactYourGp.text)
+    }
+
+    fun assertForUrgentMedicalAdviceMessage() {
+        val forUrgentMedicalAdvice = HybridPageElement(
+                "//div[@id='noRecipients']//p[@id='subHeader']",
                 page=this
         )
-        Assert.assertEquals("Contact your GP surgery for more information. For urgent medical advice, " +
-                "go to 111.nhs.uk or call 111.",
-                noRecipientsMessage.text)
+        Assert.assertEquals("For urgent medical advice, go to 111.nhs.uk or call 111.",
+            forUrgentMedicalAdvice.text)
     }
 }
