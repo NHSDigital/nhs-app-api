@@ -68,7 +68,7 @@ export default {
         text: 'For urgent medical advice, go to',
         label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
-      pleaseChooseADifferentAppointment: 'Please choose a different appointment.',
+      pleaseChooseADifferentAppointment: 'Go back and choose another appointment',
       theAppointmentIsNoLongerAvailable: 'This appointment is no longer available',
       thereIsAProblem: 'There\'s a problem',
       youCanGoBack: 'You can go back to see what you have already booked and cancel any appointments that you may no longer need.',
