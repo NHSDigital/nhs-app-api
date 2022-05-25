@@ -131,12 +131,12 @@ class WayfinderStepDefinitions {
 
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
     fun assertReferralsAndAppointmentsWithDataPageIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertWayfinderWithDataTitleIsDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertWayfinderTitleIsDisplayed()
     }
 
     @Then("^the Referrals, hospital and other appointments screen without data is displayed$")
     fun assertReferralsAndAppointmentsWithoutDataPageIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertWayfinderWithoutDataTitleIsDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertWayfinderTitleIsDisplayed()
     }
 
     @Then("^I see an in-review referral$")

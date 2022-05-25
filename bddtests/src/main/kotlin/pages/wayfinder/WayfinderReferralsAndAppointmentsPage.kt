@@ -15,16 +15,10 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     private val noSpecialityRebook = "You need to rebook your referral appointment " +
             "as the one you had booked has been cancelled."
 
-    private val pageTitleWithData = HybridPageElement(
+    private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"Referrals, hospital and other appointments\")]",
         page = this,
         helpfulName = "Wayfinder Referrals And Appointments Title"
-    )
-
-    private val pageTitleWithNoData = HybridPageElement(
-        webDesktopLocator = "//h1[contains(text(),\"You have no referrals or appointments to view or manage\")]",
-        page = this,
-        helpfulName = "Wayfinder No Referrals And Appointments Title"
     )
 
     private val appointmentToConfirmHeading = HybridPageElement(
@@ -131,14 +125,10 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         links.link("Missing or incorrect referrals in review")
     }
 
-    fun assertWayfinderWithDataTitleIsDisplayed() {
-        pageTitleWithData.assertIsVisible()
+    fun assertWayfinderTitleIsDisplayed() {
+        pageTitle.assertIsVisible()
     }
-
-    fun assertWayfinderWithoutDataTitleIsDisplayed() {
-        pageTitleWithNoData.assertIsVisible()
-    }
-
+    
     fun assertNoUpcomingAppointmentsDisplayed() {
         noUpcomingAppointments.assertIsVisible()
     }

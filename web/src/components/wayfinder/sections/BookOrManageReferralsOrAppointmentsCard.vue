@@ -1,5 +1,5 @@
 <template>
-  <card-group class="nhsuk-grid-row">
+  <card-group v-if="hasReferralsOrAppointments" class="nhsuk-grid-row">
     <card-group-item v-for="(appointment, index) in unconfirmedAppointments"
                      :key="`upcoming-appointment-${index}`"
                      class="nhsuk-grid-column-three-quarters">
@@ -44,6 +44,9 @@
 
     </card-group-item>
   </card-group>
+  <p v-else id="no-referrals-or-appointments-text">
+    {{ $t('wayfinder.noReferralsOrAppointments') }}
+  </p>
 </template>
 
 <script>
@@ -66,7 +69,7 @@ export default {
     CardGroupItem,
   },
   props: {
-    hasReferralsNotInReview: {
+    hasReferralsOrAppointments: {
       type: Boolean,
       default: false,
     },
@@ -77,10 +80,6 @@ export default {
     referralsNotInReview: {
       type: Array,
       default: null,
-    },
-    hasUnconfirmedAppointments: {
-      type: Boolean,
-      default: false,
     },
     unconfirmedAppointments: {
       type: Array,

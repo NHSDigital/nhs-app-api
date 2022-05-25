@@ -4,17 +4,19 @@ import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
-const setupStore = (hasReferralsInReview,
+const setupStore = (
+  hasReferralsInReview,
   hasReferralsNotInReview,
   hasConfirmedAppointments,
   hasUnconfirmedAppointments,
   isNativeApp,
-  hasGetters) => {
+  hasApiError,
+) => {
   let referralsNotInReviewArray = [];
   let referralsInReviewArray = [];
   let confirmedAppointmentsArray = [];
   let unconfirmedAppointmentsArray = [];
-  let getters;
+  let apiError = null;
 
   if (hasReferralsNotInReview) {
     referralsNotInReviewArray = [{
@@ -55,15 +57,10 @@ const setupStore = (hasReferralsInReview,
     }];
   }
 
-  if (hasGetters) {
-    getters = { 'knownServices/matchOneById': id => ({
-      id,
-      url: 'www.url.com',
-    }),
-    'serviceJourneyRules/cdssAdminEnabled': false,
-    'serviceJourneyRules/silverIntegrationAppointmentsEnabled': false,
-    'serviceJourneyRules/silverIntegrationEnabled': () => (true),
-    'session/isProxying': false,
+  if (hasApiError) {
+    apiError = {
+      status: 500,
+      serviceDeskReference: '521211',
     };
   }
 
@@ -79,11 +76,17 @@ const setupStore = (hasReferralsInReview,
           confirmedAppointments: confirmedAppointmentsArray,
           unconfirmedAppointments: unconfirmedAppointmentsArray,
         },
-        apiError: null,
+        apiError,
         hasLoaded: true,
       },
     },
-    getters,
+    getters: {
+      'knownServices/matchOneById': id => ({ id, url: 'www.url.com' }),
+      'serviceJourneyRules/cdssAdminEnabled': false,
+      'serviceJourneyRules/silverIntegrationAppointmentsEnabled': false,
+      'serviceJourneyRules/silverIntegrationEnabled': () => true,
+      'session/isProxying': false,
+    },
   });
 };
 
@@ -102,13 +105,15 @@ describe('Summary care response with: ' +
   let ReferralsOrAppointmentsLink;
   let ConfirmedAppointmentsLink;
   let ReferralsInReviewLink;
+  let otherAvailableServicesMenuItems;
+  let ersJumpOffMenuItem;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
   });
 
   beforeEach(() => {
-    $store = setupStore(true, true, true, true, true, false);
+    $store = setupStore(true, true, true, true, true);
   });
 
   describe('if page loaded', () => {
@@ -161,6 +166,15 @@ describe('Summary care response with: ' +
       .toEqual('Missing or incorrect referrals in review');
   });
 
+  it('show other available services menu items', () => {
+    wrapper = createIndexPage();
+    otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
+    ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
+
+    expect(ersJumpOffMenuItem.exists()).toBe(false);
+    expect(otherAvailableServicesMenuItems.exists()).toBe(true);
+  });
+
   describe('if there are confirmed appointments', () => {
     it('hide resulting empty confirmed appointments text', () => {
       wrapper = createIndexPage();
@@ -173,7 +187,7 @@ describe('Summary care response with: ' +
   describe('if there are referrals in review', () => {
     it('hide resulting empty no referrals in review text', () => {
       wrapper = createIndexPage();
-      noReferralsInReviewText = wrapper.find('#no-referrals-or-appointments-text');
+      noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
 
       expect(noReferralsInReviewText.exists()).toBe(false);
     });
@@ -195,13 +209,15 @@ describe('Summary care response with: ' +
   let ReferralsOrAppointmentsLink;
   let ConfirmedAppointmentsLink;
   let ReferralsInReviewLink;
+  let otherAvailableServicesMenuItems;
+  let ersJumpOffMenuItem;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
   });
 
   beforeEach(() => {
-    $store = setupStore(false, true, false, true, true, false);
+    $store = setupStore(false, true, false, true, true);
   });
 
   describe('if page loaded', () => {
@@ -243,6 +259,15 @@ describe('Summary care response with: ' +
     expect(ConfirmedAppointmentsLink.exists()).toBe(true);
     expect(ConfirmedAppointmentsLink.text())
       .toEqual('Missing or incorrect confirmed appointments');
+  });
+
+  it('show other available services menu items', () => {
+    wrapper = createIndexPage();
+    otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
+    ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
+
+    expect(ersJumpOffMenuItem.exists()).toBe(false);
+    expect(otherAvailableServicesMenuItems.exists()).toBe(true);
   });
 
   it('Missing or incorrect referrals in review link is visible', () => {
@@ -266,9 +291,10 @@ describe('Summary care response with: ' +
   describe('if there are no referrals in review', () => {
     it('show resulting empty no referrals in review text', () => {
       wrapper = createIndexPage();
-      noReferralsInReviewText = wrapper.find('#no-referrals-or-appointments-text');
+      noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
 
       expect(noReferralsInReviewText.exists()).toBe(true);
+      expect(noReferralsInReviewText.text()).toBe('You have no referrals being reviewed.');
     });
   });
 });
@@ -280,15 +306,103 @@ describe('Summary care response with: ' +
   'and 0 unconfirmed appointments', () => {
   let $store;
   let wrapper;
-  let youMayHaveOtherReferralsText;
-  let contactTheOrganisationText;
-  let contactHealthcareProviderText;
-  let otherServicesHeader;
-  let otherAvailableServicesMenuItems;
+  let noReferralsOrAppointmentsText;
+  let noConfirmedAppointmentsText;
+  let noReferralsInReviewText;
   let backButton;
   let ReferralsOrAppointmentsLink;
   let ConfirmedAppointmentsLink;
   let ReferralsInReviewLink;
+  let otherAvailableServicesMenuItems;
+  let ersJumpOffMenuItem;
+
+  const createIndexPage = () => mount(WayfinderPage, {
+    $store,
+  });
+
+  beforeEach(() => {
+    $store = setupStore(false, false, false, false, false);
+    dependency.redirectTo = jest.fn();
+  });
+
+  describe('if page loaded', () => {
+    it('show no referrals or appointments text', () => {
+      wrapper = createIndexPage();
+      noReferralsOrAppointmentsText = wrapper.find('#no-referrals-or-appointments-text');
+
+      expect(noReferralsOrAppointmentsText.exists()).toBe(true);
+      expect(noReferralsOrAppointmentsText.text()).toBe('You have no referrals or appointments to view or manage.');
+    });
+
+    describe('if there are no confirmed appointments', () => {
+      it('show resulting empty confirmed appointments text', () => {
+        wrapper = createIndexPage();
+        noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
+
+        expect(noConfirmedAppointmentsText.exists()).toBe(true);
+      });
+    });
+
+    describe('if there are no referrals in review', () => {
+      it('show resulting empty no referrals in review text', () => {
+        wrapper = createIndexPage();
+        noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
+
+        expect(noReferralsInReviewText.exists()).toBe(true);
+        expect(noReferralsInReviewText.text()).toBe('You have no referrals being reviewed.');
+      });
+    });
+
+    it('Missing or incorrect referrals or appointments link is visible', () => {
+      wrapper = createIndexPage();
+      ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+
+      expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
+      expect(ReferralsOrAppointmentsLink.text())
+        .toEqual('Missing or incorrect referrals or appointments');
+    });
+
+    it('Missing or incorrect confirmed appointments link is visible', () => {
+      wrapper = createIndexPage();
+      ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+
+      expect(ConfirmedAppointmentsLink.exists()).toBe(true);
+      expect(ConfirmedAppointmentsLink.text())
+        .toEqual('Missing or incorrect confirmed appointments');
+    });
+
+    it('Missing or incorrect referrals in review link is visible', () => {
+      wrapper = createIndexPage();
+      ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+
+      expect(ReferralsInReviewLink.exists()).toBe(true);
+      expect(ReferralsInReviewLink.text())
+        .toEqual('Missing or incorrect referrals in review');
+    });
+
+    it('show other available services menu items', () => {
+      wrapper = createIndexPage();
+      otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
+      ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
+
+      expect(ersJumpOffMenuItem.exists()).toBe(false);
+      expect(otherAvailableServicesMenuItems.exists()).toBe(true);
+    });
+
+    it('show back button', () => {
+      wrapper = createIndexPage();
+      backButton = wrapper.find('#desktopBackLink');
+
+      expect(backButton.exists()).toBe(true);
+    });
+  });
+});
+
+describe('If summary care response returns with error', () => {
+  let $store;
+  let wrapper;
+  let otherAvailableServicesMenuItems;
+  let ersJumpOffMenuItem;
 
   const createIndexPage = () => mount(WayfinderPage, {
     $store,
@@ -299,68 +413,14 @@ describe('Summary care response with: ' +
     dependency.redirectTo = jest.fn();
   });
 
-  describe('if page loaded', () => {
-    it('show you may have other referrals text', () => {
-      wrapper = createIndexPage();
-      youMayHaveOtherReferralsText = wrapper.find('#you-may-have-other-referrals-text');
-
-      expect(youMayHaveOtherReferralsText.exists()).toBe(true);
-    });
-
-    it('show contact the organisation text', () => {
-      wrapper = createIndexPage();
-      contactTheOrganisationText = wrapper.find('#contact-the-organisation-text');
-
-      expect(contactTheOrganisationText.exists()).toBe(true);
-    });
-
-    it('show contact health provider text', () => {
-      wrapper = createIndexPage();
-      contactHealthcareProviderText = wrapper.find('#contact-the-healthcare-provider-text');
-
-      expect(contactHealthcareProviderText.exists()).toBe(true);
-    });
-
-    it('show other services header', () => {
-      wrapper = createIndexPage();
-      otherServicesHeader = wrapper.find('#other-services-header');
-
-      expect(otherServicesHeader.exists()).toBe(true);
-    });
-
+  describe('if page errored', () => {
     it('show other available services menu items', () => {
       wrapper = createIndexPage();
       otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
+      ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
 
+      expect(ersJumpOffMenuItem.exists()).toBe(true);
       expect(otherAvailableServicesMenuItems.exists()).toBe(true);
-    });
-
-    it('show back button', () => {
-      wrapper = createIndexPage();
-      backButton = wrapper.find('#desktopBackLink');
-
-      expect(backButton.exists()).toBe(true);
-    });
-
-    it('Missing or incorrect referrals or appointments link is hidden', () => {
-      wrapper = createIndexPage();
-      ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
-
-      expect(ReferralsOrAppointmentsLink.exists()).toBe(false);
-    });
-
-    it('Missing or incorrect confirmed appointments link is hidden', () => {
-      wrapper = createIndexPage();
-      ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
-
-      expect(ConfirmedAppointmentsLink.exists()).toBe(false);
-    });
-
-    it('Missing or incorrect referrals in review link is hidden', () => {
-      wrapper = createIndexPage();
-      ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
-
-      expect(ReferralsInReviewLink.exists()).toBe(false);
     });
   });
 });

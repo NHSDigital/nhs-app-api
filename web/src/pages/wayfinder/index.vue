@@ -26,10 +26,11 @@
               </a>
             </p>
           </template>
-          <other-available-services-menu-items />
+          <other-available-services-menu-items
+            id="other-available-services-menu-items"/>
         </template>
 
-        <template v-else-if="hasReferralsOrAppointments">
+        <template v-else>
           <h2 id="book-Or-Manage-Referrals-And-Appointments-Title">
             {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
           </h2>
@@ -42,9 +43,8 @@
           <book-or-manage-referrals-or-appointments-card
             :referrals-not-in-review="referralsNotInReview"
             :referrals-in-review="referralsInReview"
-            :has-referrals-not-in-review="hasReferralsNotInReview"
             :unconfirmed-appointments="unconfirmedAppointments"
-            :has-unconfirmed-appointments="hasUnconfirmedAppointments"/>
+            :has-referrals-or-appointments="hasReferralsOrAppointments"/>
 
           <h2 id="confirmed-appointments-title">
             {{ $t('wayfinder.confirmedAppointmentsTitle') }}
@@ -58,6 +58,7 @@
           <confirmed-appointments-card
             :confirmed-appointments="confirmedAppointments"
             :has-confirmed-appointments="hasConfirmedAppointments"/>
+
           <h2 id="referrals-in-review-title">
             {{ $t('wayfinder.inReviewTitle') }}
           </h2>
@@ -70,18 +71,7 @@
           <referrals-in-review-card
             :referrals-in-review="referralsInReview"
             :has-referrals-in-review="hasReferralsInReview"/>
-        </template>
 
-        <template v-else>
-          <p id="you-may-have-other-referrals-text">
-            {{ $t('wayfinder.youMayHaveOtherReferrals') }}
-          </p>
-          <p id="contact-the-organisation-text">
-            {{ $t('wayfinder.contactTheOrganisation') }}
-          </p>
-          <p id="contact-the-healthcare-provider-text">
-            {{ $t('wayfinder.contactTheHealthcareProvider') }}
-          </p>
           <other-available-services-menu-items
             id="other-available-services-menu-items"
             :show-ers="false"/>
@@ -164,12 +154,6 @@ export default {
     hasLoaded() {
       return this.$store.state.wayfinder.hasLoaded;
     },
-    hasReferralsOrAppointments() {
-      return this.hasReferralsInReview
-      || this.hasReferralsNotInReview
-      || this.hasConfirmedAppointments
-      || this.hasUnconfirmedAppointments;
-    },
     referralsInReview() {
       return this.$store.state.wayfinder.summary.referralsInReview;
     },
@@ -194,16 +178,15 @@ export default {
     hasConfirmedAppointments() {
       return this.confirmedAppointments.length >= 1;
     },
+    hasReferralsOrAppointments() {
+      return this.hasReferralsNotInReview || this.hasUnconfirmedAppointments;
+    },
   },
   async mounted() {
     await loadData(this.$store);
 
     if (this.hasErrored) {
       const header = 'wayfinder.errors.cannotViewOrManageReferralsAndAppointments';
-      EventBus.$emit(UPDATE_HEADER, header);
-      EventBus.$emit(UPDATE_TITLE, header);
-    } else if (!this.hasReferralsOrAppointments) {
-      const header = 'wayfinder.noReferralsOrAppointments';
       EventBus.$emit(UPDATE_HEADER, header);
       EventBus.$emit(UPDATE_TITLE, header);
     }
