@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
@@ -20,6 +21,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<LoginMetric> _loginEtl;
         private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
+        private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -28,6 +30,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<LoginMetric> loginEtl,
             IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
+            IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -35,6 +38,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _loginEtl = loginEtl;
             _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
+            _medicalRecordViewEtl = medicalRecordViewEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -75,6 +79,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _secondaryCareSummaryEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
+                await _medicalRecordViewEtl.Execute(events);
             }
             catch (Exception)
             {

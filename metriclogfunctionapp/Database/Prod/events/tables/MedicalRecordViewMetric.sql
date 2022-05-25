@@ -6,6 +6,12 @@ CREATE TABLE IF NOT EXISTS events."MedicalRecordViewMetric" (
     "HasDetailedRecordAccess" boolean
 );
 
+ALTER TABLE events."MedicalRecordViewMetric"
+    ADD COLUMN IF NOT EXISTS "AuditId" character varying (36) NULL,
+    DROP CONSTRAINT IF EXISTS medicalrecordviewmetric_auditid_unique,
+    ADD CONSTRAINT medicalrecordviewmetric_auditid_unique UNIQUE ("AuditId");
+
+
 CALL perms.apply_etl_table_permissions('events', 'MedicalRecordViewMetric');
 
 CREATE INDEX IF NOT EXISTS MedicalRecordViewMetric_SessionId_idx on events."MedicalRecordViewMetric" ("SessionId");

@@ -37,14 +37,15 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
         }
 
         public static async Task AddMedicalRecordViewMetric(TestEnv env, DateTimeOffset timestamp, string sessionId,
-            bool hasDetailedRecordAccess, bool hasSummaryRecordAccess)
+            bool hasDetailedRecordAccess, bool hasSummaryRecordAccess, string auditId)
         {
             await env.Postgres.Events.MedicalRecordViewMetric.Insert(new MedicalRecordViewMetricRow
             {
                 Timestamp = timestamp,
                 SessionId = sessionId,
                 HasDetailedRecordAccess = hasDetailedRecordAccess,
-                HasSummaryRecordAccess = hasSummaryRecordAccess
+                HasSummaryRecordAccess = hasSummaryRecordAccess,
+                AuditId = auditId
             });
         }
 

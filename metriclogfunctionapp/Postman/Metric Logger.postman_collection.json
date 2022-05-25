@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ca3f7db3-64c4-4fec-a944-cf9b9cf8cf0e",
+		"_postman_id": "992844b5-f991-44ae-8cb2-0847d90c27ca",
 		"name": "Metric Logger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -45,6 +45,35 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Medical Record View to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,6 +173,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Medical Record View to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

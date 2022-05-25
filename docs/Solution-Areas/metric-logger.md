@@ -98,6 +98,36 @@ SecondaryCareSummary Body:
     }
 ]
 ```
+
+MedicalRecordView Body:
+```bash
+[
+    {
+        "Id": "d98018ae-a8e7-490f-a3dd-9686114ac6c9",
+        "Timestamp": "2022-05-05T07:58:30.0660938Z",
+        "AuditId": "d98018ae-a8e7-490f-a3dd-9686114ac6c9",
+        "NhsLoginSubject": "1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95",
+        "NhsNumber": "969 223 7672",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Fake",
+        "Operation": "PatientRecord_View_Response",
+        "Details": "Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False",
+        "ApiVersion": "v2.8.2",
+        "WebVersion": "2.8.2 (commit:f57f22a81)",
+        "NativeVersion": null,
+        "Environment": "onboardingaos",
+        "IntegrationReferrer": null,
+        "SessionId": "d6a628c7-1589-41c3-8861-dbc238db7d02",
+        "ProofLevel": "P9",
+        "id": "5928070c-ef35-42ff-ac9d-7ffb0bcc0681",
+        "_rid": "RuVQAKPVga9EJAYAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga9EJAYAAAAAAA==/",
+        "_etag": "\"e9009237-0000-1100-0000-627383a60000\"",
+        "_attachments": "attachments/",
+        "_ts": 1651737510
+    }
+]
+```
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder
