@@ -3,12 +3,14 @@ package features.patientPracticeMessaging.stepDefinitions
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
+import pages.ErrorDialogPage
 import pages.ErrorPage
 import utils.SerenityHelpers
 
 class PatientPracticeMessageErrorStepDefinitions {
 
     private lateinit var errorPage: ErrorPage
+    private lateinit var errorDialogPage: ErrorDialogPage
 
     @Given("^there is an unknown error getting patient practice messages$")
     fun givenThereIsAnUnknownErrorGettingPatientPracticeMessages() {
@@ -63,13 +65,14 @@ class PatientPracticeMessageErrorStepDefinitions {
                         .assertHasButton("Try again")
             }
             "getting" -> {
-                errorPage.assertPageHeader("Message error")
-                        .assertNoSubHeader()
-                        .assertHeaderText("There is a problem getting your message")
-                        .assertMessageText("Try again now. If the problem " +
-                                "continues and you need this information now, " +
-                                "contact the person directly.")
-                        .assertHasButton("Try again")
+                errorDialogPage
+                    .assertPageHeader("Cannot show message")
+                    .assertPageTitle("Cannot show message")
+                    .assertWarningParagraphText("There was an error opening your message.")
+                    .assertWarningParagraphText("You can try opening your message again.")
+                    .assertHasButton("Try again")
+                    .assertWarningParagraphText(
+                        "If the problem continues, contact the person or organisation who sent the message.")
             }
             "listing" -> {
                 errorPage.assertPageHeader("Messages error")

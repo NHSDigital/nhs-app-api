@@ -147,10 +147,11 @@ class PushNotificationsStepDefinitions {
 
     @Then("^an error is displayed indicating that the notifications service is not available$")
     fun anErrorIsDisplayedIndicatingThatTheNotificationsServiceIsNotAvailable() {
-        errorPage.assertHeaderText("Sorry, there is a problem with the service")
+        notificationsSettingsPage.assertPageHeader("Cannot update notification preferences")
+        errorPage
             .assertNoSubHeader()
-            .assertMessageText("Go back to settings and try again.")
-            .assertRetryButtonText("Back to settings")
+            .assertMessageText("To try again, go back to Account and settings and choose Manage notifications.")
+            .assertRetryButtonText("Back to Account and settings")
     }
 
     @Then("^an error is displayed indicating that the device's notifications are disabled$")

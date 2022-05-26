@@ -2,8 +2,9 @@
   <div v-if="showTemplate && loaded" id="mainDiv">
     <div v-if="error">
       <shutter-container>
-        <error-title title="messages.error.messagesError" />
-        <error-paragraph from="messages.error.problemGettingMessages" />
+        <error-title title="messages.error.cannotShowMessages" />
+        <error-paragraph from="messages.error.errorOpeningMessagesInbox" />
+        <error-paragraph from="messages.error.youCanTryOpeningYourInboxAgain" />
         <error-button from="generic.tryAgain" @click="reload" />
       </shutter-container>
     </div>

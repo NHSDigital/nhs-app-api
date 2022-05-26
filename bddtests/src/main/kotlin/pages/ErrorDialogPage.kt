@@ -152,4 +152,10 @@ class ErrorDialogPage : HybridPageObject() {
 
         return element.assertIsVisible(message)
     }
+
+    fun assertHasButton(expectedText: String) : ErrorDialogPage {
+        val element = getElement("//button[normalize-space(text())='$expectedText']")
+        element.assertSingleElementPresent()
+        return this
+    }
 }

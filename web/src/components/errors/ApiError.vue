@@ -6,13 +6,14 @@
                       message-type="error"
                       :focusable="true"
                       :aria-live="ariaLive">
-        <message-text :is-header="true"
+        <message-text v-if="!isEmpty(header)"
+                      :is-header="true"
                       :unindent="isPlainNativeError"
                       :override-style="overrideStyle"
                       data-purpose="msg-header">
           {{ header }}
         </message-text>
-        <message-text v-if="subheader!==''"
+        <message-text v-if="subheader !== ''"
                       :unindent="isPlainNativeError"
                       :override-style="overrideStyle"
                       data-purpose="msg-subheader">
@@ -85,7 +86,7 @@ import ReportAProblem from '@/components/errors/ReportAProblem';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { redirectTo } from '@/lib/utils';
+import { isBlankString, redirectTo } from '@/lib/utils';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -327,6 +328,9 @@ export default {
     },
     openAppSettings() {
       NativeApp.openAppSettings();
+    },
+    isEmpty(value) {
+      return isBlankString(value);
     },
   },
 };

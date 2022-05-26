@@ -2,9 +2,11 @@
   <div v-if="showTemplate && loaded" id="mainDiv">
     <div v-if="error">
       <shutter-container>
-        <error-title title="messages.error.messagesError" />
-        <error-paragraph from="messages.error.problemGettingMessages" />
+        <error-title title="messages.error.cannotShowSenderMessages" />
+        <error-paragraph from="messages.error.errorOpeningYourSenderMessages" />
+        <error-paragraph from="messages.error.youCanTryOpeningYourSenderMessagesAgain" />
         <error-button from="generic.tryAgain" @click="reload" />
+        <p data-purpose="msg-text">{{ ifProblemContinuesText }}</p>
       </shutter-container>
     </div>
     <div v-else>
@@ -102,6 +104,9 @@ export default {
     },
     messages() {
       return get('messages')(first(this.$store.state.messaging.senderMessages)) || [];
+    },
+    ifProblemContinuesText() {
+      return this.$t('messages.error.ifTheProblemContinuesContactSenderDirectly', { sender: this.sender });
     },
   },
   watch: {

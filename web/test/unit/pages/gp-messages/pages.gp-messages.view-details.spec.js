@@ -238,8 +238,12 @@ describe('gp message details', () => {
         await wrapper.vm.$nextTick();
       });
 
+      it('will dispatch gpMessages/clearError', () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/clearError');
+      });
+
       it('will not dispatch gpMessages/loadMessage', () => {
-        expect(store.dispatch).not.toHaveBeenCalled();
+        expect(store.dispatch).not.toHaveBeenCalledWith('gpMessages/loadMessage');
       });
 
       it('will redirect to /gp-messages', () => {

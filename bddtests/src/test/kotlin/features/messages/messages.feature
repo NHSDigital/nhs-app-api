@@ -243,7 +243,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And retrieving the messages will cause a server error
     And I click the App Messages link on the messages hub page
-    Then an error is displayed indicating that there was a problem getting messages
+    Then an error is displayed indicating that there was a problem getting message senders
     When the messages can be retrieved successfully
     And I click the 'Try again' button
     Then the Message Senders page is displayed
@@ -257,7 +257,7 @@ Feature: Messages
     Then the senders are displayed on the Messages Inbox page
     When retrieving the messages will cause a server error
     And I click on Sender One sender
-    Then an error is displayed indicating that there was a problem getting messages
+    Then an error is displayed indicating that there was a problem getting messages from Sender One
     When the messages can be retrieved successfully
     And I click the 'Try again' button
     Then the Sender Messages page is displayed

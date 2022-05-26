@@ -186,18 +186,31 @@ class MessagesStepDefinitions {
         messagesPage.messages.assertAllRead(expectedReadMessages)
     }
 
-    @Then( "^an error is displayed indicating that there was a problem getting messages$")
-    fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingMessages(){
-        errorDialogPage.assertPageTitle("Messages error")
-            .assertPageHeader("Messages error")
-            .assertShutterParagraphText("There is a problem getting your messages.");
+    @Then( "^an error is displayed indicating that there was a problem getting message senders$")
+    fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingMessageSenders() {
+        errorDialogPage.assertPageTitle("Cannot show messages")
+            .assertPageHeader("Cannot show messages")
+            .assertShutterParagraphText("There was an error opening your messaging inbox.")
+            .assertShutterParagraphText("You can try opening your inbox again.");
+    }
+
+    @Then( "^an error is displayed indicating that there was a problem getting messages from (.*)$")
+    fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingMessages(sender: String) {
+        errorDialogPage.assertPageTitle("Cannot show messages")
+            .assertPageHeader("Cannot show messages")
+            .assertShutterParagraphText("There was an error opening your messages.")
+            .assertShutterParagraphText("You can try opening the messages from this sender again.")
+            .assertShutterParagraphText("If the problem continues, contact $sender directly.")
     }
 
     @Then( "^an error is displayed indicating that there was a problem getting a message$")
     fun anErrorIsDisplayedIndicatingThatThereWasAProblemGettingAMessage(){
-        errorDialogPage.assertPageTitle("Message error")
-            .assertPageHeader("Message error")
-            .assertShutterParagraphText("There is a problem getting your message.");
+        errorDialogPage.assertPageTitle("Cannot show message")
+            .assertPageHeader("Cannot show message")
+            .assertShutterParagraphText("There was an error opening your message.")
+            .assertShutterParagraphText("You can try opening your message again.")
+            .assertShutterParagraphText(
+                "If the problem continues, contact the person or organisation who sent the message.");
     }
 
     @Then("^I click on the '(.*)' link in the message$")

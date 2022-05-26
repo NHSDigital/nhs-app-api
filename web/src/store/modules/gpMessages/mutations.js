@@ -2,6 +2,8 @@ import mapKeys from 'lodash/fp/mapKeys';
 import buildMessageMetadata from '@/lib/gp-messages/build-message-metadata';
 import {
   INIT,
+  ADD_ERROR,
+  CLEAR_ERROR,
   CLEAR,
   LOADED_MESSAGES,
   LOADED_RECIPIENTS,
@@ -39,6 +41,12 @@ export default {
     return mapKeys((key) => {
       state[key] = blank[key];
     })(state);
+  },
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+  },
+  [CLEAR_ERROR](state) {
+    state.error = null;
   },
   [CLEAR](state) {
     clearMessage(state);

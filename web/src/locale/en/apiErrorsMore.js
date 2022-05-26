@@ -1,12 +1,12 @@
 export default {
   account_and_settings: {
     manage_notifications: {
-      pageTitle: 'Notifications error',
-      pageHeader: 'Notifications error',
-      header: 'Sorry, there is a problem with the service',
+      pageTitle: 'Cannot update notification preferences',
+      pageHeader: 'Cannot update notification preferences',
+      header: ' ',
       subheader: '',
-      message: 'Go back to settings and try again.',
-      retryButtonText: 'Back to settings',
+      message: 'To try again, go back to <strong>Account and settings</strong> and choose <strong>Manage notifications.</strong>',
+      retryButtonText: 'Back to Account and settings',
       500: {
         10001: {
           header: 'Notifications are turned off on your device',

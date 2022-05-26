@@ -2,9 +2,11 @@
   <div v-if="showTemplate && loaded">
     <div v-if="error">
       <shutter-container>
-        <error-title title="messages.error.messageError" />
-        <error-paragraph from="messages.error.problemGettingMessage" />
+        <error-title title="messages.error.cannotShowMessage" />
+        <error-paragraph from="messages.error.errorOpeningYourMessage" />
+        <error-paragraph from="messages.error.youCanTryOpeningYourMessageAgain" />
         <error-button from="generic.tryAgain" @click="reload" />
+        <error-paragraph from="messages.error.ifTheProblemContinues" />
       </shutter-container>
     </div>
     <div v-else>

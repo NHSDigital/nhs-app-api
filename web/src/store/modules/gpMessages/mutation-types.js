@@ -1,4 +1,6 @@
 export const INIT = 'INIT';
+export const ADD_ERROR = 'ADD_ERROR';
+export const CLEAR_ERROR = 'CLEAR_ERROR';
 export const CLEAR = 'CLEAR';
 export const LOADED_MESSAGES = 'LOADED_MESSAGES';
 export const LOADED_RECIPIENTS = 'LOADED_RECIPIENTS';
@@ -18,6 +20,7 @@ export const SET_HAS_UNREAD = 'SET_HAS_UNREAD';
 export const GP_MESSAGING_SESSION_UNAVAILABLE = 'GP_MESSAGING_SESSION_UNAVAILABLE';
 
 export const initialState = () => ({
+  error: null,
   loadedMessages: false,
   loadedDetails: false,
   loadedRecipients: false,

@@ -1,7 +1,10 @@
 import get from 'lodash/fp/get';
+import { createLocalError } from '@/lib/utils';
 import {
   INIT,
+  ADD_ERROR,
   CLEAR,
+  CLEAR_ERROR,
   LOADED_MESSAGES,
   LOADED_RECIPIENTS,
   LOADED_MESSAGE,
@@ -54,6 +57,9 @@ export default {
       // Nothing to do. A server error / messages error is displayed
     }
   },
+  clearError({ commit }) {
+    commit(CLEAR_ERROR);
+  },
   clearErrorsAndLoadMessages() {
     return this.dispatch('gpMessages/loadMessages', true);
   },
@@ -81,13 +87,15 @@ export default {
     }
 
     try {
-      const response = await this.app.$http.getV1PatientMessagesById({ id });
+      const response = await this.app.$http.getV1PatientMessagesById({
+        id,
+        ignoreError: true,
+      });
 
       commit(SET_DETAILS, response);
       commit(LOADED_MESSAGE, true);
-      commit(SET_HAS_UNREAD, response);
-    } catch {
-      // Nothing to do. A server error / messages error is displayed
+    } catch (error) {
+      commit(ADD_ERROR, createLocalError(error));
     }
   },
   clearErrorsAndLoadDetails({ state }) {
