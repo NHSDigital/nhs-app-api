@@ -64,7 +64,7 @@ When running locally, you can either use what's deployed to the dedicated enviro
 
 ### Using Pre-Prod Stubs
 
-Update the ```SECONDARY_CARE_BASE_URL``` in [secondarycare_connectivity.env](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/secondarycare_connectivity.env&version=GBdevelop&_a=contents) and set the domain to be ```stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk```
+Update the ```SECONDARY_CARE_AGGREGATOR_BASE_URL``` in [secondarycare_connectivity.env](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/secondarycare_connectivity.env&version=GBdevelop&_a=contents) and set the domain to be ```stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk```
 
 ### Running Minimocks locally through Rider
 

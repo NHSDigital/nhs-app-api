@@ -43,8 +43,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         private const string ClientAssertion = "client-assertion";
 
         // APIM Auth
-        private const string ApimOathBaseUrl = "http://stubs.local.bitraft.io:8080/";
-        private const string ApimOathUrl = "http://stubs.local.bitraft.io:8080/oauth2/token";
+        private const string ApimBaseUrl = "http://stubs.local.bitraft.io:8080";
+        private const string ApimOauthPath = "oauth2/token";
+        private static string ApimOauthUrl => $"{ApimBaseUrl}/{ApimOauthPath}";
+
         private const string ApimCertPath = "test-path";
         private const string ApimCertPass = "test-phrase";
         private const string ApimKey = "key";
@@ -57,8 +59,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange";
 
         // Aggregator
-        private static string SecondaryCareApiBaseUrl = "http://stubs.local.bitraft.io:8080/fhir/secondary-care/";
-        private static readonly string SecondaryCareSummaryUrl = $"{SecondaryCareApiBaseUrl}summary/$evaluate";
+        private const string SecondaryCareAggregatorBaseUrl = "http://stubs.local.bitraft.io:8080";
+        private const string SecondaryCareAggregatorEventsPath = "fhir/secondary-care/summary/$evaluate";
+        private static string SecondaryCareAggregatorEventsUrl => $"{SecondaryCareAggregatorBaseUrl}/{SecondaryCareAggregatorEventsPath}";
 
         // Aggregator Headers
         private const string OAuthAccessToken = "oauth-access-token";
@@ -112,7 +115,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             string data)
         {
             Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Respond(httpStatusCode, "application/json", data);
         }
@@ -120,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         internal void MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(string data)
         {
             Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Respond("application/json", data);
         }
@@ -128,7 +131,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         internal void MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse()
         {
             Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Respond(HttpStatusCode.BadRequest);
         }
@@ -136,7 +139,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         internal void MockSecondaryCareHttpClientGetSummaryTimesOut()
         {
             Mocks.MockHttpMessageHandler
-                .When(HttpMethod.Get, SecondaryCareSummaryUrl)
+                .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Throw(new OperationCanceledException());
         }
@@ -334,12 +337,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             public TestMocks()
             {
                 Configuration
-                    .SetupGet(x => x["SECONDARY_CARE_BASE_URL"])
-                    .Returns(SecondaryCareApiBaseUrl);
+                    .SetupGet(x => x["SECONDARY_CARE_AGGREGATOR_BASE_URL"])
+                    .Returns(SecondaryCareAggregatorBaseUrl);
+
+                Configuration
+                    .SetupGet(x => x["SECONDARY_CARE_AGGREGATOR_EVENTS_PATH"])
+                    .Returns(SecondaryCareAggregatorEventsPath);
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_BASE_URL"])
-                    .Returns(ApimOathBaseUrl);
+                    .Returns(ApimBaseUrl);
 
                 Configuration
                     .SetupGet(x => x["NHSAPP_APIM_PFX"])
@@ -367,7 +374,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
                 ApimJwtHelper
                     .Setup(x => x.CreateApimJwt(
-                        new Uri(ApimOathUrl),
+                        new Uri(ApimOauthUrl),
                         ApimCertPath,
                         ApimCertPass,
                         ApimKey,
@@ -375,7 +382,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .Returns(ClientAssertion);
 
                 MockHttpMessageHandler
-                    .When(HttpMethod.Post, ApimOathUrl)
+                    .When(HttpMethod.Post, ApimOauthUrl)
                     .WithContent(ApimRequestContent)
                     .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
                     {

@@ -72,6 +72,10 @@ gpSessionOnDemandEnabled: true
 organDonationDesktopEnabled: true
 
 nhsAppApimKid: test-1
+nhsAppApimBaseUrl: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk"
+
+aggregatorBaseUrl: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk"
+aggregatorEventsPath: "fhir/secondary-care/summary/$evaluate"
 
 organDonationIPTrust: "13.73.176.25/32"
 organDonationProtocol: https

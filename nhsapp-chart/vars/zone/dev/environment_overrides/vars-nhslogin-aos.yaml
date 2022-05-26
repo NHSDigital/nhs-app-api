@@ -6,6 +6,11 @@ cidFidoHostname: uaf.aos.signin.nhs.uk
 cidSettingsHostName: settings.aos.signin.nhs.uk
 fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_aos.yml"
 
+nhsAppApimBaseUrl: "https://int.api.service.nhs.uk"
+
+aggregatorBaseUrl: "https://int.api.service.nhs.uk"
+aggregatorEventsPath: "patient-care-aggregator-api/aggregator/events"
+
 api:
   knownServicesOverrides:
     services__cid_settings__url: https://settings.aos.signin.nhs.uk
@@ -24,6 +29,8 @@ api:
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
     services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    services__drdoctor__url: https://my.cqa.drdoctor.co.uk
+    services__drdoctor_login__url: https://login.cqa.drdoctor.co.uk
     servicesV3__cid_settings__url: https://settings.aos.signin.nhs.uk
     servicesV3__cid_account__url: https://account.aos.signin.nhs.uk
     servicesV3__cid_auth__url: https://auth.aos.signin.nhs.uk
@@ -40,3 +47,5 @@ api:
     servicesV3__substraktPatientPack__domains__2: https://auth.aoc.substrakthealth.com
     servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    servicesV3__drdoctor__url: https://my.cqa.drdoctor.co.uk
+    servicesV3__drdoctor__domains__1: https://login.cqa.drdoctor.co.uk

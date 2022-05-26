@@ -20,8 +20,7 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
 
         public NhsApimConfig(ILogger<SecondaryCareConfig> logger, IConfiguration configuration)
         {
-            BaseUrl = new Uri(
-                configuration.GetOrThrow("NHSAPP_APIM_BASE_URL", logger));
+            BaseUrl = new Uri(configuration.GetOrThrow("NHSAPP_APIM_BASE_URL", logger));
 
             CertPath = configuration.GetOrThrow("NHSAPP_APIM_PFX", logger);
 
