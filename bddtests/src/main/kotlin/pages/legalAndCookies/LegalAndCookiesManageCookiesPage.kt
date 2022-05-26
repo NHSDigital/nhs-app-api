@@ -1,6 +1,5 @@
 package pages.legalAndCookies
 
-import io.cucumber.java.en.Then
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
@@ -21,16 +20,6 @@ class LegalAndCookiesManageCookiesPage : HybridPageObject() {
     fun assertDisplayed() {
         cookiesPolicy.cookiePolicy.assertSingleElementPresent()
         cookieToggle.assertIsVisible()
-    }
-
-    @Then("^I can see the toggle button is set to 'on'$")
-    fun iCanSeeToggleButtonSetToOn() {
-        cookieToggle.assertOn()
-    }
-
-    @Then("^I can see the toggle button is set to 'off'$")
-    fun iCanSeeToggleButtonSetToOff() {
-        cookieToggle.assertOff()
     }
 }
 

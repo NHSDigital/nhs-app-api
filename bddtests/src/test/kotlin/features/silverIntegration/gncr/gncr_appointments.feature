@@ -10,8 +10,8 @@ Feature: Great North Care Record Appointments
     Then the Hospital Appointments page is displayed
     And I can see the GNCR View Appointments link on the Appointments page
     When I click the GNCR View Appointments link on the Appointments page
-    Then I am redirected to the redirector page with the header 'Hospital and other appointments'
-    And the hospital and other warning message on the Redirector page explains the service is from GNCR
+    Then I am redirected to the redirector page with the header 'View and manage your hospital and other appointments'
+    And the view and manage warning message on the Redirector page explains the service is from GNCR
 
   Scenario: A user without access to GNCR cannot see the menu item 'Appointments' on the appointments page
     Given I am a user who cannot view Appointments from GNCR
@@ -26,7 +26,7 @@ Feature: Great North Care Record Appointments
     And 'NHS UK' responds to requests for '/personal-health-records'
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fappointment'
-    Then I am redirected to the redirector page with the header 'Hospital and other appointments'
+    Then I am redirected to the redirector page with the header 'View and manage your hospital and other appointments'
     When I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
     Then a new tab has been opened by the link
 
@@ -35,6 +35,6 @@ Feature: Great North Care Record Appointments
     And GNCR responds to requests for appointments
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fgncr.stubs.local.bitraft.io%3A8080%2Fappointment'
-    Then I am redirected to the redirector page with the header 'Hospital and other appointments'
+    Then I am redirected to the redirector page with the header 'View and manage your hospital and other appointments'
     When I click the 'Continue' button on the redirector page with a url starting with 'http://gncr.stubs.local.bitraft.io:8080/appointment'
     Then I am navigated to a third party site for GNCR

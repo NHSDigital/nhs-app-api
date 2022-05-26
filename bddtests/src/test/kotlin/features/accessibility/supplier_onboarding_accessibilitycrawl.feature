@@ -43,8 +43,8 @@ Feature: Supplier onboarding accessibility
     Then the Hospital Appointments page is displayed
     And I can see the GNCR View Appointments link on the Appointments page
     When I click the GNCR View Appointments link on the Appointments page
-    Then I am redirected to the redirector page with the header 'Hospital and other appointments'
-    And the hospital and other warning message on the Redirector page explains the service is from GNCR
+    Then I am redirected to the redirector page with the header 'View and manage your hospital and other appointments'
+    And the view and manage warning message on the Redirector page explains the service is from GNCR
     And the Supplier_Onboarding_GNCR page is saved to disk
 
   Scenario: 'Prove your identity shutter' page is captured

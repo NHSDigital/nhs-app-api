@@ -56,12 +56,13 @@ class GncrStepDefinitions : HybridPageObject() {
         hospitalAppointmentsPage.btnGncrAppointments.click()
     }
 
-    @Then("the hospital and other warning message on the Redirector page explains the service is from GNCR$")
+    @Then("the view and manage warning message on the Redirector page explains the service is from GNCR$")
     fun assertHospitalAndOtherAppointmentsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "Hospital and other appointments\nThis service is provided by Great North Care Record",
-                "Your GP surgery or hospital has chosen this personal health record service provider.",
-                "Find out more about personal health record services")
+            "View and manage your hospital and other appointments\n" +
+                "This service is provided by Great North Care Record",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
     }
 
     @Then("the healthcare documents warning message on the Redirector page explains the service is from GNCR$")
