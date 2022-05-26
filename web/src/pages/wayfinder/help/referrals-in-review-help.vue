@@ -1,24 +1,20 @@
 <template>
-  <div class="nhsuk-grid-column-full">
-    <div class="nhsuk-u-padding-top-4">
-      <template>
-        <h2 id="title1">
-          {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title1') }}
-        </h2>
-        <p id="text1">
-          {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text1') }}
-        </p>
-        <h2 id="title2">
-          {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title2') }}
-        </h2>
-        <p id="text2">
-          {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text2') }}
-        </p>
-        <p id="text3">
-          {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text3') }}
-        </p>
-      </template>
-    </div>
+  <div>
+    <h2 id="title1">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title1') }}
+    </h2>
+    <p id="text1">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text1') }}
+    </p>
+    <h2 id="title2">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title2') }}
+    </h2>
+    <p id="text2">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text2') }}
+    </p>
+    <p id="text3">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text3') }}
+    </p>
     <desktopGenericBackLink v-if="!isNativeApp"
                             id="desktopBackLink"
                             data-purpose="back-to-wayfinder-button"
