@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         "Failed to get Referral Booking Reference from Reference Identifier",
                         "Failed to get Referral Referred Date from Scheduled Period",
                         "Could not find Referral Organisation in list of Performers",
-                        "Could not find Extension of type code",
+                        "Could not find Extension of type client-id",
                         "Expected Extension value to be of type Hl7.Fhir.Model.Code but was (null)",
                         "Failed to get Provider from extensions",
                         "Failed to get Deep Link from extensions",

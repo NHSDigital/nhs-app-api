@@ -220,7 +220,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                 return (null, null);
             }
 
-            var provider = (GetValueFromExtensionWithUrl<Code>(portalLinkExtension.Extension, "code") as Code)?.Value;
+            var provider = (GetValueFromExtensionWithUrl<Code>(portalLinkExtension.Extension, "client-id") as Code)?.Value;
             var deepLink = (portalLinkExtension.Value as FhirUrl)?.Value;
 
             if (provider is null)
