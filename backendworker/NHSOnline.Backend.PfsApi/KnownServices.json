@@ -588,6 +588,25 @@
     },
     "drDoctor": {
       "url": "https://my-uat2.drdoctor.co.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "drDoctor_login": {
+      "url": "https://login-uat2.drdoctor.co.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
     }

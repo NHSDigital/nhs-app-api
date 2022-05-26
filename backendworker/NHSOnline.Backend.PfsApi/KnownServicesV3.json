@@ -96,7 +96,10 @@
     "drDoctor": {
       "url": "https://my-uat2.drdoctor.co.uk",
       "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
+      "showThirdPartyWarning": true,
+      "domains": [
+        "https://login-uat2.drdoctor.co.uk"
+      ]
     }
   }
 }
