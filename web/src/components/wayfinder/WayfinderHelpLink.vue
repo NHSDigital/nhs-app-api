@@ -1,5 +1,5 @@
 <template>
-  <menu-item-list>
+  <menu-item-list class="nhsuk-u-padding-bottom-5">
     <menu-item :id="id"
                header-tag="h2"
                data-purpose="text_link"

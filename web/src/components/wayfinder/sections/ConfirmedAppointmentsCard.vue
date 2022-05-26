@@ -3,7 +3,7 @@
     <card-group-item
       v-for="(appointment, index) in confirmedAppointments"
       :key="`confirmed-appointment-${index}`"
-      class="nhsuk-grid-column-three-quarters">
+      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
       <appointment-booked-card
         v-if="isBooked(appointment)"
         :appointment-id="index"

@@ -1,7 +1,7 @@
 <template>
   <div v-if="hasLoaded" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-u-padding-top-4">
+      <div class="nhsuk-u-padding-top-3">
 
         <template v-if="hasErrored">
 
@@ -31,7 +31,8 @@
         </template>
 
         <template v-else>
-          <h2 id="book-Or-Manage-Referrals-And-Appointments-Title">
+          <h2 id="book-Or-Manage-Referrals-And-Appointments-Title"
+              class="nhsuk-u-padding-bottom-5">
             {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
           </h2>
           <wayfinder-help-link
@@ -46,7 +47,8 @@
             :unconfirmed-appointments="unconfirmedAppointments"
             :has-referrals-or-appointments="hasReferralsOrAppointments"/>
 
-          <h2 id="confirmed-appointments-title">
+          <h2 id="confirmed-appointments-title"
+              class="nhsuk-u-padding-bottom-5">
             {{ $t('wayfinder.confirmedAppointmentsTitle') }}
           </h2>
           <wayfinder-help-link
@@ -59,7 +61,8 @@
             :confirmed-appointments="confirmedAppointments"
             :has-confirmed-appointments="hasConfirmedAppointments"/>
 
-          <h2 id="referrals-in-review-title">
+          <h2 id="referrals-in-review-title"
+              class="nhsuk-u-padding-bottom-5">
             {{ $t('wayfinder.inReviewTitle') }}
           </h2>
           <wayfinder-help-link
@@ -69,6 +72,7 @@
             :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
               'ReferralsInReview')"/>
           <referrals-in-review-card
+            class="nhsuk-u-padding-bottom-8"
             :referrals-in-review="referralsInReview"
             :has-referrals-in-review="hasReferralsInReview"/>
 

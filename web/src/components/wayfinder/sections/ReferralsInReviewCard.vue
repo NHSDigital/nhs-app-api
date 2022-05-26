@@ -1,11 +1,10 @@
 <template>
   <card-group v-if="hasReferralsInReview" class="nhsuk-grid-row">
-    <card-group-item v-for="referral in referralsInReview"
+    <card-group-item v-for="referral in referralsInReviewIsNotReviewOverdue"
                      :key="referral.referralId"
-                     class="nhsuk-grid-column-three-quarters">
+                     class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
       <referral-in-review-card
-        v-if="!isReviewOverdue(referral)"
         :requested-specialty="referral.serviceSpecialty"
         :referred-date="referral.referredDateTime"
         :review-date="referral.reviewDueDate"
@@ -44,9 +43,14 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      referralsInReviewIsNotReviewOverdue: this.referralsInReview.filter(this.isReviewNotOverdue),
+    };
+  },
   methods: {
-    isReviewOverdue(referral) {
-      return referral.status === 'inReview' && isBefore(referral.reviewDueDate);
+    isReviewNotOverdue(referral) {
+      return referral.status === 'inReview' && !isBefore(referral.reviewDueDate);
     },
   },
 };

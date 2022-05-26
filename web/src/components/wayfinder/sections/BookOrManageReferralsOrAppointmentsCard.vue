@@ -2,26 +2,17 @@
   <card-group v-if="hasReferralsOrAppointments" class="nhsuk-grid-row">
     <card-group-item v-for="(appointment, index) in unconfirmedAppointments"
                      :key="`upcoming-appointment-${index}`"
-                     class="nhsuk-grid-column-three-quarters">
+                     class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
       <appointment-ready-to-confirm-card
         :appointment-id="index"
         :location-description="appointment.locationDescription"
         :deep-link-url="appointment.deepLinkUrl"/>
     </card-group-item>
-    <card-group-item v-for="referral in referralsNotInReview"
+    <card-group-item v-for="referral in referralsNotInReviewIsBookableWasCancelled"
                      :key="referral.referralId"
-                     class="nhsuk-grid-column-three-quarters">
+                     class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
       <referral-ready-to-rebook-card
-        v-if="isBookableWasCancelled(referral)"
-        :requested-specialty="referral.serviceSpecialty"
-        :referred-date="referral.referredDateTime"
-        :referral-id="referral.referralId"
-        :referred-by="referral.referrerOrganisation"
-        :deep-link-url="referral.deepLinkUrl"/>
-
-      <referral-bookable-card
-        v-else-if="isBookable(referral)"
         :requested-specialty="referral.serviceSpecialty"
         :referred-date="referral.referredDateTime"
         :referral-id="referral.referralId"
@@ -29,12 +20,23 @@
         :deep-link-url="referral.deepLinkUrl"/>
     </card-group-item>
 
-    <card-group-item v-for="referral in referralsInReview"
+    <card-group-item v-for="referral in referralsNotInReviewIsBookable"
                      :key="referral.referralId"
-                     class="nhsuk-grid-column-three-quarters">
+                     class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+
+      <referral-bookable-card
+        :requested-specialty="referral.serviceSpecialty"
+        :referred-date="referral.referredDateTime"
+        :referral-id="referral.referralId"
+        :referred-by="referral.referrerOrganisation"
+        :deep-link-url="referral.deepLinkUrl"/>
+    </card-group-item>
+
+    <card-group-item v-for="referral in referralsInReviewIsReviewOverdue"
+                     :key="referral.referralId"
+                     class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
       <referral-review-overdue-card
-        v-if="isReviewOverdue(referral)"
         :requested-specialty="referral.serviceSpecialty"
         :referred-date="referral.referredDateTime"
         :review-date="referral.reviewDueDate"
@@ -85,6 +87,16 @@ export default {
       type: Array,
       default: null,
     },
+  },
+  data() {
+    return {
+      referralsNotInReviewIsBookableWasCancelled: this.referralsNotInReview
+        .filter(this.isBookableWasCancelled),
+      referralsNotInReviewIsBookable: this.referralsNotInReview
+        .filter(this.isBookable),
+      referralsInReviewIsReviewOverdue: this.referralsNotInReview
+        .filter(this.isReviewOverdue),
+    };
   },
   methods: {
     isBookable(referral) {
