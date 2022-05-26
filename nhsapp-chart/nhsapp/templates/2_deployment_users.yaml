@@ -188,6 +188,15 @@ spec:
             secretKeyRef:
               name: comms-hub-event-hub-connection-string-{{ .Chart.AppVersion }}
               key: secret
+        - name: AUDIT_SINK_TYPE
+          value: "{{ $.Values.auditSinkType }}"
+        - name: AUDIT_EVENT_HUB_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: audit-event-hub-connection-string-{{ .Chart.AppVersion }}
+              key: secret
+        - name: AUDIT_EVENT_HUB_NAME
+          value: nhsapp-{{ $.Values.cluster }}-auditing
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

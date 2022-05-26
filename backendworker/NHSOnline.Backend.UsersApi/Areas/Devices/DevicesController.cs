@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Users.Areas.Devices;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
@@ -19,16 +21,19 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         private readonly IRegistrationService _registrationService;
         private readonly ILogger<DevicesController> _logger;
         private readonly IMetricLogger _metricLogger;
+        private readonly INotificationsDecisionAuditService _notificationsDecisionAuditService;
 
         public DevicesController(
             IRegistrationService registrationService,
             ILogger<DevicesController> logger,
             IMetricLogger metricLogger,
+            INotificationsDecisionAuditService notificationsDecisionAuditService,
             IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
             _registrationService = registrationService;
             _metricLogger = metricLogger;
+            _notificationsDecisionAuditService = notificationsDecisionAuditService;
             _accessTokenProvider = accessTokenProvider;
         }
 

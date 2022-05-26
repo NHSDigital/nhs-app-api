@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace NHSOnline.Backend.Users.Areas.Devices
         public async Task<IActionResult> Visit(DeleteRegistrationResult.Success result)
         {
             await _metricLogger.NotificationsDisabled();
+
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 

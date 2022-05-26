@@ -7,7 +7,8 @@ namespace NHSOnline.Backend.Users.Registrations
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IRegistrationService,RegistrationService>();
+            services.AddTransient<IRegistrationService, RegistrationService>();
+            services.AddTransient<INotificationsDecisionAuditService, NotificationsDecisionAuditService>();
 
             base.ConfigureServices(services, configuration);
         }

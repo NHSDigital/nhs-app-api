@@ -7,6 +7,8 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.CustomMetrics
 {
@@ -14,11 +16,18 @@ namespace NHSOnline.Backend.UsersApi.Areas.CustomMetrics
     {
         private readonly IMetricLogger _metricLogger;
         private readonly ILogger<CustomMetricsController> _logger;
+        private readonly INotificationsDecisionAuditService _notificationsDecisionAuditService;
+        private readonly IAccessTokenProvider _accessTokenProvider;
 
-        public CustomMetricsController(IMetricLogger metricLogger, ILogger<CustomMetricsController> logger)
+        public CustomMetricsController(IMetricLogger metricLogger,
+            ILogger<CustomMetricsController> logger,
+            INotificationsDecisionAuditService notificationsDecisionAuditService,
+            IAccessTokenProvider accessTokenProvider)
         {
             _metricLogger = metricLogger;
             _logger = logger;
+            _notificationsDecisionAuditService = notificationsDecisionAuditService;
+            _accessTokenProvider = accessTokenProvider;
         }
 
         [Route("api/users/me/devices/prompt/metrics")]
@@ -70,6 +79,34 @@ namespace NHSOnline.Backend.UsersApi.Areas.CustomMetrics
             }
         }
 
+        [Route("api/users/me/devices/log/audit")]
+        [HttpPost]
+        [UserProfile]
+        public async Task<IActionResult> PostNotificationsLogAudit(
+            [FromBody] NotificationsAuditData notificationsAuditData)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (!IsNotificationsAuditDataDataValid(notificationsAuditData))
+                {
+                    return BadRequest();
+                }
+
+                var accessToken = _accessTokenProvider.AccessToken;
+                await _notificationsDecisionAuditService.LogAudit(
+                    notificationsAuditData,
+                    accessToken);
+
+                return new StatusCodeResult(StatusCodes.Status200OK);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         private bool IsNotificationPromptDataValid(NotificationsPromptData data)
         {
             return new ValidateAndLog(_logger)
@@ -93,6 +130,14 @@ namespace NHSOnline.Backend.UsersApi.Areas.CustomMetrics
                 .IsNotNullOrWhitespace(data?.ProviderName, nameof(data.ProviderName))
                 .IsNotNullOrWhitespace(data?.JumpOffId, nameof(data.JumpOffId))
                 .IsNotNullOrWhitespace(data?.Reason, nameof(data.Reason))
+                .IsValid();
+        }
+
+        private bool IsNotificationsAuditDataDataValid(NotificationsAuditData data)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNull(data, nameof(data))
+                .IsNotNull(data?.NotificationsDecisionSource, nameof(data.NotificationsDecisionSource))
                 .IsValid();
         }
     }

@@ -5932,6 +5932,40 @@
             description: "Successfully logged"
           400: 
             description: "Bad request. Supplied request is invalid."
+    /v1/api/users/me/devices/log/audit: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "notifications audit logging"
+        summary: "audit logs for notifications"
+        description: "audit logs for notifications"
+        requestBody: 
+          x-name: "NotificationsAuditData"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "notificationsRegistered"
+                  - "notificationsDecisionSource"
+                properties: 
+                  notificationsRegistered: 
+                    type: "boolean"
+                  notificationsDecisionSource:                     
+                     type: "string"
+                     enum: 
+                      - "Prompt"
+                      - "Toggle"
+                      - "Unknown"
+          description: "Audit details to be logged for the notification"
+          required: true
+        responses: 
+          200: 
+            description: "Successfully logged"
+          400: 
+            description: "Bad request. Supplied request is invalid."
     /v1/api/users/me/silver-integration-blocked/metrics: 
       post: 
         security: 

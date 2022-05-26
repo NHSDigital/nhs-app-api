@@ -58,13 +58,19 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
         }
 
         [TestMethod]
-        [DataRow(1)]
-        [DataRow(3)]
-        [DataRow(10)]
-        public async Task AuditEventConsumerFunction_ValidAnd1ExcludedAuditRecords_DbUpsertCompletedMinus1(int auditRecordCount)
+        [DataRow(1, "Login_Success")]
+        [DataRow(3, "Login_Success")]
+        [DataRow(10, "Login_Success")]
+        [DataRow(1, "NotificationToggle_Response")]
+        [DataRow(3, "NotificationToggle_Response")]
+        [DataRow(10, "NotificationToggle_Response")]
+        [DataRow(1, "InitialNotificationPrompt_Decision")]
+        [DataRow(3, "InitialNotificationPrompt_Decision")]
+        [DataRow(10, "InitialNotificationPrompt_Decision")]
+        public async Task AuditEventConsumerFunction_ValidAnd1ExcludedAuditRecords_DbUpsertCompletedMinus1(int auditRecordCount, string excludedOperation)
         {
             // Arrange
-            SetupAuditRecordsIncluding1LoginSuccessOperation(auditRecordCount);
+            SetupAuditRecordsIncluding1LoginSuccessOperation(auditRecordCount, excludedOperation);
 
             // Act
             await _systemUnderTest.AuditEventConsumerTrigger(_auditRecords, _mockCosmosClient.Object);
@@ -98,11 +104,10 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
             _auditRecords = auditRecords.ToArray();
         }
 
-        private void SetupAuditRecordsIncluding1LoginSuccessOperation(int auditRecordCount)
+        private void SetupAuditRecordsIncluding1LoginSuccessOperation(int auditRecordCount, string excludedOperation)
         {
             var auditRecords = new List<AuditRecord>();
             var testOperation = "OnlineConsultations_Submitted";
-            var excludedOperation = "Login_Success";
 
             for (var i = 0; i < auditRecordCount; i++)
                 auditRecords.Add(new AuditRecord(

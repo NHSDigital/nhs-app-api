@@ -195,6 +195,27 @@ paths:
           description: Successfully logged
         "400":
           $ref: '#/components/responses/BadRequest'
+  /users/me/devices/log/audit:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - notifications audit logging
+      summary: audit logs for notifications
+      description: audit logs for notifications
+      requestBody:
+        x-name: NotificationsAuditData
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationsAuditData"
+        description: Audit details to be logged for the notification
+        required: true
+      responses:
+        "200":
+          description: Successfully logged
+        "400":
+          $ref: '#/components/responses/BadRequest'
   /users/me/silver-integration-blocked/metrics:
     post:
       security:
@@ -332,6 +353,20 @@ components:
           type: string
         didErrorAttemptingToUpdateStatus:
           type: boolean
+    NotificationsAuditData:
+      type: object
+      required:
+        - notificationsRegistered
+        - notificationsDecisionSource
+      properties: 
+        notificationsRegistered: 
+          type: boolean
+        notificationsDecisionSource:                     
+          type: string
+          enum: 
+            - Prompt
+            - Toggle
+            - Unknown
     PushNotificationSenderContext:
       type: object
       properties:

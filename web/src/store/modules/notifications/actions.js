@@ -136,6 +136,18 @@ export default {
       // do nothing as this is just logging
     }
   },
+  async logAudit(_, { notificationsRegistered, notificationsDecisionSource }) {
+    try {
+      await this.app.$http.postV1ApiUsersMeDevicesLogAudit({
+        notificationsAuditData: {
+          notificationsRegistered,
+          notificationsDecisionSource,
+        },
+      });
+    } catch {
+      // do nothing as this is just logging
+    }
+  },
   settingsStatus({ commit }, status) {
     switch (status) {
       case authorisationStatus.authorised:

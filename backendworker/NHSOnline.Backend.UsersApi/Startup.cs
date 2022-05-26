@@ -16,6 +16,7 @@ using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.AspNet.HealthChecks.PerformanceCounter;
 using NHSOnline.Backend.AspNet.Middleware.PerformanceCounter;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Repository;
@@ -146,6 +147,7 @@ namespace NHSOnline.Backend.UsersApi
 
         private static void ConfigureMvcOptions(MvcOptions options)
         {
+            options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
             options.Filters.Add<UserProfileFilter>();

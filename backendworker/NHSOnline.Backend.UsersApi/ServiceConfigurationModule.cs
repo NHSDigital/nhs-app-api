@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.UsersApi
             services.AddSingleton<IUserDeviceRepository, UserDeviceRepository>();
             services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
             services.AddSingleton<IMapper<AddNotificationSenderContext, SenderContextEventLogData>, NotificationSenderContextEventLogDataMapper>();
-
+            
             ConfigureUserProfileServices(services);
             ConfigureCitizenIdServices(services);
 

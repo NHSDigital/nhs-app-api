@@ -6,8 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Users.Areas.Devices.Models;
+using NHSOnline.Backend.Users.Registrations;
 using NHSOnline.Backend.UsersApi.Areas.CustomMetrics;
+using NHSOnline.Backend.Auth.CitizenId.Models;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.CustomMetrics
 {
@@ -17,14 +22,24 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.CustomMetrics
         private CustomMetricsController _systemUnderTest;
         private Mock<IMetricLogger> _mockMetricLogger;
         private Mock<ILogger<CustomMetricsController>> _mockLogger;
+        private Mock<INotificationsDecisionAuditService> _mockNotificationsDecisionAuditService;
+        private const string NhsNumber = "NhsNumber";
 
         [TestInitialize]
         public void Setup()
         {
             _mockMetricLogger = new Mock<IMetricLogger>();
             _mockLogger = new Mock<ILogger<CustomMetricsController>>();
+            _mockNotificationsDecisionAuditService = new Mock<INotificationsDecisionAuditService>();
 
-            _systemUnderTest = new CustomMetricsController(_mockMetricLogger.Object,_mockLogger.Object);
+            var mockAccessTokenProvider = new Mock<IAccessTokenProvider>();
+            mockAccessTokenProvider.SetupGet(x => x.AccessToken)
+                .Returns(AccessTokenMock.Generate(nhsNumber: NhsNumber));
+
+            _systemUnderTest = new CustomMetricsController(_mockMetricLogger.Object,
+                _mockLogger.Object,
+                _mockNotificationsDecisionAuditService.Object,
+                mockAccessTokenProvider.Object);
         }
 
         [TestMethod]
@@ -111,6 +126,42 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.CustomMetrics
 
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [TestMethod]
+        public async Task Post_Notifications_LogAudit_ReturnsStatus200Ok()
+        {
+            // Arrange
+            var notificationsAuditData = new NotificationsAuditData(
+                true,
+                NotificationsDecisionSource.Prompt);
+
+            // Act
+            var result = await _systemUnderTest.PostNotificationsLogAudit(notificationsAuditData);
+
+            // Assert
+            result.Should().BeOfType<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status200OK);
+        }
+
+        [TestMethod]
+        public async Task Post_Notifications_LogAudit_CallsLogAudit()
+        {
+            // Arrange
+            var notificationsAuditData = new NotificationsAuditData(
+                true,
+                NotificationsDecisionSource.Prompt);
+            var accessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "123456");
+
+            _mockNotificationsDecisionAuditService
+                .Setup(x => x.LogAudit(It.IsAny<NotificationsAuditData>(), It.IsAny<AccessToken>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _systemUnderTest.PostNotificationsLogAudit(notificationsAuditData);
+
+            // Assert
+            _mockNotificationsDecisionAuditService.Verify(x => x.LogAudit(It.IsAny<NotificationsAuditData>(), It.IsAny<AccessToken>()), Times.Once);
         }
 
         public void Dispose()

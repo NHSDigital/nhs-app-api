@@ -121,16 +121,24 @@ export default {
         return;
       }
 
-      this.$store.dispatch('notifications/addNotificationCookie');
+      await this.$store.dispatch('notifications/addNotificationCookie');
 
       if (this.selectedValue === 'yes') {
         await this.$store.dispatch('notifications/toggle');
+        await this.$store.dispatch('notifications/logAudit', {
+          notificationsRegistered: true,
+          notificationsDecisionSource: 'Prompt',
+        });
       } else {
-        this.$store.dispatch('notifications/logMetrics', {
+        await this.$store.dispatch('notifications/logMetrics', {
           screenShown: true,
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: false,
           ignoreError: true,
+        });
+        await this.$store.dispatch('notifications/logAudit', {
+          notificationsRegistered: false,
+          notificationsDecisionSource: 'Prompt',
         });
       }
 

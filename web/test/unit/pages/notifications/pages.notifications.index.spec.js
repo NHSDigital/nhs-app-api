@@ -118,6 +118,13 @@ describe('notifications prompt page', () => {
         expect($store.dispatch).not.toBeCalledWith('notifications/logMetrics', expect.anything);
       });
 
+      it('will log audit', () => {
+        expect($store.dispatch).toBeCalledWith('notifications/logAudit', {
+          notificationsRegistered: true,
+          notificationsDecisionSource: 'Prompt',
+        });
+      });
+
       it('will call conditional redirect', () => {
         expect(conditionalRedirect).toBeCalled();
       });
@@ -141,10 +148,6 @@ describe('notifications prompt page', () => {
         expect(EventBus.$emit).not.toBeCalled();
       });
 
-      it('will not call to native to toggle permission', () => {
-        expect($store.dispatch).not.toBeCalledWith('notifications/toggle');
-      });
-
       it('will add the cookie', () => {
         expect($store.dispatch).toBeCalledWith('notifications/addNotificationCookie');
       });
@@ -155,6 +158,13 @@ describe('notifications prompt page', () => {
           notificationsRegistered: false,
           didErrorAttemptingToUpdateStatus: false,
           ignoreError: true,
+        });
+      });
+
+      it('will log audit', () => {
+        expect($store.dispatch).toBeCalledWith('notifications/logAudit', {
+          notificationsRegistered: false,
+          notificationsDecisionSource: 'Prompt',
         });
       });
 

@@ -34,6 +34,22 @@ describe('manage notifications', () => {
     expect($store.dispatch).toBeCalledWith('notifications/toggle');
   });
 
+  it('will dispatch `notifications/logAudit` when text label is clicked', () => {
+    wrapper.find('label').trigger('click');
+    expect($store.dispatch).toBeCalledWith('notifications/logAudit', {
+      notificationsRegistered: true,
+      notificationsDecisionSource: 'Toggle',
+    });
+  });
+
+  it('will dispatch `notifications/logAudit` when UI label is clicked', () => {
+    wrapper.findAll('span').trigger('click');
+    expect($store.dispatch).toBeCalledWith('notifications/logAudit', {
+      notificationsRegistered: true,
+      notificationsDecisionSource: 'Toggle',
+    });
+  });
+
   describe('created', () => {
     it('will dispatch `notifications/load`', () => {
       expect($store.dispatch).toBeCalledWith('notifications/load');

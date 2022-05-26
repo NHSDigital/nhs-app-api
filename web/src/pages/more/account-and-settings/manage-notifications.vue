@@ -68,6 +68,10 @@ export default {
       set() {
         this.$store.dispatch('spinner/prevent', true);
         this.$store.dispatch('notifications/toggle');
+        this.$store.dispatch('notifications/logAudit', {
+          notificationsRegistered: !this.$store.state.notifications.registered,
+          notificationsDecisionSource: 'Toggle',
+        });
       },
     },
   },
