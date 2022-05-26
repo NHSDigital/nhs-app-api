@@ -5,6 +5,7 @@
                      class="nhsuk-grid-column-three-quarters">
 
       <referral-in-review-card
+        v-if="!isReviewOverdue(referral)"
         :requested-specialty="referral.serviceSpecialty"
         :referred-date="referral.referredDateTime"
         :review-date="referral.reviewDueDate"
@@ -24,6 +25,7 @@
 import ReferralInReviewCard from '@/components/wayfinder/referrals/ReferralInReviewCard';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import { isBefore } from '@/lib/utils';
 
 export default {
   name: 'ReferralsInReviewCard',
@@ -40,6 +42,11 @@ export default {
     referralsInReview: {
       type: Array,
       default: null,
+    },
+  },
+  methods: {
+    isReviewOverdue(referral) {
+      return referral.status === 'inReview' && isBefore(referral.reviewDueDate);
     },
   },
 };
