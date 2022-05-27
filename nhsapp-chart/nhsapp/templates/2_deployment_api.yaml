@@ -263,8 +263,11 @@ spec:
           value: "/mnt/secrets-store/ndopSigningKey"
         - name: NHSAPP_APIM_PFX
           value: "/mnt/secrets-store/nhsAppApimPfx"
-        - name: NHSAPP_APIM_KEY 
-          value: "/mnt/secrets-store/nhsAppApimAppKey"
+        - name: NHSAPP_APIM_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-apim-app-key-{{ .Chart.AppVersion }}
+              key: secret
         - name: NHSAPP_APIM_KID
         {{- if $.Values.nhsAppApimKid }}
           value: "{{ $.Values.nhsAppApimKid }}"
