@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <!-- Ensure xamarin/buildscripts/lib/set_env.sh native versions are also updated when bumping these -->
-    <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">2.10.0</NhsAppBundleShortVersion>
+    <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">2.11.0</NhsAppBundleShortVersion>
     <NhsAppBundleVersion Condition=" '$(NhsAppBundleVersion)' == '' ">4</NhsAppBundleVersion>
     <NhsAppBundleDisplayName Condition=" '$(NhsAppBundleDisplayName)' == '' ">NHS App</NhsAppBundleDisplayName>
     <NhsAppBundleIdentifier Condition=" '$(NhsAppBundleIdentifier)' == '' ">com.nhs.online</NhsAppBundleIdentifier>
