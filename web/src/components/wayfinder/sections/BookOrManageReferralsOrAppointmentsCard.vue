@@ -94,7 +94,7 @@ export default {
         .filter(this.isBookableWasCancelled),
       referralsNotInReviewIsBookable: this.referralsNotInReview
         .filter(this.isBookable),
-      referralsInReviewIsReviewOverdue: this.referralsNotInReview
+      referralsInReviewIsReviewOverdue: this.referralsInReview
         .filter(this.isReviewOverdue),
     };
   },

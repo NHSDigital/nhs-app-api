@@ -43,10 +43,10 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      referralsInReviewIsNotReviewOverdue: this.referralsInReview.filter(this.isReviewNotOverdue),
-    };
+  computed: {
+    referralsInReviewIsNotReviewOverdue() {
+      return this.referralsInReview.filter(this.isReviewNotOverdue);
+    },
   },
   methods: {
     isReviewNotOverdue(referral) {
