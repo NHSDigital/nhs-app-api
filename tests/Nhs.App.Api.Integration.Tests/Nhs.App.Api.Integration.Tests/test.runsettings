@@ -7,5 +7,7 @@
 	        <Parameter name="IssuerKey" value="APP API KEY GOES HERE" />
 	        <Parameter name="PrivateKeyFilePath" value="PATH TO PRIVATE KEY FILE GOES HERE" />
 	        <Parameter name="KidValue" value="KID VALUE GOES HERE" />
+	        <Parameter name="OdsCode" value="B82041" />
+	        <Parameter name="RequesterDisplay" value="Beech Tree Medical Centre" />
 	    </TestRunParameters>
 	</RunSettings>

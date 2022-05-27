@@ -19,6 +19,18 @@ namespace Nhs.App.Api.Integration.Tests
     public class CommunicationHttpFunctionsFhirR4Tests : CommunicationHttpFunctionBase
     {
         private static TestConfiguration _testConfiguration;
+
+        private static readonly EndpointInfo InApp = new EndpointInfo
+        {
+            Path = "communication/in-app/FHIR/R4/CommunicationRequest",
+            DisplayName = "In-App"
+        };
+
+        private static readonly EndpointInfo Notification = new EndpointInfo
+        {
+            Path = "communication/notification/FHIR/R4/CommunicationRequest",
+            DisplayName = "Notification"
+        };
         private enum PayloadContentKind
         {
             ContentString,
@@ -35,17 +47,9 @@ namespace Nhs.App.Api.Integration.Tests
         {
             get
             {
-                yield return new object[]{ new EndpointInfo
-                {
-                    Path = "communication/in-app/FHIR/R4/CommunicationRequest",
-                    DisplayName = "In-App"
-                }};
+                yield return new object[]{ InApp };
 
-                yield return new object[]{ new EndpointInfo
-                {
-                    Path = "communication/notification/FHIR/R4/CommunicationRequest",
-                    DisplayName = "Notification"
-                }};
+                yield return new object[]{ Notification };
             }
         }
 
@@ -64,7 +68,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidCommunicationRequestWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString);
+            var validPayload = BuildValidRequestBody(endpoint.DisplayName, PayloadContentKind.ContentString);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
@@ -74,7 +78,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidCommunicationRequestWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference);
+            var validPayload = BuildValidRequestBody(endpoint.DisplayName, PayloadContentKind.ContentReference);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
@@ -86,7 +90,7 @@ namespace Nhs.App.Api.Integration.Tests
             // Arrange
             using var httpClient = CreateHttpClient();
 
-            var stringPayload = BuildValidRequestBody();
+            var stringPayload = BuildValidRequestBody(endpoint.DisplayName);
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
             var correlationId = Guid.NewGuid().ToString();
 
@@ -140,7 +144,7 @@ namespace Nhs.App.Api.Integration.Tests
             // Arrange
             using var httpClient = CreateHttpClient();
 
-            var stringPayload = BuildValidRequestBody();
+            var stringPayload = BuildValidRequestBody(endpoint.DisplayName);
             stringPayload = stringPayload.Replace("\"CommunicationRequest\"", "\"UnknownType\"", StringComparison.OrdinalIgnoreCase);
 
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
@@ -171,7 +175,7 @@ namespace Nhs.App.Api.Integration.Tests
             // Arrange
             using var httpClient = CreateHttpClient();
 
-            var stringPayload = BuildValidRequestBody();
+            var stringPayload = BuildValidRequestBody(endpoint.DisplayName);
             stringPayload = stringPayload.Replace("\"ResourceType\":", "", StringComparison.OrdinalIgnoreCase);
             stringPayload = stringPayload.Replace( "\"CommunicationRequest\",", "", StringComparison.OrdinalIgnoreCase);
 
@@ -195,14 +199,42 @@ namespace Nhs.App.Api.Integration.Tests
 
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
+        [TestMethod]
+        public async Task CommunicationPost_ValidJsonInvalidFhirRequesterIdentifier_Returns400BadRequest()
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
 
+            var stringPayload = BuildValidRequestBody(InApp.DisplayName);
+            stringPayload = stringPayload.Replace("https://fhir.nhs.uk/Id/ods-organization-code", "https://fhir.nhs.uk/Id/nhs-number", StringComparison.OrdinalIgnoreCase);
+
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            var correlationId = Guid.NewGuid().ToString();
+
+            // Act
+            var response = await httpClient.PostAsync(InApp.Path, httpContent, correlationId);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+
+            issue.Diagnostics.Should().Contain("Identifier system is invalid");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
+        }
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
         public async Task CommunicationPost_NoCorrelationIdPassed_NoCorrelationIdHeaderInTheResponse(EndpointInfo endpoint)
         {
             // Arrange
             using var httpClient = CreateHttpClient();
-            var stringPayload = BuildValidRequestBody();
+            var stringPayload = BuildValidRequestBody(endpoint.DisplayName);
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
             // Act
@@ -241,10 +273,11 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
-        private static string BuildValidRequestBody(
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
+        private static string BuildValidRequestBody(string endpoint,
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString
+            )
         {
-            var communicationRequest = BuildValidCommunicationRequest(payloadContentKind);
+            var communicationRequest = BuildValidCommunicationRequest(endpoint, payloadContentKind);
 
             return BuildRequestBody(communicationRequest);
         }
@@ -257,7 +290,7 @@ namespace Nhs.App.Api.Integration.Tests
             return json;
         }
 
-        private static CommunicationRequest BuildValidCommunicationRequest(
+        private static CommunicationRequest BuildValidCommunicationRequest(string endpoint,
             PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
         {
             var communicationRequest = new CommunicationRequest
@@ -273,7 +306,8 @@ namespace Nhs.App.Api.Integration.Tests
                     new(FhirR4IdentifierSystem.RequestReference, "Request Reference 1")
                 },
                 Recipient = BuildValidRecipient(),
-                Payload = BuildValidPayload(payloadContentKind)
+                Payload = BuildValidPayload(payloadContentKind),
+                Requester = endpoint.Equals(InApp.DisplayName, StringComparison.OrdinalIgnoreCase) ? BuildValidRequester() : null
             };
 
             return communicationRequest;
@@ -312,7 +346,16 @@ namespace Nhs.App.Api.Integration.Tests
             };
             return recipient;
         }
-
+        private static ResourceReference BuildValidRequester()
+        {
+            var requester = new ResourceReference
+            {
+                Identifier = new Identifier(FhirR4IdentifierSystem.Requester, _testConfiguration.OdsCode),
+                Type = ResourceType.Organization.ToString(),
+                Display = _testConfiguration.RequesterDisplay
+            };
+            return requester;
+        }
         private static async Task<CommunicationRequest> DeserializeFhirResponseAsync(HttpResponseMessage response)
         {
             var responseString = await response.Content.ReadAsStringAsync();

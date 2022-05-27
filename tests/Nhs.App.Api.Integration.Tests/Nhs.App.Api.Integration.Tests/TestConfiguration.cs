@@ -14,6 +14,9 @@ namespace Nhs.App.Api.Integration.Tests
         public string KidValue { get; }
         public string SendToNhsNumber { get; }
 
+        public string OdsCode { get; }
+
+        public string RequesterDisplay { get; }
         public TestConfiguration(TestContext context)
         {
             _context = context;
@@ -23,12 +26,16 @@ namespace Nhs.App.Api.Integration.Tests
             IssuerKey = GetTestPropertySetting("IssuerKey");
             PrivateKeyFilePath = GetTestPropertySetting("PrivateKeyFilePath");
             KidValue = GetTestPropertySetting("KidValue");
+            OdsCode = GetTestPropertySetting("OdsCode");
+            RequesterDisplay = GetTestPropertySetting("RequesterDisplay");
 
             Console.WriteLine($"{nameof(TokenEndpoint)} - {TokenEndpoint}");
             Console.WriteLine($"{nameof(ApplicationUrl)} - {ApplicationUrl}");
             Console.WriteLine($"{nameof(IssuerKey)} - {IssuerKey.Length}");
             Console.WriteLine($"{nameof(PrivateKeyFilePath)} - {PrivateKeyFilePath.Length}");
             Console.WriteLine($"{nameof(KidValue)} - {KidValue.Length}");
+            Console.WriteLine($"{nameof(OdsCode)} - {OdsCode}");
+            Console.WriteLine($"{nameof(RequesterDisplay)} - {RequesterDisplay}");
         }
 
         private string GetTestPropertySetting(string propertyName)
