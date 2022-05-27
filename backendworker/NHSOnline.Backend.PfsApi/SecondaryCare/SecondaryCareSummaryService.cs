@@ -44,6 +44,15 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             {
                 var authResponse = await _nhsApimClient.GetAuthToken(userSession.CitizenIdUserSession.NhsLoginIdToken);
 
+                if (!authResponse.HasSuccessResponse)
+                {
+                    await _auditor.PostOperationAudit(
+                        AuditingOperations.SecondaryCareGetSummaryRequest,
+                        $"Failed to get Auth token - response code: {authResponse.StatusCode}");
+
+                    return new SecondaryCareSummaryResult.BadGateway();
+                }
+
                 var aggregatorResponse = await _secondaryCareClient.GetSummary(userSession, authResponse.Body.AccessToken);
 
                 if (aggregatorResponse.FailedToParseResponse)

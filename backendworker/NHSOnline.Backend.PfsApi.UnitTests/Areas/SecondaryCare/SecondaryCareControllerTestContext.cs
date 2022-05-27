@@ -100,12 +100,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         {
             serviceCollection
                 .AddSingleton(typeof(HttpTimeoutHandler<>))
-                .AddSingleton(typeof(HttpRequestIdentificationHandler<>))
-                .AddHttpClient<NhsApimHttpClient>()
-                .ConfigurePrimaryHttpMessageHandler<MockHttpMessageHandler>();
+                .AddSingleton(typeof(HttpRequestIdentificationHandler<>));
 
             serviceCollection
                 .ReplacePrimaryHttpMessageHandler<SecondaryCareHttpClient, MockHttpMessageHandler>();
+
+            serviceCollection
+                .ReplacePrimaryHttpMessageHandler<NhsApimHttpClient, MockHttpMessageHandler>();
         }
 
         internal SecondaryCareController CreateSystemUnderTest() => ServiceProvider.GetRequiredService<SecondaryCareController>();
@@ -126,6 +127,29 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Respond("application/json", data);
+        }
+
+        internal void MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Post, ApimOauthUrl)
+                .WithContent(ApimRequestContent)
+                .Respond(HttpStatusCode.BadRequest);
+        }
+
+        internal void MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Post, ApimOauthUrl)
+                .WithContent(ApimRequestContent)
+                .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
+                    {
+                        ExpiresIn = "123",
+                        IssuedTokenType = "urn:ietf:params:oauth:token-type:access_token",
+                        AccessToken = OAuthAccessToken,
+                        TokenType = "Bearer"
+                    }
+                ));
         }
 
         internal void MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse()
@@ -380,17 +404,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         ApimKey,
                         ApimKid))
                     .Returns(ClientAssertion);
-
-                MockHttpMessageHandler
-                    .When(HttpMethod.Post, ApimOauthUrl)
-                    .WithContent(ApimRequestContent)
-                    .Respond("application/json", JsonConvert.SerializeObject(new ApimAccessToken
-                    {
-                        ExpiresIn = "123",
-                        IssuedTokenType = "urn:ietf:params:oauth:token-type:access_token",
-                        AccessToken = OAuthAccessToken,
-                        TokenType = "Bearer"
-                    }));
             }
 
             public void ConfigureServices(ServiceCollection serviceCollection)

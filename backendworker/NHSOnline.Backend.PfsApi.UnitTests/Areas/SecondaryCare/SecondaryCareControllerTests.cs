@@ -26,9 +26,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
+        public async Task GetSummary_ApimOAuthTokenResponseIsUnsuccessful_Returns502BadGateway()
+        {
+            // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest, "Failed to get Auth token - response code: BadRequest"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
         public async Task GetSummary_GetSummaryResponseFromClientIsSuccessful_Returns200WithCompleteOrderedSummaryResponse()
         {
             // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(LoadAggregatorResponse("complete-valid-secondary-care-summary-response"));
 
             // Act
@@ -47,6 +71,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         public async Task GetSummary_GetSummaryResponseFromClientIsUnsuccessful_Returns502BadGateway()
         {
             // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse();
 
             // Act
@@ -59,8 +84,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
 
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: BadRequest"));
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: BadRequest"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
 
             VerifyNoOtherLoggerCalls();
@@ -70,6 +95,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         public async Task GetSummary_GetSummaryResponseFromClientTimesOut_Returns504GatewayTimeout()
         {
             // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryTimesOut();
 
             // Act
@@ -83,8 +109,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             pfsErrorResponse.ServiceDeskReference.Should().StartWith("zu");
 
             Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Error, "Aggregator Secondary Care Summary API timed out", Times.Once());
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - request timed out"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: Timeout"));
 
             VerifyNoOtherLoggerCalls();
@@ -94,6 +120,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         public async Task GetSummary_WhenPatientIsUnderMinimumAge_Returns470()
         {
             // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsResponseWithData(
                 HttpStatusCode.Forbidden,
                 LoadAggregatorResponse("under-minimum-age-response"));
@@ -122,6 +149,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             List<string> auditMessages)
         {
             // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(response);
 
             // Act
