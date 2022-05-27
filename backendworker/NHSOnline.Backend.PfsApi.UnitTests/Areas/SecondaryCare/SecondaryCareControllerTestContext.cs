@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         // Aggregator
         private const string SecondaryCareAggregatorBaseUrl = "http://stubs.local.bitraft.io:8080";
-        private const string SecondaryCareAggregatorEventsPath = "fhir/secondary-care/summary/$evaluate";
+        private const string SecondaryCareAggregatorEventsPath = "patient-care-aggregator-api/aggregator/events";
         private static string SecondaryCareAggregatorEventsUrl => $"{SecondaryCareAggregatorBaseUrl}/{SecondaryCareAggregatorEventsPath}";
 
         // Aggregator Headers

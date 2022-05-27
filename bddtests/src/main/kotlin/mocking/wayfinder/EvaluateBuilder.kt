@@ -24,7 +24,7 @@ private const val NHSD_TARGET_IDENTIFIER =
 private fun getEncodedPatientIdQueryName() = URLEncoder.encode("patient:identifier", "UTF-8")
 private fun getPatientIdQueryValue() = "https://fhir.nhs.uk/Id/nhs-number|${SerenityHelpers.getPatient().nhsNumbers[0]}"
 private fun getPath(): String {
-    val path = "/fhir/secondary-care/summary/\$evaluate"
+    val path = "/patient-care-aggregator-api/aggregator/events"
     val queryName = getEncodedPatientIdQueryName()
     val queryValue = URLEncoder.encode(getPatientIdQueryValue(), "UTF-8")
 

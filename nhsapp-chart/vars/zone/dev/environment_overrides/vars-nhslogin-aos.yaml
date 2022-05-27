@@ -9,7 +9,6 @@ fakeGpSupplierConfigPath: "/app/FakeGpSupplierConfig_aos.yml"
 nhsAppApimBaseUrl: "https://int.api.service.nhs.uk"
 
 aggregatorBaseUrl: "https://int.api.service.nhs.uk"
-aggregatorEventsPath: "patient-care-aggregator-api/aggregator/events"
 
 api:
   knownServicesOverrides:

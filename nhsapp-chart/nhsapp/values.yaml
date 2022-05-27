@@ -75,7 +75,7 @@ nhsAppApimKid: test-1
 nhsAppApimBaseUrl: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk"
 
 aggregatorBaseUrl: "https://stubs-preprod.stubs.nonlive.nhsapp.service.nhs.uk"
-aggregatorEventsPath: "fhir/secondary-care/summary/$evaluate"
+aggregatorEventsPath: "patient-care-aggregator-api/aggregator/events"
 
 organDonationIPTrust: "13.73.176.25/32"
 organDonationProtocol: https
