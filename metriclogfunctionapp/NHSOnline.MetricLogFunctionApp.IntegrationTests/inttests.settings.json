@@ -339,11 +339,15 @@
 
     "AzureFunctionsJobHost:functions:136": "AuditLog_Etl_Http",
     "AzureWebJobs.AuditLog_Etl_Http.Disabled": "true",
-
+    
     "AzureFunctionsJobHost:functions:137": "ReferrerLogin_Compute_Http",
     "AzureFunctionsJobHost:functions:138": "ReferrerLogin_Compute_Queue",
     "AzureWebJobs.ReferrerLogin_Compute_Timer.Disabled": "true",
-
+    
+    "AzureFunctionsJobHost:functions:139": "DailyDeviceReferralUsage_Compute_Http",
+    "AzureFunctionsJobHost:functions:140": "DailyDeviceReferralUsage_Compute_Queue",
+    "AzureWebJobs.DailyDeviceReferralUsage_Compute_Timer.Disabled": "true",
+    
     "AzureFunctionsJobHost:extensions:queues:maxPollingInterval": "00:00:01",
     "AzureFunctionsJobHost:extensions:queues:visibilityTimeout": "00:00:01",
 

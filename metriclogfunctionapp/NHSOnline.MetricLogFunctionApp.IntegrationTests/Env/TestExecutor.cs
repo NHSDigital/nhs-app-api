@@ -1,10 +1,11 @@
 using NhsAppAnalytics.FunctionApp.IntegrationTests.Env;
-
-namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env;
+using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env;
 
 internal sealed class TestExecutor
     {

@@ -5,6 +5,7 @@ namespace NHSOnline.MetricLogFunctionApp.Resilience
     internal static class RunDaily
     {
         internal const string CronExpressionEarlyMorning = "0 10 4 * * *";
+        internal const string CronExpressionEarlyMorningOffset = "0 30 4 * * *";
 
         internal static (DateTime startDateTime, DateTime endDateTime) CalculateRunDateTimeRange()
         {

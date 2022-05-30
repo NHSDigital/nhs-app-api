@@ -403,13 +403,22 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
             return await httpEndpointCallers.AuditLogConsumer.PostJson(parameters);
         }
 
-        internal static async Task<HttpResponseMessage> PostReferrerLogin(
-            this HttpEndpointCallers httpEndpointCallers,
+        internal static async Task<HttpResponseMessage> PostReferrerLogin(this HttpEndpointCallers httpEndpointCallers,
             string startDateTime,
             string endDateTime)
         {
             var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
             return await httpEndpointCallers.ReferrerLogin.PostJson(request);
+        }
+
+        internal static async Task<HttpResponseMessage> PostDailyDeviceReferralUsage(
+            this HttpEndpointCallers httpEndpointCallers,
+            string startDateTime,
+            string endDateTime)
+        {
+            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
+
+            return await httpEndpointCallers.DailyDeviceReferralUsage.PostJson(request);
         }
     }
 }

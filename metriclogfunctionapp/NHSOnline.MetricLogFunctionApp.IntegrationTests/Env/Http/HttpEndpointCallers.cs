@@ -89,6 +89,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
         internal HttpEndpointCaller CommsHubConsumer => new HttpEndpointCaller(Logs, _httpClient, "CommsHub_Etl_Http");
         internal HttpEndpointCaller AuditLogConsumer => new HttpEndpointCaller(Logs, _httpClient, "AuditLog_Etl_Http");
         internal HttpEndpointCaller ReferrerLogin => new HttpEndpointCaller(Logs, _httpClient, "ReferrerLogin_Compute_Http");
+        internal HttpEndpointCaller DailyDeviceReferralUsage => new HttpEndpointCaller(Logs, _httpClient, "DailyDeviceReferralUsage_Compute_Http");
 
         public void Dispose()
         {

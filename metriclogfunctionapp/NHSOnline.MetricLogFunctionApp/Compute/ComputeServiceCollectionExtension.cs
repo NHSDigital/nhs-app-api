@@ -1,28 +1,31 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.MetricLogFunctionApp.Compute.DailyDeviceReferralUsage;
 using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
 using NHSOnline.MetricLogFunctionApp.Compute.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.ReferrerLogin;
 
-namespace NHSOnline.MetricLogFunctionApp.Compute;
-
-internal static class ComputeServiceCollectionExtension
+namespace NHSOnline.MetricLogFunctionApp.Compute
 {
-    internal static void AddCompute(this IServiceCollection serviceCollection)
+    internal static class ComputeServiceCollectionExtension
     {
-        AddFunctions(serviceCollection);
-        AddInfrastructure(serviceCollection);
-        serviceCollection.AddComputeLogging();
-    }
+        internal static void AddCompute(this IServiceCollection serviceCollection)
+        {
+            AddFunctions(serviceCollection);
+            AddInfrastructure(serviceCollection);
+            serviceCollection.AddComputeLogging();
+        }
 
-    private static void AddFunctions(IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddFirstLogins();
-        serviceCollection.AddReferrerLogin();
-    }
+        private static void AddFunctions(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddFirstLogins();
+            serviceCollection.AddReferrerLogin();
+            serviceCollection.AddDailyDeviceReferralUsage();
+        }
 
-    private static void AddInfrastructure(IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddTransient(typeof(ComputeExecutor<>));
-        serviceCollection.AddTransient(typeof(IComputeExecutor<>), typeof(ComputeExecutor<>));
+        private static void AddInfrastructure(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient(typeof(ComputeExecutor<>));
+            serviceCollection.AddTransient(typeof(IComputeExecutor<>), typeof(ComputeExecutor<>));
+        }
     }
 }
