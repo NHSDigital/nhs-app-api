@@ -482,48 +482,14 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
     fun returnReferralsAndUpcomingAppointmentsUnderAgeError(): Mapping {
         val response = """
             {
-               "resourceType":"Bundle",
-               "entry":[
-                  {
-                     "fullUrl":"https://servita-sandbox.co.uk/CarePlan/1",
-                     "resource":{
-                        "resourceType":"CarePlan",
-                        "status":"active",
-                        "intent":"order",
-                        "subject":{
-                           "identifier":{
-                              "system":"https://fhir.nhs.uk/Id/nhs-number",
-                              "value":"9290220899"
-                           }
-                        }
-                     },
-                     "search":{
-                        "mode":"match"
-                     }
-                  },
-                  {
-                     "fullUrl":"https://servita-sandbox.co.uk/OperationOutCome/1",
-                     "resource":{
-                        "resourceType":"OperationOutcome",
-                        "issue":[
-                           {
-                              "extension":[
-                                 {
-                                    "url":"https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
-                                    "valueCode":"company-4"
-                                 }
-                              ],
-                              "severity":"error",
-                              "code":"forbidden",
-                              "diagnostics":"UNDER_16_DENIED"
-                           }
-                        ]
-                     },
-                     "search":{
-                        "mode":"include"
-                     }
-                  }
-               ]
+              "resourceType": "OperationOutcome",
+              "issue": [
+                {
+                  "severity": "error",
+                  "code": "forbidden",
+                  "diagnostics": "UNDER_16_DENIED"
+                }
+              ]
             }
         """
 

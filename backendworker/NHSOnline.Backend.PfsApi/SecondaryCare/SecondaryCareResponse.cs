@@ -33,6 +33,8 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
         public Bundle Body { get; private set; }
 
+        public OperationOutcome OperationOutcome { get; private set; }
+
         public List<OperationOutcome.IssueComponent> Issues { get; private set; } =
             new List<OperationOutcome.IssueComponent>();
 
@@ -45,10 +47,10 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
             return string.IsNullOrEmpty(stringResponse)
                 ? this
-                : await ParseResponse(logger, stringResponse);
+                : await ParseResponse(logger, stringResponse, responseMessage.StatusCode);
         }
 
-        private async Task<SecondaryCareResponse> ParseResponse(ILogger logger, string response)
+        private async Task<SecondaryCareResponse> ParseResponse(ILogger logger, string response, HttpStatusCode statusCode)
         {
             if (string.IsNullOrEmpty(response))
             {
@@ -57,6 +59,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
             try
             {
+                if (!statusCode.IsSuccessStatusCode())
+                {
+                    OperationOutcome = await _fhirParser.ParseAsync<OperationOutcome>(response);
+
+                    return this;
+                }
+
                 Body = await _fhirParser.ParseAsync<Bundle>(response);
 
                 Issues =
@@ -78,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         public bool IsUnder16Error()
         {
             return StatusCode == HttpStatusCode.Forbidden
-                   && Issues.Any(x => x.Diagnostics == Under16DiagnosticsErrorText);
+                   && OperationOutcome.Issue.Any(x => x.Diagnostics == Under16DiagnosticsErrorText);
         }
     }
 }
