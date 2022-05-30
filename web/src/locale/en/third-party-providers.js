@@ -75,9 +75,8 @@ export default {
       {
         id: 'manageYourReferralWayfinder',
         jumpOffContent: {
-          headerText: 'View and manage other referrals and appointments',
-          descriptionText: 'If you have a referral, you can manage your ' +
-            'first appointment in the NHS e-Referral Service',
+          headerText: 'View or manage referrals and first appointments',
+          descriptionText: 'If you have a referral, you can manage your first appointment',
         },
       },
     ],
