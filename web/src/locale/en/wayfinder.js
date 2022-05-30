@@ -38,11 +38,10 @@ export default {
     contactTheOrganisation: 'Contact the organisation that referred you if a referral is missing.',
   },
   referrals: {
-    bookingReference: 'Booking reference:',
     referredBy: 'Referred by:',
     referredDate: 'Date you were referred:',
     reviewDate: 'Due to be reviewed by:',
-    manageThisReferral: 'Manage this referral',
+    manageThisReferral: 'View or manage this referral',
     inReview: {
       title: 'Referral request in review',
       yourHealthcareProviderHasRequested: 'Your healthcare provider has requested for you to be referred to {specialty}. This request is being reviewed. You do not need to do anything.',

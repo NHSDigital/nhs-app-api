@@ -85,7 +85,7 @@ describe('Referral In Review Card', () => {
       const deepLink = wrapper.find('#manageInReviewReferral-1');
 
       expect(deepLink.exists()).toBe(true);
-      expect(deepLink.text()).toBe('Manage this referral');
+      expect(deepLink.text()).toBe('View or manage this referral');
     });
   });
 
@@ -124,7 +124,7 @@ describe('Referral In Review Card', () => {
       const deepLink = wrapper.find('#manageInReviewReferral-1');
 
       expect(deepLink.exists()).toBe(true);
-      expect(deepLink.text()).toBe('Manage this referral');
+      expect(deepLink.text()).toBe('View or manage this referral');
     });
   });
 });

@@ -20,7 +20,6 @@ const setupStore = (
 
   if (hasReferralsNotInReview) {
     referralsNotInReviewArray = [{
-      bookingReference: '608119956621',
       deepLinkUrl: '',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
@@ -31,7 +30,6 @@ const setupStore = (
 
   if (hasReferralsInReview) {
     referralsInReviewArray = [{
-      bookingReference: '608119956620',
       deepLinkUrl: '',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
