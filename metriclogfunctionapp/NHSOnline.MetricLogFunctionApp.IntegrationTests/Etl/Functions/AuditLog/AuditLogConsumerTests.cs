@@ -43,6 +43,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             initialPromptMetricRows.Should().HaveCount(1);
+            
+            var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
+            appointmentCancelMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -105,6 +108,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.007Z"));
                 initialPromptMetricRow.OptedIn.Should().Be("On");
                 initialPromptMetricRow.AuditId.Should().Be("AuditId9");
+
+                var appointmentCancelMetricRow1 = appointmentCancelMetricRows.First(r => r.SessionId == "TestSession10");
+                appointmentCancelMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.010Z"));
+                appointmentCancelMetricRow1.AuditId.Should().Be("AuditId10");
             }
         }
 
@@ -140,6 +147,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             initialPromptMetricRows.Should().HaveCount(1);
+            
+            var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
+            appointmentCancelMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -202,6 +212,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.007Z"));
                 initialPromptMetricRow.OptedIn.Should().Be("On");
                 initialPromptMetricRow.AuditId.Should().Be("AuditId9");
+
+                var appointmentCancelMetricRow1 = appointmentCancelMetricRows.First(r => r.SessionId == "TestSession10");
+                appointmentCancelMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.010Z"));
+                appointmentCancelMetricRow1.AuditId.Should().Be("AuditId10");
             }
         }
 
@@ -262,6 +276,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 AuditId = "AuditId6"
             });
 
+            await env.Postgres.Events.AppointmentCancelMetric.Insert(new AppointmentCancelMetricRow()
+            {
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 7),
+                SessionId = "TestSession7",
+                AuditId = "AuditId7"
+            });
+
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
                     "Login_Success",
@@ -276,7 +297,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5),
                     "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref5"),
                 BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6),
-                    "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods4", "ref4"));
+                    "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods4", "ref4"),
+                BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7),
+                    "Appointments_Cancel_Response", "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods7", "ref7"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -300,6 +323,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             var initialPromptMetricRow = initialPromptMetricRows.Should().ContainSingle().Subject;
+            
+            var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
+            var appointmentCancelMetricRow = appointmentCancelMetricRows.Should().ContainSingle().Subject;
 
             using (new AssertionScope())
             {
@@ -343,6 +369,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.004Z"));
                 initialPromptMetricRow.OptedIn.Should().Be("On");
                 initialPromptMetricRow.AuditId.Should().Be("AuditId6");
+
+                appointmentCancelMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.007Z"));
+                appointmentCancelMetricRow.SessionId.Should().Be("TestSession7");
+                appointmentCancelMetricRow.AuditId.Should().Be("AuditId7");
             }
         }
 
@@ -374,6 +404,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             initialPromptMetricRows.Should().BeEmpty();
+            
+            var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
+            appointmentCancelMetricRows.Should().BeEmpty();
         }
 
         [NhsAppTest]
@@ -404,6 +437,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             initialPromptMetricRows.Should().BeEmpty();
+            
+            var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
+            appointmentCancelMetricRows.Should().BeEmpty();
         }
 
         private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
@@ -443,7 +479,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref6"),
                 BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref7"),
                 BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref8"),
-                BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref7")
+                BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref7"),
+                BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10), "Appointments_Cancel_Response", "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods10", "ref10")
             };
     }
 }

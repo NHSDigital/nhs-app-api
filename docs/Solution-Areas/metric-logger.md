@@ -188,6 +188,36 @@ InitialPrompt body:
     }
 ]
 ```
+
+AppointmentCancellation Body:
+```bash
+[
+    {
+        "Id": "dffeb9a8-fd50-439c-b448-f6da59837821",
+        "Timestamp": "2022-04-26T16:15:17.5871586Z",
+        "AuditId": "dffeb9a8-fd50-439c-b448-f6da59837821",
+        "NhsLoginSubject": "7e009dfe-4ece-4aec-abf9-065a6a14e3da",
+        "NhsNumber": "966 103 3552",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Emis",
+        "Operation": "Appointments_Cancel_Response",
+        "Details": "Appointment successfully cancelled for appointment with id: 237710",
+        "ApiVersion": "pr7858",
+        "WebVersion": "pr7858 (commit:c1185c1f9)",
+        "NativeVersion": null,
+        "Environment": "scratch3",
+        "IntegrationReferrer": null,
+        "SessionId": "6f3aa88b-d544-4ca6-bd06-002e8e555fdf",
+        "ProofLevel": "P9",
+        "id": "febec662-86e5-40af-8513-a21c90116bf5",
+        "_rid": "RuVQAKPVga-6sQUAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga-6sQUAAAAAAA==/",
+        "_etag": "\"0a02c6f8-0000-1100-0000-62681a950000\"",
+        "_attachments": "attachments/",
+        "_ts": 1650989717
+    }
+]
+```
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

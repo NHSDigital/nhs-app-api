@@ -13,6 +13,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -26,6 +27,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
         private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
         private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
+        private readonly IAuditLogEtl<AppointmentCancelMetric> _appointmentCancelEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -37,6 +39,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
             IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
             IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
+            IAuditLogEtl<AppointmentCancelMetric> appointmentCancelEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -47,6 +50,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _medicalRecordViewEtl = medicalRecordViewEtl;
             _notificationToggleEtl = notificationToggleEtl;
             _initialPromptEtl = initialPromptEtl;
+            _appointmentCancelEtl = appointmentCancelEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -88,6 +92,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _secondaryCareSummaryEtl.Execute(events);
                 await _notificationToggleEtl.Execute(events);
                 await _initialPromptEtl.Execute(events);
+                await _appointmentCancelEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
                 await _medicalRecordViewEtl.Execute(events);
             }

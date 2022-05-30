@@ -12,7 +12,7 @@
     "AuditEventHubConnectionDataReceiver__credential": "managedidentity",
     "AuditEventHubConnectionDataReceiver__clientId": "{{INSERT CLIENT ID HERE}}",
     "AuditEventHubConnectionDataReceiver": "testString",
-    "AnalyticsSQLDbConnectionString": "U2VydmVyPXBvc3RncmVzO0RhdGFiYXNlPWFuYWx5dGljc2RiO1BvcnQ9NTQzMjtVc2VyIElkPWFuYWx5dGljc2RiX2FwcDtQYXNzd29yZD10ZXN0YXBwdXNlcg==",
+    "AnalyticsSQLDbConnectionString": "U2VydmVyPWxvY2FsaG9zdDtEYXRhYmFzZT1hbmFseXRpY3NkYjtQb3J0PTU0MzI7VXNlciBJZD1hbmFseXRpY3NkYl9hcHA7UGFzc3dvcmQ9dGVzdGFwcHVzZXI=",
     "AzureWebJobs.AuditLog_Etl_EventHub.Disabled": "true",
     "Monitoring__SlackChannel": "analytics2-0-alerts-dev",
     "Slack__Token": "{{INSERT TOKEN HERE}}",

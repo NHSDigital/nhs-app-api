@@ -14,6 +14,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
@@ -28,6 +29,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<MedicalRecordViewMetric>> _medicalRecordView;
         private Mock<IAuditLogEtl<NotificationToggleMetric>> _notificationToggleEtl;
         private Mock<IAuditLogEtl<InitialPromptMetric>> _initialPromptEtl;
+        private Mock<IAuditLogEtl<AppointmentCancelMetric>> _appointmentCancelEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
@@ -41,6 +43,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
             _medicalRecordView = new Mock<IAuditLogEtl<MedicalRecordViewMetric>>();
             _notificationToggleEtl = new Mock<IAuditLogEtl<NotificationToggleMetric>>();
+            _appointmentCancelEtl = new Mock<IAuditLogEtl<AppointmentCancelMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
             _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
@@ -53,6 +56,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _medicalRecordView.Object,
                 _notificationToggleEtl.Object,
                 _initialPromptEtl.Object,
+                _appointmentCancelEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }
@@ -81,6 +85,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _notificationToggleEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _initialPromptEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _appointmentCancelEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

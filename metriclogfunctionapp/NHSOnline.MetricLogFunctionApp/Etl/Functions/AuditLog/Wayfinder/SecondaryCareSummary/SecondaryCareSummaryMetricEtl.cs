@@ -7,7 +7,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.Second
     public class SecondaryCareSummaryMetricEtl : AuditLogEtl<SecondaryCareSummaryMetric>
     {
         public SecondaryCareSummaryMetricEtl(IEventsRepository repo, IAuditLogParser<SecondaryCareSummaryMetric> parser,IRequestQueueOrchestrator<AuditReportRequest> queueOrchestrator)
-            : base(repo, parser,queueOrchestrator)
+            : base(repo, parser, queueOrchestrator)
         {
 
         }

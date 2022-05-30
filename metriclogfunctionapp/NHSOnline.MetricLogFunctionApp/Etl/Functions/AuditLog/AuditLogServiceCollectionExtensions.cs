@@ -8,6 +8,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -36,6 +37,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             serviceCollection.AddTransient<IAuditLogEtl<NotificationToggleMetric>, NotificationToggleMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<NotificationToggleMetric>, NotificationToggleEventParser>();
 
+            serviceCollection.AddTransient<IAuditLogEtl<AppointmentCancelMetric>, AppointmentCancelMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<AppointmentCancelMetric>, AppointmentCancelEventParser>();
+            
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();
