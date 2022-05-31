@@ -53,9 +53,9 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
-        public ValidateAndLog IsNotEmpty(string value, string name, ValidationOptions options = ValidationOptions.None)
+        public ValidateAndLog IsNotNullOrEmpty(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
             {
                 HandleNullError(name, options);
             }

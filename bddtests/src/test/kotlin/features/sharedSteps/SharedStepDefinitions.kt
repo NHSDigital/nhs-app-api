@@ -27,6 +27,7 @@ import net.thucydides.core.annotations.Steps
 import pages.navigation.WebHeader
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import utils.set
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -303,7 +304,7 @@ open class SharedStepDefinitions {
 
     private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {
         val factory = NotificationsFactory()
-        val patient = factory.setUpUser()
+        val patient = GlobalSerenityHelpers.PATIENT.getOrFail<Patient>()
         factory.setUpDeviceValues(patient.accessToken)
         factory.mockNativeNotificationFunctions(status, authorised)
 

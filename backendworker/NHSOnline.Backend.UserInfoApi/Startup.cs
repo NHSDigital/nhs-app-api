@@ -24,6 +24,7 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.UserInfo;
 
 namespace NHSOnline.Backend.UserInfoApi
 {
@@ -75,6 +76,11 @@ namespace NHSOnline.Backend.UserInfoApi
             SetupApiKeys(services);
 
             services.RegisterDatabaseClient(Configuration, _logger);
+
+            if (UserInfoConfiguration.IsSqlApiClientRequired(Configuration, _logger))
+            {
+                services.RegisterSqlApiDatabaseClient(Configuration, _logger);
+            }
 
             _modularStartup.ConfigureServices(services);
 

@@ -5,6 +5,8 @@ domain: nonlive.nhsapp.service.nhs.uk
 privateDomain: private.nonlive.nhsapp.service.nhs.uk
 registry: nhsapp.azurecr.io
 cosmosDBName: loadtest
+cosmosCommsDbName: loadtest
+cosmosSqlAccountEndpoint: https://nhsapp-loadtest-sql.documents.azure.com
 AZURE_SUBSCRIPTION_NAME: nonlive
 networkPolicyEnabled: false
 
@@ -115,6 +117,10 @@ cid:
 
 users:
   mockNotificationHubClient: true
+
+info:
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: true
 
 metrics:
   memoryRequest: "120Mi"

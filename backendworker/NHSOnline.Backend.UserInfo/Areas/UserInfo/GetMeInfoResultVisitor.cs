@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
 
 namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
 {
@@ -8,7 +9,17 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
     {
         public IActionResult Visit(GetInfoResult.Found result)
         {
-            return new OkObjectResult(result.UserInfoRecords.FirstOrDefault());
+            return new OkObjectResult(result.UserInfoRecords.Select(x => new InfoUserV1
+                {
+                    NhsLoginId = x.NhsLoginId,
+                    Info = new InfoV1
+                    {
+                        NhsNumber = x.Info?.NhsNumber,
+                        OdsCode = x.Info?.OdsCode
+                    },
+                    Timestamp = x.Timestamp
+                }).FirstOrDefault()
+            );
         }
 
         public IActionResult Visit(GetInfoResult.NotFound result)

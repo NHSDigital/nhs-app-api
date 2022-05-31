@@ -39,10 +39,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             new UserAndInfo { NhsLoginId = NhsLoginId2, Info = new Info { NhsNumber = NhsNumber, OdsCode = OdsCode }}
         };
 
-        private readonly IEnumerable<InfoUser> _outputRecords = new[]
+        private readonly IEnumerable<InfoUserV2> _outputRecords = new[]
         {
-            new InfoUser { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId1, OdsCode = OdsCode },
-            new InfoUser { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId2, OdsCode = OdsCode }
+            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId1, OdsCode = OdsCode },
+            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId2, OdsCode = OdsCode }
         };
 
         [TestInitialize]
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             _mockInfoService.VerifyAll();
 
             var statusCodeResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            var response = statusCodeResult.Value.Should().BeOfType<UserInfoResponse>().Subject;
+            var response = statusCodeResult.Value.Should().BeOfType<UserInfoResponseV2>().Subject;
             response.Users.Should().BeEquivalentTo(_outputRecords);
         }
 
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             _mockInfoService.VerifyAll();
 
             var statusCodeResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            var response = statusCodeResult.Value.Should().BeOfType<UserInfoResponse>().Subject;
+            var response = statusCodeResult.Value.Should().BeOfType<UserInfoResponseV2>().Subject;
             response.Users.Should().BeEquivalentTo(_outputRecords);
         }
 

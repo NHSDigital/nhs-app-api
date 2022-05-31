@@ -121,6 +121,20 @@ spec:
           value: {{ $.Values.info.mongoDatabaseInfoAuditCollection }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
+        - name: KEYVAULT_TENANT_ID
+          value: {{ $.Values.keyvaultTenantID }}
+        - name: COSMOS_SQL_API_ENDPOINT
+          value: {{ $.Values.cosmosSqlAccountEndpoint }}
+        - name: COMMS_SQL_API_DATABASE_NAME
+          value: comms-{{ $.Values.cosmosCommsDbName }}-sql
+        - name: USERINFO_NHS_NUMBER_CONTAINER
+          value: {{ $.Values.info.commsSqlDatabaseInfoNhsNumberCollection }}
+        - name: USERINFO_ODS_CODE_CONTAINER
+          value: {{ $.Values.info.commsSqlDatabaseInfoOdsCodeCollection }}
+        - name: USER_INFO_READ_FROM_SECONDARY_CONTAINERS
+          value: "{{ $.Values.info.userInfoReadFromSecondaryContainers }}"
+        - name: USER_INFO_SAVE_TO_SECONDARY_CONTAINERS
+          value: "{{ $.Values.info.userInfoSaveToSecondaryContainers }}"
         - name: CITIZEN_ID_JWT_ISSUER
         {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
@@ -181,6 +195,16 @@ spec:
           valueFrom:
             secretKeyRef:
               name: comms-hub-event-hub-connection-string-{{ .Chart.AppVersion }}
+              key: secret
+        - name: NHSAPP_SQL_APPLICATION_ID
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-sql-application-id-{{ .Chart.AppVersion }}
+              key: secret
+        - name: NHSAPP_SQL_APPLICATION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-sql-application-secret-{{ .Chart.AppVersion }}
               key: secret
         volumeMounts:
         - name: secrets-store-inline

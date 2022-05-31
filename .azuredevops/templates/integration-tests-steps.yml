@@ -11,6 +11,7 @@ steps:
     timeoutInMinutes: 180
     env:
       AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
+      COSMOS_SQL_API_CONNECTION_STRING: $(cosmos.sqlapi.connection.string)
     inputs:
       scriptPath: bddtests/buildscripts/$(tests.script)
 

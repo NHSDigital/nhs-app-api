@@ -10,9 +10,9 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
     {
         public IActionResult Visit(GetInfoResult.Found result)
         {
-            return new OkObjectResult(new UserInfoResponse
+            return new OkObjectResult(new UserInfoResponseV2
             {
-                Users = result.UserInfoRecords.Select(x => new InfoUser
+                Users = result.UserInfoRecords.Select(x => new InfoUserV2
                 {
                     NhsLoginId = x.NhsLoginId,
                     NhsNumber = x.Info.NhsNumber,
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
 
         public IActionResult Visit(GetInfoResult.NotFound result)
         {
-            return new OkObjectResult(new List<InfoUser>());
+            return new OkObjectResult(new List<InfoUserV2>());
         }
 
         public IActionResult Visit(GetInfoResult.BadGateway result)

@@ -5,13 +5,14 @@ namespace NHSOnline.HttpMocks.Domain
     public abstract class Patient
     {
         private static readonly NhsNumberGenerator NhsNumberGenerator = new NhsNumberGenerator();
+        private static readonly NhsLoginIdGenerator NhsLoginIdGenerator = new NhsLoginIdGenerator();
 
         protected Patient()
         {
             Login = Id;
         }
 
-        public string Id { get; } = Guid.NewGuid().ToString();
+        public string Id { get; } = NhsLoginIdGenerator.Next();
 
         public string Login { get; internal set; }
 

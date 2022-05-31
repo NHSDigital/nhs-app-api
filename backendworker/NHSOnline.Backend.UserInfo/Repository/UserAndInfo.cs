@@ -1,4 +1,5 @@
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.UserInfo.Repository
@@ -7,6 +8,7 @@ namespace NHSOnline.Backend.UserInfo.Repository
     public class UserAndInfo : RepositoryRecord
     {
         [BsonElement]
+        [JsonProperty(PropertyName = "id")]
         public string NhsLoginId { get; set; }
 
         [BsonElement]

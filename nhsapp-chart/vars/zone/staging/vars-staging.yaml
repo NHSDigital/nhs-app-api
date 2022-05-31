@@ -4,6 +4,8 @@ zone: staging
 domain: nhsapp.service.nhs.uk
 registry: nhsapprelease.azurecr.io
 cosmosDBName: staging
+cosmosCommsDbName: staging
+cosmosSqlAccountEndpoint: https://nhsapp-staging-sql.documents.azure.com
 AZURE_SUBSCRIPTION_NAME: live
 
 environmentPublicHostSuffix: ".staging.nhsapp.service.nhs.uk"
@@ -126,6 +128,10 @@ users:
       notificationHubReadCharacters: "4567CDEF"
       notificationHubWriteCharacters: "4567CDEF"
       notificationHubGeneration: "2"
+
+info:
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: false
 
 metrics:
   memoryRequest: "120Mi"

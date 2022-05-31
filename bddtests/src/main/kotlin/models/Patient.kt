@@ -21,7 +21,7 @@ data class Patient(
         val linkageKey: String = "",
         var userPatientLinkToken: String = "",
         var patientActivityContextGuid: String = "",
-        val nhsNumbers: List<String> = emptyList(),
+        var nhsNumbers: List<String> = emptyList(),
         val patientId: String = "",
         val passphrase: String = "",
         var onlineUserId: String = "",
@@ -51,6 +51,10 @@ data class Patient(
                 patientId,
                 if (odsCode == "") TppMockDefaults.DEFAULT_ODS_CODE_TPP else odsCode,
                 onlineUserId)
+    }
+
+    fun regenerateAccessToken() {
+        accessToken = AccessTokenBuilder().getSignedToken(this).serialize()
     }
 
     fun formattedNHSNumber(): String {

@@ -44,3 +44,10 @@ fun <T>ISerenityHelperEnums.setIfNotAlreadySet(valueToSet : T) {
                 valueToSet)
 }
 
+fun <T>ISerenityHelperEnums.setSingleton(valueToSet : T) {
+    val currentStoredValue = this.getOrNull<Any>()
+    if (currentStoredValue == null) {
+        this.set(valueToSet)
+    }
+}
+

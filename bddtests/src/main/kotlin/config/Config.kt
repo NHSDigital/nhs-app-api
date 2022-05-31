@@ -1,5 +1,7 @@
 package config
 
+import java.io.File
+
 private const val SESSION_EXPIRY_MINUTES: Long = 2
 private const val MONGODB_DEFAULT_PORT: Long = 27017L
 
@@ -39,6 +41,9 @@ class Config private constructor() {
     val messagesMongoDbPort: Long
     val consentMongoDbHost: String
     val consentMongoDbPort: Long
+
+    val cosmosSqlEndpoint: String
+    val cosmosSqlKey: String
 
     val accessibilityOutputFolder: String
 
@@ -94,7 +99,7 @@ class Config private constructor() {
 
         usersMongoDbHost = envOrDefault("USERS_MONGO_DATABASE_HOST", "::1")
         usersMongoDbPort = envOrDefault("USERS_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
-
+        
         messagesMongoDbHost = envOrDefault("MESSAGES_MONGO_DATABASE_HOST", "::1")
         messagesMongoDbPort = envOrDefault("MESSAGES_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
@@ -108,6 +113,19 @@ class Config private constructor() {
 
         qualtricsDirectoryId = envOrDefault("QUALTRICS_DIRECTORY_ID", "MockQualtricsDirectoryId")
         qualtricsMailingList = envOrDefault("QUALTRICS_MAILING_LIST_ID","MockQualtricsMailingListId")
+
+
+        val cosmosSqlConnectionString = if(isDockerised) {
+            envOrDefault("COSMOS_SQL_API_CONNECTION_STRING", "").split(";")
+        }
+        else {
+            val cosmosSqlConnectionStringSecretLocation = "~/.nhsonline/secrets/cosmos_sql_api_connection_string_bdd"
+            File(cosmosSqlConnectionStringSecretLocation.replace("~", System.getProperty("user.home")))
+                    .readText().split(";");
+        }
+
+        cosmosSqlEndpoint = cosmosSqlConnectionString.first().replace("AccountEndpoint=", "")
+        cosmosSqlKey = cosmosSqlConnectionString.take(2).last().replace("AccountKey=", "")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

@@ -57,6 +57,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Production);
 
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddLogging();
+            serviceCollection.AddSingleton(_mockConfiguration.Object);
 
             // Act
             _systemUnderTest.ConfigureServices(serviceCollection);
@@ -79,6 +81,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Development);
 
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddLogging();
+            serviceCollection.AddSingleton(_mockConfiguration.Object);
 
             // Act
             _systemUnderTest.ConfigureServices(serviceCollection);
@@ -105,6 +109,12 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockConfiguration.Setup(x => x["COMMS_HUB_EVENT_HUB_CONNECTION_STRING"]).Returns(
                 "Endpoint=sb://example.servicebus.windows.net/;SharedAccessKeyName=example-sender;SharedAccessKey=fake;EntityPath=example-events");
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
+            _mockConfiguration.Setup(x => x["COSMOS_SQL_API_CONNECTION_STRING"])
+                .Returns("AccountEndpoint=https://example.documents.azure.com:443/;AccountKey=fake;");
+            _mockConfiguration.Setup(x => x["USER_INFO_SAVE_TO_SECONDARY_CONTAINERS"])
+                .Returns("true");
+            _mockConfiguration.Setup(x => x["USER_INFO_READ_FROM_SECONDARY_CONTAINERS"])
+                .Returns("false");
         }
     }
 }

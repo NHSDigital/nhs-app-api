@@ -8,9 +8,17 @@ Feature: User Info Backend
     When I post to the user info endpoint
     Then I receive a "Created" success code
     And a user info record has been created
+    And a user info nhs number record has been created
+    And a user info ods code record has been created
     And the user info record will have my NHS Login ID
     And the user info record will have my ODS Code
     And the user info record will have my NHS Number
+    And the user info nhs number record will have my NHS Login ID
+    And the user info nhs number record will have my ODS Code
+    And the user info nhs number record will have my NHS Number
+    And the user info ods code record will have my NHS Login ID
+    And the user info ods code record will have my ODS Code
+    And the user info ods code record will have my NHS Number
 
   Scenario: An api user with proof level 5 can submit their details to the user info endpoint
     Given I am an api user with proof level 5 wishing to submit their details to the user info endpoint
@@ -18,9 +26,13 @@ Feature: User Info Backend
     When I post to the user info endpoint
     Then I receive a "Created" success code
     And a user info record has been created
+    And a user info ods code record has been created
     And the user info record will have my NHS Login ID
     And the user info record will have my ODS Code
     And the user info record will not have NHS Number
+    And the user info ods code record will have my NHS Login ID
+    And the user info ods code record will have my ODS Code
+    And the user info ods code record will not have NHS Number
 
   Scenario: An api user posting to the user info endpoint without an access token will receive a 401
     Given I am an api user wishing to submit their details to the user info endpoint

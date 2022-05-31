@@ -4,6 +4,8 @@ domain: nhsapp.service.nhs.uk
 zone: production
 registry: nhsapprelease.azurecr.io
 cosmosDBName: production
+cosmosCommsDbName: production
+cosmosSqlAccountEndpoint: https://nhsapp-production-sql.documents.azure.com
 AZURE_SUBSCRIPTION_NAME: live
 
 environmentPublicHostSuffix: ".production.nhsapp.service.nhs.uk"
@@ -181,6 +183,8 @@ info:
   minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: false
 
 users:
   mockNotificationHubClient: false

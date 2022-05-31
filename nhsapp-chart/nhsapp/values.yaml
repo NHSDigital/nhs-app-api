@@ -164,6 +164,8 @@ contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
 
 # CosmosDB Address Ranges
 cosmosDBName: null
+cosmosCommsDbName: null
+cosmosSqlAccountEndpoint: null
 
 # See https://docs.microsoft.com/en-us/azure/cosmos-db/performance-tips for explanation of port ranges
 cosmosDBDefaultPort: 443
@@ -468,6 +470,10 @@ info:
   cpuLimit: "600m"
   targetCPUUtilizationPercentage: 45
   mongoDatabaseInfoCollection: info
+  commsSqlDatabaseInfoNhsNumberCollection: info_nhs_number
+  commsSqlDatabaseInfoOdsCodeCollection: info_ods_code
+  userInfoReadFromSecondaryContainers: null
+  userInfoWriteToSecondaryContainers: null
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT

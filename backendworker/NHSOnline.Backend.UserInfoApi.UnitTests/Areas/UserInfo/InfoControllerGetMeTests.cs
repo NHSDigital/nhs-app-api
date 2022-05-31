@@ -49,7 +49,16 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_SuccessFound()
         {
             // Arrange
-            var userInfo = new UserAndInfo();
+            var userInfo = new UserAndInfo
+            {
+                NhsLoginId = "TestLoginId",
+                Info = new Info
+                {
+                    NhsNumber = "1234",
+                    OdsCode = "A00000"
+                },
+                Timestamp = DateTime.Now
+            };
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new GetInfoResult.Found(new []{userInfo}));
 
@@ -59,7 +68,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<UserAndInfo>()
+                .Subject.Value.Should().BeAssignableTo<InfoUserV1>()
                 .Subject.Should().BeEquivalentTo(userInfo);
         }
 

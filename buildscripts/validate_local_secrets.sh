@@ -68,5 +68,7 @@ validate_secret vision_client_cert.pfx
 validate_secret comms_hub_event_hub_pid_connection_string
 validate_secret comms_hub_event_hub_connection_string
 validate_secret audit_event_hub_connection_string
+validate_secret cosmos_sql_api_connection_string
+validate_secret cosmos_sql_api_connection_string_bdd
 
 exit $MISSING_SECRETS

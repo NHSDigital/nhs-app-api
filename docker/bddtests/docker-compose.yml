@@ -35,6 +35,8 @@ secrets:
     file: "./docker/bddtests/secrets/event_hub_connection_string"
   audit_event_hub_connection_string:
     file: "./docker/bddtests/secrets/event_hub_connection_string"
+  cosmos_sql_api_connection_string:
+    file: "~/.nhsonline/secrets/cosmos_sql_api_connection_string_bdd"
 
 services:
 

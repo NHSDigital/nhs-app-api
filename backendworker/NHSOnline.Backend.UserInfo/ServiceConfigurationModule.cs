@@ -1,3 +1,4 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -13,6 +14,7 @@ using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Repository.SqlApi;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo.Mappers;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
@@ -27,6 +29,7 @@ namespace NHSOnline.Backend.UserInfo
         {
             services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
             services.AddScoped<IAccessTokenProvider, AccessTokenProvider>();
+            services.AddSingleton<IUserInfoConfiguration, UserInfoConfiguration>();
 
             ConfigureRepositoryServices(services, configuration);
             ConfigureCitizenIdServices(services);
@@ -38,8 +41,21 @@ namespace NHSOnline.Backend.UserInfo
         private static void ConfigureRepositoryServices(IServiceCollection services, IConfiguration configuration)
         {
             services.RegisterRepository<UserAndInfo, UserAndInfoRepositoryConfiguration>(configuration);
-            services.AddSingleton<IInfoService, InfoService>();
+            services.AddTransient<MongoRepository<UserAndInfoRepositoryConfiguration, UserAndInfo>>();
+            services.AddSingleton<IUserAndInfoSqlApiRepositoryFactory, UserAndInfoSqlApiRepositoryFactory>();
             services.AddSingleton<IInfoRepository, UserInfoRepository>();
+            services.AddSingleton<IInfoService, InfoService>();
+
+            var userInfoConfig = services.BuildServiceProvider().GetService<IUserInfoConfiguration>();
+            var sqlApiEnabled = userInfoConfig.SaveToSecondaryContainers || userInfoConfig.ReadFromSecondaryContainers;
+
+            if (sqlApiEnabled)
+            {
+                services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByNhsNumberConfiguration>(configuration);
+                services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByOdsCodeConfiguration>(configuration);
+                services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByOdsCodeConfiguration, UserAndInfo>>();
+                services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByNhsNumberConfiguration, UserAndInfo>>();
+            }
         }
 
         private static void ConfigureCitizenIdServices(IServiceCollection services)

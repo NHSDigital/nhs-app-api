@@ -43,12 +43,14 @@ jobs:
         displayName: Initialise Secrets
         env:
           AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
+          COSMOS_SQL_API_CONNECTION_STRING: $(cosmos.sqlapi.connection.string)
         inputs:
           targetType: 'inline'
           script: |
             mkdir -p ~/.nhsonline/secrets
             mkdir -p ~/.nhsonline/secure-stubs-certificate
             echo "$AZURE_NOTIFICATION_HUBS__0__AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" > ~/.nhsonline/secrets/azure_notification_hub_key_bdd
+            echo "$COSMOS_SQL_API_CONNECTION_STRING" > ~/.nhsonline/secrets/cosmos_sql_api_connection_string_bdd
 
       - task: ShellScript@2
         displayName: Generate Secure Stubs Certificate

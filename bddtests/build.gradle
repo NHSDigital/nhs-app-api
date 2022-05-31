@@ -5,6 +5,7 @@ repositories {
         url 'https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1'
         name 'nhsapp'
     }
+    mavenCentral()
 }
 
 buildscript {
@@ -67,7 +68,7 @@ dependencies {
     compile "org.assertj:assertj-core:3.8.0"
     compile 'com.neovisionaries:nv-websocket-client:2.9'
     compile "org.mongodb:mongo-java-driver:$mongodb_version"
-    compile "com.microsoft.azure:azure-cosmosdb:2.2.0"
+    compile 'com.azure:azure-cosmos:4.29.1'
 }
 
 compileKotlin {

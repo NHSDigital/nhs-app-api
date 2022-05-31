@@ -71,8 +71,7 @@ namespace NHSOnline.Backend.Users.Repository
                 _logger.LogEnter();
 
                 new ValidateAndLog(_logger)
-                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
-                    .IsNotEmpty(nhsLoginId,nameof(nhsLoginId),ThrowError)
+                    .IsNotNullOrWhitespace(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
                 return await _repository.Find(d => d.NhsLoginId == nhsLoginId, RecordName);

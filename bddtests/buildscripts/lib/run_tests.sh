@@ -4,6 +4,8 @@ validate_maven_settings
 
 validate_azure_notification_hub_key
 
+validate_cosmos_sql_api_connection_string
+
 validate_npm_settings
 
 cleanup_docker_containers
@@ -24,6 +26,7 @@ docker run \
   --name "${DOCKER_PROJECT_NAME}_test_runner" \
   --network "${DOCKER_NETWORK}" \
   --env-file ../docker/bddtests/env/vars_test_runner.env \
+  --env COSMOS_SQL_API_CONNECTION_STRING=${COSMOS_SQL_API_CONNECTION_STRING} \
   "${DOCKER_ARGS[@]}" \
   "${TRANCHE_RUN_ADDITIONAL_ARGS[@]}" \
   "${DOCKER_IMAGE}" bash -c " \

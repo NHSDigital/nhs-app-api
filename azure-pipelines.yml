@@ -192,6 +192,8 @@ stages:
         - template: .azuredevops/templates/run-security-scan-job.yml
 
   - stage: integration_tests
+    variables:
+      - group: IntegrationTests-CosmosSqlApiConnection
     displayName: Integration Tests
     dependsOn:
       - web
@@ -355,6 +357,8 @@ stages:
 
     - ${{ if eq(variables['source.tag'], 'False') }}:
       - stage: xamarin_integration_tests
+        variables:
+          - group: IntegrationTests-CosmosSqlApiConnection
         displayName: XIT - Main
         ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
           condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
@@ -370,6 +374,8 @@ stages:
               nativeVersion: '$(native.xamarin.version)'
 
       - stage: xamarin_integration_upgrade_tests
+        variables:
+          - group: IntegrationTests-CosmosSqlApiConnection
         displayName: XIT - Upgrade
         ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
           condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
@@ -386,6 +392,8 @@ stages:
               nativeVersion: '$(native.xamarin.version)'
 
       - stage: xamarin_integration_canary_tests
+        variables:
+          - group: IntegrationTests-CosmosSqlApiConnection
         displayName: XIT - Canary
         ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
           condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
@@ -402,6 +410,8 @@ stages:
               nativeVersion: '$(native.xamarin.version)'
 
       - stage: xamarin_integration_flaky_tests
+        variables:
+          - group: IntegrationTests-CosmosSqlApiConnection
         displayName: XIT - Flaky
         ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
           condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
@@ -419,6 +429,8 @@ stages:
 
     - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
       - stage: xamarin_integration_flipbook_tests
+        variables:
+          - group: IntegrationTests-CosmosSqlApiConnection
         displayName: XIT - Flipbook
         condition: succeeded()
         dependsOn:

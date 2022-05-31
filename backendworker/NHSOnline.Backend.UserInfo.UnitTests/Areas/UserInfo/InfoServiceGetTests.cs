@@ -11,7 +11,6 @@ using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UserInfo.Areas.UserInfo;
-using NHSOnline.Backend.UserInfo.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfo.Repository;
 using UnitTestHelper;
 
@@ -22,20 +21,23 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
     {
         private InfoService _systemUnderTest;
         private Mock<IInfoRepository> _mockInfoRepository;
+        private IUserInfoConfiguration _userInfoConfiguration;
         private string _nhsLoginId;
         private AccessToken _accessToken;
         private string _nhsNumber;
-        private string _odsCode;
-        private InfoUserProfile _userProfile;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockInfoRepository = new Mock<IInfoRepository>();
+            _userInfoConfiguration = new TestUserInfoConfiguration
+            {
+                SaveToSecondaryContainers = true,
+                ReadFromSecondaryContainers = true
+            };
+
             _nhsLoginId = "NHS Login Id";
             _nhsNumber = "NHS Number";
-            _odsCode = "ODS Code";
-            _userProfile = new InfoUserProfile { NhsNumber = _nhsNumber, OdsCode = _odsCode };
             var mockLogger = new Mock<ILogger<InfoService>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
@@ -44,53 +46,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             });
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            _systemUnderTest = new InfoService(_mockInfoRepository.Object, mockLogger.Object);
-        }
-
-        [TestMethod]
-        public async Task Send_SuccessCreated()
-        {
-            // Arrange
-            UserAndInfo actualUserInfo = null;
-            var userAndInfo = new UserAndInfo()
-            {
-                Info = new Info
-                {
-                    NhsNumber = _nhsNumber,
-                    OdsCode = _odsCode
-                }
-            };
-            var expectedResult = new PostInfoResult.Created(userAndInfo);
-
-            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
-                .Callback<UserAndInfo>(u => actualUserInfo = u)
-                .ReturnsAsync(() => new RepositoryCreateResult<UserAndInfo>.Created(userAndInfo));
-
-            // Act
-            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<PostInfoResult.Created>();
-            result.Should().BeEquivalentTo(expectedResult);
-            actualUserInfo.NhsLoginId.Should().BeEquivalentTo(_nhsLoginId);
-            actualUserInfo.Info.NhsNumber.Should().BeEquivalentTo(_nhsNumber);
-            actualUserInfo.Info.OdsCode.Should().Be(_odsCode);
-        }
-
-        [TestMethod]
-        public async Task Send_RepositoryThrowsException_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
-                .Throws(new ArgumentException(string.Empty));
-
-            // Act
-            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<PostInfoResult.InternalServerError>();
+            _systemUnderTest = new InfoService(_mockInfoRepository.Object, _userInfoConfiguration, mockLogger.Object);
         }
 
         [TestMethod]

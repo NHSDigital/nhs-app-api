@@ -3,6 +3,8 @@ domain: nonlive.nhsapp.service.nhs.uk
 privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: scratch
+cosmosCommsDbName: dev
+cosmosSqlAccountEndpoint: https://nhsapp-dev-sql.documents.azure.com
 zone: dev
 
 environmentPublicHostSuffix: ".dev.nonlive.nhsapp.service.nhs.uk"
@@ -191,6 +193,8 @@ info:
   cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: true
 
 sjr:
   minAvailable: 0

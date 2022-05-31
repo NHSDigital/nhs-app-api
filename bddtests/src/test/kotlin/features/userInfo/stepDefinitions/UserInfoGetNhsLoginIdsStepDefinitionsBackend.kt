@@ -6,6 +6,9 @@ import io.cucumber.java.en.When
 import org.junit.Assert
 import utils.getOrFail
 import utils.set
+import utils.setSingleton
+import java.util.UUID
+import kotlin.collections.ArrayList
 
 class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
 
@@ -14,20 +17,27 @@ class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
         val factory = UserInfoFactory()
         val odsCode = "OdsCode"
         val nhsNumber = "9998889999"
-        UserInfoSerenityHelpers.TARGET_NHSNUMBER.set(nhsNumber)
-        UserInfoSerenityHelpers.TARGET_ODSCODE.set(odsCode)
-        factory.setUpMultipleExistingUserInfoRecords(odsCode, nhsNumber)
+
+        UserInfoSerenityHelpers.RUN_UUID.setSingleton(UUID.randomUUID())
+        val runUuid = UserInfoSerenityHelpers.RUN_UUID.getOrFail<UUID>()
+
+        UserInfoSerenityHelpers.TARGET_NHSNUMBER.set("$nhsNumber-$runUuid")
+        UserInfoSerenityHelpers.TARGET_ODSCODE.set("$odsCode-$runUuid")
+
+        factory.setUpMultipleExistingUserInfoRecords(odsCode, nhsNumber, runUuid)
     }
 
     @Given("^I am an api user wishing to get a list of NhsLoginIds that are linked to a given ods code$")
     fun iAmAnApiUserWishingToGetAListOfNhsLoginIdsLinkedToOdsCode() {
         val factory = UserInfoFactory()
+        UserInfoSerenityHelpers.RUN_UUID.setSingleton(UUID.randomUUID())
         factory.setUpMultipleExistingUserInfoRecordsLinkedToOdsCode()
     }
 
     @Given("^I am an api user wishing to get NhsLoginIds, but the ods code I am using is not linked to any records$")
     fun iAmAnApiUserWishingToGetAListOfNhsLoginIdsButTheOdsCodeIAmUsingIsNotLinkedToRecords() {
         val factory = UserInfoFactory()
+        UserInfoSerenityHelpers.RUN_UUID.setSingleton(UUID.randomUUID())
         factory.setUpMultipleExistingUserInfoRecordsLinkedToOdsCode()
         UserInfoSerenityHelpers.TARGET_ODSCODE.set("RandomOdsCode")
     }
@@ -35,6 +45,7 @@ class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
     @Given("^I am an api user wishing to get NhsLoginIds, but the nhs number I am using is not linked to any records$")
     fun iAmAnApiUserWishingToGetAListOfNhsLoginIdsButThenhsNumberIAmUsingIsNotLinkedToRecords() {
         val factory = UserInfoFactory()
+        UserInfoSerenityHelpers.RUN_UUID.setSingleton(UUID.randomUUID())
         factory.setUpMultipleExistingUserInfoRecordsLinkedToOdsCode()
         UserInfoSerenityHelpers.TARGET_NHSNUMBER.set("9999999998")
     }
@@ -42,6 +53,7 @@ class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
     @Given("^I am an api user wishing to get a list of NhsLoginIds that are linked to a given nhs number")
     fun iAmAnApiUserWishingToGetAListOfNhsLoginIdsLinkedToNhsNumber() {
         val factory = UserInfoFactory()
+        UserInfoSerenityHelpers.RUN_UUID.setSingleton(UUID.randomUUID())
         factory.setUpMultipleExistingUserInfoRecordsLinkedToNhsNumber()
     }
 
@@ -60,6 +72,7 @@ class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
     fun iGetUserInfoDetailsWithOdsCodeAndNhsNumber() {
         val odsCode = UserInfoSerenityHelpers.TARGET_ODSCODE.getOrFail<String>()
         val nhsNumber = UserInfoSerenityHelpers.TARGET_NHSNUMBER.getOrFail<String>()
+
         UserInfoApi.getUserInfo(odsCode = odsCode, nhsNumber = nhsNumber)
     }
 

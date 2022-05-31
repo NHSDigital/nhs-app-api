@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -12,11 +14,13 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
     public class InfoService : IInfoService
     {
         private readonly IInfoRepository _infoRepository;
+        private readonly IUserInfoConfiguration _config;
         private readonly ILogger<InfoService> _logger;
 
-        public InfoService(IInfoRepository infoRepository, ILogger<InfoService> logger)
+        public InfoService(IInfoRepository infoRepository, IUserInfoConfiguration config, ILogger<InfoService> logger)
         {
             _infoRepository = infoRepository;
+            _config = config;
             _logger = logger;
         }
 
@@ -25,7 +29,8 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
             try
             {
                 _logger.LogEnter();
-                var userInfo = new UserAndInfo
+
+                var currentUserInfo = new UserAndInfo
                 {
                     NhsLoginId = accessToken.Subject,
                     Info = new Info
@@ -35,7 +40,14 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
                     }
                 };
 
-                var repositoryResult =  await _infoRepository.Create(userInfo);
+                var lastSavedUserInfo = await GetUserInfoRecord(currentUserInfo.NhsLoginId);
+
+                if (_config.SaveToSecondaryContainers)
+                {
+                    await UpdateSecondaryInfoCollections(lastSavedUserInfo, currentUserInfo);
+                }
+
+                var repositoryResult = await _infoRepository.CreateOrUpdatePrimary(currentUserInfo);
 
                 return repositoryResult.Accept(new RepositoryCreateResultVisitor());
             }
@@ -48,6 +60,20 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task UpdateSecondaryInfoCollections(
+            UserAndInfo lastSavedUserInfo,UserAndInfo currentUserInfo)
+        {
+            var tasks = new List<Task>
+            {
+                DeleteObsoleteNhsNumberRecord(lastSavedUserInfo, currentUserInfo),
+                CreateOrUpdateNhsNumberRecord(currentUserInfo),
+                DeleteObsoleteOdsCodeRecord(lastSavedUserInfo, currentUserInfo),
+                CreateOrUpdateOdsCodeRecord(currentUserInfo)
+            };
+
+            await Task.WhenAll(tasks);
         }
 
         public async Task<GetInfoResult> GetInfo(AccessToken accessToken)
@@ -96,6 +122,51 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
             finally
             {
                 _logger.LogExit();
+            }
+        }
+
+        private async Task<UserAndInfo> GetUserInfoRecord(string nhsLoginId)
+        {
+            var userAndInfo = await GetInfoRecords(repo => repo.FindByNhsLoginId(nhsLoginId));
+
+            return (userAndInfo is GetInfoResult.Found userInfoRecord)
+                ? userInfoRecord.UserInfoRecords.FirstOrDefault()
+                : null;
+        }
+
+        private async Task DeleteObsoleteNhsNumberRecord(UserAndInfo lastSavedUserInfo, UserAndInfo currentUserInfo)
+        {
+            if (!string.IsNullOrEmpty(lastSavedUserInfo?.Info.NhsNumber) &&
+                (lastSavedUserInfo.Info.NhsNumber != currentUserInfo.Info.NhsNumber))
+            {
+                await _infoRepository.DeleteNhsNumberRecord(lastSavedUserInfo.Info.NhsNumber,
+                    lastSavedUserInfo.NhsLoginId);
+            }
+        }
+
+        private async Task CreateOrUpdateNhsNumberRecord(UserAndInfo currentUserInfo)
+        {
+            if (!string.IsNullOrEmpty(currentUserInfo.Info.NhsNumber))
+            {
+                await _infoRepository.CreateOrUpdateNhsNumberRecord(currentUserInfo);
+            }
+        }
+
+        private async Task DeleteObsoleteOdsCodeRecord(UserAndInfo lastSavedUserInfo, UserAndInfo currentUserInfo)
+        {
+            if (!string.IsNullOrEmpty(lastSavedUserInfo?.Info.OdsCode) &&
+                (lastSavedUserInfo.Info.OdsCode != currentUserInfo.Info.OdsCode))
+            {
+                await _infoRepository.DeleteOdsCodeRecord(lastSavedUserInfo.Info.OdsCode,
+                    lastSavedUserInfo.NhsLoginId);
+            }
+        }
+
+        private async Task CreateOrUpdateOdsCodeRecord(UserAndInfo currentUserInfo)
+        {
+            if (!string.IsNullOrEmpty(currentUserInfo.Info.OdsCode))
+            {
+                await _infoRepository.CreateOrUpdateOdsCodeRecord(currentUserInfo);
             }
         }
     }

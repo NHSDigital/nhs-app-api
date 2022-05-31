@@ -2,6 +2,7 @@ package features.pushNotifications.stepDefinitions
 
 import com.mongodb.client.model.Filters.eq
 import constants.Supplier
+import cosmosSql.CosmosSqlConnection
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
@@ -41,6 +42,10 @@ class NotificationsFactory {
         SessionCreateJourneyFactory.getForSupplier(supplierToUse).createFor(patientToUse)
         MongoDBConnection.UserDevicesCollection.clearCache()
         PushNotificationsSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(patientToUse.subject)
+
+        val deletion = { deleteItemInSqlContainers(patientToUse) }
+        GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
+
         return patientToUse
     }
 
@@ -115,6 +120,12 @@ class NotificationsFactory {
                 eq("RegistrationId", REGISTRATION_ID),
                 Document("\$set", Document("RegistrationId", INVALID_REGISTRATION_ID))
         )
+    }
+
+
+    private fun deleteItemInSqlContainers(patient: Patient) {
+        CosmosSqlConnection.UserInfoNhsNumberContainer.deleteValue(patient.subject, patient.nhsNumbers[0])
+        CosmosSqlConnection.UserInfoOdsCodeContainer.deleteValue(patient.subject, patient.odsCode)
     }
 
     private fun mockNotificationsStatus(status: SettingStatus): String {

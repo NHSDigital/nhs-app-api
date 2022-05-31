@@ -5,6 +5,8 @@ domain: nonlive.nhsapp.service.nhs.uk
 privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: ops
+cosmosCommsDbName: sandbox
+cosmosSqlAccountEndpoint: https://nhsapp-sandbox-sql.documents.azure.com
 
 environmentPublicHostSuffix: ".sandbox.nonlive.nhsapp.service.nhs.uk"
 environmentPrivateHostSuffix: "-sandbox.private.sandbox.nonlive.nhsapp.service.nhs.uk"
@@ -71,6 +73,10 @@ users:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive
       notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+
+info:
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: false
 
 secrets:
   notificationHubs:
