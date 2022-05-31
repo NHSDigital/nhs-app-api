@@ -1,5 +1,4 @@
-import ReferralsOrAppointmentsHelpPage
-  from '@/pages/wayfinder/help/referrals-or-appointments-help';
+import ReferralsOrAppointmentsHelpPage from '@/pages/wayfinder/help/referrals-or-appointments-help';
 import { createStore, mount } from '../../../helpers';
 
 jest.mock('@/lib/utils');

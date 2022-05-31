@@ -66,7 +66,9 @@ main () {
 
   echo "Completed Generating web config json"
 
-  echo "${config}" >> "${outputFile}"
+  mkdir -p ${outputFile}
+
+  echo "${config}" >> "${outputFile}/config.json"
 }
 
 main 

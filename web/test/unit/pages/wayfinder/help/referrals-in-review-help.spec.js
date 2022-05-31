@@ -1,5 +1,4 @@
-import ReferralsInReviewHelpPage
-  from '@/pages/wayfinder/help/referrals-in-review-help';
+import ReferralsInReviewHelpPage from '@/pages/wayfinder/help/referrals-in-review-help';
 import { createStore, mount } from '../../../helpers';
 
 jest.mock('@/lib/utils');

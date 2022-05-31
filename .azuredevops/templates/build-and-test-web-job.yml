@@ -6,10 +6,10 @@ jobs:
       - template: docker-login-steps.yml
       - template: npm-authenticate.yml
 
-      # - task: ShellScript@2
-      #   displayName: Run web security audit
-      #   inputs:
-      #     scriptPath: web/buildscripts/01_run_security_audit.sh
+      - task: ShellScript@2
+        displayName: Run web security audit
+        inputs:
+          scriptPath: web/buildscripts/01_run_security_audit.sh
 
       - task: ShellScript@2
         displayName: Run web security tests

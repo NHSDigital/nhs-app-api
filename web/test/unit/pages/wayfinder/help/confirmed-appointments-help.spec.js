@@ -1,5 +1,4 @@
-import ConfirmedAppointmentsHelpPage
-  from '@/pages/wayfinder/help/confirmed-appointments-help';
+import ConfirmedAppointmentsHelpPage from '@/pages/wayfinder/help/confirmed-appointments-help';
 import { createStore, mount } from '../../../helpers';
 
 jest.mock('@/lib/utils');

@@ -1,21 +1,45 @@
-const env = require('./src/config/env.json');
+/* eslint-disable quote-props */
+// eslint-disable-next-line import/extensions
+const webpack = require('webpack');
 
 module.exports = {
-  devServer: {
-    before: (app) => {
-      app.get(/CONFIG_PATH\/config.json$/, (req, res) => res.send(env));
+  configureWebpack: {
+    resolve: {
+      // we need to add these in for packages we required that are not part of webpack > 5
+      // https://gist.github.com/ef4/d2cf5672a93cf241fd47c020b9b3066a
+      fallback: {
+        'crypto': require.resolve('crypto-browserify'),
+        'querystring': require.resolve('querystring-es3'),
+        'buffer': require.resolve('buffer/'),
+        'stream': require.resolve('stream-browserify'),
+      },
     },
-    disableHostCheck: process.env.NODE_ENV !== 'production',
-    port: env.PORT,
+    plugins: [
+      // required after going to webpack > 5
+      // https://github.com/browserify/commonjs-assert/issues/55
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
+    ],
   },
-  // assetsDir: VERSION_TAG, this is used locally but ignored in ADO - not sure why moved to package.json
+
+  // properties found at https://webpack.js.org/configuration/dev-server/
+  devServer: {
+    onBeforeSetupMiddleware: (devServer) => {
+      devServer.app.get(/CONFIG_PATH\/config.json$/, (req, res) => res.send(process.env));
+    },
+    allowedHosts: process.env.NODE_ENV !== 'production' ? 'all' : 'auto',
+    port: process.env.PORT,
+  },
+
+  // assetsDir: VERSION_TAG, this
+  // is used locally but ignored in ADO - not sure why moved to package.json
   productionSourceMap: process.env.NODE_ENV !== 'production',
   chainWebpack: (config) => {
-    // GraphQL Loader
     config.module
       .rule('images')
-      .use('url-loader')
-      .loader('url-loader')
+      .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
+      .type('asset/resource')
       .end();
   },
 };

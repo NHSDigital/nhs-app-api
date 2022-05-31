@@ -16,8 +16,7 @@ import {
   WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_NAME,
   WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_NAME,
   WAYFINDER_REFERRALS_IN_REVIEW_HELP_NAME,
-}
-  from '@/router/names';
+} from '@/router/names';
 
 import { UPLIFT_APPOINTMENTS } from '@/router/routes/appointments';
 import { REFERRALS_HOSPITAL_AND_OTHER_APPOINTMENTS_HELP_PATH } from '@/router/externalLinks';

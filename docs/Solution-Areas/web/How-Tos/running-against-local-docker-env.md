@@ -1,6 +1,6 @@
 # Running Against Local Docker Env
 
-A different command is required to get the `envBuilder.js` script to create a matching `src/config/env.json` when running web from npm and the local env from docker; this allows the use of any non-default options, e.g. `LOGINENV=sandpit`.
+A different command is required to get the `envBuilder.js` script to create a matching `.env` when running web from npm and the local env from docker; this allows the use of any non-default options, e.g. `LOGINENV=sandpit`.
 
 Ensure however you are running the local environment (run, bdd env, browserstack etc.) that you include `WEB=host` in the make command line to signal that you will run the web service manually yourself.
 

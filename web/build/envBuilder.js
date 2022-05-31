@@ -3,7 +3,7 @@ const { readFileSync, writeFileSync } = require('fs');
 const { exit } = require('process');
 
 const prefix = '.';
-const outputFilePath = 'src/config/env.json';
+const outputFilePath = '.env';
 const numberRegex = RegExp(/^\d+$/);
 const booleanRegex = RegExp(/^(true|false)$/);
 const dockerEnvRegex = RegExp(/^([^=]+)=(.*)$/);
@@ -115,9 +115,15 @@ const determineEnvType = (envVarsSh, config, formattedConfig) => {
 const writeEnvFileAndExit = webEnv => {
   const webEnvJson = JSON.stringify(webEnv, null, 2);
 
-  writeFileSync(outputFilePath, `${webEnvJson}\n`);
+  const webContainerId = 
+      execSync(`docker ps | grep web.local.bitraft | cut -d' ' -f1`).toString().trim();
 
-  console.log(`${__filename} => Wrote web env JSON to ${outputFilePath}`);
+  const webEnvDocker = 
+      execSync(`docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' ${webContainerId}`).toString().trim();
+
+  writeFileSync(outputFilePath, `${webEnvDocker}`);
+
+  console.log(`${__filename} => Wrote web env vars to ${outputFilePath}`);
 
   exit(0);
 }

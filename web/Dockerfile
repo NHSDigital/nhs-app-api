@@ -16,10 +16,12 @@ WORKDIR /app
 
 COPY .npmrc .
 COPY package.json .
+COPY auditjs.json .
 COPY package-lock.json .
 
 COPY lint/.npmrc lint/
 COPY lint/package.json lint/
+COPY lint/auditjs.json lint/
 COPY lint/package-lock.json lint/
 
 RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
@@ -27,7 +29,7 @@ RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
     npm i -g npm \
       && npm install \
       && npm install -g auditjs \
-      && npm run audit\
+      && npm run audit \
       && cd lint \
       && npm install \
       && npm run audit 
@@ -128,7 +130,7 @@ CMD sudo update-ca-certificates && \
     nginx
 
 # 1. trust wildcard cert (mounted in helm)to allow communication between pods
-# 2. run env-wrapper.sh script to create env.json for config endpoint and place in versioned assets folder
+# 2. run env-wrapper.sh script to create .env for config endpoint and place in versioned assets folder
 # 3. run configureDeepLinking.sh to configure the well-known files
 # 4. create nginx.conf file - replace ${PORT} variable with value defined in helm
 # 5. start nginx
