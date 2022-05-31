@@ -1,6 +1,6 @@
 <template>
-  <card-group v-if="hasReferralsInReview" class="nhsuk-grid-row">
-    <card-group-item v-for="referral in referralsInReviewIsNotReviewOverdue"
+  <card-group v-if="hasAnyReferrals" class="nhsuk-grid-row">
+    <card-group-item v-for="referral in referralsInReviewAndNotOverdue"
                      :key="referral.referralId"
                      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
@@ -24,7 +24,7 @@
 import ReferralInReviewCard from '@/components/wayfinder/referrals/ReferralInReviewCard';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import { isBefore } from '@/lib/utils';
+import { isBefore, isNonEmptyArray } from '@/lib/utils';
 
 export default {
   name: 'ReferralsInReviewCard',
@@ -34,19 +34,21 @@ export default {
     CardGroupItem,
   },
   props: {
-    hasReferralsInReview: {
-      type: Boolean,
-      default: false,
-    },
     referralsInReview: {
       type: Array,
       default: null,
     },
   },
-  computed: {
-    referralsInReviewIsNotReviewOverdue() {
-      return this.referralsInReview.filter(this.isReviewNotOverdue);
-    },
+  data() {
+    const referralsInReviewAndNotOverdue = this.referralsInReview
+      .filter(this.isReviewNotOverdue);
+
+    const hasAnyReferrals = isNonEmptyArray(referralsInReviewAndNotOverdue);
+
+    return {
+      referralsInReviewAndNotOverdue,
+      hasAnyReferrals,
+    };
   },
   methods: {
     isReviewNotOverdue(referral) {

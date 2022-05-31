@@ -1,8 +1,10 @@
-import * as dependency from '@/lib/utils';
 import WayfinderPage from '@/pages/wayfinder/index';
 import { createStore, mount } from '../../helpers';
 
-jest.mock('@/lib/utils');
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const setupStore = (
   hasReferralsInReview,
@@ -20,7 +22,8 @@ const setupStore = (
 
   if (hasReferralsNotInReview) {
     referralsNotInReviewArray = [{
-      deepLinkUrl: '',
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/bookable/4',
+      status: 'bookable',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
       requestedSpecialty: 'Cardiology',
@@ -30,12 +33,22 @@ const setupStore = (
 
   if (hasReferralsInReview) {
     referralsInReviewArray = [{
-      deepLinkUrl: '',
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/inreview/3',
+      status: 'inReview',
+      referrerOrganisation: 'Mahogany GP Surgery',
+      referredDateTime: '2022-04-10T10:00:00',
+      reviewDate: '2300-04-18T10:00:00',
+      requestedSpecialty: 'Cardiology',
+      referralId: '3',
+    }, {
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/overdue/17',
+      status: 'inReview',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
       reviewDate: '2022-04-18T10:00:00',
-      requestedSpecialty: 'Cardiology',
-      referralId: '3' }];
+      requestedSpecialty: 'Haematology',
+      referralId: '17',
+    }];
   }
 
   if (hasConfirmedAppointments) {
@@ -90,6 +103,7 @@ const setupStore = (
 
 describe('Summary care response with: ' +
   '1 referral in review,' +
+  '1 referral in review overdue,' +
   '1 referral not in review,' +
   '1 confirmed appointment' +
   'and 1 unconfirmed appointment', () => {
@@ -320,7 +334,6 @@ describe('Summary care response with: ' +
 
   beforeEach(() => {
     $store = setupStore(false, false, false, false, false);
-    dependency.redirectTo = jest.fn();
   });
 
   describe('if page loaded', () => {
@@ -408,7 +421,6 @@ describe('If summary care response returns with error', () => {
 
   beforeEach(() => {
     $store = setupStore(false, false, false, false, false, true);
-    dependency.redirectTo = jest.fn();
   });
 
   describe('if page errored', () => {

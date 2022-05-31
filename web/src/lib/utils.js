@@ -48,6 +48,8 @@ export const datePart = (value, dateFormat) => {
 
 export const mimeType = type => lookupMimeType(type) || customMimeTypes.getType(type) || 'application/octet-stream';
 
+export const isNonEmptyArray = array => (Array.isArray(array) && array.length > 0);
+
 export const isEmptyArray = array => (Array.isArray(array) && array.length === 0);
 
 export const isFalsy = value => !(value && value !== 'false');

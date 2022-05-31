@@ -44,8 +44,7 @@
           <book-or-manage-referrals-or-appointments-card
             :referrals-not-in-review="referralsNotInReview"
             :referrals-in-review="referralsInReview"
-            :unconfirmed-appointments="unconfirmedAppointments"
-            :has-referrals-or-appointments="hasReferralsOrAppointments"/>
+            :unconfirmed-appointments="unconfirmedAppointments"/>
 
           <h2 id="confirmed-appointments-title"
               class="nhsuk-u-padding-bottom-5">
@@ -73,8 +72,7 @@
               'ReferralsInReview')"/>
           <referrals-in-review-card
             class="nhsuk-u-padding-bottom-8"
-            :referrals-in-review="referralsInReview"
-            :has-referrals-in-review="hasReferralsInReview"/>
+            :referrals-in-review="referralsInReview"/>
 
           <other-available-services-menu-items
             id="other-available-services-menu-items"
@@ -161,29 +159,17 @@ export default {
     referralsInReview() {
       return this.$store.state.wayfinder.summary.referralsInReview;
     },
-    hasReferralsInReview() {
-      return this.referralsInReview.length >= 1;
-    },
     referralsNotInReview() {
       return this.$store.state.wayfinder.summary.referralsNotInReview;
     },
-    hasReferralsNotInReview() {
-      return this.referralsNotInReview.length >= 1;
-    },
     unconfirmedAppointments() {
       return this.$store.state.wayfinder.summary.unconfirmedAppointments;
-    },
-    hasUnconfirmedAppointments() {
-      return this.unconfirmedAppointments.length >= 1;
     },
     confirmedAppointments() {
       return this.$store.state.wayfinder.summary.confirmedAppointments;
     },
     hasConfirmedAppointments() {
       return this.confirmedAppointments.length >= 1;
-    },
-    hasReferralsOrAppointments() {
-      return this.hasReferralsNotInReview || this.hasUnconfirmedAppointments;
     },
   },
   async mounted() {

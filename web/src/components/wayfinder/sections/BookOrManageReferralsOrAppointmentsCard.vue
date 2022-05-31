@@ -1,5 +1,5 @@
 <template>
-  <card-group v-if="hasReferralsOrAppointments" class="nhsuk-grid-row">
+  <card-group v-if="hasAnyReferralsOrAppointments" class="nhsuk-grid-row">
     <card-group-item v-for="(appointment, index) in unconfirmedAppointments"
                      :key="`upcoming-appointment-${index}`"
                      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
@@ -8,7 +8,7 @@
         :location-description="appointment.locationDescription"
         :deep-link-url="appointment.deepLinkUrl"/>
     </card-group-item>
-    <card-group-item v-for="referral in referralsNotInReviewIsBookableWasCancelled"
+    <card-group-item v-for="referral in bookableWasCancelledReferrals"
                      :key="referral.referralId"
                      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
@@ -20,7 +20,7 @@
         :deep-link-url="referral.deepLinkUrl"/>
     </card-group-item>
 
-    <card-group-item v-for="referral in referralsNotInReviewIsBookable"
+    <card-group-item v-for="referral in bookableReferrals"
                      :key="referral.referralId"
                      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
@@ -32,7 +32,7 @@
         :deep-link-url="referral.deepLinkUrl"/>
     </card-group-item>
 
-    <card-group-item v-for="referral in referralsInReviewIsReviewOverdue"
+    <card-group-item v-for="referral in overdueReferrals"
                      :key="referral.referralId"
                      class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
 
@@ -56,7 +56,7 @@ import AppointmentReadyToConfirmCard from '@/components/wayfinder/appointments/A
 import ReferralReadyToRebookCard from '@/components/wayfinder/referrals/ReferralReadyToRebookCard';
 import ReferralReviewOverdueCard from '@/components/wayfinder/referrals/ReferralReviewOverdueCard';
 import ReferralBookableCard from '@/components/wayfinder/referrals/ReferralBookableCard';
-import { isBefore } from '@/lib/utils';
+import { isBefore, isNonEmptyArray } from '@/lib/utils';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 
@@ -71,10 +71,6 @@ export default {
     CardGroupItem,
   },
   props: {
-    hasReferralsOrAppointments: {
-      type: Boolean,
-      default: false,
-    },
     referralsInReview: {
       type: Array,
       default: null,
@@ -89,23 +85,33 @@ export default {
     },
   },
   data() {
+    const bookableWasCancelledReferrals = this.referralsNotInReview
+      .filter(this.isBookableWasCancelledReferral);
+    const bookableReferrals = this.referralsNotInReview
+      .filter(this.isBookableReferral);
+    const overdueReferrals = this.referralsInReview
+      .filter(this.isReviewOverdueReferral);
+
+    const hasAnyReferralsOrAppointments =
+      isNonEmptyArray(this.referralsNotInReview) ||
+      isNonEmptyArray(this.referralsInReview) ||
+      isNonEmptyArray(this.unconfirmedAppointments);
+
     return {
-      referralsNotInReviewIsBookableWasCancelled: this.referralsNotInReview
-        .filter(this.isBookableWasCancelled),
-      referralsNotInReviewIsBookable: this.referralsNotInReview
-        .filter(this.isBookable),
-      referralsInReviewIsReviewOverdue: this.referralsInReview
-        .filter(this.isReviewOverdue),
+      bookableWasCancelledReferrals,
+      bookableReferrals,
+      overdueReferrals,
+      hasAnyReferralsOrAppointments,
     };
   },
   methods: {
-    isBookable(referral) {
+    isBookableReferral(referral) {
       return referral.status === 'bookable';
     },
-    isBookableWasCancelled(referral) {
+    isBookableWasCancelledReferral(referral) {
       return referral.status === 'bookableWasCancelled';
     },
-    isReviewOverdue(referral) {
+    isReviewOverdueReferral(referral) {
       return referral.status === 'inReview' && isBefore(referral.reviewDueDate);
     },
   },
