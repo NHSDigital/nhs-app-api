@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
     {
         private const string PortalLinkResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link";
         private const string ReferralStateResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State";
-        private const string ReviewDueDateResourceUrl = "https://fhir.nhs.net/ReviewDueDate";
+        private const string ReviewDueDateResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate";
         private const string AppointmentStatusResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status";
 
         private readonly ILogger<ISecondaryCareSummaryMapper> _logger;

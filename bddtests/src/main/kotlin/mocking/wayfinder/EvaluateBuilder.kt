@@ -116,7 +116,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                         "scheduledPeriod": {
                             "extension": [
                                 {
-                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                                     "valueDate": "2125-04-06"
                                 }
                             ],
@@ -244,7 +244,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                         "scheduledPeriod": {
                             "extension": [
                                 {
-                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                                     "valueDate": "2022-04-06"
                                 }
                             ],
@@ -291,7 +291,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                         "scheduledPeriod": {
                             "extension": [
                                 {
-                                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                                     "valueDate": "2022-04-01"
                                 }
                             ],
@@ -625,7 +625,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                       "scheduledPeriod": {
                         "extension": [
                           {
-                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                             "valueDate": "2125-04-06"
                           }
                         ],
@@ -753,7 +753,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                       "scheduledPeriod": {
                         "extension": [
                           {
-                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                             "valueDate": "2022-04-06"
                           }
                         ],
@@ -800,7 +800,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                       "scheduledPeriod": {
                         "extension": [
                           {
-                            "url": "https://fhir.nhs.net/ReviewDueDate",
+                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                             "valueDate": "2022-04-01"
                           }
                         ],
@@ -1049,7 +1049,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                     "scheduledPeriod": {
                                         "extension": [
                                             {
-                                                "url": "https://fhir.nhs.net/ReviewDueDate",
+                                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                                                 "valueDate": "2125-04-06"
                                             }
                                         ],
@@ -1152,7 +1152,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                     "scheduledPeriod": {
                                         "extension": [
                                             {
-                                                "url": "https://fhir.nhs.net/ReviewDueDate",
+                                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                                                 "valueDate": "2125-04-06"
                                             }
                                         ],

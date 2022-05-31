@@ -35,7 +35,7 @@
               "scheduledPeriod": {
                 "extension": [
                   {
-                    "url": "https://fhir.nhs.net/ReviewDueDate",
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
                     "valueDate": "2022-04-24"
                   }
                 ]
