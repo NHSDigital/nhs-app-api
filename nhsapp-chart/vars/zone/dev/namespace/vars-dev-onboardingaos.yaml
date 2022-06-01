@@ -38,7 +38,7 @@ api:
     services__cid_uaf__url: https://uaf.aos.signin.nhs.uk
     services__cid_access__url: https://access.aos.signin.nhs.uk
     services__cid_idvm__url: https://idvm.aos.signin.nhs.uk
-    services__accurx__url: https://floreystaging.accurx.com
+    services__accurx__url: https://staging.accurx.nhs.uk
     services__engage__url: https://pp-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
     services__pkb__url: https://rc.pkb.io
@@ -55,7 +55,7 @@ api:
     servicesV3__cid_uaf__url: https://uaf.aos.signin.nhs.uk
     servicesV3__cid_access__url: https://access.aos.signin.nhs.uk
     servicesV3__cid_idvm__url: https://idvm.aos.signin.nhs.uk
-    servicesV3__accurx__url: https://floreystaging.accurx.com
+    servicesV3__accurx__url: https://staging.accurx.nhs.uk
     servicesV3__engage__url: https://pp-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__pkb__url: https://rc.pkb.io
