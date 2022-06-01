@@ -11,7 +11,7 @@ open class SilverIntegrationStepDefinitions {
     fun iSeeSilverIntegrationErrorPageLoadedWithTitle(title: String) {
         featureNotAvailablePage.isLoaded(title)
     }
-
+    
     @Then("^I select the Go to NHS App homepage link from the feature not available page$")
     fun iSelectTheGoToNHSAppHomepageLinkFromTheFeatureNotAvailablePage() {
         featureNotAvailablePage.goToNHSAppHome.click()

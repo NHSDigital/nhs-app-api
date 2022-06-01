@@ -595,7 +595,10 @@ describe('redirector page', () => {
         .toHaveBeenCalledWith(
           wrapper.vm,
           SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
-          expect.any(Object),
+          {
+            providerName: 'Patients Know Best',
+            featureName: 'Consultations, events and messages',
+          },
         );
     });
 

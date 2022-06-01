@@ -212,7 +212,10 @@ export default {
       redirectTo(
         this,
         SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
-        { featureName: featureJumpOffContent.jumpOffContent.headerText },
+        {
+          featureName: featureJumpOffContent.jumpOffContent.headerText,
+          providerName: this.thirdPartyServiceContent.providerName,
+        },
       );
     },
     updateTitle({ featureJumpOffContent }, next) {

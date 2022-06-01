@@ -49,6 +49,6 @@ Feature: Patients Know Best Record Sharing
     Given I am a user who cannot view Record Sharing from Patients Know Best
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpkb.stubs.local.bitraft.io%3A8080%2Fnhs-login%2Flogin%3FphrPath%3D%252Fpatient%252FmyConsentTeam.action%253Ftab%253Dinvitations%2526subTab%253DmyClinicians'
-    Then I see silver integration error page loaded with title Record sharing
+    Then I see silver integration error page loaded with title Cannot access Record sharing
     When I select the Go to NHS App homepage link from the feature not available page
     Then I see the home page header

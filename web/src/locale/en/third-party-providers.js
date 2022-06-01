@@ -1,8 +1,8 @@
 export default {
-  errors: {
+  information: {
     silverIntegrationNotAvailable: {
-      heading: 'This service is not available',
-      contactYourGpSurgery: 'If you need to access this service, contact your GP surgery for more information.',
+      heading: 'Cannot access {featureName}',
+      youDoNotHaveAccess: 'This service is provided by {providerName} (a health service provider), which you do not have access to on the NHS App.',
       goToNHSAppHome: 'Go to NHS App homepage',
     },
   },

@@ -13,14 +13,14 @@ open class FeatureNotAvailablePage : HybridPageObject() {
     private lateinit var webHeader: WebHeader
 
     val heading = HybridPageElement(
-            webDesktopLocator = "//p[@data-purpose='error-heading']",
+            webDesktopLocator = "//p[@data-purpose='content']/h1",
             helpfulName = "error heading",
             page = this
     )
 
-    val contactYourGpSurgery =  HybridPageElement(
-            webDesktopLocator = "//p[@data-purpose='contact']",
-            helpfulName = "contact",
+    val youDoNotHaveAccess =  HybridPageElement(
+            webDesktopLocator = "//p[@data-purpose='content']/span",
+            helpfulName = "content",
             page = this
     )
 
@@ -32,14 +32,16 @@ open class FeatureNotAvailablePage : HybridPageObject() {
 
     fun isLoaded(header: String) {
         webHeader.waitForPageHeaderText(header)
+
         Assert.assertEquals(
-                "This service is not available",
+                header,
                 heading.text)
 
         Assert.assertEquals(
-                "If you need to access this service, contact your GP surgery for more information.",
-                contactYourGpSurgery.text)
-
+                "This service is provided by Patients Know Best (a health service provider), " +
+                         "which you do not have access to on the NHS App.",
+                youDoNotHaveAccess.text)
+                
         Assert.assertEquals(
                 "Go to NHS App homepage",
                 goToNHSAppHome.text)
