@@ -357,7 +357,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                     }
                                 ],
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?uniqueId=8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e&contextUserId=27911"
+                                "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
                             },
                             {
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
@@ -382,7 +382,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                     }
                                 ],
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?uniqueId=8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e&contextUserId=27911"
+                                "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
                             },
                             {
                                 "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
@@ -866,7 +866,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                             }
                           ],
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                          "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?uniqueId=8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e&contextUserId=27911"
+                          "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
                         },
                         {
                           "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
@@ -1138,7 +1138,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                                 }
                                             ],
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?uniqueId=8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e&contextUserId=27911"
+                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
                                         },
                                         {
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
@@ -1178,7 +1178,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                                 }
                                             ],
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?uniqueId=8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e&contextUserId=27911"
+                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
                                         },
                                         {
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
