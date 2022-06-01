@@ -114,7 +114,6 @@ bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,kensin
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,moorparkmedicalpractice,Moor Park Medical Practice,B83661,2907
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,parkgrangemc,Park Grange Medical Centre,b83659,3088
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,peelparksurgery,Peel Park Surgery,B83629,2900
-bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,pictonmedicalcentre,Picton Medical Centre,B83614,9157
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,theprimrosesurgery,Primrose Surgery,B83026,5373
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,avicennamedicalpractice,The Avicenna Medical Practice,B83058,7150
 bradfordcity,Bradford City,CCG,Bradford City,West Yorkshire and Harrogate,bradfordmoor,The Bradford Moor Practice,B83032,3817
@@ -374,7 +373,6 @@ devon,Devon,CCG,Devon,Devon,southovermedicalpractice,Southover Medical Practice,
 devon,Devon,CCG,Devon,Devon,stleonardssurgery,St Leonards Practice,L83042,9300
 devon,Devon,CCG,Devon,Devon,stneotssurgery,St Neots Surgery,L83028,11445
 devon,Devon,CCG,Devon,Devon,stokesurgeryplymouth,Stoke Surgery,L83071,7700
-devon,Devon,CCG,Devon,Devon,tavyside,Tavyside Health Centre,L83038,12300
 devon,Devon,CCG,Devon,Devon,teignestuarymedical,Teign Estuary Medical Group,L83657,4300
 devon,Devon,CCG,Devon,Devon,theblackdownpractice,The Blackdown Practice,L83044,7800
 devon,Devon,CCG,Devon,Devon,foxhayespractice,The Foxhayes Practice,Y00568,3750
@@ -383,7 +381,6 @@ devon,Devon,CCG,Devon,Devon,slmp,The South Lawn Medical Practice,L83084,7595
 devon,Devon,CCG,Devon,Devon,thewhiptonsurgery,The Whipton Surgery,L83115,4050
 devon,Devon,CCG,Devon,Devon,woodasurgery,The Wooda Surgery,L83106,8839
 devon,Devon,CCG,Devon,Devon,topshamsurgery,Topsham Surgery and Glasshouse Medical Practice,L83036,10500
-devon,Devon,CCG,Devon,Devon,torringtonhc,Torrington Health Centre,L83026,5200
 devon,Devon,CCG,Devon,Devon,wallingbrook,Wallingbrook Health Group,L83025,6885
 devon,Devon,CCG,Devon,Devon,wemburysurgery,Wembury Surgery,L83639,2500
 devon,Devon,CCG,Devon,Devon,westhoesurgery,West Hoe Surgery,L83112,5083
@@ -1211,7 +1208,6 @@ newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumb
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,rowlandsgillmedicalcentre,Rowlands Gill Medical Centre,A85003,6425
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,savillemed,Saville Medical Group,A86003,37264
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,secondstreetsurgery,Second Street Surgery,A85021,3400
-newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,stanthonyshealthcentre,St Anthonys Health Centre,A86040,6841
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,sunnisidesurgery,Sunniside Surgery,a85617,3348
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,teamsmedicalpractice,Teams Medical Practice,A85023,5500
 newcastlegateshead,Newcastle And Gateshead,CCG,Newcastle And Gateshead,Northhumberland Tyne and Wear and North Durham,thegrovemedicalgroup,The Grove Medical Group,A86018,12708
@@ -2050,7 +2046,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Health E1,F84733,
 ,,,Other,,,Sutterton Surgery,C83614,
 ,,,Other,,,Aspen Medical Practice,L84026,
-,,,Other,,,Brooklyn Medical Practice,C81052,
 ,,,Other,,,The Caxton Surgery,M82022,
 ,,,Other,,,Cranford Medical Centre,E85052,
 ,,,Other,,,Medina Healthcare,J84017,
@@ -2634,7 +2629,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Bower Mount Medical Practice,G82031,
 ,,,Other,,,Bearsted Medical Practice,G82074,
 ,,,Other,,,Sturry Surgery & Canterbury Health Centre,G82082,
-,,,Other,,,Headcorn Surgery,G82112,
 ,,,Other,,,Otford Medical Practice,G82125,
 ,,,Other,,,St Werburgh Medical Practice,G82233,
 ,,,Other,,,New Eltham Medical Centre,G83628,
