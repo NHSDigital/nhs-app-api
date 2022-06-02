@@ -17,11 +17,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
 
-        private AndroidLabel WeCannotConfirm => AndroidLabel.WithText(_driver, "There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it.");
+        private AndroidLabel CheckYouConnected => AndroidLabel.WithText(_driver, "Check that you’re connected to the internet and go back to the login page to try again.");
 
-        private AndroidLabel CheckYourConnection => AndroidLabel.WithText(_driver, "Check your connection and try logging in again.");
-
-        private AndroidLabel IfTheProblemContinues => AndroidLabel.WithText(_driver, "If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.");
+        private AndroidLabel IfYouNeedToBook => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
 
         private AndroidLabel ForUrgentAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
 
@@ -38,9 +36,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidForcedUpdateErrorPage AssertPageElements()
         {
-            WeCannotConfirm.AssertVisible();
-            CheckYourConnection.AssertVisible();
-            IfTheProblemContinues.AssertVisible();
+            CheckYouConnected.AssertVisible();
+            IfYouNeedToBook.AssertVisible();
             ForUrgentAdvice.AssertVisible();
             GoTo111Link.AssertVisible();
             BackToLoginLink.AssertVisible();

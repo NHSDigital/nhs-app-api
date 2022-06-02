@@ -16,9 +16,8 @@
             <StackLayout>
                 <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
           
-                <elements:Paragraph Text="There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it." />
-                <elements:Paragraph Text="Check your connection and try logging in again." />
-                <elements:Paragraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                <elements:Paragraph Text="Check that you’re connected to the internet and go back to the login page to try again." />
+                <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
                 <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
                 
                 <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />

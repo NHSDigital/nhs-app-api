@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Errors
             return page;
         }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Connection error");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot connect to the NHS App");
 
         private AndroidLink GoTo111Link => AndroidLink.WithContentDescription(_driver, "Go to 111.nhs.uk");
 

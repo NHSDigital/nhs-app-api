@@ -17,11 +17,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLabel Title=> IOSLabel.WithText(_driver, "Cannot log in");
 
-        private IOSLabel WeCannotConfirm => IOSLabel.WithText(_driver, "There is a problem connecting you. We cannot confirm which version of the NHS App you are using and if you may need to update it.");
+        private IOSLabel CheckYouConnected => IOSLabel.WithText(_driver, "Check that you’re connected to the internet and go back to the login page to try again.");
 
-        private IOSLabel CheckYourConnection => IOSLabel.WithText(_driver, "Check your connection and try logging in again.");
-
-        private IOSLabel IfTheProblemContinues => IOSLabel.WithText(_driver, "If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.");
+        private IOSLabel IfYouNeedToBook => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
 
         private IOSLabel ForUrgentAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
 
@@ -38,9 +36,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSForcedUpdateErrorPage AssertPageElements()
         {
-            WeCannotConfirm.AssertVisible();
-            CheckYourConnection.AssertVisible();
-            IfTheProblemContinues.AssertVisible();
+            CheckYouConnected.AssertVisible();
+            IfYouNeedToBook.AssertVisible();
             ForUrgentAdvice.AssertVisible();
             GoTo111Link.AssertVisible();
             BackToLoginLink.AssertVisible();

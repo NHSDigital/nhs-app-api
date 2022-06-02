@@ -10,16 +10,16 @@
                                  mc:Ignorable="d"
                                  x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorFallbackPage"
                                  x:Name="Page"
-                                 PageDescription="Login failed">
+                                 PageDescription="Cannot log in">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Session error" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
 
                 <panels:NhsErrorCallout LabelText="Error">
                     <StackLayout>
-                        <elements:Paragraph Text="We cannot log you in to the NHS App. Check your connection and try again." />
-                        <elements:Paragraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+                        <elements:Paragraph Text="Check that you’re connected to the internet and go back to the login page to try again." />
+                        <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
                         <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
                         
                         <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
