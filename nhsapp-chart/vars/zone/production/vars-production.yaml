@@ -85,6 +85,11 @@ organDonationDataExpirySeconds: 86400
 
 patientPracticeMessagingEnabled: false
 
+nhsAppApimKid: prod-1
+nhsAppApimBaseUrl: "https://api.service.nhs.uk"
+
+aggregatorBaseUrl: "https://api.service.nhs.uk"
+
 splunk:
   pidIndex: apppid_nhsapp_prod
   specialCategoryIndex: appspecialcategory_nhsapp_prod
@@ -132,6 +137,8 @@ api:
     services__engage__url: https://nhsapp.engage.gp
     services__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
+    services__drdoctor__url: https://my.drdoctor.co.uk
+    services__drdoctor_login__url: http://login.drdoctor.co.uk
     servicesV3__ndop__url: https://app.your-data-matters.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.login.nhs.uk
     servicesV3__cid_account__url: https://account.login.nhs.uk
@@ -150,6 +157,8 @@ api:
     servicesV3__engage__url: https://nhsapp.engage.gp
     servicesV3__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     servicesV3__netCompany__url: https://covid-status.service.nhsx.nhs.uk
+    servicesV3__drdoctor__url: https://my.drdoctor.co.uk
+    servicesV3__drdoctor__domains__1: http://login.drdoctor.co.uk
 
 cid:
   imagePullPolicy: IfNotPresent
