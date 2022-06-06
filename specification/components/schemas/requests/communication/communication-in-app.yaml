@@ -55,7 +55,6 @@ properties:
   sender:
     type: object
     description: The sender of the in-app message. This field will be deprecated in a future release of the API, to be replaced by the `requester` field.
-    deprecated: true
     required:
       - display
     properties:
