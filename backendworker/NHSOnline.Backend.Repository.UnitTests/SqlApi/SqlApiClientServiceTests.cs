@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +23,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         private Mock<Container> _container;
 
         private Mock<ItemResponse<TestRepositoryRecord>> _itemResponse;
+        private Mock<ICosmosLinqQuery> _mockCosmosLinqQuery;
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,12 +36,13 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
 
             _container = new Mock<Container>();
             _itemResponse = new Mock<ItemResponse<TestRepositoryRecord>>(MockBehavior.Strict);
+            _mockCosmosLinqQuery = new Mock<ICosmosLinqQuery>(MockBehavior.Strict);
 
             _cosmosClientWrapper = new Mock<ICosmosClientWrapper>(MockBehavior.Strict);
             _cosmosClientWrapper.Setup(c => c.GetContainer(_config.DatabaseName, _config.ContainerName))
                 .Returns(_container.Object);
 
-            _systemUnderTest = new SqlApiClientService(_cosmosClientWrapper.Object);
+            _systemUnderTest = new SqlApiClientService(_cosmosClientWrapper.Object, _mockCosmosLinqQuery.Object);
         }
 
         [TestMethod]
@@ -117,6 +123,68 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
                 .WithMessage("Testing a failure");
 
             // Assert
+            VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task Find_WhenClientThrowsException_ShouldThrow()
+        {
+            // Arrange
+            var partitionKeyValue = "Partition Key Value";
+
+            _container.Setup(c => c
+                    .GetItemLinqQueryable<TestRepositoryRecord>(false, null, It.IsAny<QueryRequestOptions>(), null))
+                .Throws(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+
+            // Act
+            await FluentActions.Awaiting(() =>
+                    _systemUnderTest.FindAsync(_config,
+                        It.IsAny<Expression<Func<TestRepositoryRecord, bool>>>(), partitionKeyValue))
+                .Should().ThrowAsync<CosmosException>()
+                .WithMessage("Testing a failure");
+
+            // Assert
+            VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task Find_Success()
+        {
+            // Arrange
+            var record1 = new TestRepositoryRecord();
+            var record2 = new TestRepositoryRecord();
+            var partitionKeyValue = "TestPartitionKeyValue";
+
+            _container.Setup(c =>
+                    c.GetItemLinqQueryable<TestRepositoryRecord>(false, null, It.IsAny<QueryRequestOptions>(), null))
+                .Returns(new EnumerableQuery<TestRepositoryRecord>(new List<TestRepositoryRecord> { record1, record2 }));
+
+            var mockFeedIterator = new Mock<FeedIterator<TestRepositoryRecord>>(MockBehavior.Strict);
+            var mockFeedResponse = new Mock<FeedResponse<TestRepositoryRecord>>(MockBehavior.Strict);
+
+            var resourceList = new List<TestRepositoryRecord> { record1, record2 };
+
+            mockFeedResponse.SetupGet(s => s.Resource).Returns(resourceList);
+
+            mockFeedIterator.SetupSequence(s => s.HasMoreResults)
+                .Returns(true)
+                .Returns(false);
+
+            mockFeedIterator.Setup(s => s.ReadNextAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(mockFeedResponse.Object);
+
+            _mockCosmosLinqQuery.Setup(s => s.GetFeedIterator(It.IsAny<IQueryable<TestRepositoryRecord>>()))
+                .Returns(mockFeedIterator.Object);
+
+            // Act
+            var result = await _systemUnderTest.FindAsync<TestRepositoryRecord>(_config, _ => true, partitionKeyValue);
+            var resourceListFromResult = result.SelectMany(s => s.Resource).ToList();
+
+            // Assert
+            resourceListFromResult.Count.Should().Be(2);
+            resourceListFromResult.Should().BeEquivalentTo(resourceList);
+            mockFeedIterator.VerifyAll();
+            mockFeedResponse.VerifyAll();
             VerifyAll();
         }
 
@@ -205,6 +273,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             _itemResponse.VerifyAll();
             _container.VerifyAll();
             _cosmosClientWrapper.VerifyAll();
+            _mockCosmosLinqQuery.VerifyAll();
         }
     }
 }

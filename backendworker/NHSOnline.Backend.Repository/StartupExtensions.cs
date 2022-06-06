@@ -137,6 +137,7 @@ namespace NHSOnline.Backend.Repository
             }
 
             services.AddSingleton<ISqlApiClientService, SqlApiClientService>();
+            services.AddSingleton<ICosmosLinqQuery, CosmosLinqQuery>();
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using System;
+using System.Linq.Expressions;
 
 namespace NHSOnline.Backend.Repository.SqlApi
 {
@@ -8,5 +10,6 @@ namespace NHSOnline.Backend.Repository.SqlApi
             string partitionKeyValue);
         public Task<RepositoryDeleteResult<TRecord>> Delete(string id, string partitionKeyValue, string recordName);
         public Task<RepositoryFindResult<TRecord>> Find(string id, string partitionKeyValue, string recordName);
+        public Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string partitionKeyValue, string recordName);
     }
 }

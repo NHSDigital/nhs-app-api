@@ -125,6 +125,45 @@ namespace NHSOnline.Backend.UserInfo.Repository
                     .IsNotNull(odsCode, nameof(odsCode), ValidateAndLog.ValidationOptions.ThrowError)
                     .IsValid();
 
+                return await _sqlApiRepositoryFactory
+                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.OdsCode)
+                    .Find(x => x.Info.OdsCode == odsCode, odsCode, RecordName);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumberPrimary(string nhsNumber)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(nhsNumber, nameof(nhsNumber), ValidateAndLog.ValidationOptions.ThrowError)
+                    .IsValid();
+
+                return await _primaryRepository
+                    .Find(d => d.Info.NhsNumber == nhsNumber, RecordName);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<RepositoryFindResult<UserAndInfo>> FindByOdsCodePrimary(string odsCode)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(odsCode, nameof(odsCode), ValidateAndLog.ValidationOptions.ThrowError)
+                    .IsValid();
+
                 return await _primaryRepository
                     .Find(d => d.Info.OdsCode == odsCode, RecordName);
             }
@@ -144,8 +183,9 @@ namespace NHSOnline.Backend.UserInfo.Repository
                     .IsNotNull(nhsNumber, nameof(nhsNumber), ValidateAndLog.ValidationOptions.ThrowError)
                     .IsValid();
 
-                return await _primaryRepository
-                    .Find(d => d.Info.NhsNumber == nhsNumber, RecordName);
+                return await _sqlApiRepositoryFactory
+                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.NhsNumber)
+                    .Find(x => x.Info.NhsNumber == nhsNumber, nhsNumber, RecordName);
             }
             finally
             {

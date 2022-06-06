@@ -98,11 +98,23 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
 
         public async Task<GetInfoResult> GetInfoByNhsNumber(string nhsNumber)
         {
+            if (!_config.ReadFromSecondaryContainers)
+            {
+                return await GetInfoRecords(repo => repo.FindByNhsNumberPrimary(nhsNumber));
+             
+            }
+            
             return await GetInfoRecords(repo => repo.FindByNhsNumber(nhsNumber));
         }
 
         public async Task<GetInfoResult> GetInfoByOdsCode(string odsCode)
         {
+            if (!_config.ReadFromSecondaryContainers)
+            {
+                return await GetInfoRecords(repo => repo.FindByOdsCodePrimary(odsCode));
+                
+            }
+            
             return await GetInfoRecords(repo => repo.FindByOdsCode(odsCode));
         }
 

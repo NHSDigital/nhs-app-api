@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Repository.SqlApi;
 using NHSOnline.Backend.UserInfo.Repository;
 
 namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
@@ -39,7 +41,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             _mockRepositoryFactory.VerifyAll();
             act.Should().ThrowAsync<ArgumentNullException>()
                 .WithParameterName("userAndInfo");
-
         }
 
         [TestMethod]
@@ -52,7 +53,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             VerifyAll();
             act.Should().ThrowAsync<ArgumentNullException>()
                 .WithParameterName("userAndInfo");
-
         }
 
         [TestMethod]
@@ -65,7 +65,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             _mockRepositoryFactory.VerifyAll();
             act.Should().ThrowAsync<ArgumentNullException>()
                 .WithParameterName("userAndInfo");
-
         }
 
         [TestMethod]
@@ -76,9 +75,9 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
 
             _mockPrimaryRepository.Setup(x => x
                     .CreateOrUpdate(
-                    It.IsAny<Expression<Func<UserAndInfo, bool>>>(),
-                    userInfo,
-                    It.IsAny<string>()))
+                        It.IsAny<Expression<Func<UserAndInfo, bool>>>(),
+                        userInfo,
+                        It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryCreateResult<UserAndInfo>.Created(userInfo));
 
             // Act
@@ -101,7 +100,8 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             userInfo.Info.NhsNumber = partitionKeyValue;
 
             _mockRepositoryFactory.Setup(x => x
-                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.NhsNumber)
+                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                        .NhsNumber)
                     .CreateOrUpdate(userInfo, It.IsAny<string>(), partitionKeyValue))
                 .ReturnsAsync(new RepositoryCreateResult<UserAndInfo>.Created(userInfo));
 
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             // Assert
             VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(new []{userInfo});
+                .Subject.Records.Should().BeEquivalentTo(new[] { userInfo });
         }
 
         [TestMethod]
@@ -175,15 +175,26 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
         public async Task FindByNhsNumber_WhenRecordExists_ReturnsInfo()
         {
             // Arrange
-            var userInfo = new UserAndInfo();
+            var userInfo = new UserAndInfo()
+            {
+                Info = new Info
+                {
+                    NhsNumber = "nhsNumber",
+                    OdsCode = "odsCode"
+                },
+                NhsLoginId = "nhsLoginId"
+            };
             var expectedResults = new[] { userInfo };
 
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
+            _mockRepositoryFactory.Setup(s => s
+                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                        .NhsNumber)
+                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), userInfo.Info.NhsNumber,
+                        nameof(UserAndInfo)))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new List<UserAndInfo> { userInfo }));
 
             // Act
-            var result = await _systemUnderTest.FindByNhsNumber("Nhs Number");
+            var result = await _systemUnderTest.FindByNhsNumber("nhsNumber");
 
             // Assert
             VerifyAll();
@@ -195,8 +206,11 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
         public async Task FindByNhsNumber_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
+            _mockRepositoryFactory.Setup(s =>
+                    s.GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                            .NhsNumber)
+                        .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(),
+                            nameof(UserAndInfo)))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
@@ -211,15 +225,37 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
         public async Task FindByOdsCode_WhenRecordExists_ReturnsInfo()
         {
             // Arrange
-            var userInfo1 = new UserAndInfo();
-            var userInfo2 = new UserAndInfo();
+            var userInfo1 = new UserAndInfo()
+            {
+                Info = new Info
+                {
+                    NhsNumber = "nhsNumber1",
+                    OdsCode = "odsCode"
+                },
+                NhsLoginId = "nhsLoginId1"
+            };
+
+            var userInfo2 = new UserAndInfo()
+            {
+                Info = new Info
+                {
+                    NhsNumber = "nhsNumber2",
+                    OdsCode = "odsCode"
+                },
+                NhsLoginId = "nhsLoginId2"
+            };
+
             var expectedResults = new[] { userInfo1, userInfo2 };
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
+
+            _mockRepositoryFactory.Setup(s =>
+                    s.GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                        .OdsCode).Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(),
+                        nameof(UserAndInfo)))
+                .ReturnsAsync(
+                    new RepositoryFindResult<UserAndInfo>.Found(new List<UserAndInfo> { userInfo1, userInfo2 }));
 
             // Act
-            var result = await _systemUnderTest.FindByOdsCode("Ods Code");
+            var result = await _systemUnderTest.FindByOdsCode("odsCode");
 
             // Assert
             VerifyAll();
@@ -231,8 +267,10 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
         public async Task FindByOdsCode_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
+            _mockRepositoryFactory.Setup(s =>
+                    s.GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                        .OdsCode).Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(),
+                        nameof(UserAndInfo)))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
@@ -268,10 +306,11 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             var nhsLoginId = "Nhs Login Id";
 
             _mockRepositoryFactory.Setup(x => x
-                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.NhsNumber)
+                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                        .NhsNumber)
                     .Delete(
                         It.Is<string>(s => s == nhsLoginId),
-                        It.Is<string>(s => s== nhsNumber),
+                        It.Is<string>(s => s == nhsNumber),
                         It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryDeleteResult<UserAndInfo>.NotFound());
 
@@ -290,11 +329,13 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             var nhsNumber = "Nhs Number";
             var nhsLoginId = "Nhs Login Id";
 
-            _mockRepositoryFactory.Setup(x => x
-                    .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.NhsNumber)
-                    .Delete(It.Is<string>(s => s == nhsLoginId),
-                        It.Is<string>(s => s== nhsNumber),
-                        It.IsAny<string>()))
+            _mockRepositoryFactory.Setup(
+                    x => x
+                        .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey
+                            .NhsNumber)
+                        .Delete(It.Is<string>(s => s == nhsLoginId),
+                            It.Is<string>(s => s == nhsNumber),
+                            It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryDeleteResult<UserAndInfo>.Deleted());
 
             // Act
@@ -332,7 +373,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             _mockRepositoryFactory.Setup(x => x
                     .GetUserAndInfoSqlApiRepository(UserAndInfoSqlApiRepositoryFactory.UserAndInfoRepositoryKey.OdsCode)
                     .Delete(It.Is<string>(s => s == nhsLoginId),
-                        It.Is<string>(s => s== odsCode),
+                        It.Is<string>(s => s == odsCode),
                         It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryDeleteResult<UserAndInfo>.NotFound());
 
@@ -362,6 +403,46 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             // Assert
             VerifyAll();
             result.Should().BeAssignableTo<RepositoryDeleteResult<UserAndInfo>.Deleted>();
+        }
+
+        [TestMethod]
+        public async Task FindByNhsNumberOnPrimary_WhenRecordExists_ReturnsInfo()
+        {
+            // Arrange
+            var userInfo = new UserAndInfo();
+            var expectedResults = new[] { userInfo };
+
+            _mockPrimaryRepository.Setup(x => x
+                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
+
+            // Act
+            var result = await _systemUnderTest.FindByNhsNumberPrimary("Nhs Number");
+
+            // Assert
+            VerifyAll();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(expectedResults);
+        }
+
+        [TestMethod]
+        public async Task FindByOdsCodeOnPrimary_WhenRecordExists_ReturnsInfo()
+        {
+            // Arrange
+            var userInfo1 = new UserAndInfo();
+            var userInfo2 = new UserAndInfo();
+            var expectedResults = new[] { userInfo1, userInfo2 };
+            _mockPrimaryRepository.Setup(x => x
+                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
+
+            // Act
+            var result = await _systemUnderTest.FindByOdsCodePrimary("Ods Code");
+
+            // Assert
+            VerifyAll();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>().Subject.Records
+                .Should().BeEquivalentTo(expectedResults);
         }
 
         private void VerifyAll()

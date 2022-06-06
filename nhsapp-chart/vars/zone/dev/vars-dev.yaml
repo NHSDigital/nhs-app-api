@@ -199,7 +199,7 @@ info:
   cpuRequest: "10m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
-  userInfoReadFromSecondaryContainers: false
+  userInfoReadFromSecondaryContainers: true
   userInfoSaveToSecondaryContainers: true
 
 sjr:
