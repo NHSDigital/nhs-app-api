@@ -71,7 +71,6 @@
             :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
               'ReferralsInReview')"/>
           <referrals-in-review-card
-            class="nhsuk-u-padding-bottom-8"
             :referrals-in-review="referralsInReview"/>
 
           <other-available-services-menu-items
