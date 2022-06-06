@@ -62,9 +62,7 @@ describe('nominated pharmacy not found', () => {
         expect(prescriptionHomeLink.text()).toEqual('Go back to your prescriptions');
       });
       it('will navigate to prescriptions home page when clicked ', () => {
-        prescriptionHomeLink.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+        expect(prescriptionHomeLink.attributes('href')).toBe(PRESCRIPTIONS_PATH);
       });
     });
   });

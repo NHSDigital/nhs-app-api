@@ -495,7 +495,7 @@ describe('orchestrator', () => {
           mountOrchestrator();
 
           // Act
-          const desktopBackLink = orchestrator.find('desktopgenericbacklink-stub');
+          const desktopBackLink = orchestrator.find('desktop-generic-back-link-stub');
 
           // Assert
           expect(desktopBackLink.exists()).toBe(isShown);

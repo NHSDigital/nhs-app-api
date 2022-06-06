@@ -80,10 +80,9 @@
           {{ t('theOrderStatusWillBeUpdated') }}
         </p>
 
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           :path="viewOrdersPath"
-          button-text="prescriptions.orderSuccess.goToYourPrescriptionOrders"
-          @clickAndPrevent="backButtonClicked"/>
+          button-text="prescriptions.orderSuccess.goToYourPrescriptionOrders"/>
       </div>
     </div>
   </div>
@@ -98,7 +97,7 @@ import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import { PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 import { InternetPharmacy, CommunityPharmacy } from '@/lib/pharmacy-detail/pharmacy-sub-types';
-import { redirectTo, displayedURL, hrefForURL, isBlankString } from '@/lib/utils';
+import { displayedURL, hrefForURL, isBlankString } from '@/lib/utils';
 import sjrIf from '@/lib/sjrIf';
 
 export default {
@@ -141,9 +140,6 @@ export default {
     this.$store.dispatch('repeatPrescriptionCourses/completeOrderJourney');
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.viewOrdersPath, null);
-    },
     t(key, options) {
       return this.$t(`prescriptions.orderSuccess.${key}`, options);
     },

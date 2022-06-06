@@ -80,7 +80,9 @@ describe('nominated pharmacy not found', () => {
       $style = {
         link: 'link',
       };
-      $router = createRouter();
+      const defaultRouter = createRouter();
+      defaultRouter.history.router.previousPaths[0] = 'Test_path';
+      $router = defaultRouter;
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       link = wrapper.find('#link-to-nominate-pharmacy');

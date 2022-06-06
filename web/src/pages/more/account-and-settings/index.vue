@@ -13,11 +13,10 @@
                  :click-param="legalAndCookiesPath"/>
     </menu-item-list>
 
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            data-purpose="back-link"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="onBackButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               data-purpose="back-link"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
 
   </div>
 </template>
@@ -31,7 +30,6 @@ import AccountAndSettings from '@/components/more/account-and-settings/AccountAn
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import sjrIf from '@/lib/sjrIf';
 import { MORE_PATH, MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -59,9 +57,6 @@ export default {
   methods: {
     goToLoginOptions() {
       NativeCallbacks.goToLoginOptions();
-    },
-    onBackButtonClicked() {
-      redirectTo(this, this.backPath, null);
     },
   },
 };

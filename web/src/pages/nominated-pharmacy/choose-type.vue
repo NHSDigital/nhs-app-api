@@ -42,10 +42,9 @@
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                :text="$t('generic.back')">
-          <desktopGenericBackLink id="back-link"
-                                  :path="interruptPath"
-                                  :button-text="'nominatedPharmacy.chooseType.backLinkText'"
-                                  @clickAndPrevent="backLinkClicked"/>
+          <desktop-generic-back-link id="back-link"
+                                     :path="interruptPath"
+                                     :button-text="'nominatedPharmacy.chooseType.backLinkText'"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -132,9 +131,6 @@ export default {
     },
     selected(value) {
       this.selectedValue = value;
-    },
-    backLinkClicked() {
-      redirectTo(this, this.interruptPath);
     },
   },
 };

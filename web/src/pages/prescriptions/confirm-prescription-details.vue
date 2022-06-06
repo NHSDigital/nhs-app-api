@@ -75,10 +75,9 @@
       {{ $t('prescriptions.confirmDetails.confirmAndOrder') }}
     </generic-button>
     <div class="nhsuk-body-m">
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              :path="prescriptionRepeatCoursesPath"
-                              :button-text="'prescriptions.confirmDetails.back'"
-                              @clickAndPrevent="backToPrescriptionsClicked"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 :path="prescriptionRepeatCoursesPath"
+                                 :button-text="'prescriptions.confirmDetails.back'"/>
     </div>
   </div>
 </template>
@@ -173,9 +172,6 @@ export default {
         surfaces appropriate error content based on the http status code returned from the API
         */
       }
-    },
-    backToPrescriptionsClicked() {
-      redirectTo(this, this.prescriptionRepeatCoursesPath);
     },
     changePrescriptions() {
       redirectTo(this, this.coursesPageRepeatPrescription);

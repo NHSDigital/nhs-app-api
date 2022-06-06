@@ -79,12 +79,11 @@
         </template>
       </div>
 
-      <desktopGenericBackLink v-if="!isNativeApp"
-                              id="desktopBackLink"
-                              data-purpose="back-to-appointments-hub-button"
-                              :path="appoinmentsHubPath"
-                              :button-text="'generic.back'"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!isNativeApp"
+                                 id="desktopBackLink"
+                                 data-purpose="back-to-appointments-hub-button"
+                                 :path="appoinmentsHubPath"
+                                 :button-text="'generic.back'"/>
     </div>
   </div>
 </template>
@@ -189,9 +188,6 @@ export default {
     },
     contactUsClicked() {
       window.open(this.contactUsLink, '_blank', 'noopener,noreferrer');
-    },
-    backClicked() {
-      redirectTo(this, this.appoinmentsHubPath);
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;

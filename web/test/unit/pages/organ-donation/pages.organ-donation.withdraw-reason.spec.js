@@ -106,16 +106,12 @@ describe('organ donation withdraw reason page', () => {
       });
 
       describe('click', () => {
-        beforeEach(() => {
-          backLink.trigger('click');
-        });
-
         it('will dispatch the "withdrawCancel" event', () => {
           expect($store.dispatch).toHaveBeenCalledWith('organDonation/withdrawCancel');
         });
 
         it('will push the organ donation page on the router', () => {
-          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
+          expect(backLink.attributes('href')).toBe(ORGAN_DONATION_PATH);
         });
       });
     });

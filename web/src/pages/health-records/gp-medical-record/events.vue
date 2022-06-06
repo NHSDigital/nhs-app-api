@@ -39,10 +39,9 @@
       <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -97,11 +96,6 @@ export default {
     }
 
     this.events = this.$store.state.myRecord.record.tppDcrEvents;
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
   },
 };
 </script>

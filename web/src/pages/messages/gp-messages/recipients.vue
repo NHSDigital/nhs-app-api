@@ -13,8 +13,7 @@
                    href="#"/>
       </menu-item-list>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="urgencyPath"
-                                 @clickAndPrevent="backLinkClicked"/>
+                                 :path="urgencyPath"/>
     </div>
   </div>
 </template>
@@ -50,9 +49,6 @@ export default {
     }
   },
   methods: {
-    backLinkClicked() {
-      redirectTo(this, this.urgencyPath);
-    },
     recipientClicked(recipient) {
       this.$store.dispatch('gpMessages/setSelectedRecipient',
         { id: recipient.recipientIdentifier, name: recipient.name });

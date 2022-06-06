@@ -74,17 +74,17 @@
       </div>
     </div>
 
-    <desktopGenericBackLink v-if="showBackToHomeButton"
-                            :path="indexPath"
-                            :button-text="backButtonText"
-                            data-purpose="back-to-home-button"
-                            @clickAndPrevent="backToHomeClicked"/>
-    <desktopGenericBackLink v-else-if="showBackButton && !isNativeApp"
-                            id="desktopBackLink"
-                            data-purpose="back-to-home-button"
-                            :path="indexPath"
-                            :button-text="'onlineConsultations.orchestrator.backButton'"
-                            @clickAndPrevent="backClicked"/>
+    <desktop-generic-back-link v-if="showBackToHomeButton"
+                               :path="indexPath"
+                               :button-text="backButtonText"
+                               data-purpose="back-to-home-button"
+                               @clickAndPrevent="backToHomeClicked"/>
+    <desktop-generic-back-link v-else-if="showBackButton && !isNativeApp"
+                               id="desktopBackLink"
+                               data-purpose="back-to-home-button"
+                               :path="indexPath"
+                               :button-text="'onlineConsultations.orchestrator.backButton'"
+                               @clickAndPrevent="backClicked"/>
     <generic-button v-else-if="!showBackButton"
                     id="endMyConsultationButton"
                     :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"

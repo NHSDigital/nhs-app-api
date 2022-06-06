@@ -17,8 +17,7 @@
         {{ $t('messages.deleteConversation') }}
       </generic-button>
       <desktop-generic-back-link :path="messageDetailsPath"
-                                 :button-text="buttonText"
-                                 @clickAndPrevent="backLinkClicked"/>
+                                 :button-text="buttonText"/>
     </div>
   </div>
 </template>
@@ -71,9 +70,6 @@ export default {
       if (this.$store.state.gpMessages.messageDeleted) {
         redirectTo(this, GP_MESSAGES_DELETE_SUCCESS_PATH);
       }
-    },
-    backLinkClicked() {
-      redirectTo(this, this.messageDetailsPath);
     },
   },
 };

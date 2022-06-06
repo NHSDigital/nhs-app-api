@@ -32,10 +32,9 @@
         </menu-item-list>
       </div>
       <analytics-tracked-tag :text="$t('nominatedPharmacy.searchResults.backButton')">
-        <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                :path="previousPagePath"
-                                :button-text="'nominatedPharmacy.searchResults.backButton'"
-                                @clickAndPrevent="backButtonClicked"/>
+        <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                   :path="previousPagePath"
+                                   :button-text="'nominatedPharmacy.searchResults.backButton'"/>
       </analytics-tracked-tag>
     </div>
   </div>
@@ -130,9 +129,6 @@ export default {
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);
       redirectTo(this, NOMINATED_PHARMACY_CONFIRM_PATH);
-    },
-    backButtonClicked() {
-      redirectTo(this, this.previousPagePath);
     },
     ariaLabelCaption(pharmacy) {
       // Not all pharmacies will have all details.

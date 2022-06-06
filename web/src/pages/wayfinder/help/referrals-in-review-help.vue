@@ -15,19 +15,17 @@
     <p id="text3">
       {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text3') }}
     </p>
-    <desktopGenericBackLink v-if="!isNativeApp"
-                            id="desktopBackLink"
-                            data-purpose="back-to-wayfinder-button"
-                            :path="wayfinderPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backClicked"/>
+    <desktop-generic-back-link v-if="!isNativeApp"
+                               id="desktopBackLink"
+                               data-purpose="back-to-wayfinder-button"
+                               :path="wayfinderPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { WAYFINDER_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'ReferralsInReviewHelp',
@@ -42,11 +40,6 @@ export default {
   computed: {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
-    },
-  },
-  methods: {
-    backClicked() {
-      redirectTo(this, this.wayfinderPath);
     },
   },
 };

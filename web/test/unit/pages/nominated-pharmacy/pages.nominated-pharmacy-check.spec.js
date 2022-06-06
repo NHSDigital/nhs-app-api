@@ -107,10 +107,7 @@ describe('nominated pharmacy not found', () => {
     });
 
     it('will navigate back to prescription type page', async () => {
-      dependency.redirectTo = jest.fn();
-      await backLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
+      expect(backLink.attributes('href')).toBe(PRESCRIPTION_TYPE_PATH);
     });
   });
 });
@@ -167,10 +164,7 @@ describe('back button present on mobile app', () => {
   });
 
   it('will navigate back to prescription type page', async () => {
-    dependency.redirectTo = jest.fn();
-    await backButton.trigger('click');
-    expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
+    expect(backButton.attributes('href')).toBe(PRESCRIPTION_TYPE_PATH);
   });
 });
 

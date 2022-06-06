@@ -29,12 +29,11 @@
           {{ $t("prescriptions.prescriptionType.continueButton") }}
         </generic-button>
       </div>
-      <desktopGenericBackLink
+      <desktop-generic-back-link
         v-if="!$store.state.device.isNativeApp"
         id="back-link"
         :button-text="'generic.back'"
         :path="getBackPath"
-        @clickAndPrevent="backButtonClicked"
       />
     </div>
   </div>
@@ -194,9 +193,6 @@ export default {
     },
     selected(value) {
       this.selectedValue = value;
-    },
-    backButtonClicked() {
-      redirectTo(this, this.getBackPath);
     },
   },
 };

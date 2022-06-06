@@ -9,9 +9,8 @@
                       @click="downloadButtonClicked">
         {{ $t('messages.downloadFile') }}
       </generic-button>
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              :path="gpMessagePath"
-                              @clickAndPrevent="backToMessageClicked"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 :path="gpMessagePath"/>
     </div>
   </div>
 </template>
@@ -49,9 +48,6 @@ export default {
     }
   },
   methods: {
-    backToMessageClicked() {
-      this.$router.go(-1);
-    },
     async downloadButtonClicked() {
       const { attachmentId } = this.$store.state.gpMessages;
       const messageDate = datePart(this.$route.params.date, 'YearMonthDay');

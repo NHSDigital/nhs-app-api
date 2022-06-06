@@ -24,16 +24,14 @@
       :hint-text="$t('more.cookies.iAcceptTheUseOfOptionalCookies')"
       :aria-label="$t('more.cookies.turningCookiesOffRefreshesThePage')"/>
 
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
 <script>
 import { MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
@@ -78,9 +76,6 @@ export default {
   },
 
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath, null);
-    },
     async removeFromCosmos(consent) {
       const analyticsCookieConsent = {
         analyticsCookieAccepted: consent,

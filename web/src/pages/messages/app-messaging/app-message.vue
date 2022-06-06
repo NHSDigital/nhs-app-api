@@ -31,10 +31,10 @@
         </div>
       </div>
 
-      <desktopGenericBackLink v-if="!isNativeApp"
-                              data-purpose="back-link"
-                              :path="backLink"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!isNativeApp"
+                                 data-purpose="back-link"
+                                 :path="backLink"
+                                 @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>

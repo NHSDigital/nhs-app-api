@@ -4,17 +4,20 @@
        :href="path"
        :target="target"
        data-purpose="main-back-button"
-       @click.prevent="$emit('clickAndPrevent', $event)">
+       @click.prevent="goBack">
       {{ $te(getBackButtonText) ? $t(getBackButtonText) : getBackButtonText }}</a>
   </p>
 </template>
 <script>
+import { redirectTo } from '@/lib/utils';
+
 export default {
   name: 'DesktopGenericBackButton',
   props: {
     path: {
       type: String,
-      default: undefined,
+      required: true,
+      validator: value => (value !== undefined && value !== ''),
     },
     clazz: {
       type: String,
@@ -34,8 +37,18 @@ export default {
       return this.buttonText;
     },
   },
+  methods: {
+    goBack(event) {
+      if (this.$listeners.clickAndPrevent) {
+        this.$emit('clickAndPrevent', event);
+        return;
+      }
+      redirectTo(this, this.path);
+    },
+  },
 };
 </script>
 <style module lang="scss" scoped>
   @import "@/style/custom/inline-link";
 </style>
+

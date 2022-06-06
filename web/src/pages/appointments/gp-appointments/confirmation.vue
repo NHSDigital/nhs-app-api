@@ -147,8 +147,7 @@
       <div v-if="!$store.state.device.isNativeApp" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
           <desktop-generic-back-link :path="appointmentBookingPath"
-                                     :button-text="'generic.back'"
-                                     @clickAndPrevent="onCancelButtonClicked"/>
+                                     :button-text="'generic.back'"/>
         </div>
       </div>
     </div>
@@ -319,9 +318,6 @@ export default {
     },
     hidePhoneNumberTextBox() {
       this.showPhoneNumberTextBox = false;
-    },
-    onCancelButtonClicked() {
-      redirectTo(this, this.appointmentBookingPath);
     },
     async onConfirmButtonClicked() {
       this.reasonError = false;

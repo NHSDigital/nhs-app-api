@@ -46,9 +46,8 @@
           </p>
         </template>
 
-        <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                :path="documentsPath"
-                                @clickAndPrevent="backToDocumentsClicked"/>
+        <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                   :path="documentsPath"/>
       </div>
     </div>
   </div>
@@ -198,9 +197,6 @@ export default {
         params: { id: this.$route.params.id },
         store: this.$store,
       }));
-    },
-    backToDocumentsClicked() {
-      redirectTo(this, this.documentsPath, null);
     },
     async startDownload() {
       let fileName;

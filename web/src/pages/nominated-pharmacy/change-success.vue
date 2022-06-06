@@ -38,11 +38,10 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           id="to-prescriptions-link"
           :path="prescriptionsHubPath"
-          :button-text="'nominatedPharmacy.changeSuccess.linkLabel'"
-          @clickAndPrevent="prescriptionsLinkClicked"/>
+          :button-text="'nominatedPharmacy.changeSuccess.linkLabel'"/>
       </div>
     </div>
   </div>
@@ -55,7 +54,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { redirectTo, hrefForURL, displayedURL } from '@/lib/utils';
+import { hrefForURL, displayedURL } from '@/lib/utils';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import AnalyticsTrackedTag from '../../components/widgets/AnalyticsTrackedTag';
 
@@ -95,11 +94,6 @@ export default {
     const formatArgs = { name: this.pharmacy.pharmacyName };
     EventBus.$emit(UPDATE_HEADER, this.$t('navigation.pages.headers.nominatedPharmacyChangeSuccess', formatArgs), true);
     EventBus.$emit(UPDATE_TITLE, this.$t('navigation.pages.titles.nominatedPharmacyChangeSuccess', formatArgs), true);
-  },
-  methods: {
-    prescriptionsLinkClicked() {
-      redirectTo(this, this.prescriptionsHubPath);
-    },
   },
 };
 </script>

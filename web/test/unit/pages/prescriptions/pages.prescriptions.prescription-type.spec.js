@@ -197,9 +197,7 @@ describe('Prescription type page', () => {
     });
 
     it('will go to the correct page when clicked', () => {
-      backLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+      expect(backLink.attributes('href')).toBe(PRESCRIPTIONS_PATH);
     });
   });
 });

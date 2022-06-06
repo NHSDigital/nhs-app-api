@@ -5,8 +5,7 @@
       <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="documentData"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="documentPath"
-                                 @clickAndPrevent="backToDocumentsClicked"/>
+                                 :path="documentPath"/>
     </div>
   </div>
 </template>
@@ -70,9 +69,6 @@ export default {
     this.setZoom(false);
   },
   methods: {
-    backToDocumentsClicked() {
-      this.$router.go(-1);
-    },
     setZoom(zoomable) {
       const viewport = document.getElementsByName('viewport')[0];
       let content = 'width=device-width, initial-scale=1, minimum-scale=1.0';

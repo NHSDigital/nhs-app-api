@@ -17,10 +17,9 @@
       <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
-    <desktopGenericBackLink
+    <desktop-generic-back-link
       v-if="!$store.state.device.isNativeApp"
-      :path="backPath"
-      @clickAndPrevent="onBackButtonClicked"/>
+      :path="backPath"/>
   </div>
 </template>
 
@@ -66,11 +65,6 @@ export default {
 
     this.markup = get('markup', this.$store.state.myRecord.diagnosis);
     this.diagnosis = get('diagnosis', this.$store.state.myRecord.record) || {};
-  },
-  methods: {
-    onBackButtonClicked() {
-      redirectTo(this, this.backPath, null);
-    },
   },
 };
 </script>

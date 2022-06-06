@@ -79,9 +79,7 @@ describe.skip('nominated pharmacy online only search page', () => {
 
     describe('back link', () => {
       it('navigates as expected when clicked', async () => {
-        backLink.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
+        expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
       });
     });
 

@@ -25,11 +25,10 @@
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag
           :text="$t('nominatedPharmacy.dspInterrupt.returnToPrescriptionsText')">
-          <desktopGenericBackLink
+          <desktop-generic-back-link
             id="prescriptions-home-link"
             :path="returnToPrescriptionsPath"
-            :button-text="'nominatedPharmacy.dspInterrupt.returnToPrescriptionsText'"
-            @clickAndPrevent="gotoPrescriptionsClicked"/>
+            :button-text="'nominatedPharmacy.dspInterrupt.returnToPrescriptionsText'"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-import { redirectTo } from '@/lib/utils';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
@@ -53,11 +51,6 @@ export default {
       visitOnlinePharmacyListPath: this.$store.$env.NOMINATED_PHARMACY_DSP_URL,
       returnToPrescriptionsPath: PRESCRIPTIONS_PATH,
     };
-  },
-  methods: {
-    gotoPrescriptionsClicked() {
-      redirectTo(this, this.returnToPrescriptionsPath);
-    },
   },
 };
 </script>

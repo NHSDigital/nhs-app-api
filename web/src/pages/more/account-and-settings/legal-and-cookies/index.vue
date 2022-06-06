@@ -40,11 +40,10 @@
                  :aria-label="$t('legalAndCookies.openSourceLicences')"/>
     </menu-item-list>
 
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            data-purpose="back-link"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="onBackButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               data-purpose="back-link"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -54,7 +53,6 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -72,11 +70,6 @@ export default {
       openSourceLicencesPath: this.$store.$env.OPEN_SOURCE_LICENCES_URL,
       backPath: MORE_ACCOUNTANDSETTINGS_PATH,
     };
-  },
-  methods: {
-    onBackButtonClicked() {
-      redirectTo(this, this.backPath, null);
-    },
   },
 };
 </script>

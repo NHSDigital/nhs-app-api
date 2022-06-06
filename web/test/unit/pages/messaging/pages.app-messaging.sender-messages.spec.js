@@ -178,7 +178,7 @@ describe('messaging sender messages', () => {
       });
 
       describe('back link', () => {
-        const backLinkData = '[data-purpose=back-link]';
+        const backLinkData = '[data-purpose=main-back-button]';
 
         it('will not show on native', () => {
           expect(wrapper.find(backLinkData).exists()).toBe(false);
@@ -199,10 +199,7 @@ describe('messaging sender messages', () => {
           });
 
           it('will redirect HEALTH_INFORMATION_UPDATES_PATH when clicked', () => {
-            backLink.find('a').trigger('click');
-
-            expect(dependency.redirectTo)
-              .toBeCalledWith(expect.any(Object), HEALTH_INFORMATION_UPDATES_PATH);
+            expect(backLink.attributes('href')).toBe(HEALTH_INFORMATION_UPDATES_PATH);
           });
         });
       });

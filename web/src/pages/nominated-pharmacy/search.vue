@@ -53,10 +53,9 @@
           </generic-button>
           <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                  :text="$t('generic.back')">
-            <desktopGenericBackLink id="back-link"
-                                    :path="backButtonPath"
-                                    :button-text="'generic.back'"
-                                    @clickAndPrevent="cancelButtonClicked"/>
+            <desktop-generic-back-link id="back-link"
+                                       :path="backButtonPath"
+                                       :button-text="'generic.back'"/>
           </analytics-tracked-tag>
         </form>
       </div>
@@ -208,9 +207,6 @@ export default {
         });
 
       return pharmacySearchResult;
-    },
-    cancelButtonClicked() {
-      redirectTo(this, this.backButtonPath);
     },
   },
 };

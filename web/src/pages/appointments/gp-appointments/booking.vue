@@ -41,8 +41,7 @@
 
           <desktop-generic-back-link
             v-if="hasLoaded && !$store.state.device.isNativeApp"
-            :path="appointmentsPath"
-            @clickAndPrevent="goBack"/>
+            :path="appointmentsPath"/>
 
         </div>
       </div>
@@ -63,7 +62,6 @@ import {
   GP_APPOINTMENTS_PATH,
   APPOINTMENT_BOOKING_PATH,
 } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 const FILTER_PARAMETERS = [
   'clinician',
@@ -170,9 +168,6 @@ export default {
     this.filtered = containsFilter(query);
   },
   methods: {
-    goBack() {
-      redirectTo(this, this.appointmentsPath);
-    },
     filterSlots(val) {
       this.$store.dispatch('availableAppointments/setSelectedFilters', val);
       this.$store.dispatch('availableAppointments/filter');

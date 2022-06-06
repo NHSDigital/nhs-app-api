@@ -158,7 +158,7 @@ describe('messaging index', () => {
       await wrapper.vm.$nextTick();
       dependency.redirectTo = jest.fn();
 
-      backLink = wrapper.find('[data-purpose=back-link]');
+      backLink = wrapper.find('[data-purpose=main-back-button]');
     });
 
     it('backlink will be shown', () => {
@@ -166,8 +166,7 @@ describe('messaging index', () => {
     });
 
     it('backlink will redirect to messages hub', () => {
-      backLink.find('a').trigger('click');
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, MESSAGES_PATH);
+      expect(backLink.attributes('href')).toBe(MESSAGES_PATH);
     });
   });
 

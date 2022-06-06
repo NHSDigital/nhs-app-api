@@ -55,10 +55,9 @@
         </li>
       </ul>
 
-      <desktopGenericBackLink v-if="!isNativeApp"
-                              data-purpose="back-link"
-                              :path="backLink"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!isNativeApp"
+                                 data-purpose="back-link"
+                                 :path="backLink"/>
     </div>
   </div>
 </template>
@@ -140,9 +139,6 @@ export default {
       }
 
       this.loaded = true;
-    },
-    backClicked() {
-      redirectTo(this, this.backLink);
     },
     messageLabel(message) {
       let timePrefix = this.$t('generic.on');

@@ -28,10 +28,9 @@
       <no-further-information-available />
     </div>
 
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -118,9 +117,6 @@ export default {
     this.documents = this.$store.state.myRecord.record.documents;
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
     documentDescription(extension, size) {
       if (isBlankString(extension)) {
         return '';

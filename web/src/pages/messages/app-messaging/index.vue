@@ -39,10 +39,9 @@
       </ul>
 
       <p v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</p>
-      <desktopGenericBackLink v-if="!isNativeApp"
-                              data-purpose="back-link"
-                              :path="backLink"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!isNativeApp"
+                                 data-purpose="back-link"
+                                 :path="backLink"/>
     </div>
   </div>
 </template>
@@ -100,9 +99,6 @@ export default {
       this.$store.dispatch('messaging/clear');
       await this.$store.dispatch('messaging/loadSenders');
       this.loaded = true;
-    },
-    backClicked() {
-      redirectTo(this, this.backLink);
     },
     messagePath(sender) {
       return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?sender=${sender}`;

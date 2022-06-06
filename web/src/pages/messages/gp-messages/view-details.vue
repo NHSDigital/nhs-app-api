@@ -59,10 +59,9 @@
       </template>
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <desktopGenericBackLink
+          <desktop-generic-back-link
             v-if="!$store.state.device.isNativeApp"
-            :path="messagesPath"
-            @clickAndPrevent="backButtonClicked"/>
+            :path="messagesPath"/>
         </div>
       </div>
     </div>
@@ -140,9 +139,6 @@ export default {
     await this.load();
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.messagesPath);
-    },
     deleteClicked() {
       redirectTo(this, GP_MESSAGES_DELETE_PATH);
     },

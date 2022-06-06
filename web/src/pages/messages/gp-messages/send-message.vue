@@ -79,10 +79,9 @@
         {{ $t('messages.sendMessage') }}
       </generic-button>
     </div>
-    <desktopGenericBackLink v-if="!this.$store.state.device.isNativeApp"
-                            :path="backPath"
-                            button-text="generic.back"
-                            @clickAndPrevent="onBackButtonClicked"/>
+    <desktop-generic-back-link v-if="!this.$store.state.device.isNativeApp"
+                               :path="backPath"
+                               button-text="generic.back"/>
   </div>
 </template>
 
@@ -185,9 +184,6 @@ export default {
           redirectTo(this, GP_MESSAGES_VIEW_MESSAGE_PATH);
         }
       });
-    },
-    onBackButtonClicked() {
-      redirectTo(this, GP_MESSAGES_RECIPIENTS_PATH);
     },
   },
 };

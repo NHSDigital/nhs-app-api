@@ -247,11 +247,7 @@ describe('search pharmacies', () => {
     });
 
     it('it will go back to the previous page set in the store', () => {
-      dependency.redirectTo = jest.fn();
-      backLink.trigger('click');
-
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH);
+      expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_CHOOSE_TYPE_PATH);
     });
   });
 });

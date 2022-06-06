@@ -73,11 +73,10 @@
             {{ $t('appointments.cancel.cancelAppointment') }}
           </generic-button>
 
-          <desktopGenericBackLink
+          <desktop-generic-back-link
             v-if="!$store.state.device.isNativeApp"
             :path="appointmentsPath"
-            :button-text="'generic.back'"
-            @clickAndPrevent="onBackButtonClicked"/>
+            :button-text="'generic.back'"/>
         </div>
       </div>
     </div>
@@ -150,9 +149,6 @@ export default {
     this.$store.dispatch('myAppointments/clearSelectedAppointment');
   },
   methods: {
-    onBackButtonClicked() {
-      redirectTo(this, this.appointmentsPath);
-    },
     async onCancelButtonClicked() {
       this.submissionError = false;
       if (this.cancellationReasons.length === 0 || this.selectedReason) {

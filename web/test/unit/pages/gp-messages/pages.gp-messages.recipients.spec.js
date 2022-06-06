@@ -65,9 +65,9 @@ describe('gp messages recipients page', () => {
       it('will redirect to urgency question', () => {
         mountPage({ isNativeApp: false });
 
-        wrapper.vm.backLinkClicked();
-
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/urgency');
+        const backDataPurpose = '[data-purpose=main-back-button]';
+        const backLink = wrapper.find(backDataPurpose);
+        expect(backLink.attributes('href')).toBe('messages/gp-messages/urgency');
       });
     });
 

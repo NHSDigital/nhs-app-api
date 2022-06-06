@@ -11,13 +11,12 @@
       </card>
       <div class="nhsuk-u-margin-top-3">
         <glossary v-if="result" />
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           v-if="!$store.state.device.isNativeApp
             && !tppSupportsTestResultsV2"
           class="nhsuk-u-margin-top-3"
           :path="getBackPath"
-          :button-text="'generic.back'"
-          @clickAndPrevent="backButtonClicked"/>
+          :button-text="'generic.back'"/>
       </div>
     </div>
   </div>
@@ -28,8 +27,6 @@ import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-
-import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -62,11 +59,6 @@ export default {
       this.$route.params.testResultId,
     );
     this.result = this.$store.state.myRecord.detailedTestResult.data;
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.getBackPath);
-    },
   },
 };
 </script>

@@ -5,11 +5,11 @@
         <find-out-more-link/>
       </menu-item-list>
       <make-decision/>
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              id="back-link"
-                              :path="organDonationPath"
-                              :button-text="'generic.back'"
-                              @clickAndPrevent="backButtonClicked"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 id="back-link"
+                                 :path="organDonationPath"
+                                 :button-text="'generic.back'"
+                                 @clickAndPrevent="backButtonClicked"/>
     </div>
   </div>
 </template>

@@ -54,13 +54,12 @@
           {{ retryButtonText }}
         </generic-button>
       </form>
-      <desktopGenericBackLink
+      <desktop-generic-back-link
         v-if="retryButtonText && backLinkUrl"
         id="backLink"
         :path="backLinkUrl"
         :button-text="retryButtonText"
         data-purpose="back-button"
-        @clickAndPrevent="backLinkClicked"
       />
     </div>
     <div v-else>
@@ -86,7 +85,7 @@ import ReportAProblem from '@/components/errors/ReportAProblem';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { isBlankString, redirectTo } from '@/lib/utils';
+import { isBlankString } from '@/lib/utils';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -322,9 +321,6 @@ export default {
     },
     get111HyperLink() {
       return `<a href="${this.symptomCheckerUrl}" target="_blank" rel="noopener noreferrer" style="display:inline">111.nhs.uk</a>`;
-    },
-    backLinkClicked() {
-      redirectTo(this, this.backLinkUrl);
     },
     openAppSettings() {
       NativeApp.openAppSettings();

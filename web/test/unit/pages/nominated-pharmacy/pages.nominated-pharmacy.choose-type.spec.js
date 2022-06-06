@@ -116,9 +116,7 @@ describe('nominated pharmacy choose type page', () => {
     });
 
     it('will go to the interrupt page when clicked', () => {
-      backLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT_PATH);
+      expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_INTERRUPT_PATH);
     });
   });
 });

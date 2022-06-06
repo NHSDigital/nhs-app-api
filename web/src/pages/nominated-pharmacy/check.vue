@@ -21,11 +21,10 @@
       {{ getContinueButtonText }}
     </generic-button>
 
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            id="back-link"
-                            :path="prescriptionTypePath"
-                            :button-text="'nominatedPharmacy.notFound.backButton'"
-                            @clickAndPrevent="onBackButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               id="back-link"
+                               :path="prescriptionTypePath"
+                               :button-text="'nominatedPharmacy.notFound.backButton'"/>
   </div>
 </template>
 
@@ -76,9 +75,6 @@ export default {
     onContinueButtonClicked() {
       this.$store.dispatch('navigation/setBackLinkOverride', NOMINATED_PHARMACY_CHECK_PATH);
       redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH);
-    },
-    onBackButtonClicked() {
-      redirectTo(this, this.prescriptionTypePath);
     },
   },
 };

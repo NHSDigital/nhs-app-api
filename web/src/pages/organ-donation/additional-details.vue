@@ -38,11 +38,11 @@
                       @click.prevent="continueClicked">
         {{ $t('generic.continue') }}
       </generic-button>
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              id="genericBackLink"
-                              :path="backLink"
-                              :button-text="'generic.back'"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 id="genericBackLink"
+                                 :path="backLink"
+                                 :button-text="'generic.back'"
+                                 @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>

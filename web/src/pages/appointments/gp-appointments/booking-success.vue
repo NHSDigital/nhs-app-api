@@ -22,11 +22,10 @@
               </Card>
             </CardGroupItem>
           </CardGroup>
-          <desktopGenericBackLink
+          <desktop-generic-back-link
             id="genericBackLink"
             :path="backPath"
-            :button-text="'appointments.book.goToYourAppointments'"
-            @clickAndPrevent="backButtonClicked"/>
+            :button-text="'appointments.book.goToYourAppointments'"/>
         </div>
       </div>
     </div>
@@ -42,7 +41,6 @@ import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import { APPOINTMENTS_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'GpAppointmentsBookingSuccessPage',
@@ -64,11 +62,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath, null);
-    },
   },
 };
 </script>

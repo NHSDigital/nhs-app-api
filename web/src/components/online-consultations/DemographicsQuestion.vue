@@ -44,11 +44,10 @@
             {{ $t('onlineConsultations.orchestrator.continueButton') }}
           </generic-button>
         </form>
-        <desktopGenericBackLink v-if="!isNativeApp"
-                                data-purpose="back-link"
-                                :path="backLink"
-                                :button-text="'onlineConsultations.orchestrator.backButton'"
-                                @clickAndPrevent="backClicked"/>
+        <desktop-generic-back-link v-if="!isNativeApp"
+                                   data-purpose="back-link"
+                                   :path="backLink"
+                                   :button-text="'onlineConsultations.orchestrator.backButton'"/>
       </fieldset>
     </generic-question-wrapper>
   </div>
@@ -64,7 +63,6 @@ import {
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
 } from '@/lib/online-consultations/constants/nojsInputNames';
-import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import last from 'lodash/fp/last';
@@ -122,9 +120,6 @@ export default {
     },
     stopProp(event) {
       event.stopPropagation();
-    },
-    backClicked() {
-      redirectTo(this, this.backLink);
     },
     async demographicsContinueClicked() {
       document.activeElement.blur();

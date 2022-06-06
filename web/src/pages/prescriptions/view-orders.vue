@@ -84,7 +84,6 @@
       id="desktopBackLink"
       :path="backUrl"
       class="nhsuk-u-margin-top-3"
-      @clickAndPrevent="backLinkClicked"
     />
   </div>
   <div v-else-if="prescriptionsApiError && hasLoaded">
@@ -266,9 +265,6 @@ export default {
     },
     ariaLabelCaption(header, body) {
       return `${header}. ${body}`;
-    },
-    backLinkClicked() {
-      redirectTo(this, this.backUrl);
     },
     tryAgain() {
       sessionStorage.setItem('hasRetried', true);

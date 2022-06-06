@@ -8,10 +8,9 @@
         <switch-profile-button />
       </div>
       <div v-else>
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           :path="backPath"
-          :button-text="'appointments.cancel.goToYourAppointments'"
-          @clickAndPrevent="backButtonClicked"/>
+          :button-text="'appointments.cancel.goToYourAppointments'"/>
       </div>
     </div>
   </div>
@@ -22,9 +21,7 @@ import get from 'lodash/fp/get';
 
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-
 import { APPOINTMENTS_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'GpAppointmentsCancellingSuccessPage',
@@ -42,11 +39,6 @@ export default {
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
     this.$store.dispatch('myAppointments/completeCancellingJourney');
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath, null);
-    },
   },
 };
 </script>

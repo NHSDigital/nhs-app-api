@@ -5,12 +5,11 @@
                                       !$store.state.device.isNativeApp && $style.desktopWeb]">
       <test-results :results="results" />
 
-      <desktopGenericBackLink
+      <desktop-generic-back-link
         v-if="!$store.state.device.isNativeApp"
         id="desktopBackLink"
         :path="backPath"
-        :button-text="'generic.back'"
-        @clickAndPrevent="backButtonClicked"/>
+        :button-text="'generic.back'"/>
     </div>
   </div>
 </template>
@@ -19,7 +18,6 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import TestResults from '@/components/gp-medical-record/SharedComponents/TestResults';
-import { redirectTo } from '@/lib/utils';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 
 export default {
@@ -39,11 +37,6 @@ export default {
       await this.$store.dispatch('myRecord/load');
     }
     this.results = this.$store.state.myRecord.record.testResults;
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
   },
 };
 </script>

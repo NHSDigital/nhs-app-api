@@ -9,12 +9,11 @@
           <emergency-prescriptions-link id="emergencyPrescriptions-link"/>
           {{ $t('prescriptions.contactSurgery.emergencyContact2') }}
         </p>
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           v-if="!$store.state.device.isNativeApp"
           id="backToPrescriptions-link"
           :path="getBackPath"
           :button-text="$t('prescriptions.contactSurgery.backButtonText')"
-          @clickAndPrevent="backButtonClicked"
         />
       </div>
     </div>
@@ -25,7 +24,6 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import EmergencyPrescriptionsLink from '@/components/widgets/EmergencyPrescriptionsLink';
 import { PRESCRIPTION_TYPE_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'ContactSurgeryPage',
@@ -36,11 +34,6 @@ export default {
   computed: {
     getBackPath() {
       return PRESCRIPTION_TYPE_PATH;
-    },
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.getBackPath);
     },
   },
 };

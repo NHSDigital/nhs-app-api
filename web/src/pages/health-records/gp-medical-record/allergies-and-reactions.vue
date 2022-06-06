@@ -34,10 +34,9 @@
       <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="backPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               :path="backPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -51,7 +50,6 @@ import NoFurtherInformationAvailable from '@/components/gp-medical-record/Shared
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import ScrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/SCRErrorNoAccessGpRecord';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -86,9 +84,6 @@ export default {
     this.allergies = this.$store.state.myRecord.record.allergies;
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },

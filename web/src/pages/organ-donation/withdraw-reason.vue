@@ -64,10 +64,9 @@
                           @click.stop.prevent="continueClicked">
             {{ $t('generic.continue') }}
           </generic-button>
-          <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                  :path="organDonationPath"
-                                  :button-text="'generic.back'"
-                                  @clickAndPrevent="backButtonClicked"/>
+          <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                     :path="organDonationPath"
+                                     :button-text="'generic.back'"/>
         </div>
       </div>
     </div>
@@ -156,9 +155,6 @@ export default {
         this.$store.dispatch('organDonation/setWithdrawReasonId', this.reasonId);
         redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
       });
-    },
-    backButtonClicked() {
-      redirectTo(this, ORGAN_DONATION_PATH);
     },
   },
 };

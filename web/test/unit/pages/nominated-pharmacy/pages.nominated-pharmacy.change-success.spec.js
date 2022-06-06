@@ -1,5 +1,4 @@
 import i18n from '@/plugins/i18n';
-import * as dependency from '@/lib/utils';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
@@ -182,10 +181,7 @@ describe('confirm nominated pharmacy', () => {
     });
 
     it('will redirect to prescriptions page when clicked', async () => {
-      dependency.redirectTo = jest.fn();
-      await goToPrescriptionsLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+      expect(goToPrescriptionsLink.attributes('href')).toBe(PRESCRIPTIONS_PATH);
     });
   });
 

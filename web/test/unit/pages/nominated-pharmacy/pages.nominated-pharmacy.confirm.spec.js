@@ -245,10 +245,7 @@ describe('confirm nominated pharmacy', () => {
     });
 
     it('will redirect to the search results page on click', async () => {
-      dependency.redirectTo = jest.fn();
-      await backLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
+      expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
     });
   });
 });

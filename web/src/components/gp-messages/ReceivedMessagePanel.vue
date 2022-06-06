@@ -19,16 +19,16 @@
           </span>
         </strong>
         <div>
-          <desktopGenericBackLink id="viewLink"
-                                  :class="[$style['attachmentLink'], 'nhsuk-u-margin-right-2']"
-                                  :path="viewAttachmentPath"
-                                  button-text="messages.view"
-                                  @clickAndPrevent="viewClicked"/>
-          <desktopGenericBackLink id="downloadLink"
-                                  :class="$style['attachmentLink']"
-                                  :path="downloadAttachmentPath"
-                                  button-text="messages.download"
-                                  @clickAndPrevent="downloadClicked"/>
+          <desktop-generic-back-link id="viewLink"
+                                     :class="[$style['attachmentLink'], 'nhsuk-u-margin-right-2']"
+                                     :path="viewAttachmentPath"
+                                     button-text="messages.view"
+                                     @clickAndPrevent="viewClicked"/>
+          <desktop-generic-back-link id="downloadLink"
+                                     :class="$style['attachmentLink']"
+                                     :path="downloadAttachmentPath"
+                                     button-text="messages.download"
+                                     @clickAndPrevent="downloadClicked"/>
         </div>
       </div>
     </div>

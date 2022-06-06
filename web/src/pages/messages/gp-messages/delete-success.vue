@@ -1,10 +1,9 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <desktopGenericBackLink
+      <desktop-generic-back-link
         id="messagesLink"
-        :path="messagesPath"
-        @clickAndPrevent="goToMessagesClicked"/>
+        :path="messagesPath"/>
     </div>
   </div>
 </template>
@@ -33,11 +32,6 @@ export default {
   },
   beforeDestroy() {
     this.$store.dispatch('gpMessages/clear');
-  },
-  methods: {
-    goToMessagesClicked() {
-      redirectTo(this, this.messagesPath);
-    },
   },
 };
 </script>

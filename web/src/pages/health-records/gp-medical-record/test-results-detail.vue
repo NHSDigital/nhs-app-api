@@ -17,12 +17,11 @@
       <no-further-information-available />
     </div>
     <glossary v-if="markup"/>
-    <desktopGenericBackLink
+    <desktop-generic-back-link
       v-if="!$store.state.device.isNativeApp"
       class="nhsuk-u-margin-top-3"
       :path="backPath"
-      :button-text="'generic.back'"
-      @clickAndPrevent="backButtonClicked"/>
+      :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -35,7 +34,6 @@ import Glossary from '@/components/Glossary';
 import NoFurtherInformationAvailable from '@/components/gp-medical-record/SharedComponents/NoFurtherInformationAvailable';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -63,11 +61,6 @@ export default {
 
     this.markup = get('markup', this.$store.state.myRecord.testResults);
     this.testResults = get('testResults', this.$store.state.myRecord.record) || {};
-  },
-  methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
   },
 };
 </script>

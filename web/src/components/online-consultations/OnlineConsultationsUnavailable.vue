@@ -14,11 +14,11 @@
         {{ $t('onlineConsultations.unavailable.findOutWhatToDo') }}
       </a>
     </p>
-    <desktopGenericBackLink v-if="!isNativeApp"
-                            data-purpose="back-link"
-                            :path="backLink"
-                            :button-text="'onlineConsultations.orchestrator.backButton'"
-                            @clickAndPrevent="backClicked"/>
+    <desktop-generic-back-link v-if="!isNativeApp"
+                               data-purpose="back-link"
+                               :path="backLink"
+                               :button-text="'onlineConsultations.orchestrator.backButton'"
+                               @clickAndPrevent="backClicked"/>
   </div>
 </template>
 

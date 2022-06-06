@@ -19,10 +19,9 @@
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                :text="$t('generic.back')">
-          <desktopGenericBackLink id="back-link"
-                                  :path="previousPagePath"
-                                  :button-text="'generic.back'"
-                                  @clickAndPrevent="backButtonClicked"/>
+          <desktop-generic-back-link id="back-link"
+                                     :path="previousPagePath"
+                                     :button-text="'generic.back'"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -80,9 +79,6 @@ export default {
   methods: {
     continueButtonClicked() {
       redirectTo(this, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH);
-    },
-    backButtonClicked() {
-      redirectTo(this, this.previousPagePath);
     },
   },
 };

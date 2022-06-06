@@ -57,8 +57,9 @@ describe('gp messages urgency page', () => {
   describe('back link clicked', () => {
     it('will redirect to gp messages inbox', () => {
       mountPage();
-      wrapper.vm.backToMessageClicked();
-      expect(router.go).toHaveBeenCalled();
+      const backDataPurpose = '[data-purpose=main-back-button]';
+      const backLink = wrapper.find(backDataPurpose);
+      expect(backLink.attributes('href')).toBe('messages/gp-messages/view-details');
     });
   });
 

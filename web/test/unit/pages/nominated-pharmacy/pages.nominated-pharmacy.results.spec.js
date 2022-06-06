@@ -190,12 +190,9 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     expect(dependency.redirectTo).not.toHaveBeenCalled();
 
-    // act
-    wrapper.vm.backButtonClicked();
-
-    // assert
-    expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_PATH);
+    const backDataPurpose = '[data-purpose=main-back-button]';
+    const backLink = wrapper.find(backDataPurpose);
+    expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_SEARCH_PATH);
   });
 
   it('will go back to the online choices page when the back button is clicked and the user chose to see a selection of randomised online pharmacies', () => {
@@ -211,12 +208,9 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     expect(dependency.redirectTo).not.toHaveBeenCalled();
 
-    // act
-    wrapper.vm.backButtonClicked();
-
-    // assert
-    expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
+    const backDataPurpose = '[data-purpose=main-back-button]';
+    const backLink = wrapper.find(backDataPurpose);
+    expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
   });
 
   describe('pharmacyPracticeClicked', () => {

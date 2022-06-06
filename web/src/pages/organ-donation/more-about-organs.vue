@@ -7,10 +7,10 @@
         <h3>{{ content.subheader }}</h3>
         <p>{{ content.body }}</p>
       </div>
-      <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                              :path="backLink"
-                              :button-text="'generic.back'"
-                              @clickAndPrevent="backClicked"/>
+      <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 :path="backLink"
+                                 :button-text="'generic.back'"
+                                 @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>

@@ -16,8 +16,7 @@
         <glossary/>
       </div>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="messagePath"
-                                 @clickAndPrevent="backToMessageClicked"/>
+                                 :path="messagePath"/>
     </div>
   </div>
 </template>
@@ -90,9 +89,6 @@ export default {
     this.setZoom(false);
   },
   methods: {
-    backToMessageClicked() {
-      this.$router.go(-1);
-    },
     setZoom(zoomable) {
       const viewport = document.getElementsByName('viewport')[0];
       let content = 'width=device-width, initial-scale=1, minimum-scale=1.0';

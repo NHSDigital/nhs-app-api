@@ -36,11 +36,10 @@
       </menu-item-list>
     </div>
 
-    <desktopGenericBackLink
+    <desktop-generic-back-link
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
-      :button-text="'generic.back'"
-      @clickAndPrevent="backButtonClicked"/>
+      :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -55,8 +54,6 @@ import {
   CURRENT_MEDICINES_PATH,
   DISCONTINUED_MEDICINES_PATH,
 } from '@/router/paths';
-
-import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -85,9 +82,6 @@ export default {
       this.$store.state.myRecord.record.medications.data.currentRepeatMedications.length;
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.backPath);
-    },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value
         ? effectiveDate.value

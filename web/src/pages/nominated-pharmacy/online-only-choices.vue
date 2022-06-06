@@ -36,11 +36,10 @@ https://nhsd-jira.digital.nhs.uk/browse/NHSO-16781
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                :text="$t('generic.back')">
-          <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                  id="back-link"
-                                  :path="dspInterrupt"
-                                  :button-text="'generic.back'"
-                                  @clickAndPrevent="backButtonClicked"/>
+          <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                     id="back-link"
+                                     :path="dspInterrupt"
+                                     :button-text="'generic.back'"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -154,9 +153,6 @@ export default {
     },
     selected(value) {
       this.onlineOnlyChoice = value;
-    },
-    backButtonClicked() {
-      redirectTo(this, this.dspInterrupt);
     },
   },
 };

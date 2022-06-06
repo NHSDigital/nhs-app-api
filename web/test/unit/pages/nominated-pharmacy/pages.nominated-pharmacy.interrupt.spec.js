@@ -126,9 +126,7 @@ describe('nominated pharmacy not found', () => {
         wrapper = mountPage();
         backLink = wrapper.find('#back-link').find('a');
 
-        backLink.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_PATH);
+        expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_PATH);
       });
 
       it('will navigate to prescriptions page when clicked if prescriptions has been set in the store', () => {
@@ -136,9 +134,7 @@ describe('nominated pharmacy not found', () => {
         wrapper = mountPage();
         backLink = wrapper.find('#back-link').find('a');
 
-        backLink.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
+        expect(backLink.attributes('href')).toBe(PRESCRIPTIONS_PATH);
       });
 
       it('will navigate to prescriptions page when clicked if InterruptBackTo has not been set', () => {
@@ -156,9 +152,7 @@ describe('nominated pharmacy not found', () => {
         wrapper = mountPage();
         backLink = wrapper.find('#back-link').find('a');
 
-        backLink.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK_PATH);
+        expect(backLink.attributes('href')).toBe(NOMINATED_PHARMACY_CHECK_PATH);
       });
     });
   });

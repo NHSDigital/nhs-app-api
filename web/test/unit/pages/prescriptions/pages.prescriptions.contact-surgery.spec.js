@@ -141,9 +141,7 @@ describe('Prescription contact surgery page', () => {
     });
 
     it('will go to the correct page when clicked', () => {
-      backLink.trigger('click');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_TYPE_PATH);
+      expect(backLink.attributes('href')).toBe(PRESCRIPTION_TYPE_PATH);
     });
   });
 });

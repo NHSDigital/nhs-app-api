@@ -11,6 +11,9 @@ import { mount, shallowMount, createStore, createScrollTo, createRouter } from '
 jest.mock('@/services/event-bus');
 jest.mock('@/services/native-app');
 
+const defaultRouter = createRouter();
+defaultRouter.history.router.previousPaths[0] = 'Test_path';
+
 const defaultStore = () => (
   createStore({
     state: {
@@ -38,7 +41,7 @@ const mountComponent = ({
     },
     slots,
     methods,
-    $router: createRouter(),
+    $router: defaultRouter,
     mountOpts: {
       i18n,
     },

@@ -23,8 +23,7 @@
         </ul>
       </care-card>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="urgencyPath"
-                                 @clickAndPrevent="backLinkClicked"/>
+                                 :path="urgencyPath"/>
     </div>
   </div>
 </template>
@@ -32,7 +31,6 @@
 <script>
 import CareCard from '@/components/widgets/CareCard';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { redirectTo } from '@/lib/utils';
 import { GP_MESSAGES_URGENCY_PATH } from '@/router/paths';
 
 export default {
@@ -45,11 +43,6 @@ export default {
     return {
       urgencyPath: GP_MESSAGES_URGENCY_PATH,
     };
-  },
-  methods: {
-    backLinkClicked() {
-      redirectTo(this, this.urgencyPath);
-    },
   },
 };
 </script>

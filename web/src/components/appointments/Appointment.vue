@@ -44,11 +44,13 @@
 
     <span v-if="showAddToCalendar()" :class="$style.appointmentGroup">
       <hr class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1" aria-hidden="true">
-      <desktopGenericBackLink id="add-event-to-calendar-link"
-                              :path="appointmentAddToCalendarPath"
-                              :button-text="'appointments.appointment.addToCalendar.addToCalendar'"
-                              clazz="nhsuk-body-s nhsuk-u-margin-bottom-0"
-                              @clickAndPrevent="onAddToCalendar"/>
+      <desktop-generic-back-link
+        id="add-event-to-calendar-link"
+        :path="appointmentAddToCalendarPath"
+        :button-text="'appointments.appointment.addToCalendar.addToCalendar'"
+        clazz="nhsuk-body-s nhsuk-u-margin-bottom-0"
+        @clickAndPrevent="onAddToCalendar"
+      />
     </span>
 
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation"

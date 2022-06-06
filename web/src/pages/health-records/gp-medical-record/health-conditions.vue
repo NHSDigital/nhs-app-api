@@ -43,10 +43,9 @@
       <no-further-information-available />
     </div>
     <glossary v-if="!showError"/>
-    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                            :path="getBackPath"
-                            :button-text="'generic.back'"
-                            @clickAndPrevent="backButtonClicked"/>
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                               :path="getBackPath"
+                               :button-text="'generic.back'"/>
   </div>
 </template>
 
@@ -105,9 +104,6 @@ export default {
     this.problems = this.$store.state.myRecord.record.problems;
   },
   methods: {
-    backButtonClicked() {
-      redirectTo(this, this.getBackPath);
-    },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
     },

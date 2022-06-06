@@ -104,10 +104,9 @@
           <h3>{{ $t('prescriptions.repeatCourses.youDoNotHaveAny') }}</h3>
           <p>{{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}</p>
         </div>
-        <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                :path="getBackPath"
-                                :button-text="'generic.back'"
-                                @clickAndPrevent="backButtonClicked"/>
+        <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                   :path="getBackPath"
+                                   :button-text="'generic.back'"/>
       </div>
     </div>
   </div>
@@ -338,9 +337,6 @@ export default {
     tryAgain() {
       sessionStorage.setItem('hasRetried', true);
       redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH, { hr: true }, true);
-    },
-    backButtonClicked() {
-      redirectTo(this, this.getBackPath);
     },
     onFocusSpecialRequest() {
       this.specialRequestAriaLive = 'polite';

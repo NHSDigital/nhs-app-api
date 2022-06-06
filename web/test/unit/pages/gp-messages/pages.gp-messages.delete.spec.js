@@ -107,8 +107,9 @@ describe('patient messaging delete', () => {
   describe('back link clicked', () => {
     it('will redirect to message details page', () => {
       mountPage({ isNativeApp: false, selectedId: '1' });
-      wrapper.vm.backLinkClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details');
+      const backDataPurpose = '[data-purpose=main-back-button]';
+      const backLink = wrapper.find(backDataPurpose);
+      expect(backLink.attributes('href')).toBe('messages/gp-messages/view-details');
     });
   });
 

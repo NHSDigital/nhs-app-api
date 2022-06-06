@@ -60,8 +60,9 @@ describe('patient messaging delete success', () => {
     });
 
     it('will redirect to message list page', () => {
-      wrapper.vm.goToMessagesClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+      const backDataPurpose = '[data-purpose=main-back-button]';
+      const backLink = wrapper.find(backDataPurpose);
+      expect(backLink.attributes('href')).toBe('messages/gp-messages');
     });
   });
 });

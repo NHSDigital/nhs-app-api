@@ -23,11 +23,10 @@
       {{ $t('generic.continue') }}
     </generic-button>
 
-    <desktopGenericBackLink
+    <desktop-generic-back-link
       v-if="!$store.state.device.isNativeApp"
       :path="indexPath"
-      :button-text="'myRecord.warning.backToHome'"
-      @clickAndPrevent="onBackButtonClicked"/>
+      :button-text="'myRecord.warning.backToHome'"/>
   </div>
 </template>
 
@@ -35,7 +34,6 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
-import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import { INDEX_PATH } from '@/router/paths';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
@@ -65,9 +63,6 @@ export default {
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
       EventBus.$emit(FOCUS_NHSAPP_TITLE);
-    },
-    onBackButtonClicked() {
-      redirectTo(this, this.indexPath);
     },
   },
 };

@@ -36,11 +36,10 @@
           </li>
         </ul>
 
-        <desktopGenericBackLink
+        <desktop-generic-back-link
           v-if="!$store.state.device.isNativeApp"
           id="desktopBackLink"
-          :path="messagesPath"
-          @clickAndPrevent="backLinkClicked"/>
+          :path="messagesPath"/>
       </template>
     </div>
   </div>
@@ -150,9 +149,6 @@ export default {
           timePrep,
           date: messageTime,
         });
-    },
-    backLinkClicked() {
-      redirectTo(this, this.messagesPath);
     },
     goToMessageDetails(message) {
       this.$store.dispatch('gpMessages/setSelectedMessageID', message.messageId);
