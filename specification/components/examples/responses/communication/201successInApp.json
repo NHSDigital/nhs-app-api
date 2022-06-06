@@ -30,5 +30,13 @@
     ],
     "sender": {
         "display": "Onboarded Third Party"
+    },
+    "requester": {
+        "type": "Organization",
+        "identifier": {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "B82041"
+        },
+        "display": "Beech Tree Medical Centre"
     }
 }

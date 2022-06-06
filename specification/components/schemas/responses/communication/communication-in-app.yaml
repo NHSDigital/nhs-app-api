@@ -66,3 +66,26 @@ properties:
               pattern: "^\\d{10}$"
               description: The patient's NHS number.
               example: "9903002157"
+  requester:
+    type: object
+    description: The requester who has sent the request for in-app message to the patient.
+    properties:
+      type:
+        type: string
+        description: FHIR resource type that the organization code refers to. This should be `Organization`.
+        example: "Organization"
+      identifier:
+        type: object
+        properties:
+          system:
+            type: string
+            format: uri
+            description: The namespace of the identifier value.
+          value:
+            type: string
+            description: The value of the identifier.
+            example: "B82041"
+      display:
+        type: string
+        description: The name of the ods code.
+        example: "Beech Tree Medical Centre"

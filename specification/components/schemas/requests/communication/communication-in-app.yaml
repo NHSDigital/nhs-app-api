@@ -54,7 +54,8 @@ properties:
           $ref: ../../Markdown.yaml
   sender:
     type: object
-    description: The sender of the in-app message.
+    description: The sender of the in-app message. This field will be deprecated in a future release of the API, to be replaced by the `requester` field.
+    deprecated: true
     required:
       - display
     properties:
@@ -94,3 +95,32 @@ properties:
               pattern: "^\\d{10}$"
               description: The patient's NHS number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS number](https://www.datadictionary.nhs.uk/attributes/nhs_number.html).
               example: "9903002157"
+  requester:
+    type: object
+    description: The requester who initiated the communication and would like to send an in-app message to the patient. This field is currently ignored but will be used in a future release of the API, replacing the `sender` field.
+    properties:
+      type:
+        type: string
+        description: FHIR resource type that the organization code refers to. This should be `Organization`.
+        example: "Organization"
+      identifier:
+        type: object
+        description: Identifier and system of identification used for this Organisation.
+        required:
+          - system
+          - value
+        properties:
+          system:
+            type: string
+            format: uri
+            default: https://fhir.nhs.uk/Id/ods-organization-code
+            description: URL for the Organisation Data Service - who are responsible for publishing codes that identify organisations and individuals across health and social care. This should be https://fhir.nhs.uk/Id/ods-organization-code
+          value:
+            type: string
+            description: ODS code of the requester who initiated the communication and would like to send an in-app message to the patient.
+            pattern: "^[0-9A-Z]+$"
+            example: "B82041"
+      display:
+        type: string
+        description: The name of the ods code.
+        example: "Beech Tree Medical Centre"
