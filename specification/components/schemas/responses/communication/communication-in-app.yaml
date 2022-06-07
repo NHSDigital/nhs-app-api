@@ -85,7 +85,3 @@ properties:
             type: string
             description: The value of the identifier.
             example: "B82041"
-      display:
-        type: string
-        description: The name of the ods code.
-        example: "Beech Tree Medical Centre"
