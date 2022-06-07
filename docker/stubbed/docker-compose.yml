@@ -59,3 +59,4 @@ services:
           - netcall.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io
           - wellnessAndPrevention.stubs.local.bitraft.io
+          - zesty.stubs.local.bitraft.io

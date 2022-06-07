@@ -30,3 +30,4 @@ services:
         -A /netcall.stubs.local.bitraft.io/10.0.2.2 \
         -A /netcompany.stubs.local.bitraft.io/10.0.2.2 \
         -A /wellnessandprevention.stubs.local.bitraft.io/10.0.2.2
+        -A /zesty.stubs.local.bitraft.io/10.0.2.2 \

@@ -430,6 +430,10 @@ export default {
         serviceId: 'netcall',
         providerName: 'Netcall',
       },
+      zesty: {
+        serviceId: 'zesty',
+        providerName: 'Zesty',
+      },
     },
     thirdPartyWarning: {
       featureName: 'View appointments',

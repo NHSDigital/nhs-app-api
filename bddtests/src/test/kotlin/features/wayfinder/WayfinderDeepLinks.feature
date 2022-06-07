@@ -34,3 +34,4 @@ Feature: Wayfinder DeepLinks
     | Provider | DeepLink                                                                                                               |
     | PKB      | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D         |
     | Netcall  | http://netcall.stubs.local.bitraft.io:8080/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?remote_record_id |
+    | Zesty    | http://zesty.stubs.local.bitraft.io:8080/nhs/origin_appointment?resource_id=XXXX                                       |

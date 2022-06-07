@@ -5589,6 +5589,7 @@
                               - "ers"
                               - "drdoctor"
                               - "netcall"
+                              - "zesty"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the referral."
@@ -5635,6 +5636,7 @@
                               - "ers"
                               - "drdoctor"
                               - "netcall"
+                              - "zesty"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the referral."
@@ -5670,6 +5672,7 @@
                               - "ers"
                               - "drdoctor"
                               - "netcall"
+                              - "zesty"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the appointment."
@@ -5700,6 +5703,7 @@
                               - "ers"
                               - "drdoctor"
                               - "netcall"
+                              - "zesty"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the appointment."

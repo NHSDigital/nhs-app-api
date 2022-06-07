@@ -104,6 +104,13 @@
     "netcall": {
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
+    },
+    "zesty": {
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true,
+      "domains": [
+        "https://rfl.enterprise.ytsez-sandbox.co.uk"
+      ]
     }
   }
 }

@@ -35,6 +35,7 @@ services:
           - silverintegrationtestprovider.stubs.local.bitraft.io
           - substraktDomain1.stubs.local.bitraft.io
           - wellnessAndPrevention.stubs.local.bitraft.io
+          - zesty.stubs.local.bitraft.io
 
   securestubs.local.bitraft.io:
     image: nginx:alpine

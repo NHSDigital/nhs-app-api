@@ -1005,6 +1005,8 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                 "phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
             "Netcall" -> "http://netcall.stubs.local.bitraft.io:8080/i/nhsappintegration" +
                 "/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?remote_record_id=150059575801"
+            "Zesty" -> "http://zesty.stubs.local.bitraft.io:8080/nhs/origin_appointment?" +
+                "resource_id=XXXX"
             else -> "http://stubs.local.bitraft.io:8080"
         }
 

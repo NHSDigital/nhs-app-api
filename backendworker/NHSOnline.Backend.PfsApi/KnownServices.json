@@ -620,6 +620,29 @@
       "validateSession": true,
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
+    },
+    "zesty": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "zesty_login": {
+      "url": "https://rfl.enterprise.ytsez-sandbox.co.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     }
   }
 }

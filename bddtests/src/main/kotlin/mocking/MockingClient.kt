@@ -21,6 +21,7 @@ import mocking.thirdPartyProviders.netcall.NetcallRequestBuilder
 import mocking.thirdPartyProviders.nhsd.NhsdRequestBuilder
 import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import mocking.thirdPartyProviders.wellnessAndPrevention.WellnessAndPreventionRequestBuilder
+import mocking.thirdPartyProviders.zesty.ZestyRequestBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
 import mocking.wayfinder.WayfinderMappingBuilder
@@ -58,6 +59,7 @@ class MockingClient(configuration: MockingConfiguration) {
     val forPKB = ExternalSupplierMockingClient(PKBRequestBuilder(), wiremockHelper)
     val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
     val forWellness = ExternalSupplierMockingClient(WellnessAndPreventionRequestBuilder(), wiremockHelper)
+    val forZesty = ExternalSupplierMockingClient(ZestyRequestBuilder(), wiremockHelper)
 
     val forWayfinder = ExternalSupplierMockingClient(WayfinderMappingBuilder(), wiremockHelper)
 

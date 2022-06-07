@@ -50,6 +50,7 @@ api:
     services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
+    services__zesty__url: https://patient-portal-wayfinder-test.zesty.co.uk
     servicesV3__accurx__url: https://staging.accurx.nhs.uk
     servicesV3__cid_settings__url: https://settings.aos.signin.nhs.uk
     servicesV3__cid_account__url: https://account.aos.signin.nhs.uk
@@ -68,6 +69,7 @@ api:
     servicesV3__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.aoc.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.aoc.substrakthealth.com
+    servicesV3__zesty__url: https://patient-portal-wayfinder-test.zesty.co.uk
     
 info:
   userInfoReadFromSecondaryContainers: false

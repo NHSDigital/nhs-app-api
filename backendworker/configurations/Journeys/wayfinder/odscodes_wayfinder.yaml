@@ -9,6 +9,7 @@ target:
     - "WF0003"
     - "WF0004"
     - "WF0005"
+    - "WF0006"
     - "WF0007"
 journeys:
   wayfinder:

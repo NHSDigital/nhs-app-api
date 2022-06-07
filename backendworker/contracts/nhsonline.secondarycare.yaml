@@ -115,6 +115,7 @@ components:
             - ers
             - drdoctor
             - netcall
+            - zesty
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the referral.
@@ -158,6 +159,7 @@ components:
             - ers
             - drdoctor
             - netcall
+            - zesty
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the referral.
@@ -190,6 +192,7 @@ components:
             - ers
             - drdoctor
             - netcall
+            - zesty
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the appointment.
@@ -217,6 +220,7 @@ components:
             - ers
             - drdoctor
             - netcall
+            - zesty
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the appointment.

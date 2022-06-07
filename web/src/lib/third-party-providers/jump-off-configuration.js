@@ -232,6 +232,11 @@ const thirdPartyProvider = {
       acceptablePathsRegex: '^\\/i\\/nhsappintegration/\\p\\/27EFBAC1\\/40EFBAC1\\/66EFBAC1\\/417EFBAC1.*$',
       redirectPath: '/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?',
     },
+    zesty: {
+      jumpOffId: 'zestyWayfinder',
+      acceptablePathsRegex: '^\\/nhs\\/origin_appointment\\?.*$',
+      redirectPath: '/nhs/origin_appointment?',
+    },
   },
 };
 
