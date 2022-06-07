@@ -119,7 +119,3 @@ properties:
             description: ODS code of the requester who initiated the communication and would like to send an in-app message to the patient.
             pattern: "^[0-9A-Z]+$"
             example: "B82041"
-      display:
-        type: string
-        description: The name of the ods code.
-        example: "Beech Tree Medical Centre"
