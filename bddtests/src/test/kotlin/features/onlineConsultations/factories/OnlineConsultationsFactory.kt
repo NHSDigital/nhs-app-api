@@ -1,11 +1,12 @@
 package features.onlineConsultations.factories
 
-import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
+import utils.SerenityHelpers
 
 class OnlineConsultationsFactory {
 
-   private val onlineConsultationsMappingBuilder = OnlineConsultationsMappingBuilder()
+    private val onlineConsultationsMappingBuilder = OnlineConsultationsMappingBuilder()
+    private val mockingClient = SerenityHelpers.getMockingClient()
 
     fun setupOnlineConsultationsData() {
         mockingClient.forOnlineConsultations.mock {

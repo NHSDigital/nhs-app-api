@@ -31,60 +31,53 @@ class WayfinderStepDefinitions {
 
     private val wayfinderFactory = WayfinderFactory()
 
-    @Given("^I am a user who can view Wayfinder from Appointments and has referrals but no upcoming appointments$")
-    fun iAmAUserWhoHasReferralsButNoUpcomingAppointments(){
+    @Given("^I am a user whose surgery has enabled Wayfinder$")
+    fun iAmAUserWhoseSurgeryHadEnabledWayfinder() {
         setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+    }
+
+    @Given("^I have no referrals or appointments$")
+    fun iHaveNoReferralsOrAppointments(){
+        wayfinderFactory.setupNoReferralsOrAppointmentsResponse()
+    }
+
+    @Given("^I have referrals but no upcoming appointments$")
+    fun iHaveReferralsButNoUpcomingAppointments(){
         wayfinderFactory.setupReferralsNoAppointmentsResponse()
     }
 
-    @Given("^I am a user who can view Wayfinder from Appointments$")
-    fun iAmAUserWhoCanViewWayfinderFromTheAppointmentsHub(){
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
-        wayfinderFactory.setupNoReferralsOrAppointmentsResponse();
-    }
-
-    @Given("^I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments$")
-    fun iAmAUserWhoCanViewReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+    @Given("^I have referrals and upcoming appointments$")
+    fun iHaveReferralsAndUpcomingAppointments(){
         wayfinderFactory.setupReferralsAndUpcomingAppointmentsResponse()
     }
 
-    @Given("^I am a user who can view Wayfinder from Appointments and receives a partial error$")
-    fun iAmAUserWhoCanViewReferralsAndUpcomingAppointmentsPartialError(){
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+    @Given("^I cannot view referrals or appointments due to a partial error$")
+    fun iCannotViewReferralsOrAppointmentsDueToAPartialError(){
         wayfinderFactory.setupReferralsAppointmentsPartialErrorResponse()
     }
 
-    @Given("^I am a user who is too young to use Wayfinder to retrieve referrals and appointments$")
-    fun iAmAUserWhoIsTooYoungToUseWayfinderToRetrieveReferralsAndAppointments() {
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
+    @Given("^I am too young to use Wayfinder to retrieve referrals and appointments$")
+    fun iAmTooYoungToUseWayfinderToRetrieveReferralsAndAppointments() {
         wayfinderFactory.setupReferralsAppointmentsUnderMinimumAgeResponse()
     }
 
-    @Given("^I am a user who can view Wayfinder from Appointments and has eRS referrals and upcoming appointments$")
-    fun iAmAUserWhoCanViewErsReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
-        wayfinderFactory.setupReferralsErs()
-    }
-
-    @Given("^I am an eRS user who can view Wayfinder from Appointments and has PKB referrals and upcoming appointments")
-    fun iAmAUserWhoCanViewPkbReferralsAndUpcomingAppointmentsInWayfinderFromTheAppointmentsHub(){
-        setupPatient(SJRJourneyType.WAYFINDER_ENABLED)
-        wayfinderFactory.setupReferralsPkb()
+    @Given("^I have referrals and upcoming (PKB|Netcall) appointments$")
+    fun iHaveReferralsAndUpcomingAppointments(provider: String){
+        wayfinderFactory.setupReferralsAndAppointments(provider)
     }
 
     @Given("^I see the Missing or incorrect referrals or appointments link")
-    fun assertMissingOrIncorrectReferralsOrAppointmentsLinkIsDisplayed(){
-        wayfinderReferralsAndAppointmentsPage.assertMissingOrIncorrectReferralsOrAppointmentsHelpLinkIsDisplayed()
+    fun iSeeTheMissingOrIncorrectReferralsOrAppointmentsLink(){
+        wayfinderReferralsAndAppointmentsPage.assertReferralsOrAppointmentsHelpLinkIsDisplayed()
     }
 
     @Given("^I see the Missing or incorrect confirmed appointments link")
-    fun assertConfirmedAppointmentsLinkIsDisplayed(){
+    fun iSeeTheMissingOrIncorrectConfirmedAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertConfirmedAppointmentsHelpLinkIsDisplayed()
     }
 
     @Given("^I see the Missing or incorrect referrals in review link")
-    fun assertReferralsInReviewLinkIsDisplayed(){
+    fun iSeeTheMissingOrIncorrectReferralsInReviewLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
     }
 
@@ -141,17 +134,17 @@ class WayfinderStepDefinitions {
 
     @Then("^I see an in-review referral$")
     fun assertInReviewReferralIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertInReviewReferralDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertReferralInReviewIsDisplayed()
     }
 
     @Then("^I can see that I have no confirmed appointments$")
     fun assertNoUpcomingAppointmentsIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertNoUpcomingAppointmentsDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertNoConfirmedAppointmentsMessageIsDisplayed()
     }
 
-    @Then("^I see an appointment to confirm$")
-    fun assertAppointmentToConfirmIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertApointmentToConfirmIsDisplayed()
+    @Then("^I see an appointment ready to confirm$")
+    fun assertAppointmentReadyToConfirmIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertAppointmentReadyToConfirmIsDisplayed()
     }
 
     @Then("^I see a booked appointment$")
@@ -161,22 +154,22 @@ class WayfinderStepDefinitions {
 
     @Then("^I see a cancelled appointment$")
     fun assertCancelledAppointmentIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertCancelledAppointmentIsDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertAppointmentCancelledIsDisplayed()
     }
 
     @Then("^I see a bookable cancelled referral$")
     fun assertBookableCancelledReferralIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertBookableCancelledReferralDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertReferralReadyToRebookIsDisplayed()
     }
 
     @Then("^I see an overdue referral$")
     fun assertBookableOverdueReferralIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertBookableOverdueReferralDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertReferralInReviewOverdueIsDisplayed()
     }
 
-    @Then("^I see a referral awaiting booking$")
-    fun assertBookableAwaitingBookIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertBookableAwaitingBookDisplayed()
+    @Then("^I see a referral that is ready to book$")
+    fun iSeeAReferralThatIsReadyToBook() {
+        wayfinderReferralsAndAppointmentsPage.assertReferralReadyToBookIsDisplayed()
     }
 
     @Then("^I see a helpful message indicating unavailable secondary care services with a (.*) service desk reference$")
@@ -189,11 +182,13 @@ class WayfinderStepDefinitions {
         wayfinderAggregatorErrorPage.assertIsDisplayedWithUnderMinimumAgeError()
     }
 
-    @Then("^I can see the (\\w+) referral with no speciality referenced$")
-    fun iSeeTheReferralWithNoSpecialityReferenced(status: String) {
+    @Then("^I can see the (\\w+) referral with no specialty referenced$")
+    fun iSeeTheReferralWithNoSpecialtyReferenced(status: String) {
         when (status) {
-            "InReview" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForInReview()
-            "ReadyToRebook" -> wayfinderReferralsAndAppointmentsPage.assertNoSpecialityReferencedForRebook()
+            "InReview" -> wayfinderReferralsAndAppointmentsPage
+                .assertReferralInReviewWithNoSpecialtyIsDisplayed()
+            "ReadyToRebook" -> wayfinderReferralsAndAppointmentsPage
+                .assertReferralReadyToRebookWithNoSpecialtyIsDisplayed()
         }
     }
 

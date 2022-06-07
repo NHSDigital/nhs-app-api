@@ -5588,6 +5588,7 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                              - "netcall"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the referral."
@@ -5633,6 +5634,7 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                              - "netcall"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the referral."
@@ -5667,6 +5669,7 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                              - "netcall"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the appointment."
@@ -5696,6 +5699,7 @@
                               - "pkb"
                               - "ers"
                               - "drdoctor"
+                              - "netcall"
                           deepLinkUrl: 
                             type: "string"
                             description: "Deep link url for the user to get more details on the appointment."
@@ -5999,7 +6003,7 @@
                     properties: 
                       supplierId: 
                         type: "string"
-                      senderId:
+                      senderId: 
                         type: "string"
                       communicationId: 
                         type: "string"
@@ -6347,7 +6351,7 @@
                     senders: 
                       type: "array"
                       items: 
-                        type: "objects"
+                        type: "object"
                         properties: 
                           name: 
                             type: "string"
@@ -6448,7 +6452,7 @@
                     properties: 
                       supplierId: 
                         type: "string"
-                      senderId:
+                      senderId: 
                         type: "string"
                       communicationId: 
                         type: "string"
@@ -6473,7 +6477,7 @@
                   body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   senderContext: 
                     supplierId: "7e874122-d6c0-47c1-96eb-0a2532b51675"
-                    senderId: B82041
+                    senderId: "B82041"
                     communicationId: "1c92e18e-6221-4bfd-8d30-d535e16dacd1"
                     transmissionId: "2c92e18e-6221-4bfd-8d30-d535e16dacd2"
                     communicationCreatedDateTime: "2020-10-26T15:06:37.350Z"

@@ -32,40 +32,42 @@ web:
 api:
   publicURL: api-onboardingaos.nhsapp.service.nhs.uk
   knownServicesOverrides:
+    services__accurx__url: https://staging.accurx.nhs.uk
     services__cid_settings__url: https://settings.aos.signin.nhs.uk
     services__cid_account__url: https://account.aos.signin.nhs.uk
     services__cid_auth__url: https://auth.aos.signin.nhs.uk
     services__cid_uaf__url: https://uaf.aos.signin.nhs.uk
     services__cid_access__url: https://access.aos.signin.nhs.uk
     services__cid_idvm__url: https://idvm.aos.signin.nhs.uk
-    services__accurx__url: https://staging.accurx.nhs.uk
     services__engage__url: https://pp-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
+    services__gncr__url: https://my-aos.gncr.org.uk
+    services__netcall__url: https://phubloadtest-phubpatient-integration.oncreate.app
+    services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
+    services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     services__pkb__url: https://rc.pkb.io
     services__pkb_alt__url: http://rc.pkb.io:443
-    services__gncr__url: https://my-aos.gncr.org.uk
     services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
-    services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
-    services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    servicesV3__accurx__url: https://staging.accurx.nhs.uk
     servicesV3__cid_settings__url: https://settings.aos.signin.nhs.uk
     servicesV3__cid_account__url: https://account.aos.signin.nhs.uk
     servicesV3__cid_auth__url: https://auth.aos.signin.nhs.uk
     servicesV3__cid_uaf__url: https://uaf.aos.signin.nhs.uk
     servicesV3__cid_access__url: https://access.aos.signin.nhs.uk
     servicesV3__cid_idvm__url: https://idvm.aos.signin.nhs.uk
-    servicesV3__accurx__url: https://staging.accurx.nhs.uk
     servicesV3__engage__url: https://pp-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
+    servicesV3__gncr__url: https://my-aos.gncr.org.uk
+    servicesV3__netcall__url: https://phubloadtest-phubpatient-integration.oncreate.app
+    servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
+    servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     servicesV3__pkb__url: https://rc.pkb.io
     servicesV3__pkb__domains__1: http://rc.pkb.io:443
-    servicesV3__gncr__url: https://my-aos.gncr.org.uk
     servicesV3__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.aoc.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.aoc.substrakthealth.com
-    servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
-    servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     
 info:
   userInfoReadFromSecondaryContainers: false

@@ -3,7 +3,8 @@
 Feature: Wayfinder Errors
 
   Scenario Outline: A user sees a helpful error screen when Wayfinder is <An Error> and can try again
-    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
     And the Wayfinder Aggregator API is <An Error>
     And I am logged in
     When I navigate to Appointments
@@ -19,7 +20,8 @@ Feature: Wayfinder Errors
       | encountering an issue | 4u     |
 
   Scenario Outline: A user can easily contact the service desk when they encounter an error with Wayfinder
-    Given I am a user who can view Wayfinder from Appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
     And the Wayfinder Aggregator API is <An Error>
     And I am logged in
     When I navigate to Appointments
@@ -34,7 +36,8 @@ Feature: Wayfinder Errors
       | encountering an issue | 4u     |
 
   Scenario: A user can easily contact the service desk when they encounter a partial error with Wayfinder
-    Given I am a user who can view Wayfinder from Appointments and receives a partial error
+    Given I am a user whose surgery has enabled Wayfinder
+    And I cannot view referrals or appointments due to a partial error
     And I am logged in
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
@@ -44,7 +47,8 @@ Feature: Wayfinder Errors
     Then a new tab has been opened by the link
 
   Scenario: A user is not at the minimum age to get a valid response from Wayfinder
-    Given I am a user who is too young to use Wayfinder to retrieve referrals and appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I am too young to use Wayfinder to retrieve referrals and appointments
     And I am logged in
     When I navigate to Appointments
     Then the Appointments Hub page is displayed

@@ -28,6 +28,7 @@ services:
           - gncr.stubs.local.bitraft.io
           - substrakt.stubs.local.bitraft.io
           - nhsd.stubs.local.bitraft.io
+          - netcall.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io
           - ers.stubs.local.bitraft.io
           - deeplinklauncher.stubs.local.bitraft.io

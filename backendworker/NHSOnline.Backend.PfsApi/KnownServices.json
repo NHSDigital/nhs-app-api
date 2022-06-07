@@ -609,6 +609,17 @@
       "validateSession": true,
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
+    },
+    "netcall": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     }
   }
 }

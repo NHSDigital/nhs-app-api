@@ -124,6 +124,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         MockingClient.instance.forPKB.mock { PKBRequestBuilder().appointmentsRequest().respondWithPage() }
     }
 
+    @Given("^PKB responds to requests for viewing an appointment$")
+    fun pkbRespondsToRequestsForViewingAnAppointment() {
+        MockingClient.instance.forPKB.mock { PKBRequestBuilder().viewAppointmentRequest().respondWithPage() }
+    }
+
     @Given("^PKB responds to requests for care plans$")
     fun pkbRespondsToRequestsForCarePlans() {
         MockingClient.instance.forPKB.mock { PKBRequestBuilder().carePlanRequest().respondWithPage() }

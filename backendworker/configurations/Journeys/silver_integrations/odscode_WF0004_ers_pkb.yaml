@@ -1,0 +1,14 @@
+#
+#
+#   Users in ODS code WF0004 are used by PKB
+#   DO NOT enable any third-party silver integrations other than PKB for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "WF0004"
+journeys:
+  silverIntegrations:
+    secondaryAppointments:
+      - ers
+      - pkb

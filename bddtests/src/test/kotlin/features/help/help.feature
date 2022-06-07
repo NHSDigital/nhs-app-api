@@ -30,7 +30,8 @@ Feature: Help pages
     Then I see the your health help page
 
   Scenario: A user can get help with referrals and upcoming appointments
-    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
     And I am logged in
     When I navigate to Appointments
     Then the Appointments Hub page is displayed

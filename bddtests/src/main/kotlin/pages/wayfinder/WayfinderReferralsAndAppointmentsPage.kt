@@ -10,93 +10,93 @@ import pages.sharedElements.LinksWithDescriptionsContent
 @DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
-    private val noSpecialityInReview = "Your healthcare provider has requested for you to be referred. " +
-            "This request is being reviewed. You do not need to do anything."
-    private val noSpecialityRebook = "You need to rebook your referral appointment " +
-            "as the one you had booked has been cancelled."
+    private val noSpecialtyInReview = "Your healthcare provider has requested for you to be referred. " +
+        "This request is being reviewed. You do not need to do anything."
+    private val noSpecialtyRebook = "You need to rebook your referral appointment " +
+        "as the one you had booked has been cancelled."
 
     private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"Referrals, hospital and other appointments\")]",
         page = this,
-        helpfulName = "Wayfinder Referrals And Appointments Title"
+        helpfulName = "Wayfinder Referrals And Appointments - h1"
     )
 
-    private val appointmentToConfirmHeading = HybridPageElement(
-        webDesktopLocator = "//h3[contains(text(),\"Ready to confirm appointment\")]",
-        page = this,
-        helpfulName = "Appointment to confirm H3"
-    )
-
-    private val noUpcomingAppointments = HybridPageElement(
+    private val noConfirmedAppointmentsToViewOrManageText = HybridPageElement(
         webDesktopLocator = "//p[contains(text(),\"You have no confirmed appointments to view or manage.\")]",
         page = this,
-        helpfulName = "Appointment to confirm H3"
+        helpfulName = "No confirmed appointments to manage = paragraph"
     )
 
-    private val inReviewReferralHeading = HybridPageElement(
+    private val readyToConfirmAppointmentHeading = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Ready to confirm appointment\")]",
+        page = this,
+        helpfulName = "Ready to confirm appointment - h3"
+    )
+
+    private val referralInReviewHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Referral request in review\")]",
         page = this,
-        helpfulName = "In Review Referral H3"
+        helpfulName = "Referral in review - h3"
     )
 
-    private val bookableCancelledReferralHeading = HybridPageElement(
+    private val referralReadyToRebookHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Ready to rebook\")]",
         page = this,
-        helpfulName = "Bookable Cancelled Referral H3"
+        helpfulName = "Referral ready to rebook - h3"
     )
 
-    private val bookableOverdueReferralHeading = HybridPageElement(
+    private val referralInReviewOverdueHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Review by clinic overdue\")]",
         page = this,
-        helpfulName = "Bookable Overdue H3"
+        helpfulName = "Referral in review overdue - h3"
     )
 
-    private val bookableAwaitingBookHeading = HybridPageElement(
+    private val referralReadyToBookHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Ready to book\")]",
         page = this,
-        helpfulName = "Bookable Awaiting Booking H3"
+        helpfulName = "Referral ready to book - h3"
     )
 
     private val appointmentBookedHeading = HybridPageElement(
         webDesktopLocator = "//h3[contains(text(),\"Booked appointment\")]",
         page = this,
-        helpfulName = "Appointment booked H3"
+        helpfulName = "Appointment booked - h3"
     )
 
     private val appointmentCancelledHeading = HybridPageElement(
-            webDesktopLocator = "//h3[contains(text(),\"Cancelled appointment\")]",
-            page = this,
-            helpfulName = "Appointment cancelled H3"
-    )
-
-    private val noSpecialityReferencedInReview = HybridPageElement(
-        webDesktopLocator = "//p[contains(text(),\"${noSpecialityInReview}\")]",
+        webDesktopLocator = "//h3[contains(text(),\"Cancelled appointment\")]",
         page = this,
-        helpfulName = "No speciality referenced in review paragraph"
+        helpfulName = "Appointment cancelled - h3"
     )
 
-    private val noSpecialityReferencedRebook = HybridPageElement(
-            webDesktopLocator = "//p[contains(text(),\"${noSpecialityRebook}\")]",
-            page = this,
-            helpfulName = "No speciality referenced in review paragraph"
+    private val referralInReviewWithNoSpecialty = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"${noSpecialtyInReview}\")]",
+        page = this,
+        helpfulName = "Referral in review description with no specialty - paragraph"
     )
 
-    private val missingOrIncorrectReferralsOrAppointmentsHelpLink = HybridPageElement(
+    private val referralReadyToRebookWithNoSpecialty = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"${noSpecialtyRebook}\")]",
+        page = this,
+        helpfulName = "Referral ready to rebook description with no specialty - paragraph"
+    )
+
+    private val referralsOrAppointmentsHelpLink = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals or appointments\")]",
         page = this,
-        helpfulName = "Missing or incorrect referrals or appointments H2"
+        helpfulName = "Missing or incorrect referrals or appointments - h2"
     )
 
     private val confirmedAppointmentsHelpLink = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect confirmed appointments\")]",
         page = this,
-        helpfulName = "Missing or incorrect confirmed appointments H2"
+        helpfulName = "Missing or incorrect confirmed appointments - h2"
     )
 
     private val referralsInReviewHelpLink = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals in review\")]",
         page = this,
-        helpfulName = "Missing or incorrect referrals in review H2"
+        helpfulName = "Missing or incorrect referrals in review - h2"
     )
 
     private val referralsOrAppointmentsHelpTitle = "Missing or incorrect referrals or appointments"
@@ -129,48 +129,48 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         pageTitle.assertIsVisible()
     }
     
-    fun assertNoUpcomingAppointmentsDisplayed() {
-        noUpcomingAppointments.assertIsVisible()
+    fun assertNoConfirmedAppointmentsMessageIsDisplayed() {
+        noConfirmedAppointmentsToViewOrManageText.assertIsVisible()
     }
 
-    fun assertApointmentToConfirmIsDisplayed() {
-        appointmentToConfirmHeading.assertIsVisible()
+    fun assertAppointmentReadyToConfirmIsDisplayed() {
+        readyToConfirmAppointmentHeading.assertIsVisible()
     }
 
     fun assertBookedAppointmentIsDisplayed() {
         appointmentBookedHeading.assertIsVisible()
     }
 
-    fun assertCancelledAppointmentIsDisplayed(){
+    fun assertAppointmentCancelledIsDisplayed(){
         appointmentCancelledHeading.assertIsVisible()
     }
 
-    fun assertInReviewReferralDisplayed(){
-        inReviewReferralHeading.assertIsVisible()
+    fun assertReferralInReviewIsDisplayed(){
+        referralInReviewHeading.assertIsVisible()
     }
 
-    fun assertBookableCancelledReferralDisplayed() {
-        bookableCancelledReferralHeading.assertIsVisible()
+    fun assertReferralReadyToRebookIsDisplayed() {
+        referralReadyToRebookHeading.assertIsVisible()
     }
 
-    fun assertBookableOverdueReferralDisplayed() {
-        bookableOverdueReferralHeading.assertIsVisible()
+    fun assertReferralInReviewOverdueIsDisplayed() {
+        referralInReviewOverdueHeading.assertIsVisible()
     }
 
-    fun assertBookableAwaitingBookDisplayed() {
-        bookableAwaitingBookHeading.assertIsVisible()
+    fun assertReferralReadyToBookIsDisplayed() {
+        referralReadyToBookHeading.assertIsVisible()
     }
 
-    fun assertNoSpecialityReferencedForInReview() {
-        noSpecialityReferencedInReview.assertIsVisible()
+    fun assertReferralInReviewWithNoSpecialtyIsDisplayed() {
+        referralInReviewWithNoSpecialty.assertIsVisible()
     }
 
-    fun assertNoSpecialityReferencedForRebook() {
-        noSpecialityReferencedRebook.assertIsVisible()
+    fun assertReferralReadyToRebookWithNoSpecialtyIsDisplayed() {
+        referralReadyToRebookWithNoSpecialty.assertIsVisible()
     }
 
-    fun assertMissingOrIncorrectReferralsOrAppointmentsHelpLinkIsDisplayed(){
-        missingOrIncorrectReferralsOrAppointmentsHelpLink.assertIsVisible()
+    fun assertReferralsOrAppointmentsHelpLinkIsDisplayed(){
+        referralsOrAppointmentsHelpLink.assertIsVisible()
     }
 
     fun assertConfirmedAppointmentsHelpLinkIsDisplayed(){

@@ -1,15 +1,17 @@
 package features.organDonation.stepDefinitions
 
 import constants.Supplier
-import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.models.Resource
 import models.Patient
+import utils.SerenityHelpers
 
 class OrganDonationExistingFactory (var patient: Patient, val gpSystem: Supplier){
+
+    private val mockingClient = SerenityHelpers.getMockingClient()
 
     fun optOut(organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val registration = OrganDonationRegistrationDataBuilder.optOut(patient, organDonationDemographics)

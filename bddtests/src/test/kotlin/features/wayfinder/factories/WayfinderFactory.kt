@@ -1,13 +1,14 @@
 package features.wayfinder.factories
 
-import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import mocking.apim.ApimMappingBuilder
 import mocking.wayfinder.WayfinderMappingBuilder
+import utils.SerenityHelpers
 
 class WayfinderFactory {
 
     private val wayfinderMappingBuilder = WayfinderMappingBuilder()
     private val apimMappingBuilder = ApimMappingBuilder()
+    private val mockingClient = SerenityHelpers.getMockingClient()
 
     fun setupDelayedResponse() {
         mockingClient.forWayfinder.mock {
@@ -79,23 +80,13 @@ class WayfinderFactory {
         }
     }
 
-    fun setupReferralsErs(){
+    fun setupReferralsAndAppointments(provider: String){
         mockingClient.forWayfinder.mock {
             apimMappingBuilder.successfulTokenRequest()
         }
 
         mockingClient.forWayfinder.mock {
-            wayfinderMappingBuilder.referralsAndUpcomingAppointmentsErs()
-        }
-    }
-
-    fun setupReferralsPkb(){
-        mockingClient.forWayfinder.mock {
-            apimMappingBuilder.successfulTokenRequest()
-        }
-
-        mockingClient.forWayfinder.mock {
-            wayfinderMappingBuilder.referralsAndUpcomingAppointmentsPkb()
+            wayfinderMappingBuilder.referralsAndUpcomingAppointments(provider)
         }
     }
 }

@@ -4,25 +4,29 @@ Feature: Wayfinder accessibility
 
   Scenario: The 'Wayfinder with no appointments' native page is captured
     Given I am using the native app user agent
-    And I am a user who can view Wayfinder from Appointments
+    And I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
     Then the Wayfinder_Native page is saved to disk
 
   Scenario: The 'Wayfinder with no appointments' desktop page is captured
-    Given I am a user who can view Wayfinder from Appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
     Then the Wayfinder_Desktop page is saved to disk
 
   Scenario: The 'Wayfinder with appointments and referrals' desktop page is captured
-    Given I am a user who can view Wayfinder from Appointments and has referrals and upcoming appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
     And I am logged in
     When I retrieve the 'Wayfinder' page directly
     Then the Wayfinder_Desktop page is saved to disk
 
   Scenario Outline: The 'Wayfinder API <An Error>' desktop page is captured
-    Given I am a user who can view Wayfinder from Appointments
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
     And the Wayfinder Aggregator API is <An Error>
     And I am logged in
     When I retrieve the 'Wayfinder' page directly

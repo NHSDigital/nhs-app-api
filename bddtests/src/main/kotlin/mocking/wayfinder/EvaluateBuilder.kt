@@ -999,7 +999,15 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
         }
     }
 
-    fun returnReferralsAndUpcomingAppointmentsErs(): Mapping {
+    fun returnReferralsAndUpcomingAppointmentsForProvider(provider: String): Mapping {
+        val deepLink = when(provider){
+            "PKB" -> "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?" +
+                "phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
+            "Netcall" -> "http://netcall.stubs.local.bitraft.io:8080/i/nhsappintegration" +
+                "/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?remote_record_id=150059575801"
+            else -> "http://stubs.local.bitraft.io:8080"
+        }
+
         val response = """
         {
             "resourceType": "Bundle",
@@ -1031,11 +1039,11 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                             "extension": [
                                                 {
                                                     "url": "client-id",
-                                                    "valueCode": "eRS"
+                                                    "valueCode": "$provider"
                                                 }
                                             ],
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://silver.local.bitraft.io:5001/nhslogin?ubrn=150059575801"
+                                            "valueUrl": "$deepLink"
                                         },
                                         {
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
@@ -1071,114 +1079,11 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                                             "extension": [
                                                 {
                                                     "url": "client-id",
-                                                    "valueCode": "eRS"
+                                                    "valueCode": "$provider"
                                                 }
                                             ],
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://silver.local.bitraft.io:5001/nhslogin?ubrn=821923575528"
-                                        },
-                                        {
-                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
-                                            "valueCoding": {
-                                                "system": "http://hl7.org/fhir/appointmentstatus",
-                                                "code": "booked"
-                                            }
-                                        }
-                                    ],
-                                    "kind": "Appointment",
-                                    "description": "General, The Willows, Croydon University Hospital, RJ6 5EU"
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
-        """
-
-        return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(response)
-                    .build()
-        }
-    }
-
-    fun returnReferralsAndUpcomingAppointmentsPkb(): Mapping {
-        val response = """
-        {
-            "resourceType": "Bundle",
-            "entry": [
-                {
-                    "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
-                    "resource": {
-                        "resourceType": "CarePlan",
-                        "status": "active",
-                        "intent": "order",
-                        "subject": {
-                            "identifier": {
-                                "system": "https://fhir.nhs.uk/Id/nhs-number",
-                                "value": "1111111111"
-                            }
-                        },
-                        "activity": [
-                            {
-                                "reference": {
-                                    "type": "ServiceRequest",
-                                    "identifier": {
-                                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                                        "value": "150059575801"
-                                    }
-                                },
-                                "detail": {
-                                    "extension": [
-                                        {
-                                            "extension": [
-                                                {
-                                                    "url": "client-id",
-                                                    "valueCode": "PKB"
-                                                }
-                                            ],
-                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
-                                        },
-                                        {
-                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State",
-                                            "valueCoding": {
-                                                "system": "https://fhir.nhs.uk/CodeSystem/eRS-ReferralState",
-                                                "code": "inReview"
-                                            }
-                                        }
-                                    ],
-                                    "kind": "ServiceRequest",
-                                    "scheduledPeriod": {
-                                        "extension": [
-                                            {
-                                                "url": "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ReviewDueDate",
-                                                "valueDate": "2125-04-06"
-                                            }
-                                        ],
-                                        "start": "2022-03-20T12:18:10.0150205+00:00"
-                                    },
-                                    "performer": [
-                                        {
-                                            "type": "Organization",
-                                            "display": "Mahogany GP Surgery"
-                                        }
-                                    ],
-                                    "description": "Cardiology"
-                                }
-                            },
-                            {
-                                "detail": {
-                                    "extension": [
-                                        {
-                                            "extension": [
-                                                {
-                                                    "url": "client-id",
-                                                    "valueCode": "eRS"
-                                                }
-                                            ],
-                                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                                            "valueUrl": "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
+                                            "valueUrl": "$deepLink"
                                         },
                                         {
                                             "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",

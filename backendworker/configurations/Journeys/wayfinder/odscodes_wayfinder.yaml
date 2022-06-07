@@ -1,0 +1,15 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "A20047"
+    - "A29928"
+    - "F00001"
+    - "WF0001"
+    - "WF0002"
+    - "WF0003"
+    - "WF0004"
+    - "WF0005"
+    - "WF0007"
+journeys:
+  wayfinder:
+    isEnabled: true

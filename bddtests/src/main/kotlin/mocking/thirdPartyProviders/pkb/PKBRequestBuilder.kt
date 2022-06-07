@@ -18,6 +18,10 @@ class PKBRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf(
             hashMapOf("phrPath" to "/diary/listAppointments.action")
     )
 
+    fun viewAppointmentRequest() = PKBRequestBuilder(
+            hashMapOf("phrPath" to "/diary/viewAppointment.action")
+    )
+
     fun carePlanRequest() = PKBRequestBuilder(
             hashMapOf("phrPath" to "/auth/listPlans.action")
     )

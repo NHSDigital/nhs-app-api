@@ -17,6 +17,7 @@ import mocking.thirdPartyProviders.pkb.PKBRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
 import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
 import mocking.thirdPartyProviders.netCompany.NetCompanyRequestBuilder
+import mocking.thirdPartyProviders.netcall.NetcallRequestBuilder
 import mocking.thirdPartyProviders.nhsd.NhsdRequestBuilder
 import mocking.thirdPartyProviders.substrakt.SubstraktRequestBuilder
 import mocking.thirdPartyProviders.wellnessAndPrevention.WellnessAndPreventionRequestBuilder
@@ -48,13 +49,14 @@ class MockingClient(configuration: MockingConfiguration) {
 
     val forExternalSites = ExternalSupplierMockingClient(ExternalSitesMappingBuilder(), wiremockHelper)
 
-    val forPKB = ExternalSupplierMockingClient(PKBRequestBuilder(), wiremockHelper)
-    val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
     val forAccuRx = ExternalSupplierMockingClient(AccuRxRequestBuilder(), wiremockHelper)
+    val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
     val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)
-    val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
+    val forNetcall = ExternalSupplierMockingClient(NetcallRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
     val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
+    val forPKB = ExternalSupplierMockingClient(PKBRequestBuilder(), wiremockHelper)
+    val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
     val forWellness = ExternalSupplierMockingClient(WellnessAndPreventionRequestBuilder(), wiremockHelper)
 
     val forWayfinder = ExternalSupplierMockingClient(WayfinderMappingBuilder(), wiremockHelper)

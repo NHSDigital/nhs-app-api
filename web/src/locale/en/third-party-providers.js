@@ -426,6 +426,10 @@ export default {
         serviceId: 'pkb',
         providerName: 'Patients Know Best',
       },
+      netcall: {
+        serviceId: 'netcall',
+        providerName: 'Netcall',
+      },
     },
     thirdPartyWarning: {
       featureName: 'View appointments',

@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "WF0003"
+journeys:
+  silverIntegrations:
+    secondaryAppointments:
+      - pkb

@@ -227,6 +227,11 @@ const thirdPartyProvider = {
       acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/diary\\/viewAppointment\\.action.*$',
       redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action?',
     },
+    netcall: {
+      jumpOffId: 'netcallWayfinder',
+      acceptablePathsRegex: '^\\/i\\/nhsappintegration/\\p\\/27EFBAC1\\/40EFBAC1\\/66EFBAC1\\/417EFBAC1.*$',
+      redirectPath: '/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?',
+    },
   },
 };
 
