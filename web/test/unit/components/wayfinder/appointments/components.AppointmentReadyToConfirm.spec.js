@@ -1,8 +1,16 @@
 import AppointmentReadyToConfirm from '@/components/wayfinder/appointments/AppointmentReadyToConfirmCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
 
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
+
 const mountAppointmentReadyToConfirm = ({ propsData = {} }) => mount(
-  AppointmentReadyToConfirm, { propsData },
+  AppointmentReadyToConfirm,
+  { propsData },
 );
 
 describe('Appointment Ready To Confirm Card', () => {
@@ -36,6 +44,14 @@ describe('Appointment Ready To Confirm Card', () => {
 
       expect(button.exists()).toBe(true);
       expect(button.text()).toBe('Contact the clinic to confirm');
+    });
+
+    it('will call onClick when the confirm button is clicked', () => {
+      const button = wrapper.find('#contactTheClinicToConfirm-1');
+
+      button.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 });

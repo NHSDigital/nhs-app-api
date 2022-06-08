@@ -1,11 +1,16 @@
 import AppointmentBooked from '@/components/wayfinder/appointments/AppointmentBookedCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
+
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
 
 const mountAppointmentBooked = ({ propsData = {} }) => mount(
   AppointmentBooked,
-  {
-    propsData,
-  },
+  { propsData },
 );
 
 describe('Appointment Booked Card', () => {
@@ -35,6 +40,14 @@ describe('Appointment Booked Card', () => {
       expect(locationDescription.text()).toBe('A Clinic, A Town, A Country');
     });
 
+    it('will display the formatted date', () => {
+      expect(wrapper.find('#datetime-1 > strong').text()).toBe('Monday 18 April 2022');
+    });
+
+    it('will display formatted time', () => {
+      expect(wrapper.find('#datetime-1 > span').text()).toContain('10.00am');
+    });
+
     it('will display a button', () => {
       const button = wrapper.find('#bookOrManageAppointment-1');
 
@@ -42,12 +55,12 @@ describe('Appointment Booked Card', () => {
       expect(button.text()).toBe('View or manage this appointment');
     });
 
-    it('will display the formatted date', () => {
-      expect(wrapper.find('#datetime-1 > strong').text()).toBe('Monday 18 April 2022');
-    });
+    it('will call onClick when the book button is clicked', () => {
+      const button = wrapper.find('#bookOrManageAppointment-1');
 
-    it('will display formatted time', () => {
-      expect(wrapper.find('#datetime-1 > span').text()).toContain('10.00am');
+      button.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 });

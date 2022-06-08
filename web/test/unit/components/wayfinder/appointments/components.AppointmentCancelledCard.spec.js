@@ -1,5 +1,12 @@
 import AppointmentCancelled from '@/components/wayfinder/appointments/AppointmentCancelledCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
+
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
 
 const mountAppointmentCancelled = ({ propsData = {} }) => mount(
   AppointmentCancelled,
@@ -14,8 +21,13 @@ describe('Appointment Cancelled Card', () => {
       propsData: {
         locationDescription: 'A Clinic, A Town, A Country',
         appointmentDateTime: '2022-04-18T10:00:00',
-        appointmentId: '1',
+        appointmentId: 1,
+        deepLinkUrl: 'https://appointments.stubs.local/1',
       },
+    });
+
+    it('will include the RedirectorMixin', () => {
+      expect(AppointmentCancelled.mixins).toContain(RedirectorMixin);
     });
 
     it('will display a h3 header', () => {
@@ -52,6 +64,14 @@ describe('Appointment Cancelled Card', () => {
 
       expect(deepLink.exists()).toBe(true);
       expect(deepLink.text()).toBe('View this appointment');
+    });
+
+    it('will call onClick when the view appointment link is clicked', () => {
+      const deepLink = wrapper.find('#view-this-appointment-1 a');
+
+      deepLink.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 });

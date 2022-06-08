@@ -1,11 +1,16 @@
 import ReferralBookable from '@/components/wayfinder/referrals/ReferralBookableCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
+
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
 
 const mountReferralBookable = ({ propsData = {} }) => mount(
   ReferralBookable,
-  {
-    propsData,
-  },
+  { propsData },
 );
 
 describe('Referral Bookable Card', () => {
@@ -61,6 +66,14 @@ describe('Referral Bookable Card', () => {
 
       expect(button.exists()).toBe(true);
       expect(button.text()).toBe('Book or manage this referral');
+    });
+
+    it('will call onClick when the book or manage button is clicked', () => {
+      const button = wrapper.find('#bookOrManageReferral-1');
+
+      button.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 

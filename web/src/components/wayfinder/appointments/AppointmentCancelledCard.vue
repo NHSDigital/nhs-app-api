@@ -15,7 +15,7 @@
     </p>
     <p :id="`view-this-appointment-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       <strong>
-        <a href="#">
+        <a href="#" @click="onClick">
           {{ $t('wayfinder.appointments.cancelled.viewThisAppointment') }}
         </a>
       </strong>
@@ -25,12 +25,14 @@
 
 <script>
 import Card from '@/components/widgets/card/Card';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 
 export default {
   name: 'AppointmentCancelledCard',
   components: {
     Card,
   },
+  mixins: [RedirectorMixin],
   props: {
     appointmentId: {
       type: Number,

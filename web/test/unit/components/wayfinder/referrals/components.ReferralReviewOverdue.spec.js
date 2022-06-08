@@ -1,11 +1,16 @@
 import ReferralReviewOverdue from '@/components/wayfinder/referrals/ReferralReviewOverdueCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
+
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
 
 const mountReferralReviewOverdue = ({ propsData = {} }) => mount(
   ReferralReviewOverdue,
-  {
-    propsData,
-  },
+  { propsData },
 );
 
 describe('Referral Ready Overdue Card', () => {
@@ -86,6 +91,14 @@ describe('Referral Ready Overdue Card', () => {
 
       expect(button.exists()).toBe(true);
       expect(button.text()).toBe('Contact the clinic');
+    });
+
+    it('will call onClick when the contact the clinic button is clicked', () => {
+      const button = wrapper.find('#manageInReviewReferral-1');
+
+      button.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 

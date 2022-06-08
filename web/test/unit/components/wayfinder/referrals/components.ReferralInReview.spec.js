@@ -1,11 +1,16 @@
 import ReferralInReview from '@/components/wayfinder/referrals/ReferralInReviewCard';
+import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
 import { mount } from '../../../helpers';
+
+jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
+  methods: {
+    onClick: jest.fn(),
+  },
+}));
 
 const mountReferralInReview = ({ propsData = {} }) => mount(
   ReferralInReview,
-  {
-    propsData,
-  },
+  { propsData },
 );
 
 describe('Referral In Review Card', () => {
@@ -125,6 +130,14 @@ describe('Referral In Review Card', () => {
 
       expect(deepLink.exists()).toBe(true);
       expect(deepLink.text()).toBe('View or manage this referral');
+    });
+
+    it('will call onClick when the view or manage link is clicked', () => {
+      const deepLink = wrapper.find('#manageInReviewReferral-1 a');
+
+      deepLink.trigger('click');
+
+      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
     });
   });
 });
