@@ -27,6 +27,8 @@ APIGEE_ENVIRONMENTS:
   display_name: Production
   approval_type: manual
   make_spec_visible: true 
+  quota: 60000
+  appQuota: 12000
 ---
 meta:
   api:
