@@ -40,6 +40,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
             notificationToggleMetricRows.Should().HaveCount(1);
+            
+            var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
+            initialPromptMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -97,6 +100,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.008Z"));
                 notificationToggleMetricRow.NotificationToggle.Should().Be("On");
                 notificationToggleMetricRow.AuditId.Should().Be("AuditId8");
+                
+                var initialPromptMetricRow = initialPromptMetricRows.First(r => r.LoginId == "NhsLoginSubject-Test");
+                initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.007Z"));
+                initialPromptMetricRow.OptedIn.Should().Be("On");
+                initialPromptMetricRow.AuditId.Should().Be("AuditId9");
             }
         }
 
@@ -129,6 +137,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
             notificationToggleMetricRows.Should().HaveCount(1);
+            
+            var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
+            initialPromptMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -186,6 +197,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.008Z"));
                 notificationToggleMetricRow.NotificationToggle.Should().Be("On");
                 notificationToggleMetricRow.AuditId.Should().Be("AuditId8");
+
+                var initialPromptMetricRow = initialPromptMetricRows.First(r => r.LoginId == "NhsLoginSubject-Test");
+                initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.007Z"));
+                initialPromptMetricRow.OptedIn.Should().Be("On");
+                initialPromptMetricRow.AuditId.Should().Be("AuditId9");
             }
         }
 
@@ -238,6 +254,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 AuditId = "AuditId5"
             });
 
+            await env.Postgres.Events.InitialPromptMetric.Insert(new InitialPromptMetricRow
+            {
+                LoginId = "NhsLoginSubject-Test",
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 4),
+                OptedIn = "On",
+                AuditId = "AuditId6"
+            });
+
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
                     "Login_Success",
@@ -250,7 +274,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4),
                     "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods4", "ref4"),
                 BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5),
-                    "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref5"));
+                    "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref5"),
+                BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6),
+                    "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods4", "ref4"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -271,6 +297,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
             var notificationToggleMetricRow = notificationToggleMetricRows.Should().ContainSingle().Subject;
+            
+            var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
+            var initialPromptMetricRow = initialPromptMetricRows.Should().ContainSingle().Subject;
 
             using (new AssertionScope())
             {
@@ -309,6 +338,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 notificationToggleMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.005Z"));
                 notificationToggleMetricRow.NotificationToggle.Should().Be("On");
                 notificationToggleMetricRow.AuditId.Should().Be("AuditId5");
+
+                initialPromptMetricRow.LoginId.Should().Be("NhsLoginSubject-Test");
+                initialPromptMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.004Z"));
+                initialPromptMetricRow.OptedIn.Should().Be("On");
+                initialPromptMetricRow.AuditId.Should().Be("AuditId6");
             }
         }
 
@@ -337,6 +371,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
             notificationToggleMetricRows.Should().BeEmpty();
+            
+            var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
+            initialPromptMetricRows.Should().BeEmpty();
         }
 
         [NhsAppTest]
@@ -364,6 +401,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var notificationToggleMetricRows = await env.Postgres.Events.NotificationToggleMetric.FetchAll();
             notificationToggleMetricRows.Should().BeEmpty();
+            
+            var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
+            initialPromptMetricRows.Should().BeEmpty();
         }
 
         private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
@@ -402,7 +442,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref5"),
                 BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref6"),
                 BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref7"),
-                BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref8")
+                BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref8"),
+                BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref7")
             };
     }
 }

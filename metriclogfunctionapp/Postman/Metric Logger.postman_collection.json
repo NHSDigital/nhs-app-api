@@ -39,6 +39,35 @@
 					"response": []
 				},
 				{
+					"name": "POST Initial Prompt Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST Consent Event to Metric Logger",
 					"request": {
 						"method": "POST",
@@ -161,6 +190,42 @@
 			"item": [
 				{
 					"name": "POST Login Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Initial Prompt Metric Logger",
 					"request": {
 						"method": "POST",
 						"header": [],

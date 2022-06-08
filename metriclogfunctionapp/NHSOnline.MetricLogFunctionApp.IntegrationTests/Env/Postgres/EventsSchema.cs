@@ -47,6 +47,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<PrescriptionOrdersMetricRow> PrescriptionOrdersMetric =>
             Table<PrescriptionOrdersMetricRow>();
 
+        internal PostgresTable<InitialPromptMetricRow> InitialPromptMetric => Table<InitialPromptMetricRow>();
+
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
 
