@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorInternalServerErrorView _internalServerErrorView;
         private readonly CreateSessionErrorInternalServerErrorModel _internalServerErrorModel;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorInternalServerErrorPresenter(
             ICreateSessionErrorInternalServerErrorView internalServerErrorView,
             CreateSessionErrorInternalServerErrorModel internalServerErrorModel,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _internalServerErrorView = internalServerErrorView;
             _internalServerErrorModel = internalServerErrorModel;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _internalServerErrorView.ServiceDeskReference = internalServerErrorModel.ServiceDeskReference;
@@ -34,7 +34,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
@@ -42,7 +42,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnContactUsRequested()
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_internalServerErrorModel.ServiceDeskReference);
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }

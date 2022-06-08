@@ -16,6 +16,9 @@ window.nhsapp = {
     openBrowserOverlay(url) {
       window.nhsappNative.openBrowserOverlay(url);
     },
+    openExternalBrowser(url) {
+      window.nhsappNative.openExternalBrowser(url);
+    },
   },
   tools: {
     getAppPlatform() {

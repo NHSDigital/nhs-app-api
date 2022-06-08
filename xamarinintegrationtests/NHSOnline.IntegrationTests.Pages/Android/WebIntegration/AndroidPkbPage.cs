@@ -52,6 +52,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public void NavigateToOpenBrowserOverlay() => PageContent.NavigateToOpenBrowserOverlay();
 
+        public void NavigateToOpenExternalBrowser() => PageContent.NavigateToOpenExternalBrowser();
+
         public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();
 
         public void NavigateToDocumentDownload() => PageContent.NavigateToDocumentDownload();

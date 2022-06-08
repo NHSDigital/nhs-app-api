@@ -14,7 +14,7 @@ namespace NHSOnline.App.iOS.Controllers
 
         internal static async Task DisplayController(UIViewController eventController)
         {
-            var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
+            var rootViewController = UIApplication.SharedApplication.KeyWindow?.RootViewController;
 
             if (rootViewController == null)
             {

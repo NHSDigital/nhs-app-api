@@ -18,7 +18,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
         private readonly GettingStartedModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
         private Uri? _deeplinkUrl;
 
@@ -31,7 +31,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _model = model;
@@ -40,7 +40,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             view.AppNavigation
@@ -67,7 +67,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Accessing who can access the app help url");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.NhsUkLoginWhoCanUseTheAppHelpUrl)
                 .PreserveThreadContext();
         }

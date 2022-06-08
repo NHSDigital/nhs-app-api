@@ -11,20 +11,20 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class NhsLoginTermsAndConditionsDeclinedPresenter
     {
         private readonly INhsLoginTermsAndConditionsDeclinedView _view;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly IPageFactory _pageFactory;
         private readonly ILogger<NhsLoginTermsAndConditionsDeclinedPresenter> _logger;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public NhsLoginTermsAndConditionsDeclinedPresenter(
             INhsLoginTermsAndConditionsDeclinedView view,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             IPageFactory pageFactory,
             ILogger<NhsLoginTermsAndConditionsDeclinedPresenter> logger,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _pageFactory = pageFactory;
             _logger = logger;
             _externalServicesConfiguration = externalServicesConfiguration;
@@ -47,7 +47,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger.LogInformation("OneOneOne Requested");
 
             var oneOneOneUri = _externalServicesConfiguration.OneOneOneUrl;
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(oneOneOneUri)
                 .PreserveThreadContext();
         }

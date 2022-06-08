@@ -26,6 +26,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink OpenBrowserOverlayLink => WebLink.WithText(_interactor, "Open Browser Overlay");
 
+        private WebLink OpenExternalBrowserLink => WebLink.WithText(_interactor, "Open External Browser");
+
         private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
 
         private WebLink DocumentDownloadLink => WebLink.WithText(_interactor, "Download document");
@@ -53,6 +55,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void NavigateToGoToPage() => GoToPageLink.Click();
 
         public void NavigateToOpenBrowserOverlay() => OpenBrowserOverlayLink.Click();
+
+        public void NavigateToOpenExternalBrowser() => OpenExternalBrowserLink.Click();
 
         public void NavigateToFileUpload() => FileUploadLink.Click();
 

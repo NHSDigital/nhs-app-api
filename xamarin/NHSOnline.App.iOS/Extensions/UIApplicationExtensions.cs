@@ -7,7 +7,7 @@ namespace NHSOnline.App.iOS.Extensions
     {
         public static bool IsBrowserOverlayActive(this UIApplication application)
         {
-            var viewController = application.KeyWindow.RootViewController;
+            var viewController = application.KeyWindow?.RootViewController;
             while (viewController?.PresentedViewController != null)
             {
                 viewController = viewController.PresentedViewController;

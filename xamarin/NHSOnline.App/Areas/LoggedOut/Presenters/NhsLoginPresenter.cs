@@ -22,7 +22,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILogger<NhsLoginPresenter> _logger;
         private readonly IPageFactory _pageFactory;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly LoginState _loginState;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private Uri? _deeplinkUrl;
@@ -35,7 +35,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<NhsLoginPresenter> logger,
             IPageFactory pageFactory,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsLoginService nhsLoginService,
             IBiometricAuthenticationService biometricAuthenticationService)
         {
@@ -44,7 +44,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger = logger;
             _pageFactory = pageFactory;
             _nhsLoginConfiguration = nhsLoginConfiguration;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _biometricAuthenticationService = biometricAuthenticationService;
 
             _view.AppNavigation
@@ -65,7 +65,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 webNavigatingEventArgs.Cancel = true;
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                    _browser.OpenBrowserOverlay(url).PreserveThreadContext();
                 });
             }
         }

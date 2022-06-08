@@ -21,7 +21,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private readonly IWebIntegrationView _view;
         private readonly WebIntegrationModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly ILogger _logger;
         private readonly WebIntegrationUriDestination _uriDestination;
         private readonly SingleSignOnMonitor _singleSignOnMonitor;
@@ -35,7 +35,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             IWebIntegrationView webIntegrationView,
             WebIntegrationModel model,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             ILogger<WebIntegrationPresenter> logger,
             ICalendar calendar,
             IFileHandler fileHandler,
@@ -45,7 +45,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         {
             _view = webIntegrationView;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _logger = logger;
             _calendar = calendar;
             _fileHandler = fileHandler;
@@ -74,6 +74,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(model.NavigationHandler.MessagesRequested, (view, handler) => view.MessagesRequested = handler)
                 .RegisterHandler<string>(GoToNhsAppPageRequested, (view, handler) => view.GoToNhsAppPageRequested = handler)
                 .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
+                .RegisterHandler<string>(OpenExternalBrowserRequested, (view, handler) => view.OpenExternalBrowserRequested = handler)
                 .RegisterPermanentHandler<Uri>(DeeplinkRequested, (view, handler) => view.DeepLinkRequested = handler)
                 .RegisterHandler<AddEventToCalendarRequest>(AddEventToCalendarRequested, (view, handler) => view.AddEventToCalendarRequested = handler)
                 .RegisterHandler<DownloadRequest>(StartDownloadRequested, (view, handler) => view.StartDownloadRequested = handler);
@@ -88,14 +89,21 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private async Task OpenBrowserOverlayRequested(Uri overlayUri)
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(overlayUri)
+                .PreserveThreadContext();
+        }
+
+        private async Task OpenExternalBrowserRequested(string externalUri)
+        {
+            await _browser
+                .OpenExternalBrowser(new Uri(externalUri))
                 .PreserveThreadContext();
         }
 
         private async Task HelpRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_model.HelpUrl)
                 .PreserveThreadContext();
         }
@@ -140,7 +148,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 webNavigatingEventArgs.Cancel = true;
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                    _browser.OpenBrowserOverlay(url).PreserveThreadContext();
                 });
             }
         }

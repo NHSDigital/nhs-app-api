@@ -20,7 +20,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly ILogger<NhsLoginOnDemandGpSessionPresenter> _logger;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
 
         private readonly CreateOnDemandGpSessionState _createOnDemandGpSessionState;
 
@@ -33,14 +33,14 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             ILogger<NhsLoginOnDemandGpSessionPresenter> logger,
             INhsLoginService nhsLoginService,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IBrowserOverlay browserOverlay)
+            IBrowser browser)
         {
             _view = view;
             _model = model;
             _pageFactory = pageFactory;
             _logger = logger;
             _nhsLoginConfiguration = nhsLoginConfiguration;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
 
             _view.SetNavigationFooterItem(model.FooterItem);
 
@@ -69,7 +69,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 webNavigatingEventArgs.Cancel = true;
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                    _browser.OpenBrowserOverlay(url).PreserveThreadContext();
                 });
             }
         }

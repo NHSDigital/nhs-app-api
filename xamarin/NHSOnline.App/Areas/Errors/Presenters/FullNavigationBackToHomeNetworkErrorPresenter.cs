@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.Errors.Presenters
     internal class FullNavigationBackToHomeNetworkErrorPresenter
     {
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly ILogger<FullNavigationBackToHomeNetworkErrorPresenter> _logger;
 
         public FullNavigationBackToHomeNetworkErrorPresenter(
             IFullNavigationBackToHomeNetworkErrorView view,
             FullNavigationBackToHomeNetworkErrorModel model,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             ILogger<FullNavigationBackToHomeNetworkErrorPresenter> logger)
         {
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _logger = logger;
 
             view.SetNavigationFooterItem(model.SelectedFooterItem);
@@ -44,7 +44,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("Help requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
         }
@@ -52,7 +52,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("OneOneOne requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_nhsExternalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }

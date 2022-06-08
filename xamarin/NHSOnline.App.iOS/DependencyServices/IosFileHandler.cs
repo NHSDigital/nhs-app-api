@@ -111,7 +111,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                 try
                 {
                     using var passKitPassesViewController = new PKAddPassesViewController(passKitPass);
-                    UIApplication.SharedApplication.KeyWindow.RootViewController?.PresentModalViewController(
+                    UIApplication.SharedApplication.KeyWindow?.RootViewController?.PresentModalViewController(
                         passKitPassesViewController, true);
                 }
                 catch (Exception e)

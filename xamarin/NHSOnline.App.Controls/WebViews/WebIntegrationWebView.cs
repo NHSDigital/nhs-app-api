@@ -27,6 +27,12 @@ namespace NHSOnline.App.Controls.WebViews
                 typeof(AsyncCommand<Uri>),
                 typeof(WebIntegrationWebView));
 
+        public static readonly BindableProperty OpenExternalBrowserCommandProperty =
+            BindableProperty.Create(
+                nameof(OpenExternalBrowserCommand),
+                typeof(AsyncCommand<string>),
+                typeof(WebIntegrationWebView));
+
         public event EventHandler<WebViewPageLoadEventArgs>? PageLoadComplete;
 
         public void GoToNhsAppPage(string argument) => GoToNhsAppPageCommand.Execute(argument);
@@ -36,6 +42,18 @@ namespace NHSOnline.App.Controls.WebViews
             try
             {
                 OpenBrowserOverlayCommand.Execute(new Uri(argument));
+            }
+            catch (UriFormatException e)
+            {
+                Logger.LogError(e, $"Argument supplied is not a valid Uri: {argument}");
+            }
+        }
+
+        public void OpenExternalBrowser(string argument)
+        {
+            try
+            {
+                OpenExternalBrowserCommand.Execute(argument);
             }
             catch (UriFormatException e)
             {
@@ -62,6 +80,12 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand<Uri>) GetValue(OpenBrowserOverlayCommandProperty);
             set => SetValue(OpenBrowserOverlayCommandProperty, value);
+        }
+
+        public AsyncCommand<string> OpenExternalBrowserCommand
+        {
+            get => (AsyncCommand<string>) GetValue(OpenExternalBrowserCommandProperty);
+            set => SetValue(OpenExternalBrowserCommandProperty, value);
         }
 
         public AsyncCommand<DownloadRequest> StartDownloadCommand

@@ -10,19 +10,19 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class UpdateCheckFailedPresenter
     {
         private readonly IUpdateCheckFailedView _view;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _nhsExternalServices;
         private readonly ILogger<UpdateCheckFailedPresenter> _logger;
         readonly INavigationService _navigationService;
 
         public UpdateCheckFailedPresenter(
             IUpdateCheckFailedView view,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration nhsExternalServices,
             ILogger<UpdateCheckFailedPresenter> logger, INavigationService navigationService)
         {
             _view = view;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _nhsExternalServices = nhsExternalServices;
             _logger = logger;
             _navigationService = navigationService;
@@ -36,7 +36,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task OneOneOneRequested()
         {
             _logger.LogInformation("OneOneOne requested");
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_nhsExternalServices.OneOneOneUrl)
                 .PreserveThreadContext();
         }

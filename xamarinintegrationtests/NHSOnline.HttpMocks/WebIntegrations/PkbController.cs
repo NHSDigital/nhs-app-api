@@ -76,6 +76,13 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/OpenBrowserOverlayPage.cshtml", model);
         }
 
+        [Host(PkbHostName)] [HttpGet("OpenExternalBrowser.html")]
+        public IActionResult OpenExternalBrowserPage()
+        {
+            (string Title, HttpRequest Request) model = ("Web Integration Functionality - Open External Browser", Request);
+            return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/OpenExternalBrowserPage.cshtml", model);
+        }
+
         [Host(PkbHostName)]
         [HttpGet("FileUpload.html")]
         public IActionResult FileUploadPage()

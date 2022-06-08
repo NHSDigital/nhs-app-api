@@ -8,16 +8,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class UnsupportedPlatformVersionPresenter
     {
         private readonly IUnsupportedPlatformVersionView _view;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public UnsupportedPlatformVersionPresenter(
             IUnsupportedPlatformVersionView view,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.AppNavigation
@@ -28,21 +28,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task NhsAppOnlineLoginRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.NhsAppOnlineLogin)
                 .PreserveThreadContext();
         }
 
         private async Task NhsAppTechnicalIssuesSupportRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.NhsAppTechnicalIssuesSupportUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }

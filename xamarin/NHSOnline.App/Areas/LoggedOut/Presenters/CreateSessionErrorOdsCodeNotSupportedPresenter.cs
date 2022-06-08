@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorOdsCodeNotSupportedView _view;
         private readonly CreateSessionErrorOdsCodeNotSupportedModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorOdsCodeNotSupportedPresenter(
             ICreateSessionErrorOdsCodeNotSupportedView view,
             CreateSessionErrorOdsCodeNotSupportedModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
@@ -37,35 +37,35 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnMyHealthOnlineRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.MyHealthOnlineUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneWalesRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneWalesUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewCovidPassRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.CovidPassUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewGpOutOfHoursServiceRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.GpOutOfHoursService)
                 .PreserveThreadContext();
         }
@@ -73,7 +73,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnContactUsRequested()
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }

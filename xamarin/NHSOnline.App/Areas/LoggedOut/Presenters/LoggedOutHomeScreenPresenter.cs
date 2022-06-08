@@ -23,7 +23,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly ILifecycle _lifecycle;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IDialogPresenter _dialogPresenterService;
         private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
@@ -45,7 +45,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IBiometricAuthenticationService biometricAuthenticationService,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             ILifecycle lifecycle,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             IForcedUpdateCheckService forcedUpdateCheckService,
             IDialogPresenter dialogPresenterService,
             LoggedOutHomeScreenModel model,
@@ -57,7 +57,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _biometricAuthenticationService = biometricAuthenticationService;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _lifecycle = lifecycle;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _forcedUpdateCheckService = forcedUpdateCheckService;
             _dialogPresenterService = dialogPresenterService;
             _model = model;
@@ -168,7 +168,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task LoadLoginHelpUrl()
         {
             Logger.LogInformation("Accessing login help url");
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkLoginHelpUrl)
                 .PreserveThreadContext();
         }

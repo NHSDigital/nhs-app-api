@@ -68,7 +68,7 @@ namespace NHSOnline.App.iOS.Controllers
         }
 
         private static UIAlertController? GetAlertController() =>
-            (UIAlertController?)UIApplication.SharedApplication.KeyWindow.RootViewController?.ModalViewController;
+            (UIAlertController?)UIApplication.SharedApplication.KeyWindow?.RootViewController?.ModalViewController;
 
         private static UIAlertAction CreateAlertAction(string text, Func<Task> action) =>
          UIAlertAction.Create(text, UIAlertActionStyle.Default, alert =>

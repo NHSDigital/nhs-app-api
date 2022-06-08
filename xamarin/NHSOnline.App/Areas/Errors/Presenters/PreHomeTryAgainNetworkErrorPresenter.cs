@@ -11,20 +11,20 @@ namespace NHSOnline.App.Areas.Errors.Presenters
     {
         private readonly IPreHomeTryAgainNetworkErrorView _view;
         private readonly PreHomeTryAgainNetworkErrorModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
         private readonly ILogger<PreHomeTryAgainNetworkErrorPresenter> _logger;
 
         public PreHomeTryAgainNetworkErrorPresenter(
             IPreHomeTryAgainNetworkErrorView view,
             PreHomeTryAgainNetworkErrorModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration,
             ILogger<PreHomeTryAgainNetworkErrorPresenter> logger)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
             _logger = logger;
 
@@ -38,7 +38,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("OneOneOne requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }

@@ -203,6 +203,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             return AndroidChromeApp.Launch(_driver, _interactor);
          }
 
+        public void VerifyChromeAppUrl(IAndroidDriverWrapper driver, string expectedDestination)
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            AndroidChromeApp.VerifyUrl(driver, expectedDestination);
+        }
+
         void IAndroidDriverWrapper.AssertNotRunningInForeground()
             => RetrieveAppState().Should().NotBe(AppState.RunningInForeground);
 

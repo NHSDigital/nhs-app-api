@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorUpstreamSystemTimeoutView _view;
         private readonly CreateSessionErrorUpstreamSystemTimeoutModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorUpstreamSystemTimeoutPresenter(
             ICreateSessionErrorUpstreamSystemTimeoutView view,
             CreateSessionErrorUpstreamSystemTimeoutModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
@@ -34,7 +34,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
@@ -42,7 +42,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnContactUsRequested()
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }

@@ -22,6 +22,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public static IOSButton WithText(IIOSInteractor interactor, string text)
             => new IOSButton(interactor, new TextLocatorStrategy(interactor, text));
 
+        public static IOSButton WithValueContains(IIOSInteractor interactor, string text)
+            => new IOSButton(interactor, new ValueContainsLocatorStrategy(interactor, text));
+
         public void Click()
             => ActOnElement(e => e.Click());
 
@@ -56,6 +59,25 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             public string Description => $"'{_text}'";
 
             public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND label == {_text.QuotePredicateLiteral()}");
+
+            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
+        }
+
+        private sealed class ValueContainsLocatorStrategy : IIOSLocatorStrategy
+        {
+            private readonly IIOSInteractor _interactor;
+            private readonly string _text;
+
+            public ValueContainsLocatorStrategy(IIOSInteractor interactor, string text)
+            {
+                _interactor = interactor;
+                _text = text;
+            }
+
+            public string Description => $"'{_text}'";
+
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND value CONTAINS[{_text.QuotePredicateLiteral()}]");
 
             public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
             public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);

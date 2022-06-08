@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorFallbackView _view;
         private readonly CreateSessionErrorFallbackModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorFallbackPresenter(
             ICreateSessionErrorFallbackView view,
             CreateSessionErrorFallbackModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.AppNavigation
@@ -31,7 +31,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }

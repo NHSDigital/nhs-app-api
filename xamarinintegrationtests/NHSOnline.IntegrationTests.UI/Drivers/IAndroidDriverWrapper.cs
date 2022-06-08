@@ -17,6 +17,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void CloseApp();
         void BackgroundApp();
         AndroidChromeApp OpenChromeApp();
+        void VerifyChromeAppUrl(IAndroidDriverWrapper driver, string expectedDestination);
         void LaunchApp();
     }
 }

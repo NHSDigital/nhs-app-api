@@ -53,6 +53,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         public AsyncCommand<Uri> OpenBrowserOverlayCommand
             => new AsyncCommand<Uri>(() => OpenBrowserOverlayRequested);
 
+        public Func<string, Task>? OpenExternalBrowserRequested { get; set; }
+        public AsyncCommand<string> OpenExternalBrowserCommand
+            => new AsyncCommand<string>(() => OpenExternalBrowserRequested);
+
         public Func<AddEventToCalendarRequest, Task>? AddEventToCalendarRequested { get; set; }
         public AsyncCommand<AddEventToCalendarRequest> AddEventToCalendarCommand
             => new AsyncCommand<AddEventToCalendarRequest>(() => AddEventToCalendarRequested);

@@ -12,20 +12,20 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         private readonly IFullNavigationTryAgainFileDownloadErrorView _view;
         private readonly FullNavigationTryAgainFileDownloadErrorModel _model;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly ILogger<FullNavigationTryAgainFileDownloadErrorPresenter> _logger;
 
         public FullNavigationTryAgainFileDownloadErrorPresenter(
             IFullNavigationTryAgainFileDownloadErrorView view,
             FullNavigationTryAgainFileDownloadErrorModel model,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             ILogger<FullNavigationTryAgainFileDownloadErrorPresenter> logger)
         {
             _view = view;
             _model = model;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _logger = logger;
 
             view.SetNavigationFooterItem(model.SelectedFooterItem);
@@ -48,7 +48,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("Help requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_model.HelpUrl ?? _nhsExternalServicesConfiguration.NhsUkHealthRecordDownloadHelpUrl)
                 .PreserveThreadContext();
         }
@@ -70,7 +70,7 @@ namespace NHSOnline.App.Areas.Errors.Presenters
         {
             _logger.LogInformation("Get Help With Document Downloading requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsAppGetDocumentDownloadHelpUrl)
                 .PreserveThreadContext();
         }

@@ -8,16 +8,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class CreateSessionErrorFailedAgeRequirementPresenter
     {
         private readonly ICreateSessionErrorFailedAgeRequirementView _view;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorFailedAgeRequirementPresenter(
             ICreateSessionErrorFailedAgeRequirementView view,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.AppNavigation
@@ -28,21 +28,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewDigitalCovidPassRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.DigitalCovidPassUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewPaperCovidPassRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.PaperCovidPassUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }

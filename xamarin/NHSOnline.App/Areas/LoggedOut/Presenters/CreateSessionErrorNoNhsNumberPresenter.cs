@@ -10,18 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorNoNhsNumberView _view;
         private readonly CreateSessionErrorNoNhsNumberModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorNoNhsNumberPresenter(
             ICreateSessionErrorNoNhsNumberView view,
             CreateSessionErrorNoNhsNumberModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
@@ -33,21 +33,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task ViewOnMyHealthOnlineRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.MyHealthOnlineUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneWalesRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneWalesUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnOneOneOneRequested()
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
@@ -55,7 +55,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnContactUsRequested()
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }

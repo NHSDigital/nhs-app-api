@@ -31,6 +31,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("openExternalBrowser")]
+        public void OpenExternalBrowser(string rawArgument)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _webIntegrationWebView.OpenExternalBrowser(rawArgument));
+        }
+
+        [JavascriptInterface]
         [Export("addEventToCalendar")]
         public void AddEventToCalendar(string argumentJson)
         {

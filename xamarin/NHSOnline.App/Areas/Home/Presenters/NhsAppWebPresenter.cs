@@ -34,7 +34,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INhsAppWebView _view;
         private readonly INhsAppWebConfiguration _config;
         private readonly ILogger _logger;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly IPageFactory _pageFactory;
         private readonly INhsLoginService _nhsLoginService;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
@@ -52,7 +52,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INhsAppWebView view,
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             IPageFactory pageFactory,
             INhsLoginService nhsLoginService,
             INotifications notifications,
@@ -68,7 +68,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view = view;
             _config = config;
             _logger = logger;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _pageFactory = pageFactory;
             _nhsLoginService = nhsLoginService;
             _notifications = notifications;
@@ -175,7 +175,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay
+                    _browser
                         .OpenBrowserOverlay(uri)
                         .PreserveThreadContext();
                 });
@@ -452,7 +452,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task OpenBrowserOverlayRequested(Uri overlayUri)
         {
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(overlayUri)
                 .PreserveThreadContext();
         }

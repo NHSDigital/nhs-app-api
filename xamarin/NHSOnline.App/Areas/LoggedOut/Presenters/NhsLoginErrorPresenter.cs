@@ -12,7 +12,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly INhsLoginErrorView _view;
         private readonly NhsLoginErrorModel _model;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly IPageFactory _pageFactory;
         private readonly ILogger<NhsLoginErrorPresenter> _logger;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
@@ -20,14 +20,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         public NhsLoginErrorPresenter(
             INhsLoginErrorView view,
             NhsLoginErrorModel model,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             IPageFactory pageFactory,
             ILogger<NhsLoginErrorPresenter> logger,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _pageFactory = pageFactory;
             _logger = logger;
             _externalServicesConfiguration = externalServicesConfiguration;
@@ -52,7 +52,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("OneOneOne Requested");
 
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
@@ -62,7 +62,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger.LogInformation("Contact Us Requested");
 
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _browserOverlay
+            await _browser
                 .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }

@@ -30,7 +30,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly INhsAppWebConfiguration _config;
         private readonly IPageFactory _pageFactory;
         private readonly ILogger _logger;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly INotifications _notifications;
         private readonly ICookieService _cookieService;
         private readonly IDialogPresenter _dialogPresenter;
@@ -43,7 +43,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             NhsAppPreHomeScreenWebModel model,
             INhsAppWebConfiguration config,
             ILogger<NhsAppPreHomeScreenWebPresenter> logger,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             IPageFactory pageFactory,
             INotifications notifications,
             IPreHomeLogoutMonitor preHomeLogoutMonitor,
@@ -54,7 +54,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _model = model;
             _config = config;
             _logger = logger;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _pageFactory = pageFactory;
             _notifications = notifications;
             _preHomeLogoutMonitor = preHomeLogoutMonitor;
@@ -143,7 +143,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
                 args.Cancel = true;
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay
+                    _browser
                         .OpenBrowserOverlay(uri)
                         .PreserveThreadContext();
                 });

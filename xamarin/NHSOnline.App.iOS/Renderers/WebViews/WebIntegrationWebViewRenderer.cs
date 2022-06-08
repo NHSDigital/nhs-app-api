@@ -22,6 +22,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .ForWebView(() => (WebIntegrationWebView)Element, WebIntegrationWebView.JavascriptObjectName)
                 .AddFunction("goToPage", webView => webView.GoToNhsAppPage)
                 .AddFunction("openBrowserOverlay", webView => webView.OpenBrowserOverlay)
+                .AddFunction("openExternalBrowser", webView => webView.OpenExternalBrowser)
                 .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
                 .AddFunction("startDownloadFromJson", webview => webview.StartDownload)
                 .Apply(config.UserContentController);

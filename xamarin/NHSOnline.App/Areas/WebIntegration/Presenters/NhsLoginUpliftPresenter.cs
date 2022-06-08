@@ -25,7 +25,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly INhsLoginService _nhsLoginService;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
-        private readonly IBrowserOverlay _browserOverlay;
+        private readonly IBrowser _browser;
         private readonly ISelectMediaService _selectMediaService;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
 
@@ -38,7 +38,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             IPageFactory pageFactory,
             INhsLoginService nhsLoginService,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IBrowserOverlay browserOverlay,
+            IBrowser browser,
             ISelectMediaService selectMediaService,
             IBiometricAuthenticationService biometricAuthenticationService)
         {
@@ -48,7 +48,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _pageFactory = pageFactory;
             _nhsLoginService = nhsLoginService;
             _nhsLoginConfiguration = nhsLoginConfiguration;
-            _browserOverlay = browserOverlay;
+            _browser = browser;
             _selectMediaService = selectMediaService;
             _biometricAuthenticationService = biometricAuthenticationService;
 
@@ -76,7 +76,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 webNavigatingEventArgs.Cancel = true;
                 NhsAppResilience.ExecuteOnMainThread(() =>
                 {
-                    _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
+                    _browser.OpenBrowserOverlay(url).PreserveThreadContext();
                 });
             }
         }

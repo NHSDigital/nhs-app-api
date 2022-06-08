@@ -1,3 +1,6 @@
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers.BrowserStack;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
@@ -23,6 +26,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             driver.StartActivity(AppPackage, AppActivity, stopApp: false);
             return new AndroidChromeApp(driver, interactor);
         }
+
+        public static void VerifyUrl(IAndroidDriverWrapper driver, string expectedDestination) =>
+            AndroidEditText.WithText(driver, expectedDestination).AssertVisible();
 
         public void NavigateToDeepLinkLauncher()
             => NavigateTo("http://deeplinklauncher.stubs.local.bitraft.io:8080/deeplinks");
