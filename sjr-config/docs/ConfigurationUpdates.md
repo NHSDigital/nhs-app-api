@@ -12,8 +12,7 @@
 
 1. Acquire the latest weekly GP info csv file. This is emailed to the NHS App mailbox every Sunday - a member of the T2 or T3 support team will be able to access the latest. Rename the attachment from `gpinfo.csv` to `full_gpinfo.csv`.
 
-2. Replace `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` with the renamed emailed attachment. 
-NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 below.
+2. Replace `sjr-config/utils/gpinfocreation/data/full_gpinfo.csv` with the renamed emailed attachment. This is the input file for the bash script in step 3.
 
 3. From the root directory of nhsapp repo run
 	```bash
@@ -23,23 +22,36 @@ NB: full_gpinfo.csv file is used to create an updated gpinfo.csv after step 3 be
 
 4. Check that `sjr-config/configurations/gpinfo.csv` has been updated.
 
-### eConsult update
+### Online consultation updates (eConsult and accuRx)
 
 1. The eConsult updates are raised through Service Now service requests (search for "NHS App Supplier Standard Change Request"), usually on a weekly basis. A member of the T2 support team should then post the file in the sjr-third-party-updates Slack channel. They are provided as an xlsx file, with additions and deletions on separate worksheets. Contact a member of the T3 support team to forward the file if you do not have access to Service Now.
 
-2. Update `sjr-config/utils/rulecreation/econsult.csv` with the practice changes. For removals, just delete the row where you find the ODS code to be removed. Additions should be added as entries to ccg "Other" at the end of the file. There is no need to match to a particular CCG. You can do this by first saving the the additions sheet as a csv e.g. `200727-additions.csv`. Then run
+2. Update `sjr-config/utils/rulecreation/econsult.csv` with the practice changes. For removals, just delete the row where you find the ODS code to be removed. Additions should be added as entries to ccg "Other" at the end of the file. There is no need to match to a particular CCG. You can do this by first saving the the additions sheet as a csv e.g. `220727-additions.csv`. Then run
 
 	```bash
-	awk -F, '{print ",,,Other,,,"$2","$1","}' 200727-additions.csv > 200727-additions-reformatted.csv
+	awk -F, '{print ",,,Other,,,"$2","$1","}' 220727-additions.csv > 220727-additions-reformatted.csv
 	```
 	to get a file in the appropriate format. Append the additional rows to `econsult.csv`.
+3. accuRx updates are provided from Matt Deaves. Note that these updates may also involve related changes to the eConsult config. Update `sjr-config/utils/rulecreation/accurx.csv` with the practice changes required (both additions and deletions). 
+4. If we have been directed to turn off on olc provider for a given ODS code in conjunction with enabling the other olc provider, update `sjr-config/utils/rulecreation/olcoverrides.csv` so that we know which should be enabled, the reason for this and the date the decision was made.
+5. Once both `econsult.csv` and `accurx.csv` are updated, run 
+	```bash
+	python sjr-config/utils/rulecreation/checkolcclash.py
+	```
+	This is to check if we have both OLC providers enabled for a given ODS code.  If there is a clash, what happens next depends on whether a "winner" is output (based on data from the `olcoverrides.csv` file). Where a winner is already decided, the amendment for the losing provider should be undone. If the winner has not yet been decided, this should be raised with the implementation team (i.e. Patrick Johnson) for a decision. `olcoverrides.csv` should then be updated along with `econsult.csv` and/or `accurx.csv`.
+	The goal from this step is get the "No OLC clashes detected" console output when the check is run. 
 
-3. Run the following to update the set of eConsult yaml files
+6. Run the following to update the set of eConsult yaml files
 
 	```bash
 	python sjr-config/utils/rulecreation/processolc.py
 	```
 
+7. Run the following to update the accuRx yaml file
+
+	```bash
+	python sjr-config/utils/rulecreation/processaccurx.py
+	```
 ### PKB update
 1. The PKB updates are posted in the #sjr-third-party-updates Slack channel, usually by Matt Deaves.
 2. Update `sjr-config/configurations/Journeys/patientsKnowBest/*.yaml` with the practice changes - the files are usually at CCG level.

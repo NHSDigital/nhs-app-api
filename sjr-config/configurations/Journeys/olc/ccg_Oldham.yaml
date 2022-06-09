@@ -4,7 +4,6 @@ target:
     - P85004
     - P85011
     - P85605
-    - P85620
     - P85010
 journeys:
   cdssAdvice:
