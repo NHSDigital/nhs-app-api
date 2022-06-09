@@ -53,7 +53,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
             "Choose how notifications are shown on this device (opens your device settings)");
 
-        private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Notifications error");
+        private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Cannot update notification preferences");
 
         private WebText NotificationsTurnedOffText => WebText.WithTagAndText(
             _interactor,
