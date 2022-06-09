@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @linked-profiles
 Feature: Login with proxy access
 

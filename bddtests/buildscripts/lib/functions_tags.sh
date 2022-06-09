@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 TAGS_NEVER_RUN=(bug pending manual tech-debt)
-TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record backend silverintegration backend silverIntegration)
+TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record backend silverIntegration profile-messages-notifications)
 TAGS_CUSTOM_RUN=(native accessibility long-running appointments-book)
 
 function join_by { local d=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$d}"; }

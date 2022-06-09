@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @patientpracticemessaging
 Feature: Patient to practice messaging
 

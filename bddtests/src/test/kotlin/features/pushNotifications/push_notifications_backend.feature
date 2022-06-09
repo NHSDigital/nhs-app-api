@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @pushNotifications
 @backend
 Feature: Push Notifications Backend

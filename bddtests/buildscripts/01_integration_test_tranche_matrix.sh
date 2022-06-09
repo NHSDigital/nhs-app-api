@@ -10,7 +10,7 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-TRANCHES=(SMOKE_TESTS LONG_RUNNING APPOINTMENTS APPOINTMENTS_BOOK ORGAN_DONATION PRESCRIPTION MY_RECORD BACKEND SILVERINTEGRATION ACCESSIBILITY OTHERS)
+TRANCHES=(SMOKE_TESTS LONG_RUNNING APPOINTMENTS APPOINTMENTS_BOOK ORGAN_DONATION PRESCRIPTION MY_RECORD BACKEND SILVERINTEGRATION ACCESSIBILITY PROFILE_MESSAGES_NOTIFICATIONS OTHERS)
 
 TRANCHE_SMOKE_TESTS='"Smoke_Tests": {"tests.name": "Smoke Tests", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "smoketest"}'
 TRANCHE_LONG_RUNNING='"Long_Running": {"tests.name": "Long Running", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "long-running"}'
@@ -21,6 +21,7 @@ TRANCHE_PRESCRIPTION='"Prescription": {"tests.name": "Prescription", "tests.scri
 TRANCHE_MY_RECORD='"My_Record": {"tests.name": "My Record", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "my-record"}'
 TRANCHE_BACKEND='"Backend": {"tests.name": "Backend", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "backend"}'
 TRANCHE_SILVERINTEGRATION='"SilverIntegration": {"tests.name": "Silver Integration", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "silverIntegration"}'
+TRANCHE_PROFILE_MESSAGES_NOTIFICATIONS='"Profile_Messages_Notifications": {"tests.name": "Profile Messages Notifications", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "profile-messages-notifications"}'
 TRANCHE_ACCESSIBILITY='"Accessibility": {"tests.name": "Accessibility", "tests.script": "03_integration_test_run_accessibility.sh"}'
 TRANCHE_OTHERS='"Others": {"tests.name": "Others", "tests.script": "03_integration_test_run_others.sh"}'
 
@@ -35,6 +36,7 @@ else
   INT_TESTS_RUN_MY_RECORD=${INT_TESTS_RUN_MY_RECORD:-True}
   INT_TESTS_RUN_BACKEND=${INT_TESTS_RUN_BACKEND:-True}
   INT_TESTS_RUN_SILVERINTEGRATION=${INT_TESTS_RUN_SILVERINTEGRATION:-True}
+  INT_TESTS_RUN_PROFILE_MESSAGES_NOTIFICATIONS=${INT_TESTS_RUN_PROFILE_MESSAGES_NOTIFICATIONS:-True}
   INT_TESTS_RUN_ACCESSIBILITY=${INT_TESTS_RUN_ACCESSIBILITY:-True}
   INT_TESTS_RUN_OTHERS=${INT_TESTS_RUN_OTHERS:-True}
 fi

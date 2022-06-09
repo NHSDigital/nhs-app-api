@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @messages
 Feature: Messages
 #The following tests are gp system agnostic

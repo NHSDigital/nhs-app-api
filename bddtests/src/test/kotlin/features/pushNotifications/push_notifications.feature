@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @pushNotifications
 Feature: Push Notifications
 #The following tests are gp system agnostic

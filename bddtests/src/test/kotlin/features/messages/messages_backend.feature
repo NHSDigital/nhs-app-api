@@ -1,3 +1,4 @@
+@profile-messages-notifications
 @messages
 @backend
 Feature: Messages Backend
