@@ -24,7 +24,7 @@
          class="nhsuk-hint"
          :aria-label="$t('messages.forAdviceNowContactSurgeryOrOneOneOne')">
         {{ $t('messages.forAdviceNowContactSurgery') }}
-        <a style="display:inline; vertical-align: baseline" href="https://111.nhs.uk">
+        <a style="display:inline; vertical-align: baseline" :href="oneOneOneUrl">
           {{ $t('messages.nhs111Link') }}</a>
         {{ $t('messages.or') }}
         <a style="display:inline; vertical-align: baseline" href="tel:111">
@@ -122,6 +122,7 @@ export default {
       subjectText: '',
       messageTextError: false,
       subjectError: false,
+      oneOneOneUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   computed: {

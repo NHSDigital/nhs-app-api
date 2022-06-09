@@ -33,7 +33,7 @@
            class="nhsuk-hint"
            :aria-label="$t('messages.forUrgentMedicalAdviceGoToOneOneOne')">
           {{ $t('messages.forUrgentMedicalAdvice') }}
-          <a style="display:inline" href="https://111.nhs.uk">
+          <a style="display:inline" :href="oneOneOneUrl">
             {{ $t('messages.nhs111Link') }}
           </a>
           {{ $t('messages.or') }}
@@ -86,6 +86,7 @@ export default {
         label: this.$t('messages.myMessageIsNotUrgent'),
       }],
       messagingPath: GP_MESSAGES_PATH,
+      oneOneOneUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   computed: {

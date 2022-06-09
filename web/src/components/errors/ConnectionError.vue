@@ -7,7 +7,7 @@
       <message-text
         :aria-label="$t('generic.errors.checkYourConnectionAndTryAgainOneOneOne')">
         {{ $t('generic.errors.checkYourConnectionAndTryAgain111') }}
-        <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
+        <a :href="oneOneOneUrl" target="_blank" rel="noopener noreferrer"
            style="display:inline">
           {{ $t('generic.nhs111Link') }}
         </a>
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
+      oneOneOneUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   computed: {

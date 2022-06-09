@@ -323,6 +323,7 @@ web:
   environmentVariables: {}
   baseNhsAppHelpUrl: https://www.nhs.uk/nhs-app/nhs-app-help-and-support/
   qualtricsSurveyEnabled: true
+  oneOneOneUrl: https://nhsapp.staging.111.nhs.uk
 
 api:
   containerPort: 8080

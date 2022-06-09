@@ -5,7 +5,7 @@
         <p id="infoMessagingPurpose">{{ $t('messages.messagingIsForNonUrgentAdvice') }}</p>
         <p id="infoWhatToDo" :aria-label="$t('messages.forAdviceNowContactSurgeryOrOneOneOne')">
           {{ $t('messages.forAdviceNowContactSurgery') }}
-          <a href="https://111.nhs.uk">{{ $t('messages.nhs111Link') }}</a>
+          <a :href="oneOneOneUrl">{{ $t('messages.nhs111Link') }}</a>
           {{ $t('messages.or') }}
           <a href="tel:111">{{ $t('messages.call111Link') }}</a>.
         </p>
@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       urgencyPath: GP_MESSAGES_URGENCY_PATH,
+      oneOneOneUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
     };
   },
   methods: {

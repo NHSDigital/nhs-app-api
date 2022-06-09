@@ -1,7 +1,6 @@
 {
   "services": {
     "111": {
-      "url": "https://111.nhs.uk",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
