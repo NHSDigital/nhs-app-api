@@ -6637,6 +6637,86 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/senders/{senderId}: 
+      get: 
+        tags: 
+          - "sender"
+        summary: "Retrieve sender based on sender id"
+        description: "Retrieve sender based on sender id."
+        parameters: 
+          - 
+            in: "path"
+            name: "senderId"
+            required: true
+            description: "A unique identifier for a sender."
+            schema: 
+              type: "string"
+              format: "string"
+        responses: 
+          200: 
+            description: "Successful operation. Sender is retrieved."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    id: 
+                      type: "string"
+                      description: "The sender's id."
+                    name: 
+                      type: "string"
+                      description: "The sender's name."
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/users/senders: 
+      post: 
+        tags: 
+          - "sender"
+        summary: "Creates a sender"
+        description: "Creates a sender based on a sender id and name"
+        requestBody: 
+          x-name: "Sender"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  id: 
+                    type: "string"
+                  name: 
+                    type: "string"
+          description: "Details of the sender to be created"
+          required: true
+        responses: 
+          201: 
+            description: "Successful operation. Sender is created."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  required: 
+                    - "sender"
+                  properties: 
+                    id: 
+                      type: "string"
+                      description: "The sender's id."
+                    name: 
+                      type: "string"
+                      description: "The sender's name."
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/log: 
       post: 
         tags: 

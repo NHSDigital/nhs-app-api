@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
     [TestClass]
     public class SqlApiRepositoryTests
     {
-        private SqlApiRepository<TestSqlApiRepositoryConfiguration,TestRepositoryRecord> _systemUnderTest;
+        private SqlApiRepository<TestSqlApiRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
         private TestSqlApiRepositoryConfiguration _config;
         private Mock<ILogger<SqlApiRepository<TestSqlApiRepositoryConfiguration, TestRepositoryRecord>>> _logger;
         private Mock<ItemResponse<TestRepositoryRecord>> _itemResponse;
@@ -214,7 +214,8 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         [DataRow(HttpStatusCode.TooManyRequests)]
         [DataRow(HttpStatusCode.InternalServerError)]
         [DataRow(HttpStatusCode.ServiceUnavailable)]
-        public async Task Delete_RepositoryThrowsCosmosExceptionWithStatusCode_ReturnsRepositoryError(HttpStatusCode statusCode)
+        public async Task Delete_RepositoryThrowsCosmosExceptionWithStatusCode_ReturnsRepositoryError(
+            HttpStatusCode statusCode)
         {
             // Arrange
             var id = "Nhs Login Id";
@@ -231,6 +232,64 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             VerifyAll();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.RepositoryError>();
         }
+
+        [TestMethod]
+        public async Task Find_RepositoryThrowsCosmosException_ReturnsRepositoryError()
+        {
+            // Arrange
+            var id = "Nhs Login Id";
+            var partitionKeyValue = "partition key value";
+
+            _sqlApiClientService
+                .Setup(x => x.FindOneAsync<TestRepositoryRecord>(_config, id, partitionKeyValue))
+                .ThrowsAsync(new CosmosException("Test", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+
+            // Act
+            var result = await _systemUnderTest.Find(id, partitionKeyValue, "TestRecordName");
+
+            // Assert
+            VerifyAll();
+            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.RepositoryError>();
+        }
+
+        [TestMethod]
+        public async Task Find_RepositoryThrowsCosmosExceptionWithNotFound_ReturnsRepositoryNotFound()
+        {
+            // Arrange
+            var id = "Nhs Login Id";
+            var partitionKeyValue = "partition key value";
+
+            _sqlApiClientService
+                .Setup(x => x.FindOneAsync<TestRepositoryRecord>(_config, id, partitionKeyValue))
+                .ThrowsAsync(new CosmosException("Test", HttpStatusCode.NotFound, 0, "activityId", 1.12));
+
+            // Act
+            var result = await _systemUnderTest.Find(id, partitionKeyValue, "TestRecordName");
+
+            // Assert
+            VerifyAll();
+            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.NotFound>();
+        }
+
+        [TestMethod]
+        public async Task Find_Success()
+        {
+            // Arrange
+            var id = "Nhs Login Id";
+            var partitionKeyValue = "partition key value";
+
+            _sqlApiClientService
+                .Setup(x => x.FindOneAsync<TestRepositoryRecord>(_config, id, partitionKeyValue))
+                .ReturnsAsync(_itemResponse.Object);
+
+            // Act
+            var result = await _systemUnderTest.Find(id, partitionKeyValue, "TestRecordName");
+
+            // Assert
+            VerifyAll();
+            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>();
+        }
+
 
         private void VerifyAll()
         {

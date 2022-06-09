@@ -58,6 +58,22 @@ spec:
                 name: default-users
                 port:
                   number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/senders
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-api
+                port:
+                  number: {{ .Values.defaultServicePort }}
+          - path: /v[1,2]/api/users/senders/^([A-Za-z0-9].)$
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: default-api
+                port:
+                  number: {{ .Values.defaultServicePort }}
+
+            
   tls:
     - hosts:
         - api{{ .Values.environmentPrivateHostSuffix }}

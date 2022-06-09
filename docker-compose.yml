@@ -128,6 +128,9 @@ services:
           if [ -f "$$AUDIT_EVENT_HUB_CONNECTION_STRING" ]; then
             export AUDIT_EVENT_HUB_CONNECTION_STRING=$$(<$$AUDIT_EVENT_HUB_CONNECTION_STRING)
           fi
+          if [ -f "$$COSMOS_SQL_API_CONNECTION_STRING" ]; then
+            export COSMOS_SQL_API_CONNECTION_STRING=$$(<$$COSMOS_SQL_API_CONNECTION_STRING)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -176,6 +179,7 @@ services:
       - nhsapp_apim_pfx
       - nhsapp_apim_pfx_passphrase
       - nhsapp_apim_key
+      - cosmos_sql_api_connection_string
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}

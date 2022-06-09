@@ -34,6 +34,7 @@ class WorkerClient(val config:Config = Config.instance) {
     val serviceJourneyRules = WorkerClientServiceJourneyRules(config, workerClientSender, gson)
     val userDevices = WorkerClientUserDevices(config, workerClientSender, gson)
     val messages = WorkerClientMessages(config, workerClientSender, gson)
+    val commsSenders = WorkerClientCommsSenders(config, workerClientSender, gson)
     val userInfo = WorkerClientUserInfo(config, workerClientSender, gson)
     val configuration = WorkerClientConfiguration(config, workerClientSender, gson)
     val clientLogger = WorkerClientLogger(config, workerClientSender, gson)

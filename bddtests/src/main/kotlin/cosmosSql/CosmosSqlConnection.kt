@@ -12,7 +12,7 @@ class CosmosSqlConnection(private val containerName: String, private val endpoin
         values.forEach{ item -> insertValue(item) }
     }
 
-    private fun <T> insertValue(value: ISqlRepositoryRecord<T>) {
+    fun <T> insertValue(value: ISqlRepositoryRecord<T>) {
         onContainer { container ->
             container.createItem(value.repositoryRecord, PartitionKey(value.partitionKeyValue), null)
         }
@@ -47,6 +47,7 @@ class CosmosSqlConnection(private val containerName: String, private val endpoin
 
         private const val userInfoNhsNumberContainerName = "info_nhs_number"
         private const val userInfoOdsCodeContainerName = "info_ods_code"
+        private const val commsHubSendersContainerName = "senders"
         private const val developmentDatabaseName = "comms-dev-sql"
 
         val UserInfoNhsNumberContainer = CosmosSqlConnection(
@@ -57,5 +58,9 @@ class CosmosSqlConnection(private val containerName: String, private val endpoin
                 userInfoOdsCodeContainerName,
                 Config.instance.cosmosSqlEndpoint,
                 Config.instance.cosmosSqlKey)
+        val CommsHubSendersContainer = CosmosSqlConnection(
+            commsHubSendersContainerName,
+            Config.instance.cosmosSqlEndpoint,
+            Config.instance.cosmosSqlKey)
     }
 }

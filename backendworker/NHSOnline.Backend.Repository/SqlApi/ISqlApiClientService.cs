@@ -13,6 +13,10 @@ namespace NHSOnline.Backend.Repository.SqlApi
             ISqlApiRepositoryConfiguration config, string id, string partitionKeyValue)
             where TRecord : RepositoryRecord;
 
+        public Task<ItemResponse<TRecord>> FindOneAsync<TRecord>(
+            ISqlApiRepositoryConfiguration config, string id, string partitionKeyValue)
+            where TRecord : RepositoryRecord;
+
         public Task<ContainerResponse> CheckHealthAsync(ISqlApiRepositoryConfiguration config);
     }
 }

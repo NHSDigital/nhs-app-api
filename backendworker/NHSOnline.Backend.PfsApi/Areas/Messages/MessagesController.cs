@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         private readonly ILogger<MessagesController> _logger;
         private readonly IMetricLogger _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
-
         private readonly IMapper<SenderContext, SenderContextEventLogData>
             _messageSenderContextEventLogDataMapper;
 
@@ -137,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
                 var result = await _messageService.GetSenders(_accessTokenProvider.AccessToken);
 
-                return result.Accept(new SendersResultVisitor());
+                return result.Accept(new UserSendersResultVisitor());
             }
             catch (Exception e)
             {

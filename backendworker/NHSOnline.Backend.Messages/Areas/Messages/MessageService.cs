@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
-        public async Task<SendersResult> GetSenders(AccessToken accessToken)
+        public async Task<UserSendersResult> GetSenders(AccessToken accessToken)
         {
             _logger.LogEnter();
 
@@ -194,12 +194,12 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             {
                 var result = await _messageRepository.FindAllForUser(accessToken.Subject);
 
-                return result.Accept(new RepositoryFindSendersResultVisitor());
+                return result.Accept(new RepositoryFindUserSendersResultVisitor());
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Get Senders has failed with exception");
-                return new SendersResult.InternalServerError();
+                return new UserSendersResult.InternalServerError();
             }
             finally
             {

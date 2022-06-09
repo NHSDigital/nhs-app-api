@@ -431,12 +431,12 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            var response = result.Should().BeAssignableTo<SendersResult.Found>().Subject.Response;
+            var response = result.Should().BeAssignableTo<UserSendersResult.Found>().Subject.Response;
             response.Should().NotBeNull();
             response.Senders.Should().HaveCount(3);
-            response.Senders[0].Should().BeEquivalentTo(new Sender {  Name = "Third", UnreadCount = 2 });
-            response.Senders[1].Should().BeEquivalentTo(new Sender {  Name = "First", UnreadCount = 1 });
-            response.Senders[2].Should().BeEquivalentTo(new Sender {  Name = "Second", UnreadCount = 0 });
+            response.Senders[0].Should().BeEquivalentTo(new UserSender {  Name = "Third", UnreadCount = 2 });
+            response.Senders[1].Should().BeEquivalentTo(new UserSender {  Name = "First", UnreadCount = 1 });
+            response.Senders[2].Should().BeEquivalentTo(new UserSender {  Name = "Second", UnreadCount = 0 });
         }
 
         [TestMethod]
@@ -452,7 +452,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 
             // Assert
             VerifySetups();
-            result.Should().BeAssignableTo<SendersResult.None>();
+            result.Should().BeAssignableTo<UserSendersResult.None>();
         }
 
         [TestMethod]
@@ -469,7 +469,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            result.Should().BeAssignableTo<SendersResult.InternalServerError>();
+            result.Should().BeAssignableTo<UserSendersResult.InternalServerError>();
         }
 
         [TestMethod]
@@ -486,7 +486,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             // Assert
             VerifySetups();
 
-            result.Should().BeAssignableTo<SendersResult.BadGateway>();
+            result.Should().BeAssignableTo<UserSendersResult.BadGateway>();
         }
 
         private void VerifySetups()

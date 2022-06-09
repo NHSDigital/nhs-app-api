@@ -1,0 +1,104 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sender API
+  description: NHS App Sender API - endpoints pertaining to Sender
+paths:
+  /users/senders/{senderId}:
+    get:
+      tags:
+        - sender
+      summary: Retrieve sender based on sender id
+      description: Retrieve sender based on sender id.
+      parameters:
+        - in: path
+          name: senderId
+          required: true
+          description: A unique identifier for a sender.
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: Successful operation. Sender is retrieved.
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/GetSenderResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+  /users/senders/:
+    post:
+      tags:
+        - sender
+      summary: Creates a sender
+      description: Creates a sender based on a sender id and name
+      requestBody:
+        x-name: Sender
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSender"
+        description: Details of the sender to be created
+        required: true
+      responses:
+        "201":
+          description: Successful operation. Sender is created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSenderResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    UnexpectedError:
+      description: An unexpected error occurred processing the request.
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
+  schemas:
+    GetSenderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The sender's id.
+        name:
+          type: string
+          description: The sender's name.
+    CreateSender:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateSenderResponse:
+      type: object
+      required:
+        - sender
+      properties:
+        id:
+          type: string
+          description: The sender's id.
+        name:
+          type: string
+          description: The sender's name.
+
+
+
+

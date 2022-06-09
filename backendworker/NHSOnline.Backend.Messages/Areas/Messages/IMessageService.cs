@@ -17,6 +17,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
         Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument, AccessToken accessToken, string messageId);
 
-        Task<SendersResult> GetSenders(AccessToken accessToken);
+        Task<UserSendersResult> GetSenders(AccessToken accessToken);
     }
 }

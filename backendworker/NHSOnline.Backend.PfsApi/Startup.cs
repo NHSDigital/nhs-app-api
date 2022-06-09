@@ -107,6 +107,8 @@ namespace NHSOnline.Backend.PfsApi
 
             services.RegisterDatabaseClient(Configuration, _logger);
 
+            services.RegisterSqlApiDatabaseClient(Configuration, _logger);
+
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
         }

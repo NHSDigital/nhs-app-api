@@ -53,6 +53,7 @@ namespace NHSOnline.Backend.PfsApi
         private void ConfigureMessagingServices(IServiceCollection services, IConfiguration configuration)
         {
             services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>(configuration); //error
+            services.RegisterSqlApiRepository<DbSender, SenderRepositoryConfiguration>(configuration);
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MessageRepository>();
@@ -65,6 +66,10 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IMapper<SenderContext, SenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();
 
             services.AddScoped<IAccessTokenProvider, AccessTokenProvider>();
+            services.AddSingleton<ISenderService, SenderService>();
+            services.AddSingleton<ISenderRepository, SenderRepository>();
+            services.AddSingleton<IMapper<Sender, DbSender>, SenderRequestMapper>();
+            services.AddSingleton<IMapper<DbSender,Sender>, SenderResponseMapper>();
         }
     }
 }

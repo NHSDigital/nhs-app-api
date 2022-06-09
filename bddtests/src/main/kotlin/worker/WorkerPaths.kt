@@ -33,4 +33,5 @@ object WorkerPaths {
     const val healthReady = "/health/ready"
     const val notificationOutComes = "/v1/api/users/devices/notifications/" +
                                     "$notificationIdPlaceholder?hubPath=$hubPathPlaceholder"
+    const val commsSender = "/v1/api/users/senders"
 }

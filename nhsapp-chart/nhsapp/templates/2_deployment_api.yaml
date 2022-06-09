@@ -426,12 +426,28 @@ spec:
             secretKeyRef:
               name: comms-hub-event-hub-connection-string-{{ .Chart.AppVersion }}
               key: secret
-        # messages specific values
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
           value: {{ $.Values.messages.mongoDatabaseMessagesCollection }}
         - name: CITIZEN_ID_AUTHENTICATION_TYPE
           value: "{{ $.Values.cidAuthenticationType }}"
-        # end of messages specific values
+        - name: NHSAPP_SQL_APPLICATION_ID
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-sql-application-id-{{ .Chart.AppVersion }}
+              key: secret
+        - name: NHSAPP_SQL_APPLICATION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-sql-application-secret-{{ .Chart.AppVersion }}
+              key: secret
+        - name: KEYVAULT_TENANT_ID
+          value: {{ $.Values.keyvaultTenantID }}
+        - name: COSMOS_SQL_API_ENDPOINT
+          value: {{ $.Values.cosmosSqlAccountEndpoint }}
+        - name: COMMS_SQL_API_DATABASE_NAME
+          value: comms-{{ $.Values.cosmosCommsDbName }}-sql
+        - name: SENDERS_CONTAINER
+          value: {{ $.Values.messages.cosmosSqlDatabaseSendersCollection }}
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

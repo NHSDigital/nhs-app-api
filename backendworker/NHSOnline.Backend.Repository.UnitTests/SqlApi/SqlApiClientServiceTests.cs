@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             var partitionKeyValue = "TestPartitionKeyValue";
 
             _container.Setup(c => c
-                    .UpsertItemAsync(record, new PartitionKey(partitionKeyValue), null, default(CancellationToken)))
+                    .UpsertItemAsync(record, new PartitionKey(partitionKeyValue), null, default))
                 .ReturnsAsync(_itemResponse.Object);
 
             // Act
@@ -66,8 +66,9 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             var partitionKeyValue = "TestPartitionKeyValue";
 
             _container.Setup(c => c
-                    .UpsertItemAsync(record, new PartitionKey(partitionKeyValue), null, default(CancellationToken)))
-                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+                    .UpsertItemAsync(record, new PartitionKey(partitionKeyValue), null, default))
+                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId",
+                    1.12));
 
             // Act
             await FluentActions.Awaiting(() => _systemUnderTest.UpsertOneAsync(_config, record, partitionKeyValue))
@@ -86,7 +87,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             var partitionKeyValue = "Partition Key Value";
 
             _container.Setup(c => c
-                    .DeleteItemAsync<TestRepositoryRecord>(id, new PartitionKey(partitionKeyValue), null, default(CancellationToken)))
+                    .DeleteItemAsync<TestRepositoryRecord>(id, new PartitionKey(partitionKeyValue), null, default))
                 .ReturnsAsync(_itemResponse.Object);
 
             // Act
@@ -105,8 +106,9 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
             var partitionKeyValue = "Partition Key Value";
 
             _container.Setup(c => c
-                    .DeleteItemAsync<TestRepositoryRecord>(id, new PartitionKey(partitionKeyValue), null, default(CancellationToken)))
-                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+                    .DeleteItemAsync<TestRepositoryRecord>(id, new PartitionKey(partitionKeyValue), null, default))
+                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId",
+                    1.12));
 
             // Act
             await FluentActions.Awaiting(() =>
@@ -119,13 +121,56 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         }
 
         [TestMethod]
+        public async Task FindOneAsync_WhenClientThrowsException_ShouldThrow()
+        {
+            // Arrange
+            var partitionKeyValue = "TestPartitionKeyValue";
+
+            _container.Setup(c => c
+                    .ReadItemAsync<TestRepositoryRecord>(It.IsAny<string>(), It.IsAny<PartitionKey>(),
+                        It.IsAny<ItemRequestOptions>(), It.IsAny<CancellationToken>())
+                )
+                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId",
+                    1.12));
+
+            // Act
+            await FluentActions.Awaiting(() =>
+                    _systemUnderTest.FindOneAsync<TestRepositoryRecord>(_config, "id", partitionKeyValue))
+                .Should().ThrowAsync<CosmosException>()
+                .WithMessage("Testing a failure");
+
+            // Assert
+            VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task FindOneAsync_Success()
+        {
+            //Arrange
+            var id = "Id value";
+            var partitionKeyValue = "TestPartitionKeyValue";
+
+            _container.Setup(c => c
+                .ReadItemAsync<TestRepositoryRecord>(id, new PartitionKey(partitionKeyValue),
+                    It.IsAny<ItemRequestOptions>(), It.IsAny<CancellationToken>())
+            ).ReturnsAsync(_itemResponse.Object);
+
+            //Act
+            var result = await _systemUnderTest.FindOneAsync<TestRepositoryRecord>(_config, id, partitionKeyValue);
+
+            //Assert
+            VerifyAll();
+            result.Should().BeEquivalentTo(_itemResponse.Object);
+        }
+
+        [TestMethod]
         public async Task CheckHealthAsync_Success()
         {
             // Arrange
             var containerResponse = new Mock<ContainerResponse>(MockBehavior.Strict);
 
             _container.Setup(c => c
-                    .ReadContainerAsync(null, default(CancellationToken)))
+                    .ReadContainerAsync(null, default))
                 .ReturnsAsync(containerResponse.Object);
 
             // Act
@@ -141,8 +186,9 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         {
             // Arrange
             _container.Setup(c => c
-                    .ReadContainerAsync(null, default(CancellationToken)))
-                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+                    .ReadContainerAsync(null, default))
+                .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId",
+                    1.12));
 
             // Act
             await FluentActions.Awaiting(() =>
