@@ -1,19 +1,22 @@
 <template>
   <div>
-    <h2 id="title1">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.title1') }}
+    <h2 id="missingAppointmentsHelpTitle">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.missingAppointmentsHelpTitle') }}
     </h2>
-    <p id="text1">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.text1') }}
+    <p id="missingAppointmentsHelpText">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.missingAppointmentsHelpText') }}
     </p>
-    <h2 id="title2">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.title2') }}
+    <p id="under18HelpText">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.under18HelpText') }}
+    </p>
+    <h2 id="changeNotShowingHelpTitle">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpTitle') }}
     </h2>
-    <p id="text2">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.text2') }}
+    <p id="changeNotShowingHelpText">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpText') }}
     </p>
-    <p id="text3">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.text3') }}
+    <p id="changeNeedApprovalHelpText">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNeedApprovalHelpText') }}
     </p>
     <desktopGenericBackLink v-if="!isNativeApp"
                             id="desktopBackLink"

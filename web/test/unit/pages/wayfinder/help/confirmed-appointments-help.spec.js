@@ -6,11 +6,12 @@ jest.mock('@/lib/utils');
 describe('Missing or incorrect confirmed appointments link clicked from index page', () => {
   let $store;
   let wrapper;
-  let title1;
-  let title2;
-  let text1;
-  let text2;
-  let text3;
+  let missingAppointmentsHelpTitle;
+  let changeNotShowingHelpTitle;
+  let missingAppointmentsHelpText;
+  let under18HelpText;
+  let changeNotShowingHelpText;
+  let changeNeedApprovalHelpText;
   let backButton;
 
   const createIndexPage = () => mount(ConfirmedAppointmentsHelpPage, {
@@ -28,44 +29,52 @@ describe('Missing or incorrect confirmed appointments link clicked from index pa
   });
 
   describe('if page loaded', () => {
-    it('title 1 is visible and contains correct text', () => {
+    it('Missing confirmed appointments help title is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      title1 = wrapper.find('#title1');
+      missingAppointmentsHelpTitle = wrapper.find('#missingAppointmentsHelpTitle');
 
-      expect(title1.exists()).toBe(true);
-      expect(title1.text()).toEqual('If something is missing');
+      expect(missingAppointmentsHelpTitle.exists()).toBe(true);
+      expect(missingAppointmentsHelpTitle.text()).toEqual('If something is missing');
     });
 
-    it('text 1 is visible and contains correct text', () => {
+    it('Missing confirmed appointments help text is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      text1 = wrapper.find('#text1');
+      missingAppointmentsHelpText = wrapper.find('#missingAppointmentsHelpText');
 
-      expect(text1.exists()).toBe(true);
-      expect(text1.text()).toEqual('You may have appointments not shown that are in other services. Contact the healthcare provider the appointment is booked with.');
+      expect(missingAppointmentsHelpText.exists()).toBe(true);
+      expect(missingAppointmentsHelpText.text()).toEqual('You may have appointments not shown that are in other services. Contact the healthcare provider the appointment is booked with.');
     });
 
-    it('title 2 is visible and contains correct text', () => {
+    it('Missing confirmed appointments under 18 help text is visible and contain correct text', () => {
       wrapper = createIndexPage();
-      title2 = wrapper.find('#title2');
+      under18HelpText = wrapper.find('#under18HelpText');
 
-      expect(title2.exists()).toBe(true);
-      expect(title2.text()).toEqual('If a change or cancellation is not showing');
+      expect(under18HelpText.exists()).toBe(true);
+      expect(under18HelpText.text()).toEqual('If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.');
     });
 
-    it('text 2 is visible and contains correct text', () => {
+    it('Missing confirmed appointments change not showing help title is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      text2 = wrapper.find('#text2');
+      changeNotShowingHelpTitle = wrapper.find('#changeNotShowingHelpTitle');
 
-      expect(text2.exists()).toBe(true);
-      expect(text2.text()).toEqual('You may have requested to change or cancel a booked appointment.');
+      expect(changeNotShowingHelpTitle.exists()).toBe(true);
+      expect(changeNotShowingHelpTitle.text()).toEqual('If a change or cancellation is not showing');
     });
 
-    it('text 3 is visible and contains correct text', () => {
+    it('Missing confirmed appointments change not showing help text is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      text3 = wrapper.find('#text3');
+      changeNotShowingHelpText = wrapper.find('#changeNotShowingHelpText');
 
-      expect(text3.exists()).toBe(true);
-      expect(text3.text()).toEqual('Any updates you have made may not be shown until the request is approved by the healthcare provider the appointment is booked with.');
+      expect(changeNotShowingHelpText.exists()).toBe(true);
+      expect(changeNotShowingHelpText.text()).toEqual('You may have requested to change or cancel a booked appointment.');
+    });
+
+    it('Missing confirmed appointments change need approval help text is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeNeedApprovalHelpText = wrapper.find('#changeNeedApprovalHelpText');
+
+      expect(changeNeedApprovalHelpText.exists()).toBe(true);
+      expect(changeNeedApprovalHelpText.text()).toEqual('Any updates you have made may not be shown until the request is approved by the healthcare provider the appointment is booked with.');
     });
 
     it('back button exists', () => {
