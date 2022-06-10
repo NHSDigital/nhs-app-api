@@ -21,6 +21,9 @@
     "AzureFunctionsJobHost:functions:2": "AuditLog_Etl_Http",
     "AzureFunctionsJobHost:functions:3": "ReferrerLogin_Compute_Http",
     "AzureFunctionsJobHost:functions:4": "ReferrerLogin_Compute_Queue",
-    "AzureFunctionsJobHost:functions:5": "ReferrerLogin_Compute_Timer"
+    "AzureFunctionsJobHost:functions:5": "ReferrerLogin_Compute_Timer",
+    "AzureFunctionsJobHost:functions:6": "ReferrerServiceJourney_Compute_Http",
+    "AzureFunctionsJobHost:functions:7": "ReferrerServiceJourney_Compute_Queue",
+    "AzureFunctionsJobHost:functions:8": "ReferrerServiceJourney_Compute_Timer"
   }
 }

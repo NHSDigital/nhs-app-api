@@ -3,6 +3,7 @@ using NHSOnline.MetricLogFunctionApp.Compute.DailyDeviceReferralUsage;
 using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
 using NHSOnline.MetricLogFunctionApp.Compute.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.ReferrerLogin;
+using NHSOnline.MetricLogFunctionApp.Compute.ReferrerServiceJourney;
 
 namespace NHSOnline.MetricLogFunctionApp.Compute
 {
@@ -20,6 +21,7 @@ namespace NHSOnline.MetricLogFunctionApp.Compute
             serviceCollection.AddFirstLogins();
             serviceCollection.AddReferrerLogin();
             serviceCollection.AddDailyDeviceReferralUsage();
+            serviceCollection.AddReferrerServiceJourney();
         }
 
         private static void AddInfrastructure(IServiceCollection serviceCollection)

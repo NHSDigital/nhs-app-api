@@ -44,10 +44,19 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<OrganDonationRegistrationWithdrawMetricRow> OrganDonationRegistrationWithdrawMetric =>
             Table<OrganDonationRegistrationWithdrawMetricRow>();
 
+        internal PostgresTable<OrganDonationRegistrationUpdateMetricRow> OrganDonationRegistrationUpdateMetric =>
+            Table<OrganDonationRegistrationUpdateMetricRow>();
+
+        internal PostgresTable<OrganDonationRegistrationGetMetricRow> OrganDonationRegistrationGetMetric =>
+            Table<OrganDonationRegistrationGetMetricRow>();
+
         internal PostgresTable<PrescriptionOrdersMetricRow> PrescriptionOrdersMetric =>
             Table<PrescriptionOrdersMetricRow>();
 
         internal PostgresTable<InitialPromptMetricRow> InitialPromptMetric => Table<InitialPromptMetricRow>();
+
+        internal PostgresTable<SilverIntegrationJumpOffMetricRow> SilverIntegrationJumpOffMetric =>
+            Table<SilverIntegrationJumpOffMetricRow>();
 
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);

@@ -420,5 +420,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
 
             return await httpEndpointCallers.DailyDeviceReferralUsage.PostJson(request);
         }
+
+        internal static async Task<HttpResponseMessage> PostReferrerServiceJourney(
+            this HttpEndpointCallers httpEndpointCallers,
+            string startDateTime,
+            string endDateTime)
+        {
+            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
+            return await httpEndpointCallers.ReferrerServiceJourney.PostJson(request);
+        }
     }
 }

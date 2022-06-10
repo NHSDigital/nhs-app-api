@@ -4,7 +4,7 @@ It is based on the NHS Analytics App. It's purpose is to provide a more reliable
 
 ## Running the Metric Logger Locally 
 
-You can start the environment needed for the Metric Logger Function App by running this command in the root of the metric logger function app folder
+You can start the environment needed for the Metric Logger Function App by running this command in the root of the metric logger function app folder (this will spin up a database named analyticsdb)
 
 ```bash
 make run

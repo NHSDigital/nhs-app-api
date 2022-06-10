@@ -17,6 +17,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<ReferrerLoginRow> ReferrerLogin =>
             Table<ReferrerLoginRow>();
 
+        internal PostgresTable<ReferrerServiceJourneyRow> ReferrerServiceJourney =>
+            Table<ReferrerServiceJourneyRow>();
+
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
 
