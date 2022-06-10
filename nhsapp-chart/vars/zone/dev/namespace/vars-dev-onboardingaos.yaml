@@ -66,3 +66,7 @@ api:
     servicesV3__substraktPatientPack__domains__2: https://auth.aoc.substrakthealth.com
     servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    
+info:
+  userInfoReadFromSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: false
