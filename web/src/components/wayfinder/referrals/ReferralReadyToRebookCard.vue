@@ -40,7 +40,9 @@
       <span :id="`referred-by-text-${referralId}`" >{{ referredBy }}</span>
     </p>
 
-    <primary-button :id="`bookOrManageReferral-${referralId}`" @click="onClick">
+    <primary-button
+      :id="`bookOrManageReferral-${referralId}`"
+      @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.readyToBook.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
@@ -74,6 +76,10 @@ export default {
     referralId: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
   computed: {

@@ -4,9 +4,11 @@ import { mount } from '../../../helpers';
 
 jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
   methods: {
-    onClick: jest.fn(),
+    goToUrlViaRedirector: jest.fn(),
   },
 }));
+
+const deepLinkUrl = 'https://appointments.stubs.local/1';
 
 const mountAppointmentReadyToConfirm = ({ propsData = {} }) => mount(
   AppointmentReadyToConfirm,
@@ -20,8 +22,8 @@ describe('Appointment Ready To Confirm Card', () => {
     wrapper = mountAppointmentReadyToConfirm({
       propsData: {
         appointmentId: 1,
-        deepLinkUrl: 'default',
         locationDescription: 'A Clinic, A Town, A Country',
+        deepLinkUrl,
       },
     });
 
@@ -46,12 +48,12 @@ describe('Appointment Ready To Confirm Card', () => {
       expect(button.text()).toBe('Contact the clinic to confirm');
     });
 
-    it('will call onClick when the confirm button is clicked', () => {
+    it('will call goToUrlViaRedirector when the confirm button is clicked', () => {
       const button = wrapper.find('#contactTheClinicToConfirm-1');
 
       button.trigger('click');
 
-      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
+      expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
     });
   });
 });

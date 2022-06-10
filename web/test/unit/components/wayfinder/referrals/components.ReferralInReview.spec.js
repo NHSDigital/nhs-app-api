@@ -4,9 +4,11 @@ import { mount } from '../../../helpers';
 
 jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
   methods: {
-    onClick: jest.fn(),
+    goToUrlViaRedirector: jest.fn(),
   },
 }));
+
+const deepLinkUrl = 'https://appointments.stubs.local/1';
 
 const mountReferralInReview = ({ propsData = {} }) => mount(
   ReferralInReview,
@@ -17,12 +19,12 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is set', () => {
     const wrapper = mountReferralInReview({
       propsData: {
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         reviewDate: '2022-04-18T10:00:00',
         requestedSpecialty: 'Cardiology',
         referralId: '1',
+        deepLinkUrl,
       },
     });
 
@@ -97,12 +99,12 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is empty', () => {
     const wrapper = mountReferralInReview({
       propsData: {
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         reviewDate: '2022-04-18T10:00:00',
         requestedSpecialty: null,
         referralId: '1',
+        deepLinkUrl,
       },
     });
 
@@ -132,12 +134,12 @@ describe('Referral In Review Card', () => {
       expect(deepLink.text()).toBe('View or manage this referral');
     });
 
-    it('will call onClick when the view or manage link is clicked', () => {
+    it('will call goToUrlViaRedirector when the view or manage link is clicked', () => {
       const deepLink = wrapper.find('#manageInReviewReferral-1 a');
 
       deepLink.trigger('click');
 
-      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
+      expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
     });
   });
 });

@@ -4,14 +4,13 @@ import { mount, createStore } from '../../helpers';
 const goToUrl = jest.fn();
 window.open = jest.fn();
 
+const deepLinkUrl = 'https://appointments.stubs.local/1';
+
 let wrapper;
 
 const mountComponent = ({ isNativeApp = false } = {}) => (mount(
   { render() {}, mixins: [RedirectorMixin] },
   {
-    propsData: {
-      deepLinkUrl: 'test.deeplink/app',
-    },
     methods: {
       goToUrl,
     },
@@ -21,7 +20,7 @@ const mountComponent = ({ isNativeApp = false } = {}) => (mount(
   },
 ));
 
-describe('onClick', () => {
+describe('goToUrlViaRedirector', () => {
   beforeEach(() => {
     goToUrl.mockClear();
     window.open.mockClear();
@@ -30,17 +29,14 @@ describe('onClick', () => {
   describe('on native', () => {
     beforeEach(() => {
       wrapper = mountComponent({ isNativeApp: true });
+      wrapper.vm.goToUrlViaRedirector(deepLinkUrl);
     });
 
     it('will call goToUrl with a path to redirector and redirect_to query with encoded url', () => {
-      wrapper.vm.onClick();
-
-      expect(goToUrl).toHaveBeenCalledWith('/redirector?redirect_to=test.deeplink%2Fapp');
+      expect(goToUrl).toHaveBeenCalledWith('/redirector?redirect_to=https%3A%2F%2Fappointments.stubs.local%2F1');
     });
 
     it('will not call window.open', () => {
-      wrapper.vm.onClick();
-
       expect(window.open).not.toHaveBeenCalled();
     });
   });
@@ -48,19 +44,16 @@ describe('onClick', () => {
   describe('on web', () => {
     beforeEach(() => {
       wrapper = mountComponent();
+      wrapper.vm.goToUrlViaRedirector(deepLinkUrl);
     });
 
     it('will not call goToUrl', () => {
-      wrapper.vm.onClick();
-
       expect(goToUrl).not.toHaveBeenCalled();
     });
 
     it('will call window.open with a path to redirector and redirect_to query with encoded url', () => {
-      wrapper.vm.onClick();
-
       expect(window.open).toHaveBeenCalledWith(
-        '/redirector?redirect_to=test.deeplink%2Fapp',
+        '/redirector?redirect_to=https%3A%2F%2Fappointments.stubs.local%2F1',
         '_blank',
         'noopener,noreferrer',
       );

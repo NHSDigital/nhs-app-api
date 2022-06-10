@@ -15,7 +15,7 @@
     </p>
     <p :id="`view-this-appointment-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       <strong>
-        <a href="#" @click="onClick">
+        <a href="#" @click="goToUrlViaRedirector(deepLinkUrl)">
           {{ $t('wayfinder.appointments.cancelled.viewThisAppointment') }}
         </a>
       </strong>
@@ -45,6 +45,10 @@ export default {
     locationDescription: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
 };

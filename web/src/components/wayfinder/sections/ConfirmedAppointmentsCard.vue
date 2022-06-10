@@ -14,7 +14,8 @@
         v-else-if="isCancelled(appointment)"
         :appointment-id="index"
         :location-description="appointment.locationDescription"
-        :appointment-date-time="appointment.appointmentDateTime"/>
+        :appointment-date-time="appointment.appointmentDateTime"
+        :deep-link-url="appointment.deepLinkUrl"/>
     </card-group-item>
   </card-group>
   <p v-else id="no-confirmed-appointments-text">

@@ -1,3 +1,4 @@
+import { REDIRECT_PARAMETER } from '@/router/names';
 import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 
 export default {
@@ -7,16 +8,10 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
   },
-  props: {
-    deepLinkUrl: {
-      type: String,
-      required: true,
-    },
-  },
   methods: {
-    onClick() {
-      const encodedDeepLink = encodeURIComponent(this.deepLinkUrl);
-      const path = `/${INTERSTITIAL_REDIRECTOR_PATH}?redirect_to=${encodedDeepLink}`;
+    goToUrlViaRedirector(destination) {
+      const encodedDestination = encodeURIComponent(destination);
+      const path = `/${INTERSTITIAL_REDIRECTOR_PATH}?${REDIRECT_PARAMETER}=${encodedDestination}`;
 
       if (this.isNativeApp) {
         this.goToUrl(path);

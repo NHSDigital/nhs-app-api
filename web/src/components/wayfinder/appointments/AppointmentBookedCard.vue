@@ -10,7 +10,9 @@
     <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
-    <primary-button :id="`bookOrManageAppointment-${appointmentId}`" @click="onClick">
+    <primary-button
+      :id="`bookOrManageAppointment-${appointmentId}`"
+      @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}
     </primary-button>
   </Card>
@@ -40,6 +42,10 @@ export default {
     locationDescription: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
 };

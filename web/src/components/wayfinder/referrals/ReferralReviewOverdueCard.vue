@@ -48,7 +48,9 @@
       <span :id="`referred-by-text-${referralId}`">{{ referredBy }}</span>
     </p>
 
-    <primary-button :id="`manageInReviewReferral-${referralId}`" @click="onClick">
+    <primary-button
+      :id="`manageInReviewReferral-${referralId}`"
+      @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.overdue.contactTheClinic') }}
     </primary-button>
   </Card>
@@ -86,6 +88,10 @@ export default {
     referralId: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
 

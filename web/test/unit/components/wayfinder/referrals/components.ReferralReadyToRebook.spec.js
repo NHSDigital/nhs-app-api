@@ -4,9 +4,11 @@ import { mount } from '../../../helpers';
 
 jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
   methods: {
-    onClick: jest.fn(),
+    goToUrlViaRedirector: jest.fn(),
   },
 }));
+
+const deepLinkUrl = 'https://appointments.stubs.local/1';
 
 const mountReferralReadyToRebook = ({ propsData = {} }) => mount(
   ReferralReadyToRebook,
@@ -17,11 +19,11 @@ describe('Referral Ready To Rebook Card', () => {
   describe('Requested specialty is set', () => {
     const wrapper = mountReferralReadyToRebook({
       propsData: {
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         requestedSpecialty: 'Cardiology',
         referralId: '1',
+        deepLinkUrl,
       },
     });
 
@@ -81,23 +83,23 @@ describe('Referral Ready To Rebook Card', () => {
       expect(button.text()).toBe('Book or manage this referral');
     });
 
-    it('will call onClick when the book or manage button is clicked', () => {
+    it('will call goToUrlViaRedirector when the book or manage button is clicked', () => {
       const button = wrapper.find('#bookOrManageReferral-1');
 
       button.trigger('click');
 
-      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
+      expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
     });
   });
 
   describe('Requested specialty is not set', () => {
     const wrapper = mountReferralReadyToRebook({
       propsData: {
-        deepLinkUrl: 'default',
         referredBy: 'Mahogany GP Surgery',
         referredDate: '2022-04-10T10:00:00',
         requestedSpecialty: null,
         referralId: '1',
+        deepLinkUrl,
       },
     });
 

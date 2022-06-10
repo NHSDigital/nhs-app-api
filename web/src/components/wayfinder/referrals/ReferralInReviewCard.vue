@@ -51,7 +51,7 @@
 
     <p :id="`manageInReviewReferral-${referralId}`" class="nhsuk-u-margin-bottom-3">
       <strong>
-        <a href="#" @click="onClick">
+        <a href="#" @click="goToUrlViaRedirector(deepLinkUrl)">
           {{ $t('wayfinder.referrals.manageThisReferral') }}
         </a>
       </strong>
@@ -89,6 +89,10 @@ export default {
     referralId: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
   computed: {

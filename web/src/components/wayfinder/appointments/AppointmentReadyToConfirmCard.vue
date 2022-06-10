@@ -9,7 +9,9 @@
     <p>
       {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>
-    <primary-button :id="`contactTheClinicToConfirm-${appointmentId}`" @click="onClick">
+    <primary-button
+      :id="`contactTheClinicToConfirm-${appointmentId}`"
+      @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
     </primary-button>
   </Card>
@@ -35,6 +37,10 @@ export default {
     locationDescription: {
       type: String,
       default: '',
+    },
+    deepLinkUrl: {
+      type: String,
+      required: true,
     },
   },
 };

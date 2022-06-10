@@ -4,9 +4,11 @@ import { mount } from '../../../helpers';
 
 jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
   methods: {
-    onClick: jest.fn(),
+    goToUrlViaRedirector: jest.fn(),
   },
 }));
+
+const deepLinkUrl = 'https://appointments.stubs.local/1';
 
 const mountAppointmentCancelled = ({ propsData = {} }) => mount(
   AppointmentCancelled,
@@ -22,7 +24,7 @@ describe('Appointment Cancelled Card', () => {
         locationDescription: 'A Clinic, A Town, A Country',
         appointmentDateTime: '2022-04-18T10:00:00',
         appointmentId: 1,
-        deepLinkUrl: 'https://appointments.stubs.local/1',
+        deepLinkUrl,
       },
     });
 
@@ -66,12 +68,12 @@ describe('Appointment Cancelled Card', () => {
       expect(deepLink.text()).toBe('View this appointment');
     });
 
-    it('will call onClick when the view appointment link is clicked', () => {
+    it('will call goToUrlViaRedirector when the view appointment link is clicked', () => {
       const deepLink = wrapper.find('#view-this-appointment-1 a');
 
       deepLink.trigger('click');
 
-      expect(RedirectorMixin.methods.onClick).toHaveBeenCalled();
+      expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
     });
   });
 });
