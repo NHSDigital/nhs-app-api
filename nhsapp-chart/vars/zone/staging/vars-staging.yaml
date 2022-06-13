@@ -93,10 +93,12 @@ api:
     services__accurx__url: https://nhsapp-florey.dev.accurx.com
     services__engage__url: https://nhs1-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
+    services__http_status__url: https://httpstat.us
+    services__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
     services__pkb__url: https://nhsapp.devstacks.pkb.io
     services__pkb_alt__url: https://nhsapp.devstacks.pkb.io:443
     services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
-    services__http_status__url: https://httpstat.us
+    services__zesty__url: https://enterprise.ytsez-sandbox.co.uk
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
     servicesV3__cid_account__url: https://account.ext.signin.nhs.uk
@@ -111,10 +113,12 @@ api:
     servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
     servicesV3__engage__url: https://nhs1-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
+    servicesV3__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
     servicesV3__pkb__domains__url: https://nhsapp.devstacks.pkb.io:443
     servicesV3__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
     servicesV3__silver_third_party_api_test__domains__1: https://httpstat.us
+    servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
 
 users:
   mockNotificationHubClient: false

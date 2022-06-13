@@ -91,8 +91,10 @@ api:
     services__accurx__url: https://nhsapp-florey.dev.accurx.com
     services__engage__url: https://nhs1-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
+    services__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
     services__pkb__url: https://nhsapp.devstacks.pkb.io
     services__pkb_alt__url: https://nhsapp.devstacks.pkb.io:443
+    services__zesty__url: https://enterprise.ytsez-sandbox.co.uk
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
     servicesV3__cid_account__url: https://account.ext.signin.nhs.uk
@@ -109,6 +111,8 @@ api:
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
     servicesV3__pkb__domains__url: https://nhsapp.devstacks.pkb.io:443
+    servicesV3__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
+    servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
 
 sjrExternalIngressEnabled: true
 
