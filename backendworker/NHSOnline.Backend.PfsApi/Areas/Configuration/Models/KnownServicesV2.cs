@@ -30,27 +30,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
 
             if (knownService.Url is null)
             {
-                throw new ConfigurationNotValidException(nameof(RootService.Url));
+                throw new ConfigurationNotValidException(nameof(RootService.Url),
+                    $"Validation failed for KnownService with id: {knownServiceId}");
             }
 
             if (!knownService.Url.IsAbsoluteUri)
             {
-                throw new ConfigurationNotValidException(nameof(RootService.Url));
+                throw new ConfigurationNotValidException(nameof(RootService.Url),
+                    $"Validation failed for KnownService with id: {knownServiceId}");
             }
 
-            knownService.SubServices?.ForEach(ValidateSubService);
+            knownService.SubServices?.ForEach((subService) => ValidateSubService(subService, knownServiceId));
         }
 
-        private static void ValidateSubService(SubService subService)
+        private static void ValidateSubService(SubService subService, string knownServiceId)
         {
             if (subService is null)
             {
-                throw new ConfigurationNotValidException(nameof(SubService));
+                throw new ConfigurationNotValidException(nameof(SubService),
+                    $"Validation of a SubService failed as it is null for KnownService with id: {knownServiceId}");
             }
 
             if (string.IsNullOrWhiteSpace(subService.Path))
             {
-                throw new ConfigurationNotValidException(nameof(SubService.Path));
+                throw new ConfigurationNotValidException(nameof(SubService.Path),
+                    $"Validation of a SubService failed as Path is missing for KnownService with id: {knownServiceId}");
             }
         }
 
