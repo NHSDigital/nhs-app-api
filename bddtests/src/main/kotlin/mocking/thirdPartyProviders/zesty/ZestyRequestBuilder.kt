@@ -4,7 +4,7 @@ import mocking.MappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class ZestyRequestBuilder : MappingBuilder("GET", "/nhs/origin_appointment?") {
+class ZestyRequestBuilder : MappingBuilder("GET", "/nhs/origin_appointment") {
 
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
