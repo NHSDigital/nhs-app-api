@@ -1,4 +1,4 @@
-using AutoFixture;
+using System;
 using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -14,7 +14,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
     public class MessagesValidationServiceTests
     {
         private MessagesValidationService _systemUnderTest;
-        private Fixture _fixture;
         private string _userMessageId;
         private JsonPatchDocument<Message> _jsonPatchDoc;
         private Operation<Message> _validPatchOperation;
@@ -25,15 +24,14 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture();
             var logger = new Mock<ILogger<MessagesValidationService>>();
             _systemUnderTest = new MessagesValidationService(logger.Object);
             _userMessageId = "823c13304df9cbc0e744241c"; //24 digit hex regex
             _jsonPatchDoc = new JsonPatchDocument<Message>();
-            _validPatchOperation = _fixture.Create<Operation<Message>>();
+            _validPatchOperation = BuildValidPatchOperation();
 
-            _validAddMessageRequest = _fixture.Create<AddMessageRequest>();
-            _nhsLoginId = _fixture.Create<string>();
+            _validAddMessageRequest = BuildValidAddMessageRequest();
+            _nhsLoginId = Guid.NewGuid().ToString();
         }
 
         [TestMethod]
@@ -218,6 +216,27 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         public void IsMessageIdValid_InvalidValue_ReturnsFalse(string messageId)
         {
             _systemUnderTest.IsMessageIdValid(messageId).Should().BeFalse();
+        }
+
+        private static AddMessageRequest BuildValidAddMessageRequest()
+        {
+            return new AddMessageRequest
+            {
+                Body = "Body",
+                Sender = "Sender",
+                Version = 1,
+                SenderContext = new AddMessageSenderContext()
+            };
+        }
+
+        private static Operation<Message> BuildValidPatchOperation()
+        {
+            return new Operation<Message>
+            {
+                from = "from",
+                op = "op",
+                path = "path"
+            };
         }
     }
 }
