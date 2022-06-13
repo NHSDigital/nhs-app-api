@@ -39,6 +39,11 @@
           </div>
           <past-appointments v-if="showPastAppointments"
                              :appointments="pastAppointments"/>
+          <desktopGenericBackLink
+            v-if="!$store.state.device.isNativeApp"
+            :path="appointmentsPath"
+            :button-text="'generic.back'"
+            @clickAndPrevent="onBackButtonClicked"/>
         </div>
       </div>
     </div>
@@ -49,6 +54,7 @@
 import isEmpty from 'lodash/fp/isEmpty';
 
 import CoronaVirusMessage from '@/components/widgets/CoronaVirusMessage';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import GpAppointmentErrors from '@/components/errors/pages/appointments/GpAppointmentErrors';
@@ -74,12 +80,14 @@ export default {
     CoronaVirusMessage,
     GenericButton,
     PastAppointments,
+    DesktopGenericBackLink,
     UpcomingAppointments,
   },
   mixins: [ErrorPageMixin],
   data() {
     return {
       backUrl: APPOINTMENTS_PATH,
+      appointmentsPath: APPOINTMENTS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       bookingUrl: APPOINTMENT_BOOKING_PATH,
@@ -154,6 +162,9 @@ export default {
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.bookingUrl, true);
       redirectTo(this, this.bookingUrl);
+    },
+    onBackButtonClicked() {
+      redirectTo(this, this.appointmentsPath);
     },
   },
 };
