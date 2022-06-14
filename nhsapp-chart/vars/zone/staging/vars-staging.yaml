@@ -135,7 +135,7 @@ users:
 
 info:
   userInfoReadFromSecondaryContainers: false
-  userInfoSaveToSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: true
 
 metrics:
   memoryRequest: "120Mi"

@@ -80,7 +80,7 @@ users:
 
 info:
   userInfoReadFromSecondaryContainers: false
-  userInfoSaveToSecondaryContainers: false
+  userInfoSaveToSecondaryContainers: true
 
 secrets:
   notificationHubs:
