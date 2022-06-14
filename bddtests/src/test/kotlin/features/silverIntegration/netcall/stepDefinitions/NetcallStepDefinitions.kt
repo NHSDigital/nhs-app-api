@@ -3,10 +3,9 @@ package features.silverIntegration.netcall.stepDefinitions
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.pages.NetcallPage
-import pages.HybridPageObject
 import utils.SerenityHelpers
 
-class NetcallStepDefinitions : HybridPageObject() {
+class NetcallStepDefinitions {
 
     private lateinit var netcallPage: NetcallPage
     private val mockingClient = SerenityHelpers.getMockingClient()

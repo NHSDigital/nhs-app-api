@@ -72,6 +72,8 @@ api:
     services__cid_uaf__url: https://uaf.ext.signin.nhs.uk
     services__cid_access__url: https://access.ext.signin.nhs.uk
     services__cid_idvm__url: https://idvm.ext.signin.nhs.uk
+    services__drDoctor__url: https://my-uat2.drdoctor.co.uk
+    services__drDoctor_login__url: https://login-uat2.drdoctor.co.uk
     services__engage__url: https://nhs1-nhsapp.engage.gp
     services__ers__url: https://pat.rc.refer.nhs.uk
     services__gncr__url: https://my-sandpit.gncr.org.uk
@@ -95,6 +97,8 @@ api:
     servicesV3__cid_uaf__url: https://uaf.ext.signin.nhs.uk
     servicesV3__cid_access__url: https://access.ext.signin.nhs.uk
     servicesV3__cid_idvm__url: https://idvm.ext.signin.nhs.uk
+    servicesV3__drDoctor__url: https://my-uat2.drdoctor.co.uk
+    servicesV3__drDoctor__domains__1: https://login-uat2.drdoctor.co.uk
     servicesV3__engage__url: https://nhs1-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.rc.refer.nhs.uk
     servicesV3__gncr__url: https://my-sandpit.gncr.org.uk

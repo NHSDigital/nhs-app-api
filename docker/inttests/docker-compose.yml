@@ -18,22 +18,23 @@ services:
     networks:
       default:
         aliases:
-          - auth.nhslogin.stubs.local.bitraft.io
-          - uaf.nhslogin.stubs.local.bitraft.io
-          - settings.nhslogin.stubs.local.bitraft.io
-          - paycasso.stubs.local.bitraft.io
-          - pkb.stubs.local.bitraft.io
-          - engage.stubs.local.bitraft.io
           - accurx.stubs.local.bitraft.io
+          - auth.nhslogin.stubs.local.bitraft.io
+          - deeplinklauncher.stubs.local.bitraft.io
+          - drdoctor.stubs.local.bitraft.io
+          - engage.stubs.local.bitraft.io
+          - ers.stubs.local.bitraft.io
           - gncr.stubs.local.bitraft.io
-          - substrakt.stubs.local.bitraft.io
           - nhsd.stubs.local.bitraft.io
           - netcall.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io
-          - ers.stubs.local.bitraft.io
-          - deeplinklauncher.stubs.local.bitraft.io
+          - paycasso.stubs.local.bitraft.io
+          - pkb.stubs.local.bitraft.io
+          - settings.nhslogin.stubs.local.bitraft.io
           - silverintegrationtestprovider.stubs.local.bitraft.io
+          - substrakt.stubs.local.bitraft.io
           - substraktDomain1.stubs.local.bitraft.io
+          - uaf.nhslogin.stubs.local.bitraft.io
           - wellnessAndPrevention.stubs.local.bitraft.io
           - zesty.stubs.local.bitraft.io
 

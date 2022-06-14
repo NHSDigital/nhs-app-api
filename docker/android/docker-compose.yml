@@ -11,23 +11,24 @@ services:
     command: |
       --log-facility=- \
         -h \
-        -A /web.local.bitraft.io/10.0.2.2 \
-        -A /api.local.bitraft.io/10.0.2.2 \
-        -A /silver.local.bitraft.io/10.0.2.2 \
-        -A /stubs.local.bitraft.io/10.0.2.2 \
-        -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
-        -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
-        -A /ers.stubs.local.bitraft.io/10.0.2.2 \
-        -A /deeplinklauncher.stubs.local.bitraft.io/10.0.2.2 \
-        -A /paycasso.stubs.local.bitraft.io/10.0.2.2 \
-        -A /pkb.stubs.local.bitraft.io/10.0.2.2 \
-        -A /pkb.securestubs.local.bitraft.io/10.0.2.2 \
-        -A /engage.stubs.local.bitraft.io/10.0.2.2 \
         -A /accurx.stubs.local.bitraft.io/10.0.2.2 \
+        -A /api.local.bitraft.io/10.0.2.2 \
+        -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
+        -A /deeplinklauncher.stubs.local.bitraft.io/10.0.2.2 \
+        -A /drdoctor.stubs.local.bitraft.io/10.0.2.2 \
+        -A /engage.stubs.local.bitraft.io/10.0.2.2 \
+        -A /ers.stubs.local.bitraft.io/10.0.2.2 \
         -A /gncr.stubs.local.bitraft.io/10.0.2.2 \
-        -A /substrakt.stubs.local.bitraft.io/10.0.2.2 \
-        -A /nhsd.stubs.local.bitraft.io/10.0.2.2 \
         -A /netcall.stubs.local.bitraft.io/10.0.2.2 \
         -A /netcompany.stubs.local.bitraft.io/10.0.2.2 \
+        -A /nhsd.stubs.local.bitraft.io/10.0.2.2 \
+        -A /paycasso.stubs.local.bitraft.io/10.0.2.2 \
+        -A /pkb.securestubs.local.bitraft.io/10.0.2.2 \
+        -A /pkb.stubs.local.bitraft.io/10.0.2.2 \
+        -A /silver.local.bitraft.io/10.0.2.2 \
+        -A /stubs.local.bitraft.io/10.0.2.2 \
+        -A /substrakt.stubs.local.bitraft.io/10.0.2.2 \
+        -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
+        -A /web.local.bitraft.io/10.0.2.2 \
         -A /wellnessandprevention.stubs.local.bitraft.io/10.0.2.2
         -A /zesty.stubs.local.bitraft.io/10.0.2.2 \

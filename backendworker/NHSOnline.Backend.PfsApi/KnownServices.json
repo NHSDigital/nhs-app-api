@@ -586,7 +586,6 @@
       "validateSession": true
     },
     "drDoctor": {
-      "url": "https://my-uat2.drdoctor.co.uk",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
       "menuTab": "None",
@@ -598,7 +597,6 @@
       "showThirdPartyWarning": true
     },
     "drDoctor_login": {
-      "url": "https://login-uat2.drdoctor.co.uk",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
       "menuTab": "None",

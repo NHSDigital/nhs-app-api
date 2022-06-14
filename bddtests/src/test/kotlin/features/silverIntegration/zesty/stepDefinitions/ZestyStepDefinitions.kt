@@ -3,10 +3,9 @@ package features.silverIntegration.zesty.stepDefinitions
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.pages.ZestyPage
-import pages.HybridPageObject
 import utils.SerenityHelpers
 
-class ZestyStepDefinitions : HybridPageObject() {
+class ZestyStepDefinitions {
 
     private lateinit var zestyPage: ZestyPage
     private val mockingClient = SerenityHelpers.getMockingClient()

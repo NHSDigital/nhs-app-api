@@ -93,12 +93,8 @@
       "requiresAssertedLoginIdentity": true
     },
     "drDoctor": {
-      "url": "https://my-uat2.drdoctor.co.uk",
       "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true,
-      "domains": [
-        "https://login-uat2.drdoctor.co.uk"
-      ]
+      "showThirdPartyWarning": true
     },
     "netcall": {
       "requiresAssertedLoginIdentity": true,

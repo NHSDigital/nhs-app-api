@@ -32,6 +32,7 @@ Feature: Wayfinder DeepLinks
     Then I am navigated to a third party site for <Provider>
   Examples:
     | Provider | DeepLink                                                                                                               |
-    | PKB      | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D         |
+    | DrDoctor | http://drdoctor.stubs.local.bitraft.io:8080/appointments/123456?from=nhsApp                                            |
     | Netcall  | http://netcall.stubs.local.bitraft.io:8080/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?remote_record_id |
+    | PKB      | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D         |
     | Zesty    | http://zesty.stubs.local.bitraft.io:8080/nhs/origin_appointment?resource_id=XXXX                                       |
