@@ -111,7 +111,6 @@ web:
   bloodDonationUrl: https://www.blood.co.uk/?utm_source=nhs_app&utm_medium=referral&utm_campaign=partner&utm_content=prompt_endoftransaction&utm_term=allaudiences
   hotjarSiteId: "NOT_SET"
   imagePullPolicy: IfNotPresent
-  oneOneOneUrl: https://111.nhs.uk
 
 api:
   minAvailable: 16
@@ -120,7 +119,6 @@ api:
   publicURL: api.nhsapp.service.nhs.uk
   imagePullPolicy: IfNotPresent
   knownServicesOverrides:
-    services__111__url: https://111.nhs.uk
     services__ndop__url: https://app.your-data-matters.service.nhs.uk
     services__cid_settings__url: https://settings.login.nhs.uk
     services__cid_account__url: https://account.login.nhs.uk
@@ -143,7 +141,6 @@ api:
     services__drDoctor_login__url: https://login.drdoctor.co.uk
     services__netcall__url: https://netcall.com
     services__zesty__url: https://patient-portal.zesty.co.uk
-    servicesV3__111__url: https://111.nhs.uk
     servicesV3__ndop__url: https://app.your-data-matters.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.login.nhs.uk
     servicesV3__cid_account__url: https://account.login.nhs.uk

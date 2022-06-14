@@ -81,13 +81,13 @@ class Config private constructor() {
         cidGpSessionRedirectUri =
                 envOrDefault("CID_GP_SESSION_REDIRECT_URI",
                         "$appScheme://$webHostname:3000/on-demand-gp-return")
-
+        
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
         updatedOrganDonation = "/organdonation"
-        symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://nhsapp.staging.111.nhs.uk")
+        symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
 
         val dataPreferencesHost = wiremockUrl
@@ -99,7 +99,7 @@ class Config private constructor() {
 
         usersMongoDbHost = envOrDefault("USERS_MONGO_DATABASE_HOST", "::1")
         usersMongoDbPort = envOrDefault("USERS_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
-
+        
         messagesMongoDbHost = envOrDefault("MESSAGES_MONGO_DATABASE_HOST", "::1")
         messagesMongoDbPort = envOrDefault("MESSAGES_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 

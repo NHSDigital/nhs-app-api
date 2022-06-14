@@ -8,7 +8,7 @@ namespace NHSOnline.App.Config.Values.OnboardingSandpit
         public Uri NhsUkLoginHelpUrl { get; } = new Uri("https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/");
         public Uri NhsUkLoginWhoCanUseTheAppHelpUrl { get;  } = new Uri("https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/");
         public Uri NhsUkHealthRecordDownloadHelpUrl { get; } = new Uri("https://www.nhs.uk/nhs-app/nhs-app-help-and-support/health-records-in-the-nhs-app/gp-health-record/");
-        public Uri OneOneOneUrl { get; } = new Uri("https://nhsapp.staging.111.nhs.uk/");
+        public Uri OneOneOneUrl { get; } = new Uri("https://111.nhs.uk/");
         public Uri DigitalCovidPassUrl { get; } = new Uri("https://covid-status.service.nhsx.nhs.uk/");
         public Uri PaperCovidPassUrl { get; } = new Uri("https://www.nhs.uk/conditions/coronavirus-covid-19/covid-pass/get-your-covid-pass-letter/");
         public Uri OneOneOneWalesUrl { get; } = new Uri("https://111.wales.nhs.uk/");

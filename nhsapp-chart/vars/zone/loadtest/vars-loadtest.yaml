@@ -77,7 +77,6 @@ api:
   publicURL: api-loadtest.nhsapp.service.nhs.uk
   imagePullPolicy: Always
   knownServicesOverrides:
-    services__111__url: https://nhsapp.staging.111.nhs.uk
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__cid_settings__url: https://settings.ext.signin.nhs.uk
     services__cid_account__url: https://account.ext.signin.nhs.uk
@@ -96,7 +95,6 @@ api:
     services__pkb__url: https://nhsapp.devstacks.pkb.io
     services__pkb_alt__url: https://nhsapp.devstacks.pkb.io:443
     services__zesty__url: https://enterprise.ytsez-sandbox.co.uk
-    servicesV3__111__url: https://nhsapp.staging.111.nhs.uk
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
     servicesV3__cid_account__url: https://account.ext.signin.nhs.uk

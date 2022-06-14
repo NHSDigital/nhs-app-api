@@ -1,6 +1,7 @@
 {
   "servicesV3": {
     "111": {
+      "url": "https://111.nhs.uk",
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "domains": [
