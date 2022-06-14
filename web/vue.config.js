@@ -1,6 +1,7 @@
 /* eslint-disable quote-props */
 // eslint-disable-next-line import/extensions
 const webpack = require('webpack');
+const _ = require('lodash');
 
 module.exports = {
   configureWebpack: {
@@ -26,7 +27,15 @@ module.exports = {
   // properties found at https://webpack.js.org/configuration/dev-server/
   devServer: {
     onBeforeSetupMiddleware: (devServer) => {
-      devServer.app.get(/CONFIG_PATH\/config.json$/, (req, res) => res.send(process.env));
+      devServer.app.get(/CONFIG_PATH\/config.json$/,
+        (req, res) => res.send(
+          _.pickBy(process.env,
+            (value, key) =>
+              key !== 'NGINX_VERSION' &&
+              key !== 'NJS_VERSION' &&
+              key !== 'PKG_RELEASE' &&
+              key !== 'PATH'),
+        ));
     },
     allowedHosts: process.env.NODE_ENV !== 'production' ? 'all' : 'auto',
     port: process.env.PORT,

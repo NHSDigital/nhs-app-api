@@ -36,6 +36,18 @@ const defineErrorHandling = () => {
   Vue.config.errorHandler = vueErrorLogHandler;
 };
 
+function convertBooleans() {
+  Object.keys(store.$env).forEach((key) => {
+    if (store.$env[key] === 'true') {
+      store.$env[key] = true;
+    }
+
+    if (store.$env[key] === 'false') {
+      store.$env[key] = false;
+    }
+  });
+}
+
 (async () => {
   Vue.use(VueCookies);
   Vue.use(ApiPlugin);
@@ -44,6 +56,9 @@ const defineErrorHandling = () => {
   Vue.use(NativeAppCallbacksPlugin);
   Vue.config.productionTip = false;
   store.$env = (await Axios.get('CONFIG_PATH/config.json')).data; // see the web dockerfile to see how this is defined at startup
+
+  convertBooleans();
+
   store.$cookies = Vue.$cookies;
 
   defineErrorHandling();
