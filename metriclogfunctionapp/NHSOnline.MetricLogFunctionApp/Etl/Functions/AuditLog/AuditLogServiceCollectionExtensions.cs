@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -8,7 +10,6 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
@@ -40,6 +41,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<AppointmentCancelMetric>, AppointmentCancelMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<AppointmentCancelMetric>, AppointmentCancelEventParser>();
+            
+            serviceCollection.AddTransient<IAuditLogEtl<AppointmentBookMetric>, AppointmentBookMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<AppointmentBookMetric>, AppointmentBookEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateEventParser>();

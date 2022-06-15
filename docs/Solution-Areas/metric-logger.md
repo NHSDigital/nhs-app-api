@@ -189,6 +189,36 @@ InitialPrompt body:
 ]
 ```
 
+AppointmentBooking Body:
+```bash
+[
+    {
+        "Id": "77ae16c3-fbb7-4aa1-861b-86a5949488bf",
+        "Timestamp": "2022-05-04T10:13:06.83016Z",
+        "AuditId": "77ae16c3-fbb7-4aa1-861b-86a5949488bf",
+        "NhsLoginSubject": "5abf0a97-2898-41a8-b04c-6f94d3b541eb",
+        "NhsNumber": "969 223 7680",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Fake",
+        "Operation": "Appointments_Book_Response",
+        "Details": "Appointment successfully booked for appointment with id: ddf1a37f-f46b-4147-8b1b-d5d402610358 and startDateTime: 2022-05-07T09:57:19.6877071+00:00",
+        "ApiVersion": "v2.8.2",
+        "WebVersion": "2.8.2 (commit:f57f22a81)",
+        "NativeVersion": "ios 2.8.0",
+        "Environment": "onboardingaos",
+        "IntegrationReferrer": null,
+        "SessionId": "c69711d8-2013-4dd1-acad-5bbbfecdb35e",
+        "ProofLevel": "P9",
+        "id": "76d83765-ec5a-475b-aa60-92cef2f899db",
+        "_rid": "RuVQAKPVga8qDQYAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8qDQYAAAAAAA==/",
+        "_etag": "\"c30075fe-0000-1100-0000-627251b20000\"",
+        "_attachments": "attachments/",
+        "_ts": 1651659186
+    },
+]
+```
+
 AppointmentCancellation Body:
 ```bash
 [
@@ -245,6 +275,8 @@ OrganDonationRegistration Body:
     }
 ]
 ```
+
+
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

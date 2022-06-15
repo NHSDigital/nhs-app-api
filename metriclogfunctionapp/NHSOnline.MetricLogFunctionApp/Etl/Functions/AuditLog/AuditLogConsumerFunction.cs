@@ -6,6 +6,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -13,7 +15,6 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
@@ -29,6 +30,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
         private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
         private readonly IAuditLogEtl<AppointmentCancelMetric> _appointmentCancelEtl;
+        private readonly IAuditLogEtl<AppointmentBookMetric> _appointmentBookEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationCreateMetric> _organDonationRegistrationCreateEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
@@ -42,6 +44,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
             IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
             IAuditLogEtl<AppointmentCancelMetric> appointmentCancelEtl,
+            IAuditLogEtl<AppointmentBookMetric> appointmentBookEtl,
             IAuditLogEtl<OrganDonationRegistrationCreateMetric> organDonationRegistrationCreateEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
@@ -54,6 +57,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _notificationToggleEtl = notificationToggleEtl;
             _initialPromptEtl = initialPromptEtl;
             _appointmentCancelEtl = appointmentCancelEtl;
+            _appointmentBookEtl = appointmentBookEtl;
             _organDonationRegistrationCreateEtl = organDonationRegistrationCreateEtl;
             _logger = logger;
             _queueLogger = queueLogger;
@@ -99,6 +103,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _appointmentCancelEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
                 await _medicalRecordViewEtl.Execute(events);
+                await _appointmentBookEtl.Execute(events);
                 await _organDonationRegistrationCreateEtl.Execute(events);
             }
             catch (Exception)
