@@ -420,7 +420,7 @@ export default {
       },
       drDoctor: {
         serviceId: 'drDoctor',
-        providerName: 'Dr Doctor',
+        providerName: 'DrDoctor',
       },
       pkb: {
         serviceId: 'pkb',
@@ -436,8 +436,8 @@ export default {
       },
     },
     thirdPartyWarning: {
-      featureName: 'View appointments',
-      servicePurchaser: 'Your GP surgery or hospital',
+      featureName: 'View or manage appointment',
+      servicePurchaser: 'Your hospital',
       serviceType: 'personal health record service',
       serviceTypePlural: 'personal health record services',
       linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',

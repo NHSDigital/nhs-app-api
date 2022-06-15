@@ -17,18 +17,18 @@ describe('Wayfinder Silver Integration warning panel', () => {
         wayfinder: {
           id: 'wayfinder',
           jumpOffContent: {
-            headerText: 'View appointments',
+            headerText: 'View or manage appointment',
             descriptionText: '',
           },
           wayfinderJumpOffs: {
             drDoctor: {
               serviceId: 'drDoctor',
-              providerName: 'Dr Doctor',
+              providerName: 'DrDoctor',
             },
           },
           thirdPartyWarning: {
-            featureName: 'View appointments',
-            servicePurchaser: 'Your GP surgery or hospital',
+            featureName: 'View or manage appointment',
+            servicePurchaser: 'Your hospital',
             serviceType: 'personal health record service',
             serviceTypePlural: 'personal health record services',
             linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
@@ -74,7 +74,7 @@ describe('Wayfinder Silver Integration warning panel', () => {
 
   describe('providerName', () => {
     it('will return the wayfinder provider name when isWayfinderUrl is true', () => {
-      expect(wrapper.vm.providerName).toBe('Dr Doctor');
+      expect(wrapper.vm.providerName).toBe('DrDoctor');
     });
   });
 });

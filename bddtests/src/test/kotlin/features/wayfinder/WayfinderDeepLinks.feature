@@ -27,7 +27,7 @@ Feature: Wayfinder DeepLinks
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see an appointment ready to confirm
     When I click the 'Contact the clinic to confirm' button
-    Then I am redirected to the redirector page with the header 'View appointments'
+    Then I am redirected to the redirector page with the header 'View or manage appointment'
     When I click the 'Continue' button on the redirector page with a url starting with '<DeepLink>'
     Then I am navigated to a third party site for <Provider>
   Examples:

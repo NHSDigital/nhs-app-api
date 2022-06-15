@@ -335,7 +335,7 @@ describe('redirector page', () => {
             IntendedRelyingPartyUrl: 'http://www.url.com/appointments/',
             JumpOffId: 'drDoctorWayfinder',
             ProviderId: 'drDoctor',
-            ProviderName: 'Dr Doctor',
+            ProviderName: 'DrDoctor',
             Action: 'SilverIntegrationJumpOff',
           },
           ignoreError: true,
