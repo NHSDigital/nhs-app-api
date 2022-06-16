@@ -33,6 +33,11 @@ namespace NHSOnline.App.Droid.DependencyServices
             {
                 var convertedData = Convert.FromBase64String(downloadRequest.Base64Data);
                 uri = await StoreFileInDownloads(convertedData, downloadRequest, downloadRequest.FileName).PreserveThreadContext();
+
+                if (uri == null)
+                {
+                    return new DownloadFileResult.Failed();
+                }
             }
             catch (Exception e)
             {
@@ -111,12 +116,27 @@ namespace NHSOnline.App.Droid.DependencyServices
         private static async Task<Uri?> CreateFileFromResolver(byte[] convertedData, DownloadRequest downloadRequest)
         {
             var resolver = CreateContentResolver(downloadRequest, out var fileUri);
-            await using var outputStream = resolver.OpenOutputStream(fileUri)!;
-            await outputStream.WriteAsync(convertedData).PreserveThreadContext();
+
+            if (fileUri != null)
+            {
+                await using var outputStream = resolver.OpenOutputStream(fileUri)!;
+                await outputStream.WriteAsync(convertedData).PreserveThreadContext();
+            }
+            else
+            {
+                Logger.LogError(
+                    "{MethodName}: fileUri is null. " +
+                    "DownloadRequest Length: {DownloadRequestLength}, " +
+                    "DownloadRequest MimeType: {DownloadRequestMimeType}",
+                    nameof(CreateFileFromResolver),
+                    downloadRequest.Base64Data.Length,
+                    downloadRequest.MimeType);
+            }
+
             return fileUri;
         }
 
-        private static ContentResolver CreateContentResolver(DownloadRequest downloadRequest, out Uri fileUri)
+        private static ContentResolver CreateContentResolver(DownloadRequest downloadRequest, out Uri? fileUri)
         {
             var resolver = MainActivity?.ContentResolver!;
 
@@ -125,7 +145,7 @@ namespace NHSOnline.App.Droid.DependencyServices
             contentValues.Put(MediaStore.IMediaColumns.MimeType, downloadRequest.MimeType);
             contentValues.Put(MediaStore.IMediaColumns.DocumentId, Guid.NewGuid().ToString());
 
-            fileUri = resolver.Insert(MediaStore.Downloads.ExternalContentUri, contentValues)!;
+            fileUri = resolver.Insert(MediaStore.Downloads.ExternalContentUri, contentValues);
             return resolver;
         }
     }
