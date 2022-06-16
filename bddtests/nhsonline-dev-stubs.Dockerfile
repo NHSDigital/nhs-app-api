@@ -21,6 +21,7 @@ RUN mkdir -p /var/wiremock/lib/ && \
 COPY . .
 
 RUN --mount=type=secret,id=maven,dst=/root/.m2/settings.xml \
+    --mount=type=secret,id=cosmosApiConnectionString,dst=/root/.nhsonline/secrets/cosmos_sql_api_connection_string_bdd \
     java -cp /var/wiremock/lib/* com.github.tomakehurst.wiremock.standalone.WireMockServerRunner & \
     ./gradlew --no-daemon mock && \
     curl -X POST ${wiremockUrl}__admin/mappings/save

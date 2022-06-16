@@ -15,5 +15,6 @@ validate_maven_settings
 docker build \
   --tag "local/nhsonline-dev-stubs:latest" \
   --secret "id=maven,src=${MVN_CFG_PATH}" \
+  --secret "id=cosmosApiConnectionString,src=${HOME_PATH}/.nhsonline/secrets/cosmos_sql_api_connection_string_bdd" \
   -f nhsonline-dev-stubs.Dockerfile \
   . || die "Failed to build dev stubs"
