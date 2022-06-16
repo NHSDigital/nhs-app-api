@@ -1,6 +1,6 @@
 import axios from 'axios';
 import NHSOnlineApi from '@/services/v1nhsonlineapi';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 jest.mock('uuid');
 
@@ -14,7 +14,7 @@ describe('services/nhsonlineapi', () => {
 
   beforeEach(() => {
     axios.mockClear();
-    uuid.v4 = jest.fn().mockReturnValue(mockNhsoRequestID);
+    uuid.mockReturnValue(mockNhsoRequestID);
   });
 
   describe('request', () => {
@@ -101,7 +101,7 @@ describe('services/nhsonlineapi', () => {
           expect(headersSentInRequest).not.toBeNull();
           const nhsoRequestIdHeader = headersSentInRequest['NHSO-Request-ID'];
           expect(nhsoRequestIdHeader).toBe(mockNhsoRequestID);
-          expect(uuid.v4).toHaveBeenCalled();
+          expect(uuid).toHaveBeenCalled();
         });
       });
     });

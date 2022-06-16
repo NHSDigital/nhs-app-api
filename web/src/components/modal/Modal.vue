@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import createFocusTrap from 'focus-trap/index';
+import { createFocusTrap } from 'focus-trap';
 import { getModalContent } from '@/components/modal/modalRegister';
 
 export default {

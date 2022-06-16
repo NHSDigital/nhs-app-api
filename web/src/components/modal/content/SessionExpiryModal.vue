@@ -14,6 +14,7 @@
 
     <div :class="$style.logoutPanel">
       <a id="modalExtendLogout"
+         tabindex="0"
          :class="[$style['nhsuk-action-link__link'], $style.logoutLink]"
          :href="logoutPath"
          data-purpose="logout"

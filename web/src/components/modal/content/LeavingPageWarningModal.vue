@@ -14,6 +14,7 @@
 
     <div :class="$style.leavePanel">
       <a id="modalLeavePage"
+         tabindex="0"
          :class="[$style['nhsuk-action-link__link'], $style.leaveLink]"
          :href="redirectPath"
          data-purpose="leavePage"
