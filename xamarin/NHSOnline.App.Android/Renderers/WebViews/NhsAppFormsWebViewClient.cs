@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Android.Net.Http;
 using Android.Runtime;
 using Android.Webkit;
 using NHSOnline.App.Controls;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
 using Xamarin.Forms.Platform.Android;
 using Uri = Android.Net.Uri;
@@ -41,6 +43,18 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 ClientError.ProxyAuthentication => new ProxyErrorWebResourceRequest(request, _renderer),
                 _ => request
             };
+
+        public override void OnReceivedSslError(WebView? view, SslErrorHandler? handler, SslError? error)
+        {
+            if (_renderer?.Element is WebIntegrationWebView sslErrorResult)
+            {
+                handler?.Cancel();
+                sslErrorResult.OnSslError();
+                return;
+            }
+
+            base.OnReceivedSslError(view, handler, error);
+        }
 
         private class ProxyErrorWebResourceRequest : Java.Lang.Object, IWebResourceRequest
         {

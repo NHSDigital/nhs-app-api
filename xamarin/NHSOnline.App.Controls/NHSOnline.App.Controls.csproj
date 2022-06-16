@@ -198,5 +198,9 @@
       <DependentUpon>SafeAreaPaddingTopOrientationAware.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Panels\ServiceDownError.xaml.cs">
+      <DependentUpon>ServiceDownError.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

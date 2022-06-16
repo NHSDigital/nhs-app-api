@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:NhsAppFullHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                            xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                            xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
+                            mc:Ignorable="d"
+                            x:Class="NHSOnline.App.Areas.Errors.Views.ServiceDownErrorPage"
+                            x:Name="Page"
+                            PageDescription="Service currently unavailable"
+                            SelectedNavigationFooterItem="{Binding SelectedNavigationFooterItem, Source={x:Reference Name=Page}}">
+
+    <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
+        <panels:ResponsiveLayoutPanel>
+            <panels:ServiceDownError
+               OneOneOneCommand="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+        </panels:ResponsiveLayoutPanel>
+    </ScrollView>
+</pages:NhsAppFullHeaderPage>

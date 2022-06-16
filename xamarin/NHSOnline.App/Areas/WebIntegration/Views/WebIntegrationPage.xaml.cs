@@ -69,6 +69,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
 
         public Action<WebViewPageLoadEventArgs>? PageLoadComplete { get; set; }
 
+        public Func<Task>? SslError { get; set; }
+
+        public AsyncCommand SslErrorCommand
+            => new AsyncCommand(() => SslError);
+
         public Func<Task>? BackRequested { get; set; }
         public AsyncCommand BackRequestedCommand
             => new AsyncCommand(() => BackRequested);

@@ -29,6 +29,7 @@
                                         OpenExternalBrowserCommand="{Binding OpenExternalBrowserCommand, Source={x:Reference Name=Page}}"
                                         AddEventToCalendarCommand="{Binding AddEventToCalendarCommand, Source={x:Reference Name=Page}}"
                                         BackCommand="{Binding BackCommand, Source={x:Reference Name=Page}}"
+                                        SslErrorCommand="{Binding SslErrorCommand, Source={x:Reference Name=Page}}"
                                         Navigated="WebOnEndNavigating" />
 
     </AbsoluteLayout>

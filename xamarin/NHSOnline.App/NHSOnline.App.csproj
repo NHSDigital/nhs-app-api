@@ -178,6 +178,10 @@
       <DependentUpon>UnsupportedPlatformVersionPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Areas\Errors\Views\ServiceDownErrorPage.xaml.cs">
+      <DependentUpon>ServiceDownErrorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

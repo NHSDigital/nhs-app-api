@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.Panels.ServiceDownError"
+             x:Name="Root">
+    <elements:Heading1 Text="The service is unavailable" />
+ 
+    <StackLayout>
+        <elements:Paragraph Text="This might be a temporary problem." />
+        <elements:Paragraph Text="If you need to book an appointment or get a prescription now, use your GP surgery's website or call the surgery directly." />
+        <elements:Paragraph Text="For urgent medical advice, go to 111.nhs.uk or call 111." />
+        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Root}}" />
+    </StackLayout>
+
+</StackLayout>
