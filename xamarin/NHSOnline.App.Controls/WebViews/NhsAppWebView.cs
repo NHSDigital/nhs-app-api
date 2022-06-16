@@ -173,16 +173,15 @@ namespace NHSOnline.App.Controls.WebViews
         {
             const string callbackName = "window.nativeAppCallbacks.notificationsSettingsStatus";
             var argumentJson = ConvertToJsonString(status);
-            await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
+            await EvaluateJavaScriptWithLoggingAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
         }
 
         public async Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse)
         {
             const string callbackName = "window.nativeAppCallbacks.notificationsAuthorised";
             var argumentJson = ConvertToJsonString(authorisedResponse);
-            await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
+            await EvaluateJavaScriptWithLoggingAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
         }
-
         public async Task SendNotificationUnauthorised()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.notificationsUnauthorised()").ResumeOnThreadPool();
 
@@ -265,7 +264,7 @@ namespace NHSOnline.App.Controls.WebViews
         {
             const string callbackName = "window.nativeAppCallbacks.biometricStatus";
             var jsonArgument = ConvertToJsonString(biometricStatus);
-            await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
+            await EvaluateJavaScriptWithLoggingAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
         }
 
         public void UpdateBiometricRegistration(string argument) => UpdateBiometricRegistrationCommand.Execute(argument);
@@ -322,7 +321,7 @@ namespace NHSOnline.App.Controls.WebViews
         {
             const string callbackName = "window.nativeAppCallbacks.loginSettingsBiometricCompletion";
             var jsonArgument = ConvertToJsonString(biometricCompletion);
-            await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
+            await EvaluateJavaScriptWithLoggingAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
         }
 
         public async Task SendPageLeave()
@@ -332,7 +331,7 @@ namespace NHSOnline.App.Controls.WebViews
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.pageLeaveWarningStayOnPage()").ResumeOnThreadPool();
 
         public async Task SendSessionExtend()
-            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
+            => await EvaluateJavaScriptWithLoggingAsync("window.nativeAppCallbacks.sessionExtend()").ResumeOnThreadPool();
 
         public async Task NavigateToAdvice()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.navigationGoToAdvice()").ResumeOnThreadPool();
@@ -368,7 +367,7 @@ namespace NHSOnline.App.Controls.WebViews
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.validateSession()").ResumeOnThreadPool();
 
         public async Task AppVersionUpdateNativeVersion(string version)
-            => await EvaluateJavaScriptAsync($"window.nativeAppCallbacks.appVersionUpdateNativeVersion('{version}')")
+            => await EvaluateJavaScriptWithLoggingAsync($"window.nativeAppCallbacks.appVersionUpdateNativeVersion('{version}')")
                 .ResumeOnThreadPool();
 
         public async Task NavigateToOnDemandGpReturn(Dictionary<string, string> queryParameters)
@@ -388,7 +387,19 @@ namespace NHSOnline.App.Controls.WebViews
         }
 
         public async Task GetContextualHelpLink()
-            => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.getContextualHelpLink()").ResumeOnThreadPool();
+            => await EvaluateJavaScriptWithLoggingAsync("window.nativeAppCallbacks.getContextualHelpLink()").ResumeOnThreadPool();
+
+        private async Task EvaluateJavaScriptWithLoggingAsync(string script)
+        {
+            try
+            {
+                await EvaluateJavaScriptAsync(script).ResumeOnThreadPool();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error executing script: {Script}", script);
+            }
+        }
 
         private static T ConvertFromJsonString<T>(string json)
             => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
