@@ -8,6 +8,10 @@ users:
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch16
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch16a
 
+# web
+web:
+  qualtricsSurveyEnabled: true
+
 secrets:
   notificationHubs:
     - name: "notificationHubSharedAccessKey-nonlive-scratch16"

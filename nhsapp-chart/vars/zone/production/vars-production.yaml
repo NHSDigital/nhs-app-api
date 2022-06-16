@@ -109,7 +109,7 @@ web:
   dataPreferencesUrl: https://app.your-data-matters.service.nhs.uk/createsession
   organDonationThrottlingUrl: https://www.organdonation.nhs.uk/?campaign=2896&utm_source=nhs_app&utm_medium=referral&utm_campaign=partner&utm_content=app_link_web&utm_term=allaudiences
   bloodDonationUrl: https://www.blood.co.uk/?utm_source=nhs_app&utm_medium=referral&utm_campaign=partner&utm_content=prompt_endoftransaction&utm_term=allaudiences
-  hotjarSiteId: "NOT_SET"
+  hotjarSiteId: "1010097"
   imagePullPolicy: IfNotPresent
 
 api:
