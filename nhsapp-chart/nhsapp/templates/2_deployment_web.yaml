@@ -151,13 +151,13 @@ spec:
         - name: SESSION_EXPIRING_WARNING_SECONDS
           value: "60"
         - name: SYMPTOM_CHECKER_URL
-          value: "https://111.nhs.uk"
+          value: "{{ $.Values.web.oneOneOneUrl }}"
         - name: SYMPTOM_CHECKER_WALES_URL
           value: "https://111.wales.nhs.uk"
         - name: CONDITIONS_CHECKER_URL
           value: "https://www.nhs.uk/conditions/"
         - name: CORONA_SERVICE_URL
-          value: "https://111.nhs.uk/service/COVID-19/"
+          value: "{{ $.Values.web.oneOneOneUrl }}/service/COVID-19/"
         - name: CORONA_CONDITIONS_URL
           value: "https://www.nhs.uk/conditions/coronavirus-covid-19/"
         - name: MY_HEALTH_ONLINE
@@ -205,7 +205,7 @@ spec:
         - name: GPATHAND_APP_DOWNLOAD_URL
           value: "https://www.gpathand.nhs.uk/download-app"
         - name: EMERGENCY_PRESCRIPTIONS_URL
-          value: "https://111.nhs.uk/emergency-prescription/"
+          value: "{{ $.Values.web.oneOneOneUrl }}/emergency-prescription/"
         - name: INFORMATICA_URL
           value: "https://the-andover-health-centre-medical-practice.appointments-online.co.uk/"
         - name: SYMPTOM_CHECKER_NORTHERN_IRELAND_URL
@@ -235,7 +235,7 @@ spec:
         - name: WHO_CAN_USE_APP_URL
           value: "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/"
         - name: GO_TO_NHS_WEBSITE
-          value: "https://www.nhs.uk/"    
+          value: "https://www.nhs.uk/"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
