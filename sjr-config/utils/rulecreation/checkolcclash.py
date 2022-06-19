@@ -8,7 +8,7 @@ OVERRIDES_FILENAME = 'olcoverrides.csv'
 
 accurx = csv.DictReader(open(os.path.join(os.path.dirname(__file__), ACCURX_CSV_FILENAME)))
 econsult = csv.DictReader(open(os.path.join(os.path.dirname(__file__), ECONSULT_CSV_FILENAME)))
-overrides = csv.DictReader(open(os.path.join(os.path.dirname(__file__), OVERRIDES_FILENAME)))
+overrides = list(csv.DictReader(open(os.path.join(os.path.dirname(__file__), OVERRIDES_FILENAME))))
 
 accurxOdsCodes = []
 econsultOdsCodes = []

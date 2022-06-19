@@ -28,7 +28,6 @@ target:
     - F82017
     - F82621
     - F82612
-    - F82660
     - F82034
 journeys:
   cdssAdvice:

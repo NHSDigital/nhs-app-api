@@ -11,7 +11,6 @@ target:
     - J82025
     - J82075
     - J82150
-    - J82131
     - J82106
     - J82089
     - J82146
@@ -37,7 +36,6 @@ target:
     - J82008
     - J82036
     - J82034
-    - J82139
 journeys:
   cdssAdvice:
     provider: eConsult
