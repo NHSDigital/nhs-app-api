@@ -4,45 +4,50 @@
       {{ $t('wayfinder.referrals.readyToBook.title') }}
     </h3>
 
-    <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
-       class="nhsuk-u-margin-bottom-3">
-      <strong>{{ requestedSpecialty }}</strong>
-    </p>
+    <template v-if="hasSpecialty">
+      <p data-purpose="specialty"
+         class="nhsuk-u-margin-bottom-3">
+        <strong>{{ specialty }}</strong>
+      </p>
 
-    <p v-if="hasSpecialty" :id="`referral-ready-to-book-${referralId}`"
-       class="nhsuk-u-margin-bottom-3">
-      {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYour',
-            null, {specialty: requestedSpecialty}) }}
-    </p>
+      <p data-purpose="specialty-info"
+         class="nhsuk-u-margin-bottom-3">
+        {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYour', null, {specialty}) }}
+      </p>
+    </template>
 
-    <p v-else :id="`referral-ready-to-book-no-specialty-${referralId}`"
+    <p v-else
+       data-purpose="no-specialty-info"
        class="nhsuk-u-margin-bottom-3">
       {{ $t('wayfinder.referrals.readyToBook.youNeedToRebookYourNoSpecialty') }}
     </p>
 
-    <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referral-date-header-${referralId}`">
+        <span data-purpose="referral-date-header">
           {{ $t('wayfinder.referrals.referredDate') }}
         </span>
       </strong>
       <br>
-      <span :id="`referral-date-text-${referralId}`">{{ getFormattedReferredDate }}</span>
+      <span data-purpose="referral-date">
+        {{ referralDate | longDate }}
+      </span>
     </p>
 
-    <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referred-by-header-${referralId}`" >
+        <span data-purpose="referrer-header">
           {{ $t('wayfinder.referrals.referredBy') }}
         </span>
       </strong>
       <br>
-      <span :id="`referred-by-text-${referralId}`" >{{ referredBy }}</span>
+      <span data-purpose="referrer">
+        {{ referrer }}
+      </span>
     </p>
 
-    <primary-button
-      :id="`bookOrManageReferral-${referralId}`"
-      @click="goToUrlViaRedirector(deepLinkUrl)">
+    <primary-button data-purpose="book-or-manage-button"
+                    @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.readyToBook.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
@@ -52,6 +57,7 @@
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
+import { isBlankString } from '@/lib/utils';
 
 export default {
   name: 'ReferralReadyToRebookCard',
@@ -61,33 +67,22 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    referredBy: {
-      type: String,
-      default: '',
-    },
-    referredDate: {
-      type: String,
-      default: '',
-    },
-    requestedSpecialty: {
-      type: String,
-      default: '',
-    },
-    referralId: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
+    item: {
+      type: Object,
       required: true,
     },
   },
+  data() {
+    return {
+      referrer: this.item.referrerOrganisation,
+      referralDate: this.item.referredDateTime,
+      specialty: this.item.serviceSpecialty,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
+  },
   computed: {
     hasSpecialty() {
-      return this.requestedSpecialty;
-    },
-    getFormattedReferredDate() {
-      return this.$options.filters.longDate(this.referredDate);
+      return !isBlankString(this.specialty);
     },
   },
 };

@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasLoaded" class="nhsuk-grid-row">
+  <div v-if="hasLoaded"
+       class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-padding-top-3">
 
         <template v-if="hasErrored">
-
           <template v-if="showDoesNotMeetMinimumAgeError">
             <p>{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
           </template>
@@ -41,10 +41,7 @@
             :click-func="redirectToReferralsOrAppointmentsHelp"
             :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
               'ReferralsOrAppointments')"/>
-          <book-or-manage-referrals-or-appointments-card
-            :referrals-not-in-review="referralsNotInReview"
-            :referrals-in-review="referralsInReview"
-            :unconfirmed-appointments="unconfirmedAppointments"/>
+          <book-or-manage-referrals-or-appointments-group/>
 
           <h2 id="confirmed-appointments-title"
               class="nhsuk-u-padding-bottom-5">
@@ -56,9 +53,7 @@
             :click-func="redirectToConfirmedAppointmentsHelp"
             :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
               'ConfirmedAppointments')"/>
-          <confirmed-appointments-card
-            :confirmed-appointments="confirmedAppointments"
-            :has-confirmed-appointments="hasConfirmedAppointments"/>
+          <confirmed-appointments-group/>
 
           <h2 id="referrals-in-review-title"
               class="nhsuk-u-padding-bottom-5">
@@ -70,8 +65,7 @@
             :click-func="redirectToReferralsInReviewHelp"
             :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
               'ReferralsInReview')"/>
-          <referrals-in-review-card
-            :referrals-in-review="referralsInReview"/>
+          <referrals-in-review-group/>
 
           <other-available-services-menu-items
             id="other-available-services-menu-items"
@@ -93,9 +87,9 @@ import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import GenericButton from '@/components/widgets/GenericButton';
 import OtherAvailableServicesMenuItems from '@/components/wayfinder/OtherAvailableServicesMenuItems';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import BookOrManageReferralsOrAppointmentsCard from '@/components/wayfinder/sections/BookOrManageReferralsOrAppointmentsCard';
-import ConfirmedAppointmentsCard from '@/components/wayfinder/sections/ConfirmedAppointmentsCard';
-import ReferralsInReviewCard from '@/components/wayfinder/sections/ReferralsInReviewCard';
+import BookOrManageReferralsOrAppointmentsGroup from '@/components/wayfinder/sections/BookOrManageReferralsOrAppointmentsGroup';
+import ConfirmedAppointmentsGroup from '@/components/wayfinder/sections/ConfirmedAppointmentsGroup';
+import ReferralsInReviewGroup from '@/components/wayfinder/sections/ReferralsInReviewGroup';
 import WayfinderHelpLink from '@/components/wayfinder/WayfinderHelpLink';
 
 import { redirectTo } from '@/lib/utils';
@@ -117,9 +111,9 @@ export default {
     DesktopGenericBackLink,
     GenericButton,
     OtherAvailableServicesMenuItems,
-    BookOrManageReferralsOrAppointmentsCard,
-    ConfirmedAppointmentsCard,
-    ReferralsInReviewCard,
+    BookOrManageReferralsOrAppointmentsGroup,
+    ConfirmedAppointmentsGroup,
+    ReferralsInReviewGroup,
   },
   data() {
     return {
@@ -153,21 +147,6 @@ export default {
     },
     hasLoaded() {
       return this.$store.state.wayfinder.hasLoaded;
-    },
-    referralsInReview() {
-      return this.$store.state.wayfinder.summary.referralsInReview;
-    },
-    referralsNotInReview() {
-      return this.$store.state.wayfinder.summary.referralsNotInReview;
-    },
-    unconfirmedAppointments() {
-      return this.$store.state.wayfinder.summary.unconfirmedAppointments;
-    },
-    confirmedAppointments() {
-      return this.$store.state.wayfinder.summary.confirmedAppointments;
-    },
-    hasConfirmedAppointments() {
-      return this.confirmedAppointments.length >= 1;
     },
   },
   async mounted() {

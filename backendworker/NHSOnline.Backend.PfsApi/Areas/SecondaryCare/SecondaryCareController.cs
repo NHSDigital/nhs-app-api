@@ -13,7 +13,7 @@ using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
 {
-    [ApiVersionRoute("patient/secondary-care")]
+    [ApiVersionRoute("patient/secondary-care/summary")]
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class SecondaryCareController : Controller
     {
@@ -34,15 +34,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
             _errorReferenceGenerator = errorReferenceGenerator;
         }
 
-        [HttpGet("summary")]
-        public async Task<IActionResult> Summary([UserSession] P9UserSession userSession)
+        [HttpGet]
+        [ApiVersion("1", Deprecated = true)]
+        public async Task<IActionResult> GetSummaryV1([UserSession] P9UserSession userSession) =>
+            await GetSummary(userSession, 1);
+
+        [HttpGet]
+        [ApiVersion("2")]
+        public async Task<IActionResult> GetSummaryV2([UserSession] P9UserSession userSession) =>
+            await GetSummary(userSession, 2);
+
+        private async Task<IActionResult> GetSummary(P9UserSession userSession, int apiVersion)
         {
             try
             {
                 _logger.LogEnter();
                 await _auditor.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest, "Attempting to get Secondary Care Summary");
 
-                var result = await _secondaryCareService.GetSummary(userSession);
+                var result = await _secondaryCareService.GetSummary(userSession, apiVersion);
 
                 await result.Accept(new SecondaryCareSummaryResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new SecondaryCareSummaryResultVisitor(_errorReferenceGenerator, Supplier.SecondaryCareAggregator));

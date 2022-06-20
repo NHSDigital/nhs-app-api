@@ -9,9 +9,9 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
         public class Success : SecondaryCareSummaryResult
         {
-            public SummaryResponse Response { get; }
+            public ISummaryResponse Response { get; }
 
-            public Success(SummaryResponse response)
+            public Success(ISummaryResponse response)
             {
                 Response = response;
             }

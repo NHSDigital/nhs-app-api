@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _summaryService = summaryService;
         }
 
-        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession)
-            => await _summaryService.GetSummary(userSession);
+        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession, int apiVersion)
+            => await _summaryService.GetSummary(userSession, apiVersion);
     }
 }

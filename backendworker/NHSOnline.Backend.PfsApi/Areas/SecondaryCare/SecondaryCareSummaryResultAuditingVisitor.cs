@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -24,18 +23,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         {
             try
             {
-                var referralsNotInReviewCount = result.Response.ReferralsNotInReview.Count();
-                var referralsInReviewCount = result.Response.ReferralsInReview.Count();
-                var unconfirmedAppointments = result.Response.UnconfirmedAppointments.Count();
-                var confirmedAppointmentsCount = result.Response.ConfirmedAppointments.Count();
-
-                var totalReferralsCount = (referralsInReviewCount + referralsNotInReviewCount);
-                var totalUpcomingAppointmentsCount = (unconfirmedAppointments + confirmedAppointmentsCount);
-
                 await _auditor.PostOperationAudit(AuditType,
                     "Secondary Care Summary successfully retrieved. " +
-                    $"Total Referrals: {totalReferralsCount}, " +
-                    $"Total Upcoming Appointments: {totalUpcomingAppointmentsCount}");
+                    $"Total Referrals: {result.Response.ReferralCount}, " +
+                    $"Total Upcoming Appointments: {result.Response.AppointmentCount}");
             }
             catch (Exception e)
             {

@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _auditor = auditor;
         }
 
-        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession)
+        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession, int apiVersion)
         {
             try
             {
@@ -81,11 +81,11 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
 
-                var summaryResponse = _mapper.Map(aggregatorResponse.Body);
+                var summaryResponse = _mapper.Map(aggregatorResponse.Body, apiVersion);
 
                 if (summaryResponse is null)
                 {
-                    _logger.LogError("{LogPrefix} unsuccessfully mapped {Bundle} to {Response}. See previous log entries for more detail", SecondaryCareLogPrefix, nameof(Bundle), nameof(SummaryResponse));
+                    _logger.LogError("{LogPrefix} unsuccessfully mapped {Bundle} to {SummaryResponse}. See previous log entries for more detail", SecondaryCareLogPrefix, nameof(Bundle), nameof(ISummaryResponse));
                     await AuditSecondaryCareResult("Failed - mapping failed for at least one entry");
                     return new SecondaryCareSummaryResult.BadGateway();
                 }

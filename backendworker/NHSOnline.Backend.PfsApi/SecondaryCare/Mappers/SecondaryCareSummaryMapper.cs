@@ -32,12 +32,14 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             _logger = logger;
         }
 
-        public SummaryResponse Map(Bundle bundle)
+        public ISummaryResponse Map(Bundle bundle, int apiVersion) =>
+            apiVersion == 1
+                ? MapV1(bundle)
+                : MapV2(bundle);
+
+        private ISummaryResponse MapV1(Bundle bundle)
         {
-            var referralsInReview = new List<Referral>();
-            var referralsNotInReview = new List<Referral>();
-            var confirmedAppointments = new List<UpcomingAppointment>();
-            var unconfirmedAppointments = new List<UpcomingAppointment>();
+            var response = new SummaryResponseV1();
 
             var carePlans = bundle.Entry
                 .Select(x => x.Resource)
@@ -58,16 +60,13 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                                 return null;
                             }
 
-                            if (string.Equals(
-                                    referral.Status,
-                                    ReferralStatus.inReview.ToString(),
-                                    StringComparison.Ordinal))
+                            if (referral.IsInReview)
                             {
-                                referralsInReview.Add(referral);
+                                response.AddReferralInReview(referral);
                                 break;
                             }
 
-                            referralsNotInReview.Add(referral);
+                            response.AddReferralNotInReview(referral);
                             break;
                         }
                         case CarePlan.CarePlanActivityKind.Appointment:
@@ -79,37 +78,81 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                                 return null;
                             }
 
-                            if (appointment.AppointmentDateTime != null)
+                            if (appointment.IsConfirmed)
                             {
-                                confirmedAppointments.Add(appointment);
-                            }
-                            else
-                            {
-                                unconfirmedAppointments.Add(appointment);
+                                response.AddConfirmedAppointment(appointment);
+                                break;
                             }
 
+                            response.AddUnconfirmedAppointment(appointment);
                             break;
                         }
                     }
                 }
             }
 
-            return new SummaryResponse
+            response.Sort();
+
+            return response;
+        }
+
+        private ISummaryResponse MapV2(Bundle bundle)
+        {
+            var response = new SummaryResponseV2();
+
+            var carePlans = bundle.Entry
+                .Select(x => x.Resource)
+                .OfType<CarePlan>();
+
+            foreach (var carePlan in carePlans)
             {
-                ReferralsNotInReview = referralsNotInReview
-                    .OrderBy(r => r.ReferredDateTime)
-                    .ToList(),
-                ReferralsInReview = referralsInReview
-                    .OrderBy(r => r.ReferredDateTime)
-                    .ToList(),
-                UnconfirmedAppointments = unconfirmedAppointments
-                    .OrderBy(a => a.AppointmentDateTime)
-                    .ToList(),
-                ConfirmedAppointments = confirmedAppointments
-                    .OrderBy(a => string.Equals(a.AppointmentStatus, AppointmentStatus.Cancelled.GetLiteral(), StringComparison.OrdinalIgnoreCase))
-                    .ThenBy(a => a.AppointmentDateTime)
-                    .ToList(),
-            };
+                foreach (var activity in carePlan.Activity)
+                {
+                    switch (activity.Detail?.Kind)
+                    {
+                        case CarePlan.CarePlanActivityKind.ServiceRequest:
+                        {
+                            var referral = MapActivityToReferral(activity);
+
+                            if (referral is null)
+                            {
+                                return null;
+                            }
+
+                            if (referral.IsInReview && !referral.IsOverdue)
+                            {
+                                response.AddReferralInReviewNotOverdue(referral);
+                                break;
+                            }
+
+                            response.AddActionableReferral(referral);
+                            break;
+                        }
+                        case CarePlan.CarePlanActivityKind.Appointment:
+                        {
+                            var appointment = MapActivityToUpcomingAppointment(activity);
+
+                            if (appointment is null)
+                            {
+                                return null;
+                            }
+
+                            if (appointment.IsConfirmed)
+                            {
+                                response.AddConfirmedAppointment(appointment);
+                                break;
+                            }
+
+                            response.AddActionableAppointment(appointment);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            response.Sort();
+
+            return response;
         }
 
         private Referral MapActivityToReferral(CarePlan.ActivityComponent activity)

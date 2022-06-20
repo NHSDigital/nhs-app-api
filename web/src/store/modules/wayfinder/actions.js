@@ -1,10 +1,9 @@
 import { createLocalError } from '@/lib/utils';
 import {
   INIT,
+  ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED,
   CONFIRMED_APPOINTMENTS_LOADED,
-  UNCONFIRMED_APPOINTMENTS_LOADED,
-  REFERRALS_IN_REVIEW_LOADED,
-  REFERRALS_NOT_IN_REVIEW_LOADED,
+  REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
 } from './mutation-types';
@@ -16,14 +15,15 @@ export default {
   },
   async load({ commit }) {
     try {
-      const { confirmedAppointments, unconfirmedAppointments,
-        referralsInReview, referralsNotInReview }
-        = await this.app.$http.getV1PatientSecondaryCareSummary({ ignoreError: true });
+      const {
+        actionableReferralsAndAppointments,
+        confirmedAppointments,
+        referralsInReviewNotOverdue,
+      } = await this.app.$httpV2.getV2PatientSecondaryCareSummary({ ignoreError: true });
 
-      commit(REFERRALS_IN_REVIEW_LOADED, referralsInReview);
-      commit(REFERRALS_NOT_IN_REVIEW_LOADED, referralsNotInReview);
+      commit(ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED, actionableReferralsAndAppointments);
       commit(CONFIRMED_APPOINTMENTS_LOADED, confirmedAppointments);
-      commit(UNCONFIRMED_APPOINTMENTS_LOADED, unconfirmedAppointments);
+      commit(REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED, referralsInReviewNotOverdue);
     } catch (error) {
       const apiError = createLocalError(error);
 

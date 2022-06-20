@@ -15,7 +15,7 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
     [TestClass]
-    public sealed class SecondaryCareControllerTests
+    public sealed class SecondaryCareControllerTestsV1
     {
         private SecondaryCareControllerTestContext Context { get; set; }
 
@@ -26,13 +26,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task GetSummary_ApimOAuthTokenResponseIsUnsuccessful_Returns502BadGateway()
+        public async Task WhenOAuthTokenResponseFromAPIMIsUnsuccessfulThenGetSummaryV1Returns502BadGateway()
         {
-            // Arrange
+            // Arrange APIM
             Context.MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -49,33 +49,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task GetSummary_GetSummaryResponseFromClientIsSuccessful_Returns200WithCompleteOrderedSummaryResponse()
+        public async Task WhenGetSummaryResponseFromClientIsSuccessfulThenGetSummaryV1Returns200WithCompleteOrderedSummaryResponse()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(LoadAggregatorResponse("complete-valid-secondary-care-summary-response"));
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
-            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
+            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponseV1);
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 6, Total Upcoming Appointments: 8"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 7, Total Upcoming Appointments: 9"));
 
             VerifyNoOtherLoggerCalls();
         }
 
         [TestMethod]
-        public async Task GetSummary_GetSummaryResponseFromClientIsUnsuccessful_Returns502BadGateway()
+        public async Task WhenGetSummaryResponseFromClientIsUnsuccessfulThenGetSummaryV1Returns502BadGateway()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -92,14 +92,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task GetSummary_GetSummaryResponseFromClientTimesOut_Returns504GatewayTimeout()
+        public async Task WhenGetSummaryResponseFromClientTimesOutThenGetSummaryV1Returns504GatewayTimeout()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryTimesOut();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task GetSummary_WhenPatientIsUnderMinimumAge_Returns470()
+        public async Task WhenGetSummaryResponseFromClientIsForbiddenWithMinimumAgeReasonThenGetSummaryV1Returns470()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 LoadAggregatorResponse("under-minimum-age-response"));
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         [TestMethod]
         [DynamicData(nameof(InvalidResponseData))]
-        public async Task GetSummary_GetSummaryResponseHasMissingOrInvalidData_LogsErrorsAndReturns502(
+        public async Task WhenGetSummaryResponseFromClientHasMissingOrInvalidDataThenGetSummaryV1LogsErrorsAndReturns502(
             string response,
             List<string> mapperErrorMessages,
             List<string> serviceErrorMessages,
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(response);
 
             // Act
-            var result = await Context.CreateSystemUnderTest().Summary(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -209,7 +209,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     },
                     new List<string>
                     {
-                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to SummaryResponse. See previous log entries for more detail"
+                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to ISummaryResponse. See previous log entries for more detail"
                     },
                     new List<string>
                     {
@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     },
                     new List<string>
                     {
-                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to SummaryResponse. See previous log entries for more detail"
+                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to ISummaryResponse. See previous log entries for more detail"
                     },
                     new List<string>
                     {

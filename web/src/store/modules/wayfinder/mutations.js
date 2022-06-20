@@ -1,10 +1,9 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
+  ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED,
   CONFIRMED_APPOINTMENTS_LOADED,
-  UNCONFIRMED_APPOINTMENTS_LOADED,
-  REFERRALS_NOT_IN_REVIEW_LOADED,
-  REFERRALS_IN_REVIEW_LOADED,
+  REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
   initialState,
@@ -17,17 +16,14 @@ export default {
       state[key] = blank[key];
     })(state);
   },
-  [REFERRALS_IN_REVIEW_LOADED](state, referralsInReview) {
-    state.summary.referralsInReview = referralsInReview;
-  },
-  [REFERRALS_NOT_IN_REVIEW_LOADED](state, referralsNotInReview) {
-    state.summary.referralsNotInReview = referralsNotInReview;
+  [ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED](state, actionableReferralsAndAppointments) {
+    state.summary.actionableReferralsAndAppointments = actionableReferralsAndAppointments;
   },
   [CONFIRMED_APPOINTMENTS_LOADED](state, confirmedAppointments) {
     state.summary.confirmedAppointments = confirmedAppointments;
   },
-  [UNCONFIRMED_APPOINTMENTS_LOADED](state, unconfirmedAppointments) {
-    state.summary.unconfirmedAppointments = unconfirmedAppointments;
+  [REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED](state, referralsInReviewNotOverdue) {
+    state.summary.referralsInReviewNotOverdue = referralsInReviewNotOverdue;
   },
   [SHOW_ERROR](state, apiError) {
     state.apiError = apiError;

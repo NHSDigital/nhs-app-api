@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 {
     public interface ISecondaryCareSummaryMapper
     {
-        SummaryResponse Map(Bundle bundle);
+        ISummaryResponse Map(Bundle bundle, int apiVersion);
     }
 }

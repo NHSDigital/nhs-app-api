@@ -3,19 +3,23 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('wayfinder.appointments.cancelled.title') }}
     </h3>
-    <p :id="`datetime-${appointmentId}`">
+    <p data-purpose="appointment-date-time">
       <strong>{{ appointmentDateTime | fullDate }}</strong><br>
       <span>{{ appointmentDateTime | formatDate('h.mma') }}</span>
     </p>
-    <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
+    <p data-purpose="location-description"
+       class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
-    <p :id="`cancelled-message-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
+    <p data-purpose="appointment-cancelled-info"
+       class="nhsuk-u-margin-bottom-3">
       {{ $t('wayfinder.appointments.cancelled.anAppointmentHasBeenCancelled') }}
     </p>
-    <p :id="`view-this-appointment-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <a href="#" @click="goToUrlViaRedirector(deepLinkUrl)">
+        <a data-purpose="view-appointment-link"
+           href="#"
+           @click="goToUrlViaRedirector(deepLinkUrl)">
           {{ $t('wayfinder.appointments.cancelled.viewThisAppointment') }}
         </a>
       </strong>
@@ -34,22 +38,17 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    appointmentId: {
-      type: Number,
+    item: {
+      type: Object,
       required: true,
     },
-    appointmentDateTime: {
-      type: String,
-      default: '',
-    },
-    locationDescription: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      appointmentDateTime: this.item.appointmentDateTime,
+      locationDescription: this.item.locationDescription,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
   },
 };
 </script>

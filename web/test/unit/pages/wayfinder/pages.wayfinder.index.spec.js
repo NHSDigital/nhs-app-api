@@ -6,65 +6,74 @@ jest.mock('@/lib/utils', () => ({
   redirectTo: jest.fn(),
 }));
 
+let $store;
+let wrapper;
+let bookOrManageReferralsAndAppointmentsTitle;
+let confirmedAppointmentsTitle;
+let referralsInReviewNotOverdueTitle;
+let noReferralsOrAppointmentsText;
+let noConfirmedAppointmentsText;
+let noReferralsInReviewNotOverdueText;
+let referralsOrAppointmentsHelpLink;
+let confirmedAppointmentsHelpLink;
+let referralsInReviewHelpLink;
+let otherAvailableServicesMenuItems;
+let ersJumpOffMenuItem;
+let backButton;
+
 const setupStore = (
-  hasReferralsInReview,
-  hasReferralsNotInReview,
+  hasActionableReferralsAndAppointments,
   hasConfirmedAppointments,
-  hasUnconfirmedAppointments,
+  hasReferralsInReviewNotOverdue,
   isNativeApp,
   hasApiError,
 ) => {
-  let referralsNotInReviewArray = [];
-  let referralsInReviewArray = [];
-  let confirmedAppointmentsArray = [];
-  let unconfirmedAppointmentsArray = [];
+  let actionableReferralsAndAppointments = [];
+  let confirmedAppointments = [];
+  let referralsInReviewNotOverdue = [];
   let apiError = null;
 
-  if (hasReferralsNotInReview) {
-    referralsNotInReviewArray = [{
-      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/bookable/4',
+  if (hasActionableReferralsAndAppointments) {
+    actionableReferralsAndAppointments = [{
+      referralId: '4',
       status: 'bookable',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
-      requestedSpecialty: 'Cardiology',
-      referralId: '4',
-    }];
-  }
-
-  if (hasReferralsInReview) {
-    referralsInReviewArray = [{
-      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/inreview/3',
-      status: 'inReview',
-      referrerOrganisation: 'Mahogany GP Surgery',
-      referredDateTime: '2022-04-10T10:00:00',
-      reviewDate: '2300-04-18T10:00:00',
-      requestedSpecialty: 'Cardiology',
-      referralId: '3',
+      serviceSpecialty: 'Cardiology',
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/bookable/4',
     }, {
-      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/overdue/17',
+      referralId: '17',
       status: 'inReview',
       referrerOrganisation: 'Mahogany GP Surgery',
       referredDateTime: '2022-04-10T10:00:00',
-      reviewDate: '2022-04-18T10:00:00',
-      requestedSpecialty: 'Haematology',
-      referralId: '17',
+      reviewDueDate: '2022-04-18T10:00:00',
+      serviceSpecialty: 'Haematology',
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/overdue/17',
+    }, {
+      appointmentId: '2',
+      locationDescription: 'A Clinic, A Town, A Country',
+      deepLinkUrl: '',
     }];
   }
 
   if (hasConfirmedAppointments) {
-    confirmedAppointmentsArray = [{
-      appointmentDateTime: '2022-04-18T10:00:00',
+    confirmedAppointments = [{
       appointmentId: '1',
-      deepLinkUrl: '',
+      appointmentDateTime: '2022-04-18T10:00:00',
       locationDescription: 'A Clinic, A Town, A Country',
+      deepLinkUrl: '',
     }];
   }
 
-  if (hasUnconfirmedAppointments) {
-    unconfirmedAppointmentsArray = [{
-      appointmentId: '2',
-      deepLinkUrl: '',
-      locationDescription: 'A Clinic, A Town, A Country',
+  if (hasReferralsInReviewNotOverdue) {
+    referralsInReviewNotOverdue = [{
+      referralId: '3',
+      status: 'inReview',
+      referrerOrganisation: 'Mahogany GP Surgery',
+      referredDateTime: '2022-04-10T10:00:00',
+      reviewDueDate: '2300-04-18T10:00:00',
+      serviceSpecialty: 'Cardiology',
+      deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/inreview/3',
     }];
   }
 
@@ -82,10 +91,9 @@ const setupStore = (
       },
       wayfinder: {
         summary: {
-          referralsNotInReview: referralsNotInReviewArray,
-          referralsInReview: referralsInReviewArray,
-          confirmedAppointments: confirmedAppointmentsArray,
-          unconfirmedAppointments: unconfirmedAppointmentsArray,
+          actionableReferralsAndAppointments,
+          confirmedAppointments,
+          referralsInReviewNotOverdue,
         },
         apiError,
         hasLoaded: true,
@@ -93,7 +101,6 @@ const setupStore = (
     },
     getters: {
       'knownServices/matchOneById': id => ({ id, url: 'www.url.com' }),
-      'serviceJourneyRules/cdssAdminEnabled': false,
       'serviceJourneyRules/silverIntegrationAppointmentsEnabled': false,
       'serviceJourneyRules/silverIntegrationEnabled': () => true,
       'session/isProxying': false,
@@ -101,85 +108,57 @@ const setupStore = (
   });
 };
 
-describe('Summary care response with: ' +
-  '1 referral in review,' +
-  '1 referral in review overdue,' +
-  '1 referral not in review,' +
-  '1 confirmed appointment' +
-  'and 1 unconfirmed appointment', () => {
-  let $store;
-  let wrapper;
-  let bookOrManageReferralsAndAppointmentsTitle;
-  let confirmedAppointmentsTitle;
-  let referralsInReviewTitle;
-  let noConfirmedAppointmentsText;
-  let noReferralsInReviewText;
-  let ReferralsOrAppointmentsLink;
-  let ConfirmedAppointmentsLink;
-  let ReferralsInReviewLink;
-  let otherAvailableServicesMenuItems;
-  let ersJumpOffMenuItem;
-
-  const createIndexPage = () => mount(WayfinderPage, {
+const mountPage = () => mount(
+  WayfinderPage, {
     $store,
-  });
+  },
+);
 
+describe('Summary care response with each type of summary item', () => {
   beforeEach(() => {
-    $store = setupStore(true, true, true, true, true);
+    $store = setupStore(true, true, true, true);
+    wrapper = mountPage();
   });
 
   describe('if page loaded', () => {
     it('title text is shown for book or manage appointments section', () => {
-      wrapper = createIndexPage();
       bookOrManageReferralsAndAppointmentsTitle = wrapper.find('#book-Or-Manage-Referrals-And-Appointments-Title');
 
       expect(bookOrManageReferralsAndAppointmentsTitle.exists()).toBe(true);
     });
 
     it('title text is shown for confirmed appointments section', () => {
-      wrapper = createIndexPage();
       confirmedAppointmentsTitle = wrapper.find('#confirmed-appointments-title');
 
       expect(confirmedAppointmentsTitle.exists()).toBe(true);
     });
 
     it('title text is shown for referrals in review section', () => {
-      wrapper = createIndexPage();
-      referralsInReviewTitle = wrapper.find('#referrals-in-review-title');
+      referralsInReviewNotOverdueTitle = wrapper.find('#referrals-in-review-title');
 
-      expect(referralsInReviewTitle.exists()).toBe(true);
+      expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
     });
   });
 
   it('Missing or incorrect referrals or appointments link is visible', () => {
-    wrapper = createIndexPage();
-    ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+    referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-    expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
-    expect(ReferralsOrAppointmentsLink.text())
-      .toEqual('Missing or incorrect referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
   });
 
   it('Missing or incorrect confirmed appointments link is visible', () => {
-    wrapper = createIndexPage();
-    ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+    confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-    expect(ConfirmedAppointmentsLink.exists()).toBe(true);
-    expect(ConfirmedAppointmentsLink.text())
-      .toEqual('Missing or incorrect confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
   });
 
   it('Missing or incorrect referrals in review link is visible', () => {
-    wrapper = createIndexPage();
-    ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+    referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-    expect(ReferralsInReviewLink.exists()).toBe(true);
-    expect(ReferralsInReviewLink.text())
-      .toEqual('Missing or incorrect referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
   });
 
-  it('show other available services menu items', () => {
-    wrapper = createIndexPage();
+  it('show other available services menu items without eRS jump-off', () => {
     otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
     ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
 
@@ -189,7 +168,6 @@ describe('Summary care response with: ' +
 
   describe('if there are confirmed appointments', () => {
     it('hide resulting empty confirmed appointments text', () => {
-      wrapper = createIndexPage();
       noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
 
       expect(noConfirmedAppointmentsText.exists()).toBe(false);
@@ -198,83 +176,52 @@ describe('Summary care response with: ' +
 
   describe('if there are referrals in review', () => {
     it('hide resulting empty no referrals in review text', () => {
-      wrapper = createIndexPage();
-      noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
+      noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
 
-      expect(noReferralsInReviewText.exists()).toBe(false);
+      expect(noReferralsInReviewNotOverdueText.exists()).toBe(false);
     });
   });
 });
 
-describe('Summary care response with: ' +
-  '0 referrals in review,' +
-  '1 referral not in review,' +
-  '0 confirmed appointments' +
-  'and 1 unconfirmed appointment', () => {
-  let $store;
-  let wrapper;
-  let bookOrManageReferralsAndAppointmentsTitle;
-  let confirmedAppointmentsTitle;
-  let referralsInReviewTitle;
-  let noConfirmedAppointmentsText;
-  let noReferralsInReviewText;
-  let ReferralsOrAppointmentsLink;
-  let ConfirmedAppointmentsLink;
-  let ReferralsInReviewLink;
-  let otherAvailableServicesMenuItems;
-  let ersJumpOffMenuItem;
-
-  const createIndexPage = () => mount(WayfinderPage, {
-    $store,
-  });
-
+describe('Summary care response with only actionable items', () => {
   beforeEach(() => {
-    $store = setupStore(false, true, false, true, true);
+    $store = setupStore(true, false, false, true);
+    wrapper = mountPage();
   });
 
   describe('if page loaded', () => {
     it('title text is shown for book or manage appointments section', () => {
-      wrapper = createIndexPage();
       bookOrManageReferralsAndAppointmentsTitle = wrapper.find('#book-Or-Manage-Referrals-And-Appointments-Title');
 
       expect(bookOrManageReferralsAndAppointmentsTitle.exists()).toBe(true);
     });
 
     it('title text is shown for confirmed appointments section', () => {
-      wrapper = createIndexPage();
       confirmedAppointmentsTitle = wrapper.find('#confirmed-appointments-title');
 
       expect(confirmedAppointmentsTitle.exists()).toBe(true);
     });
 
     it('title text is shown for referrals in review section', () => {
-      wrapper = createIndexPage();
-      referralsInReviewTitle = wrapper.find('#referrals-in-review-title');
+      referralsInReviewNotOverdueTitle = wrapper.find('#referrals-in-review-title');
 
-      expect(referralsInReviewTitle.exists()).toBe(true);
+      expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
     });
   });
 
   it('Missing or incorrect referrals or appointments link is visible', () => {
-    wrapper = createIndexPage();
-    ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+    referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-    expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
-    expect(ReferralsOrAppointmentsLink.text())
-      .toEqual('Missing or incorrect referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
   });
 
   it('Missing or incorrect confirmed appointments link is visible', () => {
-    wrapper = createIndexPage();
-    ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+    confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-    expect(ConfirmedAppointmentsLink.exists()).toBe(true);
-    expect(ConfirmedAppointmentsLink.text())
-      .toEqual('Missing or incorrect confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
   });
 
-  it('show other available services menu items', () => {
-    wrapper = createIndexPage();
+  it('show other available services menu items without eRS jump-off', () => {
     otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
     ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
 
@@ -283,17 +230,13 @@ describe('Summary care response with: ' +
   });
 
   it('Missing or incorrect referrals in review link is visible', () => {
-    wrapper = createIndexPage();
-    ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+    referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-    expect(ReferralsInReviewLink.exists()).toBe(true);
-    expect(ReferralsInReviewLink.text())
-      .toEqual('Missing or incorrect referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
   });
 
   describe('if there are no confirmed appointments', () => {
     it('show resulting empty confirmed appointments text', () => {
-      wrapper = createIndexPage();
       noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
 
       expect(noConfirmedAppointmentsText.exists()).toBe(true);
@@ -302,52 +245,28 @@ describe('Summary care response with: ' +
 
   describe('if there are no referrals in review', () => {
     it('show resulting empty no referrals in review text', () => {
-      wrapper = createIndexPage();
-      noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
+      noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
 
-      expect(noReferralsInReviewText.exists()).toBe(true);
-      expect(noReferralsInReviewText.text()).toBe('You have no referrals being reviewed.');
+      expect(noReferralsInReviewNotOverdueText.text()).toBe('You have no referrals being reviewed.');
     });
   });
 });
 
-describe('Summary care response with: ' +
-  '0 referrals in review,' +
-  '0 referrals not in review,' +
-  '0 confirmed appointments' +
-  'and 0 unconfirmed appointments', () => {
-  let $store;
-  let wrapper;
-  let noReferralsOrAppointmentsText;
-  let noConfirmedAppointmentsText;
-  let noReferralsInReviewText;
-  let backButton;
-  let ReferralsOrAppointmentsLink;
-  let ConfirmedAppointmentsLink;
-  let ReferralsInReviewLink;
-  let otherAvailableServicesMenuItems;
-  let ersJumpOffMenuItem;
-
-  const createIndexPage = () => mount(WayfinderPage, {
-    $store,
-  });
-
+describe('Summary care response with no summary items', () => {
   beforeEach(() => {
-    $store = setupStore(false, false, false, false, false);
+    $store = setupStore(false, false, false, false);
+    wrapper = mountPage();
   });
 
   describe('if page loaded', () => {
     it('show no referrals or appointments text', () => {
-      wrapper = createIndexPage();
       noReferralsOrAppointmentsText = wrapper.find('#no-referrals-or-appointments-text');
 
-      expect(noReferralsOrAppointmentsText.exists()).toBe(true);
       expect(noReferralsOrAppointmentsText.text()).toBe('You have no referrals or appointments to view or manage.');
     });
 
     describe('if there are no confirmed appointments', () => {
       it('show resulting empty confirmed appointments text', () => {
-        wrapper = createIndexPage();
         noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
 
         expect(noConfirmedAppointmentsText.exists()).toBe(true);
@@ -356,43 +275,31 @@ describe('Summary care response with: ' +
 
     describe('if there are no referrals in review', () => {
       it('show resulting empty no referrals in review text', () => {
-        wrapper = createIndexPage();
-        noReferralsInReviewText = wrapper.find('#no-referrals-in-review-text');
+        noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
 
-        expect(noReferralsInReviewText.exists()).toBe(true);
-        expect(noReferralsInReviewText.text()).toBe('You have no referrals being reviewed.');
+        expect(noReferralsInReviewNotOverdueText.text()).toBe('You have no referrals being reviewed.');
       });
     });
 
     it('Missing or incorrect referrals or appointments link is visible', () => {
-      wrapper = createIndexPage();
-      ReferralsOrAppointmentsLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+      referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-      expect(ReferralsOrAppointmentsLink.exists()).toBe(true);
-      expect(ReferralsOrAppointmentsLink.text())
-        .toEqual('Missing or incorrect referrals or appointments');
+      expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
     });
 
     it('Missing or incorrect confirmed appointments link is visible', () => {
-      wrapper = createIndexPage();
-      ConfirmedAppointmentsLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+      confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-      expect(ConfirmedAppointmentsLink.exists()).toBe(true);
-      expect(ConfirmedAppointmentsLink.text())
-        .toEqual('Missing or incorrect confirmed appointments');
+      expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
     });
 
     it('Missing or incorrect referrals in review link is visible', () => {
-      wrapper = createIndexPage();
-      ReferralsInReviewLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+      referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-      expect(ReferralsInReviewLink.exists()).toBe(true);
-      expect(ReferralsInReviewLink.text())
-        .toEqual('Missing or incorrect referrals in review');
+      expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
     });
 
-    it('show other available services menu items', () => {
-      wrapper = createIndexPage();
+    it('show other available services menu items without eRS jump-off', () => {
       otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
       ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
 
@@ -401,7 +308,6 @@ describe('Summary care response with: ' +
     });
 
     it('show back button', () => {
-      wrapper = createIndexPage();
       backButton = wrapper.find('#desktopBackLink');
 
       expect(backButton.exists()).toBe(true);
@@ -409,23 +315,14 @@ describe('Summary care response with: ' +
   });
 });
 
-describe('If summary care response returns with error', () => {
-  let $store;
-  let wrapper;
-  let otherAvailableServicesMenuItems;
-  let ersJumpOffMenuItem;
-
-  const createIndexPage = () => mount(WayfinderPage, {
-    $store,
-  });
-
+describe('Summary care response with API error', () => {
   beforeEach(() => {
-    $store = setupStore(false, false, false, false, false, true);
+    $store = setupStore(false, false, false, false, true);
+    wrapper = mountPage();
   });
 
   describe('if page errored', () => {
-    it('show other available services menu items', () => {
-      wrapper = createIndexPage();
+    it('show other available services menu items with eRS jump-off', () => {
       otherAvailableServicesMenuItems = wrapper.find('#other-available-services-menu-items');
       ersJumpOffMenuItem = otherAvailableServicesMenuItems.find('#btn_manage_your_referral');
 

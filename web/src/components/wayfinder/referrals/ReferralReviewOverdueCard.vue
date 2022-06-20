@@ -4,53 +4,62 @@
       {{ $t('wayfinder.referrals.overdue.title') }}
     </h3>
 
-    <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
+    <template v-if="hasSpecialty">
+      <p data-purpose="specialty"
+         class="nhsuk-u-margin-bottom-3">
+        <strong>{{ specialty }}</strong>
+      </p>
+
+      <p data-purpose="specialty-info"
+         class="nhsuk-u-margin-bottom-3">
+        {{ $t('wayfinder.referrals.overdue.youNeedToContactSpecialty', null, {specialty}) }}
+      </p>
+    </template>
+
+    <p v-else
+       data-purpose="no-specialty-info"
        class="nhsuk-u-margin-bottom-3">
-      <strong>{{ requestedSpecialty }}</strong>
-    </p>
-
-    <p v-if="hasSpecialty" :id="`contact-specialty-${referralId}`" class="nhsuk-u-margin-bottom-3">
-      {{ $t('wayfinder.referrals.overdue.youNeedToContactSpecialty',
-            null, {specialty: requestedSpecialty}) }}
-    </p>
-
-    <p v-else :id="`contact-no-specialty-${referralId}`" class="nhsuk-u-margin-bottom-3">
       {{ $t('wayfinder.referrals.overdue.youNeedToContact') }}
     </p>
 
-    <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referral-date-header-${referralId}`">
+        <span data-purpose="referral-date-header">
           {{ $t('wayfinder.referrals.referredDate') }}
         </span>
       </strong>
       <br>
-      <span :id="`referral-date-text-${referralId}`">{{ getFormattedReferredDate }}</span>
+      <span data-purpose="referral-date">
+        {{ referralDate | longDate }}
+      </span>
     </p>
 
-    <p v-if="hasReviewDate" :id="`review-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`review-date-header-${referralId}`">
+        <span data-purpose="review-due-date-header">
           {{ $t('wayfinder.referrals.reviewDate') }}
         </span>
       </strong>
       <br>
-      <span :id="`review-date-text-${referralId}`">{{ getFormattedReviewDate }}</span>
+      <span data-purpose="review-due-date">
+        {{ reviewDueDate | longDate }}
+      </span>
     </p>
 
-    <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referred-by-header-${referralId}`">
+        <span data-purpose="referrer-header">
           {{ $t('wayfinder.referrals.referredBy') }}
         </span>
       </strong>
       <br>
-      <span :id="`referred-by-text-${referralId}`">{{ referredBy }}</span>
+      <span data-purpose="referrer">
+        {{ referrer }}
+      </span>
     </p>
 
-    <primary-button
-      :id="`manageInReviewReferral-${referralId}`"
-      @click="goToUrlViaRedirector(deepLinkUrl)">
+    <primary-button data-purpose="contact-clinic-button"
+                    @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.overdue.contactTheClinic') }}
     </primary-button>
   </Card>
@@ -60,6 +69,7 @@
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
+import { isBlankString } from '@/lib/utils';
 
 export default {
   name: 'ReferralReviewOverdueCard',
@@ -69,44 +79,23 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    referredBy: {
-      type: String,
-      default: '',
-    },
-    referredDate: {
-      type: String,
-      default: '',
-    },
-    reviewDate: {
-      type: String,
-      default: '',
-    },
-    requestedSpecialty: {
-      type: String,
-      default: '',
-    },
-    referralId: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
+    item: {
+      type: Object,
       required: true,
     },
   },
-
+  data() {
+    return {
+      referrer: this.item.referrerOrganisation,
+      referralDate: this.item.referredDateTime,
+      reviewDueDate: this.item.reviewDueDate,
+      specialty: this.item.serviceSpecialty,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
+  },
   computed: {
     hasSpecialty() {
-      return this.requestedSpecialty;
-    },
-    hasReviewDate() {
-      return this.reviewDate;
-    },
-    getFormattedReviewDate() {
-      return this.$options.filters.longDate(this.reviewDate);
-    },
-    getFormattedReferredDate() {
-      return this.$options.filters.longDate(this.referredDate);
+      return !isBlankString(this.specialty);
     },
   },
 };

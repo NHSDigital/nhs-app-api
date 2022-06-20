@@ -3,15 +3,14 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('wayfinder.appointments.readyToConfirm.title') }}
     </h3>
-    <p :id="`location-description-${appointmentId}`">
+    <p data-purpose="location-description">
       {{ locationDescription }}
     </p>
-    <p>
+    <p data-purpose="appointment-advice">
       {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>
-    <primary-button
-      :id="`contactTheClinicToConfirm-${appointmentId}`"
-      @click="goToUrlViaRedirector(deepLinkUrl)">
+    <primary-button data-purpose="contact-the-clinic-button"
+                    @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.appointments.readyToConfirm.contactTheClinicToConfirm') }}
     </primary-button>
   </Card>
@@ -30,18 +29,16 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    appointmentId: {
-      type: Number,
+    item: {
+      type: Object,
       required: true,
     },
-    locationDescription: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      locationDescription: this.item.locationDescription,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
   },
 };
 </script>

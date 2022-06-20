@@ -10,70 +10,65 @@ jest.mock('@/components/wayfinder/RedirectorMixin', () => ({
 
 const deepLinkUrl = 'https://appointments.stubs.local/1';
 
-const mountAppointmentCancelled = ({ propsData = {} }) => mount(
-  AppointmentCancelled,
-  { propsData },
+const mountComponent = appointment => mount(
+  AppointmentCancelled, {
+    propsData: { item: appointment },
+  },
 );
 
 describe('Appointment Cancelled Card', () => {
   let wrapper;
+  let header;
+  let locationDescription;
+  let cancelledInfo;
+  let appointmentDateTime;
+  let viewAppointmentLink;
 
-  describe('template', () => {
-    wrapper = mountAppointmentCancelled({
-      propsData: {
-        locationDescription: 'A Clinic, A Town, A Country',
-        appointmentDateTime: '2022-04-18T10:00:00',
-        appointmentId: 1,
-        deepLinkUrl,
-      },
+  beforeEach(() => {
+    wrapper = mountComponent({
+      locationDescription: 'A Clinic, A Town, A Country',
+      appointmentDateTime: '2022-04-18T10:00:00',
+      deepLinkUrl,
     });
 
-    it('will include the RedirectorMixin', () => {
-      expect(AppointmentCancelled.mixins).toContain(RedirectorMixin);
-    });
+    header = wrapper.find('h3');
+    locationDescription = wrapper.find('[data-purpose="location-description"]');
+    cancelledInfo = wrapper.find('[data-purpose="appointment-cancelled-info"]');
+    appointmentDateTime = wrapper.find('[data-purpose="appointment-date-time"]');
+    viewAppointmentLink = wrapper.find('[data-purpose="view-appointment-link"]');
+  });
 
-    it('will display a h3 header', () => {
-      const header = wrapper.find('h3');
+  it('will include the RedirectorMixin', () => {
+    expect(AppointmentCancelled.mixins).toContain(RedirectorMixin);
+  });
 
-      expect(header.exists()).toBe(true);
-      expect(header.text()).toBe('Cancelled appointment');
-    });
+  it('will display a h3 header', () => {
+    expect(header.text()).toBe('Cancelled appointment');
+  });
 
-    it('will display the formatted date', () => {
-      expect(wrapper.find('#datetime-1 > strong').text()).toBe('Monday 18 April 2022');
-    });
+  it('will display the formatted date', () => {
+    expect(appointmentDateTime.find('strong').text()).toBe('Monday 18 April 2022');
+  });
 
-    it('will display formatted time', () => {
-      expect(wrapper.find('#datetime-1 > span').text()).toContain('10.00am');
-    });
+  it('will display formatted time', () => {
+    expect(appointmentDateTime.find('span').text()).toContain('10.00am');
+  });
 
-    it('will display the location', () => {
-      const locationDescription = wrapper.find('#location-description-1');
+  it('will display the location', () => {
+    expect(locationDescription.text()).toBe('A Clinic, A Town, A Country');
+  });
 
-      expect(locationDescription.exists()).toBe(true);
-      expect(locationDescription.text()).toBe('A Clinic, A Town, A Country');
-    });
+  it('will display appointment cancelled message', () => {
+    expect(cancelledInfo.text()).toBe('This appointment has been cancelled. You do not need to do anything.');
+  });
 
-    it('will display appointment cancelled message', () => {
-      const cancelledDescription = wrapper.find('#cancelled-message-1');
+  it('will display a deep link', () => {
+    expect(viewAppointmentLink.text()).toBe('View this appointment');
+  });
 
-      expect(cancelledDescription.exists()).toBe(true);
-      expect(cancelledDescription.text()).toBe('This appointment has been cancelled. You do not need to do anything.');
-    });
+  it('will call goToUrlViaRedirector when the view appointment link is clicked', () => {
+    viewAppointmentLink.trigger('click');
 
-    it('will display a deep link', () => {
-      const deepLink = wrapper.find('#view-this-appointment-1');
-
-      expect(deepLink.exists()).toBe(true);
-      expect(deepLink.text()).toBe('View this appointment');
-    });
-
-    it('will call goToUrlViaRedirector when the view appointment link is clicked', () => {
-      const deepLink = wrapper.find('#view-this-appointment-1 a');
-
-      deepLink.trigger('click');
-
-      expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
-    });
+    expect(RedirectorMixin.methods.goToUrlViaRedirector).toHaveBeenCalledWith(deepLinkUrl);
   });
 });

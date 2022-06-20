@@ -3,16 +3,16 @@
     <h3 class="nhsuk-u-margin-bottom-1">
       {{ $t('wayfinder.appointments.booked.title') }}
     </h3>
-    <p :id="`datetime-${appointmentId}`">
+    <p data-purpose="appointment-date-time">
       <strong>{{ appointmentDateTime | fullDate }}</strong><br>
       <span>{{ appointmentDateTime | formatDate('h.mma') }}</span>
     </p>
-    <p :id="`location-description-${appointmentId}`" class="nhsuk-u-margin-bottom-3">
+    <p data-purpose="location-description"
+       class="nhsuk-u-margin-bottom-3">
       {{ locationDescription }}
     </p>
-    <primary-button
-      :id="`bookOrManageAppointment-${appointmentId}`"
-      @click="goToUrlViaRedirector(deepLinkUrl)">
+    <primary-button data-purpose="book-or-manage-appointment-button"
+                    @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}
     </primary-button>
   </Card>
@@ -31,22 +31,17 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    appointmentId: {
-      type: Number,
+    item: {
+      type: Object,
       required: true,
     },
-    appointmentDateTime: {
-      type: String,
-      default: '',
-    },
-    locationDescription: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      appointmentDateTime: this.item.appointmentDateTime,
+      locationDescription: this.item.locationDescription,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
   },
 };
 </script>

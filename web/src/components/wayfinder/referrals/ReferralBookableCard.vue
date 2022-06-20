@@ -4,34 +4,38 @@
       {{ $t('wayfinder.referrals.bookable.title') }}
     </h3>
 
-    <p v-if="hasSpecialty" :id="`requested-specialty-${referralId}`"
+    <p v-if="hasSpecialty"
+       data-purpose="specialty"
        class="nhsuk-u-margin-bottom-3">
-      <strong>{{ requestedSpecialty }}</strong>
+      <strong>{{ specialty }}</strong>
     </p>
 
-    <p :id="`referral-date-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referral-date-header-${referralId}`">
+        <span data-purpose="referral-date-header">
           {{ $t('wayfinder.referrals.referredDate') }}
         </span>
       </strong>
       <br>
-      <span :id="`referral-date-text-${referralId}`">{{ getFormattedReferredDate }}</span>
+      <span data-purpose="referral-date">
+        {{ referralDate | longDate }}
+      </span>
     </p>
 
-    <p :id="`referred-by-${referralId}`" class="nhsuk-u-margin-bottom-3">
+    <p class="nhsuk-u-margin-bottom-3">
       <strong>
-        <span :id="`referred-by-header-${referralId}`">
+        <span data-purpose="referrer-header">
           {{ $t('wayfinder.referrals.referredBy') }}
         </span>
       </strong>
       <br>
-      <span :id="`referred-by-text-${referralId}`">{{ referredBy }}</span>
+      <span data-purpose="referrer">
+        {{ referrer }}
+      </span>
     </p>
 
-    <primary-button
-      :id="`bookOrManageReferral-${referralId}`"
-      @click="goToUrlViaRedirector(deepLinkUrl)">
+    <primary-button data-purpose="book-or-manage-referral-button"
+                    @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.bookable.bookOrManageThisReferral') }}
     </primary-button>
   </Card>
@@ -41,6 +45,7 @@
 import Card from '@/components/widgets/card/Card';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectorMixin from '@/components/wayfinder/RedirectorMixin';
+import { isBlankString } from '@/lib/utils';
 
 export default {
   name: 'ReferralBookableCard',
@@ -50,33 +55,22 @@ export default {
   },
   mixins: [RedirectorMixin],
   props: {
-    referredBy: {
-      type: String,
-      default: '',
-    },
-    referredDate: {
-      type: String,
-      default: '',
-    },
-    requestedSpecialty: {
-      type: String,
-      default: '',
-    },
-    referralId: {
-      type: String,
-      default: '',
-    },
-    deepLinkUrl: {
-      type: String,
+    item: {
+      type: Object,
       required: true,
     },
   },
+  data() {
+    return {
+      referrer: this.item.referrerOrganisation,
+      referralDate: this.item.referredDateTime,
+      specialty: this.item.serviceSpecialty,
+      deepLinkUrl: this.item.deepLinkUrl,
+    };
+  },
   computed: {
     hasSpecialty() {
-      return this.requestedSpecialty;
-    },
-    getFormattedReferredDate() {
-      return this.$options.filters.longDate(this.referredDate);
+      return !isBlankString(this.specialty);
     },
   },
 };
