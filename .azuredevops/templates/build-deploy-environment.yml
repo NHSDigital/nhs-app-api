@@ -100,7 +100,7 @@ variables:
   - name: version
     value: develop
 pool:
-  vmImage: 'ubuntu-latest'
+ vmImage: 'ubuntu-latest'
 stages:
   - stage: stage_check_image
     displayName: Check image exists in registry
@@ -175,14 +175,13 @@ stages:
       - deployment: terraform
         displayName: Run Terraform Plan And Apply
         timeoutInMinutes: 20
-        pool:
-          vmImage: 'ubuntu-latest'
         environment: scratch-dev
         strategy:
           runOnce:
             deploy:
               steps:
                 - checkout: nhsapp-ops-terraform
+                - checkout: nhsapp_ops_infra
                 - template: /pipelines/templates/steps/get_environment_ref.yml@nhsapp-ops-terraform
                   parameters:
                     environmentRefOverride: ${{ parameters.environmentRefOverride }}
@@ -196,7 +195,7 @@ stages:
                     backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
                     backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
                     backendAzureRmContainerName: $(backendAzureRmContainerName)
-                    tfExecutionDir: src/cluster-only-environment
+                    tfExecutionDir: nhsapp-ops-terraform/src/cluster-only-environment
                     tfVarFileName: $(tfVarFileName)
                     deployReason: $(Build.Reason)
                     queuedBy: $(Build.QueuedBy)
@@ -206,7 +205,7 @@ stages:
     displayName: Bootstrap Cluster
     jobs:
       - job: bootstrap_k8s_job
-        timeoutInMinutes: 5
+        timeoutInMinutes: 10
         displayName: "[k8s] Bootstrap"
         variables:
           TARGET_ZONE: 'dev'
@@ -228,7 +227,7 @@ stages:
           - template: .azuredevops/templates/steps/init_ci.yaml@nhsapp_ops_vault
           - bash: |
               cd $(PROJECT_PATH) \
-              && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker.sh
+              && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker_multicluster.sh
             displayName: "[k8s] Bootstrap"
           - bash: |
               cd $(PROJECT_PATH) \
