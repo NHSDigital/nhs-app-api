@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         private WebLink OpenBrowserOverlayLink => WebLink.WithText(_interactor, "Open Browser Overlay");
 
         private WebLink OpenExternalBrowserLink => WebLink.WithText(_interactor, "Open External Browser");
-        
+
         private WebLink NativeBackActionLink => WebLink.WithText(_interactor, "Native Back Action");
 
         private WebLink FileUploadLink => WebLink.WithText(_interactor, "File upload");
@@ -41,6 +41,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             CalendarLink,
             GoToPageLink,
             OpenBrowserOverlayLink,
+            OpenExternalBrowserLink,
+            NativeBackActionLink,
             FileUploadLink,
             DocumentDownloadLink,
             LocationServicesLink
@@ -59,7 +61,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void NavigateToOpenBrowserOverlay() => OpenBrowserOverlayLink.Click();
 
         public void NavigateToOpenExternalBrowser() => OpenExternalBrowserLink.Click();
-        
+
         public void NavigateToNativeBackAction() => NativeBackActionLink.Click();
 
         public void NavigateToFileUpload() => FileUploadLink.Click();
