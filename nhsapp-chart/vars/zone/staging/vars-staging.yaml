@@ -135,10 +135,6 @@ users:
       notificationHubWriteCharacters: "4567CDEF"
       notificationHubGeneration: "2"
 
-info:
-  userInfoReadFromSecondaryContainers: false
-  userInfoSaveToSecondaryContainers: true
-
 metrics:
   memoryRequest: "120Mi"
   memoryLimit: "120Mi"

@@ -199,8 +199,6 @@ info:
   minAvailable: 4
   minReplicas: 8
   maxReplicas: 100
-  userInfoReadFromSecondaryContainers: false
-  userInfoSaveToSecondaryContainers: true
 
 users:
   mockNotificationHubClient: false

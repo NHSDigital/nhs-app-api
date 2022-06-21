@@ -124,10 +124,6 @@ cid:
 users:
   mockNotificationHubClient: true
 
-info:
-  userInfoReadFromSecondaryContainers: true
-  userInfoSaveToSecondaryContainers: true
-
 metrics:
   memoryRequest: "120Mi"
   memoryLimit: "120Mi"
