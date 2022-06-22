@@ -4,5 +4,6 @@ namespace NHSOnline.App.Services.FIDO
     {
         Unauthorised,
         SystemCancelled,
+        NotInteractive,
     }
 }

@@ -12,6 +12,7 @@ namespace NHSOnline.App.Services.FIDO
         public static BiometricRegisterResult Failed(BiometricErrorCode errorCode) => new BiometricRegisterResult(BiometricOutcome.Failed, errorCode);
         public static BiometricRegisterResult UserCancelled() => new BiometricRegisterResult(BiometricOutcome.UserCancelled);
         public static BiometricRegisterResult SystemCancelled() => new BiometricRegisterResult(BiometricOutcome.SystemCancelled);
+        public static BiometricRegisterResult NotInteractive() => new BiometricRegisterResult(BiometricOutcome.NotInteractive);
 
         public BiometricOutcome Outcome { get; }
         public BiometricErrorCode? ErrorCode { get; }

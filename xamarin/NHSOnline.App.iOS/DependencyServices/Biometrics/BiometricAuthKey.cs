@@ -94,6 +94,12 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                     return new BiometricAuthVerifyUserResult.SystemCancelled();
                 }
 
+                if (status == LAStatus.NotInteractive)
+                {
+                    Logger.LogInformation("EvaluatePolicyAsync displaying the required authentication user interface is forbidden");
+                    return new BiometricAuthVerifyUserResult.NotInteractive();
+                }
+
                 Logger.LogWarning("EvaluatePolicyAsync failed. Error: {Error} and status: {Status}", error, status);
                 return new BiometricAuthVerifyUserResult.Unauthorised();
             }

@@ -172,6 +172,11 @@ namespace NHSOnline.App.Services.FIDO
             {
                 return BiometricRegisterResult.Failed(BiometricErrorCode.CannotChangeBiometrics);
             }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricRegisterResult> Visit(BiometricAuthVerifyUserResult.NotInteractive notInteractive)
+            {
+                return BiometricRegisterResult.NotInteractive();
+            }
         }
 
         private sealed class FidoRegisterResultVisitor : IFidoRegisterResultVisitor<ProcessResult<string, BiometricRegisterResult>>

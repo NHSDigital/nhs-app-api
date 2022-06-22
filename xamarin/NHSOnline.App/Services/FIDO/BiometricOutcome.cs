@@ -5,6 +5,7 @@ namespace NHSOnline.App.Services.FIDO
         Success,
         Failed,
         UserCancelled,
-        SystemCancelled
+        SystemCancelled,
+        NotInteractive
     }
 }

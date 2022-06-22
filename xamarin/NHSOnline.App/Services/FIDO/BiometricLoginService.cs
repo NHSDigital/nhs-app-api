@@ -119,6 +119,11 @@ namespace NHSOnline.App.Services.FIDO
             {
                 return new BiometricLoginResult.NoAction(NoActionReason.VendorError);
             }
+
+            public ProcessResult<IBiometricAuthSigner, BiometricLoginResult> Visit(BiometricAuthVerifyUserResult.NotInteractive notInteractive)
+            {
+                return new BiometricLoginResult.CouldNotLogin(CouldNotLoginReason.NotInteractive);
+            }
         }
 
         private sealed class BiometricCanLoginResultVisitor : IBiometricStatusVisitor<ProcessResult<string, BiometricLoginResult>>
