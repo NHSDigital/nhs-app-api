@@ -86,7 +86,7 @@
                       @onCheckedChanged="analyticsSelectionChanged">
       {{ $t('termsAndConditions.initial.analyticsCookieCheckBox.text') }}
     </generic-checkbox>
-    <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
+    <generic-button id="btn_accept" :button-classes="['nhsuk-button','nhsuk-u-margin-top-4']"
                     @click.stop.prevent="onConfirmButtonClicked">
       {{ $t('termsAndConditions.initial.btnAccept') }}
     </generic-button>
