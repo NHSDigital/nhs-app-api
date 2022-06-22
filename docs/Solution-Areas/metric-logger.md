@@ -247,6 +247,7 @@ AppointmentCancellation Body:
         "_ts": 1650989717
     }
 ]
+```
 
 OrganDonationRegistration Body:
 ```bash
@@ -276,6 +277,32 @@ OrganDonationRegistration Body:
 ]
 ```
 
+GetOrganDonation Body:
+```bash
+[
+    {
+        "Id": "a10231b7-54e3-4c04-b17f-f2dc022afd98",
+        "Timestamp": "2022-02-17T18:47:56.6791548Z",
+        "AuditId": "a10231b7-54e3-4c04-b17f-f2dc022afd98",
+        "NhsLoginSubject": "e85fb7cc-2bcf-4f26-b3f0-6b27524c3692",
+        "NhsNumber": "969 211 3612",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Emis",
+        "Operation": "OrganDonation_Get_Response",
+        "Details": "A default organ donation registration has been generated",
+        "ApiVersion": "b90ac9cb548192c13e127ec8e08e4ea6e94f42d9",
+        "WebVersion": "b90ac9cb548192c13e127ec8e08e4ea6e94f42d9 (commit:b90ac9cb5)",
+        "NativeVersion": "ios 2.5.0",
+        "Environment": "scratch12",
+        "id": "eb05879d-8531-4353-a287-15a7410329e5",
+        "_rid": "RuVQAKPVga+dAwAAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+dAwAAAAAAAA==/",
+        "_etag": "\"7200b265-0000-1100-0000-620e985c0000\"",
+        "_attachments": "attachments/",
+        "_ts": 1645123676
+    }
+]
+```
 
 ## Running the Metric Logger Integration Tests Locally 
 

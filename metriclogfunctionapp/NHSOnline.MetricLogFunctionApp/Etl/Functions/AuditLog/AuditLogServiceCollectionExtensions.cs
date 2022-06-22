@@ -10,6 +10,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
@@ -30,8 +31,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             serviceCollection.AddTransient<IAuditLogParser<WebIntegrationReferralsMetric>, WebIntegrationReferralsEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<SecondaryCareSummaryMetric>, SecondaryCareSummaryMetricEtl>();
-            serviceCollection
-                .AddTransient<IAuditLogParser<SecondaryCareSummaryMetric>, SecondaryCareSummaryEventParser>();
+            serviceCollection.AddTransient<IAuditLogParser<SecondaryCareSummaryMetric>, SecondaryCareSummaryEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<MedicalRecordViewMetric>, MedicalRecordViewMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<MedicalRecordViewMetric>, MedicalRecordViewEventParser>();
@@ -45,11 +45,15 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             serviceCollection.AddTransient<IAuditLogEtl<AppointmentBookMetric>, AppointmentBookMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<AppointmentBookMetric>, AppointmentBookEventParser>();
 
+            serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationGetMetric>, OrganDonationRegistrationGetMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationGetMetric>, OrganDonationRegistrationGetEventParser>();
+
             serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateEventParser>();
 
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));
+
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<InitialPromptMetric>, InitialPromptEventParser>();
         }

@@ -6,9 +6,10 @@ internal sealed class OrganDonationRegistrationGetMetricRow : ITableRow
 {
     public DateTimeOffset Timestamp { get; set; }
     public string SessionId { get; set; }
+    public string AuditId { get; set; }
 
     public string InsertSql(string tableName) => @$"
-INSERT INTO {tableName}(""Timestamp"", ""SessionId"")
-VALUES(@Timestamp, @SessionId)
-";
+        INSERT INTO {tableName}(""Timestamp"", ""SessionId"", ""AuditId"")
+        VALUES(@Timestamp, @SessionId, @AuditId)
+    ";
 }

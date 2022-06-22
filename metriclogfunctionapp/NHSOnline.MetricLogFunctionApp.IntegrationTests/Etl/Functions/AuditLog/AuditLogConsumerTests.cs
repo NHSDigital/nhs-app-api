@@ -49,6 +49,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var appointmentBookMetricRows = await env.Postgres.Events.AppointmentBookMetric.FetchAll();
             appointmentBookMetricRows.Should().HaveCount(1);
+            
+            var organDonationRegistrationGetMetricRows = await env.Postgres.Events.OrganDonationRegistrationGetMetric.FetchAll();
+            organDonationRegistrationGetMetricRows.Should().HaveCount(1);
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().HaveCount(1);
@@ -123,9 +126,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 appointmentBookMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.011Z"));
                 appointmentBookMetricRow1.AuditId.Should().Be("AuditId11");
 
-                var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession12");
-                organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
-                organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId12");
+                var organDonationRegistrationGetMetricRow1 = organDonationRegistrationGetMetricRows.First(r => r.SessionId == "TestSession12");
+                organDonationRegistrationGetMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
+                organDonationRegistrationGetMetricRow1.AuditId.Should().Be("AuditId12");
+
+                var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession13");
+                organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.013Z"));
+                organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId13");
             }
         }
 
@@ -161,6 +168,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var initialPromptMetricRows = await env.Postgres.Events.InitialPromptMetric.FetchAll();
             initialPromptMetricRows.Should().HaveCount(1);
+
+            var organDonationRegistrationGetMetricRows = await env.Postgres.Events.OrganDonationRegistrationGetMetric.FetchAll();
+            organDonationRegistrationGetMetricRows.Should().HaveCount(1);
 
             var appointmentCancelMetricRows = await env.Postgres.Events.AppointmentCancelMetric.FetchAll();
             appointmentCancelMetricRows.Should().HaveCount(1);
@@ -241,9 +251,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 appointmentBookMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.011Z"));
                 appointmentBookMetricRow1.AuditId.Should().Be("AuditId11");
 
-                var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession12");
-                organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
-                organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId12");
+                var organDonationRegistrationGetMetricRow1 = organDonationRegistrationGetMetricRows.First(r => r.SessionId == "TestSession12");
+                organDonationRegistrationGetMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
+                organDonationRegistrationGetMetricRow1.AuditId.Should().Be("AuditId12");
+
+                var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession13");
+                organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.013Z"));
+                organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId13");
             }
         }
 
@@ -311,18 +325,24 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 AuditId = "AuditId7"
             });
 
-            await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow()
-            {
+            await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow() {
                 Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 8),
                 SessionId = "TestSession8",
                 AuditId = "AuditId8"
             });
 
-            await env.Postgres.Events.OrganDonationRegistrationCreateMetric.Insert(new OrganDonationRegistrationCreateMetricRow()
+            await env.Postgres.Events.OrganDonationRegistrationGetMetric.Insert(new OrganDonationRegistrationGetMetricRow()
             {
                 Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 9),
                 SessionId = "TestSession9",
                 AuditId = "AuditId9"
+            });
+
+            await env.Postgres.Events.OrganDonationRegistrationCreateMetric.Insert(new OrganDonationRegistrationCreateMetricRow()
+            {
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 10),
+                SessionId = "TestSession10",
+                AuditId = "AuditId10"
             });
 
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
@@ -349,7 +369,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8),
                     "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710", "P9", "ods8", "ref8"),
                 BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 9),
-                    "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods9", "ref9"));
+                    "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods9", "ref9"),
+                BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10),
+                    "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P10", "ods10", "ref10"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -379,6 +401,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var appointmentBookMetricRows = await env.Postgres.Events.AppointmentBookMetric.FetchAll();
             var appointmentBookMetricRow = appointmentBookMetricRows.Should().ContainSingle().Subject;
+            
+            var organDonationRegistrationGetMetricRows = await env.Postgres.Events.OrganDonationRegistrationGetMetric.FetchAll();
+            var organDonationRegistrationGetMetricRow = organDonationRegistrationGetMetricRows.Should().ContainSingle().Subject;
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             var organDonationRegistrationCreateMetricRow = organDonationRegistrationCreateMetricRows.Should().ContainSingle().Subject;
@@ -434,9 +459,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 appointmentBookMetricRow.SessionId.Should().Be("TestSession8");
                 appointmentBookMetricRow.AuditId.Should().Be("AuditId8");
 
-                organDonationRegistrationCreateMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.009Z"));
-                organDonationRegistrationCreateMetricRow.SessionId.Should().Be("TestSession9");
-                organDonationRegistrationCreateMetricRow.AuditId.Should().Be("AuditId9");
+                organDonationRegistrationGetMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.009Z"));
+                organDonationRegistrationGetMetricRow.SessionId.Should().Be("TestSession9");
+                organDonationRegistrationGetMetricRow.AuditId.Should().Be("AuditId9");
+
+                organDonationRegistrationCreateMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.010Z"));
+                organDonationRegistrationCreateMetricRow.SessionId.Should().Be("TestSession10");
+                organDonationRegistrationCreateMetricRow.AuditId.Should().Be("AuditId10");
             }
         }
 
@@ -474,6 +503,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var appointmentBookMetricRows = await env.Postgres.Events.AppointmentBookMetric.FetchAll();
             appointmentBookMetricRows.Should().BeEmpty();
+            
+            var organDonationRegistrationGetMetricRow = await env.Postgres.Events.OrganDonationRegistrationGetMetric.FetchAll();
+            organDonationRegistrationGetMetricRow.Should().BeEmpty();
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().BeEmpty();
@@ -513,6 +545,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var appointmentBookMetricRows = await env.Postgres.Events.AppointmentBookMetric.FetchAll();
             appointmentBookMetricRows.Should().BeEmpty();
+            
+            var organDonationRegistrationGetMetricRow = await env.Postgres.Events.OrganDonationRegistrationGetMetric.FetchAll();
+            organDonationRegistrationGetMetricRow.Should().BeEmpty();
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().BeEmpty();
@@ -558,7 +593,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref7"),
                 BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10), "Appointments_Cancel_Response", "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods10", "ref10"),
                 BuildEvent("AuditId11", "TestSession11", new DateTime(2021, 11, 01, 09, 00, 00, 11), "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710", "P9", "ods11", "ref11"),
-                BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12), "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods12", "ref12")
+                BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12), "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods12", "ref12"),
+                BuildEvent("AuditId13", "TestSession13", new DateTime(2021, 11, 01, 09, 00, 00, 13), "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods13", "ref13"),
             };
     }
 }
