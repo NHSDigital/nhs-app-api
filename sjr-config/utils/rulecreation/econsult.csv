@@ -535,7 +535,6 @@ enfield,Enfield,CCG,Enfield,North Central London,boundaryhouse,Boundary House Su
 enfield,Enfield,CCG,Enfield,North Central London,edmontonmedicalcentre,Edmonton Medical Centre,F85666,3698
 enfield,Enfield,CCG,Enfield,North Central London,gillanhousesurgery,Gillan House Surgery,F85701,11122
 enfield,Enfield,CCG,Enfield,North Central London,gpdoctor,Grovelands And Grenoble MC,F85072,10588
-enfield,Enfield,CCG,Enfield,North Central London,keatssurgery,Keats Surgery,F85010,5152
 enfield,Enfield,CCG,Enfield,North Central London,morecambesurgery,Morecambe Surgery,F85650,5110
 enfield,Enfield,CCG,Enfield,North Central London,rainbowpractice,Rainbow Practice,F85039,5643
 enfield,Enfield,CCG,Enfield,North Central London,thenorthlondonhc,The North London Health Centre,F85642,8839
@@ -717,7 +716,6 @@ hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,D
 havering,Havering,CCG,Havering,North East London,avonroadsurgery,Avon Road Surgery,F82674,4700
 havering,Havering,CCG,Havering,North East London,berwicksurgeryrainham,Berwick Surgery,F82649,4788
 havering,Havering,CCG,Havering,North East London,billetlanemedicalpractice,Billet Lane Medical Practice,F82675,3799
-havering,Havering,CCG,Havering,North East London,drkakad-bhattandtanna,Central Park Surgery,F82016,7600
 havering,Havering,CCG,Havering,North East London,nhschasecrossmc,Chase Cross Medical Centre,F82630,6400
 havering,Havering,CCG,Havering,North East London,cranhamvillagesurgery,Cranham Village Surgery,F82006,12000
 havering,Havering,CCG,Havering,North East London,drcolinmarkssurgery,Dr Colin Marks Surgery,F82663,3655
@@ -896,7 +894,6 @@ kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,harrismemorialsurgery,
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,launcestonmedicalcentre,Launceston Medical Centre,L82030,18600
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,lostwithielmedicalpractice,Lostwithiel Medical Practice,L82039,4952
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,middlewaysurgery,Middleway Surgery,L82026,6518
-kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,narrowcliffsurgery,Narrowcliff Surgery,L82029,14500
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theoaktreesurgery,Oak Tree Surgery And Pensilva Health Centre,L82016,11007
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,oldbridgesurgery,Old Bridge Surgery,L82022,9500
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,portviewsurgery,Port View Surgery,L82066,6600
@@ -1156,7 +1153,6 @@ nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire 
 nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire and Farnham,Frimley Health,southleapractice,The Cambridge Practice,J82066,23500
 nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire and Farnham,Frimley Health,wellingtonpractice,The Wellington Practice,J82198,3340
 nehampshireandfarnham,North East Hampshire and Farnham,CCG,North East Hampshire and Farnham,Frimley Health,voyagerfamilyhealth,Voyager Family Health,J82067,18487
-north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,beggarwoodsurgery,Beggarwood Surgery,J82220,6816
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,boundaries-surgery,Boundaries Surgery,J82625,3931
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,chawtonparksurgery,Chawton Park Surgery,J82136,9778
 north hampshire,North Hampshire,CCG,North Hampshire,Hampshire and the Isle of Wight,cliftsurgery,Clift Surgery,J82079,7000
@@ -2507,7 +2503,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Wellington Road Family Practice,L81642,
 ,,,Other,,,Alverton Practice,L82021,
 ,,,Other,,,The Falmouth Health Centre Practice,L82049,
-,,,Other,,,Trescobeas Surgery,L82052,
 ,,,Other,,,St Keverne Health Centre,L82057,
 ,,,Other,,,Abbey Medical Centre,M84036,
 ,,,Other,,,Blackwood Health Centre,M91637,
@@ -2570,3 +2565,7 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Dr Sims and Partners,Y00469,
 ,,,Other,,,St Luke's Health Centre,Y02707,
 ,,,Other,,,Langdon Hills Medical Centre,Y03052,
+,,,Other,,,Neston Surgery,N81060,
+,,,Other,,,Central Surgery,A88013,
+,,,Other,,,Dr Kumar & Dr Sinha,F81613,
+,,,Other,,,The Arundel Surgery,H82021,

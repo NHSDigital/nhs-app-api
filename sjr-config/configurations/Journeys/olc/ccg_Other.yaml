@@ -649,7 +649,6 @@ target:
     - L81642
     - L82021
     - L82049
-    - L82052
     - L82057
     - M84036
     - M91637
@@ -712,6 +711,10 @@ target:
     - Y00469
     - Y02707
     - Y03052
+    - N81060
+    - A88013
+    - F81613
+    - H82021
 journeys:
   cdssAdvice:
     provider: eConsult
