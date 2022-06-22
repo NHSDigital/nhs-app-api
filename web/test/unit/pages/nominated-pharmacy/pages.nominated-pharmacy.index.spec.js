@@ -1,6 +1,9 @@
 import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import {
+  PRESCRIPTIONS_PATH,
+} from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy found', () => {
@@ -66,6 +69,35 @@ describe('nominated pharmacy found', () => {
       expect(pharmacyDetails.exists()).toBe(true);
       const linkToChange = wrapper.find('#link-to-change-pharmacy');
       expect(linkToChange.exists()).toBe(false);
+    });
+  });
+
+  describe('desktop back link', () => {
+    let backLink;
+
+    beforeEach(() => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState(PharmacyType.P3),
+      });
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+        'nominatedPharmacy/hasNoNominatedPharmacy': false,
+      };
+      wrapper = mountPage();
+      backLink = wrapper.find('#back-link').find('a');
+    });
+
+    it('will exist on web', () => {
+      expect(backLink.exists()).toBe(true);
+    });
+
+    it('will display back text', () => {
+      expect(backLink.text()).toEqual('Back');
+    });
+
+    it('it will go back to the prescriptions page', () => {
+      expect(backLink.attributes('href')).toBe(PRESCRIPTIONS_PATH);
     });
   });
 });

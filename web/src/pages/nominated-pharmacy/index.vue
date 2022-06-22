@@ -29,9 +29,9 @@
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                :text="$t('generic.back')">
-          <p>
-            <a href="#" @click="backButtonClicked"> {{ $t('generic.back') }} </a>
-          </p>
+          <desktop-generic-back-link id="back-link"
+                                     :path="prescriptionsPath"
+                                     :button-text="'generic.back'"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -41,6 +41,7 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import MessageDialogGeneric from '@/components/widgets/MessageDialogGeneric';
 import MessageText from '@/components/widgets/MessageText';
@@ -52,6 +53,7 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
+    DesktopGenericBackLink,
     PharmacyDetail,
     MessageDialogGeneric,
     MessageText,
