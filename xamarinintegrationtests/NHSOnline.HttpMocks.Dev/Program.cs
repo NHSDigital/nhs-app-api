@@ -35,6 +35,7 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new EmisPatient(EmisPatientOds.AllSilversEnabled).WithLogin("EmisWithAllSilvers").WithName(b => b.FamilyName("AllSilvers"));
                 yield return new EmisPatient(EmisPatientOds.Pkb).WithLogin("PKB").WithName(b => b.FamilyName("pkb"));
                 yield return new EmisPatient().WithLogin("NdopAbortConnection").WithBehaviour(new NdopCreateSessionAbortConnectionBehaviour());
+                yield return new WayfinderPatient(WayfinderPatientOds.ERS).WithLogin("WayfinderErsEnabled").WithName(b => b.FamilyName("Wayfinder"));
             }
         }
 

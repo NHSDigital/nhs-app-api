@@ -15,16 +15,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         private readonly IAndroidDriverWrapper _driver;
 
-        private AndroidAppointmentsPage(IAndroidDriverWrapper driver)
+        private AndroidAppointmentsPage(IAndroidDriverWrapper driver, bool isWayfinderEnabled)
         {
             _driver = driver;
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
+            PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView(), isWayfinderEnabled);
         }
 
-        public static AndroidAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false)
+        public static AndroidAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false, bool isWayfinderEnabled = false)
         {
-            var page = new AndroidAppointmentsPage(driver);
+            var page = new AndroidAppointmentsPage(driver, isWayfinderEnabled);
             page.PageContent.AssertOnPage();
 
             if (screenshot)

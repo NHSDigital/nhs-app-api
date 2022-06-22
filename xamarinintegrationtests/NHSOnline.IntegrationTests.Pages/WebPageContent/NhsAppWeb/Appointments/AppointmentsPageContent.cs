@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
@@ -9,10 +10,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
     public sealed class AppointmentsPageContent
     {
         private readonly IWebInteractor _interactor;
+        private readonly bool _isWayfinderEnabled;
+        private List<IFocusable>? _focusableElements;
 
-        internal AppointmentsPageContent(IWebInteractor interactor)
+        internal AppointmentsPageContent(IWebInteractor interactor, bool isWayfinderEnabled = false)
         {
             _interactor = interactor;
+            _isWayfinderEnabled = isWayfinderEnabled;
         }
 
         private WebText TitleText => WebText.WithTagAndText(
@@ -52,22 +56,49 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
             "p",
             "View and manage appointments, like your referral appointments");
 
-        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
+        private WebMenuItem ReferralsHospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Referrals, hospital and other appointments");
+
+        private WebText ReferralsHospitalAndOtherAppointmentsMenuText => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "View and manage your referrals and appointments");
+
+        public IEnumerable<IFocusable> FocusableElements
         {
-            GpSurgeryAppointmentsMenuItem,
-            AdditionalGpServicesMenuItem,
-            HospitalAndOtherAppointmentsMenuItem,
-        };
+            get
+            {
+                _focusableElements = new List<IFocusable>
+                {
+                    GpSurgeryAppointmentsMenuItem,
+                    AdditionalGpServicesMenuItem,
+                    _isWayfinderEnabled
+                        ? ReferralsHospitalAndOtherAppointmentsMenuItem
+                        : HospitalAndOtherAppointmentsMenuItem
+                };
+
+                return _focusableElements;
+            }
+        }
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public AppointmentsPageContent AssertPageElements()
         {
             TitleText.AssertVisible();
-            GpSurgeryAppointmentsMenuItem.AssertVisible();
-            GpSurgeryAppointmentsMenuText.AssertVisible();
-            HospitalAndOtherAppointmentsMenuItem.AssertVisible();
-            HospitalAndOtherAppointmentsMenuText.AssertVisible();
+
+            if (_isWayfinderEnabled)
+            {
+                ReferralsHospitalAndOtherAppointmentsMenuItem.AssertVisible();
+                ReferralsHospitalAndOtherAppointmentsMenuText.AssertVisible();
+            }
+            else
+            {
+                GpSurgeryAppointmentsMenuItem.AssertVisible();
+                GpSurgeryAppointmentsMenuText.AssertVisible();
+            }
+
             return this;
         }
 
@@ -90,6 +121,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         public void NavigateToHospitalAndOtherAppointments() => HospitalAndOtherAppointmentsMenuItem.Click();
 
         public void NavigateToAdditionalGpServices() => AdditionalGpServicesMenuItem.Click();
+
+        public void NavigateToSecondaryCareSummaryPage() => ReferralsHospitalAndOtherAppointmentsMenuItem.Click();
 
         public void KeyboardNavigateToGpSurgeryAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(GpSurgeryAppointmentsMenuItem, navigation);

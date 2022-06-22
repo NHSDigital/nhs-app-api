@@ -8,11 +8,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
     {
         private readonly IIOSDriverWrapper _driver;
 
-        private IOSAppointmentsPage(IIOSDriverWrapper driver)
+        private IOSAppointmentsPage(IIOSDriverWrapper driver, bool isWayfinderEnabled)
         {
             _driver = driver;
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView());
+            PageContent = new AppointmentsPageContent(driver.Web.NhsAppLoggedInWebView(), isWayfinderEnabled);
         }
 
         public IOSFullNavigation Navigation { get; }
@@ -21,9 +21,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
 
         private IOSLink GpSurgeryAppointmentsLink => IOSLink.WithText(_driver,  "GP surgery appointments");
 
-        public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
+        public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false, bool isWayfinderEnabled = false)
         {
-            var page = new IOSAppointmentsPage(driver);
+            var page = new IOSAppointmentsPage(driver, isWayfinderEnabled);
             page.PageContent.AssertOnPage();
 
             if (screenshot)

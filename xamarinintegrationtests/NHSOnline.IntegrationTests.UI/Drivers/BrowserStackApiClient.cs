@@ -93,7 +93,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 httpResponse.Content.ReadAsStringAsync().Result,
                 SerialiserSettings);
 
-            return response.AutomationSession;
+            return response?.AutomationSession;
         }
 
         private record BrowserStackSessionResponse(BrowserStackSessionDetails? AutomationSession);

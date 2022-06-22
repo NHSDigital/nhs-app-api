@@ -1,0 +1,48 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  "odsCode": "wayfinder_with_ers_enabled"
+journeys:
+  appointments:
+    provider: im1
+  cdssAdmin:
+    provider: none
+  cdssAdvice:
+    provider: none
+  coronavirusInformation: false
+  documents: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false
+    sendMessageSubject: false
+  medicalRecord:
+    version: "2"
+    provider: im1
+  messaging: false
+  ndop: false
+  nominatedPharmacy: false
+  notifications: false
+  notificationPrompt: false
+  oneOneOne: false
+  prescriptions:
+    provider: im1
+  silverIntegrations:
+    accountAdmin: []
+    carePlans: []
+    consultations: []
+    consultationsAdmin: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    participation: []
+    recordSharing: []
+    secondaryAppointments: []
+    testResults: []
+    vaccineRecord: []
+  supplier: Emis
+  supportsLinkedProfiles: false
+  userInfo: false
+  wayfinder:
+    isEnabled: true

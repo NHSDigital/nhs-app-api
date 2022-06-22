@@ -36,8 +36,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
+        //query will get only the first matching element if more than one found
         private By FindBy
-            => By.XPath($".//button[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+            => By.XPath($"(.//button[normalize-space(text())={_text.QuoteXPathLiteral()}])[1]");
 
         string IFocusable.ElementDescription
             => new FocusableDescriptionBuilder {Tag = "Button", Text = _text}.Description;

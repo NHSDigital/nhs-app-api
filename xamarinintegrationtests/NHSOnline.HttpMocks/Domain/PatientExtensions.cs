@@ -29,11 +29,21 @@ namespace NHSOnline.HttpMocks.Domain
             return patient;
         }
 
-        public static TPatient WithNhsNumber<TPatient>(this TPatient patient, NhsNumber nhsNumber) where TPatient : Patient
+        public static TPatient WithNhsNumber<TPatient>(this TPatient patient, NhsNumber nhsNumber)
+            where TPatient : Patient
         {
             patient = patient ?? throw new ArgumentNullException(nameof(patient));
 
             patient.NhsNumber = nhsNumber;
+            return patient;
+        }
+
+        public static TPatient WithNhsNumber<TPatient>(this TPatient patient, string nhsNumber)
+            where TPatient : Patient
+        {
+            patient = patient ?? throw new ArgumentNullException(nameof(patient));
+
+            patient.NhsNumber = NhsNumber.FromString(nhsNumber);
             return patient;
         }
 
