@@ -4,21 +4,12 @@ const { exit } = require('process');
 
 const prefix = '.';
 const outputFilePath = '.env';
-const numberRegex = RegExp(/^\d+$/);
-const booleanRegex = RegExp(/^(true|false)$/);
-const dockerEnvRegex = RegExp(/^([^=]+)=(.*)$/);
 
 const errorAndExit = msg => {
   console.error(`${__filename} => ${msg}`);
 
   exit(1);
 }
-
-const isNonBlankString = val => typeof val === 'string' && val.trim() !== '';
-
-const isBooleanString = val => isNonBlankString(val) && booleanRegex.test(val.toLowerCase().trim());
-
-const isNumberString = val => isNonBlankString(val) && numberRegex.test(val.toLowerCase().trim());
 
 const findEnvFilePaths = (composeFilePath, outArray) => {
   const lines = readFileSync(prefix + composeFilePath).toString().split('\n');
@@ -60,129 +51,47 @@ const populateEnvFile = (filePaths, total) => {
   })
 };
 
-const addNumericConfig = (variable, value) => {
-  if (!isNumberString(value)) {
-    errorAndExit(`Failed addNumericConfig for ${variable}=${value}`);
-  }
+const writeEnvFileFromDockerAndExit = () => {
+  const errorAndExitDocker = msg =>
+    errorAndExit(`Error getting web env JSON from docker: ${msg}\nIs the local environment running?`);
 
-  return parseInt(value, 10);
-};
+    try {
+      const webContainerId = 
+          execSync(`docker ps | grep web.local.bitraft | cut -d' ' -f1`).toString().trim();
 
-const addBoolConfig = (variable, value) => {
-  if (!isBooleanString(value)) {
-    errorAndExit(`Failed addBoolConfig for ${variable}=${value}`);
-  }
+      if (webContainerId === '') {
+        errorAndExitDocker('no web container detected');
+      }
 
-  return (value.toLowerCase().trim() === 'true');
-};
+      const webEnvDocker = 
+          execSync(`docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' ${webContainerId}`).toString().trim();
 
-const addStringConfig = (variable, value) => {
-  if (!isNonBlankString(value)) {
-    errorAndExit(`Failed addStringConfig for ${variable}=${value}`);
-  }
+      writeFileSync(outputFilePath, `${webEnvDocker}`);
 
-  return value;
-};
+      console.log(`${__filename} => Wrote web env vars to ${outputFilePath}`);
 
-const addConfigCommands =
-{
-  addNumericConfig,
-  addBoolConfig,
-  addStringConfig
+      exit(0);
+
+    } catch (ex) {
+    errorAndExitDocker(`${ex}`);
+    }
 }
 
-const determineEnvType = (envVarsSh, config, formattedConfig) => {
-  const lines = readFileSync(envVarsSh)
-    .toString()
-    .split('\n');
-
-  lines.forEach(rawLine => {
-    const envVarMatch = rawLine.trim().match(/^(add.+Config)\s+["'](.+)['"]$/);
-
-    if (envVarMatch == null) {
-      return;
-    }
-
-    const [ _, commandName, envVarName ] = envVarMatch;
-
-    const command = addConfigCommands[commandName];
-    const rawValue = config[envVarName];
-
-    formattedConfig[envVarName] = command(envVarName, rawValue);
-  });
-};
-
 const writeEnvFileAndExit = webEnv => {
-  const webEnvJson = JSON.stringify(webEnv, null, 2);
+  const webEnvString = convertToEnvString(webEnv)
 
-  const webContainerId = 
-      execSync(`docker ps | grep web.local.bitraft | cut -d' ' -f1`).toString().trim();
-
-  const webEnvDocker = 
-      execSync(`docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' ${webContainerId}`).toString().trim();
-
-  writeFileSync(outputFilePath, `${webEnvDocker}`);
+  writeFileSync(outputFilePath, `${webEnvString}`);
 
   console.log(`${__filename} => Wrote web env vars to ${outputFilePath}`);
 
   exit(0);
 }
 
-const parseDockerEnvVar = (webEnv, [ _, key, val ]) => {
-  let parsedVal;
-
-  if (isNumberString(val)) {
-    parsedVal = parseInt(val, 10);
-  } else if (isBooleanString(val)) {
-    parsedVal = val.toLowerCase().trim() === 'true';
-  } else if (isNonBlankString(val)) {
-    parsedVal = val;
-  } else {
-    console.warn(`Empty value detected for env var: ${key}`);
-
-    return;
-  }
-
-  webEnv[key] = parsedVal;
-}
-
-const createEnvJsonFromDockerContainer = () => {
-  const errorAndExitDocker = msg =>
-    errorAndExit(`Error getting web env JSON from docker: ${msg}\nIs the local environment running?`);
-
-  try {
-    const webContainerId = 
-      execSync(`docker ps | grep web.local.bitraft | cut -d' ' -f1`).toString().trim();
-
-    if (webContainerId === '') {
-      errorAndExitDocker('no web container detected');
-    }
-
-    const webEnvDockerJson = 
-      execSync(`docker inspect --format='{{json .Config.Env}}' ${webContainerId}`).toString().trim();
-
-    if (webEnvDockerJson === '') {
-      errorAndExitDocker('web container inspect returned no data');
-    }
-
-    const webEnv = {};
-
-    JSON.parse(webEnvDockerJson)
-      .filter(e => dockerEnvRegex.test(e))
-      .map(e => dockerEnvRegex.exec(e))
-      .forEach(m => parseDockerEnvVar(webEnv, m));
-
-    writeEnvFileAndExit(webEnv);
-   } catch (ex) {
-    errorAndExitDocker(`${ex}`);
-   }
-};
-
 const main = () => {
   const args = process.argv.map(a => a.toLowerCase().trim());
 
   if (args.find(a => a === '--docker')) {
-    createEnvJsonFromDockerContainer();
+    writeEnvFileFromDockerAndExit();
 
     return;
   }
@@ -193,10 +102,15 @@ const main = () => {
   var envFile = {};
   populateEnvFile(envFiles, envFile);
 
-  var typedEnvFile = {};
-  determineEnvType('build/docker-runtime/env-vars.sh', envFile, typedEnvFile);
+  writeEnvFileAndExit(envFile);
+}
 
-  writeEnvFileAndExit(typedEnvFile);
+function convertToEnvString (object) {
+  let envFile = ''
+  for (const key of Object.keys(object)) {
+      envFile += `${key}=${object[key]}\n`
+  }
+  return envFile
 }
 
 main()

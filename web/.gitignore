@@ -4,6 +4,7 @@ src/services/v2nhsonlineapi.js
 src/services/v3nhsonlineapi.js
 src/services/fhircdsapi.js
 src/config/env.json
+.env
 FETCH_HEAD
 
 .DS_Store

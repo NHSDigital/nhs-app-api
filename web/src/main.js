@@ -36,7 +36,12 @@ const defineErrorHandling = () => {
   Vue.config.errorHandler = vueErrorLogHandler;
 };
 
-function convertBooleans() {
+const numberRegex = RegExp(/^\d+$/);
+const isNonBlankString = val => typeof val === 'string' && val.trim() !== '';
+const isNumberString = val => isNonBlankString(val) && numberRegex.test(val.toLowerCase().trim());
+
+// this applies when running in npm to convert from strings
+function convertTypeValues() {
   Object.keys(store.$env).forEach((key) => {
     if (store.$env[key] === 'true') {
       store.$env[key] = true;
@@ -44,6 +49,10 @@ function convertBooleans() {
 
     if (store.$env[key] === 'false') {
       store.$env[key] = false;
+    }
+
+    if (isNumberString(store.$env[key])) {
+      store.$env[key] = Number(store.$env[key]);
     }
   });
 }
@@ -57,7 +66,7 @@ function convertBooleans() {
   Vue.config.productionTip = false;
   store.$env = (await Axios.get('CONFIG_PATH/config.json')).data; // see the web dockerfile to see how this is defined at startup
 
-  convertBooleans();
+  convertTypeValues();
 
   store.$cookies = Vue.$cookies;
 
