@@ -1,6 +1,6 @@
 import NativeApp from '@/services/native-app';
 import jwt from 'jwt-decode';
-import { LOGIN_PATH } from '@/router/paths';
+import { LOGOUT_PATH } from '@/router/paths';
 import { removeCookies } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
@@ -44,7 +44,7 @@ const final = ({ self, commit, expired }) => {
     return;
   }
 
-  self.app.$router.push({ path: LOGIN_PATH });
+  self.app.$router.push({ path: LOGOUT_PATH });
 };
 
 const removeSessionCookies = self => removeCookies({

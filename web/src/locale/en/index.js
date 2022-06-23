@@ -13,6 +13,7 @@ import home from './home';
 import layout from './layout';
 import legalAndCookies from './legalAndCookies';
 import login from './login';
+import logout from './logout';
 import loginSettings from './loginSettings';
 import menuItems from './menuItems';
 import messages from './messages';
@@ -49,6 +50,7 @@ export default {
   layout,
   legalAndCookies,
   login,
+  logout,
   loginSettings,
   menuItems,
   messages,

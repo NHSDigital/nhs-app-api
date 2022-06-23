@@ -53,7 +53,7 @@ Feature: Cookie Banner
     And I am logged in
     And I see the home page
     When I sign out
-    Then I see the cookie banner
+    Then I do not see the cookie banner
 
   Scenario: Acknowledged Cookie Banner reappears when browser closed and repoened, when Javascript enabled
     Given I have enabled javascript

@@ -25,7 +25,7 @@ Feature: Authorisation occurs during each URL visit
   Scenario: User has just logged out and attempts to navigate to a restricted url
     Given I am a EMIS patient
     And I have just logged out
-    And I see the login page
+    And I see the logout page
     When I browse to the pages at the following urls I see the login page
       | /more                                    |
       | /appointments                               |
@@ -83,7 +83,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details    | /prescriptions                                 |
       | /advice                                        | /advice                                        |
       | /terms-and-conditions                          | /patient                                       |
-      | /logout                                        | /login                                         |
+      | /logout                                        | /logout                                        |
 
   @bug @NHSO-8672
   #To be merged into the above test once the bug is fixed
@@ -111,7 +111,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login                            |
+      | /logout                                     | /logout                           |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |
@@ -132,7 +132,7 @@ Feature: Authorisation occurs during each URL visit
   Scenario Outline: A User who has not accepted updated T&C and not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after accepting terms
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
     And I am not logged in
-    When I browse to the <Url> and see the login page
+    When I browse to the <Url> and see the logout page
     And I login
     Then the updated Terms and Conditions page is displayed
     When I agree to the updated terms and conditions
@@ -146,7 +146,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login                            |
+      | /logout                                     | /logout                           |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |
@@ -172,7 +172,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /advice                                     | /advice                           |
       | /terms-and-conditions                       | /patient                          |
-      | /logout                                     | /login                            |
+      | /logout                                     | /logout                           |
       | /redirector                                 | /patient                          |
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                | /patient                          |

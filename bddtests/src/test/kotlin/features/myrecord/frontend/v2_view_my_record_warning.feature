@@ -40,7 +40,7 @@ Feature: Warning Frontend - Medical Record v2
     When I click the 'Continue' button
     Then I see the medical record v2 page
     When I use the header link to log out of the website
-    Then I see the login page
+    Then I see the logout page
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
