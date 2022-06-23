@@ -65,7 +65,8 @@ export default {
     availableAppointmentCount(slotCount) {
       return this.$tc(
         'appointments.book.numberOfAppointmentsAvailable',
-        slotCount, { appointmentsCount: slotCount },
+        slotCount,
+        { appointmentsCount: slotCount },
       );
     },
   },

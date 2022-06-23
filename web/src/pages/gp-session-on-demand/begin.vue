@@ -23,10 +23,10 @@ import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import Spinner from '@/components/widgets/Spinner';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Spinner,
   },
+  layout: 'nhsuk-layout',
   async mounted() {
     const authorisationService = new AuthorisationService(this.$store.$env);
     const redirectTo = this.$router.currentRoute.query.targetPage;

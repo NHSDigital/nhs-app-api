@@ -19,11 +19,11 @@
     <error-page v-else-if="error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="backUrl">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('forbiddenErrors.appointments.youCannotBookOnline') }}</p>
         <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
-      <template v-slot:actions>
+      <template #actions>
         <alternative-appointment-actions/>
       </template>
     </error-page>

@@ -72,7 +72,6 @@ import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_LINKED_PROFILES_PATH } from '@/route
 import { isTruthy } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     CeMarkIcon,
     MenuItem,
@@ -81,6 +80,7 @@ export default {
     AnalyticsTrackedTag,
     ThirdPartyJumpOffButton,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       accountAndSettingsPath: MORE_ACCOUNTANDSETTINGS_PATH,

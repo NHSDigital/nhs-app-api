@@ -38,13 +38,13 @@ import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '../../../../components/widgets/DesktopGenericBackLink';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     LabelledToggle,
     MenuItem,
     MenuItemList,
   },
+  layout: 'nhsuk-layout',
 
   data() {
     return {

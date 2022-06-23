@@ -69,7 +69,6 @@ import { redirectTo } from '@/lib/utils';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     DesktopGenericBackLink,
@@ -77,6 +76,7 @@ export default {
     ErrorDialog,
     NhsUkRadioGroup,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       interruptPath: NOMINATED_PHARMACY_INTERRUPT_PATH,

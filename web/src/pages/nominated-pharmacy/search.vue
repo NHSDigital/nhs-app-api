@@ -86,7 +86,6 @@ import { UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT, EventBus } from '@/se
 const postcodeRegex = /^((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( ?[0-9][A-Za-z]{2})?)$/;
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     GenericTextInput,
@@ -98,6 +97,7 @@ export default {
     ErrorMessage,
     DesktopGenericBackLink,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       searchQueryMaxLength: 10,

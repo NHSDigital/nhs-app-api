@@ -8,7 +8,7 @@
                 :show-back-link="isDesktop"
                 :update-header="false">
 
-      <template v-slot:content>
+      <template #content>
         <error-title title="gpSessionErrors.genericOnDemand.serviceUnavailable"/>
         <h2>{{ $t('gpSessionErrors.genericOnDemand.ifYouNeedInformationNow') }}</h2>
         <error-paragraph from="gpSessionErrors.genericOnDemand.contactGpSurgery"/>

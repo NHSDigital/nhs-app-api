@@ -42,12 +42,12 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],

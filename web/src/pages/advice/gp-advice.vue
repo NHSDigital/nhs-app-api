@@ -54,6 +54,26 @@ export default {
     DemographicsQuestion,
     ConditionList,
   },
+  beforeRouteLeave(to, from, next) {
+    let shouldContinue = true;
+
+    if (to.path === LOGIN_PATH) {
+      next(shouldContinue);
+    }
+
+    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
+      this.showModal();
+
+      shouldContinue = false;
+    }
+
+    if (shouldContinue && typeof window === 'object') {
+      window.onbeforeunload = null;
+    }
+
+    next(shouldContinue);
+  },
   data() {
     return {
       provider: this.$store.state.serviceJourneyRules.rules.cdssAdvice.provider,
@@ -80,26 +100,6 @@ export default {
     providerName() {
       return this.$store.state.onlineConsultations.adviceProviderName;
     },
-  },
-  beforeRouteLeave(to, from, next) {
-    let shouldContinue = true;
-
-    if (to.path === LOGIN_PATH) {
-      next(shouldContinue);
-    }
-
-    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
-      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
-      this.showModal();
-
-      shouldContinue = false;
-    }
-
-    if (shouldContinue && typeof window === 'object') {
-      window.onbeforeunload = null;
-    }
-
-    next(shouldContinue);
   },
   async created() {
     await this.$store.dispatch('onlineConsultations/serviceDefinitionIsValid', this.provider);

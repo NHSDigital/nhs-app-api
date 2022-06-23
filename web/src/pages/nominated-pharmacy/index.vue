@@ -50,7 +50,6 @@ import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_PATH } from '@/router/paths';
 import { redirectTo, navigateBack } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     DesktopGenericBackLink,
@@ -58,6 +57,7 @@ export default {
     MessageDialogGeneric,
     MessageText,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,

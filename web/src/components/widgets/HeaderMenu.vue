@@ -114,23 +114,6 @@ export default {
       morePath: MORE_PATH,
     };
   },
-  computed: {
-    miniMenuExpanded() {
-      return this.$store.state.header.miniMenuExpanded;
-    },
-  },
-  methods: {
-    isMenuItemSelected(menuItemIndex) {
-      return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
-    },
-    setMenuitemState(path) {
-      redirectTo(this, path);
-      this.closeMiniMenu();
-    },
-    closeMiniMenu() {
-      this.$store.dispatch('header/closeMiniMenu');
-    },
-  },
   head() {
     return {
       noscript: [
@@ -148,6 +131,23 @@ export default {
       ],
       __dangerouslyDisableSanitizers: ['noscript'],
     };
+  },
+  computed: {
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded;
+    },
+  },
+  methods: {
+    isMenuItemSelected(menuItemIndex) {
+      return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
+    },
+    setMenuitemState(path) {
+      redirectTo(this, path);
+      this.closeMiniMenu();
+    },
+    closeMiniMenu() {
+      this.$store.dispatch('header/closeMiniMenu');
+    },
   },
 };
 </script>

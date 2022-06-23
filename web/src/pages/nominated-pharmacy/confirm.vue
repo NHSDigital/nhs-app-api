@@ -41,7 +41,6 @@ import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import PharmacySummary from '../../components/nominatedPharmacy/PharmacySummary';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     AnalyticsTrackedTag,
@@ -50,6 +49,7 @@ export default {
     PharmacySummary,
     PharmacyOpeningTimes,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       openingTimes: this.$store.state.nominatedPharmacy

@@ -27,11 +27,11 @@ import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton
 import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     SwitchProfileButton,
   },
   mixins: [CalculateAgeInMonthsAndYears],
+  layout: 'nhsuk-layout',
   data() {
     return {
       currentProfile: this.$store.state.linkedAccounts.actingAsUser,

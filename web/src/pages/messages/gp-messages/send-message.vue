@@ -79,7 +79,7 @@
         {{ $t('messages.sendMessage') }}
       </generic-button>
     </div>
-    <desktop-generic-back-link v-if="!this.$store.state.device.isNativeApp"
+    <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                :path="backPath"
                                button-text="generic.back"/>
   </div>

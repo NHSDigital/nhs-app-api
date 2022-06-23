@@ -1,5 +1,5 @@
 <template>
-  <p :class="[this.$style.msgText,
+  <p :class="[$style.msgText,
               indentStyle,
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"

@@ -2,7 +2,7 @@
   <error-screen-alternative-actions
     v-if="showAlternativeActions" id="alternative_actions"
     alternative-actions-header="forbiddenErrors.appointments.whatYouCanDoNext">
-    <template v-slot:items>
+    <template #items>
       <gp-advice-menu-item v-if="isCdssAdvice" route-crumb="appointmentsCrumb"/>
       <admin-help-menu-item v-if="isCdssAdmin"/>
       <gp-advice-menu-item v-if="showEngageMedicalAdvice" route-crumb="appointmentsCrumb"/>

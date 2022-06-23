@@ -12,10 +12,10 @@
 import Shutter from '@/components/linked-profiles/Shutter';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Shutter,
   },
+  layout: 'nhsuk-layout',
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
   },

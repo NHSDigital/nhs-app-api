@@ -13,7 +13,7 @@
 
     <div>
       <p class="nhsuk-u-margin-0">
-        <strong>{{ this.$t('appointments.appointment.appointmentType') }}</strong>
+        <strong>{{ $t('appointments.appointment.appointmentType') }}</strong>
       </p>
       <p class="nhsuk-body-s nhsuk-u-margin-0" data-label="slot type">
         {{ appointment.type }}
@@ -35,7 +35,7 @@
 
     <div class="nhsuk-u-margin-top-3">
       <p class="nhsuk-u-margin-0"><strong>
-        {{ this.$t('appointments.appointment.location') }}
+        {{ $t('appointments.appointment.location') }}
       </strong></p>
       <p class="nhsuk-body-s nhsuk-u-margin-0" :class="$style.location">
         <span data-label="location">{{ appointment.location }}</span>
@@ -59,10 +59,10 @@
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
         <a :class="$style['nhsuk-action-link__link']"
            :href="appointmentCancellingPath"
-           :aria-label="this.$t('appointments.appointment.cancelThisAppointment') + ' - ' +
+           :aria-label="$t('appointments.appointment.cancelThisAppointment') + ' - ' +
              formatDate(appointment.startTime) + ' ' + formatTime(appointment.startTime)"
            @click.stop.prevent="onCancel">
-          {{ this.$t('appointments.appointment.cancelThisAppointment') }}
+          {{ $t('appointments.appointment.cancelThisAppointment') }}
         </a>
       </p>
     </span>
@@ -71,7 +71,7 @@
       <hr class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1" aria-hidden="true">
       <br>
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
-        {{ this.$t('appointments.appointment.contactSurgeryToCancel') }}
+        {{ $t('appointments.appointment.contactSurgeryToCancel') }}
       </p>
     </span>
   </div>

@@ -94,7 +94,6 @@ import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   name: 'OnlineOnlySearch',
-  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     GenericTextInput,
@@ -106,6 +105,7 @@ export default {
     ErrorMessage,
     DesktopGenericBackLink,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       nominatedPharmacyChooseType: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,

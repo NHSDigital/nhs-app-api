@@ -7,7 +7,7 @@
                   :code="error.serviceDeskReference"
                   :update-header="false"
                   :show-back-link="false">
-        <template v-slot:content>
+        <template #content>
           <p>{{ $t('gpSessionErrors.healthRecord.ifYouNeedInformationNow') }}</p>
           <contact-111 :text="$t('gpSessionErrors.healthRecord.forUrgentMedicalAdvice')"/>
         </template>

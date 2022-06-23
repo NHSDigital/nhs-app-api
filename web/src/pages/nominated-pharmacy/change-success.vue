@@ -59,13 +59,13 @@ import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import AnalyticsTrackedTag from '../../components/widgets/AnalyticsTrackedTag';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     OnlineOnlyPharmacyDetail,
     PharmacyChangeSuccessDetails,
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       pharmacy: null,

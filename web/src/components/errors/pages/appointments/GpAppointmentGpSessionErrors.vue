@@ -18,12 +18,12 @@
                 :code="error.serviceDeskReference"
                 header-locale-ref="gpSessionErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="backUrl">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('gpSessionErrors.appointments.youCannotBookOnline') }}</p>
         <p>{{ $t('gpSessionErrors.appointments.contactYourSurgery') }}</p>
         <contact-111 :text="$t('gpSessionErrors.appointments.forUrgentMedicalAdvice')"/>
       </template>
-      <template v-slot:actions>
+      <template #actions>
         <alternative-appointment-actions/>
       </template>
     </error-page>

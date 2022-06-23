@@ -5,7 +5,7 @@
                 header-locale-ref="gpSessionErrors.organDonation.organDonationUnavailable"
                 :update-header="false"
                 :show-back-link="false">
-      <template v-slot:content>
+      <template #content>
         <error-paragraph from="gpSessionErrors.organDonation.organDonationMessage"/>
         <h2>{{ $t('gpSessionErrors.organDonation.ifYouNeedInformationNow') }}</h2>
         <h3>{{ $t('gpSessionErrors.organDonation.ifYouNeedInformationNowEmail') }}</h3>

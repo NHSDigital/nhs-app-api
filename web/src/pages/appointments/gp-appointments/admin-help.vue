@@ -48,6 +48,26 @@ export default {
     DemographicsQuestion,
     ConditionList,
   },
+  beforeRouteLeave(to, from, next) {
+    let shouldContinue = true;
+
+    if (to.path === LOGIN_PATH) {
+      next(shouldContinue);
+    }
+
+    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
+      this.showModal();
+
+      shouldContinue = false;
+    }
+
+    if (shouldContinue && typeof window === 'object') {
+      window.onbeforeunload = null;
+    }
+
+    next(shouldContinue);
+  },
   data() {
     return {
       provider: this.$store.state.serviceJourneyRules.rules.cdssAdmin.provider,
@@ -103,26 +123,6 @@ export default {
     });
 
     this.available = true;
-  },
-  beforeRouteLeave(to, from, next) {
-    let shouldContinue = true;
-
-    if (to.path === LOGIN_PATH) {
-      next(shouldContinue);
-    }
-
-    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
-      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
-      this.showModal();
-
-      shouldContinue = false;
-    }
-
-    if (shouldContinue && typeof window === 'object') {
-      window.onbeforeunload = null;
-    }
-
-    next(shouldContinue);
   },
   beforeDestroy() {
     this.$store.dispatch('pageLeaveWarning/reset');

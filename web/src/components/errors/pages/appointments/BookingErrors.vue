@@ -3,11 +3,11 @@
     <error-page v-if="error && error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="appointmentsPath">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('forbiddenErrors.appointments.youCannotBookOnline') }}</p>
         <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
-      <template v-slot:actions>
+      <template #actions>
         <alternative-appointment-actions/>
       </template>
     </error-page>
@@ -16,13 +16,13 @@
                 id="no-appoinments-available"
                 header-locale-ref="appointments.book.noAppointmentsAvailable"
                 :back-url="appointmentsPath">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('appointments.book.youWillNeedToContactGpSurgery') }}</p>
         <contact-111
           :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
           :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
       </template>
-      <template v-slot:actions>
+      <template #actions>
         <p>
           <a :href="coronaConditionsUrl"
              rel="noopener noreferrer"

@@ -41,11 +41,11 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       visitOnlinePharmacyListPath: this.$store.$env.NOMINATED_PHARMACY_DSP_URL,

@@ -343,8 +343,7 @@ export default {
           return;
         }
 
-        await this.confirmTheAppointmentSlot(this.slot, this.symptoms,
-          this.telephoneNumber, this.otherTelephoneNumber.trim());
+        await this.confirmTheAppointmentSlot(this.slot, this.symptoms, this.telephoneNumber, this.otherTelephoneNumber.trim());
 
         if (this.error) {
           return;

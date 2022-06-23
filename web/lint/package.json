@@ -13,16 +13,16 @@
     "lib"
   ],
   "peerDependencies": {
-    "eslint": "^5.15.2"
+    "eslint": "8.17.0"
   },
   "dependencies": {
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "9.1.0",
     "lodash": "^4.17.21",
-    "vue-eslint-parser": "^6.0.2"
+    "@babel/eslint-parser": "7.18.2"
   },
   "devDependencies": {
     "ajv": "8.11.0",
-    "eslint": "5.15.2",
+    "eslint": "8.17.0",
     "mocha": "^10.0.0",
     "minimist": "1.2.6"
   }

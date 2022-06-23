@@ -55,12 +55,12 @@ import MenuItemList from '@/components/MenuItemList';
 import { MORE_ACCOUNTANDSETTINGS_PATH, MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     MenuItem,
     MenuItemList,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       manageCookiesPath: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_PATH,

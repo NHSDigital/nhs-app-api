@@ -20,15 +20,14 @@ const config = {
 const configurations = [];
 
 ['v1'].forEach((version) => {
-  configurations.push(Object.assign({}, config, {
+  configurations.push({ ...config,
     entry: {
       nhsapp: `./src/static/js/${version}/src/nhsapp.js`,
     },
     output: {
       path: path.join(__dirname, `public/js/${version}`),
       filename: '[name].js',
-    },
-  }));
+    } });
 });
 
 module.exports = configurations;

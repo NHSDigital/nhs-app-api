@@ -1,6 +1,0 @@
-{
-  "ignore": [
-    { "id": "sonatype-2021-1169", "reason": "Package is esLint. Fix ticket NHSO-20929" },
-    { "id": "sonatype-2021-4879", "reason": "Package is esLint. Fix ticket NHSO-20929" }
-  ]
-}

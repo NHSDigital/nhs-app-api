@@ -9,10 +9,10 @@ import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     ProofLevelUpliftBanner,
   },
+  layout: 'nhsuk-layout',
   mounted() {
     const feature = this.$router.currentRoute.query.featureName;
     EventBus.$emit(UPDATE_HEADER, feature, true, true);

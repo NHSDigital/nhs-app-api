@@ -152,13 +152,13 @@ const loadData = async (store) => {
 
 export default {
   name: 'ViewOrders',
-  layout: 'nhsuk-layout',
   components: {
     HistoricPrescription,
     SjrIf,
     DesktopGenericBackLink,
     PrescriptionErrors,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       backUrl: PRESCRIPTIONS_PATH,

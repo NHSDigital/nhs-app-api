@@ -24,6 +24,13 @@ export default {
     DesktopGenericBackLink,
     Glossary,
   },
+  beforeRouteLeave(to, from, next) {
+    if (!(to.path === LOGIN_PATH || to.path === LOGOUT_PATH) && this.navHidden) {
+      NativeApp.showHeader();
+      NativeApp.showMenuBar();
+    }
+    next();
+  },
   data() {
     return {
       documentData: null,
@@ -84,13 +91,6 @@ export default {
         NativeApp.setZoomable(zoomable);
       }
     },
-  },
-  beforeRouteLeave(to, from, next) {
-    if (!(to.path === LOGIN_PATH || to.path === LOGOUT_PATH) && this.navHidden) {
-      NativeApp.showHeader();
-      NativeApp.showMenuBar();
-    }
-    next();
   },
 };
 </script>

@@ -878,11 +878,10 @@ describe('online consultations store actions', () => {
           .mockImplementation(
             () => Promise.resolve({ response: 'test' }),
           );
-        setProviderNames.call(store, { commit, state, rootState },
-          {
-            adminProviderName: 'test',
-            adviceProviderName: 'test',
-          })
+        setProviderNames.call(store, { commit, state, rootState }, {
+          adminProviderName: 'test',
+          adviceProviderName: 'test',
+        })
           .then(() => {
             // Assert
             expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails)
@@ -896,11 +895,10 @@ describe('online consultations store actions', () => {
     });
     describe('setProviderNames none', () => {
       it('will not set names when they are none', () => {
-        setProviderNames.call(store, { commit, state, rootState },
-          {
-            adminProviderName: 'none',
-            adviceProviderName: 'none',
-          })
+        setProviderNames.call(store, { commit, state, rootState }, {
+          adminProviderName: 'none',
+          adviceProviderName: 'none',
+        })
           .then(() => {
             // Assert
             expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails)

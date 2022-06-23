@@ -58,7 +58,6 @@ import MenuItemList from '@/components/MenuItemList';
 import PharmacyAddressComponent from '@/components/nominatedPharmacy/PharmacyAddressComponent';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     PharmacyAddressComponent,
     MenuItem,
@@ -66,6 +65,7 @@ export default {
     AnalyticsTrackedTag,
     DesktopGenericBackLink,
   },
+  layout: 'nhsuk-layout',
   data() {
     const { searchResults, searchQuery } = this.$store.state.nominatedPharmacy;
     const { pharmacies, pharmacyCount, technicalError, noResultsFound } = searchResults;

@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style['error-timeout'],
-                this.$store.state.device.isNativeApp ? $style['center'] : '']">
+                $store.state.device.isNativeApp ? $style['center'] : '']">
     <div class="nhsuk-width-container">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">

@@ -39,6 +39,9 @@ export default {
     DesktopGenericBackLink,
     GenericButton,
   },
+  beforeRouteEnter(_, from, next) {
+    next(from.path !== GP_MESSAGES_VIEW_MESSAGE_PATH ? GP_MESSAGES_PATH : undefined);
+  },
   data() {
     return {
       recipient: get('$store.state.gpMessages.selectedMessageRecipient.name')(this),
@@ -53,9 +56,6 @@ export default {
     buttonText() {
       return 'messages.cancel';
     },
-  },
-  beforeRouteEnter(_, from, next) {
-    next(from.path !== GP_MESSAGES_VIEW_MESSAGE_PATH ? GP_MESSAGES_PATH : undefined);
   },
   created() {
     if (isBlankString(this.$store.state.gpMessages.selectedMessageId)) {

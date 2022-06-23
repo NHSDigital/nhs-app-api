@@ -6,14 +6,14 @@
                 header-locale-ref="gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions"
                 :back-url="backUrl"
                 :update-header="false">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('gpSessionErrors.prescriptions.contactYourSurgery') }}</p>
         <contact-111 :text="$t('gpSessionErrors.prescriptions.forUrgentMedicalAdvice')"/>
       </template>
-      <template v-slot:actions>
+      <template #actions>
         <error-screen-alternative-actions
           alternative-actions-header="gpSessionErrors.prescriptions.otherThingsYouCanDo">
-          <template v-slot:items>
+          <template #items>
             <emergency-prescription-menu-item />
           </template>
         </error-screen-alternative-actions>

@@ -32,13 +32,13 @@ import sjrIf from '@/lib/sjrIf';
 import { MORE_PATH, MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     MenuItem,
     MenuItemList,
     AccountAndSettings,
     DesktopGenericBackLink,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       legalAndCookiesPath: MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_PATH,

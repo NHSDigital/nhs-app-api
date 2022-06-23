@@ -63,16 +63,16 @@ export default {
 
     return head;
   },
+  beforeRouteUpdate(to, _, next) {
+    EventBus.$emit(UPDATE_HEADER, to.meta);
+    this.onUpdateTitle(to.meta);
+    next();
+  },
   data() {
     return {
       header: '',
       title: '',
     };
-  },
-  beforeRouteUpdate(to, _, next) {
-    EventBus.$emit(UPDATE_HEADER, to.meta);
-    this.onUpdateTitle(to.meta);
-    next();
   },
   computed: {
     chromeless() {

@@ -21,7 +21,6 @@ COPY package-lock.json .
 
 COPY lint/.npmrc lint/
 COPY lint/package.json lint/
-COPY lint/auditjs.json lint/
 COPY lint/package-lock.json lint/
 
 RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \

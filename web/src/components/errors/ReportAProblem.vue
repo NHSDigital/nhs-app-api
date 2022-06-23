@@ -5,7 +5,7 @@
                 :action="contactUsUrl"
                 target="_blank"
                 :query-param="referenceParam"/>
-    {{ this.$t('apiErrors.referenceReference', { reference }) }}
+    {{ $t('apiErrors.referenceReference', { reference }) }}
   </div>
 </template>
 <script>

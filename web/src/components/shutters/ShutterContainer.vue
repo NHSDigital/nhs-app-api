@@ -1,6 +1,6 @@
 <template>
   <div data-purpose="shutter-container"
-       :class="[this.$style.msg, {[this.$style.plain]: isPlain}, 'nhsuk-width-container--full']"
+       :class="[$style.msg, {[$style.plain]: isPlain}, 'nhsuk-width-container--full']"
        :aria-live="ariaLive">
     <div :class="$style['msg-content']" data-purpose="shutter">
       <slot/>

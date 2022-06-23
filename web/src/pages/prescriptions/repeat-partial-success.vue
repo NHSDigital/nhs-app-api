@@ -73,12 +73,12 @@ import { redirectTo } from '@/lib/utils';
 import { PRESCRIPTIONS_PATH, PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Contact111,
     GreenTick,
     RedCross,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       successfulOrders: this.$store.state.repeatPrescriptionCourses

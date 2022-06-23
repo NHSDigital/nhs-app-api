@@ -1,6 +1,6 @@
 <template>
   <div data-purpose="error-container"
-       :class="[this.$style.msg, {[this.$style.plain]: isPlain}, 'nhsuk-width-container--full']"
+       :class="[$style.msg, {[$style.plain]: isPlain}, 'nhsuk-width-container--full']"
        :aria-live="ariaLive">
     <h2 v-if="!isPlain" :class="['nhsuk-heading-m', $style.icon]">
       {{ $t('generic.error') }}

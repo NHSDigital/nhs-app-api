@@ -8,10 +8,10 @@
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     ProofLevelUpliftBanner,
   },
+  layout: 'nhsuk-layout',
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
   },

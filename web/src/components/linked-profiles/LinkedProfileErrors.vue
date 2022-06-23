@@ -14,7 +14,7 @@
                 :code="error.serviceDeskReference"
                 header-locale-ref="gpSessionErrors.linkedProfiles.sorryLinkedProfiles"
                 :back-url="backUrl">
-      <template v-slot:content>
+      <template #content>
         <p>{{ $t('gpSessionErrors.linkedProfiles.ifYouNeedAccessToHealthServices') }}</p>
         <contact-111 :text="$t('gpSessionErrors.linkedProfiles.forUrgentMedicalAdvice')"/>
         <p><a :href="findOutMoreUrl" target="_blank" rel="noopener noreferrer">

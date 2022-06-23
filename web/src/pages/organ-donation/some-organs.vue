@@ -56,7 +56,6 @@ import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
-  scrollToTop: true,
   components: {
     GenericButton,
     DesktopGenericBackLink,
@@ -65,6 +64,7 @@ export default {
     OrganChoice,
   },
   mixins: [EnsureDecisionMixin, DynamicBackLinkMixin],
+  scrollToTop: true,
   data() {
     return {
       activeErrorMessage: '',

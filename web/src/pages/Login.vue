@@ -21,10 +21,10 @@
       <div v-if="isUsingNativeApp"
            :class="[$style['nhsuk-body-s'], $style['appVersion']]">
         <span style="word-break:break-word;">
-          {{ $t('generic.version') }} {{ this.$store.state.appVersion.webVersion }}
+          {{ $t('generic.version') }} {{ $store.state.appVersion.webVersion }}
         </span>
-        <span v-if="this.$store.state.appVersion.nativeVersion">
-          ({{ this.$store.state.appVersion.nativeVersion }})
+        <span v-if="$store.state.appVersion.nativeVersion">
+          ({{ $store.state.appVersion.nativeVersion }})
         </span>
       </div>
     </div>

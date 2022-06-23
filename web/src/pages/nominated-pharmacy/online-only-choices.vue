@@ -65,7 +65,6 @@ import {
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
-  layout: 'nhsuk-layout',
   name: 'OnlineOnlyChoices',
   components: {
     RadioGroup,
@@ -76,6 +75,7 @@ export default {
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
+  layout: 'nhsuk-layout',
   data() {
     return {
       dspInterrupt: NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
