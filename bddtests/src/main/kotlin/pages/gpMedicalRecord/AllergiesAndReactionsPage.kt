@@ -2,7 +2,6 @@ package pages.gpMedicalRecord
 
 import net.serenitybdd.core.pages.WebElementFacade
 import pages.HybridPageObject
-import pages.myrecord.RecordItem
 
 class AllergiesAndReactionsPage : HybridPageObject() {
 
@@ -10,10 +9,6 @@ class AllergiesAndReactionsPage : HybridPageObject() {
 
     fun getAllergiesAndReactionsElements(): List<WebElementFacade> {
         return findAllByXpath(allergiesParentXpath)
-    }
-
-    fun allRecordItems(): List<RecordItem> {
-        return getAllergiesAndReactionsElements().map { element -> RecordItem(element) }
     }
 
     fun WebElementFacade.findByXpath(xpath: String): WebElementFacade? {

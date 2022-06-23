@@ -145,19 +145,6 @@ class HomePage : HybridPageObject() {
         listOfLinks().assertElementNotPresent()
     }
 
-    fun assertVersionNumberVisible() {
-
-        val divXpath = "//div[contains(text(),'Version dev_bdd_docker')]"
-        val pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
-
-        val versionNumberElement = HybridPageElement(
-            webDesktopLocator = "$divXpath | $pXpath",
-            page = this,
-            helpfulName = "Version Number"
-        )
-        versionNumberElement.assertSingleElementPresent()
-    }
-
     fun assertSurveyLinkCollapsibleAndExpandable() {
         surveyLinkTab.click()
         surveyContent.assertSingleElementPresent().assertIsNotVisible()

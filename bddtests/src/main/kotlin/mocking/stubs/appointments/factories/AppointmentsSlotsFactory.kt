@@ -43,16 +43,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: Supplier) : AppointmentsFact
                 startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
-    fun generateAvailableSlotExampleIncludingTelephoneAppointment1(
-            startDate: ZonedDateTime? = null,
-            endDate: ZonedDateTime? = null,
-            guidanceMessage: String? = null,
-            reasonNecessity: NecessityOption = NecessityOption.MANDATORY
-    ) {
-        generateExample(retrieveSlotsExampleIncludingTelephoneAppointments1(),
-                startDate, endDate, guidanceMessage, reasonNecessity)
-    }
-
     fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
         val example = retrieveSlotsExample()
         generateAppointmentSlotResponseWithoutGuidance(appointmentSlotsFactoryHelper.defaultStartDate(),
@@ -141,9 +131,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: Supplier) : AppointmentsFact
 
     private fun retrieveSlotsExampleIncludingTelephoneAppointments(telephoneNumber: String) =
             appointmentSlotsTelephoneExample.slotExampleIncludingTelephoneAppointments(telephoneNumber)
-
-    private fun retrieveSlotsExampleIncludingTelephoneAppointments1() =
-        appointmentSlotsTelephoneExample.slotExampleIncludingTelephoneAppointments("")
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         generateAppointmentSlotResponse(

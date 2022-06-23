@@ -27,13 +27,6 @@ fun HybridPageElement.assertIsCurrentlyEnabled(message:String) : HybridPageEleme
     return this
 }
 
-fun HybridPageElement.assertDoesElementHaveFocus(): HybridPageElement {
-    actOnTheElement {
-        Assert.assertTrue("Expected $helpfulNameToUse to be visible", it.hasFocus())
-    }
-    return this
-}
-
 fun HybridPageElement.assertIsNotVisible(): HybridPageElement {
     actOnTheElement {
         Assert.assertFalse("Expected $helpfulNameToUse to not be visible", it.isVisible)

@@ -46,13 +46,6 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         return result
     }
 
-    fun getRegistrations(nhsLoginId: String, includeApiKey: Boolean): Array<String>? {
-        val uriBuilder = URIBuilder(uri(nhsLoginId) + "/registrations")
-        val httpGet = RequestBuilder.get(uriBuilder.build().toString())
-                .addExternalSystemApiKey(includeApiKey)
-        return httpGet.sendAndGetResult(sender, gson, Array<String>::class.java)
-    }
-
     fun postNotification(nhsLoginId: String, notification: NotificationSendRequest, includeApiKey:Boolean)
         : PushNotificationResponse?
     {

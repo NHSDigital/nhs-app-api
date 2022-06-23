@@ -34,11 +34,6 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
         page = this
     )
 
-    val changeThisSpecialRequest = HybridPageElement(
-        webDesktopLocator = "//a[@id='changeSpecialRequest']",
-        page = this
-    )
-
     val serverErrorPageHeader = "Error sending order"
     val serverErrorHeader = "There's been a problem sending your order"
     val serverErrorMessage = "Go back and try again. If the problem continues and you need to order" +

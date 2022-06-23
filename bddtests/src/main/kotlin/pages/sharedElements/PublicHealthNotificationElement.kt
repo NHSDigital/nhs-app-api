@@ -3,7 +3,6 @@ package pages.sharedElements
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertIsNotVisible
 import pages.assertIsVisible
 import worker.models.serviceJourneyRules.PublicHealthNotification
 import worker.models.serviceJourneyRules.PublicHealthNotificationType as NotificationType
@@ -52,14 +51,6 @@ class PublicHealthNotificationElement(
         assertRootElement()
         assertTitleElement(publicHealthNotification.title)
         assertBodyElement(publicHealthNotification.body)
-    }
-
-    fun assertNoneAreVisible() {
-        rootElementSelector = "//div.public-health-notification"
-
-        val rootElement = findRootElement()
-
-        rootElement.assertIsNotVisible()
     }
 
     private fun setSelectors(id: String, type: NotificationType, urgency: NotificationUrgency) {

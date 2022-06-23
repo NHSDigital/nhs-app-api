@@ -72,34 +72,6 @@ class MorePage : HybridPageObject() {
         helpAndSupportLink.assertIsVisible()
     }
 
-    fun assertLoginAndPasswordOptionsIsPresent() {
-        loginAndPasswordOptionsLink.assertIsVisible()
-    }
-
-    fun assertFaceIDIsPresent() {
-        faceIDLink.assertIsVisible()
-    }
-
-    fun assertTouchIDIsPresent() {
-        touchIDLink.assertIsVisible()
-    }
-
-    fun assertFingerprintIsPresent() {
-        fingerprintLink.assertIsVisible()
-    }
-
-    fun assertLoginAndPasswordOptionsIsNotPresent() {
-        loginAndPasswordOptionsLink.assertElementNotPresent()
-    }
-
-    fun assertCookiesLinkIsPresent() {
-        cookieLink.assertIsVisible()
-    }
-
-    fun assertNHSLoginLinkIsPresent() {
-        nhsLoginLink.assertIsVisible()
-    }
-
     fun getHeaderElement(title: String): HybridPageElement {
         val locator = "//h2[contains(text(),\"$title\")]"
         return HybridPageElement(

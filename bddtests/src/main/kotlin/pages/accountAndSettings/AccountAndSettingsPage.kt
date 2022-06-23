@@ -66,10 +66,6 @@ class AccountAndSettingsPage : HybridPageObject() {
         legalAndCookiesLink.assertIsVisible()
     }
 
-    val clickLegalAndCookies by lazy {
-        legalAndCookiesLink.click()
-    }
-
     private val title by lazy {
         HybridPageElement(
             "//h1[normalize-space(text())='Account and settings']",

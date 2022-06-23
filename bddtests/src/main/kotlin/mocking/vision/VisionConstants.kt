@@ -77,15 +77,6 @@ object VisionConstants {
         return getBaseVisionResponse("<vision:record>$serviceContent</vision:record>", serviceDefinition)
     }
 
-    // Vision Demographics
-    fun getVisionDemographicsResponse(serviceContent: String,
-                                      serviceDefinition: mocking.vision.models.ServiceDefinition): String {
-
-        val response = setContextOnServiceContent(serviceContent, "demographics")
-
-        return getBaseVisionResponse(response, serviceDefinition)
-    }
-
     var linkAccount: String = "VOS.LinkAccount"
     var linkAccountVersion: String = "1.0.0"
 

@@ -3,7 +3,6 @@ package mocking.vision
 import mocking.models.Mapping
 import mocking.vision.VisionConstants.getVisionDirectServicesResponse
 import mocking.vision.VisionDirectServicesErrorResponses.getAccessDeniedError
-import mocking.vision.VisionDirectServicesErrorResponses.getUnknownError
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -37,12 +36,6 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
 
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionDirectServicesResponse(stringWriter.toString(), serviceDefinition)).build()
-        }
-    }
-
-    fun respondWithUnknownError(): Mapping {
-        return respondWith(HttpStatus.SC_BAD_REQUEST) {
-            andXmlBody(getUnknownError(serviceDefinition)).build()
         }
     }
 

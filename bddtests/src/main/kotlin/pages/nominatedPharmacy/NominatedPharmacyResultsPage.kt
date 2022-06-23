@@ -1,13 +1,11 @@
 package pages.nominatedPharmacy
 
-import models.nominatedPharmacy.OnlinePharmacySearchResult
 import models.nominatedPharmacy.PharmacySearchResult
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
-import pages.assertIsNotVisible
 import pages.navigation.WebHeader
 import pages.text
 
@@ -28,11 +26,6 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
             page = this
     )
 
-    private val noResultsFoundHeader = HybridPageElement(
-        webDesktopLocator = "//h1[contains(text(), 'No results found')]",
-        page = this
-    )
-
     private fun getPharmacyResultName(): HybridPageElement {
         return HybridPageElement(
             webDesktopLocator = "$basePharmacyResultItemPath//h2",
@@ -51,20 +44,6 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
             page = this)
     }
 
-    private fun getPharmacyResultWebsite(index: Int): HybridPageElement {
-        return HybridPageElement(
-            webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-$index-url']",
-            page = this)
-    }
-
-    fun showsNoResultsFoundHeader() {
-        noResultsFoundHeader.assertIsVisible()
-    }
-
-    fun showsNoResults() {
-        listOfPharmacies.assertIsNotVisible()
-    }
-
     fun assertIsLoaded() {
         listOfPharmacies.assertIsVisible()
     }
@@ -79,23 +58,6 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
                     PharmacySearchResult(
                             pharmacyName = getPharmacyResultName().text,
                             address = getPharmacyResultAddress(result.index).text,
-                            phoneNumber = getPharmacyResultTelephoneNumber(result.index).text
-                    )
-            )
-        }
-        return listOfPharmacies
-    }
-
-    fun getOnlinePharmacies(): List<OnlinePharmacySearchResult> {
-        val results = findAll(By.cssSelector("#searchResults li"))
-        val listOfPharmacies = mutableListOf<OnlinePharmacySearchResult>()
-
-        for (result in results.withIndex()) {
-            setBasePharmacyResultItemPath(result.index)
-            listOfPharmacies.add(
-                    OnlinePharmacySearchResult(
-                            pharmacyName = getPharmacyResultName().text,
-                            website = getPharmacyResultWebsite(result.index).text,
                             phoneNumber = getPharmacyResultTelephoneNumber(result.index).text
                     )
             )

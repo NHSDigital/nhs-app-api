@@ -2,17 +2,12 @@ package features.more.stepDefintions
 
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import features.sharedSteps.BiometricSteps
-import net.thucydides.core.annotations.Steps
 import pages.more.MorePage
 import pages.assertElementNotPresent
 
 class MoreStepDefinitions {
 
     lateinit var more: MorePage
-
-    @Steps
-    lateinit var biometricSteps: BiometricSteps
 
     @When("^I click the Account and settings link on the More page$")
     fun iClickTheAccountAndSettingsLinkOnTheMorePage() {

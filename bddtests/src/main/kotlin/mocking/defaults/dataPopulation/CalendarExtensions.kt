@@ -14,8 +14,3 @@ fun Calendar.addMinutes(minutes: Int): Calendar {
     this.add(Calendar.MINUTE, minutes)
     return this
 }
-
-fun Calendar.reset(now: Date): Calendar {
-    this.time = now
-    return this
-}

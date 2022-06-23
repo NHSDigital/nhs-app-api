@@ -43,11 +43,6 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
             page = this
     )
 
-    fun getNominatedPharmacyName(): String {
-        val nominatedPharmacyName = findByXpath("//p[@id='pharmacy-name']")
-        return nominatedPharmacyName.text
-    }
-
     private lateinit var webHeader: WebHeader
 
     fun isLoaded() {
@@ -62,11 +57,6 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
 
     fun iClickTheChangeNominatedPharmacyLink() {
         changeNominatedPharmacyLink.click()
-    }
-
-    fun isOrderSuccessfullTextVisible(): Boolean {
-        val successText = "Your prescription has been ordered."
-        return findByXpath("//div[@id='success-dialog']//p[contains(.,'$successText')]").isVisible
     }
 
     fun getAllPrescriptions(allFieldsProvided: Boolean): List<HistoricPrescription> {

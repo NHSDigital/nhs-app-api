@@ -27,8 +27,4 @@ open class NominatedPharmacyPage : PharmacyDetailComponent() {
     fun isLoadedWithPharmacy() {
         webHeader.waitForPageHeaderText("Your nominated pharmacy")
     }
-
-    fun isLoadedWithDispensingPractiseHeader() {
-        webHeader.waitForPageHeaderText("Your dispensing practice")
-    }
 }

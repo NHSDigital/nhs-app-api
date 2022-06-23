@@ -24,22 +24,6 @@ class AccountAndSettingsLoginSettingsPage : HybridPageObject() {
         }
     }
 
-    fun assertToggleChecked(biometricType: String) {
-        when (biometricType) {
-            "Face ID" -> faceIDToggle.assertOn()
-            "Touch ID" -> touchIDToggle.assertOn()
-            "Fingerprint" -> fingerprintToggle.assertOn()
-        }
-    }
-
-    fun assertToggleNotChecked(biometricType: String) {
-        when (biometricType) {
-            "Face ID" -> faceIDToggle.assertOff()
-            "Touch ID" -> touchIDToggle.assertOff()
-            "Fingerprint" -> fingerprintToggle.assertOff()
-        }
-    }
-
     private fun assertDisplayWithNoInfoText(titleLocator: String) {
         val title = getTitle(titleLocator)
         title.assertIsVisible()

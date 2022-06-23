@@ -20,8 +20,4 @@ class TppListServiceAccessesData {
         listServiceAccessesReply.Services = services
         return listServiceAccessesReply
     }
-
-    fun enableServices(servicesToEnable: List<ServiceAccess>): ListServiceAccessesReply{
-        return ListServiceAccessesReply(Services = servicesToEnable.toMutableList())
-    }
 }

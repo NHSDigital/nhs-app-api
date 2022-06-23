@@ -41,11 +41,6 @@ class LoginPage : HybridPageObject() {
         page = this
     )
 
-    private val helpIcon = HybridPageElement(
-        webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
-        page = this
-    )
-
     private lateinit var accountCreationPage: CIDAccountCreationPage
 
     private val timeoutBanner = HybridPageElement(
@@ -63,16 +58,10 @@ class LoginPage : HybridPageObject() {
         accountCreationPage.completeAccountCreation(patient)
     }
 
-    fun clickHelpIcon() {
-        helpIcon.click()
-    }
-
     override fun shouldBeDisplayed() {
         super.shouldBeDisplayed()
         pageHeading.assertIsDisplayed("Page heading is not displayed correctly.")
     }
-
-    fun helpIconIsVisible() = helpIcon.assertIsVisible()
 
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {

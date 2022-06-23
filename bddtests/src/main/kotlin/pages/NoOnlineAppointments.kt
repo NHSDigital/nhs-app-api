@@ -2,18 +2,12 @@ package pages
 
 open class NoOnlineAppointments: HybridPageObject() {
 
-    private val coronaVirusInfoHeader = setupElement("If you think you might have coronavirus")
     private val gpAdviceHeader = setupElement("Ask your GP for advice")
     private val gpAdminHeader = setupElement("Additional GP services")
     private val nhs111Header = setupElement("Use NHS 111 online")
 
     fun assertGpAdviceMenuItem() : NoOnlineAppointments{
         gpAdviceHeader.assertIsVisible()
-        return this
-    }
-
-    fun assertCoronaVirusInfoHeader() : NoOnlineAppointments {
-        coronaVirusInfoHeader.assertIsVisible()
         return this
     }
 

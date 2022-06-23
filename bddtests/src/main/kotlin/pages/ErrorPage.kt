@@ -9,7 +9,6 @@ open class ErrorPage : HybridPageObject() {
     private val headerLocator = String.format(errorTextFinderFormat, "msg-header")
     private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
-    private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
     private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
     private val desktopDeviceSettingsLinkLocator = "//*[@id='device-settings']"
 
@@ -20,8 +19,6 @@ open class ErrorPage : HybridPageObject() {
     val subHeading = findElementByLocator(subHeaderLocator)
 
     val errorText1 = findElementByLocator(messageTextLocator)
-
-    private val errorText2 = findElementByLocator(extraMessageTextLocator)
 
     val button = findElementByLocator(desktopBackLinkLocator)
 
@@ -89,11 +86,6 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertNoRetryButton(): ErrorPage {
         button.assertElementNotPresent()
-        return this
-    }
-
-    fun assertErrorDetailText(errorDetailText: String): ErrorPage {
-        assertEquals("Content message incorrect. ", errorDetailText, errorText2.text)
         return this
     }
 

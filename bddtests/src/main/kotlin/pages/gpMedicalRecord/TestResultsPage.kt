@@ -19,10 +19,6 @@ class TestResultsPage : HybridPageObject() {
         return findAllByXpath(testResultsParentXpath).map { element -> RecordItem(element) }
     }
 
-    fun allRecordItems(webElement: List<WebElementFacade>): List<RecordItem> {
-        return webElement.map { element -> RecordItem(element) }
-    }
-
     fun getTestResultChildren(): List<WebElementFacade> {
         return findAllByXpath(testResultsChildXpath)
     }

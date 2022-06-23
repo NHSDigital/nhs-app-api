@@ -22,13 +22,6 @@ class SerenityHelpers {
             }
         }
 
-        fun resetPatient(patientToSet: Patient) {
-            val currentStoredValue = getValueOrNull<Any>(GlobalSerenityHelpers.PATIENT)
-            if (currentStoredValue !== null) {
-                Serenity.setSessionVariable(GlobalSerenityHelpers.PATIENT).to(patientToSet)
-            }
-        }
-
         fun getPatient(): Patient {
             return GlobalSerenityHelpers.PATIENT.getOrFail()
         }

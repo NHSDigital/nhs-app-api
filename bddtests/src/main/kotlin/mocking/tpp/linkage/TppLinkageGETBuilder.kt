@@ -59,10 +59,4 @@ class TppLinkageGETBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST",
             andXmlBody(body).build()
         }
     }
-
-    fun respondWithNotFound(): Mapping {
-        return respondWith(HttpStatus.SC_NOT_FOUND){
-            andXmlBody("").build()
-        }
-    }
 }

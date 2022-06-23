@@ -16,11 +16,6 @@ open class BookingSuccessPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val addToCalendarLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'Add to calendar')]",
-            page = this
-    )
-
     override val titleText: String = "Your GP appointment has been booked"
 
     fun checkBookingSuccessMessage() {
@@ -42,10 +37,5 @@ open class BookingSuccessPage : AppointmentSharedElementsPage() {
         Assert.assertEquals(expectedSlot.telephoneNumber, appointmentDetails.telephoneNumber)
         Assert.assertEquals(expectedSlot.time, appointmentDetails.time)
         Assert.assertEquals(expectedSlot.id, appointmentDetails.id)
-    }
-
-
-    fun clickAddToCalendarLink() {
-        addToCalendarLink.click()
     }
 }

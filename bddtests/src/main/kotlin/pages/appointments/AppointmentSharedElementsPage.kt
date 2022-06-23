@@ -17,30 +17,15 @@ import java.util.*
 abstract class AppointmentSharedElementsPage : HybridPageObject() {
     val contactGpSurgeryDirectly = "You can contact your GP surgery directly if you need to book " +
             "or change an upcoming appointment now."
-    val problemTitle = "Sorry, there is a problem - Your GP Appointments"
-    val problemHeader = "Sorry, there is a problem"
     val tryLoadingGPAppointmentsAgain = "You can try loading GP appointments again."
     val urgentMedicalAdvice = "For urgent medical advice, go to 111.nhs.uk or call 111."
-    val goBackAndTryAgainProblem = "Go back and try again. If the problem continues and you need to book or cancel " +
-            "an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk " +
-            "or call 111."
-    val ifItContinuesBookOrCancel = "If the problem continues and you need to book or cancel an appointment now, " +
-            "contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
-    val notAbleToBook = "You are not currently able to book or view GP appointments with the NHS App."
-    val contactForMoreInformation = "Contact your GP surgery for more information. For urgent medical advice, " +
-            "go to 111.nhs.uk or call 111."
-    val coronaVirusHeader = "If you think you might have coronavirus"
-    val coronaVirusText = "Stay at home and avoid close contact with other people."
-    val coronaVirusLink ="Use the 111 coronavirus service to see if you need medical help"
     var bookOrCancelAppointment = "If you need to book or cancel an appointment or get a prescription now, " +
             "contact your GP surgery directly."
     var cannotAccessGpAppointments = "Cannot access GP appointments"
     var bookAppointment = "If you need to book an appointment or get a prescription now, contact your GP " +
             "surgery directly."
-    val forUrgentMedical = "For urgent medical advice, go to 111.nhs.uk or call 111."
     val cannotShowAppointments = "Cannot show appointments"
     val cannotShowGpAppointments = "Cannot show GP appointments"
-    val goBackTryAgain = "Go back and try again."
     val contactGpSurgeryDirectlyBooking = "Contact your GP surgery directly if you need to book an appointment " +
             "or get a prescription now."
 
@@ -71,13 +56,6 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     )
 
     abstract val titleText: String?
-
-    fun getGoBackAndTryAgainParagraph(errorCodePrefix: String) : ErrorCodeParagraph {
-        return ErrorCodeParagraph(
-                "Go back and try again. If you keep seeing this message, contact us. Quote the error code",
-                errorCodePrefix,
-                "to help us resolve the problem more quickly.")
-    }
 
     fun contactUsKeepGettingParagraph(errorCodePrefix: String) : ErrorCodeParagraph {
         return ErrorCodeParagraph(

@@ -116,14 +116,6 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
         }
     }
 
-    fun successfulGetFirstTime(linkageInformationFacade: LinkageInformationFacade) {
-        endUserSessionSetup()
-        mockingClient.forEmis.mock {
-            authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
-                    .respondWithSuccessfullyRetrievedFirstTime(verificationResponse(linkageInformationFacade))
-        }
-    }
-
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
         endUserSessionSetup()
         var connectionToken = EmisMockDefaults.patientEmis.connectionToken

@@ -21,10 +21,6 @@ open class PageLeavingWarning : HybridPageObject() {
         message.assertIsVisible()
     }
 
-    fun assertIsNotDisplayed() {
-        message.assertElementNotPresent()
-    }
-
     fun clickStay() {
         stayButton.click()
     }

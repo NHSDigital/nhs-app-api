@@ -37,7 +37,7 @@ class NotificationsApi {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
                     .get(pnsToken, authToken)
-            
+
             if (response?.statusLine !== null &&
                     response.statusLine?.statusCode !== null &&
                     response.statusLine.statusCode == HttpStatus.SC_NO_CONTENT) {
@@ -53,13 +53,6 @@ class NotificationsApi {
                     .userDevices
                     .delete(pnsTokenToDelete, authToken)
             PushNotificationsSerenityHelpers.DELETE_RESPONSE.set(response)
-        }
-
-        fun getRegistrationIds(nhsLoginId: String) {
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .userDevices
-                    .getRegistrations(nhsLoginId, true)
-            PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.set(response)
         }
 
         fun postNotification(nhsLoginId: String, notification: NotificationSendRequest): PushNotificationResponse? {
