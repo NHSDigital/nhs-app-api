@@ -1,20 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj" />
     <ProjectReference Include="..\NHSOnline.App.Config\NHSOnline.App.Config.csproj" />
@@ -24,7 +17,6 @@
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <ProjectReference Include="..\NHSOnline.App.NhsLogin\NHSOnline.App.NhsLogin.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
@@ -183,19 +175,18 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Navigation\Pages\NhsAppFullHeaderPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator />
     </EmbeddedResource>
     <EmbeddedResource Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator />
     </EmbeddedResource>
     <EmbeddedResource Update="Navigation\Pages\NhsAppCloseAndLogoHeaderPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator />
     </EmbeddedResource>
     <EmbeddedResource Update="Areas\WebIntegration\Views\WebIntegrationPage.xaml">
       <SubType>Designer</SubType>

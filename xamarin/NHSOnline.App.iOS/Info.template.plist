@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-  <dict>
-    <key>CFBundleDisplayName</key>
-    <string>NHS App</string>
-    <key>CFBundleIdentifier</key>
-    <string>placeholder</string>
-    <key>CFBundleShortVersionString</key>
-    <string>2.0.0</string>
-    <key>CFBundleName</key>
-    <string>NHSOnline.App</string>
-    <key>CFBundleVersion</key>
-    <string>4</string>
-    <key>MinimumOSVersion</key>
-    <string>11.0</string>
-    <key>UIDeviceFamily</key>
-    <array>
-      <integer>1</integer>
-      <integer>2</integer>
-    </array>
-    <key>UILaunchStoryboardName</key>
-    <string>LaunchScreen</string>
-    <key>NSCameraUsageDescription</key>
-    <string>So you can take a photo of your I.D.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>So you can record your video</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need to know where you are so we can find services near you to help.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need to know where you are so we can find services near you to help.</string>
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
-    </array>
-    <key>UISupportedInterfaceOrientations~ipad</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-    <key>XSAppIconAssets</key>
-    <string>Resources/Assets.xcassets/AppIcon.appiconset</string>
-    <key>NSAppTransportSecurity</key>
-    <dict />
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This is so that you can download your photos.</string>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false />
-    <key>NSFaceIDUsageDescription</key>
-    <string>Use this instead of a password and security code to log in.</string>
-    <key>UIStatusBarStyle</key>
-    <string>UIStatusBarStyleLightContent</string>
-    <key>UIViewControllerBasedStatusBarAppearance</key>
-    <false />
-    <key>UIBackgroundModes</key>
-    <array>
-      <string>remote-notification</string>
-    </array>
-    <key>NSCalendarsUsageDescription</key>
-    <string>So we can add events to your calendar, like appointments.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>This is so that you can download your photos.</string>
-    <key>UIFileSharingEnabled</key>
-    <true />
-    <key>LSSupportsOpeningDocumentsInPlace</key>
-    <true />
-  </dict>
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>NHS App</string>
+	<key>CFBundleIdentifier</key>
+	<string>placeholder</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0.0</string>
+	<key>CFBundleName</key>
+	<string>NHSOnline.App</string>
+	<key>CFBundleVersion</key>
+	<string>4</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>So you can take a photo of your I.D.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>So you can record your video</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need to know where you are so we can find services near you to help.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need to know where you are so we can find services near you to help.</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Resources/Assets.xcassets/AppIcon.appiconset</string>
+	<key>NSAppTransportSecurity</key>
+	<dict/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This is so that you can download your photos.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use this instead of a password and security code to log in.</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>So we can add events to your calendar, like appointments.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This is so that you can download your photos.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+</dict>
 </plist>
-

@@ -362,6 +362,9 @@ dotnet_diagnostic.CA1725.severity = error
 # CA1726: Use preferred terms
 dotnet_diagnostic.CA1726.severity = error
 
+# CA1727: Use PascalCase for named placeholders in the logging message template
+dotnet_diagnostic.CA1727.severity = silent
+
 # CA1800: Do not cast unnecessarily
 dotnet_diagnostic.CA1800.severity = error
 
@@ -438,6 +441,9 @@ dotnet_diagnostic.CA1829.severity = error
 # CA1835: Prefer the memory-based overloads of ReadAsync/WriteAsync methods in stream-based classes
 dotnet_diagnostic.CA1835.severity = error
 
+# CA1848: For improved performance, use the LoggerMessage delegates instead of calling 'LoggerExtensions.LogInformation(ILogger, string, params object[])'
+dotnet_diagnostic.CA1848.severity = silent
+
 # CA1900: Value type fields should be portable
 dotnet_diagnostic.CA1900.severity = error
 
@@ -458,9 +464,6 @@ dotnet_diagnostic.CA2004.severity = error
 
 # CA2006: Use SafeHandle to encapsulate native resources
 dotnet_diagnostic.CA2006.severity = error
-
-# CA2007: Do not directly await a Task
-dotnet_diagnostic.CA2007.severity = error
 
 # CA2009: Do not call ToImmutableCollection on an ImmutableCollection value
 dotnet_diagnostic.CA2009.severity = error
@@ -578,7 +581,7 @@ dotnet_diagnostic.CA2240.severity = error
 
 # CA2241: Provide correct arguments to formatting methods
 dotnet_diagnostic.CA2241.severity = error
-dotnet_code_quality.CA2241.additional_string_formatting_methods = 
+dotnet_code_quality.CA2241.additional_string_formatting_methods =
 
 # CA2242: Test for NaN correctly
 dotnet_diagnostic.CA2242.severity = error

@@ -43,12 +43,14 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
             Action<ITagLengthValueWriter> bytesToSignWriter,
             TagSignature signature)
         {
-            await using var bytesToSign = new TagLengthValueWriter();
+            var bytesToSign = new TagLengthValueWriter();
+            await using (bytesToSign)
+            {
+                bytesToSignWriter(bytesToSign);
 
-            bytesToSignWriter(bytesToSign);
-
-            var signatureBytes = await signer(bytesToSign.ToArray()).PreserveThreadContext();
-            signature.SigBytes(signatureBytes);
+                var signatureBytes = await signer(bytesToSign.ToArray()).PreserveThreadContext();
+                signature.SigBytes(signatureBytes);
+            }
 
             return _builder;
         }
@@ -60,12 +62,15 @@ namespace NHSOnline.App.NhsLogin.Fido.Assertion
             _logger.LogTrace("{AssertionType} Assertion: {Assertion}", assertionDesc, assertion);
             _logger.LogTrace("User Verification Extension: {UserVerificationExtension}", userVerificationExtension);
 
-            await using var assertionWriter = new TagLengthValueWriter();
+            var assertionWriter = new TagLengthValueWriter();
 
-            assertion.Write(assertionWriter);
-            userVerificationExtension.Write(assertionWriter);
+            await using (assertionWriter)
+            {
+                assertion.Write(assertionWriter);
+                userVerificationExtension.Write(assertionWriter);
 
-            return Base64Url.Encode(assertionWriter.ToArray());
+                return Base64Url.Encode(assertionWriter.ToArray());
+            }
         }
     }
 }

@@ -1,23 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Configurations>Local - Debug;Local - Release;Preview - Debug;Preview - Release;OnboardingSandpit - Debug;OnboardingSandpit - Release;OnboardingAos - Debug;OnboardingAos - Release;Staging - Debug;Staging - Release;BrowserStack - Debug;BrowserStack - Release;Scratch1 - Debug;Scratch1 - Release;Scratch2 - Debug;Scratch2 - Release;Scratch3 - Debug;Scratch3 - Release;Scratch4 - Debug;Scratch4 - Release;Scratch5 - Debug;Scratch5 - Release;Scratch6 - Debug;Scratch6 - Release;Scratch7 - Debug;Scratch7 - Release;Scratch8 - Debug;Scratch8 - Release;Scratch9 - Debug;Scratch9 - Release;Scratch10 - Debug;Scratch10 - Release;Scratch11 - Debug;Scratch11 - Release;Scratch12 - Debug;Scratch12 - Release;Scratch13 - Debug;Scratch13 - Release;Scratch14 - Debug;Scratch14 - Release;Scratch15 - Debug;Scratch15 - Release;Scratch16 - Debug;Scratch16 - Release;Scratch17 - Debug;Scratch17 - Release;Scratch18 - Debug;Scratch18 - Release;Scratch19 - Debug;Scratch19 - Release;Scratch20 - Debug;Scratch20 - Release;Scratch21 - Debug;Scratch21 - Release;Production - Release</Configurations>
-
+    <Configurations>BrowserStack - Debug;BrowserStack - Release;Local - Debug;Local - Release;OnboardingAos - Debug;OnboardingAos - Release;OnboardingSandpit - Debug;OnboardingSandpit - Release;Preview - Debug;Preview - Release;Production - Release;Scratch1 - Debug;Scratch1 - Release;Scratch10 - Debug;Scratch10 - Release;Scratch11 - Debug;Scratch11 - Release;Scratch12 - Debug;Scratch12 - Release;Scratch13 - Debug;Scratch13 - Release;Scratch14 - Debug;Scratch14 - Release;Scratch15 - Debug;Scratch15 - Release;Scratch16 - Debug;Scratch16 - Release;Scratch17 - Debug;Scratch17 - Release;Scratch18 - Debug;Scratch18 - Release;Scratch19 - Debug;Scratch19 - Release;Scratch2 - Debug;Scratch2 - Release;Scratch20 - Debug;Scratch20 - Release;Scratch21 - Debug;Scratch21 - Release;Scratch3 - Debug;Scratch3 - Release;Scratch4 - Debug;Scratch4 - Release;Scratch5 - Debug;Scratch5 - Release;Scratch6 - Debug;Scratch6 - Release;Scratch7 - Debug;Scratch7 - Release;Scratch8 - Debug;Scratch8 - Release;Scratch9 - Debug;Scratch9 - Release;Staging - Debug;Staging - Release</Configurations>
     <!-- When restored as a project dependency an invalid configuration ("Debug" or "Release") is supplied -->
     <Environment Condition=" $(Configuration.Contains('-')) == 'true' ">$(Configuration.Split('-')[0].Trim())</Environment>
     <Environment Condition=" $(Configuration.Contains('-')) != 'true' ">Local</Environment>
     <DebugMode Condition=" $(Configuration.Contains('-')) == 'true' ">$(Configuration.Split('-')[1].Trim())</DebugMode>
     <DebugMode Condition=" $(Configuration.Contains('-')) != 'true' ">$(Configuration)</DebugMode>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.19" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.19" />
-  </ItemGroup>
-
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.env.nhslogin.$(NhsLoginConfiguration).props" />
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.19" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.19" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" />
+  </ItemGroup>
 </Project>

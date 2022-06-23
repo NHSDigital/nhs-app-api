@@ -42,7 +42,8 @@ namespace NHSOnline.App.Services.ForcedUpdate
                 _task = IsUpdateRequiredCheck(1, CreateTimeoutCancellationToken());
             }
 
-            if (_task.Status == TaskStatus.RanToCompletion && _task.Result == UpdateRequired.Failed)
+            var taskResult = await _task.ResumeOnThreadPool();
+            if (_task.Status == TaskStatus.RanToCompletion && taskResult == UpdateRequired.Failed)
             {
                 return await IsUpdateRequiredCheck(1, CreateTimeoutCancellationToken()).ResumeOnThreadPool();
             }
@@ -50,7 +51,7 @@ namespace NHSOnline.App.Services.ForcedUpdate
             if (_task != null && _taskCancellationToken != null)
             {
                 _taskCancellationToken.CancelAfter(ForcedUpdateRequestTimeout);
-                return await _task.ResumeOnThreadPool();
+                return taskResult;
             }
 
             throw new InvalidOperationException("Initiate not called before required update check");

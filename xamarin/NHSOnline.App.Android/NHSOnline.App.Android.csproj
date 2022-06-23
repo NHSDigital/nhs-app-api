@@ -319,26 +319,11 @@
   </ItemGroup>
   <Import Project="GenerateAndroidManifest.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj">
-      <Project>{66b1ec4c-a6bc-4e74-b12d-546c56031f4c}</Project>
-      <Name>NHSOnline.App.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj">
-      <Project>{85425714-F320-4935-81D4-B8727CFC9CDF}</Project>
-      <Name>NHSOnline.App.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj">
-      <Project>{7783BCD8-95F8-4645-95A9-28FEF39731BA}</Project>
-      <Name>NHSOnline.App.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj">
-      <Project>{3e4fec39-10ff-479f-a542-48d3fc8d012b}</Project>
-      <Name>NHSOnline.App.Threading</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
-      <Project>{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}</Project>
-      <Name>NHSOnline.App</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj" />
+    <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />

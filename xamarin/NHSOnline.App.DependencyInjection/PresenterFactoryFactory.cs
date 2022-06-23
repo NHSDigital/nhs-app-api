@@ -67,9 +67,8 @@ namespace NHSOnline.App.DependencyInjection
                 return constructors[0];
             }
 
-            var message = $"Presenter {typeof(TPresenter).Name} must have a single constructor";
-            Logger.LogError(message);
-            throw new InvalidOperationException(message);
+            Logger.LogError("Presenter {PresenterName} must have a single constructor", typeof(TPresenter).Name);
+            throw new InvalidOperationException($"Presenter {typeof(TPresenter).Name} must have a single constructor");
         }
 
         private static MethodInfo FindGetRequiredServiceMethod()
@@ -84,11 +83,16 @@ namespace NHSOnline.App.DependencyInjection
                 return requiredServiceMethod;
             }
 
-            var message = "Missing " +
-                          $"{nameof(ServiceProviderServiceExtensions)}.{nameof(ServiceProviderServiceExtensions.GetRequiredService)}" +
-                          $"({nameof(IServiceProvider)}, {nameof(Type)})";
-            Logger.LogError(message);
-            throw new InvalidOperationException(message);
+            Logger.LogError("Missing {ServiceProviderServiceName}.{RequiredServiceName}({IServiceProviderName}, {TypeName})",
+                nameof(ServiceProviderServiceExtensions),
+                nameof(ServiceProviderServiceExtensions.GetRequiredService),
+                nameof(IServiceProvider),
+                nameof(Type));
+
+            throw new InvalidOperationException(
+                "Missing " +
+                $"{nameof(ServiceProviderServiceExtensions)}.{nameof(ServiceProviderServiceExtensions.GetRequiredService)}" +
+                $"({nameof(IServiceProvider)}, {nameof(Type)})");
         }
     }
 }

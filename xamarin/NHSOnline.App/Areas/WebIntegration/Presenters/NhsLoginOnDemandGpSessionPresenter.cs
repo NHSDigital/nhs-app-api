@@ -112,7 +112,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         public Task Visit(OnDemandGpReturnCheckResult.Complete complete)
         {
-            _logger.LogInformation($"Completed on-demand gp session creation. Returning to web to complete journey. DeepLinkUrl: {_deeplinkUrl}");
+            _logger.LogInformation(
+                "Completed on-demand gp session creation. Returning to web to complete journey. DeepLinkUrl: {DeeplinkUrl}",
+                _deeplinkUrl);
 
             if (_deeplinkUrl != null)
             {

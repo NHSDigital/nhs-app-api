@@ -28,7 +28,8 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             {
                 var urls = string.Join("\n", pageLoadEventArgs.Urls.Select(x => x.Item1.GetLeftPart(UriPartial.Path)));
                 _logger.LogError(
-                    $"Web integration page load ended up on NHS login enter-email screen. Redirect flow was:\n{urls}");
+                    "Web integration page load ended up on NHS login enter-email screen. Redirect flow was:\n{Urls}",
+                    urls);
             }
         }
 
