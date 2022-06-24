@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertAccuRxElements()
+                .AssertAccurxElements()
                 .AssertPkbElements();
         }
 
@@ -62,7 +62,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertAccuRxElements()
+                .AssertAccurxElements()
                 .AssertPkbElements();
         }
 
@@ -109,7 +109,7 @@ namespace NHSOnline.IntegrationTests.Messages
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateToAccuRx();
+                .KeyboardNavigateToAccurx();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Ask your GP surgery a question")
@@ -139,7 +139,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPageElements()
                 .AssertEngageElements()
                 .AssertSubstraktElements()
-                .AssertAccuRxElements()
+                .AssertAccurxElements()
                 .AssertPkbElements();
         }
 
@@ -189,7 +189,7 @@ namespace NHSOnline.IntegrationTests.Messages
             AndroidMessagesPage
                 .AssertOnPage(driver)
                 .TabIntoFocus()
-                .KeyboardNavigateToAccuRx();
+                .KeyboardNavigateToAccurx();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Ask your GP surgery a question");

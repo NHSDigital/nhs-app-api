@@ -1,10 +1,10 @@
-package mocking.thirdPartyProviders.accuRx
+package mocking.thirdPartyProviders.accurx
 
 import mocking.MappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class AccuRxRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf())
+class AccurxRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf())
     : MappingBuilder("GET", "/api/OpenIdConnect/AuthenticatePatientTriage") {
     init {
         if (queryStringEntries.isNotEmpty()) {
@@ -14,11 +14,11 @@ class AccuRxRequestBuilder(queryStringEntries: HashMap<String, String> = hashMap
         }
     }
 
-    fun messagesRequest() = AccuRxRequestBuilder(
+    fun messagesRequest() = AccurxRequestBuilder(
         hashMapOf("requestType" to "admin")
     )
 
-    fun medicalAdviceRequest() = AccuRxRequestBuilder(
+    fun medicalAdviceRequest() = AccurxRequestBuilder(
         hashMapOf("requestType" to "medical")
     )
 
@@ -26,9 +26,9 @@ class AccuRxRequestBuilder(queryStringEntries: HashMap<String, String> = hashMap
         return respondWith(HttpStatus.SC_OK) {
             andHtmlBody("""
                 <html>
-                    <title>AccuRx</title>
+                    <title>Accurx</title>
                     <body>
-                        <h1>AccuRx</h1>
+                        <h1>Accurx</h1>
                     </body>
                 </html>
             """.trimIndent())

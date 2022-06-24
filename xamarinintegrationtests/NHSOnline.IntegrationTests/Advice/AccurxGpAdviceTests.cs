@@ -12,12 +12,12 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Advice
 {
     [TestClass]
-    public class AccuRxGpAdviceTests
+    public class AccurxGpAdviceTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanAccessAccuRxGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanAccessAccurxGpAdviceJourneyAndroid(IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient(EmisPatientOds.AccuRx)
+            var patient = new EmisPatient(EmisPatientOds.Accurx)
                 .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -29,16 +29,16 @@ namespace NHSOnline.IntegrationTests.Advice
 
             AndroidAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAskYourGpForAdviceAccuRx();
+                .PageContent.NavigateToAskYourGpForAdviceAccurx();
 
             AndroidWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Ask your GP for medical advice");
         }
 
         [NhsAppIOSTest]
-        public void APatientCanAccessAccuRxGpAdviceJourneyIos(IIOSDriverWrapper driver)
+        public void APatientCanAccessAccurxGpAdviceJourneyIos(IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient(EmisPatientOds.AccuRx)
+            var patient = new EmisPatient(EmisPatientOds.Accurx)
                 .WithName(b => b.GivenName("Electra").FamilyName("Consult"));
             using var patients = Mocks.Patients.Add(patient);
 
@@ -50,7 +50,7 @@ namespace NHSOnline.IntegrationTests.Advice
 
             IOSAdvicePage
                 .AssertOnPage(driver)
-                .PageContent.NavigateToAskYourGpForAdviceAccuRx();
+                .PageContent.NavigateToAskYourGpForAdviceAccurx();
 
             IOSWebIntegrationWarningPanelPage
                 .AssertOnPage(driver, "Ask your GP for medical advice");

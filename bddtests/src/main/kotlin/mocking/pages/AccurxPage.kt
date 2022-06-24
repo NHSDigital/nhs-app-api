@@ -4,12 +4,12 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 
-class AccuRxPage: HybridPageObject() {
+class AccurxPage: HybridPageObject() {
 
     private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1",
         page = this
-    ).withText("AccuRx")
+    ).withText("Accurx")
 
     fun assertTitleVisible() {
         pageTitle.assertIsVisible()

@@ -9,11 +9,11 @@
       <admin-help-menu-item
         v-if="showEngageAdminHelp" description="appointments
           .guidance.additionalGpServices.engage.getSickNotesAndLetters"/>
-      <gp-advice-menu-item v-if="showAccuRxMedicalAdvice"
+      <gp-advice-menu-item v-if="showAccurxMedicalAdvice"
                            heading="adviceCheck.gpAdvice.accurx.heading"
                            description="adviceCheck.gpAdvice.accurx.description"
                            route-crumb="appointmentsCrumb"/>
-      <messages-menu-item v-if="showAccuRxAdminHelp"
+      <messages-menu-item v-if="showAccurxAdminHelp"
                           text="messages.adminAdvice.accurx.text"
                           description="messages.adminAdvice.accurx.description" />
       <one-one-one-service-menu-item v-if="showOneOneOneItem" />
@@ -65,7 +65,7 @@ export default {
         },
       });
     },
-    showAccuRxMedicalAdvice() {
+    showAccurxMedicalAdvice() {
       return sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -75,7 +75,7 @@ export default {
         },
       });
     },
-    showAccuRxAdminHelp() {
+    showAccurxAdminHelp() {
       return sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',

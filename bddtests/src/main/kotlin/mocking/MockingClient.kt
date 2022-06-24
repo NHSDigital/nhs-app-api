@@ -12,7 +12,7 @@ import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.qualtrics.QualtricsMappingBuilder
 import mocking.spine.SpineMappingBuilder
-import mocking.thirdPartyProviders.accuRx.AccuRxRequestBuilder
+import mocking.thirdPartyProviders.accurx.AccurxRequestBuilder
 import mocking.thirdPartyProviders.drDoctor.DrDoctorRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
 import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
@@ -51,7 +51,7 @@ class MockingClient(configuration: MockingConfiguration) {
 
     val forExternalSites = ExternalSupplierMockingClient(ExternalSitesMappingBuilder(), wiremockHelper)
 
-    val forAccuRx = ExternalSupplierMockingClient(AccuRxRequestBuilder(), wiremockHelper)
+    val forAccurx = ExternalSupplierMockingClient(AccurxRequestBuilder(), wiremockHelper)
     val forDrDoctor = ExternalSupplierMockingClient(DrDoctorRequestBuilder(), wiremockHelper)
     val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
     val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)

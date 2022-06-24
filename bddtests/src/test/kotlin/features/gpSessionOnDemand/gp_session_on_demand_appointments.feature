@@ -32,8 +32,8 @@ Feature: GP Session On Demand appointments
       | TPP       | 3t     |
       | VISION    | 3s     |
 
-  Scenario: A user with accuRx access trying to view appointments when the Gp System is unavailable is shown alternative options after retrying
-    Given I am a patient with access to all accuRx services
+  Scenario: A user with Accurx access trying to view appointments when the Gp System is unavailable is shown alternative options after retrying
+    Given I am a patient with access to all Accurx services
     And GP session is unavailable
     And I am logged in
     When I navigate to Appointments

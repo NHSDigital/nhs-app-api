@@ -375,7 +375,7 @@ export default {
   },
   accurx: {
     serviceId: 'accurx',
-    providerName: 'accuRx Limited',
+    providerName: 'Accurx Limited',
     jumpOffs: [
       {
         id: 'medical',
