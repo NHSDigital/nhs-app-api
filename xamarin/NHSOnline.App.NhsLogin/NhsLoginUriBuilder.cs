@@ -132,7 +132,7 @@ namespace NHSOnline.App.NhsLogin
         public Uri Build()
         {
             var queryStringParts =
-                _queryString.Select(kvp => $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value)}");
+                _queryString.Select(kvp => $"{Uri.EscapeUriString(kvp.Key)}={Uri.EscapeUriString(kvp.Value ?? string.Empty)}");
             var queryString = string.Join("&", queryStringParts);
 
             _uriBuilder.Query = $"?{queryString}";
