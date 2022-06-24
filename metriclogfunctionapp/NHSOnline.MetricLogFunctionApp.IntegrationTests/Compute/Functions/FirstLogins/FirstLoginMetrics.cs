@@ -8,34 +8,6 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Firs
 {
     internal static class FirstLoginMetrics
     {
-        public static async Task AddLoginMetric(TestEnv env, string loginId, string proofLevel, DateTimeOffset time, string odsCode = "AB123", string sessionId = "SessionId")
-        {
-            await env.Postgres.Events.LoginMetric.Insert(new LoginMetricRow
-            {
-                LoginId = loginId,
-                OdsCode = odsCode,
-                Timestamp = time,
-                ProofLevel = proofLevel,
-                LoginEventId = "LoginEventId",
-                Referrer = "Referrer",
-                SessionId = sessionId,
-                AuditId = Guid.NewGuid().ToString()
-            });
-        }
-
-        public static async Task AddConsentMetric(TestEnv env, string loginId, string proofLevel, DateTimeOffset time, string odsCode = "AB123", string sessionId = "SessionId")
-        {
-            await env.Postgres.Events.ConsentMetric.Insert(new ConsentMetricRow
-            {
-                LoginId = loginId,
-                OdsCode = odsCode,
-                Timestamp = time,
-                ProofLevel = proofLevel,
-                AuditId = Guid.NewGuid().ToString(),
-                SessionId = sessionId
-            });
-        }
-
         public static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer, string loginId = "NhsLoginSubject-Test")
         {
             var auditRecord = new AuditRecord()

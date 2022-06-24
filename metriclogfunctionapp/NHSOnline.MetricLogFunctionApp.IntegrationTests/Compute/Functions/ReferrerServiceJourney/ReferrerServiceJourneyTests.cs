@@ -19,22 +19,23 @@ public class ReferrerServiceJourneyTests
         var startTime = "2022-05-17T00:00:00";
         var endTime = "2022-05-18T00:00:00";
         const string sessionId1 = "SessionId1";
+        const string auditId1 = "AuditId1";
         const string covidPassProvider = "the Department of Health and Social Care";
         const string otherProvider = "Other Provider";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1, auditId1);
+        await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -59,8 +60,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -102,8 +103,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -145,8 +146,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -188,8 +189,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -231,8 +232,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -272,10 +273,11 @@ public class ReferrerServiceJourneyTests
         var endTime = "2022-05-18T00:00:00";
         const string sessionId1 = "SessionId1";
         const string referrerId = "nhs-uk";
+        const string auditId1 = "AuditId1";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1, auditId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -317,8 +319,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -360,8 +362,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -403,8 +405,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -446,8 +448,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, false, false, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, false, false, "auditId1");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -489,8 +491,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, false, true, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, false, true, "auditId1");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -532,8 +534,8 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, false, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, false, "auditId1");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -576,8 +578,8 @@ public class ReferrerServiceJourneyTests
         const string covidPassProvider = "the Department of Health and Social Care";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -620,8 +622,8 @@ public class ReferrerServiceJourneyTests
         const string provider = "Other Provider";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider1-ID", provider, "JumpOffId1");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider1-ID", provider, "JumpOffId1");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -664,11 +666,11 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), referrerId, sessionId2);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -698,21 +700,22 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
         const string covidPassProvider = "the Department of Health and Social Care";
         const string otherProvider = "Other Provider";
+        const string auditId1 = "AuditId1";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1, auditId1);
+        await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -756,11 +759,11 @@ public class ReferrerServiceJourneyTests
         const string referrerId2 = "other-referrer";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId1);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId1, sessionId1);
 
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2, referrerId2);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId2);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), referrerId2, sessionId2);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -792,11 +795,11 @@ public class ReferrerServiceJourneyTests
         const string referrerId = "nhs-uk";
 
         // Arrange
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId2);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId2, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId2);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), referrerId, sessionId2);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(day1, day3);
@@ -836,37 +839,37 @@ public class ReferrerServiceJourneyTests
 
         // Arrange
         // day 1; referrer 1; session 1
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 00, TimeSpan.Zero), sessionId1, referrerId1);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 26, 00, TimeSpan.Zero), referrerId1, sessionId1);
         // day 1; referrer 2; session 1
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 00, TimeSpan.Zero), sessionId2);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 02, TimeSpan.Zero), sessionId2);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 00, TimeSpan.Zero), sessionId2, referrerId2);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 00, TimeSpan.Zero), sessionId2);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 02, TimeSpan.Zero), sessionId2);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 27, 00, TimeSpan.Zero), referrerId2, sessionId2);
         // day 1; referrer 1; session 2
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 00, TimeSpan.Zero), sessionId3);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 02, TimeSpan.Zero), sessionId3);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 00, TimeSpan.Zero), sessionId3, referrerId1);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 00, TimeSpan.Zero), sessionId3);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 02, TimeSpan.Zero), sessionId3);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 28, 00, TimeSpan.Zero), referrerId1, sessionId3);
         // day 1; referrer 2; session 2
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 00, TimeSpan.Zero), sessionId4);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 02, TimeSpan.Zero), sessionId4);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 00, TimeSpan.Zero), sessionId4, referrerId2);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 00, TimeSpan.Zero), sessionId4);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 02, TimeSpan.Zero), sessionId4);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 29, 00, TimeSpan.Zero), referrerId2, sessionId4);
         // day 2; referrer 1; session 1
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId5);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 12, TimeSpan.Zero), sessionId5);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId5, referrerId1);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), sessionId5);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 12, TimeSpan.Zero), sessionId5);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 30, 10, TimeSpan.Zero), referrerId1, sessionId5);
         // day 2; referrer 2; session 1
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 10, TimeSpan.Zero), sessionId6);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 12, TimeSpan.Zero), sessionId6);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 10, TimeSpan.Zero), sessionId6, referrerId2);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 10, TimeSpan.Zero), sessionId6);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 12, TimeSpan.Zero), sessionId6);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 31, 10, TimeSpan.Zero), referrerId2, sessionId6);
         // day 2; referrer 1; session 2
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 10, TimeSpan.Zero), sessionId7);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 12, TimeSpan.Zero), sessionId7);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 10, TimeSpan.Zero), sessionId7, referrerId1);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 10, TimeSpan.Zero), sessionId7);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 12, TimeSpan.Zero), sessionId7);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 32, 10, TimeSpan.Zero), referrerId1, sessionId7);
         // day 2; referrer 2; session 2
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 10, TimeSpan.Zero), sessionId8);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 12, TimeSpan.Zero), sessionId8);
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 10, TimeSpan.Zero), sessionId8, referrerId2);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 10, TimeSpan.Zero), sessionId8);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 12, TimeSpan.Zero), sessionId8);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 18, 10, 33, 10, TimeSpan.Zero), referrerId2, sessionId8);
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(day1, day3);

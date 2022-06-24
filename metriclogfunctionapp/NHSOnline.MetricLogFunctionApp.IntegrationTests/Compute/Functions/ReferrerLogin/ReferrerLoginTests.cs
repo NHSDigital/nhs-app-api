@@ -24,8 +24,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string sessionId1 = "SessionId1";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
 
             // Act
             var response = await env.HttpEndpointCallers.PostReferrerLogin(startTime, endTime);
@@ -51,8 +51,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string referrerId = "nhs-uk";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
             // Act
@@ -80,9 +80,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string referrerId = "nhs-uk";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
             // Act
@@ -115,9 +115,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string referrerId = "nhs-uk";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
             // Act
@@ -152,14 +152,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string referrerId = "nhs-uk";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 14, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 14, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), referrerId, sessionId2);
 
             // Act
@@ -196,22 +196,22 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string referrerId = "nhs-uk";
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), referrerId, sessionId2);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 11, 30, 00, TimeSpan.Zero), sessionId3);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
+            await AddMetricHelper.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 16, 11, 30, 00, TimeSpan.Zero), sessionId3);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), referrerId, sessionId3);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 16, 30, 00, TimeSpan.Zero), sessionId4);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 16, 30, 00, TimeSpan.Zero), sessionId4);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 16, 30, 00, TimeSpan.Zero), referrerId, sessionId4);
 
             // Act
@@ -246,8 +246,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             var p9FirstLoginDateTime = new DateTime(2022, 05, 17, 09, 30, 00);
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
             await env.Postgres.Compute.FirstLogins.Insert(new FirstLoginsRow
             {
@@ -289,8 +289,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             var p9FirstLoginDateTime = new DateTime(2022, 05, 16, 09, 30, 00);
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
             await env.Postgres.Compute.FirstLogins.Insert(new FirstLoginsRow
             {
@@ -336,18 +336,18 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             var p9FirstLoginDateTime = new DateTime(2022, 05, 16, 09, 30, 00);
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 14, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 14, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), referrerId, sessionId2);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId3, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId3, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), referrerId, sessionId3);
             await env.Postgres.Compute.FirstLogins.Insert(new FirstLoginsRow
             {
@@ -393,18 +393,18 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             var p9FirstLoginDateTime = new DateTime(2022, 05, 17, 15, 30, 00);
 
             // Arrange
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 14, 30, 00, TimeSpan.Zero), sessionId2);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddConsentMetric(env, loginId2, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 14, 30, 00, TimeSpan.Zero), sessionId2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 13, 30, 00, TimeSpan.Zero), referrerId, sessionId2);
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId3, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId3, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), sessionId3);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 15, 30, 00, TimeSpan.Zero), referrerId, sessionId3);
             await env.Postgres.Compute.FirstLogins.Insert(new FirstLoginsRow
             {

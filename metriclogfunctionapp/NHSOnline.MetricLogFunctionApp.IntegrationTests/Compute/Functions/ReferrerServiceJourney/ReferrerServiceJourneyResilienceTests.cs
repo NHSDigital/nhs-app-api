@@ -46,20 +46,21 @@ public class ReferrerServiceJourneyResilienceTests
         const string referrerId = "ReferrerFailure";
         const string covidPassProvider = "the Department of Health and Social Care";
         const string otherProvider = "Other Provider";
+        const string auditId1 = "AuditId1";
 
-        await ReferrerServiceJourneyMetrics.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
-        await ReferrerServiceJourneyMetrics.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await ReferrerServiceJourneyMetrics.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
-        await ReferrerServiceJourneyMetrics.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1, referrerId);
+        await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1, auditId1);
+        await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         await env.Postgres.Compute.ReferrerServiceJourney.SetupTrigger(@"
 IF NEW.""ReferrerId"" = 'ReferrerFailure' THEN

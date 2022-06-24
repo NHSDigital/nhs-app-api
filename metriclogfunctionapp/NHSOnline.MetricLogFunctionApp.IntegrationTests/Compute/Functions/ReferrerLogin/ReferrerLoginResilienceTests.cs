@@ -47,9 +47,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
             const string sessionId1 = "SessionId1";
             const string referrerId = "ReferrerFailure";
 
-            await ReferrerLoginMetrics.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
-            await ReferrerLoginMetrics.AddWebIntegrationReferralsMetric(env,
+            await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
                 new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
             await env.Postgres.Compute.ReferrerLogin.SetupTrigger(@"

@@ -9,6 +9,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryC
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -39,7 +40,10 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<AppointmentCancelMetric>, AppointmentCancelMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<AppointmentCancelMetric>, AppointmentCancelEventParser>();
-            
+
+            serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationCreateMetric>, OrganDonationRegistrationCreateEventParser>();
+
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();

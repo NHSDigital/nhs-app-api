@@ -14,6 +14,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryC
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.AppointmentCancel;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -28,6 +29,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
         private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
         private readonly IAuditLogEtl<AppointmentCancelMetric> _appointmentCancelEtl;
+        private readonly IAuditLogEtl<OrganDonationRegistrationCreateMetric> _organDonationRegistrationCreateEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -40,6 +42,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
             IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
             IAuditLogEtl<AppointmentCancelMetric> appointmentCancelEtl,
+            IAuditLogEtl<OrganDonationRegistrationCreateMetric> organDonationRegistrationCreateEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -51,6 +54,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _notificationToggleEtl = notificationToggleEtl;
             _initialPromptEtl = initialPromptEtl;
             _appointmentCancelEtl = appointmentCancelEtl;
+            _organDonationRegistrationCreateEtl = organDonationRegistrationCreateEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -95,6 +99,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _appointmentCancelEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
                 await _medicalRecordViewEtl.Execute(events);
+                await _organDonationRegistrationCreateEtl.Execute(events);
             }
             catch (Exception)
             {

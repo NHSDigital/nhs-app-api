@@ -26,14 +26,17 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var sessionid1 = "session1";
             var sessionid2 = "session2";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
+            var auditId1 = "auditId1";
+            var auditId2 = "auditId2";
 
-            await DailyDeviceReferralUsageMetric.AddOrganDonationCreateMetric(env, endDate.AddHours(-1), sessionid1);
-            await DailyDeviceReferralUsageMetric.AddOrganDonationCreateMetric(env, endDate.AddHours(-2), sessionid1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
 
-            await DailyDeviceReferralUsageMetric.AddOrganDonationWithdrawMetric(env, endDate.AddHours(-1), sessionid2);
-            await DailyDeviceReferralUsageMetric.AddOrganDonationWithdrawMetric(env, endDate.AddHours(-2), sessionid2);
+            await AddMetricHelper.AddOrganDonationCreateMetric(env, endDate.AddHours(-1), sessionid1, auditId1);
+            await AddMetricHelper.AddOrganDonationCreateMetric(env, endDate.AddHours(-2), sessionid1, auditId2);
+
+            await AddMetricHelper.AddOrganDonationWithdrawMetric(env, endDate.AddHours(-1), sessionid2);
+            await AddMetricHelper.AddOrganDonationWithdrawMetric(env, endDate.AddHours(-2), sessionid2);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -64,10 +67,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
 
             var sessionid = "session";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
 
-            await DailyDeviceReferralUsageMetric.AddPrescriptionOrderMetric(env, endDate.AddHours(-1), sessionid);
-            await DailyDeviceReferralUsageMetric.AddPrescriptionOrderMetric(env, endDate.AddHours(-1), sessionid);
+            await AddMetricHelper.AddPrescriptionOrderMetric(env, endDate.AddHours(-1), sessionid);
+            await AddMetricHelper.AddPrescriptionOrderMetric(env, endDate.AddHours(-1), sessionid);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -98,15 +101,15 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var sessionid1 = "session1";
             var sessionid2 = "session2";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
 
             // Iv ran the SP straight onto the data this generates and it also says 4 and 4.
-            await DailyDeviceReferralUsageMetric.AddAppointmentBookMetric(env, "AB123", endDate.AddHours(-1), sessionid1);
-            await DailyDeviceReferralUsageMetric.AddAppointmentBookMetric(env, "AB123", endDate.AddHours(-1), sessionid1);
+            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDate.AddHours(-1), sessionid1);
+            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDate.AddHours(-1), sessionid1);
 
-            await DailyDeviceReferralUsageMetric.AddAppointmentCancelMetric(env, "AB123", endDate.AddHours(-1), sessionid2);
-            await DailyDeviceReferralUsageMetric.AddAppointmentCancelMetric(env, "AB123", endDate.AddHours(-1), sessionid2);
+            await AddMetricHelper.AddAppointmentCancelMetric(env, "AB123", endDate.AddHours(-1), sessionid2);
+            await AddMetricHelper.AddAppointmentCancelMetric(env, "AB123", endDate.AddHours(-1), sessionid2);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -135,11 +138,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var endDateString = "2022-05-27T00:00:00";
             var startDateString = "2022-05-26T00:00:00";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session1");
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-2), "ref", "session2");
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-3), "ref", "session3");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session1");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-2), "ref", "session2");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-3), "ref", "session3");
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddDays(-2), "ref", "session4");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddDays(-2), "ref", "session4");
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -171,11 +174,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var sessionid1 = "session1";
             var sessionid2 = "session2";
 
-            await DailyDeviceReferralUsageMetric.AddLoginMetric(env, loginId,"P9",endDate.AddHours(-1), sessionid1);
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
+            await AddMetricHelper.AddLoginMetric(env, loginId,"P9",endDate.AddHours(-1), sessionid1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
 
-            await DailyDeviceReferralUsageMetric.AddLoginMetric(env, loginId,"P9",endDate.AddHours(-1), sessionid2);
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
+            await AddMetricHelper.AddLoginMetric(env, loginId,"P9",endDate.AddHours(-1), sessionid2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -205,8 +208,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
 
             var sessionid = "session";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
-            await DailyDeviceReferralUsageMetric.AddDeviceMetric(env, endDate.AddHours(-1), sessionid, "appVersion",
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
+            await AddMetricHelper.AddDeviceMetric(env, endDate.AddHours(-1), sessionid, "appVersion",
                 "test", "testPlus", null, "0", "userAgent");
 
             // Act
@@ -241,11 +244,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var auditId1 = "auditId1";
             var auditId2 = "auditId2";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid1);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid2);
 
-            await DailyDeviceReferralUsageMetric.AddMedicalRecordViewMetric(env, endDate.AddHours(-1), sessionid1, false, true, auditId1);
-            await DailyDeviceReferralUsageMetric.AddMedicalRecordViewMetric(env, endDate.AddHours(-1), sessionid2, true, true, auditId2);
+            await AddMetricHelper.AddMedicalRecordViewMetric(env, endDate.AddHours(-1), sessionid1, false, true, auditId1);
+            await AddMetricHelper.AddMedicalRecordViewMetric(env, endDate.AddHours(-1), sessionid2, true, true, auditId2);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -276,10 +279,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
 
             var sessionid = "session";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", sessionid);
 
-            await DailyDeviceReferralUsageMetric.AddNomPharmCreateMetric(env, endDate.AddHours(-1), sessionid);
-            await DailyDeviceReferralUsageMetric.AddNomPharmUpdateMetric(env, endDate.AddHours(-1), sessionid);
+            await AddMetricHelper.AddNomPharmCreateMetric(env, endDate.AddHours(-1), sessionid);
+            await AddMetricHelper.AddNomPharmUpdateMetric(env, endDate.AddHours(-1), sessionid);
 
             // Act
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
@@ -306,7 +309,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             var endDateString = "2022-05-27T00:00:00";
             var startDateString = "2022-05-26T00:00:00";
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session");
 
             var response = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -322,8 +325,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
                 row.Users.Should().Be(0);
             }
 
-            await DailyDeviceReferralUsageMetric.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session2");
-            await DailyDeviceReferralUsageMetric.AddLoginMetric(env, "loginID","P9",endDate.AddHours(-1), "session2");
+            await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDate.AddHours(-1), "ref", "session2");
+            await AddMetricHelper.AddLoginMetric(env, "loginID","P9",endDate.AddHours(-1), "session2");
 
             //Act
             var secondResponse = await env.HttpEndpointCallers.PostDailyDeviceReferralUsage(startDateString, endDateString);

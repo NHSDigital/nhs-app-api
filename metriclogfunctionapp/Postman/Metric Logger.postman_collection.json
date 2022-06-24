@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "992844b5-f991-44ae-8cb2-0847d90c27ca",
+		"_postman_id": "eaf04a77-5a98-4500-b5e2-589a0f1f3896",
 		"name": "Metric Logger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13794420"
+		"_exporter_id": "17155254"
 	},
 	"item": [
 		{
@@ -104,6 +104,35 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Create to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"Timestamp\": \"2022-03-02T15:33:51.3049067Z\",\r\n        \"AuditId\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Registration_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully registered\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:22377e854)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"preview\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"749cc2b8-c39c-44ac-b256-066372dd6e99\",\r\n        \"_rid\": \"RuVQAKPVga+oDAEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"d1014c1c-0000-1100-0000-621f8e5f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646235231\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -333,6 +362,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Create to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"Timestamp\": \"2022-03-02T15:33:51.3049067Z\",\r\n        \"AuditId\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Registration_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully registered\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:22377e854)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"preview\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"749cc2b8-c39c-44ac-b256-066372dd6e99\",\r\n        \"_rid\": \"RuVQAKPVga+oDAEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"d1014c1c-0000-1100-0000-621f8e5f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646235231\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

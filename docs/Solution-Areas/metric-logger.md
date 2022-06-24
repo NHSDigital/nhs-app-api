@@ -217,6 +217,33 @@ AppointmentCancellation Body:
         "_ts": 1650989717
     }
 ]
+
+OrganDonationRegistration Body:
+```bash
+[
+    {
+        "Id": "af17de5d-79c8-43e9-a741-2ff5f54368ff",
+        "Timestamp": "2022-03-02T15:33:51.3049067Z",
+        "AuditId": "af17de5d-79c8-43e9-a741-2ff5f54368ff",
+        "NhsLoginSubject": "cb09b2b9-aae3-4162-96d3-0eea6ae938d8",
+        "NhsNumber": "969 211 3868",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Emis",
+        "Operation": "OrganDonation_Registration_Response",
+        "Details": "The organ donation decision has been successfully registered",
+        "ApiVersion": "develop",
+        "WebVersion": "develop (commit:22377e854)",
+        "NativeVersion": "android 2.5.0",
+        "Environment": "preview",
+        "IntegrationReferrer": null,
+        "id": "749cc2b8-c39c-44ac-b256-066372dd6e99",
+        "_rid": "RuVQAKPVga+oDAEAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/",
+        "_etag": "\"d1014c1c-0000-1100-0000-621f8e5f0000\"",
+        "_attachments": "attachments/",
+        "_ts": 1646235231
+    }
+]
 ```
 ## Running the Metric Logger Integration Tests Locally 
 

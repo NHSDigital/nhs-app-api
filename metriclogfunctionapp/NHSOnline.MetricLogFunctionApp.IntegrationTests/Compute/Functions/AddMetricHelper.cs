@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env;
 using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Events;
 
-namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.DailyDeviceReferralUsage
+namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
 {
-    public static class DailyDeviceReferralUsageMetric
+    public static class AddMetricHelper
     {
         public static async Task AddWebIntegrationReferralsMetric(TestEnv env, DateTimeOffset time, string referrer,
             string sessionId)
@@ -94,13 +94,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             });
         }
 
-        public static async Task AddOrganDonationCreateMetric(TestEnv env, DateTimeOffset timestamp, string sessionId)
+        public static async Task AddOrganDonationCreateMetric(TestEnv env, DateTimeOffset timestamp, string sessionId, string auditId)
         {
             await env.Postgres.Events.OrganDonationRegistrationCreateMetric.Insert(
                 new OrganDonationRegistrationCreateMetricRow
                 {
                     Timestamp = timestamp,
-                    SessionId = sessionId
+                    SessionId = sessionId,
+                    AuditId = auditId
                 });
         }
 
@@ -140,6 +141,75 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
                 Referrer = "Referrer",
                 SessionId = sessionId,
                 AuditId = Guid.NewGuid().ToString()
+            });
+        }
+
+        public static async Task AddOrganDonationUpdateMetric(TestEnv env, DateTimeOffset timestamp, string sessionId)
+        {
+            await env.Postgres.Events.OrganDonationRegistrationUpdateMetric.Insert(
+                new OrganDonationRegistrationUpdateMetricRow
+                {
+                    Timestamp = timestamp,
+                    SessionId = sessionId
+                });
+        }
+
+        public static async Task AddOrganDonationGetMetric(TestEnv env, DateTimeOffset timestamp, string sessionId)
+        {
+            await env.Postgres.Events.OrganDonationRegistrationGetMetric.Insert(
+                new OrganDonationRegistrationGetMetricRow
+                {
+                    Timestamp = timestamp,
+                    SessionId = sessionId
+                });
+        }
+
+        public static async Task AddNomPharmacyUpdateMetric(TestEnv env, DateTimeOffset timestamp, string sessionId)
+        {
+            await env.Postgres.Events.NominatedPharmacyUpdateMetric.Insert(new NominatedPharmacyUpdateMetricRow
+            {
+                Timestamp = timestamp,
+                SessionId = sessionId
+            });
+        }
+
+        public static async Task AddNomPharmacyCreateMetric(TestEnv env, DateTimeOffset timestamp, string sessionId)
+        {
+            await env.Postgres.Events.NominatedPharmacyCreateMetric.Insert(new NominatedPharmacyCreateMetricRow
+            {
+                Timestamp = timestamp,
+                SessionId = sessionId
+            });
+        }
+
+        public static async Task AddAppointmentBookMetric(TestEnv env, DateTimeOffset dateTime, string sessionId)
+        {
+            await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow
+            {
+                Timestamp = dateTime,
+                SessionId = sessionId
+            });
+        }
+
+        public static async Task AddAppointmentCancelMetric(TestEnv env, DateTimeOffset dateTime, string sessionId)
+        {
+            await env.Postgres.Events.AppointmentCancelMetric.Insert(new AppointmentCancelMetricRow
+            {
+                Timestamp = dateTime,
+                SessionId = sessionId
+            });
+        }
+
+        public static async Task AddSilverIntegrationJumpOffMetric(TestEnv env, DateTimeOffset dateTime, string sessionId,
+            string providerId, string providerName, string jumpOffId)
+        {
+            await env.Postgres.Events.SilverIntegrationJumpOffMetric.Insert(new SilverIntegrationJumpOffMetricRow
+            {
+                Timestamp = dateTime,
+                SessionId = sessionId,
+                ProviderId = providerId,
+                ProviderName = providerName,
+                JumpOffId = jumpOffId
             });
         }
     }
