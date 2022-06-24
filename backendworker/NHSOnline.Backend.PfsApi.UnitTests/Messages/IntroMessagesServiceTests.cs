@@ -28,6 +28,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
         private const string CampaignId = "CampaignId";
         private const string MessageId = "ae0b4ffd40c44828b884961b";
         private const string NhsLoginId = "NhsLoginId";
+        private const string Body = "Body";
+
+        private const string SenderName = "NHS App";
+        private const string SupplierId = "278d3b75-3498-4d68-8991-506d0006e46f";
+        private const string SenderId = "NHSAPP";
+        private const int Version = 1;
 
         [TestInitialize]
         public void TestInitialize()
@@ -79,10 +85,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
                 }
             );
 
+            AddMessageRequest messageRequest = null;
             _mockMessageService
-                .Setup(x => x.Send(
-                    It.Is<AddMessageRequest>(r => r.SenderContext.NhsLoginId == NhsLoginId),
-                    NhsLoginId))
+                .Setup(x => x.Send(It.IsAny<AddMessageRequest>(), NhsLoginId))
+                .Callback<AddMessageRequest, string>((amr, login) => messageRequest = amr)
                 .ReturnsAsync(response);
 
             _mockSenderContextEventLogDataMapper
@@ -98,6 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
             // Assert
             VerifyAsserts();
             result.Should().BeOfType<MessagesResult.Success>();
+            VerifyMessageRequest(messageRequest);
         }
 
         [TestMethod]
@@ -111,10 +118,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
 
             var response = (AddMessageResult)Activator.CreateInstance(addMessageResultType);
 
+            AddMessageRequest messageRequest = null;
             _mockMessageService
-                .Setup(x => x.Send(
-                    It.Is<AddMessageRequest>(r => r.SenderContext.NhsLoginId == NhsLoginId),
-                    NhsLoginId))
+                .Setup(x => x.Send(It.IsAny<AddMessageRequest>(), NhsLoginId))
+                .Callback<AddMessageRequest, string>((amr, login) => messageRequest = amr)
                 .ReturnsAsync(response);
 
             // Act
@@ -123,6 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
             // Assert
             VerifyAsserts();
             result.Should().BeOfType<MessagesResult.InternalServerError>();
+            VerifyMessageRequest(messageRequest);
         }
 
         private void SetupConfig(bool sendIntroductoryMessage)
@@ -131,14 +139,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
 
             if (sendIntroductoryMessage)
             {
-                _mockIntroMessagesServiceConfig.Setup(x => x.Body).Returns("Body");
+                _mockIntroMessagesServiceConfig.Setup(x => x.Body).Returns(Body);
                 _mockIntroMessagesServiceConfig.Setup(x => x.CampaignId).Returns(CampaignId);
+                _mockIntroMessagesServiceConfig.Setup(x => x.SenderId).Returns(SenderId);
             }
         }
 
         private void VerifyAsserts()
         {
             _mockIntroMessagesServiceConfig.VerifyAll();
+        }
+
+        private void VerifyMessageRequest(AddMessageRequest messageRequest)
+        {
+            messageRequest.Sender.Should().Be(SenderName);
+            messageRequest.Body.Should().Be(Body);
+            messageRequest.Version.Should().Be(Version);
+            messageRequest.SenderContext.CampaignId.Should().Be(CampaignId);
+            messageRequest.SenderContext.SenderId.Should().Be(SenderId);
+            messageRequest.SenderContext.NhsLoginId.Should().Be(NhsLoginId);
+            messageRequest.SenderContext.SupplierId.Should().Be(SupplierId);
         }
     }
 }

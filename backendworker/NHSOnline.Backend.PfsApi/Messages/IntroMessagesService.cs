@@ -80,7 +80,8 @@ namespace NHSOnline.Backend.PfsApi.Messages
             {
                 CampaignId = _introMessagesServiceConfig.CampaignId,
                 NhsLoginId = nhsLoginId,
-                SupplierId = IntroductoryMessageSupplierId
+                SupplierId = IntroductoryMessageSupplierId,
+                SenderId = _introMessagesServiceConfig.SenderId
             }
         };
     }

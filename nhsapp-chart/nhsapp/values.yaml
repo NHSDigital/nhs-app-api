@@ -357,6 +357,7 @@ messages:
   mongoDatabaseMessagesCollection: messages
   cosmosSqlDatabaseSendersCollection: senders
   senderIdEnabled: false
+  senderIdNhsApp: NHSAPP
   
 cid:
   containerPort: 8080

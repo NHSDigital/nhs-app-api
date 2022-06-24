@@ -450,6 +450,8 @@ spec:
           value: {{ $.Values.messages.cosmosSqlDatabaseSendersCollection }}
         - name: MESSAGES_SENDER_ID_ENABLED
           value: "{{ $.Values.messages.senderIdEnabled }}"
+        - name: MESSAGES_SENDER_ID_NHS_APP
+          value: "{{ $.Values.messages.senderIdNhsApp }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
