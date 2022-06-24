@@ -356,6 +356,8 @@ api:
 messages:
   mongoDatabaseMessagesCollection: messages
   cosmosSqlDatabaseSendersCollection: senders
+  senderIdEnabled: false
+  
 cid:
   containerPort: 8080
   clientAuth: true

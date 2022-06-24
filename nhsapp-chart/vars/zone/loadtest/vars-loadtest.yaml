@@ -118,6 +118,9 @@ api:
 
 sjrExternalIngressEnabled: true
 
+messages:
+  senderIdEnabled: true
+
 cid:
   clientAuth: false
 

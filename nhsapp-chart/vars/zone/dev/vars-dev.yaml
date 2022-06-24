@@ -131,6 +131,9 @@ web:
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 45
 
+messages:
+  senderIdEnabled: true
+
 cid:
   minAvailable: 0
   minReplicas: 1
