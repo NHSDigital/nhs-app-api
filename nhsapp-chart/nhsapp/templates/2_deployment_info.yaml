@@ -131,10 +131,6 @@ spec:
           value: {{ $.Values.info.commsSqlDatabaseInfoNhsNumberCollection }}
         - name: USERINFO_ODS_CODE_CONTAINER
           value: {{ $.Values.info.commsSqlDatabaseInfoOdsCodeCollection }}
-        - name: USER_INFO_READ_FROM_SECONDARY_CONTAINERS
-          value: "{{ $.Values.info.userInfoReadFromSecondaryContainers }}"
-        - name: USER_INFO_SAVE_TO_SECONDARY_CONTAINERS
-          value: "{{ $.Values.info.userInfoSaveToSecondaryContainers }}"
         - name: CITIZEN_ID_JWT_ISSUER
         {{- if $.Values.environmentStubbed.cidStubbed }}
           value: "https://nhsapp-wiremock.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"

@@ -473,8 +473,6 @@ info:
   mongoDatabaseInfoCollection: info
   commsSqlDatabaseInfoNhsNumberCollection: info_nhs_number
   commsSqlDatabaseInfoOdsCodeCollection: info_ods_code
-  userInfoReadFromSecondaryContainers: true
-  userInfoSaveToSecondaryContainers: true
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT

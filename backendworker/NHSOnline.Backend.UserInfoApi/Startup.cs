@@ -76,11 +76,7 @@ namespace NHSOnline.Backend.UserInfoApi
             SetupApiKeys(services);
 
             services.RegisterDatabaseClient(Configuration, _logger);
-
-            if (UserInfoConfiguration.IsSqlApiClientRequired(Configuration, _logger))
-            {
-                services.RegisterSqlApiDatabaseClient(Configuration, _logger);
-            }
+            services.RegisterSqlApiDatabaseClient(Configuration, _logger);
 
             _modularStartup.ConfigureServices(services);
 

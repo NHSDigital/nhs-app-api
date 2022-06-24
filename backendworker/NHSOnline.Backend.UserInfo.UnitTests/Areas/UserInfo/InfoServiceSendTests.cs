@@ -20,7 +20,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
     {
         private InfoService _systemUnderTest;
         private Mock<IInfoRepository> _mockInfoRepository;
-        private TestUserInfoConfiguration _userInfoConfiguration;
         private string _nhsLoginId;
         private AccessToken _accessToken;
         private string _nhsNumber;
@@ -37,12 +36,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             _userProfile = new InfoUserProfile { NhsNumber = _nhsNumber, OdsCode = _odsCode };
 
             var mockLogger = new Mock<ILogger<InfoService>>();
-            _userInfoConfiguration = new TestUserInfoConfiguration
-            {
-                SaveToSecondaryContainers = true,
-                ReadFromSecondaryContainers = true,
-            };
-
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _nhsLoginId),
@@ -50,7 +43,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             });
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            _systemUnderTest = new InfoService(_mockInfoRepository.Object, _userInfoConfiguration, mockLogger.Object);
+            _systemUnderTest = new InfoService(_mockInfoRepository.Object, mockLogger.Object);
         }
 
         [TestMethod]
@@ -74,38 +67,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             _mockInfoRepository
                 .Setup(x => x.CreateOrUpdateNhsNumberRecord(It.IsAny<UserAndInfo>()))
                 .ReturnsAsync(() => new RepositoryCreateResult<UserAndInfo>.Created(currentUserInfo));
-
-            _mockInfoRepository
-                .Setup(x => x.CreateOrUpdatePrimary(It.IsAny<UserAndInfo>()))
-                .Callback<UserAndInfo>(u => actualUserInfo = u)
-                .ReturnsAsync(() => new RepositoryCreateResult<UserAndInfo>.Created(currentUserInfo));
-
-            // Act
-            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<PostInfoResult.Created>();
-            actualUserInfo.NhsLoginId.Should().BeEquivalentTo(_nhsLoginId);
-            actualUserInfo.Info.NhsNumber.Should().BeEquivalentTo(_nhsNumber);
-            actualUserInfo.Info.OdsCode.Should().Be(_odsCode);
-        }
-
-        [TestMethod]
-        public async Task Send_WithSameUserProfileWhenSaveToSecondaryContainersFalse_SuccessCreated()
-        {
-            // Arrange
-            UserAndInfo actualUserInfo = null;
-
-            _userInfoConfiguration.SaveToSecondaryContainers = false;
-
-            var currentUserInfo = BuildUserInfo(_userProfile);
-
-            var lastSavedUserInfo = BuildUserInfo(_userProfile);
-
-            _mockInfoRepository
-                .Setup(x => x.FindByNhsLoginId(_nhsLoginId))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new [] { lastSavedUserInfo }));
 
             _mockInfoRepository
                 .Setup(x => x.CreateOrUpdatePrimary(It.IsAny<UserAndInfo>()))

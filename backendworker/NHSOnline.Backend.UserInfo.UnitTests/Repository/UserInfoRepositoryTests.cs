@@ -405,46 +405,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Repository
             result.Should().BeAssignableTo<RepositoryDeleteResult<UserAndInfo>.Deleted>();
         }
 
-        [TestMethod]
-        public async Task FindByNhsNumberOnPrimary_WhenRecordExists_ReturnsInfo()
-        {
-            // Arrange
-            var userInfo = new UserAndInfo();
-            var expectedResults = new[] { userInfo };
-
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
-
-            // Act
-            var result = await _systemUnderTest.FindByNhsNumberPrimary("Nhs Number");
-
-            // Assert
-            VerifyAll();
-            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(expectedResults);
-        }
-
-        [TestMethod]
-        public async Task FindByOdsCodeOnPrimary_WhenRecordExists_ReturnsInfo()
-        {
-            // Arrange
-            var userInfo1 = new UserAndInfo();
-            var userInfo2 = new UserAndInfo();
-            var expectedResults = new[] { userInfo1, userInfo2 };
-            _mockPrimaryRepository.Setup(x => x
-                    .Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), null))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
-
-            // Act
-            var result = await _systemUnderTest.FindByOdsCodePrimary("Ods Code");
-
-            // Assert
-            VerifyAll();
-            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>().Subject.Records
-                .Should().BeEquivalentTo(expectedResults);
-        }
-
         private void VerifyAll()
         {
             _mockPrimaryRepository.VerifyAll();

@@ -135,44 +135,6 @@ namespace NHSOnline.Backend.UserInfo.Repository
             }
         }
 
-        public async Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumberPrimary(string nhsNumber)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                new ValidateAndLog(_logger)
-                    .IsNotNull(nhsNumber, nameof(nhsNumber), ValidateAndLog.ValidationOptions.ThrowError)
-                    .IsValid();
-
-                return await _primaryRepository
-                    .Find(d => d.Info.NhsNumber == nhsNumber, RecordName);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        public async Task<RepositoryFindResult<UserAndInfo>> FindByOdsCodePrimary(string odsCode)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                new ValidateAndLog(_logger)
-                    .IsNotNull(odsCode, nameof(odsCode), ValidateAndLog.ValidationOptions.ThrowError)
-                    .IsValid();
-
-                return await _primaryRepository
-                    .Find(d => d.Info.OdsCode == odsCode, RecordName);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
         public async Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumber(string nhsNumber)
         {
             try

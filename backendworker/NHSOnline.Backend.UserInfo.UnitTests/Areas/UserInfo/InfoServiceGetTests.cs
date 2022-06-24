@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
     {
         private InfoService _systemUnderTest;
         private Mock<IInfoRepository> _mockInfoRepository;
-        private Mock<IUserInfoConfiguration> _mockUserInfoConfiguration;
         private string _nhsLoginId;
         private AccessToken _accessToken;
         private string _nhsNumber;
@@ -30,10 +29,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
         public void TestInitialize()
         {
             _mockInfoRepository = new Mock<IInfoRepository>();
-            _mockUserInfoConfiguration = new Mock<IUserInfoConfiguration>();
-            _mockUserInfoConfiguration.SetupGet(configuration => configuration.ReadFromSecondaryContainers).Returns(true);
-            _mockUserInfoConfiguration.SetupGet(configuration => configuration.SaveToSecondaryContainers).Returns(true);
-            
+
             _nhsLoginId = "NHS Login Id";
             _nhsNumber = "NHS Number";
             var mockLogger = new Mock<ILogger<InfoService>>();
@@ -44,7 +40,7 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             });
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            _systemUnderTest = new InfoService(_mockInfoRepository.Object, _mockUserInfoConfiguration.Object, mockLogger.Object);
+            _systemUnderTest = new InfoService(_mockInfoRepository.Object, mockLogger.Object);
         }
 
         [TestMethod]
@@ -205,39 +201,6 @@ namespace NHSOnline.Backend.UserInfo.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<GetInfoResult.InternalServerError>();
-        }
-
-        [TestMethod]
-        public async Task GetInfoByOdsCode_Success_ReadFromSecondaryContainersIsTrue_CallsMongoRepositoryMethod()
-        {
-            // Arrange
-            _mockUserInfoConfiguration.SetupGet(configuration => configuration.ReadFromSecondaryContainers)
-                .Returns(false);
-            _mockInfoRepository.Setup(x => x.FindByOdsCodePrimary(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new List<UserAndInfo>{new UserAndInfo()}));
-            
-            // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<GetInfoResult.Found>();
-        }
-        
-        [TestMethod]
-        public async Task GetInfoByNhsNumber_Success_ReadFromSecondaryContainersIsTrue_CallsMongoRepositoryMethod()
-        {
-            // Arrange
-            _mockUserInfoConfiguration.SetupGet(configuration => configuration.ReadFromSecondaryContainers).Returns(false);
-            _mockInfoRepository.Setup(x => x.FindByNhsNumberPrimary(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new List<UserAndInfo>{new UserAndInfo()}));
-            
-            // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber("Nhs Number");
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<GetInfoResult.Found>();
         }
     }
 }

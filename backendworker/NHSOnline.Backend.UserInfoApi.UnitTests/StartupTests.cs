@@ -111,10 +111,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
             _mockConfiguration.Setup(x => x["COSMOS_SQL_API_CONNECTION_STRING"])
                 .Returns("AccountEndpoint=https://example.documents.azure.com:443/;AccountKey=fake;");
-            _mockConfiguration.Setup(x => x["USER_INFO_SAVE_TO_SECONDARY_CONTAINERS"])
-                .Returns("true");
-            _mockConfiguration.Setup(x => x["USER_INFO_READ_FROM_SECONDARY_CONTAINERS"])
-                .Returns("false");
         }
     }
 }

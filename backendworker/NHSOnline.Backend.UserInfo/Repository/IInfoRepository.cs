@@ -13,7 +13,5 @@ namespace NHSOnline.Backend.UserInfo.Repository
         Task<RepositoryFindResult<UserAndInfo>> FindByNhsLoginId(string nhsLoginId);
         Task<RepositoryFindResult<UserAndInfo>> FindByOdsCode(string odsCode);
         Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumber(string nhsNumber);
-        Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumberPrimary(string nhsNumber);
-        Task<RepositoryFindResult<UserAndInfo>> FindByOdsCodePrimary(string odsCode);
     }
 }

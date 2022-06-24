@@ -14,13 +14,11 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
     public class InfoService : IInfoService
     {
         private readonly IInfoRepository _infoRepository;
-        private readonly IUserInfoConfiguration _config;
         private readonly ILogger<InfoService> _logger;
 
-        public InfoService(IInfoRepository infoRepository, IUserInfoConfiguration config, ILogger<InfoService> logger)
+        public InfoService(IInfoRepository infoRepository, ILogger<InfoService> logger)
         {
             _infoRepository = infoRepository;
-            _config = config;
             _logger = logger;
         }
 
@@ -42,10 +40,7 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
 
                 var lastSavedUserInfo = await GetUserInfoRecord(currentUserInfo.NhsLoginId);
 
-                if (_config.SaveToSecondaryContainers)
-                {
-                    await UpdateSecondaryInfoCollections(lastSavedUserInfo, currentUserInfo);
-                }
+                await UpdateSecondaryInfoCollections(lastSavedUserInfo, currentUserInfo);
 
                 var repositoryResult = await _infoRepository.CreateOrUpdatePrimary(currentUserInfo);
 
@@ -97,26 +92,10 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
         }
 
         public async Task<GetInfoResult> GetInfoByNhsNumber(string nhsNumber)
-        {
-            if (!_config.ReadFromSecondaryContainers)
-            {
-                return await GetInfoRecords(repo => repo.FindByNhsNumberPrimary(nhsNumber));
-             
-            }
-            
-            return await GetInfoRecords(repo => repo.FindByNhsNumber(nhsNumber));
-        }
+            => await GetInfoRecords(repo => repo.FindByNhsNumber(nhsNumber));
 
         public async Task<GetInfoResult> GetInfoByOdsCode(string odsCode)
-        {
-            if (!_config.ReadFromSecondaryContainers)
-            {
-                return await GetInfoRecords(repo => repo.FindByOdsCodePrimary(odsCode));
-                
-            }
-            
-            return await GetInfoRecords(repo => repo.FindByOdsCode(odsCode));
-        }
+            => await GetInfoRecords(repo => repo.FindByOdsCode(odsCode));
 
         private async Task<GetInfoResult> GetInfoRecords(Func<IInfoRepository, Task<RepositoryFindResult<UserAndInfo>>> find)
         {

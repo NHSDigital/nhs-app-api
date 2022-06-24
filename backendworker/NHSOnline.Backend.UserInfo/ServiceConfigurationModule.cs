@@ -29,7 +29,6 @@ namespace NHSOnline.Backend.UserInfo
         {
             services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
             services.AddScoped<IAccessTokenProvider, AccessTokenProvider>();
-            services.AddSingleton<IUserInfoConfiguration, UserInfoConfiguration>();
 
             ConfigureRepositoryServices(services, configuration);
             ConfigureCitizenIdServices(services);
@@ -46,16 +45,10 @@ namespace NHSOnline.Backend.UserInfo
             services.AddSingleton<IInfoRepository, UserInfoRepository>();
             services.AddSingleton<IInfoService, InfoService>();
 
-            var userInfoConfig = services.BuildServiceProvider().GetService<IUserInfoConfiguration>();
-            var sqlApiEnabled = userInfoConfig.SaveToSecondaryContainers || userInfoConfig.ReadFromSecondaryContainers;
-
-            if (sqlApiEnabled)
-            {
-                services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByNhsNumberConfiguration>(configuration);
-                services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByOdsCodeConfiguration>(configuration);
-                services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByOdsCodeConfiguration, UserAndInfo>>();
-                services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByNhsNumberConfiguration, UserAndInfo>>();
-            }
+            services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByOdsCodeConfiguration>(configuration);
+            services.RegisterSqlApiRepository<UserAndInfo, UserAndInfoRepositoryByNhsNumberConfiguration>(configuration);
+            services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByOdsCodeConfiguration, UserAndInfo>>();
+            services.AddTransient<SqlApiRepository<UserAndInfoRepositoryByNhsNumberConfiguration, UserAndInfo>>();
         }
 
         private static void ConfigureCitizenIdServices(IServiceCollection services)
