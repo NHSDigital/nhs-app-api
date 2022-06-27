@@ -68,6 +68,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         public void NavigateToDocumentDownload() => DocumentDownloadLink.Click();
 
-        public void NavigateToLocationServices() => LocationServicesLink.Click();
+        public void NavigateToLocationServices()
+        {
+            LocationServicesLink.ScrollTo();
+            LocationServicesLink.AssertVisible();
+            LocationServicesLink.Click();
+        }
     }
 }
