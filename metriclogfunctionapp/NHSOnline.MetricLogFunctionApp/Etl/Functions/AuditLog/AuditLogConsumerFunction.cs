@@ -17,6 +17,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -34,6 +35,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<AppointmentBookMetric> _appointmentBookEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationGetMetric> _organDonationRegistrationGetEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationCreateMetric> _organDonationRegistrationCreateEtl;
+        private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -49,6 +51,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<AppointmentBookMetric> appointmentBookEtl,
             IAuditLogEtl<OrganDonationRegistrationGetMetric> organDonationRegistrationGetEtl,
             IAuditLogEtl<OrganDonationRegistrationCreateMetric> organDonationRegistrationCreateEtl,
+            IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -63,6 +66,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _appointmentBookEtl = appointmentBookEtl;
             _organDonationRegistrationGetEtl = organDonationRegistrationGetEtl;
             _organDonationRegistrationCreateEtl = organDonationRegistrationCreateEtl;
+            _repeatPrescriptionEtl = repeatPrescriptionEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -110,6 +114,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _appointmentBookEtl.Execute(events);
                 await _organDonationRegistrationGetEtl.Execute(events);
                 await _organDonationRegistrationCreateEtl.Execute(events);
+                await _repeatPrescriptionEtl.Execute(events);
             }
             catch (Exception)
             {

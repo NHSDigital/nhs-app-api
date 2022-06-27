@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "45d87e99-4873-45bb-8f64-c1c0415035f8",
+		"_postman_id": "736df3ab-79a6-465d-a41b-cb27a9918471",
 		"name": "Metric Logger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "10704675"
+		"_exporter_id": "21371532"
 	},
 	"item": [
 		{
@@ -220,6 +220,35 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Repeat Prescription Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"Timestamp\": \"2022-04-23T23:53:33.0602823Z\",\r\n        \"AuditId\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"NhsLoginSubject\": \"ec66fe04-e8e3-4401-aa41-0b99c69c5c57\",\r\n        \"NhsNumber\": \"969 223 8318\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"RepeatPrescriptions_OrderRepeatMedications_Response\",\r\n        \"Details\": \"Repeat prescription request successfully created with course ids: FakeCourse1\",\r\n        \"ApiVersion\": \"v2.8.1\",\r\n        \"WebVersion\": \"2.8.1 (commit:15543227b)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"c23944a4-baf4-4db4-997e-aaa9a4de5311\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"1ce6bd64-a3e6-48e4-aa3f-f2bf5e41fda6\",\r\n        \"_rid\": \"RuVQAKPVga9bdAUAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga9bdAUAAAAAAA==/\",\r\n        \"_etag\": \"\\\"88019389-0000-1100-0000-6264917d0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1650758013\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

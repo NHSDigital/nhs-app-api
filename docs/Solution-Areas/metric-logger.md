@@ -304,6 +304,35 @@ GetOrganDonation Body:
 ]
 ```
 
+RepeatPrescription Body:
+```bash
+[
+    {
+        "Id": "79737fd7-e48d-49de-a237-fd7a806877bf",
+        "Timestamp": "2022-04-23T23:53:33.0602823Z",
+        "AuditId": "79737fd7-e48d-49de-a237-fd7a806877bf",
+        "NhsLoginSubject": "ec66fe04-e8e3-4401-aa41-0b99c69c5c57",
+        "NhsNumber": "969 223 8318",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Fake",
+        "Operation": "RepeatPrescriptions_OrderRepeatMedications_Response",
+        "Details": "Repeat prescription request successfully created with course ids: FakeCourse1",
+        "ApiVersion": "v2.8.1",
+        "WebVersion": "2.8.1 (commit:15543227b)",
+        "NativeVersion": "android 2.5.0",
+        "Environment": "onboardingsandpit",
+        "IntegrationReferrer": null,
+        "SessionId": "c23944a4-baf4-4db4-997e-aaa9a4de5311",
+        "ProofLevel": "P9",
+        "id": "1ce6bd64-a3e6-48e4-aa3f-f2bf5e41fda6",
+        "_rid": "RuVQAKPVga9bdAUAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga9bdAUAAAAAAA==/",
+        "_etag": "\"88019389-0000-1100-0000-6264917d0000\"",
+        "_attachments": "attachments/",
+        "_ts": 1650758013
+    }
+]
+```
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

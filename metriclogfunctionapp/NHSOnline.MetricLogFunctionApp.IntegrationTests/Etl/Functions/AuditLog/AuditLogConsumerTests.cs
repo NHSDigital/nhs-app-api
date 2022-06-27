@@ -55,6 +55,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().HaveCount(1);
+            
+            var repeatPrescriptionMetricRows = await env.Postgres.Events.PrescriptionOrdersMetric.FetchAll();
+            repeatPrescriptionMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -133,6 +136,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession13");
                 organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.013Z"));
                 organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId13");
+
+                var repeatPrescriptionMetricRow1 = repeatPrescriptionMetricRows.First(r => r.SessionId == "TestSession14");
+                repeatPrescriptionMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.014Z"));
+                repeatPrescriptionMetricRow1.AuditId.Should().Be("AuditId14");
             }
         }
 
@@ -180,6 +187,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().HaveCount(1);
+            
+            var repeatPrescriptionMetricRows = await env.Postgres.Events.PrescriptionOrdersMetric.FetchAll();
+            repeatPrescriptionMetricRows.Should().HaveCount(1);
 
             using (new AssertionScope())
             {
@@ -258,9 +268,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var organDonationRegistrationCreateMetricRow1 = organDonationRegistrationCreateMetricRows.First(r => r.SessionId == "TestSession13");
                 organDonationRegistrationCreateMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.013Z"));
                 organDonationRegistrationCreateMetricRow1.AuditId.Should().Be("AuditId13");
+
+                var repeatPrescriptionMetricRow1 = repeatPrescriptionMetricRows.First(r => r.SessionId == "TestSession14");
+                repeatPrescriptionMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.014Z"));
+                repeatPrescriptionMetricRow1.AuditId.Should().Be("AuditId14");
             }
         }
-
+            
         [NhsAppTest]
         public async Task AuditLog_AuditLogEventHubMessages_WhenRowExistsInDB_DuplicatesNotLoaded(TestEnv env)
         {
@@ -344,6 +358,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 SessionId = "TestSession10",
                 AuditId = "AuditId10"
             });
+            
+            await env.Postgres.Events.PrescriptionOrdersMetric.Insert(new PrescriptionOrdersMetricRow()
+            {
+                Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 12),
+                SessionId = "TestSession12",
+                AuditId = "AuditId12"
+            });
 
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
@@ -371,7 +392,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 9),
                     "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods9", "ref9"),
                 BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10),
-                    "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P10", "ods10", "ref10"));
+                    "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P10", "ods10", "ref10"),
+                BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12),
+                    "RepeatPrescriptions_OrderRepeatMedications_Response", "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods12", "ref12"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -407,6 +430,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             var organDonationRegistrationCreateMetricRow = organDonationRegistrationCreateMetricRows.Should().ContainSingle().Subject;
+            
+            var repeatPrescriptionMetricRows = await env.Postgres.Events.PrescriptionOrdersMetric.FetchAll();
+            var repeatPrescriptionMetricRow = repeatPrescriptionMetricRows.Should().ContainSingle().Subject;
 
             using (new AssertionScope())
             {
@@ -466,6 +492,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 organDonationRegistrationCreateMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.010Z"));
                 organDonationRegistrationCreateMetricRow.SessionId.Should().Be("TestSession10");
                 organDonationRegistrationCreateMetricRow.AuditId.Should().Be("AuditId10");
+
+                repeatPrescriptionMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
+                repeatPrescriptionMetricRow.SessionId.Should().Be("TestSession12");
+                repeatPrescriptionMetricRow.AuditId.Should().Be("AuditId12");
             }
         }
 
@@ -509,6 +539,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().BeEmpty();
+            
+            var repeatPrescriptionMetricRows = await env.Postgres.Events.PrescriptionOrdersMetric.FetchAll();
+            repeatPrescriptionMetricRows.Should().BeEmpty();
         }
 
         [NhsAppTest]
@@ -551,6 +584,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
 
             var organDonationRegistrationCreateMetricRows = await env.Postgres.Events.OrganDonationRegistrationCreateMetric.FetchAll();
             organDonationRegistrationCreateMetricRows.Should().BeEmpty();
+            
+            var repeatPrescriptionMetricRows = await env.Postgres.Events.PrescriptionOrdersMetric.FetchAll();
+            repeatPrescriptionMetricRows.Should().BeEmpty();
         }
 
         private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
@@ -595,6 +631,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 BuildEvent("AuditId11", "TestSession11", new DateTime(2021, 11, 01, 09, 00, 00, 11), "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710", "P9", "ods11", "ref11"),
                 BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12), "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods12", "ref12"),
                 BuildEvent("AuditId13", "TestSession13", new DateTime(2021, 11, 01, 09, 00, 00, 13), "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods13", "ref13"),
+                BuildEvent("AuditId14", "TestSession14", new DateTime(2021, 11, 01, 09, 00, 00, 14), "RepeatPrescriptions_OrderRepeatMedications_Response", "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods14", "ref14")
             };
     }
 }
