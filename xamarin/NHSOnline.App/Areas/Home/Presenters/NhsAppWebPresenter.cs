@@ -168,17 +168,29 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private void ViewOnNavigating(WebNavigatingEventArgs args)
         {
-            var uri = new Uri(args.Url);
-            if (!IsNhsAppWeb(uri))
+            try
             {
-                args.Cancel = true;
-
-                NhsAppResilience.ExecuteOnMainThread(() =>
+                var uri = new Uri(args.Url);
+                if (!IsNhsAppWeb(uri))
                 {
-                    _browser
-                        .OpenBrowserOverlay(uri)
-                        .PreserveThreadContext();
-                });
+                    args.Cancel = true;
+
+                    NhsAppResilience.ExecuteOnMainThread(() =>
+                    {
+                        _browser
+                            .OpenBrowserOverlay(uri)
+                            .PreserveThreadContext();
+                    });
+                }
+            }
+            catch (UriFormatException e)
+            {
+                var uriString = args.Url;
+                var queryIndex = uriString.IndexOf("?", StringComparison.Ordinal);
+                var urlSource = args.Source as UrlWebViewSource;
+                var url = urlSource?.Url;
+                _logger.LogError(e, "Failed to navigate to URI: {Uri} . Launched the failing URI from: {Url}",
+                    queryIndex.Equals(-1) ? uriString : uriString.Remove(queryIndex), url);
             }
         }
 
