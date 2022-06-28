@@ -193,6 +193,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                 .AssertOnPage(driver);
         }
 
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public async Task APatientCanTryAgainByClosingTheErrorWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
@@ -329,7 +330,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
         }
-        
+
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public async Task APatientCanUseNativeBackToTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
