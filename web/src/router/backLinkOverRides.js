@@ -2,6 +2,7 @@ import {
   APPOINTMENTS_PATH,
   INDEX_PATH,
   HEALTH_RECORDS_PATH,
+  GP_SESSION_ON_DEMAND_RETURN_PATH,
   MESSAGES_PATH,
   GP_MESSAGES_PATH,
   PRESCRIPTIONS_PATH,
@@ -134,6 +135,10 @@ export default {
   [GP_MEDICAL_RECORD_NAME]: {
     ignoreStore: false,
     defaultPath: INDEX_PATH,
+  },
+  [GP_SESSION_ON_DEMAND_RETURN_PATH]: {
+    ignoreStore: true,
+    defaultPath: HEALTH_RECORDS_PATH,
   },
   [WAYFINDER_NAME]: {
     ignoreStore: false,

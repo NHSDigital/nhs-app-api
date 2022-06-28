@@ -3,7 +3,7 @@ import { INDEX_NAME } from '@/router/names';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import { APPOINTMENTS_CRUMB } from '@/breadcrumbs/appointments';
 import { RouterLinkStub } from '@vue/test-utils';
-import { INDEX_PATH } from '@/router/paths';
+import { HEALTH_RECORDS_PATH, INDEX_PATH } from '@/router/paths';
 import * as dependancy from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
 
@@ -141,6 +141,19 @@ describe('BreadCrumbTrail.vue', () => {
 
       expect(backLink.exists()).toEqual(true);
       expect(backLink.attributes('tabindex')).toBe('0');
+    });
+
+    it('back link on GP Session On Demand page will navigate to health hub page', () => {
+      const wrapper = createBreadCrumbTrail({
+        isNativeApp: true,
+        routeName: 'on-demand-gp-return',
+      });
+
+      const backLink = wrapper.find('#native-back-breadcrumb').find('a');
+      backLink.trigger('click');
+
+      expect(wrapper.vm.$route.name).toBe('on-demand-gp-return');
+      expect(goToUrl).toHaveBeenCalledWith(HEALTH_RECORDS_PATH);
     });
   });
 });
