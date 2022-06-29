@@ -8,11 +8,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
     {
         public DbSender Map(Sender source)
         {
-            if (source == null)
-            {
-                return new DbSender();
-            }
-
             return new DbSender
             {
                 Id = source.Id.ToUpperInvariant(),

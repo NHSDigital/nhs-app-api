@@ -24,24 +24,9 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
 
         public class Created : SenderPostResult
         {
-            private DbSender DbSender { get; }
-
-            public Created(DbSender sender)
-            {
-                DbSender = sender;
-            }
-
-            public override T Accept<T>(ISenderPostResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class Success : SenderPostResult
-        {
             public DbSender DbSender { get; }
 
-            public Success(DbSender sender)
+            public Created(DbSender sender)
             {
                 DbSender = sender;
             }

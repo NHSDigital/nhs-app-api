@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Messages.Cache.Messages;
 using NHSOnline.Backend.Messages.Repository;
-using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -16,20 +15,24 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
     {
         private readonly ISenderRepository _senderRepository;
         private readonly ISenderCacheProvider _cacheProvider;
-        private readonly IMapper<Sender, DbSender> _senderRequestMapper;
-        private readonly IMapper<DbSender, Sender> _senderResponseMapper;
         private readonly ILogger<SenderService> _logger;
+        private readonly IMapper<List<DbSender>, SendersResponse> _sendersResponseMapper;
+        private readonly IMapper<Sender, DbSender> _senderRequestMapper;
+        private readonly IMapper<DbSender, SendersResponse> _senderResponseMapper;
 
         public SenderService
         (
             ISenderRepository senderRepository,
             ISenderCacheProvider cacheProvider,
             IMapper<Sender, DbSender> senderRequestMapper,
-            IMapper<DbSender, Sender> senderResponseMapper,
+            IMapper<List<DbSender>, SendersResponse> sendersResponseMapper,
+            IMapper<DbSender, SendersResponse> senderResponseMapper,
             ILogger<SenderService> logger)
         {
             _senderRepository = senderRepository;
             _cacheProvider = cacheProvider;
+            _logger = logger;
+            _sendersResponseMapper = sendersResponseMapper;
             _senderRequestMapper = senderRequestMapper;
             _senderResponseMapper = senderResponseMapper;
             _logger = logger;
@@ -59,7 +62,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
-        public async Task<SenderResult> GetSender(string senderId)
+        public async Task<SendersResult> GetSender(string senderId)
         {
             try
             {
@@ -69,19 +72,21 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
                 var sender = _cacheProvider.GetSender(senderId);
 
-                var result = sender switch
+                if (sender != null)
                 {
-                    null => await HandleInMemoryCacheMiss(senderId),
-                    _ => LogSenderAndReturn(sender)
-                };
+                    return new SendersResult.Found(new SendersResponse
+                    {
+                        Senders = new List<Sender> { sender }
+                    });
+                }
 
-                return result.Accept(new RepositoryFindSenderResultVisitor(_senderResponseMapper));
+                return await HandleInMemoryCacheMiss(senderId);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Get Sender has failed with exception");
 
-                return new SenderResult.InternalServerError();
+                return new SendersResult.InternalServerError();
             }
             finally
             {
@@ -89,36 +94,39 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
-
-        private RepositoryFindResult<DbSender> LogSenderAndReturn(Sender sender)
+        public async Task<SendersResult> GetSenders(DateTime lastUpdatedBefore, int limit)
         {
-            _logger.LogInformation($"Retrieved sender name {sender.Name} from cache");
-
-            return new RepositoryFindResult<DbSender>.Found(
-                new List<DbSender>
-                {
-                    _senderRequestMapper.Map(sender)
-                });
-        }
-
-        private async Task<RepositoryFindResult<DbSender>> HandleInMemoryCacheMiss(string senderId)
-        {
-            var findResult = await _senderRepository.Find(senderId);
-
-            if (findResult is RepositoryFindResult<DbSender>.Found foundResult)
+            try
             {
-                var dbSender = foundResult.Records.First();
-                var sender = _senderResponseMapper.Map(dbSender);
-                UpdateSenderCache(sender);
-            }
-            return findResult;
-        }
+                _logger.LogEnter();
 
-        private Sender UpdateSenderCache(Sender sender)
+                var result = await _senderRepository.Find(lastUpdatedBefore, limit);
+
+                return result.Accept(new RepositoryFindSendersResultVisitor(_sendersResponseMapper));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Get Sender has failed with exception");
+
+                return new SendersResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+        private async Task<SendersResult> HandleInMemoryCacheMiss(string senderId)
         {
-            _cacheProvider.SetSender(sender);
-            _logger.LogInformation($"Added sender name {sender.Name} from repository to cache");
-            return sender;
+            var repositoryFindResult = await _senderRepository.Find(senderId);
+
+            var sendersResult = repositoryFindResult.Accept(new RepositoryFindSenderResultVisitor(_senderResponseMapper));
+
+            if (sendersResult is SendersResult.Found foundResult)
+            {
+                _cacheProvider.SetSender(foundResult.Response.Senders.Single());
+            }
+
+            return sendersResult;
         }
     }
 }

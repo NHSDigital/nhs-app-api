@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Repository.SqlApi
             TRecord record, string partitionKeyValue)
             where TRecord : RepositoryRecord
         {
-            return await GetContainer(config).UpsertItemAsync<TRecord>(record, new PartitionKey(partitionKeyValue));
+            return await GetContainer(config).UpsertItemAsync(record, new PartitionKey(partitionKeyValue));
         }
 
         public async Task<ItemResponse<TRecord>> DeleteOneAsync<TRecord>(ISqlApiRepositoryConfiguration config,
@@ -39,11 +39,33 @@ namespace NHSOnline.Backend.Repository.SqlApi
         }
 
         public async Task<List<FeedResponse<TRecord>>> FindAsync<TRecord>(ISqlApiRepositoryConfiguration config,
-            Expression<Func<TRecord, bool>> filter, string partitionKeyValue)
+            Expression<Func<TRecord, bool>> filter, string partitionKeyValue) where TRecord : RepositoryRecord
         {
             var queryableResultSet = GetContainer(config).GetItemLinqQueryable<TRecord>(false, null,
                 new QueryRequestOptions { PartitionKey = new PartitionKey(partitionKeyValue) }).Where(filter);
 
+            return await GetRecords(queryableResultSet);
+        }
+
+        public async Task<List<FeedResponse<TRecord>>> FindQueryableAsync<TRecord>(
+            ISqlApiRepositoryConfiguration config,
+            Func<IQueryable<TRecord>, IQueryable<TRecord>> query) where TRecord : RepositoryRecord
+        {
+            var queryableResultSet = query
+            (
+                GetContainer(config)
+                    .GetItemLinqQueryable<TRecord>(
+                        false,
+                        null,
+                        new QueryRequestOptions())
+            );
+
+            return await GetRecords(queryableResultSet);
+        }
+
+        private async Task<List<FeedResponse<TRecord>>> GetRecords<TRecord>(IQueryable<TRecord> queryableResultSet)
+            where TRecord : RepositoryRecord
+        {
             var feedIterator = _cosmosLinqQuery.GetFeedIterator(queryableResultSet);
 
             var records = new List<FeedResponse<TRecord>>();

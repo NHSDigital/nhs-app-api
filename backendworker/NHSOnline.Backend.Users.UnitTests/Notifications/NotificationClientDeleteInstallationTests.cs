@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task DeleteInstallation_MultipleMatchingWrappers_InstallationFoundInOne_CompletesSuccessFully()
+        public async Task DeleteInstallation_MultipleMatchingWrappers_InstallationFoundInOne_CompletesSuccessfully()
         {
             SetupMockWrapper(_mockWrapper, true);
             SetupMockWrapper(_mockWrapper2, false);
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task DeleteInstallation_MultipleMatchingWrappers_InstallationFoundInAll_CompletesSuccessFully()
+        public async Task DeleteInstallation_MultipleMatchingWrappers_InstallationFoundInAll_CompletesSuccessfully()
         {
             SetupMockWrapper(_mockWrapper, true);
             SetupMockWrapper(_mockWrapper2, true);

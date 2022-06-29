@@ -7032,6 +7032,46 @@
           502: 
             description: "An unexpected error occurred processing the request."
     /v1/api/users/senders: 
+      get: 
+        tags: 
+          - "sender"
+        summary: "Retrieve a list of sender IDs."
+        description: "Retrieve a list of sender IDs."
+        parameters: 
+          - 
+            in: "query"
+            name: "lastUpdatedBefore"
+            required: true
+            description: "Last updated date - only IDs for senders last updated prior to this date will be returned."
+            schema: 
+              type: "string"
+              format: "date-time"
+          - 
+            in: "query"
+            name: "limit"
+            required: true
+            description: "Maximum number of IDs to be returned."
+            schema: 
+              type: "integer"
+              format: "int32"
+        responses: 
+          200: 
+            description: "Successful operation. List of sender IDs is returned."
+            content: 
+              application/json: 
+                schema: 
+                  type: "array"
+                  description: "Array of SenderId"
+                  items: 
+                    type: "string"
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
       post: 
         tags: 
           - "sender"

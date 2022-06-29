@@ -72,7 +72,8 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<ISenderService, SenderService>();
             services.AddSingleton<ISenderRepository, SenderRepository>();
             services.AddSingleton<IMapper<Sender, DbSender>, SenderRequestMapper>();
-            services.AddSingleton<IMapper<DbSender,Sender>, SenderResponseMapper>();
+            services.AddSingleton<IMapper<DbSender,SendersResponse>, SendersResponseMapper>();
+            services.AddSingleton<IMapper<List<DbSender>,SendersResponse>, SendersResponseMapper>();
         }
     }
 }

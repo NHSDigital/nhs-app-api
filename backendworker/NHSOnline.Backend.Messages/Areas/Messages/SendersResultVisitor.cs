@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -5,17 +6,17 @@ using NHSOnline.Backend.Messages.Areas.Messages.Models;
 
 namespace NHSOnline.Backend.Messages.Areas.Messages
 {
-    public class SenderResultVisitor : ISendersResultVisitor<IActionResult>
+    public class SendersResultVisitor : ISendersResultVisitor<IActionResult>
     {
         public IActionResult Visit(SendersResult.Found result)
         {
-            var sender = result?.Response.Senders.First();
-            return new OkObjectResult(sender);
+            var senderIds = result?.Response.Senders.Select(x => x.Id).ToList();
+            return new OkObjectResult(senderIds);
         }
 
         public IActionResult Visit(SendersResult.None result)
         {
-            return new NotFoundResult();
+            return new OkObjectResult(new List<string>());
         }
 
         public IActionResult Visit(SendersResult.BadGateway result)

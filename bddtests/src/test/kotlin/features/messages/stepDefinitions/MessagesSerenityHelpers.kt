@@ -19,5 +19,6 @@ enum class MessagesSerenityHelpers : ISerenityHelperEnums {
     GET_COMMS_SENDERS_RESPONSE,
     CREATE_COMMS_SENDERS_RESPONSE,
     EXPECTED_COMMS_SENDER,
-    RUN_UUID
+    RUN_UUID,
+    TARGET_LAST_UPDATED_BEFORE
 }

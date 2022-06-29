@@ -189,6 +189,77 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         }
 
         [TestMethod]
+        public async Task FindQueryableAsync_WhenSuccessful()
+        {
+            // Arrange
+            var record1 = new TestRepositoryRecord();
+            var record2 = new TestRepositoryRecord();
+
+            var query = new Mock<Func<IQueryable<TestRepositoryRecord>, IQueryable<TestRepositoryRecord>>>(MockBehavior.Strict);
+
+            query.Setup(q => q.Invoke(It.IsAny<IQueryable<TestRepositoryRecord>>()))
+                .Returns(new EnumerableQuery<TestRepositoryRecord>(new List<TestRepositoryRecord> { record1, record2 }));
+
+            _container.Setup(c =>
+                    c.GetItemLinqQueryable<TestRepositoryRecord>(false, null, It.IsAny<QueryRequestOptions>(), null))
+                .Returns(new EnumerableQuery<TestRepositoryRecord>(new List<TestRepositoryRecord>
+                    { record1, record2 }));
+
+            var mockFeedIterator = new Mock<FeedIterator<TestRepositoryRecord>>(MockBehavior.Strict);
+            var mockFeedResponse = new Mock<FeedResponse<TestRepositoryRecord>>(MockBehavior.Strict);
+
+            var resourceList = new List<TestRepositoryRecord> { record1, record2 };
+
+            mockFeedResponse.SetupGet(s => s.Resource).Returns(resourceList);
+
+            mockFeedIterator.SetupSequence(s => s.HasMoreResults)
+                .Returns(true)
+                .Returns(false);
+
+            mockFeedIterator.Setup(s => s.ReadNextAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(mockFeedResponse.Object);
+
+            _mockCosmosLinqQuery.Setup(s => s.GetFeedIterator(It.IsAny<IQueryable<TestRepositoryRecord>>()))
+                .Returns(mockFeedIterator.Object);
+
+            // Act
+            var result = await _systemUnderTest.FindQueryableAsync(_config, query.Object);
+            var resourceListFromResult = result.SelectMany(s => s.Resource).ToList();
+
+            // Assert
+            resourceListFromResult.Count.Should().Be(2);
+            resourceListFromResult.Should().BeEquivalentTo(resourceList);
+            mockFeedIterator.VerifyAll();
+            mockFeedResponse.VerifyAll();
+            query.VerifyAll();
+            VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task FindQueryableAsync_WhenClientThrowsException_ShouldThrow()
+        {
+            // Arrange
+            var query = new Mock<Func<IQueryable<TestRepositoryRecord>, IQueryable<TestRepositoryRecord>>>(MockBehavior.Strict);
+
+            query.Setup(q => q.Invoke(It.IsAny<IQueryable<TestRepositoryRecord>>()))
+                .Returns(new EnumerableQuery<TestRepositoryRecord>(new List<TestRepositoryRecord>( )));
+
+            _container.Setup(c => c
+                    .GetItemLinqQueryable<TestRepositoryRecord>(false, null, It.IsAny<QueryRequestOptions>(), null))
+                .Throws(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
+
+            // Act
+            await FluentActions.Awaiting(() =>
+                    _systemUnderTest.FindQueryableAsync(_config,
+                        query.Object))
+                .Should().ThrowAsync<CosmosException>()
+                .WithMessage("Testing a failure");
+
+            // Assert
+            VerifyAll();
+        }
+
+        [TestMethod]
         public async Task FindOneAsync_WhenClientThrowsException_ShouldThrow()
         {
             // Arrange

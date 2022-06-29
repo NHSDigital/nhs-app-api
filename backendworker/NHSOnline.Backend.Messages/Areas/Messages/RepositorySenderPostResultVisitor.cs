@@ -8,9 +8,9 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
     {
         public SenderPostResult Visit(RepositoryCreateResult<DbSender>.Created result)
         {
-            return new SenderPostResult.Success(result.Record);
+            return new SenderPostResult.Created(result.Record);
         }
-        
+
         public SenderPostResult Visit(RepositoryCreateResult<DbSender>.RepositoryError result)
         {
             return new SenderPostResult.BadGateway();

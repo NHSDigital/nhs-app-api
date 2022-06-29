@@ -24,6 +24,23 @@ class WorkerClientCommsSenders(val config: Config, val sender: WorkerClientSende
         return null
     }
 
+    fun getLastUpdatedBefore(lastUpdatedBefore: String, limit: Int, includeApiKey: Boolean): List<String>? {
+        val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.commsSender
+            + "?lastUpdatedBefore=" + lastUpdatedBefore + "&limit=" + limit)
+
+        val httpGet = RequestBuilder
+            .get(uriBuilder.build().toString())
+            .addExternalSystemApiKey(includeApiKey)
+
+        val response = httpGet.sendAndGetResult(sender)
+
+        if (response != null) {
+            return gson.fromJson(response, Array<String>::class.java).toList()
+        }
+
+        return null
+    }
+
     fun post(senderDetails: CommsSenderRequest, includeApiKey:Boolean): CommsSenderResponse? {
         val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.commsSender)
 

@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.Repository.SqlApi
                 return new RepositoryFindResult<TRecord>.RepositoryError();
             }
         }
-        
+
         public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter,
             string partitionKeyValue, string recordName)
         {
@@ -152,6 +152,40 @@ namespace NHSOnline.Backend.Repository.SqlApi
             }
         }
 
+        public async Task<RepositoryFindResult<TRecord>> Find(Func<IQueryable<TRecord>, IQueryable<TRecord>> query, string recordName)
+        {
+            try
+            {
+                var response = await FindRecords(query, recordName);
+
+                if (!response.Any())
+                {
+                    _logger.LogInformation($"Cosmos Sql Api Find with query {recordName} did not return any records.");
+
+                    return new RepositoryFindResult<TRecord>.NotFound();
+                }
+
+                if (response.All(s => s.StatusCode != HttpStatusCode.OK))
+                {
+                    _logger.LogInformation(
+                        $"Cosmos Sql Api Find with query {recordName} returned non success error code from feed response.");
+
+                    return new RepositoryFindResult<TRecord>.RepositoryError();
+                }
+
+                _logger.LogInformation($"Cosmos Sql Api Find with query {recordName} Successful.");
+
+                return new RepositoryFindResult<TRecord>.Found(response.SelectMany(s => s.Resource).ToList());
+            }
+            catch (CosmosException cosmosException)
+            {
+                _logger.LogError(cosmosException, $"Cosmos Sql Api Failure. Find with query {recordName}." +
+                                                  $"HttpStatusCode: {cosmosException.StatusCode}, subStatusCode: {cosmosException.SubStatusCode}");
+
+                return new RepositoryFindResult<TRecord>.RepositoryError();
+            }
+        }
+
         private async Task<ItemResponse<TRecord>> CreateOrUpdateRecord(TRecord record, string recordName,
             string partitionKeyValue)
         {
@@ -170,7 +204,7 @@ namespace NHSOnline.Backend.Repository.SqlApi
                 return await _sqlApiClientService.DeleteOneAsync<TRecord>(_config, id, partitionKeyValue);
             }
         }
-        
+
         private async Task<ItemResponse<TRecord>> FindRecord(
             string id, string partitionKeyValue, string recordName)
         {
@@ -186,6 +220,14 @@ namespace NHSOnline.Backend.Repository.SqlApi
             using (_logger.WithTimer($"CosmosDb Sql Api Find {recordName}."))
             {
                 return await _sqlApiClientService.FindAsync(_config, filter, partitionKeyValue);
+            }
+        }
+
+        private async Task<List<FeedResponse<TRecord>>> FindRecords(Func<IQueryable<TRecord>, IQueryable<TRecord>> query, string recordName)
+        {
+            using (_logger.WithTimer($"CosmosDb Sql Api Find {recordName}."))
+            {
+                return await _sqlApiClientService.FindQueryableAsync(_config, query);
             }
         }
     }

@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.prescriptions.yaml = contracts\nhsonline.prescriptions.yaml
 		contracts\nhsonline.secondarycare.yaml = contracts\nhsonline.secondarycare.yaml
 		contracts\nhsonline.secondarycare_v2.yaml = contracts\nhsonline.secondarycare_v2.yaml
+		contracts\nhsonline.sender.yaml = contracts\nhsonline.sender.yaml
 		contracts\nhsonline.shared.yaml = contracts\nhsonline.shared.yaml
 		contracts\nhsonline.termsandconditions.yaml = contracts\nhsonline.termsandconditions.yaml
 		contracts\nhsonline.userinfo.yaml = contracts\nhsonline.userinfo.yaml

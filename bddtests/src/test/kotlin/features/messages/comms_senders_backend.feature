@@ -33,3 +33,20 @@ Feature: Comms Senders Backend
     Given I am an api user wishing to submit sender details to the senders endpoint
     When I post to the senders endpoint without name
     Then I receive an "Bad Request" error
+
+  Scenario: An api user can get stale senders from senders container
+    Given I am an api user wishing to get senders existing in database whose details have not been recently updated
+    When I get sender details based on when they were last updated
+    Then I receive an "OK" success code
+    And I receive ids of senders not recently updated from senders endpoint
+
+  Scenario: An api user with no stale senders getting stale senders on the senders endpoint will receive a 200
+    Given I am an api user without stale senders stored details wishing to get stale senders
+    When I get sender details based on when they were last updated
+    Then I receive an "OK" success code
+    And I receive an empty list of sender ids not recently updated from senders endpoint
+
+  Scenario: An api user getting stale senders on the senders endpoint without the api key will receive a 401
+    Given I am an api user wishing to get senders existing in database whose details have not been recently updated
+    When I get sender details based on when they were last updated without the api key
+    Then I receive a "Unauthorized" error

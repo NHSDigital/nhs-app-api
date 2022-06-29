@@ -18,6 +18,14 @@ class CommsSendersApi {
             return response
         }
 
+        fun getLastUpdatedBefore(lastUpdatedBefore: String, limit: Int, includeApiKey: Boolean = true): List<String>? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .commsSenders
+                .getLastUpdatedBefore(lastUpdatedBefore, limit, includeApiKey)
+            MessagesSerenityHelpers.GET_COMMS_SENDERS_RESPONSE.set(response)
+            return response
+        }
+
         fun post(sender: CommsSenderRequest, includeApiKey:Boolean = true): CommsSenderResponse? {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .commsSenders

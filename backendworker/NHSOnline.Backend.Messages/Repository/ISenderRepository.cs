@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Repository;
 
@@ -7,5 +8,6 @@ namespace NHSOnline.Backend.Messages.Repository
     {
         Task<RepositoryCreateResult<DbSender>> CreateOrUpdate(DbSender sender);
         Task<RepositoryFindResult<DbSender>> Find(string senderId);
+        Task<RepositoryFindResult<DbSender>> Find(DateTime lastUpdatedBefore, int limit);
     }
 }

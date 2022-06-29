@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
@@ -20,8 +21,15 @@ namespace NHSOnline.Backend.Repository.SqlApi
             ISqlApiRepositoryConfiguration config, string id, string partitionKeyValue)
             where TRecord : RepositoryRecord;
 
-        public Task<List<FeedResponse<TRecord>>> FindAsync<TRecord>(ISqlApiRepositoryConfiguration config,
-            Expression<Func<TRecord, bool>> filter, string partitionKeyValue);
+        public Task<List<FeedResponse<TRecord>>> FindAsync<TRecord>(
+            ISqlApiRepositoryConfiguration config,
+            Expression<Func<TRecord, bool>> filter,
+            string partitionKeyValue)
+            where TRecord : RepositoryRecord;
+
+        public Task<List<FeedResponse<TRecord>>> FindQueryableAsync<TRecord>(
+            ISqlApiRepositoryConfiguration config, Func<IQueryable<TRecord>, IQueryable<TRecord>> query)
+            where TRecord : RepositoryRecord;
 
         public Task<ContainerResponse> CheckHealthAsync(ISqlApiRepositoryConfiguration config);
     }

@@ -6,18 +6,13 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class SenderPostResultVisitor : ISenderPostResultVisitor<IActionResult>
     {
-        public IActionResult Visit(SenderPostResult.Success result)
+        public IActionResult Visit(SenderPostResult.Created result)
         {
-            return new CreatedResult(string.Empty, new Sender()
+            return new CreatedResult(string.Empty, new Sender
             {
                 Id = result.DbSender.Id,
                 Name = result.DbSender.Name
             });
-        }
-
-        public IActionResult Visit(SenderPostResult.Created result)
-        {
-            return new NoContentResult();
         }
 
         public IActionResult Visit(SenderPostResult.InternalServerError result)

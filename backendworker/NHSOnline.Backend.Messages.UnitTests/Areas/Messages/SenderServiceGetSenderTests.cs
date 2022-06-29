@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Messages.Areas.Messages;
-using NHSOnline.Backend.Messages.Areas.Messages.Mappers;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Messages.Cache.Messages;
 using NHSOnline.Backend.Messages.Repository;
@@ -16,14 +16,15 @@ using NHSOnline.Backend.Support;
 namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 {
     [TestClass]
-    public class SenderServiceTests
+    public class SenderServiceGetSenderTests
     {
         private ISenderService _systemUnderTest;
         private Mock<ILogger<SenderService>> _mockLogger;
         private Mock<ISenderRepository> _mockSenderRepository;
         private Mock<ISenderCacheProvider> _mockCacheProvider;
-        private IMapper<Sender, DbSender> _requestMapper;
-        private IMapper<DbSender, Sender> _responseMapper;
+        private Mock<IMapper<Sender, DbSender>> _mockRequestMapper;
+        private Mock<IMapper<List<DbSender>, SendersResponse>> _mockSendersMapper;
+        private Mock<IMapper<DbSender, SendersResponse>> _mockSenderMapper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,63 +32,17 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _mockLogger = new Mock<ILogger<SenderService>>();
             _mockSenderRepository = new Mock<ISenderRepository>(MockBehavior.Strict);
             _mockCacheProvider = new Mock<ISenderCacheProvider>(MockBehavior.Strict);
-            _requestMapper = new SenderRequestMapper();
-            _responseMapper = new SenderResponseMapper();
+            _mockRequestMapper = new Mock<IMapper<Sender, DbSender>>(MockBehavior.Strict);
+            _mockSenderMapper = new Mock<IMapper<DbSender, SendersResponse>>(MockBehavior.Strict);
+            _mockSendersMapper = new Mock<IMapper<List<DbSender>, SendersResponse>>(MockBehavior.Strict);
+
             _systemUnderTest = new SenderService(
                 _mockSenderRepository.Object,
                 _mockCacheProvider.Object,
-                _requestMapper,
-                _responseMapper,
+                _mockRequestMapper.Object,
+                _mockSendersMapper.Object,
+                _mockSenderMapper.Object,
                 _mockLogger.Object);
-        }
-
-        [TestMethod]
-        public async Task Create_RepositoryThrowsException_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
-                .ThrowsAsync(new AggregateException());
-
-            // Act
-            var response = await _systemUnderTest.Create(new Sender { Id = "id", Name = "name" });
-
-            // Assert
-            response.Should().BeAssignableTo<SenderPostResult.InternalServerError>();
-            VerifyMocks();
-        }
-
-        [TestMethod]
-        public async Task Create_RepositoryReturnsRepositoryError_ReturnsBadGateway()
-        {
-            // Arrange
-            _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
-                .ReturnsAsync(new RepositoryCreateResult<DbSender>.RepositoryError());
-
-            // Act
-            var response = await _systemUnderTest.Create(new Sender { Id = "id", Name = "name" });
-
-            // Assert
-            response.Should().BeAssignableTo<SenderPostResult.BadGateway>();
-            VerifyMocks();
-        }
-
-        [TestMethod]
-        public async Task Create_RepositoryReturnsSuccess_ReturnsCreated()
-        {
-            var sender = new Sender { Id = "id", Name = "name" };
-            var dbSender = _requestMapper.Map(sender);
-
-            // Arrange
-            _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
-                .ReturnsAsync(new RepositoryCreateResult<DbSender>.Created(dbSender));
-
-            // Act
-            var response = await _systemUnderTest.Create(sender);
-
-            // Assert
-            var senderObjectFromService = response.Should().BeAssignableTo<SenderPostResult.Success>();
-            senderObjectFromService.Subject.DbSender.Should().BeEquivalentTo(dbSender);
-            VerifyMocks();
         }
 
         [TestMethod]
@@ -98,15 +53,14 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Setup(c => c.GetSender(It.IsAny<string>()))
                 .Returns((Sender) null);
 
-            _mockSenderRepository
-                .Setup(s => s.Find(It.IsAny<string>()))
+            _mockSenderRepository.Setup(s => s.Find("SENDER_ID"))
                 .ThrowsAsync(new AggregateException());
 
             // Act
-            var response = await _systemUnderTest.GetSender("sender");
+            var response = await _systemUnderTest.GetSender("sender_id");
 
             // Assert
-            response.Should().BeAssignableTo<SenderResult.InternalServerError>();
+            response.Should().BeAssignableTo<SendersResult.InternalServerError>();
             VerifyMocks();
         }
 
@@ -118,35 +72,33 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Setup(c => c.GetSender(It.IsAny<string>()))
                 .Returns((Sender) null);
 
-            _mockSenderRepository
-                .Setup(s => s.Find(It.IsAny<string>()))
+            _mockSenderRepository.Setup(s => s.Find("SENDER_ID"))
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.RepositoryError());
 
             // Act
-            var response = await _systemUnderTest.GetSender("sender");
+            var response = await _systemUnderTest.GetSender("sender_id");
 
             // Assert
-            response.Should().BeAssignableTo<SenderResult.BadGateway>();
+            response.Should().BeAssignableTo<SendersResult.BadGateway>();
             VerifyMocks();
         }
 
         [TestMethod]
-        public async Task GetSender_RepositoryReturnsNotFound_ReturnsNotFound()
+        public async Task GetSender_RepositoryReturnsNotFound_ReturnsNone()
         {
             // Arrange
             _mockCacheProvider
                 .Setup(c => c.GetSender(It.IsAny<string>()))
                 .Returns((Sender) null);
 
-            _mockSenderRepository
-                .Setup(s => s.Find(It.IsAny<string>()))
+            _mockSenderRepository.Setup(s => s.Find("SENDER_ID"))
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.NotFound());
 
             // Act
-            var response = await _systemUnderTest.GetSender("sender");
+            var response = await _systemUnderTest.GetSender("sender_id");
 
             // Assert
-            response.Should().BeAssignableTo<SenderResult.NotFound>();
+            response.Should().BeAssignableTo<SendersResult.None>();
             VerifyMocks();
         }
 
@@ -164,9 +116,10 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             var response = await _systemUnderTest.GetSender("sender_Id");
 
             // Assert
-            var senderObjectFromService = response.Should().BeAssignableTo<SenderResult.Found>();
-            senderObjectFromService.Subject.Response.Id.Should().Be(sender.Id);
-            senderObjectFromService.Subject.Response.Name.Should().Be(sender.Name);
+            var senderObjectFromService = response.Should().BeAssignableTo<SendersResult.Found>().Subject;
+
+            senderObjectFromService.Response.Senders.Single().Id.Should().Be(sender.Id);
+            senderObjectFromService.Response.Senders.Single().Name.Should().Be(sender.Name);
             VerifyMocks();
         }
 
@@ -174,7 +127,11 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         public async Task GetSender_WhenNotFoundInCacheButFoundInRepository_ReturnsSender()
         {
             var sender = new Sender { Id = "SENDER_ID", Name = "name" };
-            var dbSender = _requestMapper.Map(sender);
+            var dbSender = new DbSender();
+            var sendersResponse = new SendersResponse
+            {
+                Senders = new List<Sender> { sender }
+            };
 
             // Arrange
             _mockCacheProvider
@@ -186,18 +143,20 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.Found(new List<DbSender> { dbSender }));
 
             Sender cachedSender = null;
-
             _mockCacheProvider
                 .Setup(cs => cs.SetSender(It.IsAny<Sender>()))
                 .Callback<Sender>(ssc => cachedSender = ssc);
+
+            _mockSenderMapper
+                .Setup(x => x.Map(dbSender))
+                .Returns(sendersResponse);
 
             // Act
             var response = await _systemUnderTest.GetSender("sender_Id");
 
             // Assert
-            var senderObjectFromService = response.Should().BeAssignableTo<SenderResult.Found>();
-            senderObjectFromService.Subject.Response.Id.Should().Be(sender.Id);
-            senderObjectFromService.Subject.Response.Name.Should().Be(sender.Name);
+            var senderObjectFromService = response.Should().BeAssignableTo<SendersResult.Found>();
+            senderObjectFromService.Subject.Response.Should().Be(sendersResponse);
             cachedSender.Should().BeEquivalentTo(sender);
             VerifyMocks();
         }
@@ -205,7 +164,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         private void VerifyMocks()
         {
             _mockSenderRepository.VerifyAll();
-            _mockCacheProvider.VerifyAll();
+            _mockSenderMapper.VerifyAll();
+            _mockSendersMapper.VerifyAll();
         }
     }
 }

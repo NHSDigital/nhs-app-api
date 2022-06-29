@@ -13,14 +13,14 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {
-    public class SenderController : Controller
+    public class SendersController : Controller
     {
-        private readonly ILogger<SenderController> _logger;
+        private readonly ILogger<SendersController> _logger;
         private readonly ISenderService _senderService;
 
-        public SenderController
+        public SendersController
         (
-            ILogger<SenderController> logger,
+            ILogger<SendersController> logger,
             ISenderService senderService)
         {
             _logger = logger;
@@ -51,6 +51,35 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to post sender with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
+        [ApiVersionRoute("api/users/senders")]
+        public async Task<IActionResult> GetSenders([FromQuery] DateTime lastUpdatedBefore, [FromQuery] int limit)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (lastUpdatedBefore >= DateTime.UtcNow || limit <= 0)
+                {
+                    return new StatusCodeResult(StatusCodes.Status400BadRequest);
+                }
+
+                var result = await _senderService.GetSenders(lastUpdatedBefore, limit);
+
+                return result.Accept(new SendersResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get senderId with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

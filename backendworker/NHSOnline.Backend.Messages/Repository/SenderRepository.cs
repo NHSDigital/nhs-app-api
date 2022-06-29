@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
@@ -13,12 +15,17 @@ namespace NHSOnline.Backend.Messages.Repository
     {
         private readonly ILogger<SenderRepository> _logger;
         private readonly ISqlApiRepository<DbSender> _repository;
+        private readonly IMessagesConfiguration _messagesConfiguration;
         private const string RecordName = nameof(Sender);
 
-        public SenderRepository(ILogger<SenderRepository> logger, ISqlApiRepository<DbSender> repository)
+        public SenderRepository(
+            ILogger<SenderRepository> logger,
+            ISqlApiRepository<DbSender> repository,
+            IMessagesConfiguration messagesConfiguration)
         {
             _logger = logger;
             _repository = repository;
+            _messagesConfiguration = messagesConfiguration;
         }
 
         public async Task<RepositoryCreateResult<DbSender>> CreateOrUpdate(DbSender sender)
@@ -53,6 +60,33 @@ namespace NHSOnline.Backend.Messages.Repository
                     .IsValid();
 
                 return await _repository.Find(senderId, senderId, RecordName);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<RepositoryFindResult<DbSender>> Find(DateTime lastUpdatedBefore, int limit)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(lastUpdatedBefore, nameof(lastUpdatedBefore), ThrowError)
+                    .IsNotNull(limit, nameof(limit), ThrowError)
+                    .IsValid();
+
+                var senderIdNhsApp = _messagesConfiguration.SenderIdNhsApp;
+
+                IQueryable<DbSender> QueryFunction(IQueryable<DbSender> query) =>
+                    query.Where(x => x.Timestamp <= lastUpdatedBefore)
+                        .Where(x => x.Id != senderIdNhsApp)
+                        .OrderBy(x => x.Timestamp)
+                        .Take(limit);
+
+                return await _repository.Find(QueryFunction, RecordName);
             }
             finally
             {

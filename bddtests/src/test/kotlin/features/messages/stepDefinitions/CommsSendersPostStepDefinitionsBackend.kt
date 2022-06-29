@@ -39,7 +39,8 @@ class CommsSendersPostStepDefinitionsBackend {
 
         val sqlRecord = SqlRepositoryCommsSender(
             id = sender.id,
-            Name = sender.name
+            Name = sender.name,
+            TimeStamp = "2022-06-21T13:00:00.0000000Z"
         )
 
         val deletion = { CommsSendersFactory().deleteItemInSqlContainer(sqlRecord) }
