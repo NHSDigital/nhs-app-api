@@ -50,10 +50,11 @@ namespace NHSOnline.Backend.PfsApi
             ConfigureMessagingServices(services, configuration);
         }
 
-        private void ConfigureMessagingServices(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureMessagingServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>(configuration); //error
+            services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>(configuration);
             services.RegisterSqlApiRepository<DbSender, SenderRepositoryConfiguration>(configuration);
+            services.AddSingleton<IMessagesConfiguration, MessagesConfiguration>();
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MessageRepository>();
