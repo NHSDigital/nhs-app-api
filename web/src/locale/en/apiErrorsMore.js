@@ -9,6 +9,8 @@ export default {
       retryButtonText: 'Back to Account and settings',
       500: {
         10001: {
+          pageTitle: 'Notifications error',
+          pageHeader: 'Notifications error',
           header: 'Notifications are turned off on your device',
           message: 'To turn on notifications, go to your device settings and allow notifications. Then return to the app and try again.',
           retryButtonText: 'Try again',
