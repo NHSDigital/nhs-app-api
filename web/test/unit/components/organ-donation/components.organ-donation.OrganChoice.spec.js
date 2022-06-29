@@ -65,7 +65,7 @@ describe('organ choice component', () => {
 
         describe('when clicked', () => {
           beforeEach(() => {
-            radioButton.trigger('click');
+            radioButton.setChecked();
           });
 
           it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
@@ -96,7 +96,7 @@ describe('organ choice component', () => {
 
         describe('when clicked', () => {
           beforeEach(() => {
-            radioButton.trigger('click');
+            radioButton.setChecked();
           });
 
           it('will dispatch `setSomeOrgans` when a radio button is selected', () => {

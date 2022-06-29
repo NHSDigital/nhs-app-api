@@ -52,7 +52,7 @@ describe('Repeat Prescription', () => {
   describe('checkbox selected', () => {
     it('should emit when `selectedValueChanged` is called', () => {
       // Act
-      wrapper.find('input[type="checkbox"]').trigger('click');
+      wrapper.find('input[type="checkbox"]').setChecked();
 
       // Assert
       expect(wrapper.emitted('input')).toBeDefined();
@@ -64,7 +64,7 @@ describe('Repeat Prescription', () => {
       wrapper = mountComponent({ methods: { selectedValueChanged } });
 
       // Act
-      wrapper.find('input[type="checkbox"]').trigger('click');
+      wrapper.find('input[type="checkbox"]').setChecked();
 
       // Assert
       expect(selectedValueChanged).toHaveBeenCalledTimes(1);

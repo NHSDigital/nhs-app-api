@@ -91,7 +91,7 @@ describe('Prescription type page', () => {
 
     it('will redirect to the repeat prescription page when repeat radio selected', async () => {
       const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_REPEAT');
-      radioButton.trigger('click');
+      await radioButton.setChecked();
       continueButton.trigger('click');
       errorComponent = wrapper.find('#message-dialog');
       await Vue.nextTick();
@@ -103,7 +103,7 @@ describe('Prescription type page', () => {
 
     it('will redirect to the contact surgery page when non repeat radio selected', async () => {
       const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_NON_REPEAT');
-      radioButton.trigger('click');
+      await radioButton.setChecked();
       continueButton.trigger('click');
       await Vue.nextTick();
       errorComponent = wrapper.find('#message-dialog');
@@ -125,7 +125,7 @@ describe('Prescription type page', () => {
 
     it('will track prescriptions repeat courses path when repeat type is selected', async () => {
       const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_REPEAT');
-      radioButton.trigger('click');
+      await radioButton.setChecked();
       continueButton.trigger('click');
       await Vue.nextTick();
 
@@ -135,7 +135,7 @@ describe('Prescription type page', () => {
 
     it('will track prescriptions contact surgery path when non repeat type is selected', async () => {
       const radioButton = wrapper.find('#prescriptionType-PRESCRIPTION_TYPE_NON_REPEAT');
-      radioButton.trigger('click');
+      await radioButton.setChecked();
       continueButton.trigger('click');
       await Vue.nextTick();
 

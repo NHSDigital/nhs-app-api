@@ -75,7 +75,7 @@ describe('notifications prompt page', () => {
 
       describe('choice made', () => {
         beforeEach(() => {
-          wrapper.find('#notifications-yes').trigger('click');
+          wrapper.find('#notifications-yes').setChecked();
         });
 
         it('will not show inline error', () => {
@@ -90,7 +90,7 @@ describe('notifications prompt page', () => {
 
     describe('the user agreed to notifications', () => {
       beforeEach(() => {
-        wrapper.find('#notifications-yes').trigger('click');
+        wrapper.find('#notifications-yes').setChecked();
         wrapper.find('#btn_continue').trigger('click');
       });
 
@@ -132,7 +132,7 @@ describe('notifications prompt page', () => {
 
     describe('the user does not agree to notifications', () => {
       beforeEach(() => {
-        wrapper.find('#notifications-no').trigger('click');
+        wrapper.find('#notifications-no').setChecked();
         wrapper.find('#btn_continue').trigger('click');
       });
 

@@ -84,7 +84,7 @@ describe('questionChoice component', () => {
       const input = wrapper.find("[id='name-first']");
       expect(input).toBeDefined();
 
-      input.trigger('click');
+      input.setChecked();
 
       expect(wrapper.emitted('input')[0][0]).toBe('first');
     });
@@ -99,7 +99,7 @@ describe('questionChoice component', () => {
       const input = wrapper.find("[id='name-second']");
       expect(input).toBeDefined();
 
-      input.trigger('click');
+      input.setChecked();
 
       expect(wrapper.emitted('input')[0][0]).toBe('second');
     });
@@ -114,7 +114,7 @@ describe('questionChoice component', () => {
       const input = wrapper.find("[id='name-third']");
       expect(input).toBeDefined();
 
-      input.trigger('click');
+      input.setChecked();
 
       expect(wrapper.emitted('input')[0][0]).toBe('third');
     });

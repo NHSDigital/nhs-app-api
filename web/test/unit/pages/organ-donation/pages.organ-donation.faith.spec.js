@@ -158,7 +158,7 @@ describe('organ donation faith page', () => {
 
       describe('when clicked', () => {
         beforeEach(() => {
-          radioButton.trigger('click');
+          radioButton.setChecked();
         });
 
         it('will dispatch the "organDonation/setFaithDeclaration" action', () => {
@@ -178,7 +178,7 @@ describe('organ donation faith page', () => {
 
       describe('when clicked', () => {
         beforeEach(() => {
-          radioButton.trigger('click');
+          radioButton.setChecked();
         });
 
         it('will dispatch the "organDonation/setFaithDeclaration" action', () => {
@@ -198,7 +198,7 @@ describe('organ donation faith page', () => {
 
       describe('when clicked', () => {
         beforeEach(() => {
-          radioButton.trigger('click');
+          radioButton.setChecked();
         });
 
         it('will dispatch the "organDonation/setFaithDeclaration" action', () => {

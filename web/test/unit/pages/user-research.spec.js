@@ -90,7 +90,7 @@ describe('user research', () => {
       ])('`%s` radio button is selected', (_, value) => {
         beforeEach(() => {
           const radioButton = wrapper.find(`#userResearch-${value}`);
-          radioButton.trigger('click');
+          radioButton.setChecked();
           clickButton();
         });
 
@@ -120,7 +120,7 @@ describe('user research', () => {
           $http.postV1ApiUsersMeInfoUserresearch.mockImplementation(() => Promise.reject(error));
 
           const radioButton = wrapper.find('#userResearch-optIn');
-          radioButton.trigger('click');
+          radioButton.setChecked();
           clickButton();
         });
 

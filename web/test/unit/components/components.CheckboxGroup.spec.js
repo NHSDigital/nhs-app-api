@@ -79,7 +79,7 @@ describe('Check box group', () => {
 
     it('should emit when selected value changed is called', () => {
       const checkbox = wrapper.find('input[type="checkbox"]');
-      checkbox.trigger('click');
+      checkbox.setChecked();
       expect(wrapper.emitted('select')).toBeDefined();
     });
 
@@ -89,7 +89,7 @@ describe('Check box group', () => {
       wrapper = mountComponent({ methods: { selectedValueChanged } });
 
       const checkbox = wrapper.find('input[type="checkbox"]');
-      checkbox.trigger('click');
+      checkbox.setChecked();
       expect(selectedValueChanged).toHaveBeenCalledTimes(1);
     });
   });
