@@ -289,7 +289,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static List<TppTestResultDates> GetTestResultsForCurrentYear()
         {
-            return GetTestResultsYear(DateTime.Now.Date);
+            return GetTestResultsYear(DateTime.Now);
         }
 
         private static List<TppTestResultDates> GetCalendarYearOfTestResults(int year)

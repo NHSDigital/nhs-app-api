@@ -9,7 +9,7 @@ import worker.models.myrecord.TestResultItem
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import kotlin.math.ceil
+import kotlin.math.floor
 
 private const val START_DATE_FOR_RANGE_ONE = 179L
 private const val END_DATE_FOR_RANGE_ONE = 120L
@@ -54,10 +54,10 @@ class TestResultsFactoryTpp : TestResultsFactory(){
 
     override fun enabledWithRecords(patient: Patient, year: Int?, numberOfResults: Int?) {
         val daysLeft: Long
-        var resultsReturned = 0
         var startDate: OffsetDateTime
         val finalEndDate: OffsetDateTime
         val today = OffsetDateTime.now()
+        val resultsForAllButFinalCall = 0
         var resultsShown = TppConstants.DefaultTestResultsReturned
 
         if (numberOfResults != null) {
@@ -87,24 +87,23 @@ class TestResultsFactoryTpp : TestResultsFactory(){
                 .plusMinutes(MAX_MINUTE_SECONDS.toLong())
                 .plusSeconds(MAX_MINUTE_SECONDS.toLong())
 
-        val testResultsCallsRequired = ceil(daysLeft.toDouble() / MAX_DAYS_IN_REQUEST).toInt()
+        val testResultsCallsRequired = floor(daysLeft.toDouble() / MAX_DAYS_IN_REQUEST).toInt()
 
-        for(callsMade in 1..testResultsCallsRequired) {
-
-            if (callsMade == testResultsCallsRequired){
-                requestEndDate = finalEndDate
-                resultsReturned = resultsShown
-            }
-
+        (1..testResultsCallsRequired).forEach { _ ->
             mockingClient.forTpp.mock {
                 myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, requestEndDate)
                         .respondWithSuccess(TestResultsData
-                                .getMultipleTestResultsForTpp(resultsReturned))
+                                .getMultipleTestResultsForTpp(resultsForAllButFinalCall))
             }
 
             startDate = startDate.plusDays(MAX_DAYS_IN_REQUEST.toLong())
             requestEndDate = requestEndDate.plusDays(MAX_DAYS_IN_REQUEST.toLong())
+        }
 
+        mockingClient.forTpp.mock {
+            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, finalEndDate)
+                .respondWithSuccess(TestResultsData
+                    .getMultipleTestResultsForTpp(resultsShown))
         }
     }
 
