@@ -109,6 +109,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockSessionExtendService.Verify();
         }
 
+        [TestMethod]
+        public async Task Post_WhenP9UserSessionDoesNotHaveGpSession_DoesNotExtendGpSessionAndReturnsSuccessResponse()
+        {
+            // Arrange
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                new OnDemandGpSession(Supplier.Emis))
+            {
+                PatientSessionId = _patientId,
+            };
+
+            // Act
+            var result = await _systemUnderTest.Post(_patientId, _userSession);
+
+            // Assert
+            result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(It.IsAny<Supplier>()), Times.Never);
+        }
+
         public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

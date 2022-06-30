@@ -77,6 +77,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             public async Task<SessionExtendResultVisitorOutput> Visit(P9UserSession userSession)
             {
+                if (userSession.GpUserSession.Supplier == Supplier.Disconnected)
+                {
+                    return new SessionExtendResultVisitorOutput
+                        { SessionWasExtended = true, StatusCode = StatusCodes.Status200OK };
+                }
+
                 _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.GpUserSession.Supplier}'.");
                 var sessionService = _gpSystemFactory
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
