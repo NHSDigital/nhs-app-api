@@ -8,6 +8,7 @@ using Moq;
 using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Mappers;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Cache.Messages;
 using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         private ISenderService _systemUnderTest;
         private Mock<ILogger<SenderService>> _mockLogger;
         private Mock<ISenderRepository> _mockSenderRepository;
+        private Mock<ISenderCacheProvider> _mockCacheProvider;
         private IMapper<Sender, DbSender> _requestMapper;
         private IMapper<DbSender, Sender> _responseMapper;
 
@@ -28,23 +30,28 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             _mockLogger = new Mock<ILogger<SenderService>>();
             _mockSenderRepository = new Mock<ISenderRepository>(MockBehavior.Strict);
+            _mockCacheProvider = new Mock<ISenderCacheProvider>(MockBehavior.Strict);
             _requestMapper = new SenderRequestMapper();
             _responseMapper = new SenderResponseMapper();
-            _systemUnderTest = new SenderService(_mockSenderRepository.Object, _mockLogger.Object, _requestMapper,
-                _responseMapper);
+            _systemUnderTest = new SenderService(
+                _mockSenderRepository.Object,
+                _mockCacheProvider.Object,
+                _requestMapper,
+                _responseMapper,
+                _mockLogger.Object);
         }
 
         [TestMethod]
         public async Task Create_RepositoryThrowsException_ReturnsInternalServerError()
         {
-            //Arrange
+            // Arrange
             _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
                 .ThrowsAsync(new AggregateException());
 
-            //Act
+            // Act
             var response = await _systemUnderTest.Create(new Sender { Id = "id", Name = "name" });
 
-            //Assert
+            // Assert
             response.Should().BeAssignableTo<SenderPostResult.InternalServerError>();
             VerifyMocks();
         }
@@ -52,14 +59,14 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         [TestMethod]
         public async Task Create_RepositoryReturnsRepositoryError_ReturnsBadGateway()
         {
-            //Arrange
+            // Arrange
             _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
                 .ReturnsAsync(new RepositoryCreateResult<DbSender>.RepositoryError());
 
-            //Act
+            // Act
             var response = await _systemUnderTest.Create(new Sender { Id = "id", Name = "name" });
 
-            //Assert
+            // Assert
             response.Should().BeAssignableTo<SenderPostResult.BadGateway>();
             VerifyMocks();
         }
@@ -70,87 +77,135 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             var sender = new Sender { Id = "id", Name = "name" };
             var dbSender = _requestMapper.Map(sender);
 
-            //Arrange
+            // Arrange
             _mockSenderRepository.Setup(s => s.CreateOrUpdate(It.IsAny<DbSender>()))
                 .ReturnsAsync(new RepositoryCreateResult<DbSender>.Created(dbSender));
 
-            //Act
+            // Act
             var response = await _systemUnderTest.Create(sender);
 
-            //Assert
+            // Assert
             var senderObjectFromService = response.Should().BeAssignableTo<SenderPostResult.Success>();
             senderObjectFromService.Subject.DbSender.Should().BeEquivalentTo(dbSender);
             VerifyMocks();
         }
 
         [TestMethod]
-        public async Task Find_RepositoryThrowsException_ReturnsInternalServerError()
+        public async Task GetSender_RepositoryThrowsException_ReturnsInternalServerError()
         {
-            //Arrange
-            _mockSenderRepository.Setup(s => s.Find(It.IsAny<string>()))
+            // Arrange
+            _mockCacheProvider
+                .Setup(c => c.GetSender(It.IsAny<string>()))
+                .Returns((Sender) null);
+
+            _mockSenderRepository
+                .Setup(s => s.Find(It.IsAny<string>()))
                 .ThrowsAsync(new AggregateException());
 
-            //Act
+            // Act
             var response = await _systemUnderTest.GetSender("sender");
 
-            //Assert
+            // Assert
             response.Should().BeAssignableTo<SenderResult.InternalServerError>();
             VerifyMocks();
         }
 
         [TestMethod]
-        public async Task Find_RepositoryReturnsRepositoryError_ReturnsBadGateway()
+        public async Task GetSender_RepositoryReturnsRepositoryError_ReturnsBadGateway()
         {
-            //Arrange
-            _mockSenderRepository.Setup(s => s.Find(It.IsAny<string>()))
+            // Arrange
+            _mockCacheProvider
+                .Setup(c => c.GetSender(It.IsAny<string>()))
+                .Returns((Sender) null);
+
+            _mockSenderRepository
+                .Setup(s => s.Find(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.RepositoryError());
 
-            //Act
+            // Act
             var response = await _systemUnderTest.GetSender("sender");
 
-            //Assert
+            // Assert
             response.Should().BeAssignableTo<SenderResult.BadGateway>();
             VerifyMocks();
         }
 
         [TestMethod]
-        public async Task Find_RepositoryReturnsNotFound_ReturnsNotFound()
+        public async Task GetSender_RepositoryReturnsNotFound_ReturnsNotFound()
         {
-            //Arrange
-            _mockSenderRepository.Setup(s => s.Find(It.IsAny<string>()))
+            // Arrange
+            _mockCacheProvider
+                .Setup(c => c.GetSender(It.IsAny<string>()))
+                .Returns((Sender) null);
+
+            _mockSenderRepository
+                .Setup(s => s.Find(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.NotFound());
 
-            //Act
+            // Act
             var response = await _systemUnderTest.GetSender("sender");
 
-            //Assert
+            // Assert
             response.Should().BeAssignableTo<SenderResult.NotFound>();
             VerifyMocks();
         }
 
         [TestMethod]
-        public async Task Find_RepositoryReturnsSuccess_ReturnsSender()
+        public async Task GetSender_WhenFoundInCache_ReturnsSender()
         {
-            var sender = new Sender { Id = "senderId", Name = "name" };
+            var sender = new Sender { Id = "SENDER_ID", Name = "name" };
+
+            // Arrange
+            _mockCacheProvider
+                .Setup(c => c.GetSender(sender.Id))
+                .Returns(sender);
+
+            // Act
+            var response = await _systemUnderTest.GetSender("sender_Id");
+
+            // Assert
+            var senderObjectFromService = response.Should().BeAssignableTo<SenderResult.Found>();
+            senderObjectFromService.Subject.Response.Id.Should().Be(sender.Id);
+            senderObjectFromService.Subject.Response.Name.Should().Be(sender.Name);
+            VerifyMocks();
+        }
+
+        [TestMethod]
+        public async Task GetSender_WhenNotFoundInCacheButFoundInRepository_ReturnsSender()
+        {
+            var sender = new Sender { Id = "SENDER_ID", Name = "name" };
             var dbSender = _requestMapper.Map(sender);
 
-            //Arrange
-            _mockSenderRepository.Setup(s => s.Find("senderId".ToUpperInvariant()))
+            // Arrange
+            _mockCacheProvider
+                .Setup(c => c.GetSender("SENDER_ID"))
+                .Returns((Sender) null);
+
+            _mockSenderRepository
+                .Setup(s => s.Find("SENDER_ID"))
                 .ReturnsAsync(new RepositoryFindResult<DbSender>.Found(new List<DbSender> { dbSender }));
 
-            //Act
-            var response = await _systemUnderTest.GetSender("senderId");
+            Sender cachedSender = null;
 
-            //Assert
+            _mockCacheProvider
+                .Setup(cs => cs.SetSender(It.IsAny<Sender>()))
+                .Callback<Sender>(ssc => cachedSender = ssc);
+
+            // Act
+            var response = await _systemUnderTest.GetSender("sender_Id");
+
+            // Assert
             var senderObjectFromService = response.Should().BeAssignableTo<SenderResult.Found>();
-            senderObjectFromService.Subject.Response.Id.Should().Be(sender.Id.ToUpperInvariant());
+            senderObjectFromService.Subject.Response.Id.Should().Be(sender.Id);
             senderObjectFromService.Subject.Response.Name.Should().Be(sender.Name);
+            cachedSender.Should().BeEquivalentTo(sender);
             VerifyMocks();
         }
 
         private void VerifyMocks()
         {
             _mockSenderRepository.VerifyAll();
+            _mockCacheProvider.VerifyAll();
         }
     }
 }

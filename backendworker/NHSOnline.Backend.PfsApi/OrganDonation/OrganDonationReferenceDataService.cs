@@ -10,15 +10,15 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
-    internal class OrganDonationReferenceDataService 
+    internal class OrganDonationReferenceDataService
     {
-        
+
         private const string ReferenceDataCacheKey = "_organDonationReferenceData";
         private readonly ILogger<OrganDonationReferenceDataService> _logger;
 
         private readonly IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
             _organDonationReferenceDataMapper;
-        
+
         private readonly IMapper<HttpStatusCode, OrganDonationReferenceDataResult>
             _organDonationReferenceDataResultErrorMapper;
 
@@ -62,6 +62,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         {
             _logger.LogDebug("Cache miss, fetching organ donation reference data");
             var referenceData = await _organDonationClient.GetAllReferenceData();
+
+            entry.Size = 0;
 
             if (referenceData.HasSuccessResponse)
             {

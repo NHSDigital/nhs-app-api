@@ -241,6 +241,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
             context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow.AddSeconds(ReferenceDataExpirySeconds),
                 TimeSpan.FromSeconds(1));
+            context.CacheSize.Should().Be(0L);
             result.Result.Should().BeEquivalentTo(context.Cached);
             result.Result.Should().BeOfType<OrganDonationReferenceDataResult.SuccessfullyRetrieved>();
         }
@@ -288,6 +289,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockReferenceDataResultErrorMapper.Verify(x => x.Map(httpStatus));
 
             context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+            context.CacheSize.Should().Be(0L);
+
             result.Result.Should().BeEquivalentTo(context.Cached);
         }
 
@@ -305,6 +308,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
             context.Cached.Should().BeNull();
             context.AbsoluteExpiration.Should().BeNull();
+            context.CacheSize.Should().BeNull();
+
             result.Result.Should().BeOfType<OrganDonationReferenceDataResult.SystemError>();
         }
 
@@ -595,6 +600,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 var mockCacheEntry = new Mock<ICacheEntry>();
                 mockCacheEntry.SetupProperty(x => x.AbsoluteExpiration);
                 mockCacheEntry.SetupProperty(x => x.Value);
+                mockCacheEntry.SetupProperty(x => x.Size);
 
                 mockCacheEntry.Object.Value = cached;
 
@@ -618,6 +624,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             private ICacheEntry CacheEntry { get; }
             public DateTimeOffset? AbsoluteExpiration => CacheEntry.AbsoluteExpiration;
             public object Cached => CacheEntry.Value;
+            public long? CacheSize => CacheEntry.Size;
         }
 
         private abstract class UpdateRegisterContext

@@ -12,6 +12,7 @@ using NHSOnline.Backend.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Mappers;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Cache.Messages;
 using NHSOnline.Backend.Messages.Repository;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.NominatedPharmacy;
@@ -55,6 +56,7 @@ namespace NHSOnline.Backend.PfsApi
             services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>(configuration);
             services.RegisterSqlApiRepository<DbSender, SenderRepositoryConfiguration>(configuration);
             services.AddSingleton<IMessagesConfiguration, MessagesConfiguration>();
+            services.AddSingleton<ISenderCacheProvider, SenderCacheProvider>();
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IMessageRepository, MessageRepository>();

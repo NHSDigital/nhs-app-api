@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.AspNet.CorrelationId;
 using NHSOnline.Backend.AspNet.HealthChecks;
@@ -83,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi
             services.SetupApiKeys(Configuration, _logger);
             services.SetupHttpHandlers();
 
-            services.AddMemoryCache();
+            services.AddMemoryCache(options=> options.SizeLimit = 1000000);
 
             services
                 .AddControllers(PfsMvcOptions.Configure)
