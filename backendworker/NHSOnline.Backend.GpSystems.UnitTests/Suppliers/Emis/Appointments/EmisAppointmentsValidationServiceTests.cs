@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
@@ -11,12 +12,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
     public class EmisAppointmentsValidationServiceTests
     {
         private EmisAppointmentsValidationService _systemUnderTest;
+        private EmisUserSession _emisUserSession;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var logger = new Mock<ILogger<EmisAppointmentsValidationService>>();
             _systemUnderTest = new EmisAppointmentsValidationService(logger.Object);
+            _emisUserSession = new EmisUserSession();
         }
 
         [DataTestMethod]

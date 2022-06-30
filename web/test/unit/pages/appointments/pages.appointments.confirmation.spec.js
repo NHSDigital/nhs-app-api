@@ -19,7 +19,14 @@ describe('confirmation.vue', () => {
   let $store;
   let wrapper;
 
-  const createConfirmationPage = () => mount(ConfirmationPage, { $store });
+  const createConfirmationPage = () => mount(ConfirmationPage, {
+    $store,
+    computed: {
+      reasonCharacterLimit() {
+        return 150;
+      },
+    },
+  });
 
   beforeEach(() => {
     redirectTo.mockClear();
@@ -68,7 +75,7 @@ describe('confirmation.vue', () => {
     });
 
     it('Text area has max length html attribute set to 150', () => {
-      expect(reasonText.attributes().maxlength).toEqual('150');
+      expect(wrapper.find('[data-maxlength="150"]').exists()).toBe(true);
     });
   });
 

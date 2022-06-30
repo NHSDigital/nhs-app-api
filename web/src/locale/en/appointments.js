@@ -78,6 +78,7 @@ export default {
     giveAReason: {
       giveAReason: 'Give a reason for this appointment',
       optionalSuffix: ' (optional)',
+      reasonCharacterLimit: 'You have 0 characters remaining. | You have 1 character remaining. | You have {n} characters remaining.',
       textMustBeShorterThan: 'Text must be shorter than 150 characters (about 25 words).',
       textMayNotBeRead: 'This text may not be read by your GP or practice member until the day of your appointment.',
       ifItIsUrgent: 'If it\'s urgent, contact your GP surgery before booking.',

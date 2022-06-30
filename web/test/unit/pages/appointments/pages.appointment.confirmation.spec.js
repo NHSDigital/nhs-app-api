@@ -43,6 +43,11 @@ describe('appointments confirmation page', () => {
     stubs: {
       'page-title': '<div></div>',
     },
+    computed: {
+      reasonCharacterLimit() {
+        return 150;
+      },
+    },
   });
 
   beforeEach(() => {

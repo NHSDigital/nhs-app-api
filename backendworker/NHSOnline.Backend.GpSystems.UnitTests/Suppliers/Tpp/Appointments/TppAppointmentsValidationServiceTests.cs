@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
@@ -12,12 +13,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     public class TppAppointmentsValidationServiceTests
     {
         private TppAppointmentsValidationService _systemUnderTest;
+        private TppUserSession _tppUserSession;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var logger = new Mock<ILogger<TppAppointmentsValidationService>>();
             _systemUnderTest = new TppAppointmentsValidationService(logger.Object);
+            _tppUserSession = new TppUserSession();
         }
 
         [DataTestMethod]

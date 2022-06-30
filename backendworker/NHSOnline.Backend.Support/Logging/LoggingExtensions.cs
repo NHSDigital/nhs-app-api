@@ -46,10 +46,13 @@ namespace NHSOnline.Backend.Support.Logging
         public static void LogAppointmentReasonInformation(this ILogger logger, string bookingReason)
         {
             bookingReason = bookingReason ?? string.Empty;
+
+            var encodedBookingReasonLength = bookingReason.FindNewlineStringEncodedLength(Constants.EncodedCharacterValues.NewLineEncodedValue);
+
             var kvp = new Dictionary<string, string>
             {
                 { "More than one character in booking reason", $"{bookingReason.Length >= 1}" },
-                { "Characters entered in booking reason",  $"{bookingReason.Length }" }
+                { "Characters entered in booking reason",  $"{encodedBookingReasonLength }" }
             };
 
             logger.LogInformationKeyValuePairs("Appointments Booking Reason Info", kvp);

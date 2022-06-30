@@ -96,9 +96,6 @@
                   $t('appointments.confirmation.giveAReason.optionalSuffix') : '' }}
               </strong>
             </label>
-            <p id="max-reason-desc">
-              {{ $t('appointments.confirmation.giveAReason.textMustBeShorterThan') }}
-            </p>
             <p>
               {{ $t('appointments.confirmation.giveAReason.textMayNotBeRead') }}
               {{ $t('appointments.confirmation.giveAReason.ifItIsUrgent') }}
@@ -110,13 +107,19 @@
                                ref="reason"
                                v-model="symptoms"
                                :a-labelled-by="reasonBoxAriaLabelledBy"
-                               :text-area-classes="defaultClasses"
+                               :text-area-classes="[defaultClasses, 'nhsuk-u-margin-bottom-0']"
                                :required="!bookingReasonOptional"
                                :a-described-by="showReasonError ?
                                  'max-reason-desc reason-error-label' : 'max-reason-desc'"
                                :error.sync="showReasonError"
                                name="bookingReason"
-                               maxlength="150"/>
+                               :data-maxlength="`${reasonCharacterLimit}`"
+                               @focus.once="onFocusBookingReason"/>
+            <p id="max-reason-desc"
+               class="nhsuk-u-padding-bottom-4"
+               :aria-live="reasonAriaLive">
+              {{ remainingCharacters }}
+            </p>
           </div>
         </div>
       </div>
@@ -189,12 +192,14 @@ export default {
     return {
       appointmentBookingPath: APPOINTMENT_BOOKING_PATH,
       appointmentsPath: GP_APPOINTMENTS_PATH,
+      bookingReason: this.$store.state.availableAppointments.bookingReason,
       confirmBookingPath: APPOINTMENT_CONFIRMATIONS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       isJavascriptOn: false,
       otherTelephoneNumber: '',
       patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
+      reasonAriaLive: '',
       reasonError: false,
       slot: this.$store.state.availableAppointments.selectedSlot,
       symptoms: '',
@@ -222,11 +227,24 @@ export default {
     reasonBoxAriaLabelledBy() {
       return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
     },
+    reasonCharacterLimit() {
+      return this.$store.state.availableAppointments.bookingReasonCharacterLimit;
+    },
     reasonRequired() {
       return !this.bookingReasonOptional;
     },
     reasonTextErrorStyle() {
       return this.showReasonError ? 'nhsuk-form-group--error' : '';
+    },
+    remainingCharacters() {
+      const reasonLength = this.symptoms.length;
+      const remaining = this.reasonCharacterLimit - reasonLength;
+
+      return this.$tc(
+        'appointments.confirmation.giveAReason.reasonCharacterLimit',
+        remaining,
+        { n: remaining },
+      );
     },
     showError() {
       return this.showReasonError || this.showTelephoneError;
@@ -292,7 +310,7 @@ export default {
   },
   watch: {
     symptoms(value, oldValue) {
-      if (value.length > 150) {
+      if (value.length > this.reasonCharacterLimit) {
         this.symptoms = oldValue;
       }
     },
@@ -357,6 +375,9 @@ export default {
         });
         redirectTo(this, APPOINTMENT_BOOKING_SUCCESS_PATH);
       });
+    },
+    onFocusBookingReason() {
+      this.reasonAriaLive = 'polite';
     },
     otherPhoneNumberSelected() {
       this.telephoneNumber = '';

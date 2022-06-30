@@ -13,10 +13,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         {
             _logger = logger;
         }
-        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request)
-        {
-            return true;
-        }
+        
+        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request) => true;
 
         protected override bool IsSupplierPostValid(AppointmentBookRequest request)
         {

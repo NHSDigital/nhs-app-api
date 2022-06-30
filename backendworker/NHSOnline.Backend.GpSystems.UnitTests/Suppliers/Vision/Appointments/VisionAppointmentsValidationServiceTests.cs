@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 {
@@ -11,12 +12,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
     public class VisionAppointmentsValidationServiceTests
     {
         private VisionAppointmentsValidationService _systemUnderTest;
+        private VisionUserSession _visionUserSession;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var logger = new Mock<ILogger<VisionAppointmentsValidationService>>();
             _systemUnderTest = new VisionAppointmentsValidationService(logger.Object);
+            _visionUserSession = new VisionUserSession();
         }
 
         [DataTestMethod]

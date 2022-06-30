@@ -173,6 +173,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             var appointmentValidator = GetAppointmentsValidationService(gpUserSession);
 
+            request.BookingReason = appointmentValidator.MassageBookingReason(request.BookingReason);
+
             if (!appointmentValidator.IsPostValid(request))
             {
                 _logger.LogError("Invalid request body supplied to post request");

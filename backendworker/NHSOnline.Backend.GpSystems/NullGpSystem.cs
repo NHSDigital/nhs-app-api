@@ -28,37 +28,20 @@ namespace NHSOnline.Backend.GpSystems
 
         public Supplier Supplier => Supplier.Disconnected;
         public bool SupportsLinkedAccounts => false;
+        public int AppointmentBookingReasonCharacterLimit => 0;
         public int PrescriptionSpecialRequestCharacterLimit => 0;
-
-        public IAppointmentsService GetAppointmentsService() => throw new NoGpSessionAvailableException();
 
         public IAppointmentSlotsService GetAppointmentSlotsService() => throw new NoGpSessionAvailableException();
 
-        public IAppointmentsValidationService GetAppointmentsValidationService() =>
-            throw new NoGpSessionAvailableException();
+        public IAppointmentsService GetAppointmentsService() => throw new NoGpSessionAvailableException();
+
+        public IAppointmentsValidationService GetAppointmentsValidationService() => throw new NoGpSessionAvailableException();
 
         public ICourseService GetCourseService() => throw new NoGpSessionAvailableException();
 
         public IDemographicsService GetDemographicsService() => throw new NoGpSessionAvailableException();
 
         public IIm1ConnectionService GetIm1ConnectionService() => throw new NoGpSessionAvailableException();
-
-        public IPrescriptionService GetPrescriptionService() => throw new NoGpSessionAvailableException();
-
-        public IPrescriptionValidationService GetPrescriptionValidationService() =>
-            throw new NoGpSessionAvailableException();
-
-        public ISessionService GetSessionService() => throw new NoGpSessionAvailableException();
-
-        /// <summary>
-        /// This returns a stub service so that session extend calls succeed without requiring
-        /// a GP session to be valid.
-        /// </summary>
-        public ISessionExtendService GetSessionExtendService() => new NullGpSessionExtendService(_logger);
-
-        public ITokenValidationService GetTokenValidationService() => throw new NoGpSessionAvailableException();
-
-        public IPatientRecordService GetPatientRecordService() => throw new NoGpSessionAvailableException();
 
         public ILinkageService GetLinkageService() => throw new NoGpSessionAvailableException();
 
@@ -68,6 +51,22 @@ namespace NHSOnline.Backend.GpSystems
 
         public IPatientMessagesService GetPatientMessagesService() => throw new NoGpSessionAvailableException();
 
+        public IPatientRecordService GetPatientRecordService() => throw new NoGpSessionAvailableException();
+
+        public IPrescriptionService GetPrescriptionService() => throw new NoGpSessionAvailableException();
+
+        public IPrescriptionValidationService GetPrescriptionValidationService() => throw new NoGpSessionAvailableException();
+
         public IRecreateSessionMapperService GetRecreateSessionMapperService() => throw new NoGpSessionAvailableException();
+
+        /// <summary>
+        /// This returns a stub service so that session extend calls succeed without requiring
+        /// a GP session to be valid.
+        /// </summary>
+        public ISessionExtendService GetSessionExtendService() => new NullGpSessionExtendService(_logger);
+
+        public ISessionService GetSessionService() => throw new NoGpSessionAvailableException();
+
+        public ITokenValidationService GetTokenValidationService() => throw new NoGpSessionAvailableException();
     }
 }

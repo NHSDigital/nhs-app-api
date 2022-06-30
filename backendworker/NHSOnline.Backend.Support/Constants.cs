@@ -29,11 +29,10 @@ namespace NHSOnline.Backend.Support
             public const int Status468OdsCodeNotFound = 468;
             public const int Status469NhsNumberNotFound = 469;
             public const int Status470FailedSecondaryCareMinimumAgeRequirement = 470;
-            public const int Status599GpSessionUnavailable = 599;
-            public const int Status598GpSessionRequired = 598;
-
             public const int Status550SupplierDoesNotSupportLinkageKeys = 550;
             public const int Status580ServiceDefinitionUnavailable = 580;
+            public const int Status598GpSessionRequired = 598;
+            public const int Status599GpSessionUnavailable = 599;
         }
 
         public static class ApplicationConfig
@@ -82,6 +81,12 @@ namespace NHSOnline.Backend.Support
         {
             public const int FrontendLimit = 450;
             public const int BackendLimit = 500;
+        }
+
+        public static class BookingReasonCharacterLimit
+        {
+            public const int FrontendLimit = 150;
+            public const int BackendLimit = 150;
         }
 
         public static class EncodedCharacterValues

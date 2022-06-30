@@ -15,9 +15,9 @@ namespace NHSOnline.Backend.GpSystems
     {
         Supplier Supplier { get; }
 
-        IAppointmentsService GetAppointmentsService();
-
         IAppointmentSlotsService GetAppointmentSlotsService();
+
+        IAppointmentsService GetAppointmentsService();
 
         IAppointmentsValidationService GetAppointmentsValidationService();
 
@@ -27,18 +27,6 @@ namespace NHSOnline.Backend.GpSystems
 
         IIm1ConnectionService GetIm1ConnectionService();
 
-        IPrescriptionService GetPrescriptionService();
-
-        IPrescriptionValidationService GetPrescriptionValidationService();
-
-        ISessionService GetSessionService();
-
-        ISessionExtendService GetSessionExtendService();
-
-        ITokenValidationService GetTokenValidationService();
-
-        IPatientRecordService GetPatientRecordService();
-
         ILinkageService GetLinkageService();
 
         ILinkageValidationService GetLinkageValidationService();
@@ -47,10 +35,24 @@ namespace NHSOnline.Backend.GpSystems
 
         IPatientMessagesService GetPatientMessagesService();
 
+        IPatientRecordService GetPatientRecordService();
+
+        IPrescriptionService GetPrescriptionService();
+
+        IPrescriptionValidationService GetPrescriptionValidationService();
+
         IRecreateSessionMapperService GetRecreateSessionMapperService();
+
+        ISessionExtendService GetSessionExtendService();
+
+        ISessionService GetSessionService();
+
+        ITokenValidationService GetTokenValidationService();
 
         bool SupportsLinkedAccounts { get; }
 
         int PrescriptionSpecialRequestCharacterLimit => Constants.SpecialRequestCharacterLimit.FrontendLimit;
+
+        int AppointmentBookingReasonCharacterLimit => Constants.BookingReasonCharacterLimit.FrontendLimit;
     }
 }

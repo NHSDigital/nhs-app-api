@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {
@@ -10,14 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         {
         }
 
-        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request)
-        {
-            return true;
-        }
-
-        protected override bool IsSupplierPostValid(AppointmentBookRequest request)
-        {
-            return true;
-        }
+        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request) => true;
+        protected override bool IsSupplierPostValid(AppointmentBookRequest request) => true;
     }
 }

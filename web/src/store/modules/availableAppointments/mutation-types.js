@@ -14,6 +14,7 @@ export const initialState = () => ({
   booked: false,
   bookingGuidance: '',
   bookingInProgress: false,
+  bookingReasonCharacterLimit: 150,
   bookingReasonNecessity: '',
   error: null,
   filteredSlots: [],
