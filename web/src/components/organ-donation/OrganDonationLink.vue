@@ -7,7 +7,7 @@
              :click-func="onClickOrganDonation"
              :prevent-default="useIntegratedOrganDonation"
              :target="organDonationTarget"
-             :aria-label="$t('organDonation.helpSaveThousandsOfLivesBySigningUpToOrganDonation') |
+             :aria-label="$t('organDonation.manageYourOrganDonationDecision') |
                join(linkDescription, '. ')"/>
 </template>
 
