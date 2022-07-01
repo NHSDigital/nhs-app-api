@@ -2,21 +2,9 @@
   <div v-if="showTemplate && !gpSessionApiError">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
-        <div role="alert" aria-atomic="true">
-          <message-dialog v-if="error"
-                          message-type="error"
-                          :focusable="true">
-            <message-text>
-              {{ $t('prescriptions.repeatCourses.errors.thereIsAProblem') }}
-            </message-text>
-            <message-list class="nhsuk-u-margin-bottom-3">
-              <li v-if="!courseSelectionValid">
-                {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}</li>
-              <li v-if="!specialRequestValid">
-                {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}</li>
-            </message-list>
-          </message-dialog>
-        </div>
+        <form-error-summary v-if="error"
+                            :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
+                            :errors="getErrors"/>
 
         <div v-if="showRepeatCourses" class="break">
           <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
@@ -122,9 +110,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
@@ -167,9 +153,7 @@ export default {
   name: 'RepeatCoursesPage',
   components: {
     RepeatPrescription,
-    MessageDialog,
-    MessageText,
-    MessageList,
+    FormErrorSummary,
     ErrorMessage,
     GenericButton,
     GenericTextArea,
@@ -214,6 +198,20 @@ export default {
       }
 
       return false;
+    },
+    getErrors() {
+      const { validated } = this.$store.state.repeatPrescriptionCourses;
+
+      const errors = [];
+
+      if (validated && !this.courseSelectionValid) {
+        errors.push(this.$t('prescriptions.repeatCourses.errors.selectAtLeastOne'));
+      }
+      if (validated && !this.specialRequestValid) {
+        errors.push(this.$t('prescriptions.repeatCourses.errors.enterSpecialRequests'));
+      }
+
+      return errors;
     },
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;

@@ -1,25 +1,10 @@
 <template>
   <div v-if="showTemplate && !hasSent">
     <div class="nhsuk-grid-row nhsuk-grid-column-full">
-      <div role="alert" aria-atomic="true">
-        <div v-if="showError" class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
-            <message-dialog message-type="error" :focusable="true">
-              <message-text data-purpose="error-heading">
-                {{ $t('generic.thereIsAProblem') }}
-              </message-text>
-              <message-list>
-                <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
-                  {{ $t('messages.enterASubject') }}
-                </li>
-                <li v-if="messageTextError" data-purpose="message-error">
-                  {{ $t('messages.enterAMessage') }}
-                </li>
-              </message-list>
-            </message-dialog>
-          </div>
-        </div>
-      </div>
+      <form-error-summary v-if="showError"
+                          :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
+                          :errors="getErrors"/>
+
       <p id="subHeader"
          class="nhsuk-hint"
          :aria-label="$t('messages.forAdviceNowContactSurgeryOrOneOneOne')">
@@ -89,9 +74,7 @@
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SjrIf from '@/components/SjrIf';
 import { redirectTo } from '@/lib/utils';
@@ -109,9 +92,7 @@ export default {
     GenericTextArea,
     GenericTextInput,
     GenericButton,
-    MessageDialog,
-    MessageText,
-    MessageList,
+    FormErrorSummary,
     DesktopGenericBackLink,
     SjrIf,
   },
@@ -142,6 +123,16 @@ export default {
     },
     subjectEnabled() {
       return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
+    },
+    getErrors() {
+      const errors = [];
+      if (this.subjectError && this.subjectEnabled) {
+        errors.push(this.$t('messages.enterASubject'));
+      }
+      if (this.messageTextError) {
+        errors.push(this.$t('messages.enterAMessage'));
+      }
+      return errors;
     },
   },
   created() {

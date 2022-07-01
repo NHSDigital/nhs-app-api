@@ -18,9 +18,8 @@
       <template v-else>{{ heading }}</template>
     </legend>
 
-    <error-dialog v-if="enableErrorDialog && error"
-                  :header-locale-ref="errorHeadingReference"
-                  :errors="errorText"/>
+    <form-error-summary v-if="enableErrorDialog && error" :header-locale-ref="errorHeadingReference"
+                        :errors="errorText"/>
 
     <div :class="['nhsuk-form-group', error ? 'nhsuk-form-group--error' : undefined]">
       <span v-if="error" :id="`${name}-error`" class="nhsuk-error-message">
@@ -49,13 +48,13 @@
 </template>
 
 <script>
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import LegendSize from '@/lib/legend-size';
 
 export default {
   name: 'NhsUkRadioGroup',
   components: {
-    ErrorDialog,
+    FormErrorSummary,
   },
   props: {
     name: {

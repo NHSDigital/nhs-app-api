@@ -60,13 +60,13 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheValidationErrorSummary() {
-        cancelAppointmentPage.validationBanner.assertVisible(arrayListOf("There's a problem",
+        cancelAppointmentPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
                 "Select a reason for cancelling"))
     }
 
     @Step
     fun verifyTheInlineReasonValidationError() {
-        assertEquals("Select a reason for cancelling", cancelAppointmentPage.reasonError.text)
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.selectReasonError.text)
     }
 
     @Step

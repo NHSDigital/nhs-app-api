@@ -43,8 +43,14 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     private val selectedAppointmentParentXpath = "//div[@data-purpose='appointment-info']"
     lateinit var webHeader: WebHeader
 
-    val reasonError = HybridPageElement(
-        webDesktopLocator = "//*[@data-purpose='reason-error']",
+    val enterReasonError = HybridPageElement(
+        webDesktopLocator = "//*[text()='Enter a reason for this appointment']",
+        page = this,
+        helpfulName = "Reason Error"
+    )
+
+    val selectReasonError = HybridPageElement(
+        webDesktopLocator = "//*[text()='Select a reason for cancelling']",
         page = this,
         helpfulName = "Reason Error"
     )
@@ -191,4 +197,3 @@ fun WebElementFacade.findByXpath(xpath: String): WebElementFacade? {
     val elements = thenFindAll(xpath)
     return elements.firstOrNull()
 }
-

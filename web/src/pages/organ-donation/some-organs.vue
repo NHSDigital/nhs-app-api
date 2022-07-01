@@ -3,13 +3,13 @@
     <div class="nhsuk-grid-column-full">
       <div ref="validationMessage" tabindex="-1">
 
-        <error-dialog v-if="showErrors && !areAllSelected"
-                      :header-locale-ref="'organDonation.thereIsAProblem'"
-                      :errors="$t('organDonation.someOrgans.chooseYesOrNoForEachOrgan')"/>
+        <form-error-summary v-if="showErrors && !areAllSelected"
+                            :header-locale-ref="'organDonation.thereIsAProblem'"
+                            :errors="$t('organDonation.someOrgans.chooseYesOrNoForEachOrgan')"/>
 
-        <error-dialog v-if="showErrors && areAllSelected && !hasYesSelection"
-                      :header-locale-ref="'organDonation.thereIsAProblem'"
-                      :errors="$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan')"/>
+        <form-error-summary v-if="showErrors && areAllSelected && !hasYesSelection"
+                            :header-locale-ref="'organDonation.thereIsAProblem'"
+                            :errors="$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan')"/>
       </div>
       <div>
         <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
@@ -46,7 +46,7 @@ import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import { initialState, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
@@ -59,7 +59,7 @@ export default {
   components: {
     GenericButton,
     DesktopGenericBackLink,
-    ErrorDialog,
+    FormErrorSummary,
     NhsArrowBanner,
     OrganChoice,
   },

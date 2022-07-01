@@ -1,9 +1,9 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <error-dialog v-if="showErrors"
-                    :header-locale-ref="'organDonation.thereIsAProblem'"
-                    :errors="$t('organDonation.yourChoice.chooseToDonate')"/>
+      <form-error-summary v-if="showErrors"
+                          :header-locale-ref="'organDonation.thereIsAProblem'"
+                          :errors="$t('organDonation.yourChoice.chooseToDonate')"/>
 
       <div>
         <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
@@ -38,7 +38,7 @@ import isNil from 'lodash/fp/isNil';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import {
@@ -52,7 +52,7 @@ export default {
   components: {
     GenericButton,
     DesktopGenericBackLink,
-    ErrorDialog,
+    FormErrorSummary,
     NhsUkRadioGroup,
   },
   mixins: [DynamicBackLinkMixin, EnsureOptInDecision],

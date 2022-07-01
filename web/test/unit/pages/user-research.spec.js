@@ -71,8 +71,8 @@ describe('user research', () => {
           clickButton();
         });
 
-        it('will show error dialog', () => {
-          expect(wrapper.find('#message-dialog').exists()).toBe(true);
+        it('will show form error summary', () => {
+          expect(wrapper.find('#form-error-summary').exists()).toBe(true);
         });
 
         it('will not call conditional redirect', () => {

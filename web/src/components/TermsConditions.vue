@@ -1,18 +1,8 @@
 <template>
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
-      <div role="alert" aria-atomic="true">
-        <message-dialog :class="$style.customErrorBox"
-                        :focusable="true"
-                        message-type="error">
-          <message-text>
-            {{ $t('termsAndConditions.errors.youCannotContinue.header') }}
-          </message-text>
-          <message-list>
-            <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
-          </message-list>
-        </message-dialog>
-      </div>
+      <form-error-summary :header-locale-ref="'termsAndConditions.errors.youCannotContinue.header'"
+                          :errors="$t('termsAndConditions.errors.youCannotContinue.text')"/>
     </div>
     <div id="text_body" :class="$style.info">
       <p>{{ $t('termsAndConditions.initial.loginToAccount') }}</p>
@@ -95,9 +85,7 @@
 
 <script>
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import { USER_RESEARCH_PATH, NOTIFICATIONS_PATH } from '@/router/paths';
@@ -109,9 +97,7 @@ export default {
   components: {
     GenericButton,
     ErrorMessage,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     GenericCheckbox,
   },
   data() {

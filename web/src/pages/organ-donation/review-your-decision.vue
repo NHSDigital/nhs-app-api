@@ -1,16 +1,10 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div role="alert" aria-atomic="true">
-        <message-dialog v-if="showErrors" id="errors" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('organDonation.thereIsAProblem') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
-          </message-list>
-        </message-dialog>
-      </div>
+      <form-error-summary v-if="showErrors"
+                          :header-locale-ref="'organDonation.thereIsAProblem'"
+                          :errors="validationErrors"/>
+
       <h2>{{ $t('organDonation.reviewYourDecision.aboutYou') }}</h2>
       <personal-details
         :name="$store.state.organDonation.registration.nameFull"
@@ -63,9 +57,7 @@ import Confirmation from '@/components/organ-donation/Confirmation';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import PersonalDetails from '@/components/organ-donation/PersonalDetails';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
@@ -80,9 +72,7 @@ export default {
     FaithDetails,
     GenericButton,
     DesktopGenericBackLink,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     PersonalDetails,
   },
   mixins: [EnsureCanSubmit, DynamicBackLinkMixin],
@@ -111,11 +101,11 @@ export default {
     validationErrors() {
       const errors = [];
       if (!this.isAccuracyAccepted) {
-        errors.push('organDonation.reviewYourDecision.checkInformationAndConfirm');
+        errors.push(this.$t('organDonation.reviewYourDecision.checkInformationAndConfirm'));
       }
 
       if (!this.isPrivacyAccepted) {
-        errors.push('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent');
+        errors.push(this.$t('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent'));
       }
       return errors;
     },

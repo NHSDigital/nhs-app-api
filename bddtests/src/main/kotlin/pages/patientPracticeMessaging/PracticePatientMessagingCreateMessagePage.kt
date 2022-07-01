@@ -26,7 +26,8 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
     }
 
     fun assertValidationErrorsDisplayed() {
-        validationBanner.assertMessageItem("Enter a subject").assertMessageItem("Enter a message")
+        validationBanner.assertFormErrorSummaryReasonItem("Enter a subject")
+            .assertFormErrorSummaryReasonItem("Enter a message")
     }
 
     fun insertMessageText(message: String) {

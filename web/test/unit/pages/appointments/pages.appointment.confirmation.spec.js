@@ -92,12 +92,10 @@ describe('appointments confirmation page', () => {
       describe('errors', () => {
         let button;
         let errorContainer;
-        let reasonError;
-        let telephoneError;
 
-        const findErrorContainer = () => wrapper.find('[data-purpose=error-container]');
-        const findReasonError = () => wrapper.find('[data-purpose=reason-error]');
-        const findTelephoneError = () => wrapper.find('[data-purpose=telephone-error]');
+        const findErrorContainer = () => wrapper.find('[data-purpose="error"]');
+        const findErrorReasons = () => wrapper.findAll('[data-purpose="error-reason"]');
+
 
         describe('empty telephone number', () => {
           beforeEach(async () => {
@@ -107,11 +105,11 @@ describe('appointments confirmation page', () => {
             button = wrapper.find('#btn_book_appointment');
             button.trigger('click');
             await wrapper.vm.$nextTick();
-            telephoneError = findTelephoneError();
           });
 
           it('will display the error when trying to submit without a telephone number', () => {
-            expect(telephoneError.exists()).toEqual(true);
+            expect(findErrorReasons().length).toEqual(1);
+            expect(findErrorReasons().at(0).text()).toEqual('Enter a telephone number');
           });
 
           it('will add the error class to the telephone input element', () => {
@@ -129,8 +127,7 @@ describe('appointments confirmation page', () => {
             });
 
             it('will hide the telephone error when updated', () => {
-              reasonError = findTelephoneError();
-              expect(reasonError.exists()).toBe(false);
+              expect(findErrorReasons().exists()).toBe(false);
             });
 
             it('will hide the error container when updated', () => {
@@ -146,13 +143,14 @@ describe('appointments confirmation page', () => {
             button.trigger('click');
             await wrapper.vm.$nextTick();
             errorContainer = findErrorContainer();
-            reasonError = findReasonError();
           });
 
           it('will display a error when trying to submit without a reason', () => {
             expect(errorContainer.exists()).toBe(true);
-            expect(reasonError.exists()).toBe(true);
+            expect(findErrorReasons().exists()).toBe(true);
             expect(wrapper.vm.showError).toBe(true);
+            expect(findErrorReasons().length).toEqual(1);
+            expect(findErrorReasons().at(0).text()).toEqual('Enter a reason for this appointment');
           });
 
           it('will set focus on the error component', () => {
@@ -165,8 +163,7 @@ describe('appointments confirmation page', () => {
             });
 
             it('will hide the reason error when updated', () => {
-              reasonError = findReasonError();
-              expect(reasonError.exists()).toBe(false);
+              expect(findErrorReasons().exists()).toBe(false);
             });
 
             it('will hide the error container when updated', () => {

@@ -8,17 +8,9 @@
     <div v-else class="pull-content">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <div role="alert" aria-atomic="true">
-            <message-dialog v-if="showError" :focusable="true"
-                            message-type="error">
-              <message-text data-purpose="error-heading">
-                {{ $t('appointments.cancel.thereIsAProblem') }}
-              </message-text>
-              <message-list data-purpose="reason-error">
-                <li>{{ $t('appointments.cancel.selectAReason') }}</li>
-              </message-list>
-            </message-dialog>
-          </div>
+          <form-error-summary v-if="showError"
+                              :header-locale-ref="'appointments.cancel.thereIsAProblem'"
+                              :errors="$t('appointments.cancel.selectAReason')"/>
           <div data-purpose="info">
             <p class="nhsuk-u-padding-bottom-3">
               {{ $t('appointments.cancel.checkDetailsBeforeCancelling') }}</p>
@@ -93,13 +85,11 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import { redirectTo } from '@/lib/utils';
 import { GP_APPOINTMENTS_PATH, APPOINTMENT_CANCELLING_SUCCESS_PATH } from '@/router/paths';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
+import FormErrorSummary from '@/components/FormErrorSummary';
 
 export default {
   name: 'GpAppointmentsCancellingPage',
@@ -112,9 +102,7 @@ export default {
     DesktopGenericBackLink,
     ErrorMessage,
     GenericButton,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     SelectDropdown,
   },
   mixins: [ErrorPageMixin],

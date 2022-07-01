@@ -28,7 +28,7 @@ open class OrganDonationYourChoiceStepDefinitions {
         organDonationYourChoicePage.assertOptions()
         organDonationYourChoicePage.radioButtons.assertAllUnselected()
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertVisible(arrayListOf("There's a problem",
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
                 "Choose to donate all or some of your organs."))
     }
 

@@ -2,9 +2,9 @@
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <error-dialog v-if="showError && !areAllSelected"
-                    :header-locale-ref="'organDonation.thereIsAProblem'"
-                    :errors="$t('organDonation.faith.respondToFaithBeliefDeclaration')"/>
+      <form-error-summary v-if="showError && !areAllSelected"
+                          :header-locale-ref="'organDonation.thereIsAProblem'"
+                          :errors="$t('organDonation.faith.respondToFaithBeliefDeclaration')"/>
 
       <h2>{{ $t('organDonation.faith.faithSlashBeliefs') }}</h2>
       <p>{{ $t('organDonation.faith.askFamilyWhenYouDie') }}</p>
@@ -54,7 +54,7 @@ import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialo
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import DynamicBackLinkMixin from '@/components/organ-donation/DynamicBackLinkMixin';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
@@ -68,7 +68,7 @@ export default {
     CollapsibleDialog,
     GenericButton,
     DesktopGenericBackLink,
-    ErrorDialog,
+    FormErrorSummary,
     NhsUkRadioGroup,
   },
   mixins: [EnsureOptInDecision, DynamicBackLinkMixin],

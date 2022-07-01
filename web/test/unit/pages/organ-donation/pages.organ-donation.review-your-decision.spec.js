@@ -13,6 +13,7 @@ import {
 } from '@/store/modules/organDonation/mutation-types';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, initFilters, mount } from '../../helpers';
+import FormErrorSummary from '@/components/FormErrorSummary';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -162,13 +163,13 @@ describe('review your decision', () => {
           expect(wrapper.vm.showErrors).toBe(true);
         });
 
-        it('will show the message dialog', () => {
-          expect(wrapper.find('#errors').exists()).toBe(true);
+        it('will show the form error summary', () => {
+          expect(wrapper.find(FormErrorSummary).exists()).toBe(true);
         });
 
         it('will show a message for each validation error', () => {
           expect(wrapper.vm.validationErrors.length).toBe(2);
-          expect(wrapper.findAll('#errors li').length).toBe(wrapper.vm.validationErrors.length);
+          expect(wrapper.findAll('#form-error-summary li').length).toBe(wrapper.vm.validationErrors.length);
           expect(wrapper.text()).toContain('Check your information. Confirm if it is accurate.');
           expect(wrapper.text()).toContain('Read the privacy statement. Confirm if you give your consent.');
         });
@@ -197,12 +198,12 @@ describe('review your decision', () => {
           expect(wrapper.vm.showErrors).toBe(true);
         });
 
-        it('will show the message dialog', () => {
-          expect(wrapper.find('#errors').exists()).toBe(true);
+        it('will show the form error summary', () => {
+          expect(wrapper.find('#form-error-summary').exists()).toBe(true);
         });
 
         it('will add "organDonation.reviewYourDecision.checkInformationAndConfirm" to the validation errors', () => {
-          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.checkInformationAndConfirm');
+          expect(wrapper.vm.validationErrors).toContain('Check your information. Confirm if it is accurate.');
         });
 
         it('will set focus on the error component', () => {
@@ -229,12 +230,12 @@ describe('review your decision', () => {
           expect(wrapper.vm.showErrors).toBe(true);
         });
 
-        it('will show the message dialog', () => {
-          expect(wrapper.find('#errors').exists()).toBe(true);
+        it('will show the form error summary', () => {
+          expect(wrapper.find('#form-error-summary').exists()).toBe(true);
         });
 
         it('will add "organDonation.reviewYourDecision.readPrivacyStatmentAndConsent" to the validation errors', () => {
-          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent');
+          expect(wrapper.vm.validationErrors).toContain('Read the privacy statement. Confirm if you give your consent.');
         });
 
         it('will set focus on the error component', () => {

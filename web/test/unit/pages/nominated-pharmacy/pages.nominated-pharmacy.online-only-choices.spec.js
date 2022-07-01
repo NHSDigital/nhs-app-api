@@ -89,7 +89,7 @@ describe('nominated pharmacy online only choices page', () => {
       it('will use redirect to online only search page when yes is selected and the continue button is clicked', () => {
         wrapper.vm.hasTriedToContinue = true;
         wrapper.vm.onlineOnlyChoice = true;
-        errorMessage = wrapper.find('#error-message');
+        errorMessage = wrapper.find('#form-error-summary');
         continueButton.trigger('click');
         expect(errorMessage.exists()).toBe(false);
         expect(dependency.redirectTo)
@@ -103,7 +103,7 @@ describe('nominated pharmacy online only choices page', () => {
         await wrapper.vm.continueClicked();
 
         // assert
-        errorMessage = wrapper.find('#error-message');
+        errorMessage = wrapper.find('#form-error-summary');
         expect(errorMessage.exists()).toBe(false);
         expect(dependency.redirectTo)
           .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
@@ -112,7 +112,7 @@ describe('nominated pharmacy online only choices page', () => {
       it('will not redirect to next page in flow when a radio button has not been selected', () => {
         wrapper.vm.onlineOnlyChoice = null;
         continueButton.trigger('click');
-        errorMessage = wrapper.find('#error-message');
+        errorMessage = wrapper.find('#form-error-summary');
         expect(errorMessage.exists()).toBe(true);
         expect($store.dispatch).not.toHaveBeenCalled();
       });
@@ -147,10 +147,10 @@ describe('nominated pharmacy online only choices page', () => {
       wrapper.vm.onlineOnlyChoice = null;
     });
 
-    describe('error-message will appear when the user tries to continue and has not decided', () => {
+    describe('form-error-summary will appear when the user tries to continue and has not decided', () => {
       it('will exist', () => {
         continueButton.trigger('click');
-        errorMessage = wrapper.find('#error-message');
+        errorMessage = wrapper.find('#form-error-summary');
         expect(errorMessage.exists()).toBe(true);
       });
     });

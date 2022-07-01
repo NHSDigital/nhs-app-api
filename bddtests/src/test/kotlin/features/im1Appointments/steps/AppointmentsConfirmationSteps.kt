@@ -14,7 +14,7 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkValidationErrorMessage() {
-        val message = appointmentsConfirmation.reasonError.text
+        val message = appointmentsConfirmation.enterReasonError.text
         assertEquals("Enter a reason for this appointment", message)
     }
 
@@ -47,4 +47,3 @@ open class AppointmentsConfirmationSteps {
         )
     }
 }
-

@@ -254,8 +254,8 @@ describe('organ donation withdraw reason page', () => {
               continueButton.trigger('click');
             });
 
-            it('will show error dialog', () => {
-              expect(wrapper.find('#errors').exists()).toBe(true);
+            it('will show form error summary', () => {
+              expect(wrapper.find('#form-error-summary').exists()).toBe(true);
             });
 
             it('will show inline error', () => {

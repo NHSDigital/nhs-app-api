@@ -116,7 +116,7 @@ describe('Prescription type page', () => {
     it('will not redirect to another page when no prescription type has been selected', async () => {
       continueButton.trigger('click');
       await Vue.nextTick();
-      errorComponent = wrapper.find('#message-dialog');
+      errorComponent = wrapper.find('#form-error-summary');
 
       expect(errorComponent.exists()).toBe(true);
       expect(dependency.redirectTo).not.toHaveBeenCalled();

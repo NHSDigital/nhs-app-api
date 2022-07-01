@@ -4,9 +4,9 @@
       <div v-if="messageRecipients && messageRecipients.length > 0">
         <!-- NB Following div ensures legend focus within radio group announced - NHSO-17263 -->
         <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
-        <error-dialog v-if="isError"
-                      :header-locale-ref="'messages.thereIsAProblem'"
-                      :errors="$t('messages.youNeedToSelectYesOrNo')"/>
+        <form-error-summary v-if="isError"
+                            :header-locale-ref="'messages.thereIsAProblem'"
+                            :errors="$t('messages.youNeedToSelectYesOrNo')"/>
 
         <nhs-uk-radio-group id="messagingUrgency"
                             v-model="answer"
@@ -52,7 +52,7 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
 import {
@@ -70,7 +70,7 @@ export default {
   components: {
     DesktopGenericBackLink,
     GenericButton,
-    ErrorDialog,
+    FormErrorSummary,
     NhsUkRadioGroup,
   },
   data() {

@@ -8,16 +8,9 @@
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <div role="alert" aria-atomic="true">
-          <message-dialog v-if="showErrors" message-type="error" :focusable="true">
-            <message-text data-purpose="error-heading">
-              {{ $t('nominatedPharmacy.search.errorMessageHeader') }}
-            </message-text>
-            <message-list data-purpose="empty-search-error">
-              <li id="empty-search-error">{{ $t('nominatedPharmacy.search.emptySearchError') }}</li>
-            </message-list>
-          </message-dialog>
-        </div>
+        <form-error-summary v-if="showErrors"
+                            :header-locale-ref="'nominatedPharmacy.search.errorMessageHeader'"
+                            :errors="$t('nominatedPharmacy.search.emptySearchError')"/>
       </div>
     </div>
     <div class="nhsuk-grid-row">
@@ -68,9 +61,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import ErrorGroup from '@/components/ErrorGroup';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import {
   NOMINATED_PHARMACY_SEARCH_PATH,
   NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
@@ -91,9 +82,7 @@ export default {
     GenericTextInput,
     AnalyticsTrackedTag,
     ErrorGroup,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     ErrorMessage,
     DesktopGenericBackLink,
   },

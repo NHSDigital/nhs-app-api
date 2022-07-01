@@ -109,7 +109,7 @@ describe('gp messages urgency page', () => {
         await wrapper.find('#continueButton').trigger('click');
         expect(wrapper.vm.isError).toBe(true);
 
-        const summaryError = wrapper.find('#message-dialog');
+        const summaryError = wrapper.find('#form-error-summary');
         expect(summaryError.exists()).toBe(true);
       });
     }));

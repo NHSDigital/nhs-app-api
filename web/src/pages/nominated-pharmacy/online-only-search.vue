@@ -27,14 +27,9 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="showErrors" id="error-message" message-type="error" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('nominatedPharmacy.onlineOnlySearch.errorMessageHeader') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li>{{ $t('nominatedPharmacy.onlineOnlySearch.errorMessageText') }}</li>
-          </message-list>
-        </message-dialog>
+        <form-error-summary v-if="showErrors"
+                            :header-locale-ref="'nominatedPharmacy.onlineOnlySearch.errorMessageHeader'"
+                            :errors="$t('nominatedPharmacy.onlineOnlySearch.errorMessageText')"/>
       </div>
     </div>
 
@@ -85,9 +80,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorGroup from '@/components/ErrorGroup';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
@@ -99,9 +92,7 @@ export default {
     GenericTextInput,
     AnalyticsTrackedTag,
     ErrorGroup,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     ErrorMessage,
     DesktopGenericBackLink,
   },

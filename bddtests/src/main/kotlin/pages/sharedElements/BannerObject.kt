@@ -45,12 +45,29 @@ class BannerObject private constructor(private val page : HybridPageObject,
         }
     }
 
-    fun assertMessage(message: String) {
-        assertMessage("/p", message)
+    fun assertFormErrorSummaryVisible(expectedText: ArrayList<String>) {
+
+        container.assertSingleElementPresent().assertIsVisible()
+
+        container.actOnTheElement {
+
+            val bannerText = it.findElements<WebElement>(By.xpath("./$innerXPath/*"))
+                .map { element -> element.text }
+
+            val message = "Expected banner text. " +
+                    "Expected: ${expectedText.joinToString()}. " +
+                    "Actual: ${bannerText.joinToString()}."
+            Assert.assertEquals(message, expectedText.count(), bannerText.count())
+            Assert.assertTrue(message, expectedText.containsAll(bannerText))
+        }
     }
 
-    fun assertMessageItem(message: String) : BannerObject {
-        assertMessage("/ul/li", message)
+    fun assertFormErrorSummaryHeading(heading: String) {
+        assertMessage("/h2", heading)
+    }
+
+    fun assertFormErrorSummaryReasonItem(reason: String) : BannerObject {
+        assertMessage("/div/ul/li", reason)
         return this
     }
 

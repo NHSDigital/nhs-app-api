@@ -78,7 +78,7 @@ describe('orchestrator', () => {
         it('will display validationErrorMessage when isValidationError is true', () => {
           // Arrange
           const validationErrorMessage = 'onlineConsultations.validationErrors.message.attachment';
-          const expectedValidationHeader = 'There\'s a problem';
+          const expectedValidationHeaderLocaleRef = 'onlineConsultations.validationErrors.thereIsAProblem';
           const expectedValidationErrorMessage = 'Select a file';
 
           store.state.onlineConsultations.validationError = true;
@@ -89,13 +89,11 @@ describe('orchestrator', () => {
           mountOrchestrator();
 
           // Assert
-          const messageDialog = orchestrator.find('message-dialog-stub');
-          const dialogHeader = orchestrator.find('message-text-stub');
-          const dialogMessage = orchestrator.find('message-list-stub > li');
+          const formErrorSummary = orchestrator.find('form-error-summary-stub');
 
-          expect(messageDialog.vm.$props.messageType).toEqual('error');
-          expect(dialogHeader.element.innerHTML.trim()).toEqual(expectedValidationHeader);
-          expect(dialogMessage.element.innerHTML).toEqual(expectedValidationErrorMessage);
+          expect(formErrorSummary.exists()).toEqual(true);
+          expect(formErrorSummary.vm.$props.headerLocaleRef).toContain(expectedValidationHeaderLocaleRef);
+          expect(formErrorSummary.vm.$props.errors).toContain(expectedValidationErrorMessage);
         });
       });
 

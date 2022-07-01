@@ -51,7 +51,7 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
         val problem = "There's a problem"
         val withdrawalListValidationMessage = "Give a reason for withdrawing your decision"
 
-        validationBanner.assertVisible(arrayListOf(problem, withdrawalListValidationMessage))
+        validationBanner.assertFormErrorSummaryVisible(arrayListOf(problem, withdrawalListValidationMessage))
         withdrawalReasonList.assertInlineErrorContent(withdrawalListValidationMessage)
     }
 }

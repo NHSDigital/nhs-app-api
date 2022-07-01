@@ -1,6 +1,6 @@
 import Faith from '@/pages/organ-donation/faith';
 import i18n from '@/plugins/i18n';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
@@ -91,7 +91,7 @@ describe('organ donation faith page', () => {
           });
 
           it('will show an error', () => {
-            expect(wrapper.find(MessageDialog).exists()).toBe(true);
+            expect(wrapper.find(FormErrorSummary).exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {

@@ -4,24 +4,10 @@
       <booking-confirmation-errors :error="error" />
     </div>
     <div v-else>
-      <div v-if="showError" class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full" role="alert" aria-atomic="true">
-          <message-dialog message-type="error"
-                          :focusable="true">
-            <message-text data-purpose="error-heading">
-              {{ $t('appointments.confirmation.error.thereIsAProblem') }}
-            </message-text>
-            <message-list>
-              <li v-if="showTelephoneError" data-purpose="telephone-error">
-                {{ $t('appointments.confirmation.error.enterATelephoneNumber') }}
-              </li>
-              <li v-if="showReasonError" data-purpose="reason-error">
-                {{ $t('appointments.confirmation.error.enterAReason') }}
-              </li>
-            </message-list>
-          </message-dialog>
-        </div>
-      </div>
+      <form-error-summary v-if="showError"
+                          :header-locale-ref="'appointments.confirmation.error.thereIsAProblem'"
+                          :errors="getErrors"/>
+
       <div class="nhsuk-grid-row" data-purpose="info">
         <div class="nhsuk-grid-column-full">
           <p class="nhsuk-u-padding-bottom-2">
@@ -169,9 +155,7 @@ import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
+import FormErrorSummary from '@/components/FormErrorSummary';
 
 import channel from '@/lib/channel';
 import necessity from '@/lib/necessity';
@@ -197,9 +181,7 @@ export default {
     GenericButton,
     GenericTextArea,
     GenericTextInput,
-    MessageDialog,
-    MessageText,
-    MessageList,
+    FormErrorSummary,
   },
   mixins: [ErrorPageMixin],
   data() {
@@ -285,6 +267,16 @@ export default {
     bookingReasonOptional() {
       return this.$store.state.availableAppointments
         .bookingReasonNecessity === necessity.Optional;
+    },
+    getErrors() {
+      const errors = [];
+      if (this.showTelephoneError) {
+        errors.push(this.$t('appointments.confirmation.error.enterATelephoneNumber'));
+      }
+      if (this.showReasonError) {
+        errors.push(this.$t('appointments.confirmation.error.enterAReason'));
+      }
+      return errors;
     },
   },
   watch: {

@@ -2,18 +2,10 @@
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div>
-        <div role="alert" aria-atomic="true">
-          <message-dialog v-if="showErrors" id="errors"
-                          message-type="error"
-                          :focusable="true">
-            <message-text data-purpose="error-heading">
-              {{ $t('organDonation.thereIsAProblem') }}
-            </message-text>
-            <message-list data-purpose="reason-error">
-              <li>{{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}</li>
-            </message-list>
-          </message-dialog>
-        </div>
+        <form-error-summary v-if="showErrors"
+                            :header-locale-ref="'organDonation.thereIsAProblem'"
+                            :errors="$t('organDonation.withdrawReason.giveAReasonForWithdrawing')"/>
+
         <div :class="[$style.form]">
           <h2>{{ $t('organDonation.withdrawReason.withdrawYourPreviousDecision') }}</h2>
           <p>{{ $t('organDonation.withdrawReason.differentToOptingOut') }}</p>
@@ -80,9 +72,7 @@ import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import {
   INDEX_PATH,
@@ -101,9 +91,7 @@ export default {
     ErrorMessage,
     GenericButton,
     DesktopGenericBackLink,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     SelectDropdown,
   },
   data() {

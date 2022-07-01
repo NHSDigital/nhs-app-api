@@ -1,20 +1,10 @@
 <template>
   <div :class="[!isNativeApp && $style.container, 'pull-content']">
     <div v-if="question && isDataRequired" id="questionnaire-container">
-      <div aria-atomic="true" role="alert">
-        <message-dialog v-if="isValidationError"
-                        :key="questionKey"
-                        :focusable="true"
-                        message-type="error">
-          <message-text>
-            {{ $t('onlineConsultations.validationErrors.thereIsAProblem') }}
-          </message-text>
-          <message-list>
-            <li>{{ validationErrorMessage }}</li>
-            <li v-for="error in validationErrorMessageFromResponse" :key="error">{{ error }}</li>
-          </message-list>
-        </message-dialog>
-      </div>
+      <form-error-summary v-if="isValidationError"
+                          :key="questionKey"
+                          :header-locale-ref="'onlineConsultations.validationErrors.thereIsAProblem'"
+                          :errors="getErrors"/>
 
       <form @submit.prevent="continueClicked">
         <component :is="questionWrapper"
@@ -113,9 +103,7 @@ import QuestionQuantity from '@/components/online-consultations/QuestionQuantity
 import QuestionString from '@/components/online-consultations/QuestionString';
 import QuestionText from '@/components/online-consultations/QuestionText';
 import QuestionTime from '@/components/online-consultations/QuestionTime';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
 import { INDEX_PATH } from '@/router/paths';
@@ -130,9 +118,7 @@ export default {
     FieldsetQuestionWrapper,
     GenericButton,
     GenericQuestionWrapper,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     QuestionBoolean,
     QuestionChoice,
     QuestionDate,
@@ -169,6 +155,14 @@ export default {
     },
     validationErrorMessageFromResponse() {
       return this.$store.state.onlineConsultations.validationErrorMessageFromResponse;
+    },
+    getErrors() {
+      const errors = [];
+      errors.push(this.validationErrorMessage);
+      if (typeof (this.validationErrorMessageFromResponse) !== 'undefined' && this.validationErrorMessageFromResponse !== null) {
+        errors.push(this.validationErrorMessageFromResponse);
+      }
+      return errors;
     },
     isDataRequired() {
       return this.$store.state.onlineConsultations.status === DATA_REQUIRED;

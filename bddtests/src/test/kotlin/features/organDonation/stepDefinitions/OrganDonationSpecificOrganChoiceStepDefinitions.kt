@@ -51,7 +51,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
         organDonationYourChoicePage.assertAllOptionsUnselected()
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertVisible(errorMessage)
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(errorMessage)
 
         val organToDonate =
                 OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
@@ -59,7 +59,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
         organDonationYourChoicePage.chooseOption(organToDonate, true)
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertVisible(errorMessage)
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(errorMessage)
 
     }
 
@@ -67,7 +67,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
     fun aValidationMessageIsShownIfAUserAttemptsToContinueWithAllSpecificOrganOptionsSetToNo() {
         organDonationYourChoicePage.organOptions.forEach { option -> option.select(false) }
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertVisible(arrayListOf("There's a problem",
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
                 "To continue, choose ‘yes’ for at least one organ."))
     }
 

@@ -135,7 +135,7 @@ describe('nhsuk radio group', () => {
         });
 
         const errorSummary = wrapper
-          .find('[data-purpose="error-container"] [data-purpose="error"]');
+          .find('[data-purpose="error"]');
 
         const validationError = errorSummary.find('ul li');
 

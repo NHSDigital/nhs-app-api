@@ -1,9 +1,9 @@
 <template>
   <terms-and-conditions-layout>
     <div v-if="showTemplate">
-      <error-dialog v-if="showError"
-                    :header-locale-ref="'userResearch.thereIsAProblem'"
-                    :errors="$t('userResearch.selectYesOrNo')"/>
+      <form-error-summary v-if="showError"
+                          :header-locale-ref="'userResearch.thereIsAProblem'"
+                          :errors="$t('userResearch.selectYesOrNo')"/>
 
       <p>{{ $t('userResearch.weWouldLikeToContactYouAboutUserResearch') }}</p>
       <collapsible-details>
@@ -48,7 +48,7 @@
 <script>
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 import PrimaryButton from '@/components/PrimaryButton';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
@@ -61,7 +61,7 @@ export default {
     PrimaryButton,
     TermsAndConditionsLayout,
     NhsUkRadioGroup,
-    ErrorDialog,
+    FormErrorSummary,
   },
   data() {
     return {

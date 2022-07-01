@@ -9,14 +9,10 @@ https://nhsd-jira.digital.nhs.uk/browse/NHSO-16781
   <div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="showErrors" id="error-message" message-type="error" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('nominatedPharmacy.onlineOnlyChoices.errorMessageHeader') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li>{{ $t('nominatedPharmacy.onlineOnlyChoices.errorMessageText') }}</li>
-          </message-list>
-        </message-dialog>
+        <form-error-summary v-if="showErrors"
+                            :header-locale-ref="'nominatedPharmacy.onlineOnlyChoices.errorMessageHeader'"
+                            :errors="$t('nominatedPharmacy.onlineOnlyChoices.errorMessageText')"/>
+
         <radio-group v-model="onlineOnlyChoice"
                      class="nhsuk-u-padding-top-2"
                      :radios="radioButtons"
@@ -51,9 +47,7 @@ https://nhsd-jira.digital.nhs.uk/browse/NHSO-16781
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import RadioGroup from '@/components/RadioGroup';
 import { redirectTo } from '@/lib/utils';
 import {
@@ -69,9 +63,7 @@ export default {
   components: {
     RadioGroup,
     GenericButton,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },

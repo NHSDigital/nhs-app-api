@@ -72,7 +72,7 @@ describe('patient messaging messages', () => {
       wrapper.vm.subjectError = true;
       wrapper.vm.messageTextError = true;
 
-      const errorDialog = wrapper.find('#message-dialog');
+      const errorDialog = wrapper.find('#form-error-summary');
       const subjectError = wrapper.find('#subjectText-error-message');
       const messageError = wrapper.find('#messageText-error-message');
 
@@ -184,4 +184,3 @@ describe('patient messaging messages', () => {
     });
   });
 });
-

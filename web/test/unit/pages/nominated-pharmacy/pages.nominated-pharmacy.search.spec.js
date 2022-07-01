@@ -76,7 +76,7 @@ describe('search pharmacies', () => {
       // assert
       expect(page.vm.showInvalidSearchError).toBe(true);
       expect($http.getV1PatientPharmacies).not.toHaveBeenCalled();
-      expect(page.find('#empty-search-error').exists()).toBe(true);
+      expect(page.find('#form-error-summary').exists()).toBe(true);
       expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
 
@@ -91,7 +91,7 @@ describe('search pharmacies', () => {
       // assert
       expect(page.vm.showInvalidSearchError).toBe(true);
       expect($http.getV1PatientPharmacies).not.toHaveBeenCalled();
-      expect(page.find('#empty-search-error').exists()).toBe(true);
+      expect(page.find('#form-error-summary').exists()).toBe(true);
     });
 
     it('displays a not found message when no pharmacies are returned', async () => {

@@ -3,9 +3,7 @@
   <div v-if="showTemplate && summariesLoaded" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <menu-item-list class="nhsuk-u-margin-bottom-3">
-        <menu-item id="sendMessageButton"
-                   :text="$t('messages.sendAMessage')"
-                   :click-func="sendMessage"
+        <menu-item id="sendMessageButton" :text="$t('messages.sendAMessage')" :click-func="sendMessage"
                    header-tag="h2"
                    href="#"/>
       </menu-item-list>

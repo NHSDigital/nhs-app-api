@@ -9,14 +9,14 @@ class ValidationSteps {
 
     lateinit var genericPage: HybridPageObject
 
-    @Then("^I see '(.*)' error summary message$")
-    fun iSeeTheErrorSummaryMessage(message: String) {
-        genericPage.validationBanner.assertMessage(message)
+    @Then("^I see '(.*)' form error summary heading$")
+    fun iSeeTheFormErrorSummaryHeading(heading: String) {
+        genericPage.validationBanner.assertFormErrorSummaryHeading(heading)
     }
 
-    @Then("^I see '(.*)' error summary message item$")
-    fun iSeeTheErrorSummaryMessageItem(messageItem: String) {
-        genericPage.validationBanner.assertMessageItem(messageItem)
+    @Then("^I see '(.*)' form error summary reason item$")
+    fun iSeeTheFormErrorSummaryReasonItem(reasonItem: String) {
+        genericPage.validationBanner.assertFormErrorSummaryReasonItem(reasonItem)
     }
 
     @Then("^I see '(.*)' inline error$")

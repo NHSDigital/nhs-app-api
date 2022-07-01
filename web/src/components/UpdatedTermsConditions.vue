@@ -1,15 +1,8 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
-      <message-dialog :class="$style.customErrorBox"
-                      :focusable="true"
-                      message-type="error"
-                      role="alert">
-        <message-text>{{ $t('termsAndConditions.errors.youCannotContinue.header') }}</message-text>
-        <message-list>
-          <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
-        </message-list>
-      </message-dialog>
+      <form-error-summary :header-locale-ref="'termsAndConditions.errors.youCannotContinue.header'"
+                          :errors="$t('termsAndConditions.errors.youCannotContinue.text')"/>
     </div>
     <div id="text_body" :class="$style.info">
       <p> {{ $t('termsAndConditions.updated.weveMadeSomeChanges') }}
@@ -80,9 +73,7 @@
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import {
   TERMS_AND_CONDITIONS_URL,
   COOKIES_POLICY_URL,
@@ -96,9 +87,7 @@ export default {
     ErrorMessage,
     GenericButton,
     GenericCheckbox,
-    MessageDialog,
-    MessageList,
-    MessageText,
+    FormErrorSummary,
   },
   data() {
     return {

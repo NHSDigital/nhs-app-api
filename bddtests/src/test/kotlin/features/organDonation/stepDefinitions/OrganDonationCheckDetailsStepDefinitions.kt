@@ -112,7 +112,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertInlineError(accuracyValidationMessage)
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertInlineError(privacyStatementValidationMessage)
-        organDonationCheckDetailsPage.validationBanner.assertVisible(
+        organDonationCheckDetailsPage.validationBanner.assertFormErrorSummaryVisible(
                 arrayListOf(problem, "$accuracyValidationMessage\n$privacyStatementValidationMessage"))
     }
 
@@ -124,7 +124,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertNoInlineError()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertInlineError(privacyStatementValidationMessage)
-        organDonationCheckDetailsPage.validationBanner.assertVisible(
+        organDonationCheckDetailsPage.validationBanner.assertFormErrorSummaryVisible(
                 arrayListOf(problem, privacyStatementValidationMessage))
 
         // revert selection
@@ -139,7 +139,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertInlineError(accuracyValidationMessage)
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertNoInlineError()
-        organDonationCheckDetailsPage.validationBanner.assertVisible(
+        organDonationCheckDetailsPage.validationBanner.assertFormErrorSummaryVisible(
                 arrayListOf(problem, accuracyValidationMessage))
 
         // revert selection

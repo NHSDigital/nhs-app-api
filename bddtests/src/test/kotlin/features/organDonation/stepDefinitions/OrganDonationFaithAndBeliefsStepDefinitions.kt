@@ -55,7 +55,7 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
 
         organDonationFaithAndBeliefsPage.radioButtons.assertAllUnselected()
         organDonationFaithAndBeliefsPage.clickContinue()
-        organDonationFaithAndBeliefsPage.validationBanner.assertVisible(arrayListOf("There's a problem",
+        organDonationFaithAndBeliefsPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
                 "Respond to the faith/belief declaration. Choose yes, no or prefer not to say."))
     }
 

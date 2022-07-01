@@ -1,7 +1,7 @@
 <template>
   <no-return-flow-layout>
     <div v-if="showTemplate">
-      <error-dialog v-if="showError" :errors="errorText"/>
+      <form-error-summary v-if="showError" :errors="errorText"/>
       <p>{{ $t('notifications.weUseNotifications') }}</p>
       <p>{{ $t('notifications.theNhsAndConnected') }}</p>
       <nhs-uk-radio-group v-model="selectedValue"
@@ -45,7 +45,7 @@
 import isUndefined from 'lodash/fp/isUndefined';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import LegendSize from '@/lib/legend-size';
 import NativeApp from '@/services/native-app';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
@@ -59,7 +59,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     CollapsibleDetails,
-    ErrorDialog,
+    FormErrorSummary,
     NhsUkRadioGroup,
     NoReturnFlowLayout,
     PrimaryButton,

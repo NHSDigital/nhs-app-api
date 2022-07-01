@@ -3,11 +3,9 @@
     <!-- NB Following div ensures legend focus within radio group announced - NHSO-17263 -->
     <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
     <div class="nhsuk-grid-column-full">
-      <error-dialog v-if="showErrors"
-                    :header-locale-ref="'prescriptions.prescriptionType.errors.thereIsAProblem'"
-                    :errors="$t(
-                      'prescriptions.prescriptionType.errors.chooseTypeOfPrescription'
-                    )"/>
+      <form-error-summary v-if="showErrors"
+                          :header-locale-ref="'prescriptions.prescriptionType.errors.thereIsAProblem'"
+                          :errors="$t('prescriptions.prescriptionType.errors.chooseTypeOfPrescription')"/>
 
       <div v-if="hasLoaded" class="break">
         <nhs-uk-radio-group
@@ -49,7 +47,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_SESSION_ERROR_STATUS, gpSessionErrorHasRetried, redirectTo } from '@/lib/utils';
 import { getNavigationPathFromPrescriptionType } from '@/lib/prescriptions/navigation';
-import ErrorDialog from '@/components/ErrorDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import { PRESCRIPTION_TYPE_PATH, PRESCRIPTIONS_CONTACT_SURGERY_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
@@ -85,7 +83,7 @@ const loadData = async (store) => {
 export default {
   name: 'PrescriptionTypePage',
   components: {
-    ErrorDialog,
+    FormErrorSummary,
     NhsUkRadioGroup,
     GenericButton,
     DesktopGenericBackLink,
@@ -203,4 +201,3 @@ export default {
 @import "../../style/buttons";
 @import "../../style/spacings";
 </style>
-

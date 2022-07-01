@@ -1,5 +1,5 @@
 import OrganChoice from '@/components/organ-donation/OrganChoice';
-import MessageDialog from '@/components/widgets/MessageDialog';
+import FormErrorSummary from '@/components/FormErrorSummary';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import i18n from '@/plugins/i18n';
 import {
@@ -202,8 +202,8 @@ describe('organ donation some organs page', () => {
             clickButton();
           });
 
-          it('will show error dialog', () => {
-            expect(wrapper.find('.error').exists()).toBe(true);
+          it('will show form error summary', () => {
+            expect(wrapper.find('#form-error-summary').exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {
@@ -225,8 +225,8 @@ describe('organ donation some organs page', () => {
             clickButton();
           });
 
-          it('will show error dialog', () => {
-            expect(wrapper.find('.error').exists()).toBe(true);
+          it('will show form error', () => {
+            expect(wrapper.find('#form-error-summary').exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {
@@ -244,8 +244,8 @@ describe('organ donation some organs page', () => {
             clickButton();
           });
 
-          it('will show error dialog', () => {
-            expect(wrapper.find(MessageDialog).exists()).toBe(true);
+          it('will show form error summary', () => {
+            expect(wrapper.find(FormErrorSummary).exists()).toBe(true);
           });
 
           it('will not push the organ donation additional details page on the router', () => {

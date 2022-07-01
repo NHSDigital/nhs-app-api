@@ -8,8 +8,8 @@ Feature: User Research
     And I click the 'Continue' button
     Then the User Research page is displayed
     When I click the 'Continue' button
-    Then I see 'There is a problem' error summary message
-    And I see 'Select yes or no' error summary message item
+    Then I see 'There is a problem' form error summary heading
+    And I see 'Select yes or no' form error summary reason item
     And I see 'Select yes or no' inline error
     When I click the 'Yes' radio button
     And I click the 'Continue' button
