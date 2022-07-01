@@ -51,6 +51,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.AssertErrorTextPresented();
         }
 
+        [NhsAppFlakyTest]
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanAccessLocationServicesWithinTheAppWhenTheyAcceptPermissionsIos(
             IIOSDriverWrapper driver)
@@ -81,6 +82,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.AssertLocationPresented();
         }
 
+        [NhsAppFlakyTest]
         [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanNotAccessLocationServicesWithinTheAppWhenTheyDoNotAcceptPermissionsIos(
             IIOSDriverWrapper driver)
