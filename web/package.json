@@ -31,7 +31,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "axios": "0.21.2",
+    "axios": "0.27.2",
     "babel-jest": "28.1.1",
     "deepmerge": "4.2.2",
     "focus-trap": "6.9.3",
