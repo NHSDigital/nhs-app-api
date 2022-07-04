@@ -3,7 +3,7 @@ const path = require('path');
 const flipbookPath = 'flipbook';
 const testDetails = JSON.parse(fs.readFileSync(`${flipbookPath}/testDetails.json`));
 
-formatName = (name) => name.toLowerCase().split(' ').join('-');
+formatName = (name) => name.toLowerCase().replace('-', '').split(' ').join('');
 formatDate = (date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
 // We want the tests with no parent journey to appear at the top
@@ -21,19 +21,8 @@ var outputHtml = `<html>
     </head>
 <body>`;
 
-outputHtml += `<h1>NHS App Flipbook - ${formatDate(new Date())}</h1><hr><h2>Contents</h2><div class='break'>`;
+outputHtml += `<h1>NHS App Flipbook - ${formatDate(new Date())}</h1>`;
 
-// Produce contents table
-for (var idx = 0; idx < testDetails.length; idx++) {
-    const { TestName, TestOutcome } = testDetails[idx];
-    // 2 = Passed
-    if (TestOutcome === 2) {
-        // Table of contents should start from 1
-        outputHtml += `<p><h3>${idx + 1} ......... ${TestName}</h3></p>`;
-    }
-}
-
-outputHtml += `</div>`;
 
 for (var idx = 0; idx < testDetails.length; idx++) {
     const { AppVersion, Device, OSVersion, ParentJourney, TestName, Folder, TestOutcome } = testDetails[idx];

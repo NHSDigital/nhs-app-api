@@ -12,7 +12,7 @@ jobs:
       - task: ShellScript@2
         displayName: Build
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/09_build_flipbook.sh
+          scriptPath: xamarinintegrationtests/buildscripts/09_run_build_flipbook.sh
 
       - task: Bash@3
         displayName: Set Flipbook Artefact Name Variable
@@ -28,7 +28,7 @@ jobs:
         env:
           FLIPBOOK_NAME: $(native.xamarin.flipbookPdfName)
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/10_flipbook_generate.sh
+          scriptPath: xamarinintegrationtests/buildscripts/10_run_flipbook_generate.sh
 
       - task: PublishPipelineArtifact@1
         displayName: Publish Xamarin tests flipbook

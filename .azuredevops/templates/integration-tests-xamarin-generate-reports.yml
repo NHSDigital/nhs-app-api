@@ -14,7 +14,7 @@ jobs:
       - task: ShellScript@2
         displayName: Create html report
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/08_generate_html_report.sh
+          scriptPath: xamarinintegrationtests/buildscripts/08_run_generate_html_report.sh
 
       - task: PublishHtmlReport@1
         displayName: 'Publish HTML Report'

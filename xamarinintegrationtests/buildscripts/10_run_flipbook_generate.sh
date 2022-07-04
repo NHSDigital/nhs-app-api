@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-set -e
+set -ex
 
 # Change current working directory to be the root of flipbook, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/../flipbookgeneration" || exit 1

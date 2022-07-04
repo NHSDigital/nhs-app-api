@@ -8,7 +8,7 @@ build: $(BUILD_SCRIPTS)	## Build all integration test components
 
 generate-flipbook: ## Runs flipbook tests, build and generates the flipbook (Flipbook journeys must be ran before this)
 	FLIPBOOK_RUN='True' ./buildscripts/06_run_integration_tests.sh && \
-	./buildscripts/09_build_flipbook.sh && ./buildscripts/10_flipbook_generate.sh
+	./buildscripts/09_run_build_flipbook.sh && ./buildscripts/10_run_flipbook_generate.sh
 
 .PHONY: $(ALL_SCRIPTS) run run-local run-deps
 $(ALL_SCRIPTS):

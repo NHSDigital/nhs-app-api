@@ -121,7 +121,7 @@ jobs:
         displayName: Generate Report
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/07_generate_integration_test_result_json.sh
+          scriptPath: xamarinintegrationtests/buildscripts/07_run_generate_integration_test_result_json.sh
 
       - task: PublishPipelineArtifact@1
         displayName: Publish Xamarin Integration Test Results
