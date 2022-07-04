@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.PfsApi.Configuration;
 
 namespace NHSOnline.Backend.PfsApi.KnownServices
 {

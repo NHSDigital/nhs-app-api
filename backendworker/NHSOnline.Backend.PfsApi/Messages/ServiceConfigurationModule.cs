@@ -1,8 +1,5 @@
-using CorrelationId.HttpClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.AspNet.HealthChecks;
-using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Messages
 {

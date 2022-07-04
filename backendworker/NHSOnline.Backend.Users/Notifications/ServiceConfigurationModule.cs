@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Users.Notifications.Migration;
-using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Repository;
 
 namespace NHSOnline.Backend.Users.Notifications

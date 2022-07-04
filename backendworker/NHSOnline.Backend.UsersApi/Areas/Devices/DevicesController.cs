@@ -3,14 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Users.Areas.Devices;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
-using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi

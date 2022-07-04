@@ -5,7 +5,6 @@ using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
 using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Notifications.Models;
-using NHSOnline.Backend.Users.Registrations;
 using NHSOnline.Backend.Users.Repository;
 
 namespace NHSOnline.Backend.Users.Registrations

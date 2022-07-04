@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Metrics;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments

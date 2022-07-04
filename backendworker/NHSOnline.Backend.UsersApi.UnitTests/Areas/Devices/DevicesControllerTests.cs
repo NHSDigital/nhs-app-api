@@ -10,7 +10,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
 using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Registrations;

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Auth;
-using NHSOnline.Backend.Auth.APIM;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Http;

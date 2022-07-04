@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses

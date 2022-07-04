@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Repository;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
 {

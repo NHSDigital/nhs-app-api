@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using System;

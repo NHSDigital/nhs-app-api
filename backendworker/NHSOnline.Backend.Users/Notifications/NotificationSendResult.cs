@@ -1,5 +1,4 @@
 using NHSOnline.Backend.Users.Areas.Devices.Models;
-using NHSOnline.Backend.Users.Notifications.Models;
 
 namespace NHSOnline.Backend.Users.Notifications
 {

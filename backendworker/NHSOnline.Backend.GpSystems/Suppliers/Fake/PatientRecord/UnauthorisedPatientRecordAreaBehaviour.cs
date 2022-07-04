@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.PatientRecord;
-using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 

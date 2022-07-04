@@ -10,7 +10,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
-using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 {

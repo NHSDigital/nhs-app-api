@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Repository;
-using NHSOnline.Backend.Repository.SqlApi;
 using NHSOnline.Backend.UserInfo.Repository;
 
 namespace NHSOnline.Backend.UserInfo.UnitTests.Repository

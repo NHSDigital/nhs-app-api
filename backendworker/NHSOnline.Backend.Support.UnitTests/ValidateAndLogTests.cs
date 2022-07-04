@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Microsoft.Extensions.Logging;
 using Moq;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests
 {

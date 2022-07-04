@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.Users.Notifications.Models;
-using NHSOnline.Backend.Users.Repository;
 
 namespace NHSOnline.Backend.Users.Notifications
 {

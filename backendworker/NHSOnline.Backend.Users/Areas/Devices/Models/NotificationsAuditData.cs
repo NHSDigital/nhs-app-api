@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace NHSOnline.Backend.Users.Areas.Devices.Models
 {
     public class NotificationsAuditData

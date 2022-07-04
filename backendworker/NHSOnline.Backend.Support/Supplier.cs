@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace NHSOnline.Backend.Support
 {
     public enum Supplier

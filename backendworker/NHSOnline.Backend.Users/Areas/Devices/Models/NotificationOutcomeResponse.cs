@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using NHSOnline.Backend.Users.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.Users.Areas.Devices.Models
 {

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Auth.APIM;
-using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.NHSApim

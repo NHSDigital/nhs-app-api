@@ -1,5 +1,3 @@
-using NHSOnline.Backend.Users.Notifications;
-
 namespace NHSOnline.Backend.Users.Notifications
 {
     public interface INotificationOutcomeResultVisitor<out T>

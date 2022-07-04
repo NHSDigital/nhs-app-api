@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
-using NHSOnline.Backend.Users.Notifications;
 
 namespace NHSOnline.Backend.Users.Notifications.Migration
 {

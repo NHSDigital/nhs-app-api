@@ -10,7 +10,6 @@ using FluentAssertions;
 using GeoCoordinatePortable;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;

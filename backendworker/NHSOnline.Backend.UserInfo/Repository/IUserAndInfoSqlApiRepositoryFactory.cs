@@ -1,4 +1,3 @@
-using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Repository.SqlApi;
 
 namespace NHSOnline.Backend.UserInfo.Repository

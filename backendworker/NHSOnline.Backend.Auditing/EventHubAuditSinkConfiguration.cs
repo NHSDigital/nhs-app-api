@@ -1,9 +1,3 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Repository;
-using NHSOnline.Backend.Support.Settings;
-
 namespace NHSOnline.Backend.Auditing
 {
     public class EventHubAuditSinkConfiguration : IEventHubAuditSinkConfiguration
