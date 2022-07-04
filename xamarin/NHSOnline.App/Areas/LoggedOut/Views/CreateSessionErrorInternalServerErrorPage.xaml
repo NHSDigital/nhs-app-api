@@ -14,21 +14,17 @@
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
-
-                <panels:NhsErrorCallout LabelText="Error">
-                    <StackLayout>
-                        <elements:Paragraph Text="Go back and try logging in again." />
-                        <elements:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly." />
-                        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
-                        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
-                        <elements:LinkLabelWithErrorCode Text="Contact us if you keep seeing this message, quoting error code"
-                                                         ErrorCode="{Binding ServiceDeskReference, Source={x:Reference Name=Page}}"
-                                                         Command="{Binding ContactUsCommand, Source={x:Reference Name=Page}}" />
-                        <elements:LinkLabel Text="Back to login" Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
-                    </StackLayout>
-                </panels:NhsErrorCallout>
-
+                <elements:Heading1 Text="The service is unavailable" x:Name="Heading" />
+                <StackLayout>
+                    <elements:Paragraph Text="This might be a temporary problem." />
+                    <elements:LinkLabel Text="Go back and try logging in again" Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Paragraph Text="If you still cannot log in, try again later." />
+                    <elements:Heading2 Text="Other services you can use" />
+                    <elements:LinkLabel Text="Get your NHS COVID Pass online" Command="{Binding ViewDigitalCovidCertCommand, Source={x:Reference Name=Page}}" />
+                    <elements:Heading2 Text="Get medical advice" />
+                    <elements:Paragraph Text="If you need to book an appointment or get a prescription now, use your GP surgery's website or call the surgery directly." />
+                    <elements:LinkLabel Text="For urgent medical advice, go to 111.nhs.uk or call 111" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Page}}" />
+                </StackLayout>
             </StackLayout>
         </panels:ResponsiveLayoutPanel>
 

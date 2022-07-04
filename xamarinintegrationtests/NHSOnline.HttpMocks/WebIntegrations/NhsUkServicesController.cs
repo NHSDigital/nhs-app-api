@@ -19,6 +19,12 @@ namespace NHSOnline.HttpMocks.WebIntegrations
             return CreatePage("Covid Conditions");
         }
 
+        [HttpGet("digitalCovidPass")]
+        public IActionResult DigitalCovidPass()
+        {
+            return CreatePage("Digital Covid Pass");
+        }
+
         [HttpGet("healthAtoZ")]
         public IActionResult HealthAtoZ()
         {

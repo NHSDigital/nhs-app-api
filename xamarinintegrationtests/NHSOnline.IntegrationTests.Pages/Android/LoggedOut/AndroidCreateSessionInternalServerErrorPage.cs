@@ -17,18 +17,20 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             _driver = driver;
         }
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot log in");
-        private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back and try logging in again.");
-        private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
-        private AndroidLabel ForUrgentMedicalAdvice => AndroidLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
-        private AndroidLink GoTo111Link => AndroidLink.WithContentDescription(_driver, "Go to 111.nhs.uk");
-        private AndroidLink ContactUsLink => AndroidLink.WhichMatches(_driver, "Contact us if you keep seeing this message, quoting error code xx([0-9a-z]){4}").ScrollIntoView();
-        private AndroidLink BackToLoginLink => AndroidLink.WithContentDescription(_driver, "Back to login").ScrollIntoView();
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "The service is unavailable");
+        private AndroidLabel ThisMightBeATemporaryProblemText => AndroidLabel.WithText(_driver, "This might be a temporary problem.");
+        private AndroidLink GoBackAndTryLoggingInAgainLink => AndroidLink.WhichMatches(_driver, "Go back and try logging in again");
+        private AndroidLabel IfYouStillCannotLoginText => AndroidLabel.WithText(_driver, "If you still cannot log in, try again later.");
+        private AndroidLabel OtherServicesYouCanUseText => AndroidLabel.WithText(_driver, "Other services you can use");
+        private AndroidLink GetYourNhsCovidPassOnlineLink => AndroidLink.WhichMatches(_driver, "Get your NHS COVID Pass online");
+        private AndroidLabel GetMedicalAdviceText => AndroidLabel.WithText(_driver, "Get medical advice");
+        private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, use your GP surgery's website or call the surgery directly.");
+        private AndroidLink ForUrgentMedicalAdviceLink => AndroidLink.WhichMatches(_driver, "For urgent medical advice, go to 111.nhs.uk or call 111");
 
         private IEnumerable<IFocusable> GetAllKeyboardNavigationFocusableElements()
         {
             var headerList = Navigation.KeyboardNavigation.GetFocusableElements();
-            var pageFocusableList = new[] {GoTo111Link, ContactUsLink, BackToLoginLink};
+            var pageFocusableList = new[] {GoBackAndTryLoggingInAgainLink, GetYourNhsCovidPassOnlineLink, ForUrgentMedicalAdviceLink};
 
             return headerList.Concat(pageFocusableList);
         }
@@ -44,20 +46,24 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public AndroidCreateSessionInternalServerErrorPage AssertPageElements()
         {
-            GoBackText.AssertVisible();
+            ThisMightBeATemporaryProblemText.AssertVisible();
+            GoBackAndTryLoggingInAgainLink.AssertVisible();
+            IfYouStillCannotLoginText.AssertVisible();
+            OtherServicesYouCanUseText.AssertVisible();
+            GetYourNhsCovidPassOnlineLink.AssertVisible();
+            GetMedicalAdviceText.AssertVisible();
             IfYouNeedText.AssertVisible();
-            ForUrgentMedicalAdvice.AssertVisible();
-            GoTo111Link.AssertVisible();
-            ContactUsLink.AssertVisible();
-            BackToLoginLink.AssertVisible();
+            ForUrgentMedicalAdviceLink.AssertVisible();
             return this;
         }
 
-        public void ContactUs() => ContactUsLink.Touch();
-        public void BackToLogin() => BackToLoginLink.Touch();
+        public void GetUrgentMedicalAdvice() => ForUrgentMedicalAdviceLink.Touch();
+        public void GetYourNhsCovidPassOnline() => GetYourNhsCovidPassOnlineLink.Touch();
+        public void BackToLogin() => GoBackAndTryLoggingInAgainLink.Touch();
 
-        public void KeyboardNavigateToAndActivateContactUs() => KeyboardNavigateToAndActivateFocusable(ContactUsLink);
-        public void KeyboardNavigateToAndActivateBackToLogin() => KeyboardNavigateToAndActivateFocusable(BackToLoginLink);
+        public void KeyboardNavigateToAndActivateGetUrgentMedicalAdvice() => KeyboardNavigateToAndActivateFocusable(ForUrgentMedicalAdviceLink);
+        public void KeyboardNavigateToAndActivateGetYourNhsCovidPassOnline() => KeyboardNavigateToAndActivateFocusable(GetYourNhsCovidPassOnlineLink);
+        public void KeyboardNavigateToAndActivateBackToLogin() => KeyboardNavigateToAndActivateFocusable(GoBackAndTryLoggingInAgainLink);
 
         private void KeyboardNavigateToAndActivateFocusable(IFocusable focusable)
         {

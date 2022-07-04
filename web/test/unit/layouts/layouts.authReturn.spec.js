@@ -503,7 +503,7 @@ describe('authReturn layout', () => {
     describe.each([
       [400, 'Cannot log in'],
       [468, 'Cannot log in'],
-      [500, 'Cannot log in'],
+      [500, 'The service is unavailable'],
       [403, 'Cannot log in'],
       [469, 'Cannot log in'],
       [502, 'Cannot log in'],

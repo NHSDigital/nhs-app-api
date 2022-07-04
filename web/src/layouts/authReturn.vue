@@ -141,15 +141,20 @@
                     <shutter-container v-else-if="statusCode===500">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.cannotLogin') }} </h1>
-                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
-                      <error-paragraph from="login.authReturn.ifYouNeedToBook" />
-                      <error-paragraph from="login.authReturn.forUrgentMedicalAdvice" />
-                      <error-link from="login.authReturn.goToNhs111"
+                        {{ $t('login.authReturn.serviceUnavailable') }} </h1>
+                      <p>{{ $t('login.authReturn.thisMightBeATemporaryProblem') }}</p>
+                      <error-link from="login.authReturn.goBackAndTryAgainLink"
+                                  :action="loginUrl" />
+                      <p>{{ $t('login.authReturn.ifYouStillCannotLogIn') }}</p>
+                      <h2>{{ $t('login.authReturn.otherServicesYouCanUse') }}</h2>
+                      <error-link from="login.authReturn.getYourCovidPassOnline"
+                                  :action="digitalCovidPassUrl"
+                                  target="_blank" />
+                      <h2>{{ $t('login.authReturn.getMedicalAdvice') }}</h2>
+                      <p>{{ $t('login.authReturn.ifYouNeedToBookOrGetPrescription') }}</p>
+                      <error-link from="login.authReturn.forUrgentMedicalAdviceGoTo111OrCall111"
                                   :action="nhs111Url"
                                   target="_blank" />
-                      <service-desk-reference-link />
-                      <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
                     </shutter-container>
                     <shutter-container v-else-if="statusCode===502">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
@@ -312,10 +317,12 @@ export default {
         title = this.$t('login.authReturn.termsNotAccepted');
       } else if (this.statusCode === 465) {
         title = this.$t('login.authReturn.under13.title');
-      } else if (this.statusCode === 400 || this.statusCode === 500 || this.statusCode === 468
+      } else if (this.statusCode === 400 || this.statusCode === 468
                  || this.statusCode === 403 || this.statusCode === 469 || this.statusCode === 502
                  || this.statusCode === 504) {
         title = this.$t('login.authReturn.cannotLogin');
+      } else if (this.statusCode === 500) {
+        title = this.$t('login.authReturn.serviceUnavailable');
       } else {
         title = this.$t('login.authReturn.loginFailed');
       }

@@ -8,13 +8,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private readonly IIOSDriverWrapper _driver;
         private IOSCreateSessionInternalServerErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot log in");
-        private IOSLabel GoBackText => IOSLabel.WithText(_driver, "Go back and try logging in again.");
-        private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly.");
-        private IOSLabel ForUrgentMedicalAdvice => IOSLabel.WithText(_driver, "For urgent medical advice, use NHS 111 online or call 111.");
-        private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
-        private IOSLink ContactUsLink => IOSLink.WhichMatches(_driver, "Contact us if you keep seeing this message, quoting error code x x ([0-9a-z] ){4}");
-        private IOSLink BackToLoginLink => IOSLink.WithText(_driver, "Back to login");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "The service is unavailable");
+        private IOSLabel ThisMightBeATemporaryProblemText => IOSLabel.WithText(_driver, "This might be a temporary problem.");
+        private IOSLink GoBackAndTryLoggingInAgainLink => IOSLink.WithText(_driver, "Go back and try logging in again");
+        private IOSLabel IfYouStillCannotLoginText => IOSLabel.WithText(_driver, "If you still cannot log in, try again later.");
+        private IOSLabel OtherServicesYouCanUseText => IOSLabel.WithText(_driver, "Other services you can use");
+        private IOSLink GetYourNhsCovidPassOnlineLink => IOSLink.WhichMatches(_driver, "Get your NHS COVID Pass online");
+        private IOSLabel GetMedicalAdviceText => IOSLabel.WithText(_driver, "Get medical advice");
+        private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, use your GP surgery's website or call the surgery directly.");
+        private IOSLink ForUrgentMedicalAdviceLink => IOSLink.WhichMatches(_driver, "For urgent medical advice, go to 111.nhs.uk or call 111");
 
         public static IOSCreateSessionInternalServerErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -25,16 +27,19 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public IOSCreateSessionInternalServerErrorPage AssertPageElements()
         {
-            GoBackText.AssertVisible();
+            ThisMightBeATemporaryProblemText.AssertVisible();
+            GoBackAndTryLoggingInAgainLink.AssertVisible();
+            IfYouStillCannotLoginText.AssertVisible();
+            OtherServicesYouCanUseText.AssertVisible();
+            GetYourNhsCovidPassOnlineLink.AssertVisible();
+            GetMedicalAdviceText.AssertVisible();
             IfYouNeedText.AssertVisible();
-            ForUrgentMedicalAdvice.AssertVisible();
-            GoTo111Link.AssertVisible();
-            ContactUsLink.AssertVisible();
-            BackToLoginLink.AssertVisible();
+            ForUrgentMedicalAdviceLink.AssertVisible();
             return this;
         }
 
-        public void ContactUs() => ContactUsLink.Touch();
-        public void BackToLogin() => BackToLoginLink.Touch();
+        public void GetUrgentMedicalAdvice() => ForUrgentMedicalAdviceLink.Touch();
+        public void GetYourNhsCovidPassOnline() => GetYourNhsCovidPassOnlineLink.Touch();
+        public void BackToLogin() => GoBackAndTryLoggingInAgainLink.Touch();
     }
 }

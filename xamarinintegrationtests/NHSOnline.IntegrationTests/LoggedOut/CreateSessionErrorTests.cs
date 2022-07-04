@@ -43,12 +43,24 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             AndroidCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .ContactUs();
+                .GetUrgentMedicalAdvice();
 
             AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidBrowserOverlayContactUsPage
+            AndroidBrowserOverlay111Page
+                .AssertInBrowserOverlay(driver)
+                .AssertOnPage()
+                .ReturnToApp();
+
+            AndroidCreateSessionInternalServerErrorPage
+                .AssertOnPage(driver)
+                .GetYourNhsCovidPassOnline();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidBrowserOverlayDigitalCovidPassPage
                 .AssertOnPage(driver)
                 .ReturnToApp();
 
@@ -97,9 +109,18 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .ContactUs();
+                .GetUrgentMedicalAdvice();
 
-            IOSBrowserOverlayContactUsPage
+            IOSBrowserOverlay111Page
+                .AssertInBrowserOverlay(driver)
+                .AssertOnPage()
+                .ReturnToApp();
+
+            IOSCreateSessionInternalServerErrorPage
+                .AssertOnPage(driver)
+                .GetYourNhsCovidPassOnline();
+
+            IOSBrowserOverlayDigitalCovidPassPage
                 .AssertOnPage(driver)
                 .ReturnToApp();
 
@@ -147,12 +168,24 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             AndroidCreateSessionInternalServerErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements()
-                .KeyboardNavigateToAndActivateContactUs();
+                .KeyboardNavigateToAndActivateGetUrgentMedicalAdvice();
 
             AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
 
-            AndroidBrowserOverlayContactUsPage
+            AndroidBrowserOverlay111Page
+                .AssertInBrowserOverlay(driver)
+                .AssertOnPage()
+                .ReturnToApp();
+
+            AndroidCreateSessionInternalServerErrorPage
+                .AssertOnPage(driver)
+                .KeyboardNavigateToAndActivateGetYourNhsCovidPassOnline();
+
+            AndroidBrowserOverlayBrowserChoice
+                .IfDisplayed(driver, choice => choice.ChooseChrome());
+
+            AndroidBrowserOverlayDigitalCovidPassPage
                 .AssertOnPage(driver)
                 .ReturnToApp();
 

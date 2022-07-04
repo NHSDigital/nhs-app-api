@@ -28,8 +28,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _internalServerErrorView.AppNavigation
                 .RegisterHandler(ViewOnOneOneOneRequested, (view, handler) => view.OneOneOneRequested = handler)
-                .RegisterHandler(ViewOnContactUsRequested, (view, handler) => view.ContactUsRequested = handler)
-                .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler);
+                .RegisterHandler(ViewOnBackHomeRequested, (view, handler) => view.BackHomeRequested = handler)
+                .RegisterHandler(ViewOnDigitalCovidPassRequested, (view, handler) => view.DigitalCovidCertRequested = handler);
         }
 
         private async Task ViewOnOneOneOneRequested()
@@ -39,11 +39,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 .PreserveThreadContext();
         }
 
-        private async Task ViewOnContactUsRequested()
+        private async Task ViewOnDigitalCovidPassRequested()
         {
-            var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_internalServerErrorModel.ServiceDeskReference);
             await _browser
-                .OpenBrowserOverlay(contactUsUri)
+                .OpenBrowserOverlay(_externalServicesConfiguration.DigitalCovidPassUrl)
                 .PreserveThreadContext();
         }
 
