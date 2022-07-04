@@ -18,7 +18,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Client
         internal HttpRequestMessage RequestMessage { get; } = new HttpRequestMessage();
         internal List<HttpStatusCode> SuccessStatusCodes { get; } = new List<HttpStatusCode> { HttpStatusCode.OK };
         internal RequestsForSuccessOutcome Type { get; private set; }
-        
+        internal RecordType RecordType { get; private set; }
+
         public IEmisRequestBuilderMethod RequestType(RequestsForSuccessOutcome requestType)
         {
             Type = requestType;
@@ -85,6 +86,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Client
         public IEmisRequestBuilder AdditionalSuccessHttpStatusCode(HttpStatusCode successCode)
         {
             SuccessStatusCodes.Add(successCode);
+            return this;
+        }
+
+        public IEmisRequestBuilder RecordTypeToGet(RecordType recordType)
+        {
+            RecordType = recordType;
             return this;
         }
 

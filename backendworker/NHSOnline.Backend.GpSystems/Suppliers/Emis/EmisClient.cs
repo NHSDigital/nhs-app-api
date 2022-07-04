@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters requestParameters)
         {
             _logger.LogInformation("EMIS: Fetching patient demographics");
-            
+
             return await _emisClientRequestSender.SendRequestAndParseResponse<DemographicsGetResponse>(
                 request => request
                     .RequestType(RequestsForSuccessOutcome.DemographicsGet)
@@ -116,7 +116,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                     .Get(PatientRecordPath, requestParameters.UserPatientLinkToken, recordType.ToString())
                     .SessionId(requestParameters.SessionId)
                     .EndUserSessionId(requestParameters.EndUserSessionId)
-                    .AdditionalSuccessHttpStatusCode(HttpStatusCode.Forbidden));
+                    .AdditionalSuccessHttpStatusCode(HttpStatusCode.Forbidden)
+                    .RecordTypeToGet(recordType));
         }
 
         public async Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(
@@ -126,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             string endUserSessionId)
         {
             _logger.LogInformation("EMIS: Fetching patient document - {0}", documentIdentifier);
-            
+
             return await _emisClientRequestSender.SendRequestAndParseResponse<IndividualDocument>(
                 request => request
                     .RequestType(RequestsForSuccessOutcome.MedicalDocumentGet)
@@ -311,7 +312,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters requestParameters)
         {
             _logger.LogInformation("EMIS: Fetching patient settings");
-            
+
             return await _emisClientRequestSender.SendRequestAndParseResponse<MeSettingsGetResponse>(
                 request => request
                     .RequestType(RequestsForSuccessOutcome.MeSettingsGet)

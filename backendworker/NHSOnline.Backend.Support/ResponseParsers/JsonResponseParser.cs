@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -44,6 +45,32 @@ namespace NHSOnline.Backend.Support.ResponseParsers
         public JsonResponseParser()
         {
             _redactor = new RedexPatternRedactor(_patternAndRedactors);
+        }
+
+        public T ParseBodyAndLogOnError<T>(string stringResponse, ILogger logger)
+        {
+            try
+            {
+                var serializedResponse = Deserialize<T>(stringResponse);
+
+                if (serializedResponse != null)
+                {
+                    return  serializedResponse;
+                }
+
+                return default;
+            }
+            catch (NhsUnparsableException)
+            {
+                logger.LogInformation($"SupplierUnparsableResponse={stringResponse}");
+                throw;
+            }
+            catch (JsonException exception)
+            {
+                logger.LogInformation($"SupplierUnparsableResponse={stringResponse}");
+
+                throw new NhsUnparsableException("Response parsing failed.", exception);
+            }
         }
 
         public override T ParseBody<T>(string stringResponse)

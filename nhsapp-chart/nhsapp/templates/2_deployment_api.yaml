@@ -12,6 +12,8 @@ metadata:
     collectord.io/api--logs-override.1-index: {{ $.Values.splunk.pidIndex }}
     collectord.io/api--logs-override.2-match: Action=(AppointmentBookResult|AppointmentCancelResult)
     collectord.io/api--logs-override.2-index: {{ $.Values.splunk.specialCategoryIndex }}
+    collectord.io/api--logs-override.3-match: '(?i)SupplierUnparsableResponse'
+    collectord.io/api--logs-override.3-index: {{ $.Values.splunk.pidIndex }}
 spec:
   selector:
     matchLabels:

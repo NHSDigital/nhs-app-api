@@ -27,21 +27,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public async Task Parse(
             HttpResponseMessage responseMessage,
             IJsonResponseParser responseParser,
+            RecordType responseRecordType,
             ILogger logger)
         {
             var stringResponse = await GetStringResponse(responseMessage, logger);
             RawResponse = stringResponse;
             if (!String.IsNullOrEmpty(stringResponse))
             {
-                ParseResponse(responseParser, stringResponse, responseMessage, logger);
+                ParseResponse(responseParser, stringResponse, responseMessage, logger,
+                    responseRecordType == RecordType.Documents);
             }
         }
 
         private void ParseResponse(
-            IResponseParser responseParser,
+            IJsonResponseParser responseParser,
             string stringResponse,
             HttpResponseMessage responseMessage,
-            ILogger logger)
+            ILogger logger,
+            bool isDocumentsListResponse)
         {
             if (String.IsNullOrEmpty(stringResponse))
             {
@@ -50,8 +53,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             }
 
             var successStrategy = GetOutcomeEvaluator(RequestType);
-            Body = successStrategy.IsSuccess(StatusCodes, StatusCode,
-                responseMessage.IsSuccessStatusCode, stringResponse) ? responseParser.ParseBody<TBody>(stringResponse) : default;
+
+            var isSuccess = successStrategy.IsSuccess(StatusCodes, StatusCode, responseMessage.IsSuccessStatusCode,
+                stringResponse);
+
+            if (isDocumentsListResponse)
+            {
+                Body = isSuccess ?
+                    responseParser.ParseBodyAndLogOnError<TBody>(
+                        stringResponse,
+                        logger)
+                    : default;
+            }
+            else
+            {
+                Body = isSuccess ? responseParser.ParseBody<TBody>(stringResponse) : default;
+            }
 
             if (successStrategy.PopulateErrors(StatusCodes, responseMessage.IsSuccessStatusCode, StatusCode))
             {

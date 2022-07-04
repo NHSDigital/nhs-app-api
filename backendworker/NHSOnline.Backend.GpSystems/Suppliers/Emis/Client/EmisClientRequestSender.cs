@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Client
             }
 
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode, request.Type, request.SuccessStatusCodes);
-            await response.Parse(responseMessage, _responseParser, _logger);
+            await response.Parse(responseMessage, _responseParser, request.RecordType, _logger);
             return response;
         }
 

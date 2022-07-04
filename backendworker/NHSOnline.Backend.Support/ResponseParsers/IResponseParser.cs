@@ -1,10 +1,12 @@
 using System.Net;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Support.ResponseParsers
 {
     public interface IJsonResponseParser : IResponseParser
     {
+        T ParseBodyAndLogOnError<T>(string stringResponse, ILogger logger);
     }
 
     public interface IXmlResponseParser : IResponseParser

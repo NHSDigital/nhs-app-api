@@ -8,5 +8,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Client
         IEmisRequestBuilder EndUserSessionId(string endUserSessionId);
         IEmisRequestBuilder Timeout(int timeout);
         IEmisRequestBuilder AdditionalSuccessHttpStatusCode(HttpStatusCode successCode);
+        IEmisRequestBuilder RecordTypeToGet(RecordType recordType);
     }
 }

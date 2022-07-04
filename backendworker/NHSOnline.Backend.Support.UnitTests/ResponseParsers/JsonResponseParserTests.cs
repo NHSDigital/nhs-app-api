@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.ResponseParsers;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
 {
@@ -97,8 +102,6 @@ namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
                     });
         }
 
-
-
         [TestMethod]
         public void ParseBody_Failure_NotJson()
         {
@@ -118,6 +121,53 @@ namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
                             "Unexpected character encountered while parsing value",
                             "")
                     });
+        }
+
+        [TestMethod]
+        public void ParseBodyWithLogOnErrorOption_SuccessfulResponse_ReturnsDeserializedObject()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var mockLogger = fixture.Create<Mock<ILogger>>();
+            var parser = new JsonResponseParser();
+            var expected = new Application { DeviceType = "coco pops" };
+
+            // Act
+            var result = parser.ParseBodyAndLogOnError<Application>(
+                "{ \"Name\" : null, \"Version\" : null, \"ProviderId\" : null, \"DeviceType\" : \"coco pops\" }", mockLogger.Object
+            );
+
+            // Assert
+            result.Should().BeOfType<Application>();
+            result?.DeviceType.Should().Be(expected.DeviceType);
+        }
+
+        [TestMethod]
+        public void ParseBodyWithLogOnErrorOption_Failure_AndLogsOnError()
+        {
+            var failing = "{ \"Invalid\" }";
+
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var mockLogger = fixture.Create<Mock<ILogger>>();
+            var parser = new JsonResponseParser();
+
+            try
+            {
+                parser.ParseBodyAndLogOnError<MedicationRootObject>(failing, mockLogger.Object);
+                Assert.Fail();
+            }
+            catch (NhsUnparsableException e)
+            {
+                mockLogger.VerifyLogger(LogLevel.Information,
+               $"SupplierUnparsableResponse={failing}",
+                       Times.Once()
+                );
+                Assert.AreEqual(e.Message, "Response parsing failed.");
+            }
+            catch (Exception)
+            {
+                Assert.Fail();
+            }
         }
     }
 }
