@@ -47,7 +47,7 @@ Feature: errors accessibility
     Then I am idle for a short time
     And I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire
-    Then I see the login page with the session expiry notification
+    Then I see the logout page with the session expiry content
     And the Errors_SC05e_SessionExpired page is saved to disk
 
   Scenario: Service unavailable too young is captured

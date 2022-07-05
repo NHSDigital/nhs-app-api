@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import LogoutPage from '@/pages/logout';
 import { createStore, mount } from '../helpers';
+import i18n from '@/plugins/i18n';
 
 jest.mock('@/services/authorisation-service');
 jest.mock('@/lib/utils');
@@ -10,12 +11,19 @@ const createLogoutPage = ($store, query) => mount(LogoutPage, {
   $route: {
     query,
   },
+  mountOpts: { i18n },
 });
+
 describe('logout.vue', () => {
-  it('will call auth/logout', () => {
-    const $store = {
+  let $store;
+  let wrapper;
+  beforeEach(() => {
+    $store = {
       dispatch: jest.fn(),
       state: {
+        session: {
+          showExpiryMessage: true,
+        },
         device: {
           source: '',
         },
@@ -25,7 +33,9 @@ describe('logout.vue', () => {
       },
     };
 
-    createLogoutPage($store);
+    wrapper = createLogoutPage($store);
+  });
+  it('will call auth/logout', () => {
     expect($store.dispatch).toHaveBeenCalledWith('auth/logout');
   });
 
@@ -33,7 +43,7 @@ describe('logout.vue', () => {
     let head;
 
     beforeEach(() => {
-      head = LogoutPage.metaInfo.call();
+      head = LogoutPage.metaInfo.call(wrapper.vm);
     });
 
     it('will have no scripts defined', () => {
@@ -55,10 +65,12 @@ describe('logout.vue', () => {
   describe('continue button', () => {
     const query = { REDIRECT_PARAMETER: 'foo' };
     let button;
-    let wrapper;
+    let forSecurityYouAreAutoLoggedOutText;
+    let ifYouWereEnteringInfoText;
 
-    const $store = createStore({
+    $store = createStore({
       state: {
+        session: { showExpiryMessage: false },
         getters: {
           'session/isLoggedIn': () => true,
         },
@@ -68,6 +80,8 @@ describe('logout.vue', () => {
     beforeEach(() => {
       wrapper = createLogoutPage($store, query);
       button = wrapper.find('#loginButton');
+      forSecurityYouAreAutoLoggedOutText = wrapper.find('#forSecurityYouAreAutoLoggedOutText');
+      ifYouWereEnteringInfoText = wrapper.find('#ifYouWereEnteringInfoText');
     });
 
     it('will exist', () => {
@@ -89,6 +103,11 @@ describe('logout.vue', () => {
 
       it('will dispatch `analytics/satelliteTrack`', () => {
         expect($store.dispatch).toBeCalledWith('analytics/satelliteTrack', 'login');
+      });
+
+      it('will exists paragraphs text for session expiry', () => {
+        expect(forSecurityYouAreAutoLoggedOutText.exists()).toBe(true);
+        expect(ifYouWereEnteringInfoText.exists()).toBe(true);
       });
     });
   });

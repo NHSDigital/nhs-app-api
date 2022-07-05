@@ -4,6 +4,7 @@ import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { isAnonymous } from '@/router';
 import { APPOINTMENTS_NAME } from '@/router/names';
 import { setCookie, removeCookies } from '@/lib/cookie-manager';
+import { LOGOUT_PATH } from '@/router/paths';
 
 import {
   CLEAR,
@@ -310,7 +311,6 @@ describe('actions', () => {
       $router = createRouter(APPOINTMENTS_NAME);
 
       app = {
-        dispatch: jest.fn(),
         validate: actions.validate,
         $env: {
           SESSION_EXPIRING_WARNING_SECONDS: 10,
@@ -319,6 +319,7 @@ describe('actions', () => {
       };
 
       actions.app = app;
+      actions.dispatch = jest.fn();
 
       store = {
         getters: {
@@ -352,43 +353,43 @@ describe('actions', () => {
       });
 
       it('will call dispatch to stayOnPage for pageLeaveWarning', () => {
-        app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('pageLeaveWarning/stayOnPage');
+        actions.validate(store);
+        expect(actions.dispatch).toHaveBeenCalledWith('pageLeaveWarning/stayOnPage');
       });
 
       it('will return true', () => {
-        const result = app.validate(store);
+        const result = actions.validate(store);
         expect(result).toEqual(true);
       });
 
       it('will not call native onSessionExpiring callback if not native', () => {
         window.nativeApp = undefined;
 
-        app.validate(store);
+        actions.validate(store);
         expect(NativeApp.onSessionExpiring).not.toBeCalled();
       });
 
       it('will not call native onSessionExpiring callback if not expiring', () => {
         store.getters.isExpiring = () => false;
 
-        app.validate(store);
+        actions.validate(store);
         expect(NativeApp.onSessionExpiring).not.toBeCalled();
       });
 
       it('will call native onSessionExpiring callback if expiring and native', () => {
-        app.validate(store);
+        actions.validate(store);
         expect(NativeApp.onSessionExpiring).toHaveBeenCalledTimes(1);
       });
 
       it('will call dispatch moal/show  if expiring and desktop', () => {
         window.nativeApp = undefined;
 
-        app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('modal/show', { content: SessionExpiryModal });
+        actions.validate(store);
+        expect(actions.dispatch).toHaveBeenCalledWith('modal/show', { content: SessionExpiryModal });
       });
 
       it('will call commit for the SHOW_SESSION_EXPIRING mutation if expiring and native', () => {
-        app.validate(store);
+        actions.validate(store);
         expect(store.commit.mock.calls[0][0]).toEqual(SHOW_SESSION_EXPIRING);
       });
     });
@@ -400,12 +401,13 @@ describe('actions', () => {
       });
 
       it('will call global dispatch with the logout action', () => {
-        app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('auth/logoutWhenExpired');
+        actions.validate(store);
+        expect(actions.dispatch).toHaveBeenCalledWith('auth/logoutWhenExpired');
+        expect($router.push).toBeCalledWith({ path: `/${LOGOUT_PATH}` });
       });
 
       it('will return false', () => {
-        const result = app.validate(store);
+        const result = actions.validate(store);
         expect(result).toEqual(false);
       });
     });
@@ -417,12 +419,12 @@ describe('actions', () => {
         });
 
         it('will not call global dispatch with the logout action', () => {
-          app.validate(store);
-          expect(app.dispatch).not.toHaveBeenCalledWith('auth/logoutWhenExpired');
+          actions.validate(store);
+          expect(actions.dispatch).not.toHaveBeenCalledWith('auth/logoutWhenExpired');
         });
 
         it('will return false', () => {
-          const result = app.validate(store);
+          const result = actions.validate(store);
           expect(result).toEqual(false);
         });
       });
@@ -446,6 +448,10 @@ describe('actions', () => {
         it('will return false', () => {
           const result = actions.validate(store);
           expect(result).toEqual(false);
+        });
+
+        it('will not call to push the logout route', () => {
+          expect($router.push).not.toBeCalledWith({ path: `/${LOGOUT_PATH}` });
         });
       });
     });

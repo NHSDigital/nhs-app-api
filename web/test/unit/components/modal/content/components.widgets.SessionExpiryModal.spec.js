@@ -41,6 +41,7 @@ describe('SessionExpiryModal.vue', () => {
   });
 
   describe('button action', () => {
+    const $router = createRouter();
     it('should dismiss modal and dispatch extends session event', () => {
       const store =
         {
@@ -64,10 +65,12 @@ describe('SessionExpiryModal.vue', () => {
     });
 
     it('should dismiss modal and dispatch extends session event', () => {
-      const $router = createRouter();
       const store =
         {
-          app: { $env: jest.fn(), $router },
+          app: {
+            $router,
+            $env: jest.fn(),
+          },
           $env: {
             SESSION_EXPIRING_WARNING_SECONDS: 300,
           },

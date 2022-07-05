@@ -52,7 +52,7 @@ Feature: View prescriptions error cases
     When I retrieve the 'Your Prescriptions' page directly
     And I click the Order a prescription button
     And My session has expired
-    Then I see the login page with the session expiry notification
+    Then I see the logout page with the session expiry content
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
     Given I am a patient using the <GP System> GP System

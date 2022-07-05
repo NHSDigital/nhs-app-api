@@ -7,6 +7,8 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.JavascriptExecutor
+import pages.loggedOut.LogoutPage
+import pages.loggedOut.LoginFunction
 import pages.loggedOut.LoginPage
 import pages.loggedOut.LoginStubPage
 import utils.GlobalSerenityHelpers
@@ -19,19 +21,22 @@ private const val SLEEP_TIME_FOR_PROMISE: Long = 6000
 open class LoginSteps {
 
     lateinit var loginPage: LoginPage
+    lateinit var logOutPage: LogoutPage
+
     private lateinit var loginStubPage: LoginStubPage
 
     @Steps
     lateinit var browser: BrowserSteps
 
     @Step
-    fun using(patient: Patient, shouldAddNotificationsCookie: Boolean = true) {
-        stubbedLoginAndResetScripts(patient, shouldAddNotificationsCookie)
+    fun using(patient: Patient, shouldAddNotificationsCookie: Boolean = true, onLogOutPage: Boolean = false) {
+        val page: LoginFunction = if (onLogOutPage) logOutPage else loginPage;
+        stubbedLoginAndResetScripts(patient, shouldAddNotificationsCookie, page)
     }
 
     @Step
     fun usingLoginWithNotificationOptions(patient: Patient) {
-        stubbedLoginAndResetScripts(patient, false)
+        stubbedLoginAndResetScripts(patient, false, loginPage)
 
         val executor = loginPage.driver as JavascriptExecutor
 
@@ -43,10 +48,11 @@ open class LoginSteps {
     }
 
     private fun stubbedLoginAndResetScripts (
-            patient: Patient,
-            shouldAddNotificationsCookie: Boolean
+        patient: Patient,
+        shouldAddNotificationsCookie: Boolean,
+        page: LoginFunction
     ) {
-        loginPage.signIn()
+        page.signIn()
         if(Config.instance.autoLogin != "true" && !OptionManager.instance().isEnabled(NoJsOption::class)) {
             loginStubPage.signIn(patient)
 

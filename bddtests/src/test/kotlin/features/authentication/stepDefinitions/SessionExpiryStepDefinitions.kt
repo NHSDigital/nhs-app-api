@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.factories.PatientVerificationFactory
+import features.authentication.steps.LogOutSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import mocking.defaults.dataPopulation.journeys.session.CitizenIdSessionCreateJourney
@@ -28,6 +29,9 @@ class SessionExpiryStepDefinitions  {
 
     @Steps
     lateinit var login: LoginSteps
+
+    @Steps
+    lateinit var logOut: LogOutSteps
 
     lateinit var sessionExpiry: SessionExpiry
 
@@ -98,10 +102,10 @@ class SessionExpiryStepDefinitions  {
     @When("^I am idle long enough for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughForSessionExpiryDialog() = sessionExpiry.waitForSessionExpiryModal()
 
-    @Then("^I see the login page with the session expiry notification$")
-    fun iSeeTheLoginPageWithTheSessionExpiryNotification() {
-        login.loginPage.shouldBeDisplayed()
-        login.loginPage.assertTimeoutBannerIsVisible()
+    @Then("^I see the logout page with the session expiry content$")
+    fun iSeeTheLogoutPageWithTheSessionExpiryContent() {
+        logOut.logoutPage.shouldBeDisplayed()
+        logOut.logoutPage.shouldDisplaySessionExpiredContent()
     }
 
     @Then("^I see a dialog box prompting to extend the session$")

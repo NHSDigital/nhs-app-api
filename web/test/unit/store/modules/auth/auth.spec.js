@@ -50,6 +50,9 @@ describe('actions', () => {
     state = {
       config: {},
       session: {},
+      device: {
+        isNativeApp: false,
+      },
     };
 
     actions.dispatch = jest.fn();
@@ -168,13 +171,12 @@ describe('actions', () => {
   });
 
   describe('logoutWhenExpired', () => {
-    it('will dispatch the session/showExpiryMessage and auth/logout event', () => {
+    it('will dispatch the session/showExpiryMessage', () => {
       actions
         .logoutWhenExpired();
 
       expect(actions.dispatch).toHaveBeenCalledWith('modal/hide');
-      expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
-      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', true);
+      expect(actions.dispatch).toHaveBeenLastCalledWith('session/showExpiryMessage');
     });
   });
 });

@@ -20,6 +20,7 @@ import {
   HAS_GP_SESSION,
   HAS_ACTIONED_LOGOUT,
 } from './mutation-types';
+import { LOGOUT_PATH } from '@/router/paths';
 
 export default {
   init:
@@ -153,6 +154,9 @@ export default {
       }
 
       this.dispatch('auth/logoutWhenExpired');
+
+      this.app.$router.push({ path: `/${LOGOUT_PATH}` });
+
       return false;
     }
 

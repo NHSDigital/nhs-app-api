@@ -57,7 +57,7 @@ Feature: Session Expiry and Extend for Desktop
     Then I am idle for a short time
     And I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire
-    Then I see the login page with the session expiry notification
+    Then I see the logout page with the session expiry content
     And the dialog box is not visible on the screen
 
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box and check the focus trap

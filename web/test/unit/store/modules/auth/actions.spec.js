@@ -138,6 +138,9 @@ describe('actions', () => {
     state = {
       config: {},
       session: {},
+      device: {
+        isNativeApp: false,
+      },
     };
 
     actions.dispatch = jest.fn();
@@ -463,7 +466,13 @@ describe('actions', () => {
   });
 
   describe('logoutWhenExpired', () => {
+    state = {
+      device: {
+        isNativeApp: true,
+      },
+    };
     beforeEach(() => {
+      actions.state.device.isNativeApp = true;
       actions.logoutWhenExpired();
     });
 
@@ -485,7 +494,7 @@ describe('actions', () => {
       actions.logoutNativeWhenAlreadyExpired();
     });
 
-    it('will dispatch the `auth/logout` event', () => {
+    it('will dispatch the `auth/logout` event on native app', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('auth/logout', true);
     });
   });

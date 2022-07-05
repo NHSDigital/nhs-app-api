@@ -115,7 +115,7 @@ class AuthenticationStepDefinitions {
     @When("^I log in again$")
     fun iLogInAgain() {
         val patient = SerenityHelpers.getPatient()
-        login.using(patient)
+        login.using(patient, onLogOutPage = true)
         home.waitForLoginToCompleteSuccessfully(true)
     }
 
