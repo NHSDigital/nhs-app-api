@@ -9,7 +9,7 @@ import pages.assertIsDisplayed
 import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
-class LoginPage : HybridPageObject(), LoginFunction {
+class LoginPage : HybridPageObject() {
 
     private val pageHeading = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(), 'Access your NHS services')]",
@@ -49,7 +49,7 @@ class LoginPage : HybridPageObject(), LoginFunction {
         page = this
     )
 
-    override fun signIn() {
+    fun signIn() {
         loginOrCreateAccountButton.click()
     }
 

@@ -3,8 +3,7 @@ import { mount, createStore } from '../helpers';
 
 describe('CookieBanner', () => {
   let $store;
-  let $router;
-  const createCookieBanner = ({ acknowledged = false, isNativeApp = false, currentPathName = 'patient' } = {}) => {
+  const createCookieBanner = ({ acknowledged = false, isNativeApp = false } = {}) => {
     $store = createStore({
       state: {
         device: {
@@ -15,12 +14,7 @@ describe('CookieBanner', () => {
         },
       },
     });
-    $router = {
-      currentRoute: {
-        name: currentPathName,
-      },
-    };
-    return mount(CookieBanner, { $router, $store });
+    return mount(CookieBanner, { $store });
   };
 
   describe('methods', () => {
@@ -48,11 +42,6 @@ describe('CookieBanner', () => {
       expect(cookieBanner.vm.showCookieBanner).toBe(true);
     });
 
-    it('will show banner when not on Logout Page', () => {
-      Storage.prototype.getItem = jest.fn('hasAcknowledgedCookies').mockImplementation(() => false);
-      expect(cookieBanner.vm.showCookieBanner).toBe(true);
-    });
-
     it('will not show banner if hasAcknowledgedCookies is set in the session storage', () => {
       Storage.prototype.getItem = jest.fn('hasAcknowledgedCookies').mockImplementation(() => true);
       // This needs to be created after the sessionStorage is mocked
@@ -68,10 +57,6 @@ describe('CookieBanner', () => {
     });
     it('will not show banner if on a native device', () => {
       cookieBanner = createCookieBanner({ isNativeApp: true });
-      expect(cookieBanner.vm.showCookieBanner).toBe(false);
-    });
-    it('will not show banner when on Logout Page', () => {
-      cookieBanner = createCookieBanner({ currentPathName: 'logout' });
       expect(cookieBanner.vm.showCookieBanner).toBe(false);
     });
   });

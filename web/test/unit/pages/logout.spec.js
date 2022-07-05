@@ -1,16 +1,14 @@
 /* eslint-disable no-underscore-dangle */
+import { mount } from '@vue/test-utils';
 import LogoutPage from '@/pages/logout';
-import { createStore, mount } from '../helpers';
 
-jest.mock('@/services/authorisation-service');
-jest.mock('@/lib/utils');
+const createLogoutPage = $store =>
+  mount(LogoutPage, {
+    mocks: {
+      $store,
+    },
+  });
 
-const createLogoutPage = ($store, query) => mount(LogoutPage, {
-  $store,
-  $route: {
-    query,
-  },
-});
 describe('logout.vue', () => {
   it('will call auth/logout', () => {
     const $store = {
@@ -19,9 +17,6 @@ describe('logout.vue', () => {
         device: {
           source: '',
         },
-      },
-      getters: {
-        'session/isLoggedIn': () => true,
       },
     };
 
@@ -48,47 +43,6 @@ describe('logout.vue', () => {
       expect(head.noscript[0]).toEqual({
         innerHTML: '<meta http-equiv="refresh" content="0;URL=\'/\'">',
         body: false,
-      });
-    });
-  });
-
-  describe('continue button', () => {
-    const query = { REDIRECT_PARAMETER: 'foo' };
-    let button;
-    let wrapper;
-
-    const $store = createStore({
-      state: {
-        getters: {
-          'session/isLoggedIn': () => true,
-        },
-      },
-    });
-
-    beforeEach(() => {
-      wrapper = createLogoutPage($store, query);
-      button = wrapper.find('#loginButton');
-    });
-
-    it('will exist', () => {
-      expect(button.exists()).toBe(true);
-    });
-
-    it('will be enabled', () => {
-      expect(wrapper.vm.isButtonDisabled).toBe(false);
-    });
-
-    describe('on click', () => {
-      beforeEach(() => {
-        button.trigger('click');
-      });
-
-      it('will disable button', () => {
-        expect(wrapper.vm.isButtonDisabled).toBe(true);
-      });
-
-      it('will dispatch `analytics/satelliteTrack`', () => {
-        expect($store.dispatch).toBeCalledWith('analytics/satelliteTrack', 'login');
       });
     });
   });

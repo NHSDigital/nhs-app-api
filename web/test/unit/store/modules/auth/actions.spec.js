@@ -57,7 +57,6 @@ describe('actions', () => {
       'practiceSettings/init',
     ]).it('will dispatch the `%s` event', (action) => {
       expect(actions.dispatch).toHaveBeenCalledWith(action);
-      expect(actions.app.$router.push).toHaveBeenCalledWith({ path: 'logout' });
     });
   };
 
@@ -460,7 +459,6 @@ describe('actions', () => {
     });
 
     removeSessionCookiesAsserts();
-    // Redirects to logout
   });
 
   describe('logoutWhenExpired', () => {

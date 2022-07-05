@@ -28,11 +28,6 @@ open class NavHeaderSteps {
     }
 
     @Step
-    fun clickLogout() {
-        webHeader.clickLogout()
-    }
-
-    @Step
     fun assertHomePageHeaderVisible() {
         webHeader.getPageTitle().withText(homePage.headerText)
     }

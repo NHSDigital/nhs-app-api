@@ -8,7 +8,7 @@ Feature: Sign out of mobile web
   Scenario Outline: A <GP Supplier> user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in as a <GP Supplier> user
     When I sign out
-    Then I see the logout page
+    Then I see the login page
     Examples:
       | GP Supplier |
       | EMIS        |
@@ -34,7 +34,7 @@ Feature: Sign out of mobile web
   Scenario Outline: A signed out <GP Supplier> user should not see the navigation bar or header on the onboarding sign in screen
     Given I am logged in as a <GP Supplier> user
     When I sign out
-    Then I see the logout page
+    Then I see the login page
     And I do not see the menu bar
     Examples:
       | GP Supplier |
@@ -45,7 +45,7 @@ Feature: Sign out of mobile web
   Scenario Outline: The nhso.session cookie should be clear of session and user information if the <GP Supplier> user is not signed in
     Given I am logged in as a <GP Supplier> user
     When I sign out
-    Then I see the logout page
+    Then I see the login page
     And the user login details are cleared from cookies
     Examples:
       | GP Supplier |
@@ -57,5 +57,5 @@ Feature: Sign out of mobile web
     # Only TPP has a sign out endpoint which can fail. Other suppliers tested manually
     Given I am logged in as a TPP user where the session will fail to clear on signout
     When I sign out
-    Then I see the logout page
+    Then I see the login page
     And the user login details are cleared from cookies

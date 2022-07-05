@@ -25,7 +25,6 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
-import { LOGOUT_NAME } from '@/router/names';
 
 export default {
   name: 'CookieBanner',
@@ -42,7 +41,6 @@ export default {
       return (
         !this.$store.state.cookieBanner.acknowledged &&
         !sessionStorage.getItem('hasAcknowledgedCookies') &&
-        this.$router.currentRoute.name !== LOGOUT_NAME &&
         !this.$store.state.device.isNativeApp
       );
     },

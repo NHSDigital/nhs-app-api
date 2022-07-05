@@ -118,11 +118,11 @@ Feature: Login frontend
     Given I am logged in as a <GP System> user
     Then I see the home page
     When I log out
-    Then I see the logout page
+    Then I see the login page
     When I log in again
     Then I see the home page
     When I log out
-    Then I see the logout page
+    Then I see the login page
     When I log in again
     Then I see the home page
     Examples:
@@ -134,7 +134,7 @@ Feature: Login frontend
     Given I am logged in as a EMIS user
     Then I see the home page
     When I use the header link to log out of the website
-    Then I see the logout page
+    Then I see the login page
 
   Scenario: A EMIS user can cycle the header links
     Given I am logged in as a EMIS user
