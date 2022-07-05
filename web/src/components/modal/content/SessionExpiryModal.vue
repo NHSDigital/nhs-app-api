@@ -56,7 +56,8 @@ export default {
 
     logout() {
       this.$store.dispatch('modal/hide');
-      this.$store.dispatch('auth/logout');
+      this.$store.dispatch('session/setActionedLogout', true);
+      this.$store.app.$router.push({ path: `/${LOGOUT_PATH}` });
     },
   },
 };

@@ -1,30 +1,48 @@
 <template>
-  <div v-if="anchorLinks.length > 0" :class="$style['header-links']">
-    <span v-for="(anchorLink, index) in anchorLinks" :key="index">
-      <router-link v-if="anchorLink.internal"
-                   :id="anchorLink.id"
-                   :to="anchorLink.value"
-                   tabindex="0">
-        {{ anchorLink.name }}
-      </router-link>
-      <a v-else :id="anchorLink.id" :href="anchorLink.value" target="_blank"
-         rel="noopener noreferrer">
-        {{ anchorLink.name }}
-      </a>
-      <strong v-if="index < anchorLinks.length - 1" aria-hidden="true">
-        &nbsp;|&nbsp;
-      </strong>
-    </span>
+  <div :class="$style['header-links']">
+    <header-link :anchor-name="$t('navigation.header.helpAndSupport')"
+                 :anchor-value="currentHelpUrl"
+                 :anchor-id="'help-and-support-link'"/>
+    <strong aria-hidden="true">
+      |
+    </strong>
+    <header-link :anchor-name="$t('navigation.header.more')"
+                 :anchor-value="morePath"
+                 :anchor-id="'more-link'"
+                 :anchor-internal="true"/>
+    <strong aria-hidden="true">
+      |
+    </strong>
+    <header-link :anchor-name="$t('navigation.header.logout')"
+                 :anchor-value="logoutPath"
+                 :anchor-id="'account-logout'"
+                 :anchor-internal="true"
+                 :anchor-action="actionLogout()"/>
   </div>
 </template>
 
 <script>
+
+import HeaderLink from '@/components/widgets/HeaderLink';
+import {
+  LOGOUT_PATH,
+  MORE_PATH,
+} from '@/router/paths';
+
 export default {
   name: 'HeaderLinks',
-  props: {
-    anchorLinks: {
-      type: Array,
-      default: () => [],
+  components: {
+    HeaderLink,
+  },
+  data() {
+    return {
+      morePath: `/patient/${MORE_PATH}`,
+      logoutPath: `/patient/${LOGOUT_PATH}`,
+    };
+  },
+  methods: {
+    actionLogout() {
+      this.$store.dispatch('session/setActionedLogout', true);
     },
   },
 };

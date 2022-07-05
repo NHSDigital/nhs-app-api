@@ -5,6 +5,7 @@ import { LOGOUT_NAME } from '@/router/names';
 
 import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
+import logout from '@/middleware/logout';
 
 export const LOGOUT = {
   path: LOGOUT_PATH,
@@ -16,6 +17,7 @@ export const LOGOUT = {
     proofLevel: proofLevel.P5,
     crumb: {},
     helpPath: APP_LOGIN_HELP_PATH,
+    middleware: [logout],
   },
 };
 

@@ -20,10 +20,10 @@
                     @keyup.enter="toggleMiniMenu">{{ $t('navigation.header.menu') }}
             </button>
           </div>
-          <header-links v-if="showLinks" :anchor-links="links"/>
+          <header-links v-if="showLinks"/>
         </div>
+        <header-menu v-if="showMenu" />
       </div>
-      <header-menu v-if="showMenu" />
     </header>
   </div>
 </template>
@@ -88,13 +88,6 @@ export default {
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
     },
-    links() {
-      return [
-        { name: this.$t('navigation.header.helpAndSupport'), value: this.currentHelpUrl, id: 'help-and-support-link' },
-        { name: this.$t('navigation.header.more'), value: this.morePath, id: 'more-link', internal: true },
-        { name: this.$t('navigation.header.logout'), value: this.logoutPath, id: 'account-logout', internal: true },
-      ];
-    },
     miniMenuExpanded() {
       return this.$store.state.header.miniMenuExpanded.toString();
     },
@@ -102,6 +95,9 @@ export default {
   methods: {
     toggleMiniMenu() {
       this.$store.dispatch('header/toggleMiniMenu');
+    },
+    actionLogout() {
+      this.$store.dispatch('session/setActionedLogout', true);
     },
   },
 };

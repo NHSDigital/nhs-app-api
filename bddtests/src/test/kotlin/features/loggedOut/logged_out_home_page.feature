@@ -1,4 +1,5 @@
 @logged-out
+@authentication
 Feature: Logged out home page content
 
   Scenario: The correct information about using the service is displayed when on logged-out home page
@@ -18,5 +19,11 @@ Feature: Logged out home page content
     Given I am a EMIS patient using the native app
     And I am on the login logged-out page
     Then I do not see desktop specific information displayed
+
+  Scenario: A user can see the logout page after logging out
+    Given I am logged in as a EMIS user
+    Then I see the home page
+    When I use the header link to log out of the website
+    Then I see the Logout page displayed
 
 

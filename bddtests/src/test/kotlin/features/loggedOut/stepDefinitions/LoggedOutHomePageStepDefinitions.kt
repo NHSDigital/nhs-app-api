@@ -3,11 +3,13 @@ package features.loggedOut.stepDefinitions
 import io.cucumber.java.en.Then
 import pages.assertElementNotPresent
 import pages.assertIsDisplayed
+import pages.loggedOut.LogoutPage
 import pages.loggedOut.LoginPage
 
 class LoggedOutHomePageStepDefinitions {
 
     private lateinit var loginPage: LoginPage
+    lateinit var logoutPage: LogoutPage
 
     @Then("^I see a list of other services I can use without logging in$")
     fun iSeeAListOfServicesICanUseWithoutLoggingIn() {
@@ -34,5 +36,4 @@ class LoggedOutHomePageStepDefinitions {
     fun iDoNotSeeDesktopSpecificInformationDisplayed() {
         loginPage.desktopSpecificInformation.assertElementNotPresent()
     }
-
 }

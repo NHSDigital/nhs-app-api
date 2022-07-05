@@ -1,41 +1,32 @@
-import HeaderLinks from '@/components/widgets/HeaderLinks';
-import { createStore, mount } from '../../helpers';
+import HeaderLink from '@/components/widgets/HeaderLink';
+import { mount } from '../../helpers';
 
 const additionalInternalAnchorAttrs = { target: '_blank', rel: 'noopener noreferrer' };
 
+const anchorId = 'Id';
+const anchorName = 'Name';
+const anchorValue = '/value';
+const lastPlaceLink = false;
+
 let wrapper;
-let $store;
-let dispatch;
 
-const mountComponent = () => {
-  $store = createStore({
-    app: {
-      $env: jest.fn(),
+const mountComponent = (anchorInternal) => {
+  wrapper = mount(HeaderLink, {
+    propsData: {
+      anchorId,
+      anchorName,
+      anchorValue,
+      anchorInternal,
+      lastPlaceLink,
+      anchorAction() {},
     },
-    dispatch: jest.fn(),
-    getters: {
-      'session/isLoggedIn': () => true,
-    },
-  });
-  dispatch = jest.spyOn($store, 'dispatch');
-
-  wrapper = mount(HeaderLinks, {
-    $store,
     stubs: { 'router-link': '<div data-purpose="router-link"><slot/></div>' },
-    $route: { meta: { helpUrl: 'https://help.url' } },
   });
 };
 
-describe('HeaderLinks', () => {
-  beforeEach(() => {
-    mountComponent();
-  });
-
-  it('actionLogout() will call setActionedLogout with a payload of true ', () => {
-    expect(dispatch).toBeCalledWith('session/setActionedLogout', true);
-  });
-
+describe('HeaderLink', () => {
   it('will render plain anchor tags for external links', () => {
+    mountComponent(false);
     const anchorWrappers = wrapper.findAll('a').wrappers;
     const mappedAttributes = anchorWrappers.map((a) => {
       const attributes = a.attributes();
@@ -49,13 +40,14 @@ describe('HeaderLinks', () => {
       };
     });
     const expectedAttributes = [
-      { name: 'Help and support', id: 'help-and-support-link', value: 'http://stubs.local.bitraft.io/help-and-support/', ...additionalInternalAnchorAttrs },
+      { name: 'Name', value: '/value', id: 'Id', ...additionalInternalAnchorAttrs },
     ];
 
     expect(mappedAttributes).toEqual(expectedAttributes);
   });
 
   it('will render router-links for internal links', () => {
+    mountComponent(true);
     const routerLinkWrappers = wrapper.findAll('div[data-purpose=router-link]').wrappers;
     const mappedAttributes = routerLinkWrappers.map((r) => {
       const attributes = r.attributes();
@@ -67,8 +59,8 @@ describe('HeaderLinks', () => {
       };
     });
     const expectedAttributes = [
-      { name: 'More', id: 'more-link', value: '/patient/more' },
-      { name: 'Log out', id: 'account-logout', value: '/patient/logout' }];
+      { name: 'Name', value: '/value', id: 'Id' },
+    ];
 
     expect(mappedAttributes).toEqual(expectedAttributes);
   });

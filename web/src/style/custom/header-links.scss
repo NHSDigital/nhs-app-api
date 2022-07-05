@@ -1,5 +1,3 @@
-@import "../colours";
-@import "../fonts";
 @import "../screensizes";
 @import "../textstyles";
 
@@ -12,38 +10,6 @@
     outline-color: $focus_highlight;
     box-shadow: inset 0 0 0 4px $focus_highlight;
     outline-offset: -5px;
-  }
-
-  span {
-    margin: 0;
-
-    a {
-      @include account;
-      text-decoration: none;
-      display: inline-block;
-      color: $white;
-      padding: 0.5em;
-
-      &:visited, &:active {
-        color: $white;
-      }
-
-      &:hover {
-        // Editted as part of NHSO-13314
-        // Made !important to override the a:hover in _focus.scss
-        background: $hover_blue !important;
-        box-shadow: none !important;
-        color: $white !important;
-        text-decoration: underline !important;
-        // End of Edit
-      }
-    }
-
-    b {
-      @include account;
-      display: inline-block;
-      color: $white;
-    }
   }
 
  @include fromLargeDesktop {

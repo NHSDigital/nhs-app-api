@@ -12,6 +12,7 @@ export const HIDE_SESSION_EXPIRING = 'HIDE_SESSION_EXPIRING';
 export const SET_USER_SESSION_REFERENCE = 'SET_USER_SESSION_REFERENCE';
 export const SET_RETRY_GP_SESSION = 'SET_RETRY_GP_SESSION';
 export const HAS_GP_SESSION = 'HAS_GP_SESSION';
+export const HAS_ACTIONED_LOGOUT = 'HAS_ACTIONED_LOGOUT';
 export const initialState = () => ({
   accessToken: undefined,
   csrfToken: undefined,
@@ -31,4 +32,5 @@ export const initialState = () => ({
   userSessionCreateReferenceCode: undefined,
   hasRetried: undefined,
   hasGpSession: undefined,
+  hasActionedLogout: false,
 });

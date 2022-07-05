@@ -3,7 +3,7 @@ import { find } from 'lodash/fp';
 import actions from '@/store/modules/auth/actions';
 import Sources from '@/lib/sources';
 import NativeApp from '@/services/native-app';
-import { LOGIN_PATH } from '@/router/paths';
+import { LOGOUT_PATH } from '@/router/paths';
 
 jest.mock('@/services/native-app');
 
@@ -139,7 +139,7 @@ describe('actions', () => {
       });
 
       it('will call router push', () => {
-        expect(actions.app.$router.push).toHaveBeenCalledWith({ path: LOGIN_PATH });
+        expect(actions.app.$router.push).toHaveBeenCalledWith({ path: LOGOUT_PATH });
       });
     });
 

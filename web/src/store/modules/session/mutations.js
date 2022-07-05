@@ -14,6 +14,7 @@ import {
   SET_USER_SESSION_REFERENCE,
   SET_RETRY_GP_SESSION,
   HAS_GP_SESSION,
+  HAS_ACTIONED_LOGOUT,
   initialState,
 } from './mutation-types';
 
@@ -55,6 +56,7 @@ export default {
     state.userSessionCreateReferenceCode = undefined;
     state.hasRetried = undefined;
     state.hasGpSession = undefined;
+    state.hasActionedLogout = false;
   },
   [HIDE_EXPIRY_MESSAGE](state) {
     delete (state.showExpiryMessage);
@@ -104,5 +106,8 @@ export default {
   },
   [HAS_GP_SESSION](state, hasGpSession) {
     state.hasGpSession = hasGpSession;
+  },
+  [HAS_ACTIONED_LOGOUT](state, hasActionedLogout) {
+    state.hasActionedLogout = hasActionedLogout;
   },
 };

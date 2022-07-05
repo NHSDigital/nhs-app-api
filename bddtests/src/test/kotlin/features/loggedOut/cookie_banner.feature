@@ -53,7 +53,18 @@ Feature: Cookie Banner
     And I am logged in
     And I see the home page
     When I sign out
+    Then I see the Logout page displayed
+    When I browse to the /login and see the login page
     Then I see the cookie banner
+
+  Scenario: Unacknowledged Cookie Banner doesn't appear when on the Logout page, when Javascript enabled
+    Given I have enabled javascript
+    And I am a EMIS patient
+    And I am logged in
+    And I see the home page
+    When I sign out
+    Then I see the Logout page displayed
+    And I do not see the cookie banner
 
   Scenario: Acknowledged Cookie Banner reappears when browser closed and repoened, when Javascript enabled
     Given I have enabled javascript

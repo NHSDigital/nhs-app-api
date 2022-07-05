@@ -1,6 +1,7 @@
 import i18n from '@/plugins/i18n';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
-import { mount } from '../../../helpers';
+import { mount, createRouter } from '../../../helpers';
+import { LOGOUT_PATH } from '@/router/paths';
 
 describe('SessionExpiryModal.vue', () => {
   const createModal = (
@@ -63,9 +64,10 @@ describe('SessionExpiryModal.vue', () => {
     });
 
     it('should dismiss modal and dispatch extends session event', () => {
+      const $router = createRouter();
       const store =
         {
-          app: { $env: {} },
+          app: { $env: jest.fn(), $router },
           $env: {
             SESSION_EXPIRING_WARNING_SECONDS: 300,
           },
@@ -81,7 +83,8 @@ describe('SessionExpiryModal.vue', () => {
       page.vm.logout();
 
       expect(dispatch).toBeCalledWith('modal/hide');
-      expect(dispatch).toHaveBeenLastCalledWith('auth/logout');
+      expect(dispatch).toHaveBeenLastCalledWith('session/setActionedLogout', true);
+      expect($router.push).toBeCalledWith({ path: `/${LOGOUT_PATH}` });
     });
   });
 

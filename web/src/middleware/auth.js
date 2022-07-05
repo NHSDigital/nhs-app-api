@@ -8,8 +8,13 @@ import {
   LOGIN_NAME,
   INTEGRATION_REFERRER_PARAMETER,
   SSO_PARAMETER,
+  LOGOUT_NAME,
 } from '@/router/names';
-import { EMPTY_PATH, INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
+import {
+  EMPTY_PATH,
+  INTERSTITIAL_REDIRECTOR_PATH,
+  LOGOUT_PATH,
+} from '@/router/paths';
 import { isAnonymous } from '@/router';
 import { createRouteByNameObject, createRoutePathObject, pathWithPatientPrefixOrUndefined } from '@/lib/utils';
 
@@ -20,6 +25,10 @@ export default async ({ router, store, to, next }) => {
   const santizedPath = pathWithPatientPrefixOrUndefined({ path: to.path, store, router });
 
   if (!isAnonymous(to) && !isLoggedIn) {
+    if (to.path === `/${LOGOUT_PATH}`) {
+      next({ name: LOGOUT_NAME });
+      return;
+    }
     if (store.$env.SKIP_LOGGED_OUT_ENABLED) {
       if (to.query.referrer) {
         const integrationReferrer = `${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}`;
@@ -55,6 +64,11 @@ export default async ({ router, store, to, next }) => {
     if (!to.name) {
       queryParam = santizedPath;
       navigateToRedirector = santizedPath === `/patient/${INTERSTITIAL_REDIRECTOR_PATH}`;
+    }
+
+    if (queryParam === LOGOUT_NAME) {
+      next({ name: LOGIN_NAME });
+      return;
     }
 
     const query = { [REDIRECT_PARAMETER]: queryParam };

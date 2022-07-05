@@ -56,4 +56,7 @@ export default {
   patientSessionId(state) {
     return state.patientSessionId;
   },
+  hasActionedLogout(state) {
+    return state.hasActionedLogout;
+  },
 };

@@ -18,6 +18,7 @@ import {
   HIDE_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
   HAS_GP_SESSION,
+  HAS_ACTIONED_LOGOUT,
 } from './mutation-types';
 
 export default {
@@ -111,6 +112,9 @@ export default {
   },
   setGpSession({ commit }, info) {
     commit(HAS_GP_SESSION, info);
+  },
+  setActionedLogout({ commit }, value) {
+    commit(HAS_ACTIONED_LOGOUT, value);
   },
   startValidationChecking({ getters, commit, dispatch, state }) {
     if (!getters.isLoggedIn() || state.validationInterval) return;

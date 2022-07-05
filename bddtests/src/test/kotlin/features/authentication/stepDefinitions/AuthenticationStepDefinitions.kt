@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.steps.HomeSteps
+import features.authentication.steps.LogOutSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.navigation.steps.NavHeaderSteps
@@ -41,6 +42,8 @@ class AuthenticationStepDefinitions {
     lateinit var home: HomeSteps
     @Steps
     lateinit var login: LoginSteps
+    @Steps
+    lateinit var logout: LogOutSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
     @Steps
@@ -222,6 +225,11 @@ class AuthenticationStepDefinitions {
     @Then("^I see the login page$")
     fun iSeeTheLoginPage() {
         login.loginPage.shouldBeDisplayed()
+    }
+
+    @Then("^I see the logout page$")
+    fun iSeeTheLogoutPage() {
+        logout.logoutPage.shouldBeDisplayed();
     }
 
     @Then("^I see the yellow banner$")

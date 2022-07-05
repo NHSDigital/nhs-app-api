@@ -24,6 +24,11 @@ class NavHeaderStepDefinitions {
         navHeader.clickHelpAndSupport()
     }
 
+    @When("^I click the logout link$")
+    fun iClickTheLogoutIcon() {
+        navHeader.clickLogout()
+    }
+
     @When("^I click the home icon$")
     fun iClickTheNHSLogo() {
         navHeader.clickHome()

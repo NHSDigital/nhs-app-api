@@ -46,7 +46,7 @@ Feature: Session Expiry and Extend for Desktop
     Then I am idle for a short time
     And I see a dialog box prompting to extend the session
     When I click to log out
-    Then I see the login page
+    Then I see the logout page
     And the dialog box is not visible on the screen
 
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
