@@ -26,6 +26,12 @@
               <p class="nhsuk-body nhsuk-u-margin-bottom-2">
                 {{ item.term }}
               </p>
+              <div v-if="item.associatedText.length > 0" class="nhsuk-body nhsuk-u-margin-bottom-2">
+                <p v-for="(text, textIndex) in item.associatedText"
+                   :key="`associated-text-${textIndex}`"
+                   class="nhsuk-u-margin-bottom-0">
+                  {{ text }}</p>
+              </div>
               <p v-if="item.nextDate != null"
                  class="nhsuk-body nhsuk-u-margin-bottom-2">
                 {{ $t('myRecord.gpMedicalRecord.nextDate') }}

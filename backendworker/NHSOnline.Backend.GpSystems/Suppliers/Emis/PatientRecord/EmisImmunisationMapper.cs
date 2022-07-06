@@ -3,6 +3,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using MedicationRootObject = NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord.MedicationRootObject;
 using System;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -35,6 +36,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             => new ImmunisationItem
             {
                 Term = immunisation.Term,
+                AssociatedText = immunisation.AssociatedText != null
+                    ? immunisation.AssociatedText.Select(x => x.Text).ToList() : new List<string>(),
                 EffectiveDate = immunisation.EffectiveDate != null ? new MyRecordDate
                 {
                     Value = immunisation.EffectiveDate?.Value,

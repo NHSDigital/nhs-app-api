@@ -10,10 +10,16 @@ data class ImmunisationMedicalRecord(
 
 data class ImmunisationResponse(
         var term: String,
-        var effectiveDate: EffectiveDate?
+        var effectiveDate: EffectiveDate?,
+        var associatedText: MutableList<AssociatedText> = arrayListOf()
 )
 
 data class EffectiveDate(
         var datePart: String,
         var value: String
+)
+
+data class AssociatedText(
+        var text: String,
+        var textType: String
 )

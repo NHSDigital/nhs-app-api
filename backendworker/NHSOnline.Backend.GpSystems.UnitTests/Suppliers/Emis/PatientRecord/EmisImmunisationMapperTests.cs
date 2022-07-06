@@ -74,6 +74,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             firstMappedImmunisation.EffectiveDate.Should().NotBeNull();
             firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
             firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
+            firstMappedImmunisation.AssociatedText.Should().BeEquivalentTo(new List<string>());
         }
 
         [TestMethod]
@@ -100,6 +101,51 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             firstMappedImmunisation.EffectiveDate.Should().NotBeNull();
             firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
             firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
+            firstMappedImmunisation.AssociatedText.Should().BeEquivalentTo(new List<string>());
+        }
+
+
+        [TestMethod]
+        public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithListOfAssociatedText()
+        {
+            // Arrange
+            var immunisations = new List<Immunisation>
+            {
+                new Immunisation
+                {
+                    Term = "testImmunisation",
+                    EffectiveDate = new EffectiveDate(),
+                    AssociatedText = new List<AssociatedText> {
+                        new AssociatedText {
+                                Text = "Text one",
+                                TextType = "text type one"
+                        },
+                        new AssociatedText {
+                                Text = "Text two",
+                                TextType = "text type two"
+                        }
+                    }
+                }
+            };
+
+            // Act
+            var mappedImmunisationList = _systemUnderTest.Map(new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Immunisations = immunisations
+                }
+            });
+
+            // Assert
+            var firstMappedImmunisation = mappedImmunisationList.Data.First();
+            firstMappedImmunisation.Term.Should().Be("testImmunisation");
+            firstMappedImmunisation.EffectiveDate.Should().NotBeNull();
+            firstMappedImmunisation.EffectiveDate.DatePart.Should().BeNull();
+            firstMappedImmunisation.EffectiveDate.Value.Should().BeNull();
+            firstMappedImmunisation.AssociatedText.Count.Should().Be(2);
+            firstMappedImmunisation.AssociatedText[0].Should().Be("Text one");
+            firstMappedImmunisation.AssociatedText[1].Should().Be("Text two");
         }
     }
 }

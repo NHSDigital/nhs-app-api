@@ -1212,6 +1212,11 @@
                                   term: 
                                     type: "string"
                                     description: "The name of the immunisation."
+                                  associatedText: 
+                                    type: "array"
+                                    description: "Array of text associated with the immunisation item."
+                                    items: 
+                                      type: "string"
                     testResults: 
                       type: "object"
                       properties: 

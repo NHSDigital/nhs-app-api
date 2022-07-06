@@ -12,8 +12,13 @@ open class V2MedicalRecordImmunisationsStepDefinitions {
 
     val expectedData = mapOf(
             Supplier.EMIS to arrayOf(
-                "18 February 2018\nSecond meningitis C Vaccination",
-                "15 May 2002\nFirst meningitis C Vaccination"
+                "18 February 2018\nSecond meningitis C Vaccination\n" +
+                        "associated text line one\n" +
+                        "associated text line two\n" +
+                        "associated text line three\n" +
+                        "associated text line four",
+                "15 May 2002\nFirst meningitis C Vaccination\n" +
+                        "associated text line one"
             ), Supplier.VISION to arrayOf(
                 "10 October 2018\nLumpectomy NEC",
                 "10 October 2018\nLumpectomy NEC"
@@ -36,8 +41,13 @@ open class V2MedicalRecordImmunisationsStepDefinitions {
         val immunisationsMessages = immunisationsPage.getImmunisationsElements()
 
         val expectedMessages = listOf(
-            "18 February 2018\nSecond meningitis C Vaccination",
-            "Unknown Date\nFirst meningitis C Vaccination"
+            "18 February 2018\nSecond meningitis C Vaccination\n" +
+                    "associated text line one\n" +
+                    "associated text line two\n" +
+                    "associated text line three\n" +
+                    "associated text line four",
+            "Unknown Date\nFirst meningitis C Vaccination\n" +
+                    "associated text line one"
         )
 
         Assert.assertEquals("Expected records", expectedMessages.size, immunisationsMessages.size )

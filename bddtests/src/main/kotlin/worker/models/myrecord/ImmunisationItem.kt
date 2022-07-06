@@ -4,5 +4,6 @@ data class ImmunisationItem (
         val term: String,
         val effectiveDate: Date,
         val nextDate: String,
-        val status: String
+        val status: String,
+        val associatedText: MutableList<String>
 )

@@ -1,5 +1,6 @@
 package mocking.data.myrecord
 
+import mocking.emis.immunisations.AssociatedText
 import mocking.emis.immunisations.EffectiveDate
 import mocking.emis.immunisations.ImmunisationMedicalRecord
 import mocking.emis.immunisations.ImmunisationResponse
@@ -14,10 +15,12 @@ object ImmunisationsData {
         val immunisations = mutableListOf<ImmunisationResponse>()
 
         immunisations.add(ImmunisationResponse(term = "First meningitis C Vaccination",
-                effectiveDate =  null))
+                effectiveDate =  null,
+                associatedText = mutableListOf()))
 
         immunisations.add(ImmunisationResponse(term = "Second meningitis C Vaccination",
-                effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
+                effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927"),
+                associatedText = getSingleAssociatedText()))
 
         return ImmunisationResponseModel (
                 medicalRecord = ImmunisationMedicalRecord (
@@ -31,10 +34,12 @@ object ImmunisationsData {
         val immunisations = mutableListOf<ImmunisationResponse>()
 
         immunisations.add(ImmunisationResponse(term = "First meningitis C Vaccination",
-                effectiveDate =  EffectiveDate("YearMonthDay", "2002-05-15T09:52:44.927")))
+                effectiveDate =  EffectiveDate("YearMonthDay", "2002-05-15T09:52:44.927"),
+                associatedText = getSingleAssociatedText()))
 
         immunisations.add(ImmunisationResponse(term = "Second meningitis C Vaccination",
-                effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
+                effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927"),
+                associatedText = getMultipleAssociatedText()))
 
         return ImmunisationResponseModel (
                 medicalRecord = ImmunisationMedicalRecord (
@@ -78,6 +83,25 @@ object ImmunisationsData {
         // Overwrite effective date
         immunisationData.medicalRecord.immunisations.first().effectiveDate = null
         return immunisationData
+    }
+
+
+    private fun getSingleAssociatedText(): MutableList<AssociatedText> {
+        val associatedText = mutableListOf<AssociatedText>()
+        associatedText.add(AssociatedText(text = "associated text line one", textType = "p0"))
+
+        return associatedText
+    }
+
+    private fun getMultipleAssociatedText(): MutableList<AssociatedText> {
+        val associatedText = mutableListOf<AssociatedText>()
+
+        associatedText.add(AssociatedText(text = "associated text line one", textType = "p0"))
+        associatedText.add(AssociatedText(text = "associated text line two", textType = "p0"))
+        associatedText.add(AssociatedText(text = "associated text line three", textType = "p0"))
+        associatedText.add(AssociatedText(text = "associated text line four", textType = "p0"))
+
+        return associatedText
     }
 
 }
