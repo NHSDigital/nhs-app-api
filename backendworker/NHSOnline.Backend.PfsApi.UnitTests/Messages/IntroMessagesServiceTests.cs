@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
 
         private const string SenderName = "NHS App";
         private const string SupplierId = "278d3b75-3498-4d68-8991-506d0006e46f";
-        private const string SenderId = "NHSAPP";
+        // private const string SenderId = "NHSAPP";        // NHSO-20472 / NHSO-21187
         private const int Version = 1;
 
         [TestInitialize]
@@ -141,7 +141,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
             {
                 _mockIntroMessagesServiceConfig.Setup(x => x.Body).Returns(Body);
                 _mockIntroMessagesServiceConfig.Setup(x => x.CampaignId).Returns(CampaignId);
-                _mockIntroMessagesServiceConfig.Setup(x => x.SenderId).Returns(SenderId);
+                // _mockIntroMessagesServiceConfig.Setup(x => x.SenderId).Returns(SenderId);    // NHSO-20472 / NHSO-21187
             }
         }
 
@@ -150,13 +150,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
             _mockIntroMessagesServiceConfig.VerifyAll();
         }
 
-        private void VerifyMessageRequest(AddMessageRequest messageRequest)
+        private static void VerifyMessageRequest(AddMessageRequest messageRequest)
         {
             messageRequest.Sender.Should().Be(SenderName);
             messageRequest.Body.Should().Be(Body);
             messageRequest.Version.Should().Be(Version);
             messageRequest.SenderContext.CampaignId.Should().Be(CampaignId);
-            messageRequest.SenderContext.SenderId.Should().Be(SenderId);
+            // messageRequest.SenderContext.SenderId.Should().Be(SenderId); // NHSO-20472 / NHSO-21187
             messageRequest.SenderContext.NhsLoginId.Should().Be(NhsLoginId);
             messageRequest.SenderContext.SupplierId.Should().Be(SupplierId);
         }

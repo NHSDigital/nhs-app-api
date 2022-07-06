@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.Messages
                 CampaignId = _introMessagesServiceConfig.CampaignId,
                 NhsLoginId = nhsLoginId,
                 SupplierId = IntroductoryMessageSupplierId,
-                SenderId = _introMessagesServiceConfig.SenderId
+                // SenderId = _introMessagesServiceConfig.SenderId  // NHSO-20472 / NHSO-21187
             }
         };
     }
