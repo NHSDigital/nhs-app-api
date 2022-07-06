@@ -7,7 +7,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing.UnitTestsSupport
 {
-    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute, IAuditIntegrationReferrer, IAuditBuilderReferrer
+    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute
     {
         public string AccessTokenString { get; set; }
         public AccessToken AccessToken { get; set; }

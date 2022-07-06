@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
             if (_keys.Count > _maxSize)
             {
                 _keys.TryDequeue(out var dequeueKey);
-                base.TryRemove(dequeueKey, out _);
+                TryRemove(dequeueKey, out _);
             }
         }
     }

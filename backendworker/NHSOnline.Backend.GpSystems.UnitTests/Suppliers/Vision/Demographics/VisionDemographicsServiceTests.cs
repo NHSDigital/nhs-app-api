@@ -54,8 +54,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
                             ServiceContent = new VisionDemographicsResponse
                             {
                                 Demographics = new VisionDemographics()
-                                {
-                                }
                             }
                         }
                     }));
@@ -89,9 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
             _mockVisionClient.Setup(x =>
                     x.GetDemographicsV2(It.IsAny<VisionUserSession>(), It.IsAny<DemographicsRequest>()))
                 .Returns(Task.FromResult(
-                    new VisionDirectServicesApiObjectResponse<VisionDemographicsResponse>(HttpStatusCode.InternalServerError)
-                    {
-                    }));
+                    new VisionDirectServicesApiObjectResponse<VisionDemographicsResponse>(HttpStatusCode.InternalServerError)));
 
             var systemUnderTest = CreateVisionDemographicsService();
 

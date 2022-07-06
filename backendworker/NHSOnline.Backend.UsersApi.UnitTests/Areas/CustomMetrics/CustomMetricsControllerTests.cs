@@ -151,14 +151,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.CustomMetrics
             var notificationsAuditData = new NotificationsAuditData(
                 true,
                 NotificationsDecisionSource.Prompt);
-            var accessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "123456");
 
             _mockNotificationsDecisionAuditService
                 .Setup(x => x.LogAudit(It.IsAny<NotificationsAuditData>(), It.IsAny<AccessToken>()))
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _systemUnderTest.PostNotificationsLogAudit(notificationsAuditData);
+            await _systemUnderTest.PostNotificationsLogAudit(notificationsAuditData);
 
             // Assert
             _mockNotificationsDecisionAuditService.Verify(x => x.LogAudit(It.IsAny<NotificationsAuditData>(), It.IsAny<AccessToken>()), Times.Once);

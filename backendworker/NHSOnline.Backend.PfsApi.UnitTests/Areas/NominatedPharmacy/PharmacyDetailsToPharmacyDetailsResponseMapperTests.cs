@@ -8,7 +8,6 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using GeoCoordinatePortable;
-using NHSOnline.Backend.PfsApi.GpSearch;
 using OpeningTime = NHSOnline.Backend.NominatedPharmacy.Models.OpeningTime;
 using GpSearchOpeningTime = NHSOnline.Backend.PfsApi.GpSearch.Models.OpeningTime;
 using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
@@ -183,8 +182,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 },
                 Contacts = new List<ContactInformation>
                 {
-                    new ContactInformation{ ContactValue = "1234567890", ContactMethodType = ResponseEnums.OrganisationContactMethodType.Fax},
-                    new ContactInformation{ ContactValue = phone, ContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone}
+                    new ContactInformation{ ContactValue = "1234567890", ContactMethodType = OrganisationContactMethodType.Fax},
+                    new ContactInformation{ ContactValue = phone, ContactMethodType = OrganisationContactMethodType.Telephone}
                 },
             };
 

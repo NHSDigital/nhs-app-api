@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     {
                         new MetricInformation
                         {
-                            MetricName = PfsApi.GpSearch.Constants.EpsMetricName,
+                            MetricName = Constants.EpsMetricName,
                             Value = otherEpsMetricValue
                         }
                     }
@@ -181,8 +181,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     {
                         new MetricInformation
                         {
-                            MetricName = PfsApi.GpSearch.Constants.EpsMetricName,
-                            Value = PfsApi.GpSearch.Constants.EpsEnabledMetricValue
+                            MetricName = Constants.EpsMetricName,
+                            Value = Constants.EpsEnabledMetricValue
                         }
                     }
                 }

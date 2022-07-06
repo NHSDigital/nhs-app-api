@@ -373,7 +373,7 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
                 .Returns(HttpStatusCode.OK);
 
             _feedResponse.SetupGet(x => x.Resource)
-                .Returns(new TestRepositoryRecord[] {repositoryRecord });
+                .Returns(new[] {repositoryRecord });
 
             _sqlApiClientService
                 .Setup(x => x.FindAsync<TestRepositoryRecord>(_config, _ => true, partitionKeyValue))

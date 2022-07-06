@@ -1,4 +1,4 @@
- using System;
+using FluentAssertions;
  using Microsoft.VisualStudio.TestTools.UnitTesting;
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
  using NHSOnline.Backend.Support.Settings;
@@ -9,7 +9,7 @@
      public class OnlineConsultationsProviderSettingsTests
      {
          private OnlineConsultationsProviderSettings _providerSettings;
-            
+
          [TestInitialize]
          public void TestInitialize()
          {
@@ -31,7 +31,7 @@
          {
              // Arrange
              _providerSettings.Provider = provider;
-            
+
              // Act
              _providerSettings.Validate();
          }
@@ -45,23 +45,25 @@
          {
              // Arrange
              _providerSettings.BaseAddress = baseAddress;
-            
+
              // Act
              _providerSettings.Validate();
          }
 
          [TestMethod]
          [DataRow("randomte.ccccc")]
-         [ExpectedException(typeof(UriFormatException))]
-         public void Validate_WhenBaseAddressIsInvalidUrl_ThrowsUriFormatException(string baseAddress)
+         public void Validate_WhenBaseAddressIsInvalidUrl_ThrowsConfigurationNotValidException(string baseAddress)
          {
              // Arrange
              _providerSettings.BaseAddress = baseAddress;
-            
+
              // Act
-             _providerSettings.Validate();
+             FluentActions
+                 .Invoking(_providerSettings.Validate)
+                 .Should().Throw<ConfigurationNotValidException>()
+                 .And.Message.Should().Contain("OnlineConsultationsProvider.BaseAddress");
          }
-        
+
          [TestMethod]
          [DataRow(null)]
          [DataRow("")]
@@ -71,7 +73,7 @@
          {
              // Arrange
              _providerSettings.ProviderName = provider;
-            
+
              // Act
              _providerSettings.Validate();
          }

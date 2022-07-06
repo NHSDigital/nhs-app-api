@@ -21,13 +21,16 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings
             {
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.Provider");
             }
-            
+
             if (string.IsNullOrWhiteSpace(ProviderName))
             {
                 throw new ConfigurationNotFoundException("OnlineConsultationsProvider.ProviderName");
             }
 
-            var uri = new Uri(BaseAddress);
+            if (!Uri.IsWellFormedUriString(BaseAddress, UriKind.Absolute))
+            {
+                throw new ConfigurationNotValidException("OnlineConsultationsProvider.BaseAddress");
+            }
         }
     }
 }

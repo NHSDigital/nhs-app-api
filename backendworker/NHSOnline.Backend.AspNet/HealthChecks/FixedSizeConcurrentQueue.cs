@@ -20,9 +20,9 @@ namespace NHSOnline.Backend.AspNet.HealthChecks
         {
             base.Enqueue(obj);
 
-            while (base.Count > _maxSize)
+            while (Count > _maxSize)
             {
-                base.TryDequeue(out _);
+                TryDequeue(out _);
             }
         }
     }

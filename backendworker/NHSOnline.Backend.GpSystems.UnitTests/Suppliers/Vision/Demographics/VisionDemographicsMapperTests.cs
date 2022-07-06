@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoFixture;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -12,30 +11,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
     public class VisionDemographicsMapperTests
     {
         private IVisionDemographicsMapper _mapper;
-        private Fixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new VisionDemographicsMapper();
-            _fixture = new Fixture();
         }
 
         [TestMethod]
         public void Map_PatientDemographics_To_DemographicsResponse_When_Passing_NullPatientDemographics_Throws_ArgumentNullException()
         {
             Action act = () => _mapper.Map(null, string.Empty);
-            
+
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("patientDemographics");
         }
-        
+
         [TestMethod]
         public void Map_PatientDemographics_To_DemographicsResponse_When_Passing_NoNhsNumber_Throws_ArgumentNullException()
         {
             Action act = () => _mapper.Map(new VisionDemographics(), string.Empty);
-            
+
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("nhsNumber");
-        }    
+        }
 
         [TestMethod]
         public void Map_PatientDemographics_To_DemographicsResponse_With_Empty_Values_ReturnsResultWithEmptyValues()
@@ -43,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
             // Arrange
             var item = new VisionDemographics();
             var testNhsNumber = "1231231234";
-            
+
             // Act
             var result = _mapper.Map(item, testNhsNumber);
 
@@ -57,12 +54,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
             var testNhsNumber = "1231231234";
-            
+
             var item = new VisionDemographics
             {
                   Name = new Name { Title = "Mr", Forename = "Test", Surname = "Tester" },
                   PrimaryAddress =  new PrimaryAddress { HouseName = "The Lodge", HouseNumber = "12", Street = "Test Street", Town = "Test Town", Postcode = "L1 511",  },
-                  DateOfBirth = dateOfBirth,                 
+                  DateOfBirth = dateOfBirth,
             };
 
             // Act
@@ -93,19 +90,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
 
             result.Should().BeEquivalentTo(expectedResult);
         }
-        
+
         [TestMethod]
         public void Map_PatientDemographics_To_DemographicsResponse_HandlesAddressWithMissingTown()
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
             var testNhsNumber = "1231231234";
-            
+
             var item = new VisionDemographics
             {
                 Name = new Name { Title = "Mr", Forename = "Test", Surname = "Tester" },
                 PrimaryAddress =  new PrimaryAddress { HouseName = "The Lodge", Street = "Test Street", Postcode = "L1 511",  },
-                DateOfBirth = dateOfBirth,                 
+                DateOfBirth = dateOfBirth,
             };
 
             // Act
@@ -135,19 +132,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
 
             result.Should().BeEquivalentTo(expectedResult);
         }
-        
+
         [TestMethod]
         public void Map_PatientDemographics_To_DemographicsResponse_HandlesStreetWithHouseNumber()
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
             var testNhsNumber = "1231231234";
-            
+
             var item = new VisionDemographics
             {
                 Name = new Name { Title = "Mr", Forename = "Test", Surname = "Tester" },
                 PrimaryAddress =  new PrimaryAddress { HouseName = "The Lodge", HouseNumber = "12", Street = "Test Street", Postcode = "L1 511",  },
-                DateOfBirth = dateOfBirth,                 
+                DateOfBirth = dateOfBirth,
             };
 
             // Act

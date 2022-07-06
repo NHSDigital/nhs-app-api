@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
         public async Task<IActionResult> Visit(CreateSessionResult.GpSessionExists gpSessionExists)
         {
-            var userSession = gpSessionExists.UserSession; ;
+            var userSession = gpSessionExists.UserSession;
 
             var responseBody = new PostUserSessionResponse();
 

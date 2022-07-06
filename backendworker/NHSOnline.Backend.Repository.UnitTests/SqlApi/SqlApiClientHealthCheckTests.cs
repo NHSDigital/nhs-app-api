@@ -55,7 +55,6 @@ namespace NHSOnline.Backend.Repository.UnitTests.SqlApi
         public async Task CheckHealthAsync_WhenClientThrows_ShouldReturnUnhealthy()
         {
             // Arrange
-            var containerResponse = new Mock<ContainerResponse>(MockBehavior.Strict);
             _sqlApiClientService.Setup(s => s.CheckHealthAsync(_config))
                 .ThrowsAsync(new CosmosException("Testing a failure", HttpStatusCode.Forbidden, 1234, "activityId", 1.12));
 

@@ -83,8 +83,6 @@ namespace NHSOnline.Backend.AspNet.UnitTests.Middleware
 
             context.Features.Set<IHttpResponseFeature>(feature);
 
-            RequestDelegate next = async (ctx) => { await feature.InvokeCallBack(); };
-
             _systemUnderTest = new PerformanceCounterMiddleware(_next, _statisticsStoreServiceMock.Object, _options);
 
             // Act

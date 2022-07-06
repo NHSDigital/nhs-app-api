@@ -137,7 +137,7 @@
                  _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2);
 
              // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinition(
+             await _systemUnderTest.EvaluateServiceDefinition(
                  Provider,
                  _evaluateParameters,
                  false,
@@ -158,7 +158,7 @@
                  _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2, version: "2");
 
              // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinitionV2(
+             await _systemUnderTest.EvaluateServiceDefinitionV2(
                  Provider,
                  _evaluateParameters,
                  false,
