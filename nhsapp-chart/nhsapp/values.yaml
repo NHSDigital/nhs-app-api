@@ -358,6 +358,7 @@ messages:
   cosmosSqlDatabaseSendersCollection: senders
   senderIdEnabled: false
   senderIdNhsApp: NHSAPP
+  supplierIdNhsApp: 278d3b75-3498-4d68-8991-506d0006e46f
   
 cid:
   containerPort: 8080

@@ -454,6 +454,8 @@ spec:
           value: "{{ $.Values.messages.senderIdEnabled }}"
         - name: MESSAGES_SENDER_ID_NHS_APP
           value: "{{ $.Values.messages.senderIdNhsApp }}"
+        - name: MESSAGES_SUPPLIER_ID_NHS_APP
+          value: "{{ $.Values.messages.supplierIdNhsApp }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
