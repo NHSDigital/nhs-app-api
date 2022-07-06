@@ -184,6 +184,35 @@
 					"response": []
 				},
 				{
+					"name": "POST Organ Donation Registration Withdraw to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Withdraw_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully Withdrawn\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": null,\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST Notification Toggle Event to Metric Logger",
 					"request": {
 						"method": "POST",
@@ -492,6 +521,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n      {\r\n        \"Id\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"Timestamp\": \"2022-02-17T18:47:56.6791548Z\",\r\n        \"AuditId\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"NhsLoginSubject\": \"e85fb7cc-2bcf-4f26-b3f0-6b27524c3692\",\r\n        \"NhsNumber\": \"969 211 3612\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Emis\",\r\n        \"Operation\": \"OrganDonation_Get_Response\",\r\n        \"Details\": \"A default organ donation registration has been generated\",\r\n        \"ApiVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9\",\r\n        \"WebVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9 (commit:b90ac9cb5)\",\r\n        \"NativeVersion\": \"ios 2.5.0\",\r\n        \"Environment\": \"scratch12\",\r\n        \"id\": \"eb05879d-8531-4353-a287-15a7410329e5\",\r\n        \"_rid\": \"RuVQAKPVga+dAwAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+dAwAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"7200b265-0000-1100-0000-620e985c0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1645123676\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
+							"protocol": "https",
+							"host": [
+								"nhsapp-devuks3-analytics-metric-log-app",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Withdraw to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Withdraw_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully Withdrawn\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": null,\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
