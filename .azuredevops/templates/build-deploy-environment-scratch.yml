@@ -82,7 +82,7 @@ variables:
   - name: backendAzureRmStorageAccountName
     value: nhsappterraformnlv
   - name: tfVarFileName
-    value: ../zone/dev/devscratch.tfvars
+    value: ../zone/dev/devscratch_new.tfvars
   - name: backendAzureRmContainerName
     value: terraform
   - name: region
