@@ -1,9 +1,5 @@
 {
   "ignore": [
-    { "id": "sonatype-2019-0454", "reason": "Package is vue and highest version has the issue. We santize anything we render in v-html and dont use jsx (fix ticket NHSO-20931)" },
-    { "id": "sonatype-2021-0563", "reason": "Package is vue and highest version has the issue. We santize anything we render in v-html and dont use jsx (fix ticket NHSO-20931)" },
-    { "id": "sonatype-2021-1169", "reason": "Package is @vue/cli-service. Latest version doesnt fix ansi-regex yet (fix ticket NHSO-20931)" },
-    { "id": "CVE-2022-21944", "reason": "Package is fb-watchman. Testing package dependency which requires migration (fix ticket NHSO-20931)" },
-    { "id": "sonatype-2019-0206", "reason": "Package is @vue/vue-cli. This version is at its max (fix ticket NHSO-20933)" }
-  ]
+    { "id": "CVE-2022-21944", "reason": "Package is fb-watchman. Testing package dependency which requires migration (fix ticket NHSO-20931)" }
+   ]
 }
