@@ -20,6 +20,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistr
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
@@ -40,6 +41,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<OrganDonationRegistrationCreateMetric>> _organDonationRegistrationCreateEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>> _organDonationRegistrationWithdrawEtl;
         private Mock<IAuditLogEtl<RepeatPrescriptionMetric>> _repeatPrescriptionEtl;
+        private Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>> _organDonationRegistrationUpdateEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
@@ -59,6 +61,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _organDonationRegistrationCreateEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationCreateMetric>>();
             _organDonationRegistrationWithdrawEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>>();
             _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
+            _organDonationRegistrationUpdateEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
             _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
@@ -77,6 +80,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _organDonationRegistrationCreateEtl.Object,
                 _organDonationRegistrationWithdrawEtl.Object,
                 _repeatPrescriptionEtl.Object,
+                _organDonationRegistrationUpdateEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }
@@ -117,6 +121,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _organDonationRegistrationWithdrawEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _repeatPrescriptionEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _organDonationRegistrationUpdateEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

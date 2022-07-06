@@ -14,6 +14,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistr
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -58,6 +59,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<RepeatPrescriptionMetric>, RepeatPrescriptionMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<RepeatPrescriptionMetric>, RepeatPrescriptionEventParser>();
+            
+            serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateEventParser>();
 
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));

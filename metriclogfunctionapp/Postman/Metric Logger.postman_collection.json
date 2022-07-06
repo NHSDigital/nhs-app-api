@@ -213,6 +213,35 @@
 					"response": []
 				},
 				{
+					"name": "POST Organ Donation Registration Update to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"Timestamp\": \"2022-03-01T16:26:32.2328691Z\",\r\n        \"AuditId\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"NhsLoginSubject\": \"2d97a264-996d-4294-9b61-3e87e3c1103f\",\r\n        \"NhsNumber\": \"966 118 3279\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Update_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully updated\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:1615267fb)\",\r\n        \"NativeVersion\": \"ios 2.4.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"e67ddb18-03ad-42c6-90c2-9e5e21c16b0c\",\r\n        \"_rid\": \"RuVQAKPVga-G9QAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga-G9QAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"c801b5f8-0000-1100-0000-621e49380000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646151992\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST Notification Toggle Event to Metric Logger",
 					"request": {
 						"method": "POST",

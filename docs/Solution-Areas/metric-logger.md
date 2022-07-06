@@ -277,6 +277,34 @@ OrganDonationRegistration Body:
 ]
 ```
 
+UpdateOrganDonation Body:
+```bash
+[
+    {
+        "Id": "97b8f02f-0682-4a82-a24f-71b16e141ba4",
+        "Timestamp": "2022-03-01T16:26:32.2328691Z",
+        "AuditId": "97b8f02f-0682-4a82-a24f-71b16e141ba4",
+        "NhsLoginSubject": "2d97a264-996d-4294-9b61-3e87e3c1103f",
+        "NhsNumber": "966 118 3279",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Fake",
+        "Operation": "OrganDonation_Update_Response",
+        "Details": "The organ donation decision has been successfully updated",
+        "ApiVersion": "develop",
+        "WebVersion": "develop (commit:1615267fb)",
+        "NativeVersion": "ios 2.4.0",
+        "Environment": "onboardingsandpit",
+        "IntegrationReferrer": null,
+        "id": "e67ddb18-03ad-42c6-90c2-9e5e21c16b0c",
+        "_rid": "RuVQAKPVga-G9QAAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga-G9QAAAAAAAA==/",
+        "_etag": "\"c801b5f8-0000-1100-0000-621e49380000\"",
+        "_attachments": "attachments/",
+        "_ts": 1646151992
+    }
+]
+```
+
 GetOrganDonation Body:
 ```bash
 [
