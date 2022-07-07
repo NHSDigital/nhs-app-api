@@ -24,6 +24,9 @@
     "AzureFunctionsJobHost:functions:5": "ReferrerLogin_Compute_Timer",
     "AzureFunctionsJobHost:functions:6": "ReferrerServiceJourney_Compute_Http",
     "AzureFunctionsJobHost:functions:7": "ReferrerServiceJourney_Compute_Queue",
-    "AzureFunctionsJobHost:functions:8": "ReferrerServiceJourney_Compute_Timer"
+    "AzureFunctionsJobHost:functions:8": "ReferrerServiceJourney_Compute_Timer",
+    "AzureFunctionsJobHost:functions:9": "Wayfinder_Compute_Http",
+    "AzureFunctionsJobHost:functions:10": "Wayfinder_Compute_Queue",
+    "AzureFunctionsJobHost:functions:11": "Wayfinder_Compute_Timer"
   }
 }

@@ -429,5 +429,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
             var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
             return await httpEndpointCallers.ReferrerServiceJourney.PostJson(request);
         }
+
+        internal static async Task<HttpResponseMessage> PostWayfinder(
+            this HttpEndpointCallers httpEndpointCallers,
+            string startDateTime,
+            string endDateTime)
+        {
+            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
+            return await httpEndpointCallers.Wayfinder.PostJson(request);
+        }
     }
 }

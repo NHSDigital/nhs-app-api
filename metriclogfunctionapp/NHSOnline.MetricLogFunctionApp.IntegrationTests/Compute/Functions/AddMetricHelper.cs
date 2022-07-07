@@ -212,5 +212,18 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
                 JumpOffId = jumpOffId
             });
         }
+
+        public static async Task AddSecondaryCareSummaryMetric(TestEnv env, DateTimeOffset dateTime, string sessionId,
+            int totalReferrals, int totalUpcomingAppointments, string auditId)
+        {
+            await env.Postgres.Events.SecondaryCareSummaryMetric.Insert(new SecondaryCareSummaryMetricRow()
+            {
+                Timestamp = dateTime,
+                SessionId = sessionId,
+                TotalReferrals = totalReferrals,
+                TotalUpcomingAppointments = totalUpcomingAppointments,
+                AuditId = auditId
+            });
+        }
     }
 }

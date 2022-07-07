@@ -85,6 +85,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Storage
         internal QueueWrapper ReferrerLogin => CreateQueueWrapper("referrer-login-dev-local");
         internal QueueWrapper ReferrerServiceJourney => CreateQueueWrapper("referrer-servicejourney-dev-local");
         internal QueueWrapper DailyDeviceReferralUsage => CreateQueueWrapper("daily-device-referrals-metric-dev-local");
+        internal QueueWrapper Wayfinder => CreateQueueWrapper("wayfinder-dev-local");
 
         internal async Task Initialise()
         {

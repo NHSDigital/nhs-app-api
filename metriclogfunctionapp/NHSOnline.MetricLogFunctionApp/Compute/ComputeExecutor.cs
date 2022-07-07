@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Storage.Queue;
 using Microsoft.Extensions.Logging;
-using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Compute
