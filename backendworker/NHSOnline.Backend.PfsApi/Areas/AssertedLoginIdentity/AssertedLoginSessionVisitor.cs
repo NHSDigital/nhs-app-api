@@ -26,6 +26,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
 
         public async Task<CreateJwtResult> Visit(P9UserSession userSession)
         {
+            await _auditor.PostOperationAuditSilverIntegrationEvent(
+                    userSession.CitizenIdUserSession.AccessToken,
+                    userSession.NhsNumber,
+                    AuditingOperations.SilverIntegrationJumpOffClick,
+                    "The user has jumped off to an integration partner",
+                    _model.ProviderId,
+                    _model.ProviderName,
+                    _model.JumpOffId);
+
             return await _auditor.Audit()
                 .Operation(AuditingOperations.CreateAssertedLoginIdentityToken)
                 .Details("Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', " +

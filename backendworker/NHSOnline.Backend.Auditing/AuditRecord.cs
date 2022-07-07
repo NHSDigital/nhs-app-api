@@ -22,7 +22,10 @@ namespace NHSOnline.Backend.Auditing
             string sessionId,
             string proofLevel,
             string ods,
-            string referrer)
+            string referrer,
+            string providerId,
+            string providerName,
+            string jumpOffId)
         {
             Timestamp = timestamp;
             AuditId = Guid.NewGuid().ToString();
@@ -37,6 +40,9 @@ namespace NHSOnline.Backend.Auditing
             ProofLevel = proofLevel;
             ODS = ods;
             Referrer = referrer;
+            ProviderId = providerId;
+            ProviderName = providerName;
+            JumpOffId = jumpOffId;
 
             if (version == null)
             {
@@ -96,5 +102,14 @@ namespace NHSOnline.Backend.Auditing
 
         [BsonElement]
         public string Referrer { get; private set; }
-   }
+
+        [BsonElement]
+        public string ProviderId { get; private set; }
+
+        [BsonElement]
+        public string ProviderName { get; private set; }
+
+        [BsonElement]
+        public string JumpOffId { get; private set; }
+    }
 }

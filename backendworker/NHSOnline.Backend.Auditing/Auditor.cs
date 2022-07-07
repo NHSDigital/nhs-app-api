@@ -63,6 +63,18 @@ namespace NHSOnline.Backend.Auditing
                 referrer, integrationReferrer, parameters);
         }
 
+        public async Task PostOperationAuditSilverIntegrationEvent(string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string providerId,
+            string providerName,
+            string jumpOffId,
+            params object[] parameters)
+        {
+            await AuditSilverIntegrationEvent(AuditType.PostOperationAudit, accessToken, nhsNumber, operation, details,
+                string.Empty, string.Empty, providerId, providerName, jumpOffId, parameters);
+        }
 
         private async Task Audit(AuditType auditType, string operation, string details,  params object[] parameters)
         {
@@ -81,7 +93,7 @@ namespace NHSOnline.Backend.Auditing
                 nhsNumber = auditUserContext.LinkedAccountNhsNumber;
             }
 
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, null, null, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, null, null, null, null, null, parameters);
         }
 
         private async Task AuditRegistrationEvent(
@@ -93,11 +105,10 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             const string nhsLoginSubject = "";
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, null, null, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, null, null, null, null, null, parameters);
         }
 
-        private async Task AuditSessionEvent(
-            AuditType auditType,
+        private async Task AuditSessionEvent(AuditType auditType,
             string accessToken,
             string nhsNumber,
             Supplier supplier,
@@ -108,7 +119,26 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer, integrationReferrer, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer, integrationReferrer, null, null, null, parameters);
+        }
+
+        private async Task AuditSilverIntegrationEvent(
+            AuditType auditType,
+            string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string referrer,
+            string integrationReferrer,
+            string providerId,
+            string providerName,
+            string jumpOffId,
+            params object[] parameters)
+        {
+            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            await AuditInternal(
+                auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details, referrer,
+                integrationReferrer, providerId, providerName, jumpOffId, parameters);
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
@@ -140,6 +170,9 @@ namespace NHSOnline.Backend.Auditing
             string details,
             string referrer,
             string integrationReferrer,
+            string providerId,
+            string providerName,
+            string jumpOffId,
             params object[] parameters)
         {
             if (string.IsNullOrEmpty(nhsNumber))
@@ -147,7 +180,7 @@ namespace NHSOnline.Backend.Auditing
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
 
-            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, referrer, integrationReferrer, parameters);
+            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, referrer, integrationReferrer, providerId, providerName, jumpOffId, parameters);
 
             switch (auditType)
             {
@@ -195,6 +228,9 @@ namespace NHSOnline.Backend.Auditing
             string details,
             string referrer,
             string integrationReferrer,
+            string providerId,
+            string providerName,
+            string jumpOffId,
             params object[] parameters)
         {
             var versionTag = _scopeProvider.Value?.VersionTag();
@@ -220,7 +256,10 @@ namespace NHSOnline.Backend.Auditing
                 auditUserContext.SessionId,
                 auditUserContext.ProofLevel.ToString(),
                 auditUserContext.OdsCode,
-                referrer);
+                referrer,
+                providerId,
+                providerName,
+                jumpOffId);
 
             return auditRecord;
         }
@@ -263,6 +302,9 @@ namespace NHSOnline.Backend.Auditing
             public string IntegrationReferrer { get; set; }
             public string RequestDetails { get; set; }
             public string Referrer { get; set; }
+            public string ProviderId { get; set; }
+            public string ProviderName { get; set; }
+            public string JumpOffId { get; set; }
 
             internal AuditRecord BuildAuditRecord(string operationSuffix, string details)
             {
@@ -280,7 +322,10 @@ namespace NHSOnline.Backend.Auditing
                     _auditUserContext().SessionId,
                     _auditUserContext().ProofLevel.ToString(),
                     _auditUserContext().OdsCode,
-                    Referrer);
+                    Referrer,
+                    ProviderId,
+                    ProviderName,
+                    JumpOffId);
             }
 
             internal void SetContextFromScope()

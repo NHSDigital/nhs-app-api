@@ -104,7 +104,10 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "SessionId",
                 "P9",
                 "odsCode",
-                "referrer");
+                "referrer",
+                "providerId",
+                "providerName",
+                "jumpOffId");
         }
     }
 }

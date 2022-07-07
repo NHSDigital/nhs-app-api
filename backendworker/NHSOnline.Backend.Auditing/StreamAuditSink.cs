@@ -43,7 +43,10 @@ namespace NHSOnline.Backend.Auditing
                     auditRecord.Supplier,
                     auditRecord.Operation,
                     auditRecord.Details,
-                    auditRecord.Referrer)
+                    auditRecord.Referrer,
+                    auditRecord.ProviderId,
+                    auditRecord.ProviderName,
+                    auditRecord.JumpOffId)
                 .Append(" |");
 
             if (!string.IsNullOrEmpty(auditRecord.ApiVersion))

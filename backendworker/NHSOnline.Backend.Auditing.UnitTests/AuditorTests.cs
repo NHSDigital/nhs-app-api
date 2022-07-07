@@ -173,6 +173,24 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                     await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, referrer, integrationReferrer, parameters);
                 }
             }
+
+            public async Task AuditSilverIntegrationEvent(
+            string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string providerId,
+            string providerName,
+            string jumpOffId)
+            {
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.PostOperationAuditSilverIntegrationEvent(accessToken, nhsNumber, operation, details,
+                        providerId, providerName, jumpOffId);
+                }
+            }
         }
 
         [TestInitialize]
@@ -324,7 +342,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
         [TestMethod]
@@ -338,7 +356,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -419,7 +437,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -475,7 +493,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |");
+            testString.Should().EndWith("|  | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -492,6 +510,34 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         }
 
         [TestMethod]
+        public async Task AuditSilverIntegrationEvent_HappyPath()
+        {
+            await _systemUnderTest.AuditSilverIntegrationEvent(
+                AccessToken,
+                _nhsNumber1,
+                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().Contain("Test ProviderId");
+            testString.Should().Contain("Test ProviderName");
+            testString.Should().Contain("Test JumpOffId");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditSilverIntegrationEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            await _systemUnderTest.AuditSilverIntegrationEvent(
+               AccessToken,
+               nhsNumber,
+               "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+        }
+
+        [TestMethod]
         public void TestCrossThreadAudits()
         {
             RunControllerMethod(_systemUnderTest.NestedControllerMethod);
@@ -501,15 +547,15 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |");
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |  |  |  |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(_nhsNumber1 + " | False | Emis | Testing | TaskedMethod | " + _referrer + " |");
+            auditLine2.Should().EndWith(_nhsNumber1 + " | False | Emis | Testing | TaskedMethod | " + _referrer + " |  |  |  |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |");
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |  |  |  |");
         }
 
         [TestMethod]
@@ -530,15 +576,15 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |");
+            auditLine1.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 1 | " + _referrer + " |  |  |  |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(proxyNhsNumber + " | True | Emis | Testing | TaskedMethod | " + _referrer + " |");
+            auditLine2.Should().EndWith(proxyNhsNumber + " | True | Emis | Testing | TaskedMethod | " + _referrer + " |  |  |  |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |");
+            auditLine3.Should().EndWith(_nhsNumber2 + " | False | Emis | Testing | Message with rubbish scope 2 | " + _referrer + " |  |  |  |");
         }
 
         public void Dispose()
