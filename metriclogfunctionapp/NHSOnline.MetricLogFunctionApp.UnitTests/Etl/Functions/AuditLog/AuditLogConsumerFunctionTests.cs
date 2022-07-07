@@ -9,6 +9,7 @@ using Moq;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -42,6 +43,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>> _organDonationRegistrationWithdrawEtl;
         private Mock<IAuditLogEtl<RepeatPrescriptionMetric>> _repeatPrescriptionEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>> _organDonationRegistrationUpdateEtl;
+        private Mock<IAuditLogEtl<BiometricsToggleMetric>> _biometricsToggleEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
@@ -62,6 +64,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _organDonationRegistrationWithdrawEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>>();
             _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
             _organDonationRegistrationUpdateEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>>();
+            _biometricsToggleEtl = new Mock<IAuditLogEtl<BiometricsToggleMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
             _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
@@ -81,6 +84,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _organDonationRegistrationWithdrawEtl.Object,
                 _repeatPrescriptionEtl.Object,
                 _organDonationRegistrationUpdateEtl.Object,
+                _biometricsToggleEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }
@@ -123,6 +127,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _repeatPrescriptionEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _organDonationRegistrationUpdateEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _biometricsToggleEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

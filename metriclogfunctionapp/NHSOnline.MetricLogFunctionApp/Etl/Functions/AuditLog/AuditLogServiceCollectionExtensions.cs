@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.QueueRequests;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -44,7 +45,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<AppointmentCancelMetric>, AppointmentCancelMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<AppointmentCancelMetric>, AppointmentCancelEventParser>();
-            
+
             serviceCollection.AddTransient<IAuditLogEtl<AppointmentBookMetric>, AppointmentBookMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<AppointmentBookMetric>, AppointmentBookEventParser>();
 
@@ -59,7 +60,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<RepeatPrescriptionMetric>, RepeatPrescriptionMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<RepeatPrescriptionMetric>, RepeatPrescriptionEventParser>();
-            
+
             serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateEventParser>();
 
@@ -68,6 +69,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<InitialPromptMetric>, InitialPromptEventParser>();
+
+            serviceCollection.AddTransient<IAuditLogEtl<BiometricsToggleMetric>, BiometricsToggleMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<BiometricsToggleMetric>,BiometricsToggleEventParser>();
         }
     }
 }

@@ -7,6 +7,7 @@ public static class AuditingOperations
         "Login_Success",
         "NotificationToggle_Response",
         "InitialNotificationPrompt_Decision",
-        "SilverIntegration_JumpOff_Click"
+        "SilverIntegration_JumpOff_Click",
+        "BiometricsRegistration_Decision"
     };
 }

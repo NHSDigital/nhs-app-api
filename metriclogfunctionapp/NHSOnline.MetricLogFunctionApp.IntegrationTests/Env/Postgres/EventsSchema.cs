@@ -58,6 +58,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<SilverIntegrationJumpOffMetricRow> SilverIntegrationJumpOffMetric =>
             Table<SilverIntegrationJumpOffMetricRow>();
 
+        internal PostgresTable<BiometricsToggleMetricRow> BiometricsToggleMetric => Table<BiometricsToggleMetricRow>();
+
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
 

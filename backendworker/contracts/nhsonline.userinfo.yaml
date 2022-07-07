@@ -77,6 +77,28 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /metrics/biometrics/optIn:
+      post:
+        tags:
+          - biometrics
+        summary: Records the current user has opted in for biometrics
+        description: Records the current user has opted in for biometrics
+        responses:
+          "200":
+            description: "Successful operation. Biometrics registration status update logged."
+          "400":
+            description: "An unexpected error occurred processing the request."
+  /metrics/biometrics/optOut:
+      post:
+        tags:
+          - biometrics
+        summary: Records the current user has opted out for biometrics
+        description: Records the current user has opted out for biometrics
+        responses:
+          "200":
+            description: "Successful operation. Biometrics registration status update logged."
+          "400":
+            description: "An unexpected error occurred processing the request."
   /users/me/info/userresearch:
     post:
       security:
@@ -103,7 +125,6 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
-
 components:
   securitySchemes:
     nhsLoginBearerAuth:

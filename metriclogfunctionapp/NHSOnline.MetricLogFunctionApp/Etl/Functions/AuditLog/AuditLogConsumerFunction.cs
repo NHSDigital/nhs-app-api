@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
@@ -40,6 +41,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> _organDonationRegistrationWithdrawEtl;
         private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationUpdateMetric> _organDonationRegistrationUpdateEtl;
+        private readonly IAuditLogEtl<BiometricsToggleMetric> _biometricsToggleEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -58,6 +60,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> organDonationRegistrationWithdrawEtl,
             IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
             IAuditLogEtl<OrganDonationRegistrationUpdateMetric> organDonationRegistrationUpdateEtl,
+            IAuditLogEtl<BiometricsToggleMetric> biometricsToggleEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -75,6 +78,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _organDonationRegistrationWithdrawEtl = organDonationRegistrationWithdrawEtl;
             _repeatPrescriptionEtl = repeatPrescriptionEtl;
             _organDonationRegistrationUpdateEtl = organDonationRegistrationUpdateEtl;
+            _biometricsToggleEtl = biometricsToggleEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -125,6 +129,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _organDonationRegistrationWithdrawEtl.Execute(events);
                 await _repeatPrescriptionEtl.Execute(events);
                 await _organDonationRegistrationUpdateEtl.Execute(events);
+                await _biometricsToggleEtl.Execute(events);
             }
             catch (Exception)
             {

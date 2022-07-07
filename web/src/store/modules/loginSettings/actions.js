@@ -58,7 +58,7 @@ export default {
     NativeApp.updateBiometricRegistrationWithToken(accessToken);
   },
 
-  biometricCompletion({ commit }, deviceResponse) {
+  async biometricCompletion({ commit }, deviceResponse) {
     commit(SET_WAITING, false);
 
     let deviceResponseParam = deviceResponse;
@@ -87,8 +87,18 @@ export default {
 
     if (outcome === biometricRegistrationOutcomes.Success) {
       if (action === biometricActions.Register) {
+        try {
+          await this.app.$http.postV1ApiMetricsBiometricsOptIn();
+        } catch {
+          // do nothing as this is just logging
+        }
         commit(UPDATE_REGISTRATION_STATUS, true);
       } else if (action === biometricActions.Deregister) {
+        try {
+          await this.app.$http.postV1ApiMetricsBiometricsOptOut();
+        } catch {
+          // do nothing as this is just logging
+        }
         commit(UPDATE_REGISTRATION_STATUS, false);
       }
     }

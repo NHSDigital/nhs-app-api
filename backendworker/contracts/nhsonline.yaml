@@ -107,6 +107,10 @@ paths:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1me~1info
   /v1/api/users/me/info/userresearch:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1me~1info~1userresearch
+  /v1/api/metrics/biometrics/optIn:
+    $ref: ./nhsonline.userinfo.yaml#/paths/~1metrics~1biometrics~1optIn
+  /v1/api/metrics/biometrics/optOut:
+    $ref: ./nhsonline.userinfo.yaml#/paths/~1metrics~1biometrics~1optOut
   /v1/api/users/info:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1info
   /v1/api/users/senders/{senderId}:

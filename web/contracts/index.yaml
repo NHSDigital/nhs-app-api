@@ -6767,6 +6767,28 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/metrics/biometrics/optIn: 
+      post: 
+        tags: 
+          - "biometrics"
+        summary: "Records the current user has opted in for biometrics"
+        description: "Records the current user has opted in for biometrics"
+        responses: 
+          200: 
+            description: "Successful operation. Biometrics logged."
+          400: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/metrics/biometrics/optOut: 
+      post: 
+        tags: 
+          - "biometrics"
+        summary: "Records the current user has opted out for biometrics"
+        description: "Records the current user has opted out for biometrics"
+        responses: 
+          200: 
+            description: "Successful operation. Biometrics logged."
+          400: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/users/info: 
       get: 
         tags: 

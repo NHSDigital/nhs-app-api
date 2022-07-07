@@ -93,6 +93,10 @@ describe('loginSettings actions', () => {
       commit = jest.fn();
       actions.dispatch = jest.fn();
       actions.app = {
+        $http: {
+          postV1ApiMetricsBiometricsOptIn: jest.fn(() => Promise.resolve()),
+          postV1ApiMetricsBiometricsOptOut: jest.fn(() => Promise.resolve()),
+        },
         $cookies: {
           get: (cookieName) => {
             switch (cookieName) {
@@ -187,6 +191,10 @@ describe('loginSettings actions', () => {
       it('will call commit to update registration status to true', () => {
         expect(commit).toHaveBeenCalledWith(UPDATE_REGISTRATION_STATUS, true);
       });
+
+      it('will call postV1ApiMetricsBiometricsOptIn', () => {
+        expect(actions.app.$http.postV1ApiMetricsBiometricsOptIn).toBeCalled();
+      });
     });
 
     describe('deregister', () => {
@@ -203,6 +211,10 @@ describe('loginSettings actions', () => {
 
       it('will call commit to update registration status to false', () => {
         expect(commit).toHaveBeenCalledWith(UPDATE_REGISTRATION_STATUS, false);
+      });
+
+      it('will call postV1ApiMetricsBiometricsOptIn', () => {
+        expect(actions.app.$http.postV1ApiMetricsBiometricsOptOut).toBeCalled();
       });
     });
 
