@@ -180,8 +180,17 @@ namespace NHSOnline.App.Areas.Home.Views
 
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
-            _logger.LogInformation("Navigating: {Uri}", args.Url);
-            NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
+            try
+            {
+                _logger.LogInformation("Navigating: {Uri}", args.Url);
+                NhsAppResilience.ExecuteImmediately(() => Navigating?.Invoke(args));
+            }
+            catch (ArgumentNullException e)
+            {
+                var urlSource = args.Source;
+                var url = urlSource.ToString();
+                _logger.LogError(e,"Launched the null URI from: {Url}", url);
+            }
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
