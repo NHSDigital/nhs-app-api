@@ -22,32 +22,6 @@
         Back</a>
     </div>
 
-    <form onsubmit="addEventToCalendar(subject1, startDateTimeEpoch1, endDateTimeEpoch1)">
-      <fieldset>
-        <legend>Wednesday, 2 Jan 2030 13:00:00 (GMT)</legend>
-        <input type="hidden" id="subject1" value="Your appointment at 1pm, Wednesday, 2 Jan 2030">
-        <input type="hidden" id="startDateTimeEpoch1" value="1893589200">
-        <select id="endDateTimeEpoch1">
-          <option value="1893589800">(Valid) 10 minutes after</option> 
-          <option value="1893588600">(Invalid) 10 minutes before</option> 
-        </select>
-        <button type="submit">Add to calendar</button>
-      </fieldset>
-    </form>
-
-    <form onsubmit="addEventToCalendar(subject2, startDateTimeEpoch2, endDateTimeEpoch2)">
-      <fieldset>
-        <legend>Wednesday, 3 July 2030 13:00:00 BST (GMT+1)</legend>
-        <input type="hidden" id="subject2" value="Your appointment at 1pm, Wednesday, 3 July 2030">
-        <input type="hidden" id="startDateTimeEpoch2" value="1893589200">
-        <select id="endDateTimeEpoch2">
-          <option value="1909311000">(Valid) 10 minutes after</option> 
-          <option value="1909309800">(Invalid) 10 minutes before</option> 
-        </select>
-        <button type="submit">Add to calendar</button>
-      </fieldset>
-    </form>
-
     <fieldset>
       <legend>Add appointment details:</legend>
       <label for="subject">Title</label><br>
@@ -122,17 +96,6 @@
       fillDropdown(document.getElementById("endHour"), 0, 23, 1);
       fillDropdown(document.getElementById("startMin"), 0, 55, 5);
       fillDropdown(document.getElementById("endMin"), 0, 55, 5);
-      
-
-      function addEventToCalendar(subjectId, startDateTimeEpochId, endDateTimeEpochId) {
-        const subject = document.getElementById(subjectId).value;
-        const body = "Event body lorem ipsum dolor sit amet";
-        const location = "A convient location";
-        const startDateTimeEpoch = document.getElementById(startDateTimeEpochId).value;
-        const endDateTimeEpoch = document.getElementById(startDateTimeEpochId).value;
-
-        nhsapp.storage.addEventToCalendar(subject, body, location, startDateTimeEpoch, endDateTimeEpoch);
-      }
       
       function getAppointmentDetails() {
         const subject = document.getElementById("subject").value;
