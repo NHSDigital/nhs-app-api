@@ -85,8 +85,13 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                     browserOverlay?.AssertNoInternet();
                 });
 
-            AndroidCloseSlimBackToHomeConnectionErrorPage
-                .AssertOnPage(driver)
+            var connectionErrorPage = AndroidCloseSlimBackToHomeConnectionErrorPage
+                .AssertOnPage(driver);
+
+            // Android device seems to at this point take a bit longer to work out there is an internet connection
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(5));
+
+            connectionErrorPage
                 .BackToHome();
 
             AndroidLoggedOutHomePage

@@ -381,7 +381,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                         .AssertOnPage(driver);
                 });
 
-            await driver.ResetNetwork();
+            // Android device seems to at this point take a bit longer to work out there is an internet connection
+            await driver.ResetNetworkAndWait(TimeSpan.FromSeconds(10));
 
             driver.PressBackButton();
 
