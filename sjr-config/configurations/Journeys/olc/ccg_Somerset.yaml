@@ -1,7 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - L85055
     - L85028
 journeys:
   cdssAdvice:
