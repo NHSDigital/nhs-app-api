@@ -60,11 +60,11 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot:true)
                 .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver,screenshot:true)
                 .PageContent.NavigateToOrderARepeatPrescription();
 
             var iosOrderARepeatPrescriptionPage =
