@@ -53,10 +53,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings
             return page;
         }
 
-        public static AndroidNotificationsPage AssertErrorOnPage(IAndroidDriverWrapper driver)
+        public static AndroidNotificationsPage AssertNotificationsTurnedOffOnDeviceErrorOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidNotificationsPage(driver);
-            page.PageContent.AssertErrorOnPage();
+            page.PageContent.AssertNotificationsTurnedOffOnDeviceErrorOnPage();
             return page;
         }
 

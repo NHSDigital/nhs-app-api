@@ -73,7 +73,7 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .PageContent.NavigateToNotifications();
 
             AndroidNotificationsPage
-                .AssertErrorOnPage(driver)
+                .AssertNotificationsTurnedOffOnDeviceErrorOnPage(driver)
                 .PageContent.AssertNotificationsTurnedOffErrorPageElements();
         }
 

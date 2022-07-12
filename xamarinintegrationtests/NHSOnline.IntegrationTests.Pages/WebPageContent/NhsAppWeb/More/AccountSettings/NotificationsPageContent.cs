@@ -53,6 +53,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
             "Choose how notifications are shown on this device (opens your device settings)");
 
+        private WebText NotificationTurnedOffOnDeviceErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Notifications error");
+
         private WebText ErrorTitleText => WebText.WithTagAndText(_interactor, "h1", "Cannot update notification preferences");
 
         private WebText NotificationsTurnedOffText => WebText.WithTagAndText(
@@ -93,6 +95,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         internal void AssertErrorOnPage() => ErrorTitleText.AssertVisible();
 
+        internal void AssertNotificationsTurnedOffOnDeviceErrorOnPage() => NotificationTurnedOffOnDeviceErrorTitleText.AssertVisible();
+
         internal void AssertNotificationsChoiceErrorOnPage() => ErrorCannotChangeChoiceTitleText.AssertVisible();
 
         public void AssertPageElements()
@@ -114,7 +118,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         public void AssertNotificationsTurnedOffErrorPageElements()
         {
-            ErrorTitleText.AssertVisible();
+            NotificationTurnedOffOnDeviceErrorTitleText.AssertVisible();
             NotificationsTurnedOffText.AssertVisible();
             TurnOnNotificationsText.AssertVisible();
             TryAgainButton.AssertVisible();
