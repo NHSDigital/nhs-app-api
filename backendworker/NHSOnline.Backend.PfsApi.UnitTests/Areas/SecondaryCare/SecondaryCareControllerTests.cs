@@ -15,7 +15,7 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {
     [TestClass]
-    public sealed class SecondaryCareControllerTestsV1
+    public sealed class SecondaryCareControllerTests
     {
         private SecondaryCareControllerTestContext Context { get; set; }
 
@@ -26,13 +26,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task WhenOAuthTokenResponseFromAPIMIsUnsuccessfulThenGetSummaryV1Returns502BadGateway()
+        public async Task WhenOAuthTokenResponseFromAPIMIsUnsuccessfulThenGetSummaryReturns502BadGateway()
         {
             // Arrange APIM
             Context.MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -49,17 +49,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task WhenGetSummaryResponseFromClientIsSuccessfulThenGetSummaryV1Returns200WithCompleteOrderedSummaryResponse()
+        public async Task WhenGetSummaryResponseFromClientIsSuccessfulThenGetSummaryReturns200WithCompleteOrderedSummaryResponse()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(LoadAggregatorResponse("complete-valid-secondary-care-summary-response"));
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
-            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponseV1);
+            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 7, Total Upcoming Appointments: 9"));
@@ -68,14 +68,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task WhenGetSummaryResponseFromClientIsUnsuccessfulThenGetSummaryV1Returns502BadGateway()
+        public async Task WhenGetSummaryResponseFromClientIsUnsuccessfulThenGetSummaryReturns502BadGateway()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryReturnsUnsuccessfulResponse();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -92,14 +92,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task WhenGetSummaryResponseFromClientTimesOutThenGetSummaryV1Returns504GatewayTimeout()
+        public async Task WhenGetSummaryResponseFromClientTimesOutThenGetSummaryReturns504GatewayTimeout()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
             Context.MockSecondaryCareHttpClientGetSummaryTimesOut();
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        public async Task WhenGetSummaryResponseFromClientIsForbiddenWithMinimumAgeReasonThenGetSummaryV1Returns470()
+        public async Task WhenGetSummaryResponseFromClientIsForbiddenWithMinimumAgeReasonThenGetSummaryReturns470()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 LoadAggregatorResponse("under-minimum-age-response"));
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
         [TestMethod]
         [DynamicData(nameof(InvalidResponseData))]
-        public async Task WhenGetSummaryResponseFromClientHasMissingOrInvalidDataThenGetSummaryV1LogsErrorsAndReturns502(
+        public async Task WhenGetSummaryResponseFromClientHasMissingOrInvalidDataThenGetSummaryLogsErrorsAndReturns502(
             string response,
             List<string> mapperErrorMessages,
             List<string> serviceErrorMessages,
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(response);
 
             // Act
-            var result = await Context.CreateSystemUnderTest().GetSummaryV1(Context.Data.P9UserSession);
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;

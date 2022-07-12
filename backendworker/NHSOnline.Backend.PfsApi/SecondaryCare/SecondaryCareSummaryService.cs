@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _auditor = auditor;
         }
 
-        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession, int apiVersion)
+        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                     return new SecondaryCareSummaryResult.BadGateway();
                 }
 
-                var summaryResponse = _mapper.Map(aggregatorResponse.Body, apiVersion);
+                var summaryResponse = _mapper.Map(aggregatorResponse.Body);
 
                 if (summaryResponse is null)
                 {

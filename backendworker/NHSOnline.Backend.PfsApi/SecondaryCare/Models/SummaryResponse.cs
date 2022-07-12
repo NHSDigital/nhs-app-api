@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
 {
-    public class SummaryResponseV2 : ISummaryResponse
+    public class SummaryResponse : ISummaryResponse
     {
-        public SummaryResponseV2()
+        public SummaryResponse()
         {
             ActionableReferralsAndAppointments = new List<SecondaryCareSummaryItem>();
             ConfirmedAppointments = new List<UpcomingAppointment>();

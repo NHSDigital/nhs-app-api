@@ -79,8 +79,6 @@ paths:
     $ref: ./nhsonline.authorization.yaml#/paths/~1access-token~1refresh
   /v1/patient/secondary-care/summary:
     $ref: ./nhsonline.secondarycare.yaml#/paths/~1secondary-care~1summary
-  /v2/patient/secondary-care/summary:
-    $ref: ./nhsonline.secondarycare_v2.yaml#/paths/~1secondary-care~1summary
   /v1/api/users/me/devices:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1me~1devices
   /v1/api/users/me/devices/prompt/metrics:

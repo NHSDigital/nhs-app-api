@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  version: 0.0.1
+  version: 0.0.2
   title: NHS App Sub-API - Secondary Care
   description: NHS App Sub-API - endpoints pertaining to Secondary-Care integration.
 paths:
@@ -49,34 +49,37 @@ components:
     SecondaryCareSummaryResponse:
       type: object
       required:
-        - referralsNotInReview
-        - referralsInReview
+        - actionableReferralsAndAppointments
+        - referralsInReviewNotOverdue
         - confirmedAppointments
-        - unconfirmedAppointments
       properties:
-        referralsNotInReview:
-          type: array
-          description: An array of referrals (Not in review) for the authorized user.
-          items:
-            $ref: "#/components/schemas/ReferralNotInReview"
-        referralsInReview:
-          type: array
-          description: An array of referrals (In review) for the authorized user.
-          items:
-            $ref: "#/components/schemas/ReferralInReview"
         confirmedAppointments:
           type: array
           description: An array of confirmed (with appointment date) appointments for the authorized user.
           items:
             $ref: "#/components/schemas/ConfirmedAppointment"
-        unconfirmedAppointments:
+        referralsInReviewNotOverdue:
           type: array
-          description: An array of unconfirmed (without appointment date) appointments for the authorized user.
+          description: |
+            An array of in-review referrals that are not overdue (a ReviewDueDate before today). Items are sorted
+            by ReferredDateTime in chronological order.
           items:
-            $ref: "#/components/schemas/UnconfirmedAppointment"
+            $ref: "#/components/schemas/ReferralInReview"
+        actionableReferralsAndAppointments:
+          type: array
+          description: |
+            An array of appointments (cancelled) and referrals (not in review, or overdue) that may require
+            attention for the authorized user. Items are sorted by appointments then referrals, and subsequently
+            referrals are then sorted by ReferredDateTime in chronological order.
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/UnconfirmedAppointment"
+              - $ref: "#/components/schemas/ReferralNotInReview"
+              - $ref: "#/components/schemas/ReferralInReview"
     ReferralNotInReview:
       type: object
       required:
+        - itemType
         - referralId
         - referredDatetime
         - referrerOrganisation
@@ -84,6 +87,11 @@ components:
         - provider
         - deepLinkUrl
       properties:
+        itemType:
+          type: string
+          description: A string representation of the type of this summary item
+          enum:
+            - Referral
         referralId:
           type: string
           description: Supplier specific reference - booking reference.
@@ -122,6 +130,7 @@ components:
     ReferralInReview:
       type: object
       required:
+        - itemType
         - referralId
         - referredDatetime
         - referrerOrganisation
@@ -129,6 +138,11 @@ components:
         - provider
         - deepLinkUrl
       properties:
+        itemType:
+          type: string
+          description: A string representation of the type of this summary item
+          enum:
+            - Referral
         referralId:
           type: string
           description: Supplier specific reference - booking reference.
@@ -150,7 +164,7 @@ components:
         reviewDueDate:
           type: string
           format: date-time
-          description: Optional - Date when referral is due if applicable. Only will be returned if status is InReview.
+          description: Optional - Date when referral is due if applicable
         provider:
           type: string
           description: The linked referral or portal system.
@@ -166,12 +180,18 @@ components:
     ConfirmedAppointment:
       type: object
       required:
+        - itemType
         - appointmentDatetime
         - appointmentStatus
         - locationDescription
         - deepLinkUrl
         - provider
       properties:
+        itemType:
+          type: string
+          description: A string representation of the type of this summary item
+          enum:
+            - UpcomingAppointment
         appointmentDatetime:
           type: string
           format: date-time
@@ -199,11 +219,17 @@ components:
     UnconfirmedAppointment:
       type: object
       required:
+        - itemType
         - appointmentStatus
         - locationDescription
         - deepLinkUrl
         - provider
       properties:
+        itemType:
+          type: string
+          description: A string representation of the type of this summary item
+          enum:
+            - UpcomingAppointment
         appointmentStatus:
           type: string
           description: State of the appointment. Initially only booked appointments will be returned.

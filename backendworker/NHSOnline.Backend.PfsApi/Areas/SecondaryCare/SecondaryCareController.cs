@@ -35,23 +35,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
         }
 
         [HttpGet]
-        [ApiVersion("1", Deprecated = true)]
-        public async Task<IActionResult> GetSummaryV1([UserSession] P9UserSession userSession) =>
-            await GetSummary(userSession, 1);
-
-        [HttpGet]
-        [ApiVersion("2")]
-        public async Task<IActionResult> GetSummaryV2([UserSession] P9UserSession userSession) =>
-            await GetSummary(userSession, 2);
-
-        private async Task<IActionResult> GetSummary(P9UserSession userSession, int apiVersion)
+        public async Task<IActionResult> GetSummary([UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 await _auditor.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest, "Attempting to get Secondary Care Summary");
 
-                var result = await _secondaryCareService.GetSummary(userSession, apiVersion);
+                var result = await _secondaryCareService.GetSummary(userSession);
 
                 await result.Accept(new SecondaryCareSummaryResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new SecondaryCareSummaryResultVisitor(_errorReferenceGenerator, Supplier.SecondaryCareAggregator));

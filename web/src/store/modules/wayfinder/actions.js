@@ -19,7 +19,7 @@ export default {
         actionableReferralsAndAppointments,
         confirmedAppointments,
         referralsInReviewNotOverdue,
-      } = await this.app.$httpV2.getV2PatientSecondaryCareSummary({ ignoreError: true });
+      } = await this.app.$http.getV1PatientSecondaryCareSummary({ ignoreError: true });
 
       commit(ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED, actionableReferralsAndAppointments);
       commit(CONFIRMED_APPOINTMENTS_LOADED, confirmedAppointments);
