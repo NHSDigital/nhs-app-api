@@ -422,6 +422,62 @@ BiometricsToggle Body:
 ]
 ```
 
+CreateNominatedPhramacy Body:
+```bash
+[
+    {
+        "Id": "7f3e2d28-0f70-44f9-8f8e-0ac38ee1a23e",
+        "Timestamp": "2022-02-18T12:44:37.280269Z",
+        "AuditId": "7f3e2d28-0f70-44f9-8f8e-0ac38ee1a23e",
+        "NhsLoginSubject": "81670141-803b-4aa4-a9a5-4a8e7a8ed245",
+        "NhsNumber": "966 103 3625",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Disconnected",
+        "Operation": "NominatedPharmacy_Update_Response",
+        "Details": "Successfully created new nominated pharmacy registration to Z0000",
+        "ApiVersion": "f3242696750c493cae5c9eacc4597cc749653179",
+        "WebVersion": "f3242696750c493cae5c9eacc4597cc749653179 (commit:f32426967)",
+        "NativeVersion": null,
+        "Environment": "scratch12",
+        "SessionId": "af664631-15f7-4205-8ebb-f9e9bc45abc2",
+        "id": "434a7124-0a42-497f-99f8-fa69ceea4a3f",
+        "_rid": "RuVQAKPVga8WBwAAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8WBwAAAAAAAA==/",
+        "_etag": "\"9f00cb2a-0000-1100-0000-620f94b50000\"",
+        "_attachments": "attachments/",
+        "_ts": 1645188277
+    }
+]
+```
+
+UpdateNominatedPharmacy Body:
+```bash
+[
+    {
+        "Id": "7f3e2d28-0f70-44f9-8f8e-0ac38ee1a23e",
+        "Timestamp": "2022-02-18T12:44:37.280269Z",
+        "AuditId": "7f3e2d28-0f70-44f9-8f8e-0ac38ee1a23e",
+        "NhsLoginSubject": "81670141-803b-4aa4-a9a5-4a8e7a8ed245",
+        "NhsNumber": "966 103 3625",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Disconnected",
+        "Operation": "NominatedPharmacy_Update_Response",
+        "Details": "Successfully updated nominated pharmacy from Z0000 to Z0001",
+        "ApiVersion": "f3242696750c493cae5c9eacc4597cc749653179",
+        "WebVersion": "f3242696750c493cae5c9eacc4597cc749653179 (commit:f32426967)",
+        "NativeVersion": null,
+        "Environment": "scratch12",
+        "SessionId": "af664631-15f7-4205-8ebb-f9e9bc45abc2",
+        "id": "434a7124-0a42-497f-99f8-fa69ceea4a3f",
+        "_rid": "RuVQAKPVga8WBwAAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8WBwAAAAAAAA==/",
+        "_etag": "\"9f00cb2a-0000-1100-0000-620f94b50000\"",
+        "_attachments": "attachments/",
+        "_ts": 1645188277
+    }
+]
+```
+
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

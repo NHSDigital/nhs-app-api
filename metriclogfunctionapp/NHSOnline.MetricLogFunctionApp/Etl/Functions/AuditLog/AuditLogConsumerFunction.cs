@@ -17,6 +17,8 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryC
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
@@ -27,58 +29,64 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 {
     public class AuditLogConsumerFunction
     {
-        private readonly IAuditLogEtl<ConsentMetric> _consentEtl;
-        private readonly IAuditLogEtl<LoginMetric> _loginEtl;
-        private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
-        private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
-        private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
-        private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
-        private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
         private readonly IAuditLogEtl<AppointmentCancelMetric> _appointmentCancelEtl;
         private readonly IAuditLogEtl<AppointmentBookMetric> _appointmentBookEtl;
+        private readonly IAuditLogEtl<BiometricsToggleMetric> _biometricsToggleEtl;
+        private readonly IAuditLogEtl<ConsentMetric> _consentEtl;
+        private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
+        private readonly IAuditLogEtl<LoginMetric> _loginEtl;
+        private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
+        private readonly IAuditLogEtl<NominatedPharmacyCreateMetric> _nominatedPharmacyCreateEtl;
+        private readonly IAuditLogEtl<NominatedPharmacyUpdateMetric> _nominatedPharmacyUpdateEtl;
+        private readonly IAuditLogEtl<NotificationToggleMetric> _notificationToggleEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationGetMetric> _organDonationRegistrationGetEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationCreateMetric> _organDonationRegistrationCreateEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> _organDonationRegistrationWithdrawEtl;
-        private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
         private readonly IAuditLogEtl<OrganDonationRegistrationUpdateMetric> _organDonationRegistrationUpdateEtl;
-        private readonly IAuditLogEtl<BiometricsToggleMetric> _biometricsToggleEtl;
+        private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
+        private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
+        private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
         public AuditLogConsumerFunction(
-            IAuditLogEtl<ConsentMetric> consentEtl,
-            IAuditLogEtl<LoginMetric> loginEtl,
-            IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
-            IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
-            IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
-            IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
-            IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
             IAuditLogEtl<AppointmentCancelMetric> appointmentCancelEtl,
             IAuditLogEtl<AppointmentBookMetric> appointmentBookEtl,
+            IAuditLogEtl<BiometricsToggleMetric> biometricsToggleEtl,
+            IAuditLogEtl<ConsentMetric> consentEtl,
+            IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
+            IAuditLogEtl<LoginMetric> loginEtl,
+            IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
+            IAuditLogEtl<NominatedPharmacyCreateMetric> nominatedPharmacyCreateEtl,
+            IAuditLogEtl<NominatedPharmacyUpdateMetric> nominatedPharmacyUpdateEtl,
+            IAuditLogEtl<NotificationToggleMetric> notificationToggleEtl,
             IAuditLogEtl<OrganDonationRegistrationGetMetric> organDonationRegistrationGetEtl,
             IAuditLogEtl<OrganDonationRegistrationCreateMetric> organDonationRegistrationCreateEtl,
             IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> organDonationRegistrationWithdrawEtl,
-            IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
             IAuditLogEtl<OrganDonationRegistrationUpdateMetric> organDonationRegistrationUpdateEtl,
-            IAuditLogEtl<BiometricsToggleMetric> biometricsToggleEtl,
+            IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
+            IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
+            IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
-            _consentEtl = consentEtl;
-            _loginEtl = loginEtl;
-            _webIntegrationReferralEtl = webIntegrationReferralEtl;
-            _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
-            _medicalRecordViewEtl = medicalRecordViewEtl;
-            _notificationToggleEtl = notificationToggleEtl;
-            _initialPromptEtl = initialPromptEtl;
             _appointmentCancelEtl = appointmentCancelEtl;
             _appointmentBookEtl = appointmentBookEtl;
+            _biometricsToggleEtl = biometricsToggleEtl;
+            _consentEtl = consentEtl;
+            _initialPromptEtl = initialPromptEtl;
+            _loginEtl = loginEtl;
+            _medicalRecordViewEtl = medicalRecordViewEtl;
+            _nominatedPharmacyCreateEtl = nominatedPharmacyCreateEtl;
+            _nominatedPharmacyUpdateEtl = nominatedPharmacyUpdateEtl;
+            _notificationToggleEtl = notificationToggleEtl;
             _organDonationRegistrationGetEtl = organDonationRegistrationGetEtl;
             _organDonationRegistrationCreateEtl = organDonationRegistrationCreateEtl;
             _organDonationRegistrationWithdrawEtl = organDonationRegistrationWithdrawEtl;
-            _repeatPrescriptionEtl = repeatPrescriptionEtl;
             _organDonationRegistrationUpdateEtl = organDonationRegistrationUpdateEtl;
-            _biometricsToggleEtl = biometricsToggleEtl;
+            _repeatPrescriptionEtl = repeatPrescriptionEtl;
+            _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
+            _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -115,24 +123,29 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             {
                 _logger.StartedTriggered("AuditLogEtl", "");
 
-                await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
-                await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
-                await _secondaryCareSummaryEtl.Execute(events);
-                await _notificationToggleEtl.Execute(events);
-                await _initialPromptEtl.Execute(events);
-                await _appointmentCancelEtl.Execute(events);
-                await _webIntegrationReferralEtl.Execute(events);
-                await _medicalRecordViewEtl.Execute(events);
                 await _appointmentBookEtl.Execute(events);
+                await _appointmentCancelEtl.Execute(events);
+                await _biometricsToggleEtl.Execute(events);
+                await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
+                await _initialPromptEtl.Execute(events);
+                await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
+                await _medicalRecordViewEtl.Execute(events);
+                await _nominatedPharmacyCreateEtl.Execute(events);
+                await _nominatedPharmacyUpdateEtl.Execute(events);
+                await _notificationToggleEtl.Execute(events);
                 await _organDonationRegistrationGetEtl.Execute(events);
                 await _organDonationRegistrationCreateEtl.Execute(events);
                 await _organDonationRegistrationWithdrawEtl.Execute(events);
-                await _repeatPrescriptionEtl.Execute(events);
                 await _organDonationRegistrationUpdateEtl.Execute(events);
-                await _biometricsToggleEtl.Execute(events);
+                await _repeatPrescriptionEtl.Execute(events);
+                await _secondaryCareSummaryEtl.Execute(events);
+                await _webIntegrationReferralEtl.Execute(events);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.Information("An Exception Occured: " + e.Message);
+                _logger.Information("Stacktrace: " + e.StackTrace);
+
                 var retryCount = context.RetryContext.RetryCount;
                 var maxRetries = context.RetryContext.MaxRetryCount;
 

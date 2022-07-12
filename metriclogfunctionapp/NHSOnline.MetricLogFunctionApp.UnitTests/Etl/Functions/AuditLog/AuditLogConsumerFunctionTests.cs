@@ -11,6 +11,8 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
@@ -29,21 +31,23 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
     [TestClass]
     public class AuditLogConsumerFunctionTests
     {
-        private Mock<IAuditLogEtl<ConsentMetric>> _consentEtl;
-        private Mock<IAuditLogEtl<LoginMetric>> _loginEtl;
-        private Mock<IAuditLogEtl<WebIntegrationReferralsMetric>> _webIntegrationReferralEtl;
-        private Mock<IAuditLogEtl<SecondaryCareSummaryMetric>> _secondaryCareSummaryEtl;
-        private Mock<IAuditLogEtl<MedicalRecordViewMetric>> _medicalRecordView;
-        private Mock<IAuditLogEtl<NotificationToggleMetric>> _notificationToggleEtl;
-        private Mock<IAuditLogEtl<InitialPromptMetric>> _initialPromptEtl;
         private Mock<IAuditLogEtl<AppointmentCancelMetric>> _appointmentCancelEtl;
         private Mock<IAuditLogEtl<AppointmentBookMetric>> _appointmentBookEtl;
+        private Mock<IAuditLogEtl<BiometricsToggleMetric>> _biometricsToggleEtl;
+        private Mock<IAuditLogEtl<ConsentMetric>> _consentEtl;
+        private Mock<IAuditLogEtl<LoginMetric>> _loginEtl;
+        private Mock<IAuditLogEtl<MedicalRecordViewMetric>> _medicalRecordView;
+        private Mock<IAuditLogEtl<NominatedPharmacyCreateMetric>> _nominatedPharmacyCreateEtl;
+        private Mock<IAuditLogEtl<NominatedPharmacyUpdateMetric>> _nominatedPharmacyUpdateEtl;
+        private Mock<IAuditLogEtl<NotificationToggleMetric>> _notificationToggleEtl;
+        private Mock<IAuditLogEtl<InitialPromptMetric>> _initialPromptEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationGetMetric>> _organDonationRegistrationGetEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationCreateMetric>> _organDonationRegistrationCreateEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>> _organDonationRegistrationWithdrawEtl;
-        private Mock<IAuditLogEtl<RepeatPrescriptionMetric>> _repeatPrescriptionEtl;
         private Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>> _organDonationRegistrationUpdateEtl;
-        private Mock<IAuditLogEtl<BiometricsToggleMetric>> _biometricsToggleEtl;
+        private Mock<IAuditLogEtl<RepeatPrescriptionMetric>> _repeatPrescriptionEtl;
+        private Mock<IAuditLogEtl<SecondaryCareSummaryMetric>> _secondaryCareSummaryEtl;
+        private Mock<IAuditLogEtl<WebIntegrationReferralsMetric>> _webIntegrationReferralEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
@@ -51,40 +55,44 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         [TestInitialize]
         public void TestInitialize()
         {
-            _consentEtl = new Mock<IAuditLogEtl<ConsentMetric>>();
-            _loginEtl = new Mock<IAuditLogEtl<LoginMetric>>();
-            _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
-            _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
-            _medicalRecordView = new Mock<IAuditLogEtl<MedicalRecordViewMetric>>();
-            _notificationToggleEtl = new Mock<IAuditLogEtl<NotificationToggleMetric>>();
             _appointmentCancelEtl = new Mock<IAuditLogEtl<AppointmentCancelMetric>>();
             _appointmentBookEtl = new Mock<IAuditLogEtl<AppointmentBookMetric>>();
+            _biometricsToggleEtl = new Mock<IAuditLogEtl<BiometricsToggleMetric>>();
+            _consentEtl = new Mock<IAuditLogEtl<ConsentMetric>>();
+            _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
+            _loginEtl = new Mock<IAuditLogEtl<LoginMetric>>();
+            _medicalRecordView = new Mock<IAuditLogEtl<MedicalRecordViewMetric>>();
+            _nominatedPharmacyCreateEtl = new Mock<IAuditLogEtl<NominatedPharmacyCreateMetric>>();
+            _nominatedPharmacyUpdateEtl = new Mock<IAuditLogEtl<NominatedPharmacyUpdateMetric>>();
+            _notificationToggleEtl = new Mock<IAuditLogEtl<NotificationToggleMetric>>();
             _organDonationRegistrationGetEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationGetMetric>>();
             _organDonationRegistrationCreateEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationCreateMetric>>();
             _organDonationRegistrationWithdrawEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>>();
-            _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
             _organDonationRegistrationUpdateEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>>();
-            _biometricsToggleEtl = new Mock<IAuditLogEtl<BiometricsToggleMetric>>();
+            _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
+            _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
+            _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
-            _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
 
             _function = new AuditLogConsumerFunction(
-                _consentEtl.Object,
-                _loginEtl.Object,
-                _webIntegrationReferralEtl.Object,
-                _secondaryCareSummaryEtl.Object,
-                _medicalRecordView.Object,
-                _notificationToggleEtl.Object,
-                _initialPromptEtl.Object,
                 _appointmentCancelEtl.Object,
                 _appointmentBookEtl.Object,
+                _biometricsToggleEtl.Object,
+                _consentEtl.Object,
+                _initialPromptEtl.Object,
+                _loginEtl.Object,
+                _medicalRecordView.Object,
+                _nominatedPharmacyCreateEtl.Object,
+                _nominatedPharmacyUpdateEtl.Object,
+                _notificationToggleEtl.Object,
                 _organDonationRegistrationGetEtl.Object,
                 _organDonationRegistrationCreateEtl.Object,
                 _organDonationRegistrationWithdrawEtl.Object,
-                _repeatPrescriptionEtl.Object,
                 _organDonationRegistrationUpdateEtl.Object,
-                _biometricsToggleEtl.Object,
+                _repeatPrescriptionEtl.Object,
+                _secondaryCareSummaryEtl.Object,
+                _webIntegrationReferralEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }

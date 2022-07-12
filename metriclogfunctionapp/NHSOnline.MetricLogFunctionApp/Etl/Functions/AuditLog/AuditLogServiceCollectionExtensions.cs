@@ -5,6 +5,8 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
@@ -63,6 +65,12 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateEventParser>();
+
+            serviceCollection.AddTransient<IAuditLogEtl<NominatedPharmacyCreateMetric>, NominatedPharmacyCreateMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyCreateMetric>,NominatedPharmacyCreateEventParser >();
+            
+            serviceCollection.AddTransient<IAuditLogEtl<NominatedPharmacyUpdateMetric>, NominatedPharmacyUpdateMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyUpdateMetric>,NominatedPharmacyUpdateEventParser >();
 
             serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));
