@@ -37,7 +37,7 @@ info:
 
     It conforms to the [FHIR](https://digital.nhs.uk/developer/guides-and-documentation/our-api-technologies#fhir) global standard for health care data exchange, specifically to [FHIR R4 (v4.0.1)](https://hl7.org/fhir/r4/), except that it does not support the [capabilities](http://hl7.org/fhir/R4/http.html#capabilities) interaction.
 
-    It includes some country-specific FHIR extensions, which are built against [FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core), specifically [UK.core.r4 1.0.0](https://simplifier.net/packages/uk.core.r4/1.0.0).
+    It includes some country-specific FHIR extensions, which conform to [FHIR UK Core](https://digital.nhs.uk/services/fhir-uk-core), specifically [fhir.r4.ukcore.stu1 0.5.1](https://simplifier.net/packages/fhir.r4.ukcore.stu1/0.5.1).
 
     ### Specific rules for FHIR APIs
     FHIR APIs are RESTful APIs that follow specific rules. In particular:
