@@ -7,7 +7,6 @@ import {
   LOADED,
   LOADED_MESSAGE,
   LOADED_SENDERS,
-  SET_SENDER,
 } from '@/store/modules/messaging/mutation-types';
 
 describe('messaging mutations', () => {
@@ -115,18 +114,6 @@ describe('messaging mutations', () => {
       it('will set the senders state to empty array', () => {
         expect(state.senders).toEqual([]);
       });
-    });
-  });
-
-  describe('SET_SENDER', () => {
-    const data = 'test state';
-
-    beforeEach(() => {
-      mutations[SET_SENDER](state, data);
-    });
-
-    it('will set the selected sender state to the received value', () => {
-      expect(state.selectedSender).toEqual(data);
     });
   });
 });

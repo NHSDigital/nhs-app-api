@@ -7,15 +7,44 @@ import { createStore, mount } from '../../helpers';
 
 dependency.redirectTo = jest.fn();
 
-describe('messaging index', () => {
-  const messageItemClass = 'nhs-app-message__item';
-  const messageItemUnreadClass = 'nhs-app-message__item--unread';
-  const senderSectionClass = 'nhs-app-message';
-  const noMessagesSelector = '#noMessages';
-  let $store;
-  let wrapper;
+const messageItemClass = 'nhs-app-message__item';
+const messageItemUnreadClass = 'nhs-app-message__item--unread';
+const senderSectionClass = 'nhs-app-message';
+const noMessagesSelector = '#noMessages';
 
-  const mountIndex = () => mount(Index, {
+let $store;
+let wrapper;
+
+const defaultSenders = [
+  { id: 'test-1', name: 'Test Sender 1', unreadCount: 0 },
+  { id: 'test-2', name: 'Test Sender 2', unreadCount: 2 },
+  { id: 'test-3', name: 'Test Sender 3', unreadCount: 0 },
+  { id: 'test-4', name: 'Test Sender 4', unreadCount: 4 },
+];
+
+const mountIndex = ({
+  senderIdEnabled = false,
+  messagingError = false,
+  senders = defaultSenders,
+  isNativeApp = true,
+} = {}) => {
+  const messagingState = initialState();
+  messagingState.error = messagingError;
+  messagingState.senders = senders;
+
+  $store = createStore({
+    state: {
+      messaging: messagingState,
+      device: {
+        isNativeApp,
+      },
+    },
+    $env: {
+      MESSAGES_SENDER_ID_ENABLED: senderIdEnabled,
+    },
+  });
+
+  return mount(Index, {
     $store,
     $style: {
       [messageItemClass]: messageItemClass,
@@ -26,23 +55,11 @@ describe('messaging index', () => {
       reload: jest.fn(),
     },
   });
+};
 
-  const createSender = ({ name, unreadCount = 0 }) => {
-    $store.state.messaging.senders.push({
-      name,
-      unreadCount,
-    });
-  };
-
+describe('messaging index', () => {
   beforeEach(() => {
-    $store = createStore({
-      state: {
-        messaging: initialState(),
-        device: {
-          isNativeApp: true,
-        },
-      },
-    });
+    dependency.redirectTo.mockClear();
   });
 
   describe('created', () => {
@@ -62,9 +79,9 @@ describe('messaging index', () => {
 
   describe('failed to load senders', () => {
     beforeEach(async () => {
-      $store.state.messaging.error = true;
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
+      $store.state.messaging.error = true;
     });
 
     it('will show the shutter container', () => {
@@ -82,7 +99,7 @@ describe('messaging index', () => {
 
   describe('has no senders', () => {
     beforeEach(async () => {
-      wrapper = mountIndex();
+      wrapper = mountIndex({ senders: [] });
       await wrapper.vm.$nextTick();
     });
 
@@ -101,10 +118,6 @@ describe('messaging index', () => {
     let senderSection;
 
     beforeEach(async () => {
-      createSender({ name: 'Test 1' });
-      createSender({ name: 'Test 2', unreadCount: 2 });
-      createSender({ name: 'Test 3' });
-      createSender({ name: 'Test 4', unreadCount: 4 });
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
       senderSection = wrapper.find(`.${senderSectionClass}`);
@@ -118,14 +131,48 @@ describe('messaging index', () => {
       const messages = senderSection.findAll(`.${messageItemClass}`);
       expect(messages.length).toBe(4);
 
-      expect(messages.at(0).text()).toContain('Test 1');
-      expect(messages.at(1).text()).toContain('Test 2');
-      expect(messages.at(2).text()).toContain('Test 3');
-      expect(messages.at(3).text()).toContain('Test 4');
+      expect(messages.at(0).text()).toContain('Test Sender 1');
+      expect(messages.at(1).text()).toContain('Test Sender 2');
+      expect(messages.at(2).text()).toContain('Test Sender 3');
+      expect(messages.at(3).text()).toContain('Test Sender 4');
     });
 
     it('will not display the no messages text', () => {
       expect(wrapper.find(noMessagesSelector).exists()).toBe(false);
+    });
+
+    describe('when sender id is enabled', () => {
+      beforeEach(async () => {
+        wrapper = mountIndex({ senderIdEnabled: true });
+        await wrapper.vm.$nextTick();
+        senderSection = wrapper.find(`.${senderSectionClass}`);
+      });
+
+      it('will pass the sender id in the query parameters to the sender messages page', () => {
+        const messageLink = senderSection.find(`.${messageItemClass} a`);
+        messageLink.trigger('click');
+
+        expect(dependency.redirectTo).toBeCalledWith(
+          wrapper.vm,
+          'messages/app-messaging/sender-messages',
+          { senderId: 'test-1' },
+        );
+        expect(messageLink.attributes().href).toBe('messages/app-messaging/sender-messages?senderId=test-1');
+      });
+    });
+
+    describe('when sender id is not enabled', () => {
+      it('will pass the sender name in the query parameters to the sender messages page', () => {
+        const messageLink = senderSection.find(`.${messageItemClass} a`);
+        messageLink.trigger('click');
+
+        expect(dependency.redirectTo).toBeCalledWith(
+          wrapper.vm,
+          'messages/app-messaging/sender-messages',
+          { sender: 'Test Sender 1' },
+        );
+        expect(messageLink.attributes().href).toBe('messages/app-messaging/sender-messages?sender=Test Sender 1');
+      });
     });
 
     describe('senders with unread messages', () => {
@@ -138,8 +185,8 @@ describe('messaging index', () => {
       it('will have the appropriate class', () => {
         expect(unreadSenders.length).toBe(2);
 
-        expect(unreadSenders.at(0).text()).toContain('Test 2');
-        expect(unreadSenders.at(1).text()).toContain('Test 4');
+        expect(unreadSenders.at(0).text()).toContain('Test Sender 2');
+        expect(unreadSenders.at(1).text()).toContain('Test Sender 4');
       });
     });
 
@@ -153,10 +200,9 @@ describe('messaging index', () => {
   describe('desktop', () => {
     let backLink;
     beforeEach(async () => {
-      $store.state.device.isNativeApp = false;
-      wrapper = mountIndex();
+      wrapper = mountIndex({ isNativeApp: false });
       await wrapper.vm.$nextTick();
-      dependency.redirectTo = jest.fn();
+      dependency.redirectTo.mockClear();
 
       backLink = wrapper.find('[data-purpose=main-back-button]');
     });
@@ -172,23 +218,19 @@ describe('messaging index', () => {
 
   describe('sender aria label', () => {
     it('will indicate the sender and date of the last message received', async () => {
-      createSender({ name: 'Test sender' });
-
       wrapper = mountIndex();
       await wrapper.vm.$nextTick();
 
       const ariaLabel = wrapper.find(`.${senderSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
 
-      expect(ariaLabel).toEqual('Messages from: Test sender. ');
+      expect(ariaLabel).toEqual('Messages from: Test Sender 1. ');
     });
 
     each([[1, ''], [5, 's']])
       .it('will include an appropriately pluralised unread count when some messages are unread', async (count, pluralisation) => {
-        createSender({ name: 'Test sender', unreadCount: count });
-        const expected = 'Messages from: Test sender. ' +
-          `You have ${count} unread message${pluralisation}. `;
+        const expected = `Messages from: Test Sender. You have ${count} unread message${pluralisation}. `;
 
-        wrapper = mountIndex();
+        wrapper = mountIndex({ senders: [{ id: 'test-sender', name: 'Test Sender', unreadCount: count }] });
         await wrapper.vm.$nextTick();
 
         const ariaLabel = wrapper.find(`.${senderSectionClass}>.${messageItemClass}>a`).attributes('aria-label');

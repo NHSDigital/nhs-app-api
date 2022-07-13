@@ -19,6 +19,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {
+    [ApiVersion("1")]
     public class MessagesController : Controller
     {
         private readonly IAccessTokenProvider _accessTokenProvider;
@@ -80,13 +81,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ApiVersionRoute("api/me/messages")]
-        public async Task<IActionResult> Get([FromQuery] string sender = null, [FromQuery] bool summary = false)
+        public async Task<IActionResult> Get(
+            [FromQuery] string sender = null,
+            [FromQuery] string senderId = null,
+            [FromQuery] bool summary = false)
         {
             try
             {
                 _logger.LogEnter();
 
-                var messagesResult = await GetUserMessages(sender, summary, _accessTokenProvider.AccessToken);
+                var messagesResult = await GetUserMessages(sender, senderId, summary, _accessTokenProvider.AccessToken);
 
                 return messagesResult.Accept(new MessagesResultVisitor());
             }
@@ -117,6 +121,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to get message with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ApiVersion("2")]
+        [ApiVersionRoute("api/users/me/messages/senders")]
+        public async Task<IActionResult> GetSendersV2()
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var result = await _messageService.GetSendersV2(_accessTokenProvider.AccessToken);
+
+                return result.Accept(new UserSendersResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get senders with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -177,18 +206,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
         }
 
-        private async Task<MessagesResult> GetUserMessages(string sender, bool summary, AccessToken accessToken)
+        private async Task<MessagesResult> GetUserMessages(string sender, string senderId, bool summary, AccessToken accessToken)
         {
             var hasSender = !string.IsNullOrWhiteSpace(sender);
-            if (!hasSender && !summary || hasSender && summary)
+            var hasSenderId = !string.IsNullOrWhiteSpace(senderId);
+
+            if (!hasSender && !hasSenderId && !summary ||
+                hasSender && summary ||
+                hasSender && hasSenderId ||
+                hasSenderId && summary)
             {
-                _logger.LogError("Either `sender` or `summary` is required, but cannot be both");
+                _logger.LogError("Exactly one of `sender`, `senderId` or `summary` is required");
                 return new MessagesResult.BadRequest();
             }
 
-            return hasSender
-                ? await _messageService.GetMessages(accessToken, sender)
-                : await _messageService.GetSummaryMessages(accessToken);
+            if (hasSender)
+            {
+                return await _messageService.GetMessagesBySender(accessToken, sender);
+            }
+
+            if (hasSenderId)
+            {
+                return await _messageService.GetMessagesBySenderId(accessToken, senderId);
+            }
+
+            return await _messageService.GetSummaryMessages(accessToken);
         }
     }
 }

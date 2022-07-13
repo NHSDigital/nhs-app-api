@@ -16,7 +16,7 @@
             <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
               {{ $t('messages.messagesFrom') }}
             </span>
-            {{ sender }}
+            {{ senderName }}
           </page-title>
         </div>
       </div>
@@ -90,14 +90,15 @@ export default {
   mixins: [ErrorPageMixin],
   data() {
     return {
-      loaded: false,
       isNativeApp: this.$store.state.device.isNativeApp,
       backLink: HEALTH_INFORMATION_UPDATES_PATH,
-      sender: this.$store.state.messaging.selectedSender,
       toPlainText,
     };
   },
   computed: {
+    loaded() {
+      return this.$store.state.messaging.senderMessagesLoaded;
+    },
     error() {
       return this.$store.state.messaging.error;
     },
@@ -105,40 +106,43 @@ export default {
       return get('messages')(first(this.$store.state.messaging.senderMessages)) || [];
     },
     ifProblemContinuesText() {
-      return this.$t('messages.error.ifTheProblemContinuesContactSenderDirectly', { sender: this.sender });
+      return this.$t('messages.error.ifTheProblemContinuesContactSenderDirectly', { sender: this.senderName });
+    },
+    senderName() {
+      return get('sender')(first(this.$store.state.messaging.senderMessages)) || '';
     },
   },
   watch: {
-    '$route.query.ts': async function watchTimestamp() {
-      await this.loadMessage();
+    '$route.query.ts': function watchTimestamp() {
+      this.loadMessages();
+    },
+    loaded: function watchLoaded(value) {
+      if (value && !this.error && !this.messages.length) {
+        redirectTo(this, this.backLink);
+      }
     },
   },
-  async created() {
-    await this.loadMessage();
+  mounted() {
+    this.loadMessages();
   },
   methods: {
-    async loadMessage() {
-      this.loaded = false;
+    loadMessages() {
       this.$store.dispatch('messaging/clear');
-      const sender = get('sender')(this.$route.query);
 
-      if (sender) {
-        this.$store.dispatch('messaging/selectSender', sender);
-        this.sender = sender;
-      }
+      const sender = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
+        ? this.$route.query.senderId
+        : this.$route.query.sender;
 
-      if (!this.sender) {
+      if (!sender) {
         redirectTo(this, this.backLink);
         return;
       }
 
-      await this.$store.dispatch('messaging/load', { sender: this.sender });
+      const request = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
+        ? { senderId: sender }
+        : { sender };
 
-      if (!this.error && !this.messages.length) {
-        redirectTo(this, this.backLink);
-      }
-
-      this.loaded = true;
+      this.$store.dispatch('messaging/load', request);
     },
     messageLabel(message) {
       let timePrefix = this.$t('generic.on');

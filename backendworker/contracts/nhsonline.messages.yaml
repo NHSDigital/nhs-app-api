@@ -22,13 +22,19 @@ paths:
         - in: query
           name: sender
           required: false
-          description: The name of sender to filter by. This parameter is incompatible with `summary`.
+          description: The name of sender to filter by. This parameter is incompatible with `summary` and `senderId`.
+          schema:
+            type: string
+        - in: query
+          name: senderId
+          required: false
+          description: The id of sender to filter by. This parameter is incompatible with `summary` and `sender`.
           schema:
             type: string
         - in: query
           name: summary
           required: false
-          description: Indicates to return only the latest message per sender. This parameter is incompatible with `sender`.
+          description: Indicates to return only the latest message per sender. This parameter is incompatible with `sender` and `senderId`.
           schema:
             type: boolean
       responses:
@@ -43,7 +49,7 @@ paths:
         "204":
           description: Successful operation. Content is empty.
         "400":
-          description: Either `sender` or `summary` is required.
+          description: Either `sender`, `senderId` or `summary` is required.
         "401":
           $ref: '#/components/responses/UnauthorizedError'
         "500":
@@ -328,6 +334,8 @@ components:
       properties:
         id:
           type: string
+        senderId:
+          type: string
         sender:
           type: string
         version:
@@ -342,6 +350,7 @@ components:
           type: boolean
       example:
         id: 9fbd0bea-5a63-4fd4-b4be-4bcd9c063227
+        senderId: B82041
         sender: b1f99cf0-278d-49ca-a325-0a1504799488
         version: 0
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -350,6 +359,9 @@ components:
     SenderResponse:
       type: object
       properties:
+        id:
+          type: string
+          description: ID of the sender.
         name:
           type: string
           description: The sender's name.

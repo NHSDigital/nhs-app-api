@@ -26,29 +26,43 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
         public void Map_WithUserMessages_MapsToResponse()
         {
             // Arrange
-            const string sender = "test sender";
+            const string senderName = "test sender";
+            const string senderId = "TEST_SENDER";
+
             var currentMessage = new UserMessage
             {
-                Sender = sender,
+                Sender = senderName,
                 SentTime = DateTime.UtcNow,
                 ReadTime = DateTime.UtcNow,
-                Body = "123"
+                Body = "123",
+                SenderContext = new SenderContext
+                {
+                    SenderId = senderId
+                }
             };
 
             var oldestMessage = new UserMessage
             {
-                Sender = sender,
+                Sender = senderName,
                 SentTime = DateTime.UtcNow.AddSeconds(-10),
                 ReadTime = default,
-                Body = "456"
+                Body = "456",
+                SenderContext = new SenderContext
+                {
+                    SenderId = senderId
+                }
             };
 
             var latestMessage = new UserMessage
             {
-                Sender = sender,
+                Sender = senderName,
                 SentTime = DateTime.UtcNow.AddSeconds(10),
                 ReadTime = default,
-                Body = "789"
+                Body = "789",
+                SenderContext = new SenderContext
+                {
+                    SenderId = senderId
+                }
             };
 
             // Act
@@ -58,7 +72,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             result.SenderMessages.Should().NotBeEmpty();
             result.SenderMessages.Should().HaveCount(1);
             var resultSenderMessage = result.SenderMessages.First();
-            resultSenderMessage.Sender.Should().Be(sender);
+            resultSenderMessage.Sender.Should().Be(senderName);
             resultSenderMessage.UnreadCount.Should().Be(2);
 
             var resultMessages = resultSenderMessage.Messages;
@@ -97,11 +111,23 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
         public void Map_WithSummaryMessages_MapsToResponse()
         {
             // Arrange
-            var currentMessage = new SummaryMessage { SentTime = DateTime.UtcNow };
+            var currentMessage = new SummaryMessage
+            {
+                SentTime = DateTime.UtcNow ,
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+            };
 
-            var oldestMessage = new SummaryMessage { SentTime = DateTime.UtcNow.AddSeconds(-10) };
+            var oldestMessage = new SummaryMessage
+            {
+                SentTime = DateTime.UtcNow.AddSeconds(-10),
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+            };
 
-            var latestMessage = new SummaryMessage { SentTime = DateTime.UtcNow.AddSeconds(10) };
+            var latestMessage = new SummaryMessage
+            {
+                SentTime = DateTime.UtcNow.AddSeconds(10),
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+            };
 
             // Act
             var result = _systemUnderTest.Map(new List<SummaryMessage>
@@ -165,7 +191,11 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 ReadTime = default,
                 Body = $"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
                        $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
-                       $"metus id velit ullamcorper pulvinar. Vestibulum fermen#"
+                       $"metus id velit ullamcorper pulvinar. Vestibulum fermen#",
+                SenderContext = new SenderContext
+                {
+                    SenderId = "TEST_SENDER"
+                }
             };
 
             // Act
@@ -193,7 +223,11 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 Sender = "test sender",
                 SentTime = DateTime.UtcNow.AddSeconds(-10),
                 ReadTime = default,
-                Body = body
+                Body = body,
+                SenderContext = new SenderContext
+                {
+                    SenderId = "TEST_SENDER"
+                }
             };
 
             // Act
@@ -214,6 +248,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             var message = new UserMessage
             {
                 Id = new ObjectId("ae0b4ffd40c44828b884961b"),
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" },
                 Sender = "test sender",
                 SentTime = sentTime,
                 ReadTime = default,
@@ -232,6 +267,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             var resultMessage = result.SenderMessages.First().Messages.Should().ContainSingle().Subject;
 
             resultMessage.Id.Should().Be("ae0b4ffd40c44828b884961b");
+            resultMessage.SenderId.Should().Be("TEST_SENDER");
             resultMessage.Sender.Should().Be("test sender");
             resultMessage.SentTime.Should().Be(sentTime);
             resultMessage.Read.Should().Be(false);
@@ -256,6 +292,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             => userMessages.Select(m => new Message
             {
                 Id = m.Id.ToString(),
+                SenderId = m.SenderContext.SenderId,
                 Sender = m.Sender,
                 Version = m.Version,
                 Body = m.Body,

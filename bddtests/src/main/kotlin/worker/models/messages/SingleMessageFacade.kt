@@ -6,5 +6,6 @@ data class SingleMessageFacade(
         val body: String,
         val read: Boolean,
         val sentTime: String,
-        val version: Int
+        val version: Int,
+        val senderContext: SenderContext? = null
 )

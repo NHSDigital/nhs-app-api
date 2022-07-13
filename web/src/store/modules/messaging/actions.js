@@ -4,10 +4,10 @@ import {
   CLEAR,
   INIT,
   LOADED,
+  SENDER_MESSAGES_LOADED,
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
-  SET_SENDER,
 } from './mutation-types';
 
 export default {
@@ -30,8 +30,8 @@ export default {
   clear({ commit }) {
     commit(CLEAR);
   },
-  async load({ commit }, { sender } = {}) {
-    const request = sender ? { sender } : { summary: true };
+  async load({ commit }, request = {}) {
+    // eslint-disable-next-line no-param-reassign
     request.ignoreError = true;
 
     try {
@@ -41,14 +41,15 @@ export default {
     } catch (error) {
       commit(ADD_ERROR, createLocalError(error));
     } finally {
+      commit(SENDER_MESSAGES_LOADED);
       this.dispatch('device/unlockNavBar');
     }
   },
   async loadSenders({ commit }) {
     try {
-      const { senders } = await this.app.$http.getV1ApiUsersMeMessagesSenders({
-        ignoreError: true,
-      });
+      const { senders } = this.$env.MESSAGES_SENDER_ID_ENABLED
+        ? await this.app.$httpV2.getV2ApiUsersMeMessagesSenders({ ignoreError: true })
+        : await this.app.$http.getV1ApiUsersMeMessagesSenders({ ignoreError: true });
 
       commit(LOADED_SENDERS, senders);
     } catch (error) {
@@ -66,9 +67,6 @@ export default {
     } catch (error) {
       commit(ADD_ERROR, createLocalError(error));
     }
-  },
-  selectSender({ commit }, sender) {
-    commit(SET_SENDER, sender);
   },
   markAsRead(_, messageId) {
     const request = {

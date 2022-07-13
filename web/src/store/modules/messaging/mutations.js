@@ -5,10 +5,10 @@ import {
   CLEAR,
   INIT,
   LOADED,
+  SENDER_MESSAGES_LOADED,
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
-  SET_SENDER,
 } from './mutation-types';
 
 export default {
@@ -18,6 +18,7 @@ export default {
   [CLEAR](state) {
     state.error = null;
     state.message = null;
+    state.senderMessagesLoaded = false;
   },
   [INIT](state) {
     const blank = initialState();
@@ -28,14 +29,14 @@ export default {
   [LOADED](state, data) {
     state.senderMessages = data || [];
   },
+  [SENDER_MESSAGES_LOADED](state) {
+    state.senderMessagesLoaded = true;
+  },
   [LOADED_MESSAGE](state, message) {
     state.message = message;
   },
   [LOADED_SENDERS](state, senders) {
     state.senders = senders || [];
-  },
-  [SET_SENDER](state, sender) {
-    state.selectedSender = sender;
   },
   [SET_HAS_UNREAD](state, data) {
     if (data) {

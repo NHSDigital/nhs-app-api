@@ -7,12 +7,16 @@ import {
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
-  SET_SENDER,
 } from '@/store/modules/messaging/mutation-types';
+
+const setSenderIdEnabled = enabled => {
+  actions.$env = { MESSAGES_SENDER_ID_ENABLED: enabled };
+};
 
 describe('messaging actions', () => {
   const getResponse = 'get test response';
   let $http;
+  let $httpV2;
   let commit;
   let dispatch;
 
@@ -20,13 +24,18 @@ describe('messaging actions', () => {
     commit = jest.fn();
     dispatch = jest.fn();
     $http = {
-      getV1ApiUsersMeMessages: jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
+      getV1ApiUsersMeMessages:
+      jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
       getV1ApiUsersMeMessagesByMessageid:
         jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
     };
+    $httpV2 = {};
     actions.app = {
       get $http() {
         return $http;
+      },
+      get $httpV2() {
+        return $httpV2;
       },
     };
     actions.dispatch = dispatch;
@@ -54,11 +63,11 @@ describe('messaging actions', () => {
 
   describe('load', () => {
     beforeEach(async () => {
-      await actions.load({ commit });
+      await actions.load({ commit }, { senderId: 'fedcba-123124bcc-edaadc', sender: 'Test Sender' });
     });
 
-    it('will call the `getV1ApiUsersMeMessages` endpoint with `summary=true`', () => {
-      expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ summary: true, ignoreError: true });
+    it('will call the `getV1ApiUsersMeMessages` endpoint adding ignoreError to the given request', () => {
+      expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ senderId: 'fedcba-123124bcc-edaadc', sender: 'Test Sender', ignoreError: true });
     });
 
     it('will commit endpoint response to `LOADED`', () => {
@@ -158,53 +167,105 @@ describe('messaging actions', () => {
 
   describe('loadSenders', () => {
     const response = { senders: 'test sender' };
-
-    beforeEach(async () => {
-      $http.getV1ApiUsersMeMessagesSenders =
-        jest.fn().mockImplementation(() => Promise.resolve(response));
-      await actions.loadSenders({ commit });
-    });
-
-    it('will call the `getV1ApiUsersMeMessagesSenders` endpoint', () => {
-      expect($http.getV1ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
-    });
-
-    it('will commit endpoint response to `LOADED_SENDERS`', () => {
-      expect(commit).toBeCalledWith(LOADED_SENDERS, 'test sender');
-    });
-
-    describe('on error', () => {
-      beforeEach(async () => {
-        const error = { response: { status: 502 } };
-        commit.mockClear();
-        $http.getV1ApiUsersMeMessagesSenders =
-          jest.fn().mockImplementation(() => Promise.reject(error));
-        await actions.loadSenders({ commit });
-      });
-
-      it('will call the `getV1ApiUsersMeMessagesSenders` endpoint', () => {
-        expect($http.getV1ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
-      });
-
-      it('will commit `ADD_ERROR`', () => {
-        expect(commit).toBeCalledWith(ADD_ERROR, { status: 502, serviceDeskReference: '' });
-      });
-
-      it('will not commit `LOADED_SENDERS`', () => {
-        expect(commit).not.toBeCalledWith(LOADED_SENDERS, expect.any(String));
-      });
-    });
-  });
-
-  describe('selectSender', () => {
-    const sender = 'test sender';
+    const responseV2 = { senders: 'test sender v2' };
 
     beforeEach(() => {
-      actions.selectSender({ commit }, sender);
+      $http.getV1ApiUsersMeMessagesSenders =
+      jest.fn().mockImplementation(() => Promise.resolve(response));
+      $httpV2.getV2ApiUsersMeMessagesSenders =
+        jest.fn().mockImplementation(() => Promise.resolve(responseV2));
     });
 
-    it('will commit `SET_SENDER with passed value`', () => {
-      expect(commit).toBeCalledWith(SET_SENDER, sender);
+    describe('when sender id is not enabled', () => {
+      beforeEach(() => {
+        setSenderIdEnabled(false);
+      });
+
+      describe('on success', () => {
+        beforeEach(async () => {
+          await actions.loadSenders({ commit });
+        });
+
+        it('will call the `getV1ApiUsersMeMessagesSenders` endpoint', () => {
+          expect($http.getV1ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
+        });
+
+        it('will not call the `getV2ApiusersMeMessagesSenders` endpoint', () => {
+          expect($httpV2.getV2ApiUsersMeMessagesSenders).not.toHaveBeenCalled();
+        });
+
+        it('will commit endpoint response to `LOADED_SENDERS`', () => {
+          expect(commit).toBeCalledWith(LOADED_SENDERS, 'test sender');
+        });
+      });
+
+      describe('on error', () => {
+        beforeEach(async () => {
+          const error = { response: { status: 502 } };
+          $http.getV1ApiUsersMeMessagesSenders =
+            jest.fn().mockImplementation(() => Promise.reject(error));
+
+          await actions.loadSenders({ commit });
+        });
+
+        it('will call the `getV1ApiUsersMeMessagesSenders` endpoint', () => {
+          expect($http.getV1ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
+        });
+
+        it('will commit `ADD_ERROR`', () => {
+          expect(commit).toBeCalledWith(ADD_ERROR, { status: 502, serviceDeskReference: '' });
+        });
+
+        it('will not commit `LOADED_SENDERS`', () => {
+          expect(commit).not.toBeCalledWith(LOADED_SENDERS, expect.any(String));
+        });
+      });
+    });
+
+    describe('when sender id is enabled', () => {
+      beforeEach(() => {
+        setSenderIdEnabled(true);
+      });
+
+      describe('on success', () => {
+        beforeEach(async () => {
+          await actions.loadSenders({ commit });
+        });
+
+        it('will not call the `getV1ApiUsersMeMessagesSenders` endpoint', () => {
+          expect($http.getV1ApiUsersMeMessagesSenders).not.toHaveBeenCalled();
+        });
+
+        it('will call the `vetV2ApiusersMeMessagesSenders` endpoint', () => {
+          expect($httpV2.getV2ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
+        });
+
+        it('will commit endpoint response to `LOADED_SENDERS`', () => {
+          expect(commit).toBeCalledWith(LOADED_SENDERS, 'test sender v2');
+        });
+      });
+
+      describe('on error', () => {
+        beforeEach(async () => {
+          const error = { response: { status: 502 } };
+          $httpV2.getV2ApiUsersMeMessagesSenders =
+            jest.fn().mockImplementation(() => Promise.reject(error));
+
+          await actions.loadSenders({ commit });
+        });
+
+        it('will call the `getV2ApiUsersMeMessagesSenders` endpoint', () => {
+          expect($httpV2.getV2ApiUsersMeMessagesSenders).toBeCalledWith({ ignoreError: true });
+        });
+
+        it('will commit `ADD_ERROR`', () => {
+          expect(commit).toBeCalledWith(ADD_ERROR, { status: 502, serviceDeskReference: '' });
+        });
+
+        it('will not commit `LOADED_SENDERS`', () => {
+          expect(commit).not.toBeCalledWith(LOADED_SENDERS, expect.any(String));
+        });
+      });
     });
   });
 });

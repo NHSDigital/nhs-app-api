@@ -56,10 +56,10 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         [TestMethod]
         [DataRow(null, "test", "nhsLoginId")]
         [DataRow("test", null, "sender")]
-        public void FindMessagesFromSender_WhenArgumentsAreNotValid_ThrowsException(string nhsLoginId, string sender, string paramName)
+        public void FindMessagesFromSenderByName_WhenArgumentsAreNotValid_ThrowsException(string nhsLoginId, string sender, string paramName)
         {
             // Act
-            Func<Task> act = async () => await _systemUnderTest.FindMessagesFromSender(nhsLoginId, sender);
+            Func<Task> act = async () => await _systemUnderTest.FindMessagesFromSenderByName(nhsLoginId, sender);
 
             // Assert
             act.Should().ThrowAsync<ArgumentNullException>()
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task FindMessagesFromSender_ReturnsMessages()
+        public async Task FindMessagesFromSenderByName_ReturnsMessages()
         {
             // Arrange
             var messages = new List<UserMessage> { new UserMessage(), new UserMessage() };
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(messages));
 
             // Act
-            var result = await _systemUnderTest.FindMessagesFromSender("value", "value");
+            var result = await _systemUnderTest.FindMessagesFromSenderByName("value", "value");
 
             // Assert
             result.Should().NotBeNull();
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task FindMessagesFromSender_WhenCannotFindMatchingRecords_ShouldReturnEmptyList()
+        public async Task FindMessagesFromSenderByName_WhenCannotFindMatchingRecords_ShouldReturnEmptyList()
         {
             // Arrange
             _mockRepository.Setup(x =>
@@ -92,7 +92,53 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.FindMessagesFromSender("value", "value");
+            var result = await _systemUnderTest.FindMessagesFromSenderByName("value", "value");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserMessage>.NotFound>();
+        }
+
+        [TestMethod]
+        [DataRow(null, "test", "nhsLoginId")]
+        [DataRow("test", null, "senderId")]
+        public void FindMessagesFromSenderById_WhenArgumentsAreNotValid_ThrowsException(string nhsLoginId, string senderId, string paramName)
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.FindMessagesFromSenderById(nhsLoginId, senderId);
+
+            // Assert
+            act.Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName(paramName);
+        }
+
+        [TestMethod]
+        public async Task FindMessagesFromSenderById_ReturnsMessages()
+        {
+            // Arrange
+            var messages = new List<UserMessage> { new UserMessage(), new UserMessage() };
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(messages));
+
+            // Act
+            var result = await _systemUnderTest.FindMessagesFromSenderById("value", "value");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserMessage>.Found>().Subject.Records.Should().BeEquivalentTo(messages);
+        }
+
+        [TestMethod]
+        public async Task FindMessagesFromSenderById_WhenCannotFindMatchingRecords_ShouldReturnEmptyList()
+        {
+            // Arrange
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.FindMessagesFromSenderById("value", "value");
 
             // Assert
             result.Should().NotBeNull();

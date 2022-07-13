@@ -24,6 +24,7 @@ object WorkerPaths {
     const val serviceJourneyRules = "/v1/patient/journey-configuration"
     const val userDevices = "/v1/api/users/$userPlaceholder/devices"
     const val userMessages = "/v1/api/users/$userPlaceholder/messages"
+    const val userMessageSendersV2 = "/v2/api/users/me/messages/senders"
     const val userMeInfo = "/v1/api/users/me/info"
     const val userMeUserResearch= "/v1/api/users/me/info/userResearch"
     const val userInfo = "/v1/api/users/info"

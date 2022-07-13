@@ -18,11 +18,11 @@
               [$style['nhs-app-message__item--unread']]: !!sender.unreadCount
             }">
           <a :title="sender.name"
-             :href="messagePath(sender.name)"
+             :href="messagePath(sender)"
              :class="$style['nhs-app-message__link']"
              :aria-label="messageLabel(sender)"
              tabindex="0"
-             @click="goToMessages(sender.name)"
+             @click="goToMessages(sender)"
              @click.stop.prevent="$emit('click')">
             <div :class="$style['flex-baseline-container']" aria-hidden="true">
               <h2 :class="['nhsuk-heading-xs', $style['nhs-app-message__title']]">
@@ -71,6 +71,7 @@ export default {
     return {
       loaded: false,
       isNativeApp: this.$store.state.device.isNativeApp,
+      senderIdEnabled: this.$store.$env.MESSAGES_SENDER_ID_ENABLED,
       backLink: MESSAGES_PATH,
     };
   },
@@ -101,10 +102,18 @@ export default {
       this.loaded = true;
     },
     messagePath(sender) {
-      return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?sender=${sender}`;
+      const senderQuery = this.senderIdEnabled
+        ? `senderId=${sender.id}`
+        : `sender=${sender.name}`;
+
+      return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?${senderQuery}`;
     },
     goToMessages(sender) {
-      redirectTo(this, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { sender });
+      const queryParams = this.senderIdEnabled
+        ? { senderId: sender.id }
+        : { sender: sender.name };
+
+      redirectTo(this, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, queryParams);
     },
     messageLabel(sender) {
       let label = this.$t('messages.messagesFromSender')

@@ -35,7 +35,13 @@ class MessagesStepDefinitions {
     @Given("^I am a user wishing to view my messages$")
     fun iAmAUserWishingToViewTheirMessages() {
         val factory = setupMessagesEnabledPatient()
-        factory.setUpMultipleMessagesInCache()
+        factory.setUpMultipleMessagesInCacheV2()
+    }
+
+    @Given("^I am a user wishing to view my messages with sender id feature flag enabled$")
+    fun iAmAUserWishingToViewTheirMessagesV2() {
+        val factory = setupMessagesEnabledPatient()
+        factory.setUpMultipleMessagesInCacheV2()
     }
 
     @Given("^I am a user with proof level 5 wishing to view my messages$")
@@ -44,7 +50,7 @@ class MessagesStepDefinitions {
                 .findPatientForConfiguration(null, SJRJourneyType.MESSAGES_ENABLED, IdentityProofingLevel.P5)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
-        factory.setUpMultipleMessagesInCache()
+        factory.setUpMultipleMessagesInCacheV2()
     }
 
     @Given("^I am a user with proof level 5 whose access token is about to expire wishing to view my messages$")
@@ -164,7 +170,7 @@ class MessagesStepDefinitions {
 
     @Then("^the Sender Messages page is displayed$")
     fun theSenderMessagesPageIsDisplayed() {
-        messagesPage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
+        messagesPage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail())
     }
 
     @Then("^my messages from the sender are displayed$")
@@ -227,7 +233,7 @@ class MessagesStepDefinitions {
 
     @Then("^the Message page is displayed$")
     fun theMessagePageIsDisplayed() {
-        messagePage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
+        messagePage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail())
     }
 
     private fun setupMessagesEnabledPatient(): MessagesFactory {

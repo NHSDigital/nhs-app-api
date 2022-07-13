@@ -16,7 +16,7 @@
             <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
               {{ $t('messages.messageFrom') }}
             </span>
-            {{ sender }}
+            {{ senderName }}
           </page-title>
         </div>
       </div>
@@ -89,7 +89,12 @@ export default {
       return this.$store.state.messaging.message;
     },
     sender() {
-      return get('sender')(this.message);
+      return this.$store.$env.MESSAGES_SENDER_ID_ENABLED
+        ? get('senderId')(this.message)
+        : get('sender')(this.message);
+    },
+    senderName() {
+      return get('sender')(this.message) || '';
     },
   },
   watch: {
@@ -100,9 +105,6 @@ export default {
       if (value) {
         this.$store.dispatch('messaging/markAsRead', this.message.id);
       }
-    },
-    sender: function watchSender(value) {
-      this.$store.dispatch('messaging/selectSender', value);
     },
   },
   async created() {
@@ -129,7 +131,11 @@ export default {
       this.loaded = true;
     },
     backClicked() {
-      redirectTo(this, this.backLink, { sender: this.sender });
+      const request = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
+        ? { senderId: this.sender }
+        : { sender: this.sender };
+
+      redirectTo(this, this.backLink, request);
     },
   },
 };

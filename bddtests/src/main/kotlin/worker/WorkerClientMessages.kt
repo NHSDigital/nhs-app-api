@@ -24,10 +24,14 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
         return null
     }
 
-    fun get(authToken: String?, summary:Boolean, targetSender:String? =null): Array<MessagesResponse> {
+    fun get(authToken: String?,
+            summary:Boolean,
+            targetSender:String? = null,
+            targetSenderId:String? = null): Array<MessagesResponse> {
         val uriBuilder = URIBuilder(uri("me"))
         uriBuilder.setParameter("summary", summary.toString())
         uriBuilder.setParameterIfNotNull("sender", targetSender)
+        uriBuilder.setParameterIfNotNull("senderId", targetSenderId)
 
         val httpGet = RequestBuilder.get(uriBuilder.build().toString())
                 .addAuthorizationIfNotNull(authToken)
@@ -56,6 +60,19 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
 
     fun getSenders(authToken: String?): SendersResponse? {
         val uriBuilder = URIBuilder(uri("me") + "/senders")
+
+        val httpGet = RequestBuilder.get(uriBuilder.build().toString())
+            .addAuthorizationIfNotNull(authToken)
+        val response = httpGet.sendAndGetResult(sender)
+        if (response != null) {
+            return gson.fromJson(response, SendersResponse::class.java)
+        }
+
+        return null
+    }
+
+    fun getSendersV2(authToken: String?): SendersResponse? {
+        val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.userMessageSendersV2)
 
         val httpGet = RequestBuilder.get(uriBuilder.build().toString())
             .addAuthorizationIfNotNull(authToken)

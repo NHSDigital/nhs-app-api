@@ -1,24 +1,59 @@
 import mockdate from 'mockdate';
 import * as dependency from '@/lib/utils';
 import SenderMessages from '@/pages/messages/app-messaging/sender-messages';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/messaging/mutation-types';
 import { createStore, mount } from '../../helpers';
 
-describe('messaging sender messages', () => {
-  const messageItemClass = 'nhs-app-message__item';
-  const messageSectionClass = 'nhs-app-message';
-  const messageUnreadIndicatorClass = 'nhs-app-message__meta';
-  const messageBodyUnreadClass = 'nhs-app-message__summary--unread';
-  const messageDateUnreadClass = 'nhs-app-message__date--unread';
-  let $store;
-  let wrapper;
+dependency.redirectTo = jest.fn();
 
-  const mountSenderMessages = ({ sender }) => mount(SenderMessages, {
+const messageItemClass = 'nhs-app-message__item';
+const messageSectionClass = 'nhs-app-message';
+const messageUnreadIndicatorClass = 'nhs-app-message__meta';
+const messageBodyUnreadClass = 'nhs-app-message__summary--unread';
+const messageDateUnreadClass = 'nhs-app-message__date--unread';
+
+const shutterContainer = '[data-purpose="shutter-container"]';
+
+const defaultMessages = [
+  { body: 'Message 1', read: true, sentTime: '2020-01-14T16:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Message 2', read: true, sentTime: '2020-01-14T12:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Unread Message 3', read: false, sentTime: '2020-01-14T00:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Message 4', read: true, sentTime: '2020-01-13T15:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Unread Message 5', read: false, sentTime: '2020-01-09T17:00:00.000Z', sender: 'Test Sender' },
+];
+
+let wrapper;
+let $store;
+
+const mountSenderMessages = ({
+  sender = null,
+  senderId = null,
+  messages = defaultMessages,
+  errored = false,
+  senderIdEnabled = true,
+  isNativeApp = true,
+} = {}) => {
+  const messaging = initialState();
+  messaging.senderMessages = [{ messages }];
+  messaging.error = errored;
+
+  $store = createStore({
+    state: {
+      messaging,
+      device: { isNativeApp },
+    },
+    $env: {
+      MESSAGES_SENDER_ID_ENABLED: senderIdEnabled,
+    },
+  });
+
+  wrapper = mount(SenderMessages, {
     $route: {
-      query: {
-        sender,
-      },
+      query: senderIdEnabled
+        ? { senderId }
+        : { sender },
     },
     $store,
     $style: {
@@ -32,259 +67,374 @@ describe('messaging sender messages', () => {
       reload: jest.fn(),
     },
   });
+};
 
-  const createSenderMessages = ({ messages = [] }) => {
-    $store.state.messaging.senderMessages.push({
-      sender: 'Test Sender',
-      messages,
-    });
-  };
-
+describe('messaging sender messages', () => {
   beforeEach(() => {
-    dependency.redirectTo = jest.fn();
-
-    $store = createStore({
-      state: {
-        messaging: initialState(),
-        device: {
-          isNativeApp: true,
-        },
-      },
-    });
+    mockdate.set('2020-01-14T17:00:00.000Z');
+    dependency.redirectTo.mockClear();
   });
 
-  describe('no query or state selected sender', () => {
-    beforeEach(async () => {
-      $store.state.messaging.selectedSender = null;
-      wrapper = mountSenderMessages({ sender: null });
-    });
-
-    it('will dispatch messaging/clear', () => {
-      expect($store.dispatch).toBeCalledWith('messaging/clear');
-    });
-
-    it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
-      expect(dependency.redirectTo)
-        .toBeCalledWith(expect.any(Object), HEALTH_INFORMATION_UPDATES_PATH);
-    });
-  });
-
-  describe('with state selected sender', () => {
-    beforeEach(async () => {
-      $store.state.messaging.selectedSender = 'Test Sender';
-      createSenderMessages({
-        messages: [
-          { body: 'Message 1', read: true, sentTime: '2020-01-14T16:00:00.000Z' },
-        ],
-      });
-      wrapper = mountSenderMessages({ sender: null });
-    });
-
-    it('will dispatch `messaging/clear`', () => {
-      expect($store.dispatch).toBeCalledWith('messaging/clear');
-    });
-
-    it('will dispatch `messaging/load`', () => {
-      expect($store.dispatch).toBeCalledWith('messaging/load', { sender: 'Test Sender' });
-    });
-
-    it('will not redirect', () => {
-      expect(dependency.redirectTo).not.toBeCalled();
-    });
-  });
-
-  describe('with selected sender', () => {
-    const sender = 'Test Sender';
-
-    describe('fail to load messages', () => {
-      beforeEach(async () => {
-        $store.state.messaging.error = true;
-        wrapper = mountSenderMessages({ sender });
-        await wrapper.vm.$nextTick();
-      });
-
-      it('will dispatch messaging/clear', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/clear');
-      });
-
-      it('will dispatch messaging/load', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: 'Test Sender' });
-      });
-
-      it('will show the shutter container', () => {
-        expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(true);
-      });
-
-      it('will not show the messages section', () => {
-        expect(wrapper.find(`.${messageSectionClass}`).exists()).toBe(false);
-      });
-    });
-
-    describe('no messages', () => {
-      beforeEach(async () => {
-        createSenderMessages({ messages: [] });
-        wrapper = mountSenderMessages({ sender });
-      });
-
-      it('will dispatch messaging/clear', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/clear');
-      });
-
-      it('will dispatch messaging/load', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: 'Test Sender' });
-      });
-
-      it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
-        expect(dependency.redirectTo)
-          .toBeCalledWith(expect.any(Object), HEALTH_INFORMATION_UPDATES_PATH);
-      });
-    });
-
-    describe('has messages', () => {
-      beforeEach(async () => {
-        mockdate.set('2020-01-14T17:00:00.000Z');
-        createSenderMessages({
-          messages: [
-            { body: 'Message 1', read: true, sentTime: '2020-01-14T16:00:00.000Z' },
-            { body: 'Message 2', read: true, sentTime: '2020-01-14T12:00:00.000Z' },
-            { body: 'Unread Message 3', read: false, sentTime: '2020-01-14T00:00:00.000Z' },
-            { body: 'Message 4', read: true, sentTime: '2020-01-13T15:00:00.000Z' },
-            { body: 'Unread Message 5', read: false, sentTime: '2020-01-09T17:00:00.000Z' },
-          ],
-        });
-        $store.state.device.isNativeApp = true;
-        wrapper = mountSenderMessages({ sender });
-        await wrapper.vm.$nextTick();
-      });
-
-      afterEach(() => {
-        mockdate.reset();
-      });
-
-      it('will dispatch messaging/clear', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/clear');
-      });
-
-      it('will dispatch messaging/load', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: 'Test Sender' });
-      });
-
-      it('will not redirect', () => {
-        expect(dependency.redirectTo).not.toBeCalled();
-      });
-
-      it('will not show the shutter container', () => {
-        expect(wrapper.find('[data-purpose="shutter-container"]').exists()).not.toBe(true);
-      });
-
-      describe('back link', () => {
-        const backLinkData = '[data-purpose=main-back-button]';
-
-        it('will not show on native', () => {
-          expect(wrapper.find(backLinkData).exists()).toBe(false);
-        });
-
-        describe('desktop', () => {
-          let backLink;
-
-          beforeEach(async () => {
-            $store.state.device.isNativeApp = false;
-            wrapper = mountSenderMessages({ sender });
-            await wrapper.vm.$nextTick();
-            backLink = wrapper.find(backLinkData);
-          });
-
-          it('will show', () => {
-            expect(backLink.exists()).toBe(true);
-          });
-
-          it('will redirect HEALTH_INFORMATION_UPDATES_PATH when clicked', () => {
-            expect(backLink.attributes('href')).toBe(HEALTH_INFORMATION_UPDATES_PATH);
-          });
-        });
-      });
-
-      describe('inbox', () => {
-        let messageItems;
-
+  describe('sender id not enabled', () => {
+    describe('mounted', () => {
+      describe('no query param provided', () => {
         beforeEach(() => {
-          messageItems = wrapper.findAll(`.${messageItemClass}`);
+          mountSenderMessages({ senderIdEnabled: false });
         });
 
-        it('will display all messages', () => {
-          expect(messageItems.length).toBe(5);
-          expect(messageItems.at(0).text()).toContain('Message 1');
-          expect(messageItems.at(1).text()).toContain('Message 2');
-          expect(messageItems.at(2).text()).toContain('Unread Message 3');
-          expect(messageItems.at(3).text()).toContain('Message 4');
-          expect(messageItems.at(4).text()).toContain('Unread Message 5');
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
         });
 
-        describe('read messages', () => {
-          let readMessage1;
-          let readMessage2;
-          let readMessage4;
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('incorrect query param provided', () => {
+        beforeEach(() => {
+          mountSenderMessages({ senderId: 'test-sender', senderIdEnabled: false });
+        });
+
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
+        });
+
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+
+        it('will not load messages', () => {
+          expect($store.dispatch).not.toHaveBeenCalledWith('messaging/load', expect.anything);
+        });
+      });
+
+      describe('correct query param provided', () => {
+        beforeEach(() => {
+          mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false });
+        });
+
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+
+        it('will load messages', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/load', { sender: 'Test Sender' });
+        });
+      });
+    });
+
+    describe('load messages has completed', () => {
+      describe('and there has been an error', () => {
+        beforeEach(() => {
+          mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, errored: true });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there are no messages', () => {
+        beforeEach(() => {
+          mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, messages: [] });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there are no messages and has errored', () => {
+        beforeEach(() => {
+          mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, errored: true, messages: [] });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there has been no error and messages have loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
 
           beforeEach(() => {
-            readMessage1 = messageItems.at(0);
-            readMessage2 = messageItems.at(1);
-            readMessage4 = messageItems.at(3);
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
           });
 
-          it('will not style body as unread', () => {
-            expect(readMessage1.find(`.${messageBodyUnreadClass}`).exists()).toBe(false);
-            expect(readMessage2.find(`.${messageBodyUnreadClass}`).exists()).toBe(false);
-            expect(readMessage4.find(`.${messageBodyUnreadClass}`).exists()).toBe(false);
+          it('will not show the shutter container', () => {
+            expect(wrapper.find(shutterContainer).exists()).toBe(false);
           });
 
-          it('will not style date time as unread', () => {
-            expect(readMessage1.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
-            expect(readMessage2.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
-            expect(readMessage4.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(5);
+            expect(messageItems.at(0).text()).toContain('Message 1');
+            expect(messageItems.at(1).text()).toContain('Message 2');
+            expect(messageItems.at(2).text()).toContain('Unread Message 3');
+            expect(messageItems.at(3).text()).toContain('Message 4');
+            expect(messageItems.at(4).text()).toContain('Unread Message 5');
           });
 
-          it('will not show unread indicator', () => {
-            expect(readMessage1.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
-            expect(readMessage2.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
-            expect(readMessage4.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
-          });
-        });
+          describe.each([0, 1, 3])('read message', (messageIndex) => {
+            let readMessage;
 
-        describe('unread messages', () => {
-          let unreadMessage3;
-          let unreadMessage5;
+            beforeEach(() => {
+              readMessage = messageItems.at(messageIndex);
+            });
 
-          beforeEach(() => {
-            unreadMessage3 = messageItems.at(2);
-            unreadMessage5 = messageItems.at(4);
-          });
+            it('will not style body as unread', () => {
+              expect(readMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(false);
+            });
 
-          it('will style body as unread', () => {
-            expect(unreadMessage3.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
-            expect(unreadMessage5.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
-          });
+            it('will not style date time as unread', () => {
+              expect(readMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
+            });
 
-          it('will style date time as unread', () => {
-            expect(unreadMessage3.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
-            expect(unreadMessage5.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
+            it('will not show unread indicator', () => {
+              expect(readMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
+            });
           });
 
-          it('will show unread indicator', () => {
-            expect(unreadMessage3.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(true);
-            expect(unreadMessage5.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(true);
+          describe.each([2, 4])('unread messages', (messageIndex) => {
+            let unreadMessage;
+
+            beforeEach(() => {
+              unreadMessage = messageItems.at(messageIndex);
+            });
+
+            it('will style body as unread', () => {
+              expect(unreadMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
+            });
+
+            it('will style date time as unread', () => {
+              expect(unreadMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
+            });
+
+            it('will show unread indicator', () => {
+              expect(unreadMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(true);
+            });
+          });
+
+          describe.each([
+            [0, 'today', 'Red message received at 4pm'],
+            [1, 'midday', 'Red message received at Midday'],
+            [2, 'midnight', 'Unread message received at Midnight'],
+            [3, 'yesterday', 'Red message received  Yesterday'],
+            [4, 'a few days ago', 'Unread message received on Thursday'],
+          ])('aria label', (messageIndex, time, description) => {
+            it(`will describe ${time} correctly`, () => {
+              expect(messageItems.at(messageIndex).find('a').attributes('aria-label')).toContain(description);
+            });
           });
         });
 
         describe.each([
-          ['today time', 'Red', 'at', 0, '4pm'],
-          ['midday time', 'Red', 'at', 1, 'Midday'],
-          ['midnight time', 'Unread', 'at', 2, 'Midnight'],
-          ['yesterday', 'Red', '', 3, 'Yesterday'],
-          ['a few days ago', 'Unread', 'on', 4, 'Thursday'],
-        ])('aria label', (description, prefix, timePrefix, messageIndex, date) => {
-          it(`will display ${description} correctly`, () => {
-            expect(messageItems.at(messageIndex).find('a').attributes('aria-label'))
-              .toContain(`${prefix} message received ${timePrefix} ${date}.`);
+          ['will not be shown on native', true],
+          ['will be shown on desktop', false],
+        ])('desktop back link', (description, isNativeApp) => {
+          let desktopBackLink;
+
+          beforeEach(() => {
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, isNativeApp });
+            $store.state.messaging.senderMessagesLoaded = true;
+            desktopBackLink = wrapper.find(DesktopGenericBackLink);
+          });
+
+          it(description, () => {
+            expect(desktopBackLink.exists()).toBe(!isNativeApp);
+          });
+        });
+      });
+    });
+  });
+
+  describe('sender id enabled', () => {
+    describe('mounted', () => {
+      describe('no query param provided', () => {
+        beforeEach(() => {
+          mountSenderMessages();
+        });
+
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
+        });
+
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('incorrect query param provided', () => {
+        beforeEach(() => {
+          mountSenderMessages({ sender: 'Test Sender' });
+        });
+
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
+        });
+
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+
+        it('will not load messages', () => {
+          expect($store.dispatch).not.toHaveBeenCalledWith('messaging/load', expect.anything);
+        });
+      });
+
+      describe('correct query param provided', () => {
+        beforeEach(() => {
+          mountSenderMessages({ senderId: 'test-sender' });
+        });
+
+        it('will dispatch messaging/clear', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/clear');
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+
+        it('will load messages', () => {
+          expect($store.dispatch).toHaveBeenCalledWith('messaging/load', { senderId: 'test-sender' });
+        });
+      });
+    });
+
+    describe('load messages has completed', () => {
+      describe('and there has been an error', () => {
+        beforeEach(() => {
+          mountSenderMessages({ senderId: 'test-sender', errored: true });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there are no messages', () => {
+        beforeEach(() => {
+          mountSenderMessages({ senderId: 'test-sender', messages: [] });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there are no messages and has errored', () => {
+        beforeEach(() => {
+          mountSenderMessages({ senderId: 'test-sender', errored: true, messages: [] });
+          $store.state.messaging.senderMessagesLoaded = true;
+        });
+
+        it('will not redirect to HEALTH_INFORMATION_UPDATES_PATH', () => {
+          expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
+      });
+
+      describe('and there has been no error and messages have loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
+
+          beforeEach(() => {
+            mountSenderMessages({ senderId: 'test-sender' });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
+          });
+
+          it('will not show the shutter container', () => {
+            expect(wrapper.find(shutterContainer).exists()).toBe(false);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(5);
+            expect(messageItems.at(0).text()).toContain('Message 1');
+            expect(messageItems.at(1).text()).toContain('Message 2');
+            expect(messageItems.at(2).text()).toContain('Unread Message 3');
+            expect(messageItems.at(3).text()).toContain('Message 4');
+            expect(messageItems.at(4).text()).toContain('Unread Message 5');
+          });
+
+          describe.each([0, 1, 3])('read message', (messageIndex) => {
+            let readMessage;
+
+            beforeEach(() => {
+              readMessage = messageItems.at(messageIndex);
+            });
+
+            it('will not style body as unread', () => {
+              expect(readMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(false);
+            });
+
+            it('will not style date time as unread', () => {
+              expect(readMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
+            });
+
+            it('will not show unread indicator', () => {
+              expect(readMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
+            });
+          });
+
+          describe.each([2, 4])('unread messages', (messageIndex) => {
+            let unreadMessage;
+
+            beforeEach(() => {
+              unreadMessage = messageItems.at(messageIndex);
+            });
+
+            it('will style body as unread', () => {
+              expect(unreadMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
+            });
+
+            it('will style date time as unread', () => {
+              expect(unreadMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
+            });
+
+            it('will show unread indicator', () => {
+              expect(unreadMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(true);
+            });
+          });
+
+          describe.each([
+            [0, 'today', 'Red message received at 4pm'],
+            [1, 'midday', 'Red message received at Midday'],
+            [2, 'midnight', 'Unread message received at Midnight'],
+            [3, 'yesterday', 'Red message received  Yesterday'],
+            [4, 'a few days ago', 'Unread message received on Thursday'],
+          ])('aria label', (messageIndex, time, description) => {
+            it(`will describe ${time} correctly`, () => {
+              expect(messageItems.at(messageIndex).find('a').attributes('aria-label')).toContain(description);
+            });
+          });
+        });
+
+        describe.each([
+          ['will not be shown on native', true],
+          ['will be shown on desktop', false],
+        ])('desktop back link', (description, isNativeApp) => {
+          let desktopBackLink;
+
+          beforeEach(() => {
+            mountSenderMessages({ senderId: 'test-sender', isNativeApp });
+            $store.state.messaging.senderMessagesLoaded = true;
+            desktopBackLink = wrapper.find(DesktopGenericBackLink);
+          });
+
+          it(description, () => {
+            expect(desktopBackLink.exists()).toBe(!isNativeApp);
           });
         });
       });

@@ -78,7 +78,7 @@ export default {
     }
 
     if (this.appMessagingEnabled) {
-      await this.$store.dispatch('messaging/load');
+      await this.$store.dispatch('messaging/load', { summary: true });
     }
 
     this.hasUnreadMessages = this.$store.state.messaging.hasUnread;

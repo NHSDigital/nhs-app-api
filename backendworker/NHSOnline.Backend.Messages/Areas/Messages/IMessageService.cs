@@ -11,11 +11,15 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
         Task<MessagesResult> GetMessage(AccessToken accessToken, string messageId);
 
-        Task<MessagesResult> GetMessages(AccessToken accessToken, string sender);
+        Task<MessagesResult> GetMessagesBySender(AccessToken accessToken, string sender);
+
+        Task<MessagesResult> GetMessagesBySenderId(AccessToken accessToken, string senderId);
 
         Task<MessagesResult> GetSummaryMessages(AccessToken accessToken);
 
         Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument, AccessToken accessToken, string messageId);
+
+        Task<UserSendersResult> GetSendersV2(AccessToken accessToken);
 
         Task<UserSendersResult> GetSenders(AccessToken accessToken);
     }

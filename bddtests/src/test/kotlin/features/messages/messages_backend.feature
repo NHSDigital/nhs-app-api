@@ -27,40 +27,71 @@ Feature: Messages Backend
     And I have logged in and have a valid session cookie
     Then an attempt to get a summary of my messages with an invalid access token will return an Unauthorised error
 
-  Scenario: An api user can get all their messages from a sender
+  Scenario: An api user can get all their messages from a sender by sender name
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages from a sender from the api
+    When I get my messages from a sender by name from the api
+    Then I receive a "OK" success code
+    And I receive my messages from a sender
+
+  Scenario: An api user can get all their messages from a sender by sender Id
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender by sender Id from the api
     Then I receive a "OK" success code
     And I receive my messages from a sender
 
   Scenario: An api user getting their messages from a sender where no messages are stored will receive a 204
     Given I am an api user wishing to get my messages, but I have no messages
     And I have logged in and have a valid session cookie
-    When I get my messages from a sender from the api
+    When I get my messages from a sender by name from the api
+    Then I receive a "No Content" success code
+
+  Scenario: An api user getting their messages from a sender by sender Id where no messages are stored will receive a 204
+    Given I am an api user wishing to get my messages, but I have no messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender by sender Id from the api
     Then I receive a "No Content" success code
 
   Scenario: An api user getting their messages from a sender without an access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages from a sender from the api without an access token
+    When I get my messages from a sender by name from the api without an access token
+    Then I receive an "Unauthorized" error
+
+  Scenario: An api user getting their messages from a sender by sender Id without an access token will receive a 401
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get my messages from a sender by sender Id from the api without an access token
     Then I receive an "Unauthorized" error
 
   Scenario: An api user getting their messages from a sender with an invalid access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    Then an attempt to get messages from a sender with an invalid access token will return an Unauthorised error
+    Then an attempt to get messages from a sender by name with an invalid access token will return an Unauthorised error
 
-  Scenario: An api user getting a summary of their messages from a single sender will receive a 400
+  Scenario: An api user getting their messages from a sender by sender Id with an invalid access token will receive a 401
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages with a summary flag and a target sender
+    Then an attempt to get messages from a sender by sender Id with an invalid access token will return an Unauthorised error
+
+  Scenario Outline: An api user getting messages with an invalid parameter combination will receive a 400
+    Given I am an api user wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When <Messages requested>
     Then I receive an "Bad Request" error
+  Examples:
+    | Messages requested                                                                |
+    | I get my messages with a summary flag and a target sender                         |
+    | I get my messages with a target sender and a target sender Id                     |
+    | I get my messages with a summary flag and a target sender Id                      |
+    | I get my messages with a summary flag, a target sender and a target sender Id     |
+    | I get my messages without a summary flag, target sender name, or target sender Id |
 
   Scenario: An api user getting neither a summary of their messages or messages from a single sender will receive a 400
     Given I am an api user wishing to get my messages
     And I have logged in and have a valid session cookie
-    When I get my messages without a summary flag and without a target sender
+    When I get my messages without a summary flag, target sender name, or target sender Id
     Then I receive an "Bad Request" error
 
   Scenario: An api user can post messages with sender context specified
@@ -152,4 +183,24 @@ Feature: Messages Backend
     Given I am an api user wishing to get my messages, but I have no messages
     And I have logged in and have a valid session cookie
     When I try to get a list of message senders
+    Then I receive a "No Content" success code
+
+  Scenario: An api user can get all their message senders v2
+    Given I am an api user wishing to get my messages when sender id flag is enabled
+    And I have logged in and have a valid session cookie
+    When I try to get a list of message senders from v2 endpoint
+    Then I receive a "OK" success code
+    And I can see a list of message senders from v2 endpoint along with a count of unread messages per sender
+
+  Scenario: An api user attempting to retrieve their message senders from v2 endpoint without passing an access token
+  will receive a 401
+    Given I am an api user with an unread message
+    And I have logged in and have a valid session cookie
+    When I try to get the message senders from v2 endpoint without passing an access token
+    Then I receive an "Unauthorized" error
+
+  Scenario: An api user attempting to retrieve their message senders from v2 endpoint with no results returns a 204
+    Given I am an api user wishing to get my messages, but I have no messages
+    And I have logged in and have a valid session cookie
+    When I try to get a list of message senders from v2 endpoint
     Then I receive a "No Content" success code

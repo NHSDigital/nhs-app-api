@@ -94,6 +94,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
             return new Message
             {
                 Id = userMessage.Id.ToString(),
+                SenderId = userMessage.SenderContext?.SenderId,
                 Sender = userMessage.Sender,
                 Version = userMessage.Version,
                 Body = truncateBody

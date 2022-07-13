@@ -165,7 +165,7 @@ export default {
     }
 
     if (this.appMessagingSjrEnabled) {
-      await this.$store.dispatch('messaging/load');
+      await this.$store.dispatch('messaging/load', { summary: true });
     }
 
     this.hasUnreadGPMessages = this.$store.state.gpMessages.hasUnread;

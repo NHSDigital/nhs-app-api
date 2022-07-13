@@ -6,6 +6,8 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
     {
         public string Id { get; set; }
 
+        public string SenderId { get; set; }
+
         public string Sender { get; set; }
 
         public int Version { get; set; }

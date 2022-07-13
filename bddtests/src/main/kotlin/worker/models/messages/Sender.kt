@@ -1,4 +1,6 @@
 package worker.models.messages
 
-data class Sender(val name: String,
-                  val unreadCount: Int)
+data class Sender(
+    val id: String?,
+    val name: String,
+    val unreadCount: Int)

@@ -1,0 +1,81 @@
+openapi: 3.0.2
+info:
+  version: 0.0.2
+  title: NHS App Messages-API V2
+  description: NHS App Messages-API - V2 endpoints pertaining to Messages.
+paths:
+  /users/me/messages/senders:
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - messages
+      summary: Gets a list of senders who have sent messages to the authorized user
+      description: Gets a list of senders who have sent messages to the authorized user
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. List of senders are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  senders:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SenderResponse"
+        "204":
+          description: Successful operation. Content is empty.
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  securitySchemes:
+    nhsLoginBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    UnexpectedError:
+      description: An unexpected error occurred processing the request.
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
+  schemas:
+    SenderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the sender.
+        name:
+          type: string
+          description: The sender's name.
+        unreadCount:
+          type: integer
+          description: The number of unread messages.
+    SenderMessagesResponse:
+      type: object
+      properties:
+        sender:
+          type: string
+          description: The sender's name.
+        unreadCount:
+          type: integer
+          description: The number of unread messages.
+        messages:
+          type: array
+          description: Array of messages per sender for an authorized user.
+          items:
+            $ref: "#/components/schemas/MessageResponse"
