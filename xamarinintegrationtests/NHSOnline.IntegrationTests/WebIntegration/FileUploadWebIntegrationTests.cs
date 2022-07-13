@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android;
@@ -72,18 +70,11 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         // Running on lower version as we had issues with the structure in the updated default
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone13, OSVersion = IOSVersion.Fifteen)]
         [NhsAppFlakyTest]
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenIOS(
             IIOSDriverWrapper driver)
         {
-            UploadAndVerifyFile(driver);
-
-            if (!driver.VerifyFilePushed())
-            {
-                Assert.Fail("Test could not find test file for upload");
-            }
-
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
@@ -118,12 +109,12 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSFileSourceDialog
                 .GetPanel(driver)
-                .SelectBrowse();
+                .SelectPhotoLibrary();
 
-            IOSStoragePage
-                .AssertOnPage(driver)
-                .SearchForText()
-                .SelectFile();
+            IOSFileChooser
+                .AssertDisplayed(driver)
+                .ChoosePhoto()
+                .ConfirmSelection();
 
             IOSFileUploadPage
                 .AssertOnPage(driver)
