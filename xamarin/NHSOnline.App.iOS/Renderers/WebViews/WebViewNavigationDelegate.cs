@@ -7,6 +7,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.iOS.Renderers.WebViews.Extensions;
 using NHSOnline.App.Logging;
 using WebKit;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -15,6 +16,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
     internal sealed class WebViewNavigationDelegate : WKNavigationDelegate
     {
         private const int FrameLoadInterruptedErrorCode = 102;
+        private const string Mailto = "MAILTO";
+        private const string Tel = "TEL";
         private readonly WkWebViewRenderer _renderer;
         private readonly ReadOnlyCollection<IWebViewRendererExtension> _extensions;
 
@@ -55,6 +58,14 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                         true => WKNavigationActionPolicy.Cancel,
                         false => WKNavigationActionPolicy.Allow
                     };
+
+                    var url = navigationAction.Request.Url;
+
+                    if ( url.Scheme.ToUpperInvariant() == Mailto || url.Scheme.ToUpperInvariant() == Tel)
+                    {
+
+                        Launcher.OpenAsync(url);
+                    }
 
                     decisionHandler(decision);
                 }
