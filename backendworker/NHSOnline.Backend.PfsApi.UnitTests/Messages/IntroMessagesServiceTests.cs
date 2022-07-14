@@ -141,6 +141,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Messages
             {
                 _mockIntroMessagesServiceConfig.Setup(x => x.Body).Returns(Body);
                 _mockIntroMessagesServiceConfig.Setup(x => x.CampaignId).Returns(CampaignId);
+                _mockIntroMessagesServiceConfig.Setup(x => x.SupplierId).Returns(SupplierId);
                 // _mockIntroMessagesServiceConfig.Setup(x => x.SenderId).Returns(SenderId);    // NHSO-20472 / NHSO-21187
             }
         }

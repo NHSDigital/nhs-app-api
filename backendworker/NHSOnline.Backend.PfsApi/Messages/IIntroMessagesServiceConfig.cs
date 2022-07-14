@@ -7,5 +7,6 @@ namespace NHSOnline.Backend.PfsApi.Messages
         public string Body { get; }
         public string CampaignId { get; }
         public string SenderId { get; }
+        public string SupplierId { get; }
     }
 }

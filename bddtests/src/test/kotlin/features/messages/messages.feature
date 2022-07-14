@@ -4,16 +4,16 @@ Feature: Messages
 #The following tests are gp system agnostic
 
   @smoketest
-  Scenario: A user can see their read and unread messages with sender id feature flag enabled
+  Scenario: A user can see their read and unread messages
     Given I am using the native app user agent
-    And I am a user wishing to view my messages with sender id feature flag enabled
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And the Sender One sender is displayed as unread
-    When I click on Sender One sender
+    And the Sender One Canonical sender is displayed as unread
+    When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     And my messages from the sender are displayed
     # We need to check the functionality to mark the messages as read with the back button,
@@ -25,7 +25,7 @@ Feature: Messages
     And my messages from the sender are displayed as read
     When I click the 'Back' breadcrumb
     Then the Message Senders page is displayed
-    And the Sender One sender is displayed as read
+    And the Sender One Canonical sender is displayed as read
 
   Scenario: A user with proof level 5 can access their messages
     Given I am using the native app user agent
@@ -65,7 +65,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -74,7 +74,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 2 message on the Sender Messages page
     Then the Message page is displayed
@@ -94,7 +94,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -116,7 +116,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -133,7 +133,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -155,7 +155,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -171,7 +171,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -187,7 +187,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -203,7 +203,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -237,10 +237,9 @@ Feature: Messages
       | /messages/app-messaging/app-message?source=ios  |
       | /messages/app-messaging/app-message?source=android  |
 
-  Scenario: A user getting their message senders with sender id feature flag enabled when a server error occurs sees
-  an error and can try again
+  Scenario: A user getting their message senders when a server error occurs sees an error and can try again
     Given I am using the native app user agent
-    And I am a user wishing to view my messages with sender id feature flag enabled
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And retrieving the messages will cause a server error
@@ -250,31 +249,29 @@ Feature: Messages
     And I click the 'Try again' button
     Then the Message Senders page is displayed
 
-  Scenario: A user getting messages from a sender with sender id feature flag enabled when a server error occurs sees an
-  error and can try again
+  Scenario: A user getting messages from a sender when a server error occurs sees an error and can try again
     Given I am using the native app user agent
-    And I am a user wishing to view my messages with sender id feature flag enabled
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     Then the senders are displayed on the Messages Inbox page
     When retrieving the messages will cause a server error
-    And I click on Sender One sender
-    Then an error is displayed indicating that there was a problem getting messages from Sender One
+    And I click on Sender One Canonical sender
+    Then an error is displayed indicating that there was a problem getting messages from Sender One Canonical
     When the messages can be retrieved successfully
     And I click the 'Try again' button
     Then the Sender Messages page is displayed
     And my messages from the sender are displayed
 
-  Scenario: A user getting a message with sender id feature flag enabled when a server error occurs sees an error and
-  can try again
+  Scenario: A user getting a message when a server error occurs sees an error and can try again
     Given I am using the native app user agent
-    And I am a user wishing to view my messages with sender id feature flag enabled
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     Then the senders are displayed on the Messages Inbox page
-    When I click on Sender One sender
+    When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When retrieving the messages will cause a server error
     And I click on a message on the Sender Messages page
@@ -283,13 +280,13 @@ Feature: Messages
     And I click the 'Try again' button
     Then the Message page is displayed
 
-  Scenario: A desktop user can see back links on the app messages journey with sender id feature flag enabled
-    Given I am a user wishing to view my messages with sender id feature flag enabled
+  Scenario: A desktop user can see back links on the app messages journey
+    Given I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on a message on the Sender Messages page
     Then the Message page is displayed
@@ -300,15 +297,15 @@ Feature: Messages
     When I click the Back link
     Then the Messages Hub page is displayed
 
-  Scenario: A native user cannot see back links on the app messages journey with sender id feature flag enabled
+  Scenario: A native user cannot see back links on the app messages journey
     Given I am using the native app user agent
-    And I am a user wishing to view my messages with sender id feature flag enabled
+    And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And I can't see the Back link
-    When I click on Sender One sender
+    When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     And I can't see the Back link
     When I click on a message on the Sender Messages page

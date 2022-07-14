@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.PfsApi.Messages
     public class IntroMessagesService : IIntroMessagesService
     {
         private const string IntroductoryMessageSender = "NHS App";
-        private const string IntroductoryMessageSupplierId = "278d3b75-3498-4d68-8991-506d0006e46f";
         private const int IntroductoryMessageVersion = 1;
 
         private readonly ILogger<IntroMessagesService> _logger;
@@ -80,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.Messages
             {
                 CampaignId = _introMessagesServiceConfig.CampaignId,
                 NhsLoginId = nhsLoginId,
-                SupplierId = IntroductoryMessageSupplierId,
+                SupplierId = _introMessagesServiceConfig.SupplierId,
                 // SenderId = _introMessagesServiceConfig.SenderId  // NHSO-20472 / NHSO-21187
             }
         };

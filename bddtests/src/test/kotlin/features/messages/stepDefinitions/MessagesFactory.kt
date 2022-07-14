@@ -2,6 +2,9 @@ package features.messages.stepDefinitions
 
 import com.mongodb.client.model.Filters.eq
 import config.Config
+import cosmosSql.CosmosSqlConnection
+import cosmosSql.SqlRepositoryCommsSender
+import cosmosSql.SqlRepositoryRecordCommsSender
 import io.cucumber.datatable.DataTable
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
@@ -39,9 +42,10 @@ class MessagesFactory {
     private val oneMonthAgo = timeNow.minusMonths(ONE_MONTH)
     private val oneWeekAgo = timeNow.minusDays(SEVEN_DAYS)
 
-    private val senderOneName = "Sender One"
-    private val senderOneId = "12345";
+    private val senderOneId = "SENDERONEID"
     private val senderOneSenderContext = SenderContext(senderId = senderOneId)
+    private val senderOneName = "Sender One"
+    private val senderOneCanonicalName = "Sender One Canonical"
 
     private val senderTwoName = "Sender Two"
 
@@ -65,7 +69,7 @@ class MessagesFactory {
         MessagesSerenityHelpers.TARGET_UNREAD_MESSAGE.set(messageTwo)
     }
 
-    fun setUpMultipleMessagesInCache() {
+    fun setUpMultipleMessagesInCache(isV1SendersEndpoint: Boolean = false) {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
@@ -84,56 +88,65 @@ class MessagesFactory {
         val senderOneMessages = createSenderMessages(
             arrayListOf(senderOneMessageOne, senderOneMessageTwo, senderOneMessageThree)
         )
-        val senderOneSummaryMessage = SenderFacade(senderOneName, 1, arrayListOf(senderOneMessageThree))
 
         val senderTwoMessageOne = SingleMessageFacade(
             "2.1", senderTwoName, messageOne, false, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
-            MessageVersion.PLAIN_TEXT.value
+            MessageVersion.PLAIN_TEXT.value, null
         )
         val senderTwoMessages = createSenderMessages(arrayListOf(senderTwoMessageOne))
-        val senderTwoSummaryMessage = SenderFacade(senderTwoName, 1, arrayListOf(senderTwoMessageOne))
+
+        val expectedSenderOneSummaryMessage =
+            SenderFacade(senderOneName, 1,
+                arrayListOf(senderOneMessageThree.copy(sender = senderOneCanonicalName)))
+        val expectedSenderOneMessages = senderOneMessages.copy(
+            name = senderOneCanonicalName,
+            messages = senderOneMessages.messages
+                .map { m -> m.copy(sender = senderOneCanonicalName) }
+        )
+
+        val expectedSenderTwoSenderContext =
+            SenderContext(senderId = "NHSAPP", supplierId = "278d3b75-3498-4d68-8991-506d0006e46f")
+        val expectedSenderTwoSummaryMessage =
+            SenderFacade(senderTwoName, 1,
+                arrayListOf(
+                    senderTwoMessageOne.copy(sender = "NHS APP", senderContext = expectedSenderTwoSenderContext)
+                )
+            )
+
+        createSendersIfNotExists(
+            arrayListOf(
+                SqlRepositoryRecordCommsSender(
+                    senderOneId, senderOneId, SqlRepositoryCommsSender(senderOneId, senderOneCanonicalName,
+                    CosmosSqlConnection.sqlApiDateFormatter.format(oneWeekAgo)))
+            )
+        )
 
         createMessagesInRepository(arrayListOf(senderOneMessages, senderTwoMessages), nhsLoginId)
 
-        MessagesSerenityHelpers.EXPECTED_SENDERS.set(
-            arrayListOf(senderOneSummaryMessage, senderTwoSummaryMessage)
-        )
+        if(isV1SendersEndpoint) {
+            MessagesSerenityHelpers.EXPECTED_SENDERS.set(
+                arrayListOf(expectedSenderOneSummaryMessage, expectedSenderTwoSummaryMessage)
+            )
+            MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderOneMessages)
+            MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(arrayListOf(senderOneMessageTwo))
+            MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(
+                senderOneMessageThree, senderOneMessageOne))
+        }
+        else {
+            MessagesSerenityHelpers.EXPECTED_SENDERS.set(
+                arrayListOf(
+                    expectedSenderOneSummaryMessage.copy(name = senderOneCanonicalName),
+                    expectedSenderTwoSummaryMessage.copy(name = "NHS APP")
+                )
+            )
 
-        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderOneMessages)
-        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(arrayListOf(senderOneMessageTwo))
-        MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(senderOneMessageThree, senderOneMessageOne))
-    }
-
-    fun setUpMultipleMessagesInCacheV2() {
-        val nhsLoginId = SerenityHelpers.getPatient().subject
-        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
-
-        val senderOneMessageOne = SingleMessageFacade(
-            "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
-        )
-        val senderOneMessageTwo = SingleMessageFacade(
-            "1.2", senderOneName, messageTwo, false, MongoDBConnection.mongoDateFormatter.format(oneMonthAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
-        )
-        val senderOneMessageThree = SingleMessageFacade(
-            "1.3", senderOneName, messageThree, true, MongoDBConnection.mongoDateFormatter.format(oneWeekAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
-        )
-        val senderOneMessages = createSenderMessagesV2(
-            arrayListOf(senderOneMessageOne, senderOneMessageTwo, senderOneMessageThree)
-        )
-        val senderOneSummaryMessage = SenderFacade(senderOneName, 1, arrayListOf(senderOneMessageThree))
-
-        createMessagesInRepository(arrayListOf(senderOneMessages), nhsLoginId)
-
-        MessagesSerenityHelpers.EXPECTED_SENDERS.set(
-            arrayListOf(senderOneSummaryMessage)
-        )
-
-        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderOneMessages)
-        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(arrayListOf(senderOneMessageTwo))
-        MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(senderOneMessageThree, senderOneMessageOne))
+            MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(expectedSenderOneMessages)
+            MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(
+                arrayListOf(senderOneMessageTwo.copy(sender = senderOneCanonicalName)))
+            MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(
+                senderOneMessageThree.copy(sender = senderOneCanonicalName),
+                senderOneMessageOne.copy(sender = senderOneCanonicalName)))
+        }
     }
 
     fun setUpMultipleMessagesWithContentInCache(table: DataTable, messageVersion: MessageVersion) {
@@ -155,8 +168,13 @@ class MessagesFactory {
 
         createMessagesInRepository(arrayListOf(senderMessages), nhsLoginId)
 
-        MessagesSerenityHelpers.EXPECTED_SENDERS.set(arrayListOf(senderMessage))
-        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderMessages)
+        MessagesSerenityHelpers.EXPECTED_SENDERS.set(arrayListOf(senderMessage.copy(name = senderOneCanonicalName)))
+        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderMessages.copy(
+            name = senderOneCanonicalName,
+            messages = senderMessages.messages
+                .map { m -> m.copy(sender = senderOneCanonicalName) }
+            )
+        )
     }
 
     fun setUpSingleUnreadMessage() {
@@ -201,18 +219,17 @@ class MessagesFactory {
         MongoDBConnection.MessagesCollection.clearAndInsertJson(messagesToInsert)
     }
 
+    private fun createSendersIfNotExists(
+        sendersToInsert: ArrayList<SqlRepositoryRecordCommsSender<SqlRepositoryCommsSender>>
+    ) {
+        CosmosSqlConnection.CommsHubSendersContainer.upsertValues(sendersToInsert)
+    }
+
     private fun createSenderMessages(messages: ArrayList<SingleMessageFacade>): SenderFacade {
         val distinctSender = messages.map { message -> message.sender }.distinct()
         Assert.assertEquals("Expected one distinct sender", 1, distinctSender.count())
         val unreadCount = messages.count { message -> !message.read }
         return SenderFacade(distinctSender.single(), unreadCount, messages)
-    }
-
-    private fun createSenderMessagesV2(messages: ArrayList<SingleMessageFacade>): SenderFacade {
-        val distinctSender = messages.map { message -> message.senderContext!!.senderId }.distinct()
-        Assert.assertEquals("Expected one distinct sender", 1, distinctSender.count())
-        val unreadCount = messages.count { message -> !message.read }
-        return SenderFacade(distinctSender.single()!!, unreadCount, messages)
     }
 
     companion object {

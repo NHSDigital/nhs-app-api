@@ -74,6 +74,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
                 if (sender != null)
                 {
+                    _logger.LogInformation("Found sender with id {senderId} in cache", senderId);
                     return new SendersResult.Found(new SendersResponse
                     {
                         Senders = new List<Sender> { sender }
@@ -117,6 +118,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
         }
         private async Task<SendersResult> HandleInMemoryCacheMiss(string senderId)
         {
+            _logger.LogInformation("Unable to find sender with id {senderId} in cache", senderId);
             var repositoryFindResult = await _senderRepository.Find(senderId);
 
             var sendersResult = repositoryFindResult.Accept(new RepositoryFindSenderResultVisitor(_senderResponseMapper));
@@ -124,6 +126,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             if (sendersResult is SendersResult.Found foundResult)
             {
                 _cacheProvider.SetSender(foundResult.Response.Senders.Single());
+                _logger.LogInformation("Found sender with id {senderId} in senders container after cache miss, added to cache", senderId);
             }
 
             return sendersResult;

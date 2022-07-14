@@ -12,7 +12,7 @@ Feature: errors accessibility
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One sender
+    And I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed

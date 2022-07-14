@@ -4,5 +4,6 @@ namespace NHSOnline.Backend.Messages
     {
         bool SenderIdEnabled { get; }
         string SenderIdNhsApp { get; }
+        string SupplierIdNhsApp { get; }
     }
 }

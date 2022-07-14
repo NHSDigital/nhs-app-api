@@ -1,7 +1,11 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
+using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -14,16 +18,19 @@ namespace NHSOnline.Backend.Messages.Repository
     {
         private readonly ILogger<MessageRepository> _logger;
         private readonly IRepository<UserMessage> _repository;
+        private readonly ICanonicalSenderNameService _canonicalSenderNameService;
         private const string RecordName = nameof(UserMessage);
 
         public MessageRepository
         (
             ILogger<MessageRepository> logger,
-            IRepository<UserMessage> repository
+            IRepository<UserMessage> repository,
+            ICanonicalSenderNameService canonicalSenderNameService
         )
         {
             _logger = logger;
             _repository = repository;
+            _canonicalSenderNameService = canonicalSenderNameService;
         }
 
         public async Task<RepositoryCreateResult<UserMessage>> Create(UserMessage userMessage)
@@ -57,7 +64,27 @@ namespace NHSOnline.Backend.Messages.Repository
                     .IsNotNull(sender, nameof(sender), ThrowError)
                     .IsValid();
 
-                return await _repository.Find(d => d.NhsLoginId == nhsLoginId && d.Sender == sender, RecordName);
+                return await Find(d => d.NhsLoginId == nhsLoginId && d.Sender == sender);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [SuppressMessage("Microsoft.Globalization", "CA1309",
+            Justification = "Method 'CompareOrdinal' is not supported in repository")]
+        public async Task<RepositoryFindResult<UserMessage>> FindAllForUserV1(string nhsLoginId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
+                    .IsValid();
+
+                return await _repository.Find(x => x.NhsLoginId == nhsLoginId, RecordName);
             }
             finally
             {
@@ -78,7 +105,8 @@ namespace NHSOnline.Backend.Messages.Repository
                     .IsNotNull(senderId, nameof(senderId), ThrowError)
                     .IsValid();
 
-                return await _repository.Find(d => d.NhsLoginId == nhsLoginId && d.SenderContext.SenderId == senderId, RecordName);
+                return await FindWithPostQueryFilter(d => d.NhsLoginId == nhsLoginId,
+                    d => d.SenderContext.SenderId == senderId);
             }
             finally
             {
@@ -98,8 +126,7 @@ namespace NHSOnline.Backend.Messages.Repository
                     .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
-                    return await _repository.Find(x => x.NhsLoginId == nhsLoginId, RecordName);
-
+                    return await Find(x => x.NhsLoginId == nhsLoginId);
             }
             finally
             {
@@ -122,8 +149,7 @@ namespace NHSOnline.Backend.Messages.Repository
 
                 var id = ObjectId.Parse(messageId);
 
-                return await _repository.Find(m => m.Id == id && m.NhsLoginId == nhsLoginId, RecordName);
-
+                return await Find(m => m.Id == id && m.NhsLoginId == nhsLoginId);
             }
             finally
             {
@@ -154,6 +180,40 @@ namespace NHSOnline.Backend.Messages.Repository
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<RepositoryFindResult<UserMessage>> Find(
+            Expression<Func<UserMessage, bool>> filter,
+            int? maxRecords = null)
+        {
+            var result = await _repository.Find(filter, RecordName, maxRecords);
+
+            if (result is RepositoryFindResult<UserMessage>.Found foundResult)
+            {
+                await _canonicalSenderNameService.UpdateWithCanonicalSenderName(foundResult.Records);
+            }
+
+            return result;
+        }
+
+        private async Task<RepositoryFindResult<UserMessage>> FindWithPostQueryFilter(
+            Expression<Func<UserMessage, bool>> filter,
+            Func<UserMessage, bool> postQueryFilter,
+            int? maxRecords = null)
+        {
+            var result = await _repository.Find(filter, RecordName, maxRecords);
+
+            if (result is RepositoryFindResult<UserMessage>.Found foundResult)
+            {
+                await _canonicalSenderNameService.UpdateWithCanonicalSenderName(foundResult.Records);
+
+                foreach (var record in foundResult.Records.Where(r => !postQueryFilter(r)).ToList())
+                {
+                    foundResult.Records.Remove(record);
+                }
+            }
+
+            return result;
         }
     }
 }

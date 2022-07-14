@@ -31,7 +31,7 @@ Feature: Messages accessibility
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And the Messages_Senders page is saved to disk
-    When I click on Sender One sender
+    When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     And the Messages_Sender_ReadAndUnread page is saved to disk
     When I click on a message on the Sender Messages page

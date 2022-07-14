@@ -35,13 +35,7 @@ class MessagesStepDefinitions {
     @Given("^I am a user wishing to view my messages$")
     fun iAmAUserWishingToViewTheirMessages() {
         val factory = setupMessagesEnabledPatient()
-        factory.setUpMultipleMessagesInCacheV2()
-    }
-
-    @Given("^I am a user wishing to view my messages with sender id feature flag enabled$")
-    fun iAmAUserWishingToViewTheirMessagesV2() {
-        val factory = setupMessagesEnabledPatient()
-        factory.setUpMultipleMessagesInCacheV2()
+        factory.setUpMultipleMessagesInCache()
     }
 
     @Given("^I am a user with proof level 5 wishing to view my messages$")
@@ -50,7 +44,7 @@ class MessagesStepDefinitions {
                 .findPatientForConfiguration(null, SJRJourneyType.MESSAGES_ENABLED, IdentityProofingLevel.P5)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
-        factory.setUpMultipleMessagesInCacheV2()
+        factory.setUpMultipleMessagesInCache()
     }
 
     @Given("^I am a user with proof level 5 whose access token is about to expire wishing to view my messages$")

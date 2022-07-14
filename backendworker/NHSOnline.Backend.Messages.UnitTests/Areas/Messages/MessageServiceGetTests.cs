@@ -678,7 +678,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageRepository
-                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .Setup(x => x.FindAllForUserV1(NhsLoginId))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new[]
                 {
                     new UserMessage { Sender = "First", SentTime = DateTime.UtcNow.AddSeconds(-20), ReadTime = DateTime.UtcNow },
@@ -707,7 +707,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageRepository
-                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .Setup(x => x.FindAllForUserV1(NhsLoginId))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
 
             // Act
@@ -723,7 +723,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageRepository
-                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .Setup(x => x.FindAllForUserV1(NhsLoginId))
                 .Throws<ArgumentException>();
 
             // Act
@@ -740,7 +740,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageRepository
-                .Setup(x => x.FindAllForUser(NhsLoginId))
+                .Setup(x => x.FindAllForUserV1(NhsLoginId))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.RepositoryError());
 
             // Act

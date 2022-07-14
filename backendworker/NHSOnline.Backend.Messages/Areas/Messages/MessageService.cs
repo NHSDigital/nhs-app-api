@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
             try
             {
-                var result = await _messageRepository.FindAllForUser(accessToken.Subject);
+                var result = await _messageRepository.FindAllForUserV1(accessToken.Subject);
 
                 return result.Accept(new RepositoryFindUserSendersResultVisitor(false));
             }

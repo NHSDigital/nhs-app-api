@@ -29,11 +29,11 @@ class MessagesGetStepDefinitionsBackend {
         factory.setUpMultipleMessagesInCache()
     }
 
-    @Given("^I am an api user wishing to get my messages when sender id flag is enabled$")
-    fun iAmAnApiUserWishingToGetTheirMessagesWhenSenderIdEnabled() {
+    @Given("^I am an api user wishing to get my messages from v1 endpoint$")
+    fun iAmAnApiUserWishingToGetTheirMessagesfromV1Endpoint() {
         val factory = MessagesFactory()
         factory.setUpUser()
-        factory.setUpMultipleMessagesInCacheV2()
+        factory.setUpMultipleMessagesInCache(true)
     }
 
     @Given("^I am an api user with proof level 5 wishing to get my messages$")
@@ -327,7 +327,8 @@ class MessagesGetStepDefinitionsBackend {
                     message.body,
                     message.read?.toLowerCase() =="true" ,
                     message.sentTime,
-                    message.version)
+                    message.version,
+                    message.senderContext)
         }
     }
 }

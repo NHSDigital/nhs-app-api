@@ -5,11 +5,20 @@ import com.azure.cosmos.CosmosContainer
 import com.azure.cosmos.CosmosClientBuilder
 import com.azure.cosmos.models.CosmosItemResponse
 import com.azure.cosmos.models.PartitionKey
+import java.time.format.DateTimeFormatter
 
 class CosmosSqlConnection(private val containerName: String, private val endpoint: String, private val key: String) {
 
     fun <T> insertValues(values: List<ISqlRepositoryRecord<T>>) {
         values.forEach{ item -> insertValue(item) }
+    }
+
+    fun <T> upsertValues(values: List<ISqlRepositoryRecord<T>>) {
+        values.forEach{ item ->
+            onContainer { container ->
+                container.upsertItem(item.repositoryRecord, PartitionKey(item.partitionKeyValue), null)
+            }
+        }
     }
 
     fun <T> insertValue(value: ISqlRepositoryRecord<T>) {
@@ -49,6 +58,8 @@ class CosmosSqlConnection(private val containerName: String, private val endpoin
         private const val userInfoOdsCodeContainerName = "info_ods_code"
         private const val commsHubSendersContainerName = "senders"
         private const val developmentDatabaseName = "comms-dev-sql"
+
+        val sqlApiDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
 
         val UserInfoNhsNumberContainer = CosmosSqlConnection(
                 userInfoNhsNumberContainerName,

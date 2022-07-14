@@ -6,5 +6,6 @@ data class MessagesResponseMessage(
         val version: Int,
         val body: String,
         val read: String?,
-        val sentTime: String
+        val sentTime: String,
+        val senderContext: SenderContext?
 )
