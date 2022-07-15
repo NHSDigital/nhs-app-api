@@ -3,23 +3,20 @@
 <template>
   <component :is="componentType" class="nhsuk-fieldset"
              :aria-describedby="error ? `${name}-error` : undefined">
-    <label for="`${name}-legend`"
-           :aria-label="''">
-      <legend
-        v-if="!noHeadingRequired && heading"
-        :id="`${name}-legend`"
-        ref="legendRef"
-        tabindex="-1"
-        :class="['nhsuk-fieldset__legend',
-                 `nhsuk-fieldset__legend--${legendSize}`,
-                 'nhsuk-u-margin-bottom-3']"
-      >
-        <template v-if="headingAsHtml">
-          <span v-html="heading"/>
-        </template>
-        <template v-else>{{ heading }}</template>
-      </legend>
-    </label>
+    <legend
+      v-if="!noHeadingRequired && heading"
+      :id="`${name}-legend`"
+      ref="legendRef"
+      tabindex="-1"
+      :class="['nhsuk-fieldset__legend',
+               `nhsuk-fieldset__legend--${legendSize}`,
+               'nhsuk-u-margin-bottom-3']"
+    >
+      <template v-if="headingAsHtml">
+        <span v-html="heading"/>
+      </template>
+      <template v-else>{{ heading }}</template>
+    </legend>
 
     <form-error-summary v-if="enableErrorDialog && error" :header-locale-ref="errorHeadingReference"
                         :errors="errorText"/>
