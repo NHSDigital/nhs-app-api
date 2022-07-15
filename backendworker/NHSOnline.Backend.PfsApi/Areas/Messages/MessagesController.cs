@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ApiVersion("2")]
-        [ApiVersionRoute("api/users/me/messages/senders")]
+        [ApiVersionRoute("api/me/messages/senders")]
         public async Task<IActionResult> GetSendersV2()
         {
             try
