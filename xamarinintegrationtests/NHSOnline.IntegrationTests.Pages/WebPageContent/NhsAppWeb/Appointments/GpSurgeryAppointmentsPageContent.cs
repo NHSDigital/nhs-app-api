@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         internal void AssertOnPage()
         {
             // Extending timeout to allow SSO to complete
-            using var extendedTimeout = ExtendedTimeout.FromSeconds(20);
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(25);
 
             TitleText.AssertVisible();
         }

@@ -31,7 +31,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     {
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
-        public async Task APatientCanTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
+        public async Task APatientCanTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(
+            IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Cynthia").FamilyName("Sanders"));
@@ -106,12 +107,17 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
                     browserOverlay?.AssertNoInternet();
                 });
 
-            AndroidCloseSlimTryAgainConnectionErrorPage
-                .AssertOnPage(driver)
-                .TryAgain();
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Retry(() =>
+                {
+                    AndroidCloseSlimTryAgainConnectionErrorPage
+                        .AssertOnPage(driver)
+                        .TryAgain();
 
-            AndroidManageCookiesPage
-                .AssertOnPage(driver);
+                    AndroidManageCookiesPage
+                        .AssertOnPage(driver);
+                },
+                "An element could not be located on the page using the given search parameters.");
         }
 
         [NhsAppIOSTest]
