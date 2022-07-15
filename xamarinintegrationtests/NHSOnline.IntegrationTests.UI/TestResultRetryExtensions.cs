@@ -162,6 +162,16 @@ namespace NHSOnline.IntegrationTests.UI
             @"Test could not find test file for upload*",
             RegexOptions.Compiled);
 
+        // ios11 is really flakey trying to consistently get past ts and cs page
+        private static readonly Regex TermsAndConditionsContinueFailure = new(
+            @"(?=.*No IWebElement found matching\b)(?=.*Help improve the NHS App\b).*",
+            RegexOptions.Compiled);
+
+        // ios11 is really flakey trying to consistently get past ts and cs page
+        private static readonly Regex TermsAndConditionsBoxCheckedFailure = new(
+            @"Expected e.Selected to be true because Checkbox should be selected, but found False.*",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -193,7 +203,9 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
             (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement))),
             (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure))),
-            (BrowserstackDidNotUploadFile, RetryStatus.Retry(nameof(BrowserstackDidNotUploadFile)))
+            (BrowserstackDidNotUploadFile, RetryStatus.Retry(nameof(BrowserstackDidNotUploadFile))),
+            (TermsAndConditionsContinueFailure, RetryStatus.Retry(nameof(TermsAndConditionsContinueFailure))),
+            (TermsAndConditionsBoxCheckedFailure, RetryStatus.Retry(nameof(TermsAndConditionsBoxCheckedFailure)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)

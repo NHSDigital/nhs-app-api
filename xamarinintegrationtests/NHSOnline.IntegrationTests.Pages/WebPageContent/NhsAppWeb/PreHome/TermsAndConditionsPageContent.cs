@@ -106,6 +106,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
             ContinueButton.Click();
         }
 
+        public void AcceptTermsAndConditionsWithoutContinue()
+        {
+            AcceptAnalyticCookiesText.ScrollTo();
+            AcceptTermsAndConditionsCheckbox.Click();
+        }
+
+        public void VerifyAccepted()
+        {
+            AcceptAnalyticCookiesText.ScrollTo();
+            AcceptTermsAndConditionsCheckbox.VerifyClick();
+        }
+
+        public void Continue()
+        {
+            ContinueButton.ScrollTo();
+            ContinueButton.Click();
+        }
+
         public void ContinueWithoutAccepting()
         {
             AcceptAnalyticCookiesText.ScrollTo();

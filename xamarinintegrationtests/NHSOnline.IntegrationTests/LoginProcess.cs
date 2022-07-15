@@ -3,6 +3,7 @@ using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests
@@ -70,9 +71,37 @@ namespace NHSOnline.IntegrationTests
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSTermsAndConditionsPage
-                .AssertOnPage(driver)
-                .PageContent.AcceptTermsAndConditions();
+            var termsAndConditionsPage = IOSTermsAndConditionsPage
+                .AssertOnPage(driver);
+
+            termsAndConditionsPage.PageContent.AcceptTermsAndConditionsWithoutContinue();
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        // The accept action is flakey and doesnt always check the box
+                        termsAndConditionsPage.PageContent.VerifyAccepted();
+                    },
+                    "Expected e.Selected to be true because Checkbox should be selected, but found False.",
+                    () => { termsAndConditionsPage.PageContent.AcceptTermsAndConditions(); });
+
+            termsAndConditionsPage.PageContent.Continue();
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        // The accept action is flakey and doesnt always check the box
+                        IOSUserResearchOptInPage
+                            .AssertOnPage(driver);
+                    },
+                    "No IWebElement found matching By.XPath: //h1[normalize-space()='Help improve the NHS App']",
+                    () =>
+                    {
+                        termsAndConditionsPage.AssertPageContent();
+                        termsAndConditionsPage.PageContent.AcceptTermsAndConditionsWithoutContinue();
+                        termsAndConditionsPage.PageContent.VerifyAccepted();
+                        termsAndConditionsPage.PageContent.Continue();
+                    });
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)

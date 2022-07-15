@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -24,6 +25,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public void Click()
             => ActOnCheckboxElement(e => e.Click());
+
+        public void VerifyClick()
+            => ActOnCheckboxElement(e => e.Selected.Should().BeTrue("Checkbox should be selected"));
 
         public void ScrollTo() => _interactor.ActOnElementContext(
             CheckboxFindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
