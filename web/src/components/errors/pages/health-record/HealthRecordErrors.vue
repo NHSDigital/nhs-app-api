@@ -34,9 +34,6 @@
       <error-title title="gpSessionErrors.healthRecord.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.healthRecord.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
     </shutter-container>
 
