@@ -1,10 +1,7 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - E87045
     - E87052
-    - E87772
-    - E87714
 journeys:
   cdssAdvice:
     provider: eConsult
