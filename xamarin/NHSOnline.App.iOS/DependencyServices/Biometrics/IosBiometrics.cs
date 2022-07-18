@@ -27,13 +27,21 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
             BiometricStatus status = new BiometricStatus.HardwareNotPresent();
 
             using var context = new LAContext();
-            if (BiometricsHardware.HasBiometricHardware(context, out var state))
+            if (BiometricsHardware.HasDeviceOwnerPermittedUseOfBiometricHardware(context, out var state))
             {
                 var registrationStatus = DeriveRegistrationStatus(context);
                 status = context.BiometryType switch
                 {
                     LABiometryType.FaceId => new BiometricStatus.FaceId(state, registrationStatus),
                     _ => new BiometricStatus.TouchId(state, registrationStatus)
+                };
+            }
+            else
+            {
+                status = context.BiometryType switch
+                {
+                    LABiometryType.FaceId => new BiometricStatus.FaceId(state, BiometricRegistrationStatus.NotRegistered),
+                    _ => new BiometricStatus.TouchId(state, BiometricRegistrationStatus.NotRegistered)
                 };
             }
 
@@ -43,6 +51,16 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
         public Task<IBiometricAuthKey> CreateBiometricKey(string fidoUsername) => _biometricAuthKeyProvider.CreateBiometricKey();
 
         public bool TryGetKey(string fidoUsername, [NotNullWhen(true)] out IBiometricAuthKey? key) => _biometricAuthKeyProvider.TryGetKey(out key);
+
+        public bool IsPermissionBased()
+        {
+            using var context = new LAContext();
+            return context.BiometryType switch
+            {
+                LABiometryType.FaceId => true,
+                _=> false
+            };
+        }
 
         private static BiometricRegistrationStatus DeriveRegistrationStatus(LAContext context)
         {

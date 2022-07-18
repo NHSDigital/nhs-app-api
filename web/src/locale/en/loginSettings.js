@@ -51,6 +51,13 @@ export default {
         paragraph1: 'Go back and try again.',
         paragraph2: 'If you keep seeing this message, return to your settings later.',
       },
+      cannotUseBiometricSettings: {
+        face: {
+          youNeedTo: 'You need to',
+          turnOnBiometricsInYourDeviceSettingsLink: 'turn on Face ID in your device settings',
+          beforeYouCanTurnOnBiometricsInNHSApp: 'before you can turn on Face ID in the NHS App.',
+        },
+      },
     },
   },
 };
