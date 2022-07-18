@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.HttpMocks.Emis;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
@@ -83,6 +84,34 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             iosChooseRepeatPrescriptionPage.PageContent.Continue();
             iosChooseRepeatPrescriptionPage.ScreenshotError();
+        }
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "A user logs in to the app - iOS",
+            FlipbookTestName = "Attempting to order prescription when GP Services down")]
+        public void APatientWithProofLevelNineAttemptsToOrderPrescriptionWhenGPServicesAreDownIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithBehaviour(new EmisCreateSessionFailureBehaviour())
+                .WithNhsNumber("9305373119")
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver, screenshot:true)
+                .Navigation.NavigateToPrescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver,screenshot:true)
+                .PageContent.NavigateToOrderARepeatPrescription();
+
+            IOSOrderARepeatPrescriptionErrorPage.AssertOnPage(driver, screenshot: true)
+                .ClickTryAgainButton();
+
+            IOSPrescriptionsUnavailablePage
+                .AssertOnPage(driver, screenshot: true);
         }
     }
 }

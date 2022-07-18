@@ -12,7 +12,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
         public OrderARepeatPrescriptionPageContent PageContent { get; }
 
-
         private IOSOrderARepeatPrescriptionPage(IIOSDriverWrapper driver)
         {
             _driver = driver;

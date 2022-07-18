@@ -15,10 +15,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
             PageContent = new PrescriptionsUnavailablePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static AndroidPrescriptionsUnavailablePage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidPrescriptionsUnavailablePage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false)
         {
             var page = new AndroidPrescriptionsUnavailablePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidPrescriptionsUnavailablePage));
+            }
+
             return page;
         }
 

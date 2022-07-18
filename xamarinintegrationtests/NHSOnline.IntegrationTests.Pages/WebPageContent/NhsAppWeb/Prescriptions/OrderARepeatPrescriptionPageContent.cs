@@ -37,7 +37,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         {
             // Extending timeout to allow SSO to complete
             using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
-
             TitleText.AssertVisible();
         }
 

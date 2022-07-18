@@ -14,10 +14,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
             PageContent = new PrescriptionsUnavailablePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSPrescriptionsUnavailablePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSPrescriptionsUnavailablePage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSPrescriptionsUnavailablePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSPrescriptionsUnavailablePage));
+            }
+
             return page;
         }
 
