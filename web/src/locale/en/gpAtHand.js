@@ -21,7 +21,7 @@ export default {
         suffix: '.',
       },
       {
-        prefix: 'Call Babylon GP at Hand on 0330 808 2217 if you have any problems.',
+        prefix: 'Call Babylon GP at Hand on 0330 303 8000 if you have any problems.',
       },
     ],
   },
