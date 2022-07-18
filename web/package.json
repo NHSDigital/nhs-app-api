@@ -66,7 +66,7 @@
     "@babel/preset-env": "7.3.4",
     "@logux/eslint-config": "47.2.0",
     "@vue/cli-plugin-babel": "~5.0.4",
-    "@vue/cli-service": "~5.0.4",
+    "@vue/cli-service": "~5.0.8",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-loader": "8.0.5",
     "buffer": "6.0.3",
@@ -106,6 +106,11 @@
   "overrides": {
     "jest-vue-preprocessor": {
       "vue-template-compiler": "2.7.0"
+    },
+    "@vue/cli-service": {
+      "terser-webpack-plugin":{
+        "terser": "5.14.2"
+      }
     }
   },
   "vue": {
