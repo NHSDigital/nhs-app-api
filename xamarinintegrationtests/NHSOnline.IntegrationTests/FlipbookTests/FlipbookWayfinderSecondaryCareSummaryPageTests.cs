@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     {
         [NhsAppAndroidTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - Android",
-            FlipbookTestName = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on")]
+            FlipbookTestName = "A user accesses the Appointment Hub when Wayfinder is toggled on")]
         public void APatientWithProofLevelNineCanAccessAppointmentHubWhenWayfinderToggledOnAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
@@ -37,7 +37,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - iOS",
-            FlipbookTestName = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on")]
+            FlipbookTestName = "A user accesses the Appointment Hub when Wayfinder is toggled on")]
         public void APatientWithProofLevelNineCanAccessAppointmentHubWhenWayfinderToggledOnIOS(IIOSDriverWrapper driver)
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - Android",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
             FlipbookTestName = "A user logs in when they have no secondary care referrals or appointments")]
         public void APatientWithProofLevelNineAndNoReferralsOrAppointmentsCanViewWayfinderSCSPSignpostingScreensAndroid(IAndroidDriverWrapper driver)
         {
@@ -105,7 +105,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - iOS",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - iOS",
             FlipbookTestName = "A user logs in when they have no secondary care referrals or appointments")]
         public void APatientWithProofLevelNineAndNoReferralsOrAppointmentsCanViewWayfinderSCSPSignpostingScreensIOS(IIOSDriverWrapper driver)
         {
@@ -150,7 +150,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - Android",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
             FlipbookTestName = "A user logs in and attempts to access Secondary Care while Aggregator is unavailable")]
         public void APatientWithProofLevelNineCanViewWayfinderSCSPWithAggregatorErrorAndroid(IAndroidDriverWrapper driver)
         {
@@ -174,7 +174,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - iOS",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - iOS",
             FlipbookTestName = "A user logs in and attempts to access Secondary Care while Aggregator is unavailable")]
         public void APatientWithProofLevelNineCanViewWayfinderSCSPWithAggregatorErrorIOS(IIOSDriverWrapper driver)
         {
@@ -198,7 +198,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - Android",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
             FlipbookTestName = "A user attempts to access Secondary Care Summary Screen when under 16 years old")]
         public void APatientWithProofLevelNineAndUnderSixteenViewsWayfinderSCSPAndroid(IAndroidDriverWrapper driver)
         {
@@ -223,7 +223,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - iOS",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - iOS",
             FlipbookTestName = "A user attempts to access Secondary Care Summary Screen when under 16 years old")]
         public void APatientWithProofLevelNineAndUnderSixteenViewsWayfinderSCSPIOS(IIOSDriverWrapper driver)
         {
@@ -248,7 +248,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - Android",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
             FlipbookTestName = "A user accesses secondary care referrals or appointments and clicks a deep link")]
         public void APatientWithProofLevelNineCanViewWayfinderSCSPAndClickDeepLinksAndroid(IAndroidDriverWrapper driver)
         {
@@ -285,7 +285,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app and accesses the Appointment Hub when Wayfinder is toggled on - iOS",
+        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - iOS",
             FlipbookTestName = "A user accesses secondary care referrals or appointments and clicks a deep link")]
         public void APatientWithProofLevelNineCanViewWayfinderSCSPAndClickDeepLinksIOS(IIOSDriverWrapper driver)
         {
