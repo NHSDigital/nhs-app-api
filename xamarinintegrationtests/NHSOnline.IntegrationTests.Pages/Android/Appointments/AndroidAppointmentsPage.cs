@@ -35,12 +35,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
             return page;
         }
 
-        public void AssertPageElements()
-        {
-            Navigation.AssertNavigationIconsArePresent();
-            PageContent.AssertPageElements();
-        }
-
         private AndroidKeyboardNavigation KeyboardPageContentNavigation => AndroidKeyboardNavigation
             .WithExpectedFocusableElements(_driver, GetAllKeyboardHomeNavigationFocusableElements());
 
@@ -52,8 +46,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
             return pageFocusableList.Concat(footerFocusableList).Concat(headerFocusableList);
         }
-
-        public void NavigateToGpSurgeryAppointments() => PageContent.NavigateToGpSurgeryAppointments();
 
         public void KeyboardNavigateToGpSurgeryAppointments() =>
             PageContent.KeyboardNavigateToGpSurgeryAppointments(KeyboardPageContentNavigation);

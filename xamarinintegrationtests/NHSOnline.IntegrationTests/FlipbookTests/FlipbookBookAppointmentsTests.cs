@@ -13,50 +13,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     [TestClass]
     public class FlipbookBookAppointmentTests
     {
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - Android",
-            FlipbookTestName = "A user can book an appointment")]
-        public void APatientWithProofLevelNineCanBookAnAppointmentAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver, screenshot: true)
-                .KeyboardNavigateToAppointments(patient);
-
-            AndroidAppointmentsPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.NavigateToGpSurgeryAppointments();
-
-            AndroidGpSurgeryAppointmentsPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.ClickBookAppointment();
-
-            var androidBookAppointmentsPage = AndroidBookAppointmentsPage
-                .AssertOnPage(driver, screenshot: true);
-
-            androidBookAppointmentsPage.PageContent.ChooseType();
-            androidBookAppointmentsPage.ClickType();
-            androidBookAppointmentsPage.PageContent.Toggle();
-
-            androidBookAppointmentsPage.ScrollToBookingTextAndScreenshot();
-            androidBookAppointmentsPage.PageContent.ClickLink();
-
-            var androidAppointmentConfirmPage = AndroidAppointmentConfirmPage
-                .AssertOnPage(driver, screenshot: true);
-
-            androidAppointmentConfirmPage.PageContent.InsertReason();
-            androidAppointmentConfirmPage.ScrollToBookAndScreenshot();
-            androidAppointmentConfirmPage.PageContent.ClickBook();
-
-            AndroidAppointmentConfirmedPage
-                .AssertOnPage(driver, screenshot: true);
-        }
-
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - iOS",
             FlipbookTestName = "A user can book an appointment")]

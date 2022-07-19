@@ -1,6 +1,6 @@
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.Wayfinder
+namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
 {
     public static class IOSBlueScreenInterruptPage
     {

@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Confirm your GP appointment");
 
-        public  WebButton BookingButton => WebButton.WithText(_interactor, "Confirm and book appointment");
+        private WebButton BookingButton => WebButton.WithText(_interactor, "Confirm and book appointment");
 
         public WebTextarea AppointmentReason => WebTextarea.WithId(_interactor, "reasonText");
 

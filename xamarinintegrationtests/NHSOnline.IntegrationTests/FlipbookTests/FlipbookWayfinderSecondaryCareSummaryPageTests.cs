@@ -1,9 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.SecondaryCare;
-using NHSOnline.IntegrationTests.Pages.Android.Appointments;
-using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Wayfinder;
+using NHSOnline.IntegrationTests.Pages.IOS.Wayfinder;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.UI;
@@ -14,27 +12,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     [TestClass]
     public class FlipbookWayfinderSecondaryCareSummaryPageTests
     {
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - Android",
-            FlipbookTestName = "A user accesses the Appointment Hub when Wayfinder is toggled on")]
-        public void APatientWithProofLevelNineCanAccessAppointmentHubWhenWayfinderToggledOnAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105132");
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver, screenshot: true)
-                .NavigateToAppointments();
-
-             AndroidAppointmentsPage
-                 .AssertOnPage(driver, screenshot: true)
-                 .PageContent.NavigateToSecondaryCareSummaryPage();
-        }
-
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - iOS",
             FlipbookTestName = "A user accesses the Appointment Hub when Wayfinder is toggled on")]
@@ -54,54 +31,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             IOSAppointmentsPage
                 .AssertOnPage(driver, screenshot: true)
                 .PageContent.NavigateToSecondaryCareSummaryPage();
-        }
-
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
-            FlipbookTestName = "A user logs in when they have no secondary care referrals or appointments")]
-        public void APatientWithProofLevelNineAndNoReferralsOrAppointmentsCanViewWayfinderSCSPSignpostingScreensAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105131");
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .NavigateToAppointments();
-
-             AndroidAppointmentsPage
-                 .AssertOnPage(driver)
-                 .PageContent.NavigateToSecondaryCareSummaryPage();
-
-             AndroidSecondaryCareSummaryPage
-                 .AssertOnPage(driver)
-                 .ScrollToMissingOrIncorrectReferralsAppointmentsHelpPageLinkAndScreenshotThenClick();
-
-            AndroidWayfinderHelpPage
-                .AssertOnPage(driver, screenshot: true)
-                .TabIntoFocus()
-                .KeyboardNavigateViaBackButton();
-
-            AndroidSecondaryCareSummaryPage
-                .AssertOnPage(driver)
-                .ScrollToConfirmedAppointmentsHelpPageLinkAndScreenshotThenClick();
-
-            AndroidWayfinderHelpPage
-                .AssertOnPage(driver, screenshot: true)
-                .TabIntoFocus()
-                .KeyboardNavigateViaBackButton();
-
-            AndroidSecondaryCareSummaryPage
-                .AssertOnPage(driver)
-                .ScrollToReferralsInReviewHelpPageLinkAndScreenshotThenClick();
-
-            AndroidWayfinderHelpPage
-                .AssertOnPage(driver, screenshot: true)
-                .TabIntoFocus()
-                .KeyboardNavigateViaBackButton();
         }
 
         [NhsAppIOSTest]
@@ -149,30 +78,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                  .PageContent.NavigateViaBackButton();
         }
 
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
-            FlipbookTestName = "A user logs in and attempts to access Secondary Care while Aggregator is unavailable")]
-        public void APatientWithProofLevelNineCanViewWayfinderSCSPWithAggregatorErrorAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9392013752");
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .NavigateToAppointments();
-
-             AndroidAppointmentsPage
-                 .AssertOnPage(driver)
-                 .PageContent.NavigateToSecondaryCareSummaryPage();
-
-             AndroidSecondaryCareSummaryPage
-                 .AssertOnPage(driver, screenshot: true, errorType: WayfinderErrorType.generalError);
-        }
-
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - iOS",
             FlipbookTestName = "A user logs in and attempts to access Secondary Care while Aggregator is unavailable")]
@@ -195,31 +100,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             IOSSecondaryCareSummaryPage
                 .AssertOnPage(driver, screenshot: true, errorType: WayfinderErrorType.generalError);
-        }
-
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
-            FlipbookTestName = "A user attempts to access Secondary Care Summary Screen when under 16 years old")]
-        public void APatientWithProofLevelNineAndUnderSixteenViewsWayfinderSCSPAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithAge(13,20)
-                .WithNhsNumber("9290220899");
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .NavigateToAppointments();
-
-            AndroidAppointmentsPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToSecondaryCareSummaryPage();
-
-            AndroidSecondaryCareSummaryPage
-                .AssertOnPage(driver, screenshot: true, errorType: WayfinderErrorType.underSixteen);
         }
 
         [NhsAppIOSTest]
@@ -245,43 +125,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             IOSSecondaryCareSummaryPage
                 .AssertOnPage(driver, screenshot: true, errorType: WayfinderErrorType.underSixteen);
-        }
-
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user accesses the Appointment Hub when Wayfinder is toggled on - Android",
-            FlipbookTestName = "A user accesses secondary care referrals or appointments and clicks a deep link")]
-        public void APatientWithProofLevelNineCanViewWayfinderSCSPAndClickDeepLinksAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105132");
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .NavigateToAppointments();
-
-             AndroidAppointmentsPage
-                 .AssertOnPage(driver)
-                 .PageContent.NavigateToSecondaryCareSummaryPage();
-
-             AndroidSecondaryCareSummaryPage
-                 .AssertOnPage(driver)
-                 .ScrollToReadyToConfirmAppointmentDeepLinkButtonAndScreenshotThenClick();
-
-             AndroidBlueScreenInterruptPage
-                 .AssertOnPage(driver, screenshot: true);
-
-             driver.PressBackButton();
-
-             AndroidSecondaryCareSummaryPage
-                 .AssertOnPage(driver)
-                 .ScrollToCancelledAppointmentDeepLinkButtonAndScreenshotThenClick();
-
-             AndroidBlueScreenInterruptPage
-                 .AssertOnPage(driver, screenshot: true);
         }
 
         [NhsAppIOSTest]

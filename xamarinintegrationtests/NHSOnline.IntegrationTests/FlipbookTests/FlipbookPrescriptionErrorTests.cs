@@ -13,42 +13,6 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     [TestClass]
     public class FlipbookPrescriptionErrorsTests
     {
-        [NhsAppAndroidTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs in to the app - Android",
-            FlipbookTestName = "A user can order a repeat prescription seeing validation errors")]
-        public void APatientWithProofLevelNineCanOrderARepeatPrescriptionSeeingErrorsAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LoginProcess.LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver, screenshot: true)
-                .KeyboardNavigatePrescriptions(patient);
-
-            AndroidPrescriptionsPage
-                .AssertOnPage(driver, screenshot: true)
-                .PageContent.NavigateToOrderARepeatPrescription();
-
-            var androidOrderARepeatPrescriptionPage =
-                AndroidOrderARepeatPrescriptionPage.AssertOnPage(driver, screenshot: true);
-
-            androidOrderARepeatPrescriptionPage.PageContent.Continue();
-            androidOrderARepeatPrescriptionPage.ScreenshotError();
-
-            androidOrderARepeatPrescriptionPage.PageContent
-                .ChooseRepeat()
-                .Continue();
-
-            var androidChooseRepeatPrescriptionPage =
-                AndroidChooseRepeatPrescriptionPage.AssertOnPage(driver, screenshot: true);
-
-            androidChooseRepeatPrescriptionPage.PageContent.Continue();
-            androidChooseRepeatPrescriptionPage.ScreenshotError();
-        }
-
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs in to the app - iOS",
             FlipbookTestName = "A user can order a repeat prescription seeing validation errors")]

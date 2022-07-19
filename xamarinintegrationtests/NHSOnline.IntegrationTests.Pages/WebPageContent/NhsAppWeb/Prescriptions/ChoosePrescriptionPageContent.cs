@@ -18,8 +18,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             "h1",
             "Order a repeat prescription");
 
-        private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
-
         private WebCheckbox PrescriptionCheckbox => WebCheckbox.WithLabel(_interactor, "Tablet");
 
         private WebTextarea SpecialRequestText => WebTextarea.WithId(_interactor, "specialRequest");
@@ -45,20 +43,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
 
             TitleText.AssertVisible();
-        }
-
-        public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
-        {
-            BackBreadcrumb
-        };
-
-        public void KeyboardNavigateBack(AndroidKeyboardNavigation navigation)
-            => KeyboardNavigateToAndActivate(BackBreadcrumb, navigation);
-
-        private void KeyboardNavigateToAndActivate(IFocusable menuItem, AndroidKeyboardNavigation keyboardPageContentNavigation)
-        {
-            keyboardPageContentNavigation.TabBack(menuItem);
-            keyboardPageContentNavigation.PressEnterKey();
         }
     }
 }

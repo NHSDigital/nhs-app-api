@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
 
         private AndroidFullNavigation Navigation { get; }
 
-        public OrderARepeatPrescriptionPageContent PageContent { get; }
+        private OrderARepeatPrescriptionPageContent PageContent { get; }
 
         private AndroidOrderARepeatPrescriptionPage(IAndroidDriverWrapper driver)
         {
@@ -50,7 +50,5 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Prescriptions
 
         public void KeyboardNavigateBack() =>
             PageContent.KeyboardNavigateBack(KeyboardPageContentNavigation);
-
-        public void ScreenshotError() => _driver.Screenshot($"{nameof(AndroidOrderARepeatPrescriptionPage)}_error");
     }
 }

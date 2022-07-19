@@ -1,8 +1,7 @@
-using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.Wayfinder
+namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
 {
     public class IOSWayfinderHelpPage
     {
