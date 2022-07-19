@@ -1,22 +1,22 @@
 {
 	"info": {
-		"_postman_id": "736df3ab-79a6-465d-a41b-cb27a9918471",
+		"_postman_id": "430af880-53da-4fb2-809b-d34d32f41d68",
 		"name": "Metric Logger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21371532"
+		"_exporter_id": "10704675"
 	},
 	"item": [
 		{
-			"name": "local dev",
+			"name": "Audit Log Requests",
 			"item": [
 				{
-					"name": "POST Login Event to Metric Logger",
+					"name": "POST Alert to Metric Logger Monitoring",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"raw": "{\r\n    \"Data\": {\r\n        \"Essentials\": {\r\n            \"AlertRule\": \"AuditLog ETL Unprocessed Events Alert\"\r\n        },\r\n        \"AlertContext\": {\r\n            \"SearchResults\": {\r\n                \"Tables\": [\r\n                    {\r\n                        \"name\": \"PrimaryResult\",\r\n                        \"columns\": [\r\n                            {\r\n                                \"name\": \"env\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"message\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"eventhubevents\",\r\n                                \"type\": \"string\"\r\n                            }\r\n                        ],\r\n                        \"rows\": [\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 1, Offset: 0-1\"\r\n                            ],\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 2, Offset: 0-2\"\r\n                            ]\r\n                        ]\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,276 +24,20 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host_address}}"
 							],
-							"port": "7071",
 							"path": [
 								"api",
 								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Initial Prompt Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
 								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Consent Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Medical Record View to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Create to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"Timestamp\": \"2022-03-02T15:33:51.3049067Z\",\r\n        \"AuditId\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Registration_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully registered\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:22377e854)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"preview\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"749cc2b8-c39c-44ac-b256-066372dd6e99\",\r\n        \"_rid\": \"RuVQAKPVga+oDAEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"d1014c1c-0000-1100-0000-621f8e5f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646235231\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Biometrics Toggle Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"BiometricsRegistration_Decision\",\n        \"Details\": \"Biometrics toggled. optIn=true\",\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Get to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n      {\r\n        \"Id\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"Timestamp\": \"2022-02-17T18:47:56.6791548Z\",\r\n        \"AuditId\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"NhsLoginSubject\": \"e85fb7cc-2bcf-4f26-b3f0-6b27524c3692\",\r\n        \"NhsNumber\": \"969 211 3612\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Emis\",\r\n        \"Operation\": \"OrganDonation_Get_Response\",\r\n        \"Details\": \"A default organ donation registration has been generated\",\r\n        \"ApiVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9\",\r\n        \"WebVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9 (commit:b90ac9cb5)\",\r\n        \"NativeVersion\": \"ios 2.5.0\",\r\n        \"Environment\": \"scratch12\",\r\n        \"id\": \"eb05879d-8531-4353-a287-15a7410329e5\",\r\n        \"_rid\": \"RuVQAKPVga+dAwAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+dAwAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"7200b265-0000-1100-0000-620e985c0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1645123676\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Withdraw to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Withdraw_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully Withdrawn\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": null,\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Update to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"Timestamp\": \"2022-03-01T16:26:32.2328691Z\",\r\n        \"AuditId\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"NhsLoginSubject\": \"2d97a264-996d-4294-9b61-3e87e3c1103f\",\r\n        \"NhsNumber\": \"966 118 3279\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Update_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully updated\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:1615267fb)\",\r\n        \"NativeVersion\": \"ios 2.4.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"e67ddb18-03ad-42c6-90c2-9e5e21c16b0c\",\r\n        \"_rid\": \"RuVQAKPVga-G9QAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga-G9QAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"c801b5f8-0000-1100-0000-621e49380000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646151992\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Notification Toggle Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"NotificationToggle_Response\",\r\n        \"Details\": \"Notification toggled. optIn=true\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
 							]
 						}
 					},
@@ -314,104 +58,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Repeat Prescription Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"Timestamp\": \"2022-04-23T23:53:33.0602823Z\",\r\n        \"AuditId\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"NhsLoginSubject\": \"ec66fe04-e8e3-4401-aa41-0b99c69c5c57\",\r\n        \"NhsNumber\": \"969 223 8318\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"RepeatPrescriptions_OrderRepeatMedications_Response\",\r\n        \"Details\": \"Repeat prescription request successfully created with course ids: FakeCourse1\",\r\n        \"ApiVersion\": \"v2.8.1\",\r\n        \"WebVersion\": \"2.8.1 (commit:15543227b)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"c23944a4-baf4-4db4-997e-aaa9a4de5311\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"1ce6bd64-a3e6-48e4-aa3f-f2bf5e41fda6\",\r\n        \"_rid\": \"RuVQAKPVga9bdAUAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga9bdAUAAAAAAA==/\",\r\n        \"_etag\": \"\\\"88019389-0000-1100-0000-6264917d0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1650758013\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/AuditLog_Etl_Http",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Alert to Metric Logger Monitoring",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"Data\": {\r\n        \"Essentials\": {\r\n            \"AlertRule\": \"AuditLog ETL Unprocessed Events Alert\"\r\n        },\r\n        \"AlertContext\": {\r\n            \"SearchResults\": {\r\n                \"Tables\": [\r\n                    {\r\n                        \"name\": \"PrimaryResult\",\r\n                        \"columns\": [\r\n                            {\r\n                                \"name\": \"env\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"message\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"eventhubevents\",\r\n                                \"type\": \"string\"\r\n                            }\r\n                        ],\r\n                        \"rows\": [\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 1, Offset: 0-1\"\r\n                            ],\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 2, Offset: 0-2\"\r\n                            ]\r\n                        ]\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:7071/api/Monitoring_AppInsightsAlert",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7071",
-							"path": [
-								"api",
-								"Monitoring_AppInsightsAlert"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "dev-uks3 cluster",
-			"item": [
-				{
-					"name": "POST Login Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
+								"{{host_address}}"
 							],
 							"path": [
 								"api",
@@ -420,259 +70,7 @@
 							"query": [
 								{
 									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Initial Prompt Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Consent Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Medical Record View to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Create to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"Timestamp\": \"2022-03-02T15:33:51.3049067Z\",\r\n        \"AuditId\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Registration_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully registered\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:22377e854)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"preview\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"749cc2b8-c39c-44ac-b256-066372dd6e99\",\r\n        \"_rid\": \"RuVQAKPVga+oDAEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"d1014c1c-0000-1100-0000-621f8e5f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646235231\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Get to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n      {\r\n        \"Id\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"Timestamp\": \"2022-02-17T18:47:56.6791548Z\",\r\n        \"AuditId\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"NhsLoginSubject\": \"e85fb7cc-2bcf-4f26-b3f0-6b27524c3692\",\r\n        \"NhsNumber\": \"969 211 3612\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Emis\",\r\n        \"Operation\": \"OrganDonation_Get_Response\",\r\n        \"Details\": \"A default organ donation registration has been generated\",\r\n        \"ApiVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9\",\r\n        \"WebVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9 (commit:b90ac9cb5)\",\r\n        \"NativeVersion\": \"ios 2.5.0\",\r\n        \"Environment\": \"scratch12\",\r\n        \"id\": \"eb05879d-8531-4353-a287-15a7410329e5\",\r\n        \"_rid\": \"RuVQAKPVga+dAwAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+dAwAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"7200b265-0000-1100-0000-620e985c0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1645123676\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Organ Donation Registration Withdraw to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Withdraw_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully Withdrawn\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": null,\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST Notification Toggle Event to Metric Logger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"NotificationToggle_Response\",\r\n        \"Details\": \"Notification toggled. optIn=true\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
-							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"api",
-								"AuditLog_Etl_Http"
-							],
-							"query": [
-								{
-									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+									"value": "{{code}}"
 								}
 							]
 						}
@@ -694,12 +92,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
 							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
+								"{{host_address}}"
 							],
 							"path": [
 								"api",
@@ -708,7 +104,7 @@
 							"query": [
 								{
 									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+									"value": "{{code}}"
 								}
 							]
 						}
@@ -716,13 +112,13 @@
 					"response": []
 				},
 				{
-					"name": "POST Alert to Metric Logger Monitoring",
+					"name": "POST Consent Event to Metric Logger",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Data\": {\r\n        \"Essentials\": {\r\n            \"AlertRule\": \"AuditLog ETL Unprocessed Events Alert\"\r\n        },\r\n        \"AlertContext\": {\r\n            \"SearchResults\": {\r\n                \"Tables\": [\r\n                    {\r\n                        \"name\": \"PrimaryResult\",\r\n                        \"columns\": [\r\n                            {\r\n                                \"name\": \"env\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"message\",\r\n                                \"type\": \"string\"\r\n                            },\r\n                            {\r\n                                \"name\": \"eventhubevents\",\r\n                                \"type\": \"string\"\r\n                            }\r\n                        ],\r\n                        \"rows\": [\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 1, Offset: 0-1\"\r\n                            ],\r\n                            [\r\n                                \"dev\",\r\n                                \"Failed Encountered error while processing events\",\r\n                                \"PartionId: 2, Offset: 0-2\"\r\n                            ]\r\n                        ]\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    }\r\n}",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -730,12 +126,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://nhsapp-devuks3-analytics-metric-log-app.azurewebsites.net/api/AuditLog_Etl_Http?code=tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg==",
-							"protocol": "https",
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
 							"host": [
-								"nhsapp-devuks3-analytics-metric-log-app",
-								"azurewebsites",
-								"net"
+								"{{host_address}}"
 							],
 							"path": [
 								"api",
@@ -744,7 +138,313 @@
 							"query": [
 								{
 									"key": "code",
-									"value": "tKaUK7dfkhhN[…]cUTQ4ia91KufAXd5BOtUHE82KSs1TlWiGkAdEg=="
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Initial Prompt Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"3840f219-cb5a-4c8b-a3f8-17fc59280b7c\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"Login_Success\",\r\n        \"Details\": \"Successful Login with test details\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"cs-test\",\r\n        \"SessionId\": null,\r\n        \"Timestamp\": \"2022-02-21T15:29:58.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"\",\r\n        \"Referrer\": \"\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Medical Record View to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AuditId\": \"d98018ae-a8e7-490f-a3dd-9686114ac6c9\",\r\n        \"NhsLoginSubject\": \"1b09a0ba-c36b-403f-bca5-7cfd7cf2cb95\",\r\n        \"NhsNumber\": \"969 223 7672\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"PatientRecord_View_Response\",\r\n        \"Details\": \"Patient record successfully retrieved. hasSummaryRecordAccess=False, hasDetailedRecordAccess=False\",\r\n        \"ApiVersion\": \"v2.8.2\",\r\n        \"WebVersion\": \"2.8.2 (commit:f57f22a81)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"onboardingaos\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"d6a628c7-1589-41c3-8861-dbc238db7d02\",\r\n        \"ProofLevel\": \"P9\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Notification Toggle Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"NotificationToggle_Response\",\r\n        \"Details\": \"Notification toggled. optIn=true\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Create to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"Timestamp\": \"2022-03-02T15:33:51.3049067Z\",\r\n        \"AuditId\": \"af17de5d-79c8-43e9-a741-2ff5f54368ff\",\r\n        \"NhsLoginSubject\": \"cb09b2b9-aae3-4162-96d3-0eea6ae938d8\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Registration_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully registered\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:22377e854)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"preview\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"749cc2b8-c39c-44ac-b256-066372dd6e99\",\r\n        \"_rid\": \"RuVQAKPVga+oDAEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+oDAEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"d1014c1c-0000-1100-0000-621f8e5f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646235231\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Get to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n      {\r\n        \"Id\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"Timestamp\": \"2022-02-17T18:47:56.6791548Z\",\r\n        \"AuditId\": \"a10231b7-54e3-4c04-b17f-f2dc022afd98\",\r\n        \"NhsLoginSubject\": \"e85fb7cc-2bcf-4f26-b3f0-6b27524c3692\",\r\n        \"NhsNumber\": \"969 211 3612\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Emis\",\r\n        \"Operation\": \"OrganDonation_Get_Response\",\r\n        \"Details\": \"A default organ donation registration has been generated\",\r\n        \"ApiVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9\",\r\n        \"WebVersion\": \"b90ac9cb548192c13e127ec8e08e4ea6e94f42d9 (commit:b90ac9cb5)\",\r\n        \"NativeVersion\": \"ios 2.5.0\",\r\n        \"Environment\": \"scratch12\",\r\n        \"id\": \"eb05879d-8531-4353-a287-15a7410329e5\",\r\n        \"_rid\": \"RuVQAKPVga+dAwAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga+dAwAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"7200b265-0000-1100-0000-620e985c0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1645123676\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Update to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"Timestamp\": \"2022-03-01T16:26:32.2328691Z\",\r\n        \"AuditId\": \"97b8f02f-0682-4a82-a24f-71b16e141ba4\",\r\n        \"NhsLoginSubject\": \"2d97a264-996d-4294-9b61-3e87e3c1103f\",\r\n        \"NhsNumber\": \"966 118 3279\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Update_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully updated\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:1615267fb)\",\r\n        \"NativeVersion\": \"ios 2.4.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"id\": \"e67ddb18-03ad-42c6-90c2-9e5e21c16b0c\",\r\n        \"_rid\": \"RuVQAKPVga-G9QAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga-G9QAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"c801b5f8-0000-1100-0000-621e49380000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646151992\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Organ Donation Registration Withdraw to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"OrganDonation_Withdraw_Response\",\r\n        \"Details\": \"The organ donation decision has been successfully Withdrawn\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": null,\r\n        \"id\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"_rid\": \"RuVQAKPVga8bowEAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/\",\r\n        \"_etag\": \"\\\"e4011bab-0000-1100-0000-622890e20000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1646825698\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Repeat Prescription Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"Timestamp\": \"2022-04-23T23:53:33.0602823Z\",\r\n        \"AuditId\": \"79737fd7-e48d-49de-a237-fd7a806877bf\",\r\n        \"NhsLoginSubject\": \"ec66fe04-e8e3-4401-aa41-0b99c69c5c57\",\r\n        \"NhsNumber\": \"969 223 8318\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Fake\",\r\n        \"Operation\": \"RepeatPrescriptions_OrderRepeatMedications_Response\",\r\n        \"Details\": \"Repeat prescription request successfully created with course ids: FakeCourse1\",\r\n        \"ApiVersion\": \"v2.8.1\",\r\n        \"WebVersion\": \"2.8.1 (commit:15543227b)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"c23944a4-baf4-4db4-997e-aaa9a4de5311\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"1ce6bd64-a3e6-48e4-aa3f-f2bf5e41fda6\",\r\n        \"_rid\": \"RuVQAKPVga9bdAUAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga9bdAUAAAAAAA==/\",\r\n        \"_etag\": \"\\\"88019389-0000-1100-0000-6264917d0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1650758013\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
 								}
 							]
 						}
