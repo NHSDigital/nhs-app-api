@@ -62,7 +62,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions
             ProofLevel = "P9",
             ODS = "AB001",
             Referrer = "ref",
-            IntegrationReferrer = "Int-ref"
+            IntegrationReferrer = "Int-ref",
+            ProviderId = "ProviderId",
+            ProviderName = "ProviderName",
+            JumpOffId = "JumpOffId"
         };
 
         private static AuditRecord FillAuditRecord(AuditRecord record)
@@ -91,7 +94,10 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions
                 Timestamp =  FieldOrDefault(record.Timestamp, _DefaultRecord.Timestamp),
                 ProofLevel = FieldOrDefault(record.ProofLevel, _DefaultRecord.ProofLevel),
                 ODS = FieldOrDefault(record.ODS, _DefaultRecord.ODS),
-                Referrer = FieldOrDefault(record.Referrer, _DefaultRecord.Referrer)
+                Referrer = FieldOrDefault(record.Referrer, _DefaultRecord.Referrer),
+                ProviderId = FieldOrDefault(record.ProviderId,_DefaultRecord.ProviderId),
+                ProviderName = FieldOrDefault(record.ProviderName,_DefaultRecord.ProviderName),
+                JumpOffId = FieldOrDefault(record.JumpOffId,_DefaultRecord.JumpOffId)
             };
 
             if (String.IsNullOrEmpty(record.IntegrationReferrer))

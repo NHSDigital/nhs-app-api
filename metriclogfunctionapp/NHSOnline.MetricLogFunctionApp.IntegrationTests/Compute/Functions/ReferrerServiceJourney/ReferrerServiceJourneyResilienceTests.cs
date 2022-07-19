@@ -58,8 +58,8 @@ public class ReferrerServiceJourneyResilienceTests
         await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1", "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2", "auditId2");
         await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         await env.Postgres.Compute.ReferrerServiceJourney.SetupTrigger(@"

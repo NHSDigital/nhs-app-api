@@ -201,7 +201,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
         }
 
         public static async Task AddSilverIntegrationJumpOffMetric(TestEnv env, DateTimeOffset dateTime, string sessionId,
-            string providerId, string providerName, string jumpOffId)
+            string providerId, string providerName, string jumpOffId, string auditId)
         {
             await env.Postgres.Events.SilverIntegrationJumpOffMetric.Insert(new SilverIntegrationJumpOffMetricRow
             {
@@ -209,7 +209,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
                 SessionId = sessionId,
                 ProviderId = providerId,
                 ProviderName = providerName,
-                JumpOffId = jumpOffId
+                JumpOffId = jumpOffId,
+                AuditId = auditId
             });
         }
 

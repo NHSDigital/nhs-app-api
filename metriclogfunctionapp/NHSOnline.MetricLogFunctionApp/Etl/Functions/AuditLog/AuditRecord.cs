@@ -44,5 +44,11 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         public string Referrer { get; set; }
 
         public string IntegrationReferrer { get; set; }
+
+        public string ProviderId { get; set; }
+
+        public string ProviderName { get; set; }
+        
+        public string JumpOffId { get; set; }
     }
 }

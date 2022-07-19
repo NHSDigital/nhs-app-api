@@ -26,16 +26,16 @@ public class ReferrerServiceJourneyTests
         // Arrange
         await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
-        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
         await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1, auditId1);
         await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
-        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1", "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2", "auditId2");
 
         // Act
         var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
@@ -79,17 +79,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(1);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -119,20 +119,20 @@ public class ReferrerServiceJourneyTests
             rows.Count.Should().Be(1);
 
             var row = rows.Single(x => x.Date == DateTime.Parse(startTime));
-            row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(1);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
+            row.ReferrerId.Should().Be(referrerId);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -165,17 +165,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(1);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(1);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -208,17 +208,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(1);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(1);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -251,17 +251,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(1);
+            row.CovidPassJumpOffs.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(1);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -295,7 +295,9 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(1);
             row.OdUpdates.Should().Be(0);
@@ -303,9 +305,7 @@ public class ReferrerServiceJourneyTests
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -338,6 +338,9 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.Prescriptions.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
@@ -346,9 +349,6 @@ public class ReferrerServiceJourneyTests
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -381,17 +381,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(1);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -467,17 +467,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(1);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -510,17 +510,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(1);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(1);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -553,17 +553,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(1);
             row.RecordViewsDcr.Should().Be(1);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -578,7 +578,7 @@ public class ReferrerServiceJourneyTests
         const string covidPassProvider = "the Department of Health and Social Care";
 
         // Arrange
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1", "auditId1");
         await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
@@ -597,17 +597,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(1);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(1);
             row.SilverIntegrationJumpOffs.Should().Be(0);
         }
     }
@@ -622,7 +622,7 @@ public class ReferrerServiceJourneyTests
         const string provider = "Other Provider";
 
         // Arrange
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider1-ID", provider, "JumpOffId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider1-ID", provider, "JumpOffId1", "auditId1");
         await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
@@ -641,17 +641,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(0);
             row.AppointmentsCancelled.Should().Be(0);
-            row.Prescriptions.Should().Be(0);
+            row.CovidPassJumpOffs.Should().Be(0);
+            row.NomPharmacyCreate.Should().Be(0);
+            row.NomPharmacyUpdate.Should().Be(0);
             row.OdLookups.Should().Be(0);
             row.OdRegistrations.Should().Be(0);
             row.OdUpdates.Should().Be(0);
             row.OdWithdrawals.Should().Be(0);
+            row.Prescriptions.Should().Be(0);
             row.RecordViews.Should().Be(0);
             row.RecordViewsDcr.Should().Be(0);
             row.RecordViewsScr.Should().Be(0);
-            row.NomPharmacyCreate.Should().Be(0);
-            row.NomPharmacyUpdate.Should().Be(0);
-            row.CovidPassJumpOffs.Should().Be(0);
             row.SilverIntegrationJumpOffs.Should().Be(1);
         }
     }
@@ -705,16 +705,16 @@ public class ReferrerServiceJourneyTests
         // Arrange
         await AddMetricHelper.AddAppointmentBookMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddAppointmentCancelMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 01, TimeSpan.Zero), sessionId1);
-        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
         await AddMetricHelper.AddNomPharmacyCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 03, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddNomPharmacyUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 04, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationCreateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 05, TimeSpan.Zero), sessionId1, auditId1);
         await AddMetricHelper.AddOrganDonationGetMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 06, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationUpdateMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 07, TimeSpan.Zero), sessionId1);
         await AddMetricHelper.AddOrganDonationWithdrawMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 08, TimeSpan.Zero), sessionId1);
-        await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1");
-        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2");
+        await AddMetricHelper.AddPrescriptionOrderMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 02, TimeSpan.Zero), sessionId1);
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1", "auditId1");
+        await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2", "auditId2");
         await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
 
         // Act
@@ -733,17 +733,17 @@ public class ReferrerServiceJourneyTests
             row.ReferrerId.Should().Be(referrerId);
             row.AppointmentsBooked.Should().Be(1);
             row.AppointmentsCancelled.Should().Be(1);
-            row.Prescriptions.Should().Be(1);
+            row.CovidPassJumpOffs.Should().Be(1);
+            row.NomPharmacyCreate.Should().Be(1);
+            row.NomPharmacyUpdate.Should().Be(1);
             row.OdLookups.Should().Be(1);
             row.OdRegistrations.Should().Be(1);
             row.OdUpdates.Should().Be(1);
             row.OdWithdrawals.Should().Be(1);
+            row.Prescriptions.Should().Be(1);
             row.RecordViews.Should().Be(1);
             row.RecordViewsDcr.Should().Be(1);
             row.RecordViewsScr.Should().Be(1);
-            row.NomPharmacyCreate.Should().Be(1);
-            row.NomPharmacyUpdate.Should().Be(1);
-            row.CovidPassJumpOffs.Should().Be(1);
             row.SilverIntegrationJumpOffs.Should().Be(1);
         }
     }

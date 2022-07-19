@@ -23,8 +23,9 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Cr
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.SilverIntegrationJumpOff;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -50,6 +51,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
         private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
         private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
+        private readonly IAuditLogEtl<SilverIntegrationJumpOffMetric> _silverIntegrationJumpOffEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -73,6 +75,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
             IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
             IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
+            IAuditLogEtl<SilverIntegrationJumpOffMetric> silverIntegrationJumpOffEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -95,6 +98,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _repeatPrescriptionEtl = repeatPrescriptionEtl;
             _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
             _webIntegrationReferralEtl = webIntegrationReferralEtl;
+            _silverIntegrationJumpOffEtl = silverIntegrationJumpOffEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -150,6 +154,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _repeatPrescriptionEtl.Execute(events);
                 await _secondaryCareSummaryEtl.Execute(events);
                 await _webIntegrationReferralEtl.Execute(events);
+                await _silverIntegrationJumpOffEtl.Execute(events);
             }
             catch (Exception e)
             {
