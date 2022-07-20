@@ -1,9 +1,17 @@
 @import "../textstyles";
+@import '~nhsuk-frontend/packages/core/settings/globals';
 
 .formErrorSummary {
   margin-top: 34px;
   margin-bottom: 16px;
   padding: 24px;
+
+  &:focus {
+    border: 2px solid $nhsuk-focus-text-color !important;
+    box-shadow: inset 0 0 0 2px !important;
+    outline: $nhsuk-focus-width solid $focus_highlight !important;
+    outline-offset: 0 !important;
+  }
 }
 
 h2 {
