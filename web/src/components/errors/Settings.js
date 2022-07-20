@@ -106,6 +106,11 @@ export default {
         default: MORE_ACCOUNTANDSETTINGS_PATH,
         10001: MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_PATH,
       },
+      backLinks: {
+        500: MORE_ACCOUNTANDSETTINGS_PATH,
+        10001: null,
+        10002: null,
+      },
     },
     {
       route: NOMINATED_PHARMACY_CONFIRM_PATH,

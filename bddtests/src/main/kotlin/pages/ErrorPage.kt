@@ -9,7 +9,8 @@ open class ErrorPage : HybridPageObject() {
     private val headerLocator = String.format(errorTextFinderFormat, "msg-header")
     private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
-    private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
+    private val desktopBackButtonLocator = "//*[@data-purpose='retry-or-back-button']"
+    private val desktopBackLinkLocator = "//*[@id='backLink']"
     private val desktopDeviceSettingsLinkLocator = "//*[@id='device-settings']"
 
     lateinit var webHeader: WebHeader
@@ -20,7 +21,9 @@ open class ErrorPage : HybridPageObject() {
 
     val errorText1 = findElementByLocator(messageTextLocator)
 
-    val button = findElementByLocator(desktopBackLinkLocator)
+    val button = findElementByLocator(desktopBackButtonLocator)
+
+    val link = findElementByLocator(desktopBackLinkLocator)
 
     val deviceSettings = findElementByLocator(desktopDeviceSettingsLinkLocator)
 
@@ -91,5 +94,10 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertIsNotDisplayed() {
         headerWeb.assertElementNotPresent()
+    }
+
+    fun assertLinkText(linkText: String): ErrorPage {
+        assertEquals("Link text incorrect. ", linkText, link.text)
+        return this
     }
 }

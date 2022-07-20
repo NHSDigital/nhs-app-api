@@ -150,7 +150,7 @@ Feature: Push Notifications
     And I click the Account and settings link on the More page
     And I click the Manage notifications link on the account and settings page
     Then an error is displayed indicating that the notifications service is not available
-    When I click the 'Back to Account and settings' button
+    When I click the 'Back to Account and settings' link
     Then the Account and settings Hub page is displayed
 
   Scenario: A user attempting to disable a non-existing registration is shown an error message
@@ -165,7 +165,7 @@ Feature: Push Notifications
     When the push notification registration record can no longer be found in the repository
     And I change the notifications toggle to off
     Then an error is displayed indicating that the notifications service is not available
-    When I click the 'Back to Account and settings' button
+    When I click the 'Back to Account and settings' link
     Then the Account and settings Hub page is displayed
 
   Scenario: A user viewing notifications settings when their device's notifications are disabled sees an error

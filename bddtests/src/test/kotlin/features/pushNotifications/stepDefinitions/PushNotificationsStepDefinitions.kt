@@ -151,7 +151,7 @@ class PushNotificationsStepDefinitions {
         errorPage
             .assertNoSubHeader()
             .assertMessageText("To try again, go back to Account and settings and choose Manage notifications.")
-            .assertRetryButtonText("Back to Account and settings")
+            .assertLinkText("Back to Account and settings")
     }
 
     @Then("^an error is displayed indicating that the device's notifications are disabled$")
