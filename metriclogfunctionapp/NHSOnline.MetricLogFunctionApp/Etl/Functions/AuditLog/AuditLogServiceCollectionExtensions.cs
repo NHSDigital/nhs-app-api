@@ -5,6 +5,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
@@ -16,8 +17,8 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Initial
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Resilience;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -33,7 +34,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             serviceCollection.AddTransient<IAuditLogParser<LoginMetric>, LoginEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<WebIntegrationReferralsMetric>, WebIntegrationReferralsMetricEtl>();
-            serviceCollection.AddTransient<IRequestQueueOrchestrator<AuditReportRequest>,RequestQueueOrchestrator<AuditReportRequest>>();
+            serviceCollection.AddTransient<IRequestQueueOrchestrator<AuditReportRequest>, RequestQueueOrchestrator<AuditReportRequest>>();
             serviceCollection.AddTransient<IAuditLogParser<WebIntegrationReferralsMetric>, WebIntegrationReferralsEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<SecondaryCareSummaryMetric>, SecondaryCareSummaryMetricEtl>();
@@ -67,19 +68,22 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             serviceCollection.AddTransient<IAuditLogParser<OrganDonationRegistrationUpdateMetric>, OrganDonationRegistrationUpdateEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<NominatedPharmacyCreateMetric>, NominatedPharmacyCreateMetricEtl>();
-            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyCreateMetric>,NominatedPharmacyCreateEventParser >();
+            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyCreateMetric>, NominatedPharmacyCreateEventParser >();
             
             serviceCollection.AddTransient<IAuditLogEtl<NominatedPharmacyUpdateMetric>, NominatedPharmacyUpdateMetricEtl>();
-            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyUpdateMetric>,NominatedPharmacyUpdateEventParser >();
+            serviceCollection.AddTransient<IAuditLogParser<NominatedPharmacyUpdateMetric>, NominatedPharmacyUpdateEventParser >();
 
-            serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>),typeof(RequestQueueOrchestrator<>));
+            serviceCollection.AddTransient(typeof(IRequestQueueOrchestrator<>), typeof(RequestQueueOrchestrator<>));
             serviceCollection.AddTransient(typeof(RequestQueueOrchestrator<>));
 
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<InitialPromptMetric>, InitialPromptEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<BiometricsToggleMetric>, BiometricsToggleMetricEtl>();
-            serviceCollection.AddTransient<IAuditLogParser<BiometricsToggleMetric>,BiometricsToggleEventParser>();
+            serviceCollection.AddTransient<IAuditLogParser<BiometricsToggleMetric>, BiometricsToggleEventParser>();
+
+            serviceCollection.AddTransient<IAuditLogEtl<MedicalRecordSectionViewMetric>, MedicalRecordSectionViewMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<MedicalRecordSectionViewMetric>, MedicalRecordSectionViewEventParser>();
         }
     }
 }

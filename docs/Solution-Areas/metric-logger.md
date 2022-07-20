@@ -478,6 +478,35 @@ UpdateNominatedPharmacy Body:
 ]
 ```
 
+PatientRecordSectionView Body:
+```bash
+[
+    {
+        "Id": "213d7ae1-1e26-4b98-a4ef-75994fd0846b",
+        "Timestamp": "2022-05-27T11:12:47.3068548Z",
+        "AuditId": "213d7ae1-1e26-4b98-a4ef-75994fd0846b",
+        "NhsLoginSubject": "AFF0A112-X001-000F-BF99-147D64025:S0",
+        "NhsNumber": "550 019 0757",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Vision",
+        "Operation": "PatientRecord_Section_View_Response",
+        "Details": "Patient record TEST RESULTS successfully retrieved.",
+        "ApiVersion": "develop",
+        "WebVersion": "develop",
+        "NativeVersion": null,
+        "Environment": "loadtest",
+        "SessionId": "c69711d8-2013-4dd1-acad-5bbbfecdb35e",
+        "ProofLevel": "P9",
+        "id": "95ad044c-3f9a-42c4-8d13-e8754b9bee63",
+        "_rid": "XR9GALdybyjcGFMCAADAAw==",
+        "_self": "dbs/XR9GAA==/colls/XR9GALdybyg=/docs/XR9GALdybyjcGFMCAADAAw==/",
+        "_etag": "\"91002cc5-0000-1100-0000-6290b22f0000\"",
+        "_attachments": "attachments/",
+        "_ts": 1653649967
+    }
+]
+```
+
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

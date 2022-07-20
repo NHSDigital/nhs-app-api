@@ -11,6 +11,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
@@ -22,8 +23,8 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Initial
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
@@ -48,6 +49,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<RepeatPrescriptionMetric>> _repeatPrescriptionEtl;
         private Mock<IAuditLogEtl<SecondaryCareSummaryMetric>> _secondaryCareSummaryEtl;
         private Mock<IAuditLogEtl<WebIntegrationReferralsMetric>> _webIntegrationReferralEtl;
+        private Mock<IAuditLogEtl<MedicalRecordSectionViewMetric>> _medicalRecordSectionViewMetricEtl;
         private Mock<IEtlLogger<AuditLogConsumerFunction>> _logger;
         private Mock<ILogger<AuditLogConsumerFunction>> _queueLogger;
         private AuditLogConsumerFunction _function;
@@ -72,6 +74,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
             _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
             _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
+            _medicalRecordSectionViewMetricEtl = new Mock<IAuditLogEtl<MedicalRecordSectionViewMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
 
@@ -93,6 +96,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _repeatPrescriptionEtl.Object,
                 _secondaryCareSummaryEtl.Object,
                 _webIntegrationReferralEtl.Object,
+                _medicalRecordSectionViewMetricEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }
@@ -137,6 +141,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _organDonationRegistrationUpdateEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _biometricsToggleEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _medicalRecordSectionViewMetricEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

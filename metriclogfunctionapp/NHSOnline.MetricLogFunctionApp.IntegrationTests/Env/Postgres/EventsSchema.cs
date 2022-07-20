@@ -60,6 +60,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 
         internal PostgresTable<BiometricsToggleMetricRow> BiometricsToggleMetric => Table<BiometricsToggleMetricRow>();
 
+        internal PostgresTable<MedicalRecordSectionViewMetricRow> MedicalRecordSectionViewMetric =>
+            Table<MedicalRecordSectionViewMetricRow>();
+
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
 
