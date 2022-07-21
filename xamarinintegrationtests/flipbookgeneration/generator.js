@@ -31,15 +31,13 @@ for (var idx = 0; idx < testDetails.length; idx++) {
     // 2 = Passed
     if (TestOutcome === 2) {
         let ParentJourneyTestId;
-
-        if (!ParentJourney) {
-            let TestNameId = formatName(TestName);
-            outputHtml += `<div class="break"><h1 id="${TestNameId}" name="${TestNameId}">${contentIndex} - ${TestName}</h1>`;
-        } else {
+        if (ParentJourney)
+        {
             ParentJourneyTestId = formatName(ParentJourney);
-            outputHtml += `<div class="break"><h1>${contentIndex} - ${TestName}</h1>` 
         }
-
+        let TestNameId = formatName(TestName);
+        outputHtml += `<div class="break"><h1 id="${TestNameId}" name="${TestNameId}">${contentIndex} - ${TestName}</h1>`;
+        
         outputHtml += `<h2>AppVersion=v${AppVersion} | Device=${Device} | OS Version=${OSVersion}</h2>`;
 
         // If not the login journey we need to print the link to it
