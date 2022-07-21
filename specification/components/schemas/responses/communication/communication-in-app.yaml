@@ -37,14 +37,6 @@ properties:
           type: string
           description: The body text of the message to be displayed in the NHS App.
           example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)
-  sender:
-    type: object
-    description: The sender of the in-app message.
-    properties:
-      display:
-        type: string
-        description: The name to be displayed in the NHS App as the sender of the message.
-        example: Onboarded Third Party
   recipient:
     type: array
     description:

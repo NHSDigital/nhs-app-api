@@ -22,8 +22,8 @@
       "code": "invalid",
       "diagnostics": "Not specified",
       "expression": [
-        "sender.display"
+          "recipient"
       ]
-    }
+  }
   ]
 }

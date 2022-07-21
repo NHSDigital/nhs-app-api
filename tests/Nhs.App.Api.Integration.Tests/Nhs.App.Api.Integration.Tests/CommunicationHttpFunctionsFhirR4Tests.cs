@@ -296,10 +296,6 @@ namespace Nhs.App.Api.Integration.Tests
             var communicationRequest = new CommunicationRequest
             {
                 Status = RequestStatus.Active,
-                Sender = new ResourceReference
-                {
-                    Display = "NHS App"
-                },
                 Identifier = new List<Identifier>
                 {
                     new(FhirR4IdentifierSystem.CampaignId, "Campaign ID 1"),

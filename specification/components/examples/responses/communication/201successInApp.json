@@ -28,9 +28,6 @@
             }
         }
     ],
-    "sender": {
-        "display": "Onboarded Third Party"
-    },
     "requester": {
         "type": "Organization",
         "identifier": {

@@ -34,4 +34,4 @@ properties:
           description: FHIRPath of element(s) related to the error.
           items:
             type: string
-            example: sender.display
+            example: requester.identifier
