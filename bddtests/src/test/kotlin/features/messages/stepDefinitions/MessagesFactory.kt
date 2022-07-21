@@ -192,6 +192,25 @@ class MessagesFactory {
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(messageToPost)
     }
 
+    fun setUpSingleReadMessage() {
+        val patient = SerenityHelpers.getPatient()
+        val nhsLoginId = patient.subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        val message = SingleMessageFacade(
+            "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
+            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
+        )
+
+        val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
+        MongoDBConnection.MessagesCollection.clearAndInsertJson(arrayListOf(messageToInsert))
+
+        val insertedMessage = MongoDBConnection.MessagesCollection
+            .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+            .first()
+        MessagesSerenityHelpers.MESSAGE_ID.set(insertedMessage._id?.toHexString())
+        MessagesSerenityHelpers.EXPECTED_MESSAGE.set(insertedMessage)
+    }
+
     fun setUpInvalidMessageInCache() {
         val targetMessage = MessagesSerenityHelpers.TARGET_MESSAGE.getOrFail<String>()
         MongoDBConnection.MessagesCollection.updateOne(

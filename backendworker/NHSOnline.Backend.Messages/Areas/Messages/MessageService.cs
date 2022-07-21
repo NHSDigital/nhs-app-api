@@ -174,14 +174,15 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                     return new MessagePatchResult.BadRequest();
                 }
 
-                var repositoryUpdates = new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
-                if (repositoryUpdates.Failed(out var repositoryUpdatesFailure))
+                var filtersAndUpdates =
+                    new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
+                if (filtersAndUpdates.Failed(out var repositoryUpdatesFailure))
                 {
                     return repositoryUpdatesFailure;
                 }
 
-                var updateResult =
-                    await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
+                var updateResult = await _messageRepository
+                    .UpdateOne(accessToken.Subject, messageId, filtersAndUpdates);
                 if (!(updateResult is RepositoryUpdateResult<UserMessage>.Updated))
                 {
                     _logger.LogWarning("Message Patch did not update message in repository");

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using Moq;
 using NHSOnline.Backend.Messages.Areas.Messages;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
@@ -347,7 +348,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.UpdateOne(
                 "NhsLoginId",
                 null,
-                It.IsAny<UpdateRecordBuilder<UserMessage>>());
+                It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>());
 
             // Assert
             act.Should().ThrowAsync<ArgumentNullException>()
@@ -363,7 +364,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             Func<Task> act = async () => await _systemUnderTest.UpdateOne(
                 null,
                 "MessageId",
-                It.IsAny<UpdateRecordBuilder<UserMessage>>());
+                It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>());
 
             // Assert
             act.Should().ThrowAsync<ArgumentNullException>()
@@ -373,20 +374,56 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task UpdateOne_WithMessage_ShouldUpdateRecord()
+        public async Task UpdateOne_WithMessage_ShouldUpdateRecordUsingCorrectFilter()
         {
             // Arrange
+            Expression<Func<UserMessage, bool>> combinedFilter = null;
             _mockRepository.Setup(x =>
                     x.Update(It.IsAny<Expression<Func<UserMessage, bool>>>(),
                         It.IsAny<UpdateRecordBuilder<UserMessage>>(),
                         It.IsAny<string>()))
+                .Callback<Expression<Func<UserMessage, bool>>, UpdateRecordBuilder<UserMessage>, string>(
+                    (filter, update, recordName) => combinedFilter = filter)
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
 
+            var filters = new List<Expression<Func<UserMessage, bool>>>
+            {
+                userMessage => userMessage.Sender == "Sender",
+                userMessage => userMessage.ReadTime != null
+            };
+
+            IEnumerable<UserMessage> messagesToFilter = new List<UserMessage>
+            {
+                new UserMessage
+                {
+                    Id = ObjectId.Parse("fd9fb3db27402da79fe66515"), NhsLoginId = "NotNhsLoginId", Sender = "Sender", ReadTime = null
+                },
+                new UserMessage
+                {
+                    Id = ObjectId.Parse("fd9fb3db27402da79fe66515"), NhsLoginId = "NhsLoginId", Sender = "NotSender", ReadTime = null
+                },
+                new UserMessage
+                {
+                    Id = ObjectId.Parse("fd9fb3db27402da79fe66515"), NhsLoginId = "NhsLoginId", Sender = "Sender", ReadTime = null
+                },
+                new UserMessage
+                {
+                    Id = ObjectId.Parse("fd9fb3db27402da79fe66515"), NhsLoginId = "NhsLoginId", Sender = "Sender", ReadTime = DateTime.Now
+                }
+            };
+
             // Act
-            var result = await _systemUnderTest.UpdateOne("NhsLoginId", "fd9fb3db27402da79fe66515", new UpdateRecordBuilder<UserMessage>());
+            var result = await _systemUnderTest.UpdateOne(
+                "NhsLoginId",
+                "fd9fb3db27402da79fe66515",
+                (filters, new UpdateRecordBuilder<UserMessage>()));
+
+            var filteredMessages = messagesToFilter.Where(combinedFilter.Compile());
 
             // Assert
             result.Should().BeOfType<RepositoryUpdateResult<UserMessage>.Updated>();
+            filteredMessages.Should().HaveCount(1);
+            filteredMessages.First().ReadTime.Should().NotBeNull();
 
             VerifyAll();
         }

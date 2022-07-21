@@ -9,6 +9,7 @@ import config.Config
 import org.bson.Document
 import org.bson.conversions.Bson
 import org.bson.json.JsonWriterSettings
+import org.bson.types.ObjectId
 import org.junit.Assert
 import pages.ELEMENT_RETRY_TIME
 import pages.MILLISECONDS_IN_A_SECOND
@@ -31,7 +32,8 @@ class MongoDBConnection(private val collectionName: String, private val host: St
     }
 
     fun <T> getValues(type: Type): List<T> {
-        val gsonBuilder = GsonBuilder().create()
+        val gsonBuilder = GsonBuilder().registerTypeAdapter(ObjectId::class.java, ObjectIdTypeAdapter() )
+            .create()
         return onCollection { collection ->
             val documents = collection.find()
             documents.map {

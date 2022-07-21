@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
@@ -159,7 +160,8 @@ namespace NHSOnline.Backend.Messages.Repository
 
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
             "Method ‘CompareOrdinal’ is not supported in repository")]
-        public async Task<RepositoryUpdateResult<UserMessage>> UpdateOne(string nhsLoginId, string messageId, UpdateRecordBuilder<UserMessage> updates)
+        public async Task<RepositoryUpdateResult<UserMessage>> UpdateOne(string nhsLoginId, string messageId,
+            (List<Expression<Func<UserMessage, bool>>> filters, UpdateRecordBuilder<UserMessage> updates) filtersAndUpdates)
         {
             try
             {
@@ -172,9 +174,37 @@ namespace NHSOnline.Backend.Messages.Repository
 
                 var id = ObjectId.Parse(messageId);
 
-                return await _repository.Update(m => m.Id == id && m.NhsLoginId == nhsLoginId,
-                        updates,
-                        RecordName);
+                Expression<Func<UserMessage, bool>> userMessageFilter = userMessage =>
+                    userMessage.Id == id && userMessage.NhsLoginId == nhsLoginId;
+
+                var (filters, updates) = filtersAndUpdates;
+                foreach (var filter in filters)
+                {
+                    // We need to traverse the filter expression and replace the UserMessage instance used in the body
+                    // with the instance passed into the userMessageFilter expression.  This step is required so we
+                    // can combine the expressions into a single expression
+                    //
+                    // Example:
+                    // Combining expressions:
+                    //          a => a.Id == "abc" and b => b.NhsLoginId == "def"
+                    // results in combined expression:
+                    //          a => a.Id == "abc" && b.NhsLoginId == "def"
+                    // We must modify this expression to remove the reference to instance b:
+                    //          a => a.Id == "abc" && a.NhsLoginId == "def"
+                    // See stackoverflow https://stackoverflow.com/a/71721612
+
+                    var filterUserMessageInstance = filter.Parameters[0];
+                    var exprUserMessageInstance = userMessageFilter.Parameters[0];
+                    var filterBody = ExpressionModifier.Replace(
+                        filter.Body, filterUserMessageInstance, exprUserMessageInstance);
+
+                    var combinedExpression = Expression.AndAlso(
+                        userMessageFilter.Body,
+                        filterBody);
+                    userMessageFilter = Expression.Lambda<Func<UserMessage,bool>>(combinedExpression, userMessageFilter.Parameters[0]);
+                }
+
+                return await _repository.Update(userMessageFilter, updates, RecordName);
             }
             finally
             {

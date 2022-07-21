@@ -4,6 +4,9 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.InvalidAccessTokenTester
+import mongodb.MongoDBConnection
+import mongodb.MongoRepositoryMessage
+import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.messages.MessageRequest
@@ -15,6 +18,13 @@ class MessagesPatchStepDefinitionsBackend {
         val factory = MessagesFactory()
         factory.setUpUser()
         factory.setUpSingleUnreadMessage()
+    }
+
+    @Given("^I am an api user with a read message$")
+    fun iAmAnApiUserWithAReadMessage() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleReadMessage()
     }
 
     @When("^I patch the message to indicate that it has been read$")
@@ -42,6 +52,15 @@ class MessagesPatchStepDefinitionsBackend {
     fun theMessageIsAvailableInTheDatabase() {
         val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
         MessagesRepository.assertSingleMessageInRepository(expectedMessage, read = true)
+    }
+
+    @Then("^the message has not been updated in the repository$")
+    fun theMessagesHasNotBeenUpdatedInTheDatabase() {
+        val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MongoRepositoryMessage>()
+        val message = MongoDBConnection.MessagesCollection
+            .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+            .first()
+        Assert.assertEquals(expectedMessage.ReadTime, message.ReadTime)
     }
 }
 

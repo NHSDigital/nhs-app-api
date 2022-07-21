@@ -130,6 +130,13 @@ Feature: Messages Backend
     When I patch the message to indicate that it has been read without an access token
     Then I receive an "internal server error" error
 
+  Scenario: An api user cannot mark a message as read that had already been read
+    Given I am an api user with a read message
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been read
+    Then I receive a "Not Found" success code
+    And the message has not been updated in the repository
+
   Scenario: An api user attempting to mark a message as read with an invalid access token will receive a 401
     Given I am an api user with an unread message
     And I have logged in and have a valid session cookie

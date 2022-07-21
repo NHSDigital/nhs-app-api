@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -75,14 +77,24 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 Id = new ObjectId("ae0b4ffd40c44828b884961b5228128e")
             };
 
+            var messagesToFilter = new List<UserMessage>
+            {
+                new UserMessage{ NhsLoginId = "NhsLoginIdNullReadTime", ReadTime = null },
+                new UserMessage{ NhsLoginId = "NhsLoginIdNonNullReadTime", ReadTime = DateTime.Now}
+            };
+
             _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
 
+            List<Expression<Func<UserMessage, bool>>> filters = null;
+
             _mockMessageRepository.Setup(x => x.UpdateOne(
                     _accessToken.Subject,
                     _userMessageId,
-                    It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
+                .Callback<string, string, (List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>(
+                    (nhsLoginId, messageId, thing) => filters = thing.Item1)
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
 
             _mockMessageRepository
@@ -95,6 +107,12 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             // Assert
             _mockMessagesValidationService.VerifyAll();
             _mockMessageRepository.VerifyAll();
+
+            filters.Should().HaveCount(1);
+
+            var filteredMessages = messagesToFilter.Where(filters.First().Compile());
+            filteredMessages.Should().HaveCount(1);
+            filteredMessages.Should().Contain(u => u.NhsLoginId == "NhsLoginIdNullReadTime");
 
             var subject =  result.Should().BeAssignableTo<MessagePatchResult.Updated>().Subject;
             subject.UserMessage.Should().Be(userMessage);
@@ -133,7 +151,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Returns(true);
 
             _mockMessageRepository.Setup(x =>
-                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .Throws(new MongoException("Test"));
 
             // Act
@@ -157,7 +176,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Returns(true);
 
             _mockMessageRepository.Setup(x =>
-                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.RepositoryError());
 
             // Act
@@ -181,7 +201,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Returns(true);
 
             _mockMessageRepository.Setup(x =>
-                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.NotFound());
 
             // Act
@@ -205,7 +226,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Returns(true);
 
             _mockMessageRepository.Setup(x =>
-                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.NoChange());
 
             // Act
@@ -231,7 +253,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _mockMessageRepository.Setup(x => x.UpdateOne(
                     _accessToken.Subject,
                     _userMessageId,
-                    It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
 
             _mockMessageRepository
@@ -261,7 +283,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _mockMessageRepository.Setup(x => x.UpdateOne(
                     _accessToken.Subject,
                     _userMessageId,
-                    It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
 
             _mockMessageRepository
@@ -291,7 +313,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _mockMessageRepository.Setup(x => x.UpdateOne(
                     _accessToken.Subject,
                     _userMessageId,
-                    It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                    It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
                 .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
 
             _mockMessageRepository

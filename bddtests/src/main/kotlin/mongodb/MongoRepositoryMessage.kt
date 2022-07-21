@@ -1,5 +1,6 @@
 package mongodb
 
+import org.bson.types.ObjectId
 import worker.models.messages.SingleMessageFacade
 import java.time.ZonedDateTime
 
@@ -8,7 +9,8 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
                                   val Version: Int,
                                   val Body: String,
                                   val ReadTime: String?,
-                                  val SenderContext: MongoRepositoryMessageSenderContext?) {
+                                  val SenderContext: MongoRepositoryMessageSenderContext?,
+                                  val _id: ObjectId?) {
     companion object {
         // We cannot serialise an object to create this because the ISODate objects cannot be created like that.
         fun createJson(message: SingleMessageFacade, nhsLoginId: String): String {
@@ -19,6 +21,7 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
                 else ""
 
             return "{" +
+                    "\"_id\" : ObjectId(\"${ObjectId().toHexString()}\")," +
                     "\"_ts\" : ISODate(\"${message.sentTime}\")," +
                     "\"NhsLoginId\" : \"${nhsLoginId}\"," +
                     "\"Sender\" : \"${message.sender}\"," +
