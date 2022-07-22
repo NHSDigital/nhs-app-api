@@ -3,6 +3,7 @@ import NativeApp from '@/services/native-app';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import biometricActions from '@/lib/biometrics/biometricActions';
 import biometricRegistrationOutcomes from '@/lib/biometrics/biometricRegistrationOutcomes';
+import { BIOMETRICS_REGISTRATION_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
 import {
   SET_WAITING,
@@ -100,6 +101,10 @@ export default {
           // do nothing as this is just logging
         }
         commit(UPDATE_REGISTRATION_STATUS, false);
+      }
+
+      if (this.app.$router.currentRoute.name === BIOMETRICS_REGISTRATION_NAME) {
+        NativeApp.goToLoggedInHomeScreen();
       }
     }
   },

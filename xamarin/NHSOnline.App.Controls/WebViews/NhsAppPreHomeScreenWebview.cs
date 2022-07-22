@@ -27,6 +27,12 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty GetNotificationsStatusCommandProperty =
             BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty FetchBiometricStatusCommandProperty =
+            BindableProperty.Create(nameof(FetchBiometricStatusCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
+
+        public static readonly BindableProperty UpdateBiometricRegistrationCommandProperty =
+            BindableProperty.Create(nameof(UpdateBiometricRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
+
         public static readonly BindableProperty RequestPnsTokenCommandProperty =
             BindableProperty.Create(nameof(RequestPnsTokenCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
 
@@ -50,6 +56,36 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(GetNotificationsStatusCommandProperty);
             set => SetValue(GetNotificationsStatusCommandProperty, value);
+        }
+
+        public void FetchBiometricStatus(string accessToken) => FetchBiometricStatusCommand.Execute(accessToken);
+
+        public AsyncCommand<string> FetchBiometricStatusCommand
+        {
+            get => (AsyncCommand<string>)GetValue(FetchBiometricStatusCommandProperty);
+            set => SetValue(FetchBiometricStatusCommandProperty, value);
+        }
+
+        public void UpdateBiometricRegistration(string argument) => UpdateBiometricRegistrationCommand.Execute(argument);
+
+        public AsyncCommand<string> UpdateBiometricRegistrationCommand
+        {
+            get => (AsyncCommand<string>)GetValue(UpdateBiometricRegistrationCommandProperty);
+            set => SetValue(UpdateBiometricRegistrationCommandProperty, value);
+        }
+
+        public async Task SendBiometricStatus(BiometricStatus biometricStatus)
+        {
+            const string callbackName = "window.nativeAppCallbacks.biometricStatus";
+            var jsonArgument = ConvertToJsonString(biometricStatus);
+            await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
+        }
+
+        public async Task SendBiometricCompletion(BiometricCompletion biometricCompletion)
+        {
+            const string callbackName = "window.nativeAppCallbacks.loginSettingsPreHomeBiometricCompletion";
+            var jsonArgument = ConvertToJsonString(biometricCompletion);
+            await EvaluateJavaScriptAsync($"{callbackName}({jsonArgument})").ResumeOnThreadPool();
         }
 
         public async Task SendNotificationsStatus(string status)

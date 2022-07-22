@@ -112,7 +112,6 @@ export default {
     const loading = new Promise((resolve) => {
       resolveTask = resolve;
     });
-
     NativeApp.getNotificationsStatus();
     return loading;
   },

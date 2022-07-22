@@ -196,6 +196,8 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('biometrics/showBiometricSpinner', false);
+
     this.$store.dispatch('session/updateLastCalledAt');
 
     NativeVersionSetup(this.$store);

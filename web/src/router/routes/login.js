@@ -6,10 +6,12 @@ import TermsAndConditionsPage from '@/pages/terms-and-conditions';
 import UserResearchPage from '@/pages/user-research';
 import Notifications from '@/pages/notifications/index';
 import NotificationsGenericError from '@/pages/notifications/notifications-generic-error';
+import Biometrics from '@/pages/biometrics';
 
 import {
   AUTH_RETURN_PATH,
   BEGINLOGIN_PATH,
+  BIOMETRICS_REGISTRATION_PATH,
   LOGIN_BIOMETRIC_ERROR_PATH,
   LOGIN_PATH,
   NOTIFICATIONS_GENERIC_FAILURE_PATH,
@@ -21,6 +23,7 @@ import {
 import {
   AUTH_RETURN_NAME,
   BEGINLOGIN_NAME,
+  BIOMETRICS_REGISTRATION_NAME,
   LOGIN_BIOMETRIC_ERROR_NAME,
   LOGIN_NAME,
   NOTIFICATIONS_GENERIC_FAILURE_NAME,
@@ -32,6 +35,7 @@ import {
 
 import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
 import notificationsPrompt from '@/middleware/notificationsPrompt';
+import biometricRegistrationPrompt from '@/middleware/biometricRegistrationPrompt';
 import nativeLogout from '@/middleware/nativeLogout';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
@@ -165,6 +169,19 @@ export const NOTIFICATIONS_GENERIC_ERROR = {
   },
 };
 
+export const BIOMETRICS = {
+  path: BIOMETRICS_REGISTRATION_PATH,
+  name: BIOMETRICS_REGISTRATION_NAME,
+  component: Biometrics,
+  meta: {
+    headerKey: 'navigation.pages.headers.biometricsRegistration',
+    titleKey: 'navigation.pages.headers.biometricsRegistration',
+    middleware: [biometricRegistrationPrompt],
+    proofLevel: proofLevel.P5,
+    crumb: {},
+  },
+};
+
 export default [
   LOGIN,
   LOGIN_BIOMETRIC_ERROR,
@@ -175,4 +192,5 @@ export default [
   USER_RESEARCH,
   NOTIFICATIONS,
   NOTIFICATIONS_GENERIC_ERROR,
+  BIOMETRICS,
 ];

@@ -146,6 +146,8 @@ spec:
           value: "false"
         - name: QUALTRICS_SURVEY_ENABLED
           value: "{{ $.Values.web.qualtricsSurveyEnabled }}"
+        - name: BIOMETRICS_REGISTRATION_ENABLED
+          value: "{{ $.Values.web.biometricsRegistrtionEnabled }}"
         - name: CE_MARK_ENABLED
           value: "false"
         - name: SESSION_EXPIRING_WARNING_SECONDS

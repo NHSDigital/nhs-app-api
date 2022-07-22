@@ -1,6 +1,6 @@
 import actions from '@/store/modules/loginSettings/actions';
 import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
-import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME } from '@/router/names';
+import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME, BIOMETRICS_REGISTRATION_NAME } from '@/router/names';
 import NativeApp from '@/services/native-app';
 import { SET_WAITING,
   CLEAR_ERROR_CODE,
@@ -178,9 +178,18 @@ describe('loginSettings actions', () => {
   describe('biometricCompletion', () => {
     describe('register', () => {
       let commit;
+      let $router;
       const deviceResponse =
         { action: 'Register', outcome: 'Success', errorCode: '' };
       beforeEach(() => {
+        $router = createRouter(BIOMETRICS_REGISTRATION_NAME);
+        actions.app = {
+          $router,
+          $http: {
+            postV1ApiMetricsBiometricsOptIn: jest.fn(() => Promise.resolve()),
+            postV1ApiMetricsBiometricsOptOut: jest.fn(() => Promise.resolve()),
+          },
+        };
         commit = jest.fn();
         actions.biometricCompletion({ commit }, deviceResponse);
       });

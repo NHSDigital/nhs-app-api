@@ -1,6 +1,7 @@
 import Notifications from '@/pages/notifications/index';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
-import { createStore, mount } from '../../helpers';
+import { createRouter, createStore, mount } from '../../helpers';
+import { BIOMETRICS_REGISTRATION_PATH } from '@/router/paths';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -8,15 +9,18 @@ jest.mock('@/services/event-bus', () => ({
 }));
 
 describe('notifications prompt page', () => {
+  let $router;
   let $store;
   let wrapper;
   let conditionalRedirect;
 
   const mountPage = ({ state }) => {
+    $router = createRouter();
     $store = createStore({ state });
     conditionalRedirect = jest.fn();
 
     return mount(Notifications, {
+      $router,
       $store,
       stubs: {
         'no-return-flow-layout': '<div><slot/></div>',
@@ -126,7 +130,7 @@ describe('notifications prompt page', () => {
       });
 
       it('will call conditional redirect', () => {
-        expect(conditionalRedirect).toBeCalled();
+        expect($router.push).toBeCalledWith({ path: BIOMETRICS_REGISTRATION_PATH });
       });
     });
 
@@ -169,7 +173,7 @@ describe('notifications prompt page', () => {
       });
 
       it('will call conditional redirect', () => {
-        expect(conditionalRedirect).toBeCalled();
+        expect($router.push).toBeCalledWith({ path: BIOMETRICS_REGISTRATION_PATH });
       });
     });
   });

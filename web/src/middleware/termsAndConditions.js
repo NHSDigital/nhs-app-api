@@ -9,6 +9,8 @@ import { createConditionalRedirectRouteByName } from '@/lib/utils';
 export default async (context) => {
   const { to, store, next } = context;
 
+  await store.dispatch('loginSettings/fetchBiometricStatus');
+
   if (isAnonymous(to)) {
     return next();
   }

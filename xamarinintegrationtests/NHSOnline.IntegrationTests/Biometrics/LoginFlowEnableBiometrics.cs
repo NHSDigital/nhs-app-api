@@ -3,27 +3,23 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.Home.Biometrics;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.Android.More;
-using NHSOnline.IntegrationTests.Pages.Android.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
-using NHSOnline.IntegrationTests.Pages.IOS.More;
-using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings;
 using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings.Biometrics;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Notifications
+namespace NHSOnline.IntegrationTests.Biometrics
 {
     [TestClass]
-    [BusinessRule("BR-NOT-03.7", "Continuing without enabling notifications on the notifications prompt continues on without enabling notifications on the device")]
-    public class LoginFlowContinuingWithoutEnablingNotificationsTests
+    public class LoginFlowEnableBiometrics
     {
         [NhsAppAndroidTest]
-        public void APatientCanChooseToNotEnableNotificationsDuringTheLoginFlowAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanEnableBiometricsDuringTheLoginFlowAndroid(
+            IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+                .WithName(b => b.GivenName("Jack").FamilyName("Potts"));
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -54,30 +50,11 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .Continue();
 
             AndroidFingerprintFaceIrisPromptPage
-                .AssertOnPage(driver)
-                .PageContent
-                .NoTurnOffBiometrics()
-                .Continue();
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.NavigateToMore();
-
-            AndroidMorePage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToAccountAndSettings();
-
-            AndroidAccountSettingsPage
-                .AssertOnPage(driver)
-                .PageContent.NavigateToNotifications();
-
-            AndroidNotificationsPage
-                .AssertOnPage(driver)
-                .PageContent.AssertNotificationsDisabled();
+                .AssertOnPage(driver);
         }
 
-        [NhsAppIOSTest]
-        public void APatientCanChooseToNotEnableNotificationsDuringTheLoginFlowIos(IIOSDriverWrapper driver)
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
+        public void APatientCanEnableFaceBiometricsDuringTheLoginFlowIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -112,25 +89,46 @@ namespace NHSOnline.IntegrationTests.Notifications
 
             IOSFacePromptPage
                 .AssertOnPage(driver)
-                .PageContent
-                .NoTurnOffBiometrics()
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone8, OSVersion = IOSVersion.Thirteen)]
+        public void APatientCanEnableTouchBiometricsDuringTheLoginFlowIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver)
                 .Continue();
 
-            IOSLoggedInHomePage
+            IOSStubbedLoginPage
                 .AssertOnPage(driver)
-                .Navigation.NavigateToMore();
+                .PageContent.Login(patient);
 
-            IOSMorePage
+            IOSTermsAndConditionsPage
                 .AssertOnPage(driver)
-                .NavigateToAccountAndSettings();
+                .PageContent.AcceptTermsAndConditions();
 
-            IOSAccountSettingsPage
+            IOSUserResearchOptInPage
                 .AssertOnPage(driver)
-                .NavigateToNotificationsSettings();
+                .PageContent.OptInToUserResearch();
 
-            IOSNotificationsPage
+            IOSManageNotificationsPromptPage
                 .AssertOnPage(driver)
-                .PageContent.AssertNotificationsDisabled();
+                .PageContent
+                .AssertPageContent()
+                .NoDontSendNotifications()
+                .Continue();
+
+            IOSTouchPromptPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
         }
     }
 }

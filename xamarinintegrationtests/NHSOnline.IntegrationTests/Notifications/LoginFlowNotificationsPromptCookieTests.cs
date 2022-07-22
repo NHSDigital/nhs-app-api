@@ -1,9 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.Home.Biometrics;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
+using NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings.Biometrics;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -45,6 +47,12 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .PageContent
                 .AssertPageContent()
                 .NoDontSendNotifications()
+                .Continue();
+
+            AndroidFingerprintFaceIrisPromptPage
+                .AssertOnPage(driver)
+                .PageContent
+                .NoTurnOffBiometrics()
                 .Continue();
 
             AndroidLoggedInHomePage
@@ -97,6 +105,12 @@ namespace NHSOnline.IntegrationTests.Notifications
                 .PageContent
                 .AssertPageContent()
                 .NoDontSendNotifications()
+                .Continue();
+
+            IOSFacePromptPage
+                .AssertOnPage(driver)
+                .PageContent
+                .NoTurnOffBiometrics()
                 .Continue();
 
             IOSLoggedInHomePage

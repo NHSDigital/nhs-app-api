@@ -55,6 +55,7 @@ import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectMixin from '@/components/RedirectMixin';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
+import { BIOMETRICS_REGISTRATION_PATH } from '@/router/paths';
 import get from 'lodash/fp/get';
 
 export default {
@@ -146,7 +147,7 @@ export default {
       }
 
       if (!this.$store.state.notifications.notificationCommunicationError) {
-        this.conditionalRedirect();
+        this.$router.push({ path: BIOMETRICS_REGISTRATION_PATH, query: this.$route.query });
       }
     },
     getFirstChoiceValue(choicesName) {

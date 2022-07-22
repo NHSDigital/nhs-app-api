@@ -11,6 +11,10 @@ const NativeAppCallbacksPlugin = {
       loginSettingsBiometricCompletion(biometricCompletionDetails) {
         store.dispatch('loginSettings/biometricCompletion', biometricCompletionDetails);
       },
+      loginSettingsPreHomeBiometricCompletion(biometricCompletionDetails) {
+        store.dispatch('biometrics/showBiometricSpinner', false);
+        store.dispatch('loginSettings/biometricCompletion', biometricCompletionDetails);
+      },
       biometricStatus(biometricStatus) {
         store.dispatch('loginSettings/biometricStatus', biometricStatus);
       },

@@ -40,6 +40,7 @@ export const APPOINTMENT_BOOKING_SUCCESS_PATH = 'appointments/gp-appointments/bo
 export const APPOINTMENT_ADD_TO_CALENDAR_PATH = 'appointments/gp-appointments/add-to-calendar-interrupt';
 export const APPOINTMENT_GP_AT_HAND_PATH = 'appointments/gp-at-hand';
 export const APPOINTMENT_INFORMATICA_PATH = 'appointments/informatica';
+export const BIOMETRICS_REGISTRATION_PATH = '/biometrics-registration';
 export const DATA_SHARING_OVERVIEW_PATH = 'data-sharing';
 export const DATA_SHARING_WHERE_USED_PATH = 'data-sharing/where-used';
 export const DATA_SHARING_DOES_NOT_APPLY_PATH = 'data-sharing/does-not-apply';

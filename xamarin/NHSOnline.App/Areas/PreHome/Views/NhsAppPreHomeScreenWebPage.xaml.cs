@@ -39,6 +39,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public AsyncCommand GetNotificationsStatusCommand
             => new AsyncCommand(() => GetNotificationsStatusRequested);
 
+        public Func<string, Task>? FetchBiometricStatusRequested { get; set; }
+        public AsyncCommand<string> FetchBiometricStatusCommand
+            => new AsyncCommand<string>(() => FetchBiometricStatusRequested);
+
+        public Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
+        public AsyncCommand<string> UpdateBiometricRegistrationCommand
+            => new AsyncCommand<string>(() => UpdateBiometricRegistrationRequested);
+
         public Func<string, Task>? GetPnsTokenRequested { get; set; }
         public AsyncCommand<string> RequestPnsTokenCommand
             => new AsyncCommand<string>(() => GetPnsTokenRequested);
@@ -163,6 +171,12 @@ namespace NHSOnline.App.Areas.PreHome.Views
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+
+        public async Task SendBiometricStatus(BiometricStatus biometricStatus)
+            => await WebView.SendBiometricStatus(biometricStatus).ResumeOnThreadPool();
+
+        public async Task SendBiometricCompletion(BiometricCompletion completionDetails)
+            => await WebView.SendBiometricCompletion(completionDetails).ResumeOnThreadPool();
 
         public async Task SendNotificationsStatus(string status)
             => await WebView.SendNotificationsStatus(status).ResumeOnThreadPool();

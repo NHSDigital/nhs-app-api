@@ -8,6 +8,9 @@ users:
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch17
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch17
 
+web:
+  biometricsRegistrtionEnabled: true
+
 secrets:
   notificationHubs:
     - name: "notificationHubSharedAccessKey-nonlive-scratch17"

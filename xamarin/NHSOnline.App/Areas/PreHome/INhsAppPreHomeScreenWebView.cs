@@ -16,8 +16,9 @@ namespace NHSOnline.App.Areas.PreHome
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Uri, Task>? NavigationFailed { get; set; }
             Action<WebViewPageNavigationEventArgs>? PageLoadComplete { get; set; }
-
             Func<Task>? GetNotificationsStatusRequested { get; set; }
+            Func<string, Task>? FetchBiometricStatusRequested { get; set; }
+            Func<string, Task>? UpdateBiometricRegistrationRequested { get; set; }
             Func<Task>? GoToLoggedInHomeRequested { get; set; }
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }
@@ -29,6 +30,8 @@ namespace NHSOnline.App.Areas.PreHome
 
         Task<Uri?> GetCurrentWebViewUrl();
         void GoToUri(Uri uri);
+        Task SendBiometricStatus(BiometricStatus biometricStatus);
+        Task SendBiometricCompletion(BiometricCompletion completionDetails);
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();

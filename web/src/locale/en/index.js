@@ -29,6 +29,7 @@ import adviceCheck from './adviceCheck';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 import userResearch from './userResearch';
+import biometricsRegistration from './biometricsRegistration';
 import wayfinder from './wayfinder';
 
 export default {
@@ -66,5 +67,6 @@ export default {
   termsAndConditions,
   thirdPartyProviders,
   userResearch,
+  biometricsRegistration,
   wayfinder,
 };

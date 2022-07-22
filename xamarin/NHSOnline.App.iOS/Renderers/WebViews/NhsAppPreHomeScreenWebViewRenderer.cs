@@ -19,6 +19,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (NhsAppPreHomeScreenWebview)Element, "nativeApp")
                 .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatus)
+                .AddFunction("fetchBiometricStatus", webView => webView.FetchBiometricStatus)
+                .AddFunction("updateBiometricRegistrationWithToken", webView => webView.UpdateBiometricRegistration)
                 .AddFunction("requestPnsToken", webView => webView.RequestPnsToken)
                 .AddFunction("goToLoggedInHomeScreen", webView => webView.GoToLoggedInHomeScreen)
                 .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
