@@ -16,9 +16,6 @@
             "contentString": "You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)"
         }
     ],
-    "sender": {
-        "display": "Onboarded Third Party"
-    },
     "recipient": [
         {
             "type": "Patient",

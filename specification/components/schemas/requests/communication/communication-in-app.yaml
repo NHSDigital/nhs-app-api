@@ -4,8 +4,8 @@ required:
   - resourceType
   - status
   - payload
-  - sender
   - recipient
+  - requester
 properties:
   resourceType:
     type: string
@@ -52,18 +52,6 @@ properties:
       properties:
         contentString:
           $ref: ../../Markdown.yaml
-  sender:
-    type: object
-    description: The sender of the in-app message. This field will be deprecated in a future release of the API, to be replaced by the `requester` field.
-    required:
-      - display
-    properties:
-      display:
-        type: string
-        description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
-        maxLength: 50
-        pattern: must not match <(.|\n)*?>
-        example: Onboarded Third Party
   recipient:
     type: array
     description:
@@ -96,7 +84,7 @@ properties:
               example: "9903002157"
   requester:
     type: object
-    description: The requester who initiated the communication and would like to send an in-app message to the patient. This field is currently ignored but will be used in a future release of the API, replacing the `sender` field.
+    description: The requester who initiated the communication and would like to send an in-app message to the patient.
     properties:
       type:
         type: string

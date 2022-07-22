@@ -72,7 +72,7 @@ info:
     Our development environment:
     * includes authorisation
     * is for initial development and [integration testing](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing)
-    * points to the Onboarding Sandpit NHS App environment, which in turn is using the NHS Login Sandpit environment
+    * points to the [Onboarding Sandpit NHS App environment](https://www-onboardingsandpit.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Sandpit environment
 
     We have created a [Postman collection](https://github.com/NHSDigital/nhs-app-api/tree/master/postman) during internal development and testing of the API, which you may find useful when working with this environment.
 
@@ -82,7 +82,7 @@ info:
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
     * includes authorisation
     * is for formal release testing and assurance when onboarding with NHS Login
-    * points to the Onboarding AOS NHS App environment, which in turn is using the NHS Login Integration (AOS) environment
+    * points to the [Onboarding AOS NHS App environment](https://www-onboardingaos.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Integration (AOS) environment
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
@@ -129,8 +129,6 @@ paths:
         If a recipient is an active NHS App user but has not registered a device to receive native push notifications, they will still receive the in-app message.
 
         This endpoint allows you to specify the content that will appear in the in-app message. It does not allow you to specify the content that will appear in the associated push notification. By default, the content of the associated push notification will read "NHS App. You have a new message." To discuss changing this standard push notification content for your application, [contact the NHS App team](mailto:app.onboarding@nhs.net).
-        
-        We are considering an improvement that would include message sender names in associated push notifications. This may be of benefit if your application sends communications on behalf of several NHS organisations. You can track, comment, and vote for this feature on our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/suggestions/204132/nhs-app-api-allow-push-notification-content-to-include-the-message-sender-name).
         
         When a recipient taps the native notification, the NHS App will open on the in-app messaging inbox page.
 
@@ -197,8 +195,8 @@ paths:
                   summary: Too many recipients have been specified
                   value:
                     $ref: components/examples/responses/communication/400tooManyRecipients.json   
-                sender-missing-and-campaign-id-too-long:
-                  summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
+                no-recipient-and-campaign-id-too-long:
+                  summary: Multiple issues - no recipient has been specified and campaign ID exceeds maximum length
                   value:
                     $ref: components/examples/responses/communication/400multipleIssues.json
                 invalid-requester:
@@ -344,8 +342,8 @@ paths:
                   summary: Too many recipients have been specified
                   value:
                     $ref: components/examples/responses/communication/400tooManyRecipients.json
-                sender-missing-and-campaign-id-too-long:
-                  summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
+                no-recipient-and-campaign-id-too-long:
+                  summary: Multiple issues - no recipient has been specified and campaign ID exceeds maximum length
                   value:
                     $ref: components/examples/responses/communication/400multipleIssues.json
         "401":
