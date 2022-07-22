@@ -1,8 +1,8 @@
 export default {
   appointments: {
     whatYouCanDoNext: 'What you can do next',
-    gpAppointmentBookingUnavailable: 'Sorry, GP appointment booking is unavailable',
+    gpAppointmentBookingUnavailable: 'Cannot book GP appointments online',
     youCannotBookOnline: 'You are not currently able to book and manage GP appointments online.',
-    ifTheProblemContinues: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice go to ',
+    ifTheProblemContinues: 'If you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to ',
   },
 };

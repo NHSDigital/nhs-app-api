@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidCreateSessionOdsCodeNotSupportedErrorPage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Login failed");
+        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Cannot access NHS App in your area");
 
         private AndroidLabel IfNotRegisteredOrArmedForceText => AndroidLabel
             .WithText(

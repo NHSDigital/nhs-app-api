@@ -72,8 +72,8 @@ export default {
       theAppointmentIsNoLongerAvailable: 'This appointment is no longer available',
       thereIsAProblem: 'There\'s a problem',
       youCanGoBack: 'You can go back to see what you have already booked and cancel any appointments that you may no longer need.',
-      youCannotBookAnyMore: 'You cannot book any more appointments right now.',
-      youHaveReachedYourAppoinmentLimit: 'Sorry, you have reached your GP appointment limit',
+      youCannotBookAnyMore: 'Your GP surgery only allows a certain number of appointments to be booked through your account.',
+      youHaveReachedYourAppoinmentLimit: 'Cannot book any more appointments right now',
     },
     giveAReason: {
       giveAReason: 'Give a reason for this appointment',

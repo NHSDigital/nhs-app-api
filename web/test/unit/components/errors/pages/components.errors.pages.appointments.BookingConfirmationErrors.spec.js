@@ -55,7 +55,7 @@ describe('BookingConfirmationErrors', () => {
       });
 
       it('will explain to the user how to get urgent help', () => {
-        expect(content.at(1).text()).toContain('If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice go to ');
+        expect(content.at(1).text()).toContain('If you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to ');
       });
 
       it('will contain the nhs 111 link text', () => {

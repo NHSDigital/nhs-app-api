@@ -175,6 +175,11 @@ describe('authReturn layout', () => {
         expect(wrapper.findAll('a').length).toBe(5);
       });
 
+      it('will have the title', () => {
+        const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        expect(head.title).toBe('Cannot access NHS App in your area - NHS App');
+      });
+
       describe('hyperlinks', () => {
         let covidPass;
         let myHealthOnlineLink;
@@ -508,6 +513,7 @@ describe('authReturn layout', () => {
       [469, 'Cannot log in'],
       [502, 'Cannot log in'],
       [504, 'Cannot log in'],
+      [464, 'Cannot access NHS App in your area'],
     ])('on error %i the heading content of h1 should be %s', (status, headingTitle) => {
       beforeEach(() => {
         wrapper = mountAuthReturnLayout({ status });

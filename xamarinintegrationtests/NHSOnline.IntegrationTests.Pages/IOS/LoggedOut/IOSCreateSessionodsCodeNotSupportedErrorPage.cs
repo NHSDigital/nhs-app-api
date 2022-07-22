@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSCreateSessionOdsCodeNotSupportedErrorPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Login failed");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot access NHS App in your area");
 
         private IOSLabel IfNotRegisteredOrArmedForceText => IOSLabel
             .WithText(

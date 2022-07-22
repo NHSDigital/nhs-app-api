@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         internal AppointmentBookingUnavailablePageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, GP appointment booking is unavailable");
+            "h1", "Cannot book GP appointment");
 
         private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
             "p", "You are not currently able to book and manage GP appointments online.");

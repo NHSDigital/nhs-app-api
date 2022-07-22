@@ -8,8 +8,8 @@ import pages.typeTextIntoTextArea
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
 open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     val notAvailableTitle = "This appointment is no longer available"
-    val reachedLimitTitle = "Sorry, you have reached your GP appointment limit"
-    val cannotBook = "You cannot book any more appointments right now."
+    val reachedLimitTitle = "Cannot book any more appointments right now"
+    val cannotBook = "Your GP surgery only allows a certain number of appointments to be booked through your account."
     val contactGp = "Contact your GP surgery if you still need to book an appointment."
     val cancelNoLongerNeeded = "You can go back to see what you have already booked and cancel any appointments " +
             "that you may no longer need."

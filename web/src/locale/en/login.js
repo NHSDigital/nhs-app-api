@@ -69,6 +69,7 @@ export default {
     ifYourSurgeryIsInNorthernIrelandOrScotland: 'If your GP surgery is in Northern Ireland or Scotland ',
     ifYourSurgeryIsInWales: 'If your GP surgery is in Wales',
     loginFailed: 'Login failed',
+    cannotAccessNhsAppInYourArea: 'Cannot access NHS App in your area',
     cannotLogin: 'Cannot log in',
     serviceUnavailable: 'The service is unavailable',
     thisMightBeATemporaryProblem: 'This might be a temporary problem.',

@@ -225,11 +225,11 @@ class YourAppointmentsStepDefinitions {
     @Then("^I see appropriate error message when appointments are disabled$")
     fun iSeeAppropriateErrorMessageWhenAppointmentsAreDisabled() {
 
-        appointmentForbiddenError.assertPageHeader("Sorry, GP appointment booking is unavailable")
+        appointmentForbiddenError.assertPageHeader("Cannot book GP appointments online")
                 .assertMenuListHeader("What you can do next")
                 .assertParagraphText("You are not currently able to book and manage GP appointments online.")
-                .assertParagraphText("If the problem continues and you need to book an appointment now, " +
-                        "contact your GP surgery directly. For urgent medical advice go to ")
+                .assertParagraphText("If you need to book an appointment now, " +
+                        "contact your GP surgery directly. For urgent medical advice, go to ")
         appointmentForbiddenError.assertNHS111Online()
     }
 
@@ -268,7 +268,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I see what I can do next with an error message and reference code '(.*)'$")
     fun iSeeGPAppointmentsUnavailable(prefix: String){
-        appointmentGpSessionError.assertPageHeader("Sorry, GP appointment booking is unavailable")
+        appointmentGpSessionError.assertPageHeader("Cannot book GP appointment")
                 .assertReferenceCode(prefix)
                 .assertMenuListHeader("What you can do next")
                 .assertParagraphText("You are not currently able to book and manage GP appointments online.")
@@ -280,7 +280,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I am shown a message and a list of actions I can perform$")
     fun iSeeGPAppointmentsUnavailableOptions(){
-        appointmentGpSessionError.assertPageHeader("Sorry, GP appointment booking is unavailable")
+        appointmentGpSessionError.assertPageHeader("Cannot book GP appointment")
             .assertMenuListHeader("What you can do next")
             .assertParagraphText("You are not currently able to book and manage GP appointments online.")
             .assertParagraphText("If you need to book an appointment now, contact your GP surgery.")

@@ -13,7 +13,7 @@
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="Login failed" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot access NHS App in your area" x:Name="Heading" />
 
                 <StackLayout>
                     <elements:Paragraph Text="If you’re not registered with a GP surgery in England, or you’re a member of the armed forces, you may still be able to get an NHS COVID Pass or proof of vaccination status." />

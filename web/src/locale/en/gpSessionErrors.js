@@ -2,7 +2,7 @@ export default {
   temporaryProblem: 'This may be a temporary problem.',
   appointments: {
     whatYouCanDoNext: 'What you can do next',
-    gpAppointmentBookingUnavailable: 'Sorry, GP appointment booking is unavailable',
+    gpAppointmentBookingUnavailable: 'Cannot book GP appointment',
     temporaryHeader: 'Sorry, there is a problem with GP appointment booking',
     temporaryProblem: 'This may be a temporary problem.',
     youCannotBookOnline: 'You are not currently able to book and manage GP appointments online.',

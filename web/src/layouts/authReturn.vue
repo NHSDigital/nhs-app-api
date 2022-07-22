@@ -23,10 +23,10 @@
                        :class="isNativeApp
                          ? 'pull-content nhsuk-u-padding-top-7'
                          : ''">
-                    <div v-if="statusCode===464">
+                    <shutter-container v-if="statusCode===464">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                            nhsuk-u-margin-bottom-0">
-                        {{ $t('login.authReturn.loginFailed') }} </h1>
+                        {{ $t('login.authReturn.cannotAccessNhsAppInYourArea') }} </h1>
                       <error-paragraph from="login.authReturn.ifYouAreNotRegisteredInEngland" />
                       <error-paragraph-with-links
                         from="login.authReturn.howToGetYourCovidPass" />
@@ -58,7 +58,7 @@
                                   target="_blank"
                                   :query-param="contactUsParam"
                                   :params="{errorCode: serviceDeskReference}"/>
-                    </div>
+                    </shutter-container>
                     <shutter-container v-else-if="statusCode===468">
                       <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                           nhsuk-u-margin-bottom-0">
@@ -323,6 +323,8 @@ export default {
         title = this.$t('login.authReturn.cannotLogin');
       } else if (this.statusCode === 500) {
         title = this.$t('login.authReturn.serviceUnavailable');
+      } else if (this.statusCode === 464) {
+        title = this.$t('login.authReturn.cannotAccessNhsAppInYourArea');
       } else {
         title = this.$t('login.authReturn.loginFailed');
       }
