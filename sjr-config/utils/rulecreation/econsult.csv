@@ -44,7 +44,6 @@ barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,gpbarkin
 barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,victoriamc,Victoria Medical Centre,F82034,5080
 barnet,Barnet,CCG,Barnet,North Central London,addingtonmedicalcentre,Addington Medical Centre,E83044,9428
 barnet,Barnet,CCG,Barnet,North Central London,brunswickparkmedicalpractice,Brunswick Park Medical Practice,E83621,8552
-barnet,Barnet,CCG,Barnet,North Central London,colindalemedicalcentre,Colindale Medical centre,E83637,9632
 barnet,Barnet,CCG,Barnet,North Central London,deanslanemedicalcentre,Deans Lane Medical Centre,E83668,4273
 barnet,Barnet,CCG,Barnet,North Central London,derwentmedical,Derwent Medical Centre,E83037,5634
 barnet,Barnet,CCG,Barnet,North Central London,eastbarnetgpsurgeries,East Barnet Health Centre,E83613,11522
@@ -308,7 +307,6 @@ dorset,Dorset,CCG,Dorset,Dorset,cerneabbassurgery,Cerne Abbas Surgery,J81053,400
 dorset,Dorset,CCG,Dorset,Dorset,christchurchmedicalpractice,Christchurch Medical Practice,J81056,21000
 dorset,Dorset,CCG,Dorset,Dorset,corfecastlesurgery,Corfe Castle Surgery,J81612,2624
 dorset,Dorset,CCG,Dorset,Dorset,providencesurgery,Crescent Providence Surgery,J81634,15647
-dorset,Dorset,CCG,Dorset,Dorset,denmarkroadmedicalcentre,Denmark Road Medical Centre,J81625,9711
 dorset,Dorset,CCG,Dorset,Dorset,doctornewman,Dr Newmans Surgery,J81648,4371
 dorset,Dorset,CCG,Dorset,Dorset,evergreenoaksurgery,Evergreen Oak Surgery,J81086,5766
 dorset,Dorset,CCG,Dorset,Dorset,fordingtonsurgery,Fordington Surgery,J81626,4600
@@ -357,8 +355,6 @@ dorset,Dorset,CCG,Dorset,Dorset,wellbridge,The Wellbridge Practice,J81025,6184
 dorset,Dorset,CCG,Dorset,Dorset,wimbornegp,Walford Mill Medical Centre,J81077,6500
 dorset,Dorset,CCG,Dorset,Dorset,warehamsurgery,Wareham Surgery,J81011,8074
 dorset,Dorset,CCG,Dorset,Dorset,wmgp,West Moors Group Practice,J81022,4926
-dorset,Dorset,CCG,Dorset,Dorset,westbournemedical,Westbourne Medical Centre,J81014,17602
-dorset,Dorset,CCG,Dorset,Dorset,wintonhealthcentre,Winton Health Centre,J81003,6663
 dorset,Dorset,CCG,Dorset,Dorset,woodleahouse-surgery,Woodlea House Surgery,J81633,3647
 dorset,Dorset,CCG,Dorset,Dorset,wykeregisandlanehousemedicalpractice,Wyke Regis and Lanehouse Medical Practice,J81051,11000
 dorset,Dorset,CCG,Dorset,Dorset,yetminsterhc,Yetminster Health Centre,J81017,4125
@@ -604,7 +600,6 @@ halton,Halton,CCG,Halton,Cheshire and Merseyside,weavervalepractice,Weaver Vale 
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,ashchurchmedicalcentre,Ashchurch Surgery,E85032,5017
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,brookgreensurgery,Brook Green Surgery,E85074,4663
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,hammersmithandfulhamcentresforhealth,Hammersmith and Fulham Centres for Health,Y02589,9516
-hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,newsurgeryhf,New Surgery,E85042,5582
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,northfulhamsurgery,North Fulham Surgery,E85008,7920
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,parkmedicalcentre,Park Medical Centre,E85636,10674
 hammersmithfulham,Hammersmith And Fulham,CCG,Hammersmith And Fulham,North West London,parkviewdrkukar,Parkview Dr Kukar,E85659,1863
@@ -649,7 +644,6 @@ harness,Harness,ORGANISATION,Brent,North West London,sunflowermedicalcentre,The 
 harness,Harness,ORGANISATION,Brent,North West London,thesurgeryharrowroadwembley,The Surgery,E84635,5250
 harness,Harness,ORGANISATION,Brent,North West London,walmlanesurgery,Walm lane Surgery,E84086,8500
 harness,Harness,ORGANISATION,Brent,North West London,wembleyparkdrive,Wembley Park Medical Centre,E84709,12300
-harness,Harness,ORGANISATION,Brent,North West London,willowtreefamilydoctors,Willow Tree Family Doctors,E84015,15215
 harrogate,Harrogate and Rural District,CCG,Harrogate and Rural District,West Yorkshire and Harrogate,beechhousesurgery,Beech House Surgery,B82069,7400
 harrogate,Harrogate and Rural District,CCG,Harrogate and Rural District,West Yorkshire and Harrogate,churchavenuemedicalgroup,Church Avenue Medical Group,B82059,10844
 harrogate,Harrogate and Rural District,CCG,Harrogate and Rural District,West Yorkshire and Harrogate,churchlane,Church Lane Surgery Boroughbridge,B82032,10800
@@ -701,7 +695,6 @@ hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,D
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,woodbridgepractice,Woodbridge Practice,A81017,18863
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,woodlandsmedical,Woodlands Family Medical Centre,A81046,12767
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,wynyardandhartfields,Wynyard Road and Hartfields Medical Centre,A81070,6991
-havering,Havering,CCG,Havering,North East London,avonroadsurgery,Avon Road Surgery,F82674,4700
 havering,Havering,CCG,Havering,North East London,berwicksurgeryrainham,Berwick Surgery,F82649,4788
 havering,Havering,CCG,Havering,North East London,billetlanemedicalpractice,Billet Lane Medical Practice,F82675,3799
 havering,Havering,CCG,Havering,North East London,nhschasecrossmc,Chase Cross Medical Centre,F82630,6400
@@ -736,15 +729,10 @@ highweald,High Weald Lewes Havens,CCG,High Weald Lewes Havens,Sussex and East Su
 highweald,High Weald Lewes Havens,CCG,High Weald Lewes Havens,Sussex and East Surrey,rotherfieldsurgery,Rotherfield Surgery,G81043,6993
 highweald,High Weald Lewes Havens,CCG,High Weald Lewes Havens,Sussex and East Surrey,saxonburyhousesurgery,Saxonbury House Surgery,G81055,9036
 highweald,High Weald Lewes Havens,CCG,High Weald Lewes Havens,Sussex and East Surrey,woodhillsurgery,Woodhill Surgery,G81040,3485
-hillingdon,Hillingdon,CCG,Hillingdon,North West London,abbotsburypractice,Abbotsbury Practice,E86022,6951
-hillingdon,Hillingdon,CCG,Hillingdon,North West London,acornmedicalcentre,Acorn Medical Centre,E86632,6223
 hillingdon,Hillingdon,CCG,Hillingdon,North West London,heathrowmedicalcentre,Heathrow Medical Centre Dr M N Rajan's Practice,E86637,6005
 hillingdon,Hillingdon,CCG,Hillingdon,North West London,hesamedicalcentre,HESA Medical Centre,Y00352,15880
 hillingdon,Hillingdon,CCG,Hillingdon,North West London,kingswaysurgery,Kingsway Surgery,E86003,4721
-hillingdon,Hillingdon,CCG,Hillingdon,North West London,stmartinsmedicalcentre,St Martin's Medical Centre,E86033,6100
-hillingdon,Hillingdon,CCG,Hillingdon,North West London,warrenpractice,The Warren Practice,E86019,7166
 hillingdon,Hillingdon,CCG,Hillingdon,North West London,willowtreesurgery,Willow Tree Surgery,E86610,3509
-hillingdon,Hillingdon,CCG,Hillingdon,North West London,yeadingcourt,Yeading Court,E86020,5123
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,browmedicalcentre,Brow Medical Centre,H82084,6550
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,cowfoldmedicalgroup,Cowfold Medical Group,H82004,4685
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,dolphinspractice,Dolphins Practice,H82044,11358
@@ -753,30 +741,7 @@ horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,orchardsurgery,Orchard Surgery,H82036,7740
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,silverdalepractice,Silverdale Surgery,H82072,12968
 horsham,Horsham and Mid Sussex,CCG,Horsham and Mid Sussex,Sussex and East Surrey,meadowssurgeryburgesshill,The Meadows Surgery,H82003,9413
-hounslow,Hounslow,CCG,Hounslow,North West London,albanypractice,Albany Practice,E85004,6993
-hounslow,Hounslow,CCG,Hounslow,North West London,isleworthpractice,Argyle Isleworth,E85744,11150
-hounslow,Hounslow,CCG,Hounslow,North West London,brentfordfamilypractice,Brentford Family Practice,E85735,4300
-hounslow,Hounslow,CCG,Hounslow,North West London,carltonsurgery,Carlton Surgery,E85024,5500
-hounslow,Hounslow,CCG,Hounslow,North West London,chiswickfamilydoctorspractice,Chiswick Family Doctors Practice,E85625,4212
-hounslow,Hounslow,CCG,Hounslow,North West London,chiswickhealthpractice,Chiswick Health Practice,E85030,7167
-hounslow,Hounslow,CCG,Hounslow,North West London,cliffordhousemedicalcentre,Clifford House Medical Centre,E85071,1650
-hounslow,Hounslow,CCG,Hounslow,North West London,drsinghsurgery,Clifford Road Surgery,E85696,8500
-hounslow,Hounslow,CCG,Hounslow,North West London,crosslandssurgery,Crosslands Surgery,E85114,7784
-hounslow,Hounslow,CCG,Hounslow,North West London,firstcare,Firstcare Practice,E85062,13000
-hounslow,Hounslow,CCG,Hounslow,North West London,gillmedicalpractice,Gill Medical Practice,E85708,4659
-hounslow,Hounslow,CCG,Hounslow,North West London,thegreenpractice,Green Practice,E85126,8045
-hounslow,Hounslow,CCG,Hounslow,North West London,groveparksurgery,Grove Park Surgery,E85693,8155
-hounslow,Hounslow,CCG,Hounslow,North West London,groveparkterracesurgery,Grove Park Terrace surgery,E85746,4310
-hounslow,Hounslow,CCG,Hounslow,North West London,grove-village-medical-centre,Grove Village Medical Centre,E85699,6000
-hounslow,Hounslow,CCG,Hounslow,North West London,kingfisherpractice,Kingfisher Practice,E85060,6255
-hounslow,Hounslow,CCG,Hounslow,North West London,littleparksurgery,Little Park Surgery,E85736,6488
-hounslow,Hounslow,CCG,Hounslow,North West London,mountmedicalcentre,Mount Medical Centre,E85035,5411
-hounslow,Hounslow,CCG,Hounslow,North West London,redwoodpractice,Redwood Practice,E85113,7287
-hounslow,Hounslow,CCG,Hounslow,North West London,skywaysmedical,Skyways Medical Centre,E85707,4871
 hounslow,Hounslow,CCG,Hounslow,North West London,springgrovemedicalpracticehounslow,Spring Grove Medical Practice,E85750,7501
-hounslow,Hounslow,CCG,Hounslow,North West London,stdavidspractice,St Davids Practice,E85056,7900
-hounslow,Hounslow,CCG,Hounslow,North West London,thornburymedicalpractice,Thornbury Road Centre for Health,E85001,8900
-hounslow,Hounslow,CCG,Hounslow,North West London,willowpractice,Willow Practice,E85600,5150
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,barracklane,Barrack Lane Medical Centre,D83059,19400
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,bildestonhealthcentre,Bildeston Health Centre,D83006,6800
 ipswich,Ipswich and East Suffolk,CCG,Ipswich and East Suffolk,Suffolk and North East Essex,constablecountrymedicalpractice,Constable Country Medical Practice,D83001,10200
@@ -1728,21 +1693,10 @@ whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,wat
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,westendsurgery,West End Surgery,J82008,7500
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,westmeon,West Meon Surgery,J82036,2642
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,wickhamsurgery,Wickham Surgery,J82034,12650
-wlondon,West London,CCG,West London,North West London,chelseamedicalservices,Chelsea Medical Services - Dr Joshi,E87048,3130
-wlondon,West London,CCG,West London,North West London,earlscourtmedicalcentre,Earls Court Medical Centre,E87047,6056
-wlondon,West London,CCG,West London,North West London,earlscourtsurgery,Earls Court Surgery,E87750,4000
 wlondon,West London,CCG,West London,North West London,emperorsgate,Emperor's Gate Centre For Health,E87043,6900
-wlondon,West London,CCG,West London,North West London,forelandmedical,Foreland Medical Centre,E87706,4224
-wlondon,West London,CCG,West London,North West London,574healthcentre,HARROW ROAD SURGERY Dr Srikrishnamurthy,E87751,2145
-wlondon,West London,CCG,West London,North West London,kensingtonparkmedical,Kensington Park Medical Centre,E87720,8411
-wlondon,West London,CCG,West London,North West London,kynancepractice,Kynance Practice,E87702,2619
 wlondon,West London,CCG,West London,North West London,stanhopemewswest,Stanhope Mews Surgery,E87013,12793
-wlondon,West London,CCG,West London,North West London,abingdonmedicalpractice,The Abingdon Medical Practice,E87701,8756
 wlondon,West London,CCG,West London,North West London,garwaymedical,THE GARWAY MEDICAL PRACTICE,E87009,4039
-wlondon,West London,CCG,West London,North West London,meanwhilegardenmedicalcentre,The Meanwhile Garden Medical Centre,E87026,2862
-wlondon,West London,CCG,West London,North West London,portlandroadsurgery,The Portland Road Practice,E87029,9036
 wlondon,West London,CCG,West London,North West London,theredcliffesurgery,The Redcliffe Surgery,E87004,10135
-wlondon,West London,CCG,West London,North West London,westbournegrovemedicalcentre,Westbourne Grove Medical Centre,E87007,8337
 westsuffolk,West Suffolk,CCG,West Suffolk,Suffolk and North East Essex,angelhillsurgery,Angel Hill Surgery,D83005,13738
 westsuffolk,West Suffolk,CCG,West Suffolk,Suffolk and North East Essex,botesdalehealthcentre,Botesdale Health Centre,D83033,9200
 westsuffolk,West Suffolk,CCG,West Suffolk,Suffolk and North East Essex,christmasandclements,Christmas Maltings And Clements Surgery,D83012,17166
@@ -1808,14 +1762,11 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Dr.N.K.Gupta,F82610,
 ,,,Other,,,Littlebury Medical Centre,C83065,
 ,,,Other,,,St Georges Medical Centre,E84704,
-,,,Other,,,Half Penny Steps Health Centre,Y02842,
-,,,Other,,,Sterndale,E85125,
 ,,,Other,,,Frome Valley Medical Centre,L81014,
 ,,,Other,,,Gossops Green Surgery,H82033,
 ,,,Other,,,Kenwood Medical Centre,F86081,
 ,,,Other,,,LINCOLN HOUSE SURGERY,N84037,
 ,,,Other,,,Dr A Patel Surgery,F82686,
-,,,Other,,,Brompton Medical Centre,E87746,
 ,,,Other,,,The Upstairs Surgery,F82019,
 ,,,Other,,,Kennedy Way Surgery,L81042,
 ,,,Other,,,Plumbridge Medical Centre,G83641,
@@ -1831,7 +1782,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Slaithwaite Health Centre,B85059,
 ,,,Other,,,Church Street Surgery,B86642,
 ,,,Other,,,University Health Centre,B85062,
-,,,Other,,,Wellesley Road Practice,E85692,
 ,,,Other,,,Manor Park Medical Centre,K81086,
 ,,,Other,,,Conway Medical Centre,B86103,
 ,,,Other,,,Shreeji Medical Centre,K81085,
@@ -1841,8 +1791,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Lynwood Medical Centre,F82030,
 ,,,Other,,,Rainham Health Centre,F82627,
 ,,,Other,,,Camberwell Green Surgery,G85013,
-,,,Other,,,The Jersey Practice,E85681,
-,,,Other,,,Brentford Group Practice,E85605,
 ,,,Other,,,Fireclay Health,L81062,
 ,,,Other,,,Saddlers Health Centre,M91018,
 ,,,Other,,,GREENWAY COMMUNITY PRACTICE,L81098,
@@ -1853,13 +1801,10 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Swineshead Surgery,C83015,
 ,,,Other,,,Munro Medical Centre,C83022,
 ,,,Other,,,Abbeyview Surgery,C83617,
-,,,Other,,,Chestnut Practice,E85059,
 ,,,Other,,,Fartown Green Road Surgery,B85611,
 ,,,Other,,,Close Farm Surgery,L81050,
 ,,,Other,,,Newtown Surgery,N81064,
-,,,Other,,,Hatton Medical Practice,E85718,
 ,,,Other,,,Stickney Surgery,C83055,
-,,,Other,,,Queens Park Medical Practice,E85734,
 ,,,Other,,,Moulton medical Centre,C83039,
 ,,,Other,,,Health E1,F84733,
 ,,,Other,,,Sutterton Surgery,C83614,
@@ -1871,9 +1816,7 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Lofthouse Surgery,B86020,
 ,,,Other,,,Parkside Medical Centre,C83010,
 ,,,Other,,,Holbeach Medical Centre,C83028,
-,,,Other,,,Bath Road Surgery,E85716,
 ,,,Other,,,Longton Medical Centre,N83053,
-,,,Other,,,Blue wing Family Doctor Unit,E85058,
 ,,,Other,,,Mid Sussex Health Care,H82057,
 ,,,Other,,,Cornerways Surgery,H82076,
 ,,,Other,,,Launceston Close Surgery,N81074,
@@ -1885,7 +1828,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Goldington Avenue Surgery,E81047,
 ,,,Other,,,Cromwell and Wormley Medical Centres,E82079,
 ,,,Other,,,Fallodon Way Medical Centre,L81131,
-,,,Other,,,HMC Health Feltham,Y02672,
 ,,,Other,,,Victoria Surgery,D83040,
 ,,,Other,,,Oak Hall Surgery,G82147,
 ,,,Other,,,Abbey Wood Surgery,G83031,
@@ -1895,12 +1837,10 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Montpelier Health Centre,L81012,
 ,,,Other,,,Gloucester Road Medical Centre,L81078,
 ,,,Other,,,Magnolia House Surgery,K81028,
-,,,Other,,,St Margarets Medical Practice,E85007,
 ,,,Other,,,Craven Arms Medical Practice,M82046,
 ,,,Other,,,Portland Medical Practice,C83001,
 ,,,Other,,,The Market Cross Surgery,D83018,
 ,,,Other,,,Brook Green Medical Centre,E85020,
-,,,Other,,,Holly Road Medical Centre,E85658,
 ,,,Other,,,Richford Gate Medical Practice,E85016,
 ,,,Other,,,Lindley Village Surgery,B85033,
 ,,,Other,,,Beeston Village Surgery,B86667,
@@ -1949,7 +1889,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Family Practice,B83617,
 ,,,Other,,,Guiseley & Yeadon Medical Practice,B86038,
 ,,,Other,,,Thornton Medical Centre,B86060,
-,,,Other,,,Wood lane Medical Centre,E86012,
 ,,,Other,,,Salisbury Avenue Healthcare,F82647,
 ,,,Other,,,Buckland Medical Centre,G82700,
 ,,,Other,,,Blackfriars Medical Practice,G85642,
@@ -1966,7 +1905,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Pinfold Medical Practice,C82011,
 ,,,Other,,,Hawthorn Medical Practice,C83045,
 ,,,Other,,,Stanhope Surgery,E82638,
-,,,Other,,,Hounslow Medical Centre,E85015,
 ,,,Other,,,Colville Health Centre,E87067,
 ,,,Other,,,Abbamoor surgery,F82670,
 ,,,Other,,,Swan Surgery,J82098,
@@ -1997,7 +1935,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Wellspring Practice,L81061,
 ,,,Other,,,Kiltearn Medical Centre,N81047,
 ,,,Other,,,Goldington Road Surgery,Y00328,
-,,,Other,,,St Quintin Health Centre,Y00507,
 ,,,Other,,,Wellsbourne Healthcare CIC,Y06007,
 ,,,Other,,,Victoria Park Health Centre,C82124,
 ,,,Other,,,Laindon Medical Group,F81108,
@@ -2017,21 +1954,16 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Craneswater Group Practice,J82055,
 ,,,Other,,,Brookside Group Practice,K81047,
 ,,,Other,,,Almondsbury Surgery,L81127,
-,,,Other,,,The Chelsea Practice,E87665,
 ,,,Other,,,Partners In Health,L84034,
 ,,,Other,,,The Coatham Surgery,A81045,
-,,,Other,,,Maida Vale Medical Centre,E87010,
 ,,,Other,,,New Horizons Medical Partnership,J82112,
 ,,,Other,,,Whitby Group,N81093,
 ,,,Other,,,Cedar Cross Medical Centre,N83609,
 ,,,Other,,,Yarm Medical Practice,A81027,
 ,,,Other,,,Ashburnham Road Surgery,E81615,
 ,,,Other,,,Little Venice Medical Centre,E87006,
-,,,Other,,,Soho Square Surgery,E87069,
-,,,Other,,,Third Floor Medical Centre,E87663,
 ,,,Other,,,Dr Hickeys Surgery,E87740,
 ,,,Other,,,Wellington Health Centre,E87754,
-,,,Other,,,Lanark Medical Centre,E87756,
 ,,,Other,,,Dr T Abela & Partners - Chafford Hundred MC,F81113,
 ,,,Other,,,Balfour Medical Centre,F81155,
 ,,,Other,,,Yadava Practice,F81211,
@@ -2049,20 +1981,16 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Bourne Galletly Medical Practice,C83054,
 ,,,Other,,,The De Parys Group,E81037,
 ,,,Other,,,East Cowes Medical Centre,J84004,
-,,,Other,,,Exmoor Surgery,E87733,
 ,,,Other,,,Stanford Medical Centre,G81038,
 ,,,Other,,,Beaconsfield Medical Practice,G81042,
 ,,,Other,,,The Orchard Surgery,N85047,
 ,,,Other,,,Westfield Medical Centre,B86031,
 ,,,Other,,,Dr Khokher & Partners - Queen Park Group,E81021,
 ,,,Other,,,Lincoln House Surgery,E82009,
-,,,Other,,,HMC Bedfont,E85697,
-,,,Other,,,Heston Practice,E85739,
 ,,,Other,,,Manor Brook PMS,G83001,
 ,,,Other,,,Riverside Surgery,H82089,
 ,,,Other,,,Knutsford Medical Partnership,N81049,
 ,,,Other,,,Mather Avenue Surgery,N82035,
-,,,Other,,,HMC Health Hounslow,Y02671,
 ,,,Other,,,Biddlestone Health Group,A86010,
 ,,,Other,,,Crich Medical Practice,C81094,
 ,,,Other,,,Brighton Station Health Centre,Y02676,
@@ -2128,7 +2056,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Meads Medical Practice Limited,G82634,
 ,,,Other,,,Pump Lane Surgery,G82635,
 ,,,Other,,,Malling Health Four,G82681,
-,,,Other,,,Church View Practice,G82704,
 ,,,Other,,,Medway Medical Group,G82775,
 ,,,Other,,,Pinehill Sugery,J82184,
 ,,,Other,,,The Family Practice,L81090,
@@ -2263,7 +2190,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Leylands Medical Centre,B83038,
 ,,,Other,,,Highcroft Surgery,C84055,
 ,,,Other,,,New River Health,E82102,
-,,,Other,,,Pentelow Practice,E85115,
 ,,,Other,,,Apex Medical Practice,G82679,
 ,,,Other,,,Valentine Health Partnership,G83067,
 ,,,Other,,,Cathedral Medical Group,H82042,
@@ -2298,7 +2224,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Ragstone Road Surgery,K81089,
 ,,,Other,,,Portishead Medical Group,L81004,
 ,,,Other,,,Hanham Health,L81079,
-,,,Other,,,Pembroke Road Surgery,L81081,
 ,,,Other,,,Tower House Practice,N81057,
 ,,,Other,,,Manchester Road Surgery,N81107,
 ,,,Other,,,Brownlow Health - Princes Park Health Centre,N82076,
@@ -2367,13 +2292,11 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Leeds Student Medical Practice,B86110,
 ,,,Other,,,Beacon Medical Practice,C83019,
 ,,,Other,,,Salisbury House Surgery,E81004,
-,,,Other,,,Oliver Street Surgery,E81077,
 ,,,Other,,,Stanmore Medical Group,E82005,
 ,,,Other,,,The Maples Health centre,E82063,
 ,,,Other,,,Cuffley and Goffs Oak Medical Practice,E82081,
 ,,,Other,,,Birchwood Surgery,E82082,
 ,,,Other,,,Dolphin House Surgery,E82092,
-,,,Other,,,West4GPs,E85040,
 ,,,Other,,,Ritchie Street Group Practice,F83021,
 ,,,Other,,,Goodmans Fields Health Centre,F84039,
 ,,,Other,,,West Green Surgery,F85669,
@@ -2403,7 +2326,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Crondall New Surgery,J82628,
 ,,,Other,,,The Gainsborough Practice,K81059,
 ,,,Other,,,Windrush Surgery,K84024,
-,,,Other,,,The Malthouse Surgery,K84027,
 ,,,Other,,,Woodlands Surgery,K84062,
 ,,,Other,,,Wellington Road Family Practice,L81642,
 ,,,Other,,,Alverton Practice,L82021,
@@ -2490,3 +2412,4 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Sandringham Practice,F84621,
 ,,,Other,,,Brocklebank Group Practice,H85048,
 ,,,Other,,,Bramblys Grange Medical Practice,J82058,
+,,,Other,,,The Lawson Practice,F84096,
