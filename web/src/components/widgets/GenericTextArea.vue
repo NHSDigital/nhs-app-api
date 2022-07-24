@@ -6,7 +6,6 @@
     </span>
     <textarea :id="id"
               ref="textArea"
-              v-model="textValue"
               v-tabbing="textAreaClasses"
               tabindex="0"
               :rows="rows"
@@ -16,10 +15,12 @@
               :maxlength="maxlength"
               :name="name"
               :aria-describedby="ariaDescribed"
+              :value="value"
               autocomplete="off"
               autocorrect="off"
               autocapitalize="off"
               spellcheck="false"
+              @input="$emit('input', $event.target.value)"
               @focus="onFocus"
               @keydown="onKeyDown"
               @keyup="onKeyUp"/>
@@ -86,14 +87,6 @@ export default {
     },
   },
   computed: {
-    textValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
     inputClasses() {
       return this.textAreaClasses.concat([
         this.$style['nhsuk-textarea'],

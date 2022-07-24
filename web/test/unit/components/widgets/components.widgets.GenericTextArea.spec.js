@@ -52,14 +52,16 @@ describe('GenericTextArea.vue', () => {
   });
 
   it('will verify a value is emitted when input is set', () => {
-    wrapper.vm.textValue = 'Emit this';
-    wrapper.trigger('input');
+    const textarea = wrapper.find('textarea');
+    textarea.element.value = 'Emit this';
+    textarea.trigger('input');
 
     expect(wrapper.emitted('input')).toBeDefined();
     expect(wrapper.emitted('input').length).toBe(1);
     expect(wrapper.emitted('input')[0][0]).toEqual('Emit this');
 
-    wrapper.vm.textValue = 'Update and emit this';
+    textarea.element.value = 'Update and emit this';
+    textarea.trigger('input');
     expect(wrapper.emitted('input').length).toBe(2);
     expect(wrapper.emitted('input')[1][0]).toEqual('Update and emit this');
   });
