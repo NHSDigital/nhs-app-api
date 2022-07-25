@@ -109,6 +109,9 @@ export default {
       htmlAttrs: {
         lang: this.$t('language'),
       },
+      meta: [
+        { name: 'description', content: this.$t('login.metaDescriptionAccessYourServices') },
+      ],
     };
   },
   data() {

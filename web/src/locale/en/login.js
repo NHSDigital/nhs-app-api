@@ -26,6 +26,7 @@ export default {
   youCanHaveAccountIfYouAre: 'You can have an account if you are:',
   useNhs111Online: 'Use NHS 111 online to check if you need urgent help',
   loginToYourNhsAccountToAccessServices: 'Log in to your NHS account to access services online on your computer, tablet or mobile phone. You do not need to download anything.',
+  metaDescriptionAccessYourServices: 'Log in to your NHS account to get your COVID pass, order repeat prescriptions and book appointments.',
   useTheNhsAppTo: 'Use the NHS App to:',
   loginToYourAccountTo: 'Log in to your account to:',
   viewYourHealthRecord: 'view your health record securely',
