@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Session.SessionExpiry
     [BusinessRule("BR-LOG-07.7","Navigating back to the app from a web integration or browser overlay when the app session is within the session timeout warning period displays a prompt to extend the session or log out")]
     public class SessionExpiryDialogWebIntegrationsSessionAboutToExpireTests
     {
-        private static readonly TimeSpan SessionExpiryDialogDuration = TimeSpan.FromMinutes(1.1);
+        private static readonly TimeSpan SessionExpiryDialogDuration = TimeSpan.FromSeconds(70);
 
         [NhsAppAndroidTest]
         public void APatientWhoAccessesAThirdPartyAndReturnsAsTheSessionIsAboutToExpireWillSeeTheExpiryPromptAndroid(IAndroidDriverWrapper driver)

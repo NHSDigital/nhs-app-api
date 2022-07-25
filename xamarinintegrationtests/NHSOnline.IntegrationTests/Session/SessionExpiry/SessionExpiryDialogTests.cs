@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Session.SessionExpiry
     [BusinessRule("BR-LOG-07.4","Logging out when prompted when a session is expiring logs the user out")]
     public class SessionExpiryDialogExtendTimeoutTests
     {
-        private static readonly TimeSpan SessionExpiryDialogDuration = TimeSpan.FromMinutes(1);
+        private static readonly TimeSpan SessionExpiryDialogDuration = TimeSpan.FromSeconds(70);
 
         [NhsAppAndroidTest]
         public void APatientSeesTheSessionExpiryDialogAndChoosesToExtendTheirSessionAndWhenTheySeeTheDialogAgainTheyChooseToLogOutAndroid(IAndroidDriverWrapper driver)
