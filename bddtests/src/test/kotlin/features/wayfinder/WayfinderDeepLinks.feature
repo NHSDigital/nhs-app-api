@@ -33,6 +33,6 @@ Feature: Wayfinder DeepLinks
   Examples:
     | Provider | DeepLink                                                                                                               |
     | DrDoctor | http://drdoctor.stubs.local.bitraft.io:8080/appointments/123456?from=nhsApp                                            |
-    | Netcall  | http://netcall.stubs.local.bitraft.io:8080/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?remote_record_id |
+    | Netcall  | http://netcall.stubs.local.bitraft.io:8080/Appointments?id=49482520-9026-4398-b3a0-2b738ebc1365&trust=789              |
     | PKB      | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D         |
     | Zesty    | http://zesty.stubs.local.bitraft.io:8080/nhs/origin_appointment?resource_id=XXXX                                       |

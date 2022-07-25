@@ -44,7 +44,7 @@ api:
     services__engage__url: https://pp-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
     services__gncr__url: https://my-aos.gncr.org.uk
-    services__netcall__url: https://phubloadtest-phubpatient-integration.oncreate.app
+    services__netcall__url: https://integration.patienthub-mtps.co.uk
     services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     services__pkb__url: https://rc.pkb.io
@@ -65,7 +65,7 @@ api:
     servicesV3__engage__url: https://pp-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__gncr__url: https://my-aos.gncr.org.uk
-    servicesV3__netcall__url: https://phubloadtest-phubpatient-integration.oncreate.app
+    servicesV3__netcall__url: https://integration.patienthub-mtps.co.uk
     servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
     servicesV3__pkb__url: https://rc.pkb.io

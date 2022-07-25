@@ -229,8 +229,8 @@ const thirdPartyProvider = {
     },
     netcall: {
       jumpOffId: 'netcallWayfinder',
-      acceptablePathsRegex: '^\\/i\\/nhsappintegration/\\p\\/27EFBAC1\\/40EFBAC1\\/66EFBAC1\\/417EFBAC1.*$',
-      redirectPath: '/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1?',
+      acceptablePathsRegex: '^\\/Appointments\\?.*$',
+      redirectPath: '/Appointments?',
     },
     zesty: {
       jumpOffId: 'zestyWayfinder',

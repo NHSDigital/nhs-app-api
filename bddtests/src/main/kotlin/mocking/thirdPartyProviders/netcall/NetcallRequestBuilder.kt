@@ -4,7 +4,7 @@ import mocking.MappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class NetcallRequestBuilder : MappingBuilder("GET", "/i/nhsappintegration/p/27EFBAC1/40EFBAC1/66EFBAC1/417EFBAC1") {
+class NetcallRequestBuilder : MappingBuilder("GET", "/Appointments") {
 
     fun respondWithPage(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
