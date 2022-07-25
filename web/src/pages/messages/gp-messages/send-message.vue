@@ -3,7 +3,8 @@
     <div class="nhsuk-grid-row nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
       <form-error-summary v-if="showError"
                           :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
-                          :errors="getErrors"/>
+                          :errors="getErrors"
+                          :errors-ids="getErrorsIds"/>
 
       <p id="subHeader"
          class="nhsuk-hint"
@@ -133,6 +134,16 @@ export default {
         errors.push(this.$t('messages.enterAMessage'));
       }
       return errors;
+    },
+    getErrorsIds() {
+      const errorsIds = [];
+      if (this.subjectError && this.subjectEnabled) {
+        errorsIds.push('subjectText');
+      }
+      if (this.messageTextError) {
+        errorsIds.push('messageText');
+      }
+      return errorsIds;
     },
   },
   created() {

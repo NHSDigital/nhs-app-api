@@ -11,7 +11,8 @@ https://nhsd-jira.digital.nhs.uk/browse/NHSO-16781
       <div class="nhsuk-grid-column-full">
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'nominatedPharmacy.onlineOnlyChoices.errorMessageHeader'"
-                            :errors="$t('nominatedPharmacy.onlineOnlyChoices.errorMessageText')"/>
+                            :errors="$t('nominatedPharmacy.onlineOnlyChoices.errorMessageText')"
+                            :errors-ids="`radioButton-${getFirstChoiceValue('radioButtons')}`"/>
 
         <radio-group v-model="onlineOnlyChoice"
                      class="nhsuk-u-padding-top-2"
@@ -57,6 +58,7 @@ import {
   PRESCRIPTIONS_PATH,
 } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'OnlineOnlyChoices',
@@ -145,6 +147,15 @@ export default {
     },
     selected(value) {
       this.onlineOnlyChoice = value;
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

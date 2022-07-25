@@ -7,7 +7,9 @@
     </h2>
     <div class="nhsuk-error-summary__body">
       <ul class="nhsuk-list nhsuk-error-summary__list" data-purpose="error-reasons">
-        <li v-for="error in validationErrors" :key="error" data-purpose="error-reason">{{ error }}</li>
+        <li v-for="(error, index) in validationErrors" :key="error" data-purpose="error-reason">
+          <a :href="'#' + validationErrorsIds[index]" @click.prevent="$event.target.blur(); scrollToError(getErrorId(index));"> {{ error }} </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -28,10 +30,17 @@ export default {
       type: [String, Array],
       required: true,
     },
+    errorsIds: {
+      type: [String, Array],
+      required: true,
+    },
   },
   computed: {
     validationErrors() {
       return isArray(this.errors) ? this.errors : [this.errors];
+    },
+    validationErrorsIds() {
+      return isArray(this.errorsIds) ? this.errorsIds : [this.errorsIds];
     },
   },
   beforeMount() {
@@ -51,6 +60,16 @@ export default {
     focusDialog() {
       this.$refs.formErrorSummaryContainer.setAttribute('tabindex', '-1');
       this.$refs.formErrorSummaryContainer.focus();
+    },
+    getErrorId(index) {
+      if (this.validationErrorsIds[index] !== undefined) {
+        return this.validationErrorsIds[index];
+      }
+      return this.validationErrorsIds[0];
+    },
+    scrollToError(id) {
+      document.getElementById(id).scrollIntoView();
+      document.getElementById(id).focus();
     },
   },
 };

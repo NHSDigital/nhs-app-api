@@ -1,7 +1,9 @@
 <template>
   <no-return-flow-layout>
     <div v-if="showTemplate">
-      <form-error-summary v-if="showError" :errors="errorText"/>
+      <form-error-summary v-if="showError"
+                          :errors="errorText"
+                          :errors-ids="`notifications-${getFirstChoiceValue('choices')}`"/>
       <p>{{ $t('notifications.weUseNotifications') }}</p>
       <p>{{ $t('notifications.theNhsAndConnected') }}</p>
       <nhs-uk-radio-group v-model="selectedValue"
@@ -53,6 +55,7 @@ import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
 import PrimaryButton from '@/components/PrimaryButton';
 import RedirectMixin from '@/components/RedirectMixin';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'Index',
@@ -145,6 +148,15 @@ export default {
       if (!this.$store.state.notifications.notificationCommunicationError) {
         this.conditionalRedirect();
       }
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

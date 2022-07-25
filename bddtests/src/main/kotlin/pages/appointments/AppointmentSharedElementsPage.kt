@@ -44,13 +44,13 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     lateinit var webHeader: WebHeader
 
     val enterReasonError = HybridPageElement(
-        webDesktopLocator = "//*[text()='Enter a reason for this appointment']",
+        webDesktopLocator = "//*[normalize-space()='Enter a reason for this appointment']",
         page = this,
         helpfulName = "Reason Error"
     )
 
     val selectReasonError = HybridPageElement(
-        webDesktopLocator = "//*[text()='Select a reason for cancelling']",
+        webDesktopLocator = "//*[normalize-space()='Select a reason for cancelling']",
         page = this,
         helpfulName = "Reason Error"
     )

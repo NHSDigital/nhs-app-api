@@ -6,7 +6,8 @@
       <div class="nhsuk-grid-column-full">
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'nominatedPharmacy.chooseType.errorHeading'"
-                            :errors="$t('nominatedPharmacy.chooseType.errorMessage')"/>
+                            :errors="$t('nominatedPharmacy.chooseType.errorMessage')"
+                            :errors-ids="`chooseType-${getFirstChoiceValue('radioButtons')}`"/>
       </div>
     </div>
     <div class="nhsuk-grid-row">
@@ -131,6 +132,15 @@ export default {
     },
     selected(value) {
       this.selectedValue = value;
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

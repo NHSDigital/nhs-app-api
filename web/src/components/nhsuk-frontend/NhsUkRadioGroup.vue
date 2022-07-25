@@ -19,7 +19,8 @@
     </legend>
 
     <form-error-summary v-if="enableErrorDialog && error" :header-locale-ref="errorHeadingReference"
-                        :errors="errorText"/>
+                        :errors="errorText"
+                        :errors-ids="`${name}-${getValue(items[0])}`"/>
 
     <div :class="['nhsuk-form-group', error ? 'nhsuk-form-group--error' : undefined]">
       <span v-if="error" :id="`${name}-error`" class="nhsuk-error-message">

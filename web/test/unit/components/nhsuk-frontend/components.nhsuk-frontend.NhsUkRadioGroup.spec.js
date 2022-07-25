@@ -8,7 +8,7 @@ let wrapper;
 const mountComponent = ({
   methods = undefined,
   currentValue = undefined,
-  items = [],
+  items = [{ value: 'Option 1' }, { value: 'Option 2' }],
   heading = 'test',
   noHeadingRequired = false,
   legendSize = undefined,

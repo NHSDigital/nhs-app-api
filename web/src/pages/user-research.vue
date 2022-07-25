@@ -3,7 +3,8 @@
     <div v-if="showTemplate">
       <form-error-summary v-if="showError"
                           :header-locale-ref="'userResearch.thereIsAProblem'"
-                          :errors="$t('userResearch.selectYesOrNo')"/>
+                          :errors="$t('userResearch.selectYesOrNo')"
+                          :errors-ids="`userResearch-${getFirstChoiceValue('choices')}`"/>
 
       <p>{{ $t('userResearch.weWouldLikeToContactYouAboutUserResearch') }}</p>
       <collapsible-details>
@@ -53,6 +54,7 @@ import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
 import { NOTIFICATIONS_PATH } from '@/router/paths';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'UserResearchPage',
@@ -98,6 +100,15 @@ export default {
     },
     onSelection(value) {
       this.selectedValue = value;
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

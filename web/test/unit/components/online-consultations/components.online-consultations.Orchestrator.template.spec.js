@@ -44,7 +44,7 @@ const store = {
   dispatch,
 };
 
-const mountOrchestrator = ({ stubbed = true, methods = {} } = {}) => {
+const mountOrchestrator = ({ stubbed = true, methods = { getErrorId() { return 'errorId'; } } } = {}) => {
   orchestrator = (stubbed ? shallowMount : mount)(Orchestrator, {
     propsData: {
       provider: 'stubs',
@@ -379,7 +379,9 @@ describe('orchestrator', () => {
             // Arrange
             store.state.onlineConsultations.question = baseQuestion('integer');
             const continueClicked = jest.fn();
-            mountOrchestrator({ stubbed: false, methods: { continueClicked } });
+            const getErrorId = jest.fn();
+            getErrorId.mockReturnValue('errorId');
+            mountOrchestrator({ stubbed: false, methods: { continueClicked, getErrorId } });
             const continueButton = orchestrator.find('button');
 
             // Act

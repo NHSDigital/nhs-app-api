@@ -4,7 +4,8 @@
       <div class="nhsuk-grid-column-full">
         <form-error-summary v-if="error"
                             :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
-                            :errors="getErrors"/>
+                            :errors="getErrors"
+                            :errors-ids="getErrorsIds"/>
 
         <div v-if="showRepeatCourses" class="break">
           <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
@@ -211,6 +212,20 @@ export default {
       }
 
       return errors;
+    },
+    getErrorsIds() {
+      const { validated } = this.$store.state.repeatPrescriptionCourses;
+
+      const errorsIds = [];
+
+      if (validated && !this.courseSelectionValid) {
+        errorsIds.push(this.repeatPrescriptionCourses[0].id);
+      }
+      if (validated && !this.specialRequestValid) {
+        errorsIds.push('specialRequest');
+      }
+
+      return errorsIds;
     },
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;

@@ -2,7 +2,8 @@
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <form-error-summary :header-locale-ref="'termsAndConditions.errors.youCannotContinue.header'"
-                          :errors="$t('termsAndConditions.errors.youCannotContinue.text')"/>
+                          :errors="$t('termsAndConditions.errors.youCannotContinue.text')"
+                          :errors-ids="'termsAndConditions-agree_checkbox'"/>
     </div>
     <div id="text_body" :class="$style.info">
       <p>{{ $t('termsAndConditions.initial.loginToAccount') }}</p>

@@ -15,7 +15,7 @@ class UpdatedTermsAndConditionsPage : HybridPageObject() {
     ).withText("To continue using the NHS App, you need to agree to our updated", exact = false)
 
     val mainErrorMessage = HybridPageElement(
-        webDesktopLocator = "//li",
+        webDesktopLocator = "//a",
         page = this
     ).withNormalisedText("You cannot continue without agreeing")
 

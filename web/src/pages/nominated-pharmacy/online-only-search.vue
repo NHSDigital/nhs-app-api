@@ -29,7 +29,8 @@
       <div class="nhsuk-grid-column-full">
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'nominatedPharmacy.onlineOnlySearch.errorMessageHeader'"
-                            :errors="$t('nominatedPharmacy.onlineOnlySearch.errorMessageText')"/>
+                            :errors="$t('nominatedPharmacy.onlineOnlySearch.errorMessageText')"
+                            :errors-ids="'searchTextInput'"/>
       </div>
     </div>
 

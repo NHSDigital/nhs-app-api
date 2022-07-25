@@ -10,7 +10,8 @@
       <div class="nhsuk-grid-column-full">
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'nominatedPharmacy.search.errorMessageHeader'"
-                            :errors="$t('nominatedPharmacy.search.emptySearchError')"/>
+                            :errors="$t('nominatedPharmacy.search.emptySearchError')"
+                            :errors-ids="'searchTextInput'"/>
       </div>
     </div>
     <div class="nhsuk-grid-row">

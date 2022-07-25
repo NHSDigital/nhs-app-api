@@ -3,7 +3,8 @@
     <div class="nhsuk-grid-column-full">
       <form-error-summary v-if="showErrors"
                           :header-locale-ref="'organDonation.thereIsAProblem'"
-                          :errors="$t('organDonation.yourChoice.chooseToDonate')"/>
+                          :errors="$t('organDonation.yourChoice.chooseToDonate')"
+                          :errors-ids="'choice-' + getFirstChoiceValue('radioButtons')"/>
 
       <div>
         <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
@@ -131,6 +132,15 @@ export default {
     backButtonClicked() {
       this.hasTriedToContinue = false;
       this.backClicked();
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

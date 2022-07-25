@@ -4,7 +4,8 @@
       <form-error-summary v-if="isValidationError"
                           :key="questionKey"
                           :header-locale-ref="'onlineConsultations.validationErrors.thereIsAProblem'"
-                          :errors="getErrors"/>
+                          :errors="getErrors"
+                          :errors-ids="getErrorId()"/>
 
       <form @submit.prevent="continueClicked">
         <component :is="questionWrapper"
@@ -109,6 +110,7 @@ import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/sta
 import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
+import isArray from 'lodash/fp/isArray';
 
 export default {
   name: 'Orchestrator',
@@ -160,7 +162,11 @@ export default {
       const errors = [];
       errors.push(this.validationErrorMessage);
       if (typeof (this.validationErrorMessageFromResponse) !== 'undefined' && this.validationErrorMessageFromResponse !== null) {
-        errors.push(this.validationErrorMessageFromResponse);
+        if (isArray(this.validationErrorMessageFromResponse)) {
+          errors.push(this.validationErrorMessageFromResponse[0]);
+        } else {
+          errors.push(this.validationErrorMessageFromResponse);
+        }
       }
       return errors;
     },
@@ -327,6 +333,41 @@ export default {
     goBack() {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       redirectTo(this, this.indexPath);
+    },
+    getErrorId() {
+      switch (get('question.type', this)) {
+        case QuestionTypes.ATTACHMENT:
+        case QuestionTypes.DECIMAL:
+        case QuestionTypes.INTEGER:
+        case QuestionTypes.IMAGE:
+        case QuestionTypes.STRING:
+        case QuestionTypes.TEXT:
+          return get('question.name', this);
+        case QuestionTypes.BOOLEAN:
+          return `${get('question.name', this)}-true`;
+        case QuestionTypes.CHOICE:
+          return this.getFirstChoiceId();
+        case QuestionTypes.DATE:
+        case QuestionTypes.DATETIME:
+          return `${get('question.name', this)}-day`;
+        case QuestionTypes.MULTIPLE_CHOICE:
+          return `checkbox-${get('question.options[0].code', this)}`;
+        case QuestionTypes.QUANTITY:
+          return `${get('question.name', this)}-quantity`;
+        case QuestionTypes.TIME:
+          return `${get('question.name', this)}-hour`;
+        default:
+          return get('question.id', this);
+      }
+    },
+    getFirstChoiceId() {
+      if (get('question.options[0].value', this) !== undefined && get('question.options[0].value', this) !== '') {
+        return `${get('question.name', this)}-${get('question.options[0].value', this)}`;
+      }
+      if (get('question.options[0].code', this) !== undefined && get('question.options[0].code', this) !== '') {
+        return `${get('question.name', this)}-${get('question.options[0].code', this)}`;
+      }
+      return get('question.id', this);
     },
   },
 };

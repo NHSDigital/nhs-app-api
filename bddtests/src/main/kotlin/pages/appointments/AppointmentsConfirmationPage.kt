@@ -48,7 +48,7 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     )
 
     val telephoneError = HybridPageElement(
-        webDesktopLocator = "//*[text()='Enter a telephone number']",
+        webDesktopLocator = "//*[normalize-space()='Enter a telephone number']",
         page = this,
         helpfulName = "Telephone Error"
     )

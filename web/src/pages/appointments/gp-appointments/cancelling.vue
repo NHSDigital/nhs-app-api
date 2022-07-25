@@ -10,7 +10,8 @@
         <div class="nhsuk-grid-column-full">
           <form-error-summary v-if="showError"
                               :header-locale-ref="'appointments.cancel.thereIsAProblem'"
-                              :errors="$t('appointments.cancel.selectAReason')"/>
+                              :errors="$t('appointments.cancel.selectAReason')"
+                              :errors-ids="'txt_reason'"/>
           <div data-purpose="info">
             <p class="nhsuk-u-padding-bottom-3">
               {{ $t('appointments.cancel.checkDetailsBeforeCancelling') }}</p>

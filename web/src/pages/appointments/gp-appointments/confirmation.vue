@@ -6,7 +6,8 @@
     <div v-else>
       <form-error-summary v-if="showError"
                           :header-locale-ref="'appointments.confirmation.error.thereIsAProblem'"
-                          :errors="getErrors"/>
+                          :errors="getErrors"
+                          :errors-ids="getErrorsIds"/>
 
       <div class="nhsuk-grid-row" data-purpose="info">
         <div class="nhsuk-grid-column-full">
@@ -277,6 +278,16 @@ export default {
         errors.push(this.$t('appointments.confirmation.error.enterAReason'));
       }
       return errors;
+    },
+    getErrorsIds() {
+      const errorsIds = [];
+      if (this.showTelephoneError) {
+        errorsIds.push(get('patientTelephoneNumbers[0].telephoneNumber', this));
+      }
+      if (this.showReasonError) {
+        errorsIds.push('reasonText');
+      }
+      return errorsIds;
     },
   },
   watch: {

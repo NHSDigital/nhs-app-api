@@ -67,7 +67,7 @@ class BannerObject private constructor(private val page : HybridPageObject,
     }
 
     fun assertFormErrorSummaryReasonItem(reason: String) : BannerObject {
-        assertMessage("/div/ul/li", reason)
+        assertMessage("/div/ul/li/a", reason)
         return this
     }
 

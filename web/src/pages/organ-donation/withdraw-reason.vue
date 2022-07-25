@@ -4,7 +4,8 @@
       <div>
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="$t('organDonation.withdrawReason.giveAReasonForWithdrawing')"/>
+                            :errors="$t('organDonation.withdrawReason.giveAReasonForWithdrawing')"
+                            :errors-ids="'reason'"/>
 
         <div :class="[$style.form]">
           <h2>{{ $t('organDonation.withdrawReason.withdrawYourPreviousDecision') }}</h2>

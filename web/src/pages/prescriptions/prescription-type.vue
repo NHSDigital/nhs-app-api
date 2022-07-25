@@ -5,7 +5,8 @@
     <div class="nhsuk-grid-column-full">
       <form-error-summary v-if="showErrors"
                           :header-locale-ref="'prescriptions.prescriptionType.errors.thereIsAProblem'"
-                          :errors="$t('prescriptions.prescriptionType.errors.chooseTypeOfPrescription')"/>
+                          :errors="$t('prescriptions.prescriptionType.errors.chooseTypeOfPrescription')"
+                          :errors-ids="`prescriptionType-${getFirstChoiceValue('prescriptionTypeChoices')}`"/>
 
       <div v-if="hasLoaded" class="break">
         <nhs-uk-radio-group
@@ -55,6 +56,7 @@ import showShutterPage from '@/lib/proxy/shutter';
 import { EventBus, FOCUS_ERROR_ELEMENT, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import sjrIf from '@/lib/sjrIf';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
+import get from 'lodash/fp/get';
 
 const PRESCRIPTION_TYPE_REPEAT = 'PRESCRIPTION_TYPE_REPEAT';
 const PRESCRIPTION_TYPE_NON_REPEAT = 'PRESCRIPTION_TYPE_NON_REPEAT';
@@ -191,6 +193,15 @@ export default {
     },
     selected(value) {
       this.selectedValue = value;
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

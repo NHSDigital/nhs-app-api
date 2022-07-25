@@ -4,7 +4,8 @@
 
       <form-error-summary v-if="showError && !areAllSelected"
                           :header-locale-ref="'organDonation.thereIsAProblem'"
-                          :errors="$t('organDonation.faith.respondToFaithBeliefDeclaration')"/>
+                          :errors="$t('organDonation.faith.respondToFaithBeliefDeclaration')"
+                          :errors-ids="'faith-' + getFirstChoiceValue('choices')"/>
 
       <h2>{{ $t('organDonation.faith.faithSlashBeliefs') }}</h2>
       <p>{{ $t('organDonation.faith.askFamilyWhenYouDie') }}</p>
@@ -62,6 +63,7 @@ import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
+import get from 'lodash/fp/get';
 
 export default {
   components: {
@@ -121,6 +123,15 @@ export default {
         }
         redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
       });
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

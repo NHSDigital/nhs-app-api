@@ -6,7 +6,8 @@
         <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
         <form-error-summary v-if="isError"
                             :header-locale-ref="'messages.thereIsAProblem'"
-                            :errors="$t('messages.youNeedToSelectYesOrNo')"/>
+                            :errors="$t('messages.youNeedToSelectYesOrNo')"
+                            :errors-ids="`messagingUrgency-${getFirstChoiceValue('questionOptions')}`"/>
 
         <nhs-uk-radio-group id="messagingUrgency"
                             v-model="answer"
@@ -61,6 +62,7 @@ import {
   GP_MESSAGES_RECIPIENTS_PATH,
 } from '@/router/paths';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import get from 'lodash/fp/get';
 
 const YES = 'yes';
 const NO = 'no';
@@ -132,6 +134,15 @@ export default {
     },
     backLinkClicked() {
       redirectTo(this, this.$store.state.navigation.backLinkOverride || this.messagingPath);
+    },
+    getFirstChoiceValue(choicesName) {
+      if (get(`${choicesName}[0].value`, this) !== undefined && get(`${choicesName}[0].value`, this) !== '') {
+        return get(`${choicesName}[0].value`, this);
+      }
+      if (get(`${choicesName}[0].code`, this) !== undefined && get(`${choicesName}[0].code`, this) !== '') {
+        return get(`${choicesName}[0].code`, this);
+      }
+      return '';
     },
   },
 };

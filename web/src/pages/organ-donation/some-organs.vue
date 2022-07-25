@@ -5,11 +5,13 @@
 
         <form-error-summary v-if="showErrors && !areAllSelected"
                             :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="$t('organDonation.someOrgans.chooseYesOrNoForEachOrgan')"/>
+                            :errors="$t('organDonation.someOrgans.chooseYesOrNoForEachOrgan')"
+                            :errors-ids="getFirstNotStated() + '-Yes'"/>
 
         <form-error-summary v-if="showErrors && areAllSelected && !hasYesSelection"
                             :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan')"/>
+                            :errors="$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan')"
+                            :errors-ids="choices[0] + '-Yes'"/>
       </div>
       <div>
         <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
@@ -121,6 +123,17 @@ export default {
     },
     moreAboutOrgansClicked() {
       redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
+    },
+    getFirstNotStated() {
+      const organs = Object.keys(this.$store.state.organDonation.registration.decisionDetails.choices);
+      const decisions = Object.values(this.$store.state.organDonation.registration.decisionDetails.choices);
+
+      for (let i = 0; i < organs.length; i += 1) {
+        if (decisions[i] === NOT_STATED) {
+          return organs[i];
+        }
+      }
+      return '';
     },
   },
 };

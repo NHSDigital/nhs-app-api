@@ -3,7 +3,8 @@
     <div class="nhsuk-grid-column-full">
       <form-error-summary v-if="showErrors"
                           :header-locale-ref="'organDonation.thereIsAProblem'"
-                          :errors="validationErrors"/>
+                          :errors="validationErrors"
+                          :errors-ids="validationErrorsIds"/>
 
       <h2>{{ $t('organDonation.reviewYourDecision.aboutYou') }}</h2>
       <personal-details
@@ -108,6 +109,17 @@ export default {
         errors.push(this.$t('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent'));
       }
       return errors;
+    },
+    validationErrorsIds() {
+      const errorsIds = [];
+      if (!this.isAccuracyAccepted) {
+        errorsIds.push('accuracy-checkbox');
+      }
+
+      if (!this.isPrivacyAccepted) {
+        errorsIds.push('privacy-checkbox');
+      }
+      return errorsIds;
     },
     wasSomeOrgans() {
       return this.$store.state.organDonation.originalRegistration.decision === DECISION_OPT_IN &&
