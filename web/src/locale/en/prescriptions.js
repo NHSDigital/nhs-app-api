@@ -98,7 +98,7 @@ export default {
     currentlyAvailableRepeatPrescriptions: 'Medications currently available for repeat prescription',
     currentlyAvailableToOrder: 'Medicine currently available to order',
     youDoNotHaveAny: 'You don\'t have any medication available to order right now',
-    ifYouHaveThatAreNotShown: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
+    contactYourGP: 'Contact your GP surgery to get medication or set up a repeat prescription.',
     changePharmacy: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
     specialRequestsOptionalLabel: 'Add notes for your GP surgery (optional)',
     specialRequestsMandatoryLabel: 'Add notes for your GP surgery',

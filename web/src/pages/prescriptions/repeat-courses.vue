@@ -88,9 +88,8 @@
             </collapsible-details>
           </fieldset>
         </div>
-        <div v-if="showNoRepeatCourses">
-          <h3>{{ $t('prescriptions.repeatCourses.youDoNotHaveAny') }}</h3>
-          <p>{{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}</p>
+        <div v-if="showNoRepeatCourses" id="noRepeatCoursesDialogue">
+          <p>{{ $t('prescriptions.repeatCourses.contactYourGP') }}</p>
         </div>
         <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                    :path="getBackPath"
@@ -308,6 +307,11 @@ export default {
         const element = ref.$el || ref;
         vueScrollTo.scrollTo(element, 250, { easing: vueScrollTo['ease-in'] });
       }
+    }
+
+    if (this.showNoRepeatCourses) {
+      EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.repeatPrescriptionsNoPrescriptionsToOrder');
+      EventBus.$emit(UPDATE_TITLE, 'navigation.pages.titles.repeatPrescriptionsNoPrescriptionsToOrder');
     }
   },
   methods: {

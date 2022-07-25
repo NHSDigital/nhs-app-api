@@ -91,6 +91,12 @@ describe('api errors', () => {
     },
   });
 
+  function createApiErrorStore(gettersParam, stateParam) {
+    const store = createStore({ getters: gettersParam, state: stateParam });
+
+    return store;
+  }
+
   describe('updated', () => {
     beforeEach(() => {
       state = createState({
@@ -106,7 +112,7 @@ describe('api errors', () => {
 
     it('will not emit to EventBus when updated and no api error shown', () => {
       getters = { 'errors/showApiError': true };
-      $store = createStore({ getters, state });
+      $store = createApiErrorStore(getters, state);
       wrapper = mountApiError();
       getters['errors/showApiError'] = false;
 
@@ -115,13 +121,13 @@ describe('api errors', () => {
 
     it('will update header and title when updated and api error shown', () => {
       getters = { 'errors/showApiError': false };
-      $store = createStore({ getters, state });
+      $store = createApiErrorStore(getters, state);
       wrapper = mountApiError();
       getters['errors/showApiError'] = true;
 
       expect(EventBus.$emit).toHaveBeenCalledTimes(2);
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'Prescription data error', true, true);
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'Prescription data error', true);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'Cannot show prescription information', true, true);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'Cannot show prescription information', true);
     });
   });
 
@@ -142,7 +148,7 @@ describe('api errors', () => {
 
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/account/notifications', status: 500, error: 10002 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
           deviceSettings = getDeviceSettings();
         });
@@ -164,7 +170,7 @@ describe('api errors', () => {
       describe('path does not have additional info', () => {
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/account/notifications', status: 500, error: 10001 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
         });
 
@@ -181,7 +187,7 @@ describe('api errors', () => {
       describe('path has message text', () => {
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/organ_donation', status: 500 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
           message = getMessage();
         });
@@ -201,7 +207,7 @@ describe('api errors', () => {
 
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/prescriptions', status: 500 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
           message = getMessage();
         });
@@ -220,7 +226,7 @@ describe('api errors', () => {
       describe('is native app', () => {
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/prescriptions/confirm_prescription_details', status: 466 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
         });
 
@@ -234,33 +240,33 @@ describe('api errors', () => {
             path: '/prescriptions/confirm_prescription_details',
             status: 466,
             userSessionCreateReferenceCode: 'xxxxxx' });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
 
           expect(wrapper.find(ReportAProblem).exists()).toBe(true);
         });
 
-        it('will have three message texts', () => {
-          expect(wrapper.findAll(MessageText).length).toBe(3);
+        it('will have two message texts', () => {
+          expect(wrapper.findAll(MessageText).length).toBe(2);
         });
 
         it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('We cannot complete this order');
-        });
-
-        it('will contain the subheader', () => {
           expect(wrapper.find(MessageDialog).text()).toContain('You previously ordered at least one of these medications in the last 30 days');
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('If you need more medication sooner, contact your GP.');
+          expect(wrapper.find(MessageDialog).text()).toContain('If you need this medicine sooner, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.');
+        });
+
+        it('will contain no subheader', () => {
+          expect(wrapper.find('[data-purpose="msg-subheader"').exists()).toBe(false);
         });
       });
 
       describe('is not native app', () => {
         beforeEach(() => {
           state = createState({ isNativeApp: false, path: '/prescriptions/confirm_prescription_details', status: 466 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
         });
 
@@ -274,18 +280,14 @@ describe('api errors', () => {
             path: '/prescriptions/confirm_prescription_details',
             status: 466,
             userSessionCreateReferenceCode: 'xxxxxx' });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
 
           expect(wrapper.find(ReportAProblem).exists()).toBe(true);
         });
 
-        it('will have three message texts', () => {
-          expect(wrapper.findAll(MessageText).length).toBe(3);
-        });
-
-        it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('We cannot complete this order');
+        it('will have two message texts', () => {
+          expect(wrapper.findAll(MessageText).length).toBe(2);
         });
 
         it('will contain the subheader', () => {
@@ -293,7 +295,7 @@ describe('api errors', () => {
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('If you need more medication sooner, contact your GP.');
+          expect(wrapper.find(MessageDialog).text()).toContain('If you need this medicine sooner, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.');
         });
       });
     });
@@ -302,7 +304,7 @@ describe('api errors', () => {
       describe('no retry text', () => {
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/', status: 404 });
-          $store = createStore({ getters, state });
+          $store = createApiErrorStore(getters, state);
           wrapper = mountApiError();
         });
 
@@ -315,7 +317,7 @@ describe('api errors', () => {
         describe('is native app', () => {
           beforeEach(() => {
             state = createState({ isNativeApp: true, path: '/prescriptions/view-orders', status: 504 });
-            $store = createStore({ getters, state });
+            $store = createApiErrorStore(getters, state);
             wrapper = mountApiError();
           });
 
@@ -328,7 +330,7 @@ describe('api errors', () => {
           describe('no retry action or text', () => {
             beforeEach(() => {
               state = createState({ isNativeApp: false, path: '/', status: 404 });
-              $store = createStore({ getters, state });
+              $store = createApiErrorStore(getters, state);
               wrapper = mountApiError();
             });
 
@@ -348,7 +350,7 @@ describe('api errors', () => {
                 path: '/prescriptions/view-orders',
                 status: 504,
               });
-              $store = createStore({ getters, state });
+              $store = createApiErrorStore(getters, state);
               wrapper = mountApiError();
               EventBus.$emit.mockClear();
               EventBus.$on.mockClear();
@@ -391,7 +393,7 @@ describe('api errors', () => {
                 backLinks: { 466: 'prescriptions' },
               });
 
-              $store = createStore({ getters, state });
+              $store = createApiErrorStore(getters, state);
               wrapper = mountApiError();
 
               expect(wrapper.find('#backLink').exists()).toBe(true);
@@ -401,15 +403,38 @@ describe('api errors', () => {
             it('will not show the back link if there is no back link url for the error', () => {
               state = createState({
                 isNativeApp: false,
-                path: '/prescriptions/confirm-prescription-details',
-                status: 500,
+                path: '/prescriptions/repeat_courses',
+                status: 504,
                 backLinks: { 466: 'prescriptions' },
               });
-              $store = createStore({ getters, state });
+              $store = createApiErrorStore(getters, state);
               wrapper = mountApiError();
 
               expect(wrapper.find('#backLink').exists()).toBe(false);
               expect(wrapper.find('#retryButton').exists()).toBe(true);
+            });
+
+            it('will show the prescriptions link if there is text for the link', () => {
+              state = createState({
+                isNativeApp: false,
+                path: '/prescriptions/confirm-prescription-details',
+              });
+              $store = createApiErrorStore(getters, state);
+              wrapper = mountApiError();
+
+              expect(wrapper.find('#prescriptionsLink').exists()).toBe(true);
+            });
+
+            it('will not show the prescriptions link if there is no text for the link', () => {
+              state = createState({
+                isNativeApp: false,
+                path: '/prescriptions/confirm-prescription-details',
+                status: 466,
+              });
+              $store = createApiErrorStore(getters, state);
+              wrapper = mountApiError();
+
+              expect(wrapper.find('#prescriptionsLink').exists()).toBe(false);
             });
           });
         });
@@ -428,7 +453,7 @@ describe('api errors', () => {
     describe('is native app', () => {
       beforeEach(() => {
         state = createState({ isNativeApp: true, path: '/', status: 404 });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
       });
 
@@ -440,7 +465,7 @@ describe('api errors', () => {
     describe('is not native app', () => {
       beforeEach(() => {
         state = createState({ isNativeApp: false, path: '/', status: 404 });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
       });
 
@@ -461,7 +486,7 @@ describe('api errors', () => {
         ['will substitude "-" for "_"', '/my-page', 'my_page'],
       ]).it('%s', (_, routePath, expectedComponent) => {
         state = createState({ path: routePath });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
         expect(wrapper.vm.component).toEqual(expectedComponent);
       });
@@ -469,14 +494,14 @@ describe('api errors', () => {
     describe('override style', () => {
       it('will not return an override style if not defined for given status code', () => {
         state = createState({ isNativeApp: true, path: '/', status: 500 });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
         expect(wrapper.vm.overrideStyle).toBeUndefined();
       });
 
       it('will return an override style if defined for given status code', () => {
         state = createState({ isNativeApp: true, path: '/', status: 403 });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
         expect(wrapper.vm.overrideStyle).toEqual('none');
       });
@@ -496,7 +521,7 @@ describe('api errors', () => {
 
       it('will be value of `[component].errors.[statusCode].[errorCode].[type] if it exists', () => {
         state = createState({ path: '/account/notifications', error: 10001, status: 500 });
-        $store = createStore({ getters, state });
+        $store = createApiErrorStore(getters, state);
         wrapper = mountApiError();
 
         const x = wrapper.vm.getComponentErrorCodeKey('retryButtonText');

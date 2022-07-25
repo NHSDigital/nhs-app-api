@@ -3,19 +3,17 @@ import each from 'jest-each';
 import Necessity from '@/lib/necessity';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
 import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
-import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import { FOCUS_ERROR_ELEMENT, EventBus, UPDATE_TITLE, UPDATE_HEADER } from '@/services/event-bus';
 import { createRouter, mount } from '../../helpers';
 
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
-
-const repeatPrescriptionCourses = [
-  { id: 'repeat-course-id-1' },
-  { id: 'repeat-course-id-2' },
-  { id: 'repeat-course-id-3' },
-];
 
 const createStore = ({
   hasLoaded = true,
@@ -27,6 +25,11 @@ const createStore = ({
   specialRequestIds = [],
   isValid = false,
   specialRequestValid = false,
+  repeatPrescriptionCourses = [
+    { id: 'repeat-course-id-1' },
+    { id: 'repeat-course-id-2' },
+    { id: 'repeat-course-id-3' },
+  ],
 } = {}) => ({
   dispatch: jest.fn(() => Promise.resolve()),
   app: {
@@ -302,6 +305,20 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
       // Assert
       expect(page.vm.error).toBe(false);
+    });
+  });
+
+  describe('if no prescriptions available', () => {
+    const $store = createStore({
+      repeatPrescriptionCourses: [],
+    });
+
+    it('will update page content', async () => {
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'navigation.pages.titles.repeatPrescriptionsNoPrescriptionsToOrder');
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'navigation.pages.headers.repeatPrescriptionsNoPrescriptionsToOrder');
+      expect(page.find('#noRepeatCoursesDialogue p').text()).toEqual('Contact your GP surgery to get medication or set up a repeat prescription.');
     });
   });
 });

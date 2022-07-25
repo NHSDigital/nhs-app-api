@@ -183,10 +183,10 @@ Feature: View prescriptions Frontend
     And I click the View Orders link
     Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
-    Then I see what I can do next with a prescriptions error message and reference code '3p'
+    Then I see what I can do next with a repeat prescriptions error message and reference code '3p'
     And I click the session error back link
     And I click the View Orders link
-    And I see what I can do next with a prescriptions error message and reference code '3p'
+    And I see what I can do next with a repeat prescriptions error message and reference code '3p'
     And I click the session error back link
     And the Prescriptions Hub page is displayed
     And The <GP System> GP system becomes available

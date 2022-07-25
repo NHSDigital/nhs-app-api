@@ -3,7 +3,7 @@
     <error-page v-if="hasRetried"
                 id="presciptionsGpSessionError"
                 :code="referenceCode"
-                header-locale-ref="gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions"
+                header-locale-ref="gpSessionErrors.prescriptions.repeatPrescriptionsCannotOrder"
                 :back-url="backUrl"
                 :update-header="false">
       <template #content>

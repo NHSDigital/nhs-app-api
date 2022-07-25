@@ -302,15 +302,16 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Then("I see a message indicating I've previously ordered " +
             "one of the selected medications within the last 30 days")
     fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
-        val expectedHeader = "We cannot complete this order"
-        val expectedSubHeader = "You previously ordered at least one of these medications in the last 30 days."
-        val expectedText = "If you need more medication sooner, contact your GP."
+        val expectedHeader = "You previously ordered at least one of these medications in the last 30 days."
+        val expectedText = "If you need this medicine sooner, contact your GP surgery directly. For " +
+                "urgent medical advice, go to 111.nhs.uk or call 111."
+        val backLink = "Go to your prescriptions"
         Assert.assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
                 expectedHeader, errorPage.heading.text)
-        Assert.assertEquals("expected error text $expectedSubHeader but found ${errorPage.subHeading.text}",
-                expectedSubHeader, errorPage.subHeading.text)
         Assert.assertEquals("expected error text $expectedText but found ${errorPage.errorText1.text}",
                 expectedText, errorPage.errorText1.text)
+        Assert.assertEquals("expected error text $backLink but found ${errorPage.customBackLink.text}",
+            backLink, errorPage.customBackLink.text)
     }
 
     @When("^I see nominated pharmacy information is shown and correct$")

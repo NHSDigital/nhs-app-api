@@ -228,9 +228,9 @@ open class CoursesStepDefinitions {
         Assert.assertTrue(repeatPrescriptions.checkMedicalAbbreviationsLink())
     }
 
-    @Then("^a message is displayed indicating that you don't have any medication available to order$")
-    fun aMessageIsDisplayedIndicatingThatYouDontHaveAnyRepeatMedicationAvailableToOrder() {
-        Assert.assertTrue(repeatPrescriptions.isNoMedicationAvailableToOrderMessageVisible())
+    @Then("^the 'No repeat prescriptions available to order' Header is displayed$")
+    fun theHeaderPageErrorIsDisplayed() {
+        Assert.assertTrue(repeatPrescriptions.isErrorPageHeaderVisible())
     }
 
     @Then("^I see the available repeatable prescriptions$")

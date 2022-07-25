@@ -14,13 +14,13 @@ import pages.navigation.WebHeader
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/view-orders")
 open class ViewOrdersPrescriptionsPage : HybridPageObject() {
 
-    val timeoutPageHeader = "Prescription data error"
+    val timeoutPageHeader = "Cannot show prescription information"
     val timeoutHeader = "There's been a problem getting your prescription information"
     val timeoutMessage = "Try again now. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
     val timeoutRetryButtonText = "Try again"
 
-    val serverErrorPageHeader = "Prescription data error"
+    val serverErrorPageHeader = "Cannot show prescription information"
     val serverErrorHeader = "There\'s been a problem getting your prescription information"
     val serverErrorMessage = "Try again later. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."

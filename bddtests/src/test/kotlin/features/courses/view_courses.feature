@@ -36,8 +36,7 @@ Feature: View Courses Frontend
     When I click 'Order a prescription'
     Then the Type of Prescriptions page is displayed
     When I select the option to order a repeat prescription
-    Then I see the available repeatable prescriptions
-    And a message is displayed indicating that you don't have any medication available to order
+    Then the 'No repeat prescriptions available to order' Header is displayed
     Examples:
       | GP System |
       | EMIS      |

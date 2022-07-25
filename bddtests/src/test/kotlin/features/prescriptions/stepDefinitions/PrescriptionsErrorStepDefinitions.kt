@@ -120,12 +120,12 @@ class PrescriptionsErrorStepDefinitions {
         val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
         val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
         val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
-        val retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
+        val backLink = confirmRepeatPrescriptionsOrderPage.backToPrescriptionsText
 
         errorPage.assertHeaderText(header)
                 .assertMessageText(message)
-                .assertRetryButtonText(retryButtonText)
                 .assertPageHeader(pageHeader)
+                .assertBackToPrescriptionsLinkText(backLink)
     }
 
     @Then("^I see a message informing me that I don't currently have access to this service$")
@@ -154,6 +154,17 @@ class PrescriptionsErrorStepDefinitions {
                 .assertParagraphText("If you need a repeat prescription now, contact your GP surgery.")
                 .assertParagraphText("For urgent medical advice, go to ")
                 .assertReportAProblemLink()
+        prescriptionsGpSessionError.assertEmergencyMenuItem()
+    }
+
+    @Then("^I see what I can do next with a repeat prescriptions error message and reference code '(.*)'$")
+    fun iSeeRepeatPrescriptionsUnavailableNoGpSession(prefix: String){
+        prescriptionsGpSessionError.assertPageHeader("Cannot order or view repeat prescriptions online")
+            .assertReferenceCode(prefix)
+            .assertMenuListHeader("Other things you can do")
+            .assertParagraphText("If you need a repeat prescription now, contact your GP surgery.")
+            .assertParagraphText("For urgent medical advice, go to ")
+            .assertReportAProblemLink()
         prescriptionsGpSessionError.assertEmergencyMenuItem()
     }
 }

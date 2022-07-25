@@ -26,7 +26,7 @@ Feature: GP Session On Demand prescriptions
     And I click the View Orders link
     And I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
-    Then I see what I can do next with a prescriptions error message and reference code '<Prefix>'
+    Then I see what I can do next with a repeat prescriptions error message and reference code '<Prefix>'
     Examples:
       | GP System | Prefix |
       | EMIS      | 3e     |

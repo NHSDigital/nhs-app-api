@@ -1,6 +1,6 @@
 export default {
-  pageTitle: 'Prescription data error',
-  pageHeader: 'Prescription data error',
+  pageTitle: 'Cannot show prescription information',
+  pageHeader: 'Cannot show prescription information',
   header: 'There\'s been a problem getting your prescription information',
   subheader: '',
   message: {
@@ -9,8 +9,8 @@ export default {
   },
   retryButtonText: '',
   view_orders: {
-    pageTitle: 'Prescription data error',
-    pageHeader: 'Prescription data error',
+    pageTitle: 'Cannot show prescription information',
+    pageHeader: 'Cannot show prescription information',
     header: 'There\'s been a problem getting your prescription information',
     subheader: '',
     message: {
@@ -19,8 +19,8 @@ export default {
     },
     retryButtonText: '',
     504: {
-      pageTitle: 'Prescription data error',
-      pageHeader: 'Prescription data error',
+      pageTitle: 'Cannot show prescription information',
+      pageHeader: 'Cannot show prescription information',
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
       message: {
@@ -41,8 +41,8 @@ export default {
     },
   },
   repeat_courses: {
-    pageTitle: 'Prescription data error',
-    pageHeader: 'Prescription data error',
+    pageTitle: 'Cannot show prescription information',
+    pageHeader: 'Cannot show prescription information',
     header: 'There\'s been a problem getting your prescription information',
     subheader: '',
     message: {
@@ -51,8 +51,8 @@ export default {
     },
     retryButtonText: '',
     504: {
-      pageTitle: 'Prescription data error',
-      pageHeader: 'Prescription data error',
+      pageTitle: 'Cannot show prescription information',
+      pageHeader: 'Cannot show prescription information',
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
       message: {
@@ -62,8 +62,8 @@ export default {
       retryButtonText: 'Try again',
     },
     403: {
-      pageTitle: 'Repeat prescriptions unavailable',
-      pageHeader: 'Repeat prescriptions unavailable',
+      pageTitle: 'Cannot show prescription information',
+      pageHeader: 'Cannot show prescription information',
       header: 'You are not currently able to order repeat prescriptions online.',
       subheader: '',
       message: {
@@ -73,8 +73,8 @@ export default {
     },
   },
   prescription_type: {
-    pageTitle: 'Prescription data error',
-    pageHeader: 'Prescription data error',
+    pageTitle: 'Cannot show prescription information',
+    pageHeader: 'Cannot show prescription information',
     header: 'There\'s been a problem getting your prescription information',
     subheader: '',
     message: {
@@ -83,8 +83,8 @@ export default {
     },
     retryButtonText: '',
     504: {
-      pageTitle: 'Prescription data error',
-      pageHeader: 'Prescription data error',
+      pageTitle: 'Cannot show prescription information',
+      pageHeader: 'Cannot show prescription information',
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
       message: {
@@ -105,21 +105,21 @@ export default {
     },
   },
   confirm_prescription_details: {
-    pageTitle: 'Prescription order error',
-    pageHeader: 'Error sending order',
-    header: 'There\'s been a problem sending your order',
-    subheader: '',
+    pageTitle: 'There was a problem sending your order',
+    pageHeader: 'There was a problem sending your order',
+    header: 'There was a problem connecting to your GP surgery',
+    subheader: 'Go back to prescriptions and try again',
     message: {
-      text: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
-      label: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+      text: 'If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
+      label: 'If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
-    retryButtonText: 'Go to your prescriptions',
+    backToPrescriptionsLinkText: 'Back to prescriptions',
     466: {
-      pageTitle: 'Error submitting request',
-      pageHeader: 'Error submitting request',
-      header: 'We cannot complete this order',
-      subheader: 'You previously ordered at least one of these medications in the last 30 days.',
-      message: 'If you need more medication sooner, contact your GP.',
+      pageTitle: 'Medication is unavailable to order',
+      pageHeader: 'Medication is unavailable to order',
+      header: 'You previously ordered at least one of these medications in the last 30 days.',
+      message: 'If you need this medicine sooner, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
+      retryButtonText: 'Go to your prescriptions',
     },
   },
 };

@@ -13,11 +13,14 @@
                       data-purpose="msg-header">
           {{ header }}
         </message-text>
-        <message-text v-if="subheader !== ''"
+        <message-text v-if="subheader !== '' && displayPrescriptionsSubheader"
                       :unindent="isPlainNativeError"
                       :override-style="overrideStyle"
                       data-purpose="msg-subheader">
           {{ subheader }}
+          <a v-if="displayBackToPrescriptionsLinkText" id="prescriptionsLink" :href="prescriptionsPath">
+            {{ backToPrescriptionsLinkText }}
+          </a>
         </message-text>
         <message-text :is-before-footer="true"
                       :unindent="isPlainNativeError"
@@ -86,6 +89,7 @@ import { getDynamicStyle } from '@/lib/desktop-experience';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { isBlankString } from '@/lib/utils';
+import { PRESCRIPTIONS_PATH } from '@/router/paths';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -120,6 +124,7 @@ export default {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
       symptomCheckerUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
+      prescriptionsPath: `/${PRESCRIPTIONS_PATH}`,
     };
   },
   computed: {
@@ -197,6 +202,18 @@ export default {
     },
     retryButtonText() {
       return this.getComponentErrorCodeKey('retryButtonText') || this.getComponentKey('retryButtonText');
+    },
+    backToPrescriptionsLinkText() {
+      return this.getMessage('backToPrescriptionsLinkText');
+    },
+    displayBackToPrescriptionsLinkText() {
+      return this.statusCode !== 466 && this.component === 'prescriptions.confirm_prescription_details';
+    },
+    displayPrescriptionsSubheader() {
+      if (this.component === 'prescriptions.confirm_prescription_details') {
+        return this.statusCode !== 466;
+      }
+      return true;
     },
     buttonClasses() {
       let clazzes = 'nhsuk-button';

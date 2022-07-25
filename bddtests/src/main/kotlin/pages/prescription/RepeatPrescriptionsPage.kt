@@ -74,6 +74,11 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         return findByXpath("//h3[contains(., \"$message\")]").isVisible
     }
 
+    fun isErrorPageHeaderVisible(): Boolean {
+        val message = "No repeat prescriptions available to order"
+        return findByXpath("//h1[contains(., \"$message\")]").isVisible
+    }
+
     fun specialRequestCharactersRemainingTextIsVisible(text: String): Boolean {
         return findByXpath("//p[@id=\"specialRequestCharactersRemaining\"][contains(., \"$text\")]").isVisible
     }

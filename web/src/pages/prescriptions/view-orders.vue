@@ -141,11 +141,11 @@ const loadData = async (store) => {
   ) {
     EventBus.$emit(
       UPDATE_HEADER,
-      'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions',
+      'gpSessionErrors.prescriptions.repeatPrescriptionsCannotOrder',
     );
     EventBus.$emit(
       UPDATE_TITLE,
-      'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions',
+      'gpSessionErrors.prescriptions.repeatPrescriptionsCannotOrder',
     );
   }
 };

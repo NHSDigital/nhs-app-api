@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         private WebText ErrorTitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "Prescription data error");
+            "Cannot show prescription information");
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 

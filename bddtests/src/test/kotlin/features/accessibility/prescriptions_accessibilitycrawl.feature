@@ -102,8 +102,7 @@ Feature: Repeat prescriptions and Your orders accessibility
     When I click 'Order a prescription'
     Then the Type of Prescriptions page is displayed
     When I select the option to order a repeat prescription
-    Then I see the available repeatable prescriptions
-    And a message is displayed indicating that you don't have any medication available to order
+    Then the 'No repeat prescriptions available to order' Header is displayed
     And the PrescriptionsHub_SelectMedicationNoneAvailable page is saved to disk
 
   Scenario: The 'Error submitting request - prescription order' page is captured
@@ -174,7 +173,7 @@ Feature: Repeat prescriptions and Your orders accessibility
     And I click the View Orders link
     Then I see appropriate try again shutter screen for prescriptions when there is no GP session
     When I click the 'Try again' button
-    Then I see what I can do next with a prescriptions error message and reference code '3p'
+    Then I see what I can do next with a repeat prescriptions error message and reference code '3p'
     And the Prescriptions_GPSessionError_OtherThingsYouCanDo page is saved to disk
 
   Scenario: The 'Prescription hub for users with No-Nominated Pharmacy' page is captured
@@ -221,3 +220,22 @@ Feature: Repeat prescriptions and Your orders accessibility
     And I click the View Orders link
     Then I see no prescriptions
     And the NoOrders_WithNominatedPharmacy page is saved to disk
+
+  Scenario: The 'Error getting prescription history and medication list (SC26)' page is captured
+    Given I am a patient using the TPP GP System
+    And I am logged in
+    And The prescriptions endpoint is throwing a server error
+    When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
+    Then I see the appropriate error message for a prescription server error
+    And the SC26_CannotShowPrescriptionInformation page is saved to disk
+
+  Scenario: The 'Timeout error getting prescription history and medication list (SC25)' page is captured
+    Given I am a patient using the TPP GP System
+    And I am logged in
+    And The prescriptions endpoint is timing out
+    When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
+    And I wait for 20 seconds
+    Then I see the appropriate error message for a prescription timeout
+    And the SC25_CannotShowPrescriptionInformation page is saved to disk

@@ -14,6 +14,7 @@ export default {
     tryAgainHeader: 'Sorry, there is a problem getting your repeat prescription information',
     youAreNotCurrentlyAble: 'You are not currently able to order or view repeat prescriptions online.',
     youCanNotOrderOrViewPrescriptions: 'Sorry, you cannot order or view repeat prescriptions online',
+    repeatPrescriptionsCannotOrder: 'Cannot order or view repeat prescriptions online',
     contactYourSurgery: 'If you need a repeat prescription now, contact your GP surgery.',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
     emergencyHeader: 'Find out how to get an emergency prescription',
