@@ -14,10 +14,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             PageContent = new AppointmentsTemporaryProblemPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSAppointmentsTemporaryProblemPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSAppointmentsTemporaryProblemPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSAppointmentsTemporaryProblemPage(driver);
             page.PageContent.AssertOnPage();
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSAppointmentsTemporaryProblemPage));
+            }
             return page;
         }
 

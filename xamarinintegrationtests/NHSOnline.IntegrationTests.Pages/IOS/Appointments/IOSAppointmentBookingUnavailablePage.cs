@@ -14,10 +14,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
             PageContent = new AppointmentBookingUnavailablePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSAppointmentBookingUnavailablePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSAppointmentBookingUnavailablePage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSAppointmentBookingUnavailablePage(driver);
             page.PageContent.AssertOnPage();
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSAppointmentBookingUnavailablePage));
+            }
             return page;
         }
 
