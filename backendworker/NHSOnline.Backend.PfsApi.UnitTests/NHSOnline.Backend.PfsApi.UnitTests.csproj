@@ -62,6 +62,10 @@
     <Content Include="OrganDonation\Resources\mycert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="MockData\SecondaryCare\partial-error-and-appointment.json" />
+    <Content Include="MockData\SecondaryCare\partial-error-and-appointment.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.test.json">

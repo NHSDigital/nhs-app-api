@@ -12,11 +12,14 @@
     <h2 id="changeNotShowingHelpTitle">
       {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpTitle') }}
     </h2>
-    <p id="changeNotShowingHelpText">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpText') }}
+    <p id="changeNotShowingHelpTextOne">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpTextOne') }}
     </p>
-    <p id="changeNeedApprovalHelpText">
-      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNeedApprovalHelpText') }}
+    <p id="changeNotShowingHelpTextTwo">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpTextTwo') }}
+    </p>
+    <p id="changeNotShowingHelpTextThree">
+      {{ $t('wayfinder.wayfinderHelp.confirmedAppointmentsHelp.changeNotShowingHelpTextThree') }}
     </p>
     <desktop-generic-back-link v-if="!isNativeApp"
                                id="desktopBackLink"

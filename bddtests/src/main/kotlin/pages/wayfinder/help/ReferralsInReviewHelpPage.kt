@@ -13,19 +13,13 @@ open class ReferralsInReviewHelpPage : HybridPageObject() {
         helpfulName = "Missing or incorrect referrals in review H1"
     )
 
-    private val referralsInReviewHelpPageTitle1 = HybridPageElement(
+    private val somethingIsMissingTitle = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"If something is missing\")]",
         page = this,
         helpfulName = "If something is missing H2"
     )
 
-    private val referralsInReviewHelpPageTitle2 = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"If a cancellation is not showing\")]",
-        page = this,
-        helpfulName = "If a cancellation is not showing H2"
-    )
-
-    private val referralsInReviewHelpPageText1 = HybridPageElement(
+    private val somethingIsMissingText1 = HybridPageElement(
         webDesktopLocator = "//p[contains(text(),\"You may have referrals being reviewed by a clinic " +
                 "that are not shown but are in other services. Contact the organisation that referred you.\")]",
         page = this,
@@ -33,28 +27,27 @@ open class ReferralsInReviewHelpPage : HybridPageObject() {
                 "shown but are in other services. Contact the organisation that referred you. p"
     )
 
-    private val referralsInReviewHelpPageText2 = HybridPageElement(
-        webDesktopLocator = "//p[contains(text(),\"You may have requested to cancel a referral " +
-                "that's being reviewed.\")]",
+    private val cancellationNotShowingTitle = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"If a cancellation is not showing\")]",
         page = this,
-        helpfulName = "You may have requested to cancel a referral that's being reviewed. p"
+        helpfulName = "If a cancellation is not showing H2"
     )
 
-    private val referralsInReviewHelpPageText3 = HybridPageElement(
-        webDesktopLocator = "//p[contains(text(),\"Your cancellation may not be shown until " +
-                "the request is approved by the organisation that referred you.\")]",
+    private val cancellationNotShowingText = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"If you have cancelled a referral that’s " +
+                "being reviewed and it’s still showing you need to contact the " +
+                "healthcare provider that referred you.\")]",
         page = this,
-        helpfulName = "Your cancellation may not be shown until the request is approved by " +
-                "the organisation that referred you. p"
+        helpfulName = "If you have cancelled a referral that’s being reviewed and it’s still " +
+                "showing you need to contact the healthcare provider that referred you. p"
     )
 
     fun assertHelpPageIsDisplayed(){
         referralsInReviewHelpPageMainTitle.assertIsVisible()
-        referralsInReviewHelpPageTitle1.assertIsVisible()
-        referralsInReviewHelpPageTitle2.assertIsVisible()
-        referralsInReviewHelpPageText1.assertIsVisible()
-        referralsInReviewHelpPageText2.assertIsVisible()
-        referralsInReviewHelpPageText3.assertIsVisible()
+        somethingIsMissingTitle.assertIsVisible()
+        somethingIsMissingText1.assertIsVisible()
+        cancellationNotShowingTitle.assertIsVisible()
+        cancellationNotShowingText.assertIsVisible()
         getBackLink().assertIsVisible()
     }
 }

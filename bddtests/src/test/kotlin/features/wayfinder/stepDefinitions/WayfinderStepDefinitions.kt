@@ -51,8 +51,8 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAndUpcomingAppointmentsResponse()
     }
 
-    @Given("^I cannot view referrals or appointments due to a partial error$")
-    fun iCannotViewReferralsOrAppointmentsDueToAPartialError(){
+    @Given("^I get a partial error returned for a supplier$")
+    fun iGetAPartialErrorReturnedForASupplier(){
         wayfinderFactory.setupReferralsAppointmentsPartialErrorResponse()
     }
 

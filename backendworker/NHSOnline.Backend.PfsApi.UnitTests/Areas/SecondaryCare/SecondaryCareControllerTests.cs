@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -141,44 +142,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         }
 
         [TestMethod]
-        [DynamicData(nameof(InvalidResponseData))]
-        public async Task WhenGetSummaryResponseFromClientHasMissingOrInvalidDataThenGetSummaryLogsErrorsAndReturns502(
-            string response,
-            List<string> mapperErrorMessages,
-            List<string> serviceErrorMessages,
-            List<string> auditMessages)
+        public async Task WhenGetSummaryResponseFromClientHasMissingOrInvalidDataThenGetSummaryLogsErrorsAndReturnsPartialData()
         {
             // Arrange
             Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
-            Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(response);
+            Context.MockSecondaryCareHttpClientGetSummaryReturnsSuccessfulResponseWithData(LoadAggregatorResponse("partial-error-and-appointment"));
 
             // Act
             var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
+            var pfsResponse = result.Should().BeAssignableTo<OkObjectResult>();
+            var summaryResponse = pfsResponse.Subject.Value as SummaryResponse;
 
-            // Assert
-            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+            //Assert
+            summaryResponse.Should().NotBeNull();
 
-            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
-
-            foreach (var errorMessage in mapperErrorMessages)
-            {
-                Context.Mocks.SummaryMapperLogger.VerifyLogger(LogLevel.Error, errorMessage, Times.Once());
-            }
-
-            foreach (var errorMessage in serviceErrorMessages)
-            {
-                Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Error, errorMessage, Times.Once());
-            }
-
-            foreach (var auditMessage in auditMessages)
-            {
-                Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult,auditMessage));
-            }
-
+            var errorMessage = "Aggregator Secondary Care Summary API errors found in response: Reason: http-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3";
+            Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Error, errorMessage, Times.Once());
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult,"Failed - errors in response: Reason: http-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 0, Total Upcoming Appointments: 1"));
 
             VerifyNoOtherLoggerCalls();
         }

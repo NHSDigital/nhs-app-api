@@ -9,9 +9,12 @@ describe('Missing or incorrect referrals or appointments link clicked from index
   let missingAppointmentsHelpTitle;
   let changeNotShowingHelpTitle;
   let missingAppointmentsHelpText;
-  let Under18HelpText;
+  let under18HelpText;
   let changeNotShowingHelpText;
-  let changeNeedApprovalHelpText;
+  let appointmentChangeOrCancellationNotShowingTitle;
+  let changeOrCancellationTextOne;
+  let changeOrCancellationTextTwo;
+  let changeOrCancellationTextThree;
   let backButton;
 
   const createIndexPage = () => mount(ReferralsOrAppointmentsHelpPage, {
@@ -47,10 +50,10 @@ describe('Missing or incorrect referrals or appointments link clicked from index
 
     it('Missing referrals or appointments under 18 help text is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      Under18HelpText = wrapper.find('#Under18HelpText');
+      under18HelpText = wrapper.find('#under18HelpText');
 
-      expect(Under18HelpText.exists()).toBe(true);
-      expect(Under18HelpText.text()).toEqual('If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.');
+      expect(under18HelpText.exists()).toBe(true);
+      expect(under18HelpText.text()).toEqual('If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.');
     });
 
     it('Missing referrals or appointments change not showing help title is visible and contains correct text', () => {
@@ -58,7 +61,7 @@ describe('Missing or incorrect referrals or appointments link clicked from index
       changeNotShowingHelpTitle = wrapper.find('#changeNotShowingHelpTitle');
 
       expect(changeNotShowingHelpTitle.exists()).toBe(true);
-      expect(changeNotShowingHelpTitle.text()).toEqual('If a change or cancellation is not showing');
+      expect(changeNotShowingHelpTitle.text()).toEqual('Cancelled referrals');
     });
 
     it('Missing referrals or appointments change not showing help text is visible and contains correct text', () => {
@@ -66,15 +69,39 @@ describe('Missing or incorrect referrals or appointments link clicked from index
       changeNotShowingHelpText = wrapper.find('#changeNotShowingHelpText');
 
       expect(changeNotShowingHelpText.exists()).toBe(true);
-      expect(changeNotShowingHelpText.text()).toEqual('You may have requested to change or cancel a referral or appointment.');
+      expect(changeNotShowingHelpText.text()).toEqual('If you have cancelled a referral and it’s still showing, you need to contact the healthcare provider that referred you.');
     });
 
-    it('Missing referrals or appointments change need approval help text is visible and contains correct text', () => {
+    it('Appointment change or cancellation not showing help title is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      changeNeedApprovalHelpText = wrapper.find('#changeNeedApprovalHelpText');
+      appointmentChangeOrCancellationNotShowingTitle = wrapper.find('#appointmentChangeOrCancellationNotShowingTitle');
 
-      expect(changeNeedApprovalHelpText.exists()).toBe(true);
-      expect(changeNeedApprovalHelpText.text()).toEqual('Any updates you have made may not be shown until the request is approved by the relevant organisation or healthcare provider.');
+      expect(appointmentChangeOrCancellationNotShowingTitle.exists()).toBe(true);
+      expect(appointmentChangeOrCancellationNotShowingTitle.text()).toEqual('If an appointment change or cancellation is not showing');
+    });
+
+    it('Appointment change or cancellation not showing help text one is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeOrCancellationTextOne = wrapper.find('#changeOrCancellationTextOne');
+
+      expect(changeOrCancellationTextOne.exists()).toBe(true);
+      expect(changeOrCancellationTextOne.text()).toEqual('If you have requested to change or permanently cancel an appointment this request may not automatically be accepted.');
+    });
+
+    it('Appointment change or cancellation not showing help text two is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeOrCancellationTextTwo = wrapper.find('#changeOrCancellationTextTwo');
+
+      expect(changeOrCancellationTextTwo.exists()).toBe(true);
+      expect(changeOrCancellationTextTwo.text()).toEqual('The appointment will show as pending while the request is reviewed by the relevant organisation or healthcare provider it’s booked with.');
+    });
+
+    it('Appointment change or cancellation not showing help text three is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeOrCancellationTextThree = wrapper.find('#changeOrCancellationTextThree');
+
+      expect(changeOrCancellationTextThree.exists()).toBe(true);
+      expect(changeOrCancellationTextThree.text()).toEqual('If the request to change or cancel the appointment is not accepted it will still show as booked.');
     });
 
     it('back button exists', () => {

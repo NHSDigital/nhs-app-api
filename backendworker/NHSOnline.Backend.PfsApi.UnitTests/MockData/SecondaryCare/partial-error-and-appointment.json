@@ -1,0 +1,82 @@
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+      "resource": {
+        "resourceType": "CarePlan",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "identifier": {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "9461823282"
+          }
+        },
+        "activity": [
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "PKB"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "https://nhsapp-pkb.devstacks.pkb.io/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D273235339474%26nhsStyle%3Dtrue"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "booked"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          }
+        ]
+      },
+      "search": {
+        "mode": "match"
+      }
+    },
+    {
+      "fullUrl": "https://servita-sandbox.co.uk/OperationOutCome/1",
+      "resource": {
+        "resourceType": "OperationOutcome",
+        "issue": [
+          {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                "valueCode": "company-2"
+              }
+            ],
+            "severity": "error",
+            "code": "transient",
+            "diagnostics": "http-404 returned"
+          },
+          {
+            "extension": [
+              {
+                "url": "https://fhir.nhs.uk/StructureDefinition/ExtensionErrorSource",
+                "valueCode": "company-3"
+              }
+            ],
+            "severity": "error",
+            "code": "timeout",
+            "diagnostics": "Timeout occured"
+          }
+        ]
+      },
+      "search": {
+        "mode": "include"
+      }
+    }
+  ]
+}

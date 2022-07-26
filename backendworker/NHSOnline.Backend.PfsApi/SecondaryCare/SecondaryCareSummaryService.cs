@@ -78,7 +78,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                     var errorMessagesForLogging = string.Join("|", aggregatorResponse.Issues.Select(MapErrorForLogging));
                     _logger.LogError("{LogPrefix} errors found in response: {ErrorMessages}", SecondaryCareLogPrefix, errorMessagesForLogging);
                     await AuditSecondaryCareResult($"Failed - errors in response: {errorMessagesForLogging}");
-                    return new SecondaryCareSummaryResult.BadGateway();
                 }
 
                 var summaryResponse = _mapper.Map(aggregatorResponse.Body);

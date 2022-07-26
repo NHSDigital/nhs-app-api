@@ -10,8 +10,9 @@ describe('Missing or incorrect confirmed appointments link clicked from index pa
   let changeNotShowingHelpTitle;
   let missingAppointmentsHelpText;
   let under18HelpText;
-  let changeNotShowingHelpText;
-  let changeNeedApprovalHelpText;
+  let changeNotShowingHelpTextOne;
+  let changeNotShowingHelpTextTwo;
+  let changeNotShowingHelpTextThree;
   let backButton;
 
   const createIndexPage = () => mount(ConfirmedAppointmentsHelpPage, {
@@ -61,20 +62,36 @@ describe('Missing or incorrect confirmed appointments link clicked from index pa
       expect(changeNotShowingHelpTitle.text()).toEqual('If a change or cancellation is not showing');
     });
 
-    it('Missing confirmed appointments change not showing help text is visible and contains correct text', () => {
+    it('Missing confirmed appointments change not showing help text one is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      changeNotShowingHelpText = wrapper.find('#changeNotShowingHelpText');
+      changeNotShowingHelpTextOne = wrapper.find('#changeNotShowingHelpTextOne');
 
-      expect(changeNotShowingHelpText.exists()).toBe(true);
-      expect(changeNotShowingHelpText.text()).toEqual('You may have requested to change or cancel a booked appointment.');
+      expect(changeNotShowingHelpTextOne.exists()).toBe(true);
+      expect(changeNotShowingHelpTextOne.text()).toEqual('You may have requested to change or permanently cancel a booked appointment. This request may not automatically be accepted.');
     });
 
-    it('Missing confirmed appointments change need approval help text is visible and contains correct text', () => {
+    it('Missing confirmed appointments change not showing help text one is visible and contains correct text', () => {
       wrapper = createIndexPage();
-      changeNeedApprovalHelpText = wrapper.find('#changeNeedApprovalHelpText');
+      changeNotShowingHelpTextOne = wrapper.find('#changeNotShowingHelpTextOne');
 
-      expect(changeNeedApprovalHelpText.exists()).toBe(true);
-      expect(changeNeedApprovalHelpText.text()).toEqual('Any updates you have made may not be shown until the request is approved by the healthcare provider the appointment is booked with.');
+      expect(changeNotShowingHelpTextOne.exists()).toBe(true);
+      expect(changeNotShowingHelpTextOne.text()).toEqual('You may have requested to change or permanently cancel a booked appointment. This request may not automatically be accepted.');
+    });
+
+    it('Missing confirmed appointments change not showing help text two is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeNotShowingHelpTextTwo = wrapper.find('#changeNotShowingHelpTextTwo');
+
+      expect(changeNotShowingHelpTextTwo.exists()).toBe(true);
+      expect(changeNotShowingHelpTextTwo.text()).toEqual('The appointment will show as pending while the request is reviewed by the relevant organisation or healthcare provider it’s booked with.');
+    });
+
+    it('Missing confirmed appointments change not showing help text three is visible and contains correct text', () => {
+      wrapper = createIndexPage();
+      changeNotShowingHelpTextThree = wrapper.find('#changeNotShowingHelpTextThree');
+
+      expect(changeNotShowingHelpTextThree.exists()).toBe(true);
+      expect(changeNotShowingHelpTextThree.text()).toEqual('If the request to change or cancel the appointment is not accepted it will still show as booked.');
     });
 
     it('back button exists', () => {

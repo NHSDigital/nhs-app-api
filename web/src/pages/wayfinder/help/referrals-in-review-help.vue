@@ -1,19 +1,16 @@
 <template>
   <div>
-    <h2 id="title1">
-      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title1') }}
+    <h2 id="somethingIsMissingTitle">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.somethingIsMissingTitle') }}
     </h2>
-    <p id="text1">
-      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text1') }}
+    <p id="somethingIsMissingText1">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.somethingIsMissingText1') }}
     </p>
-    <h2 id="title2">
-      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.title2') }}
+    <h2 id="cancellationNotShowingTitle">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.cancellationNotShowingTitle') }}
     </h2>
-    <p id="text2">
-      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text2') }}
-    </p>
-    <p id="text3">
-      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.text3') }}
+    <p id="cancellationNotShowingText">
+      {{ $t('wayfinder.wayfinderHelp.referralsInReviewHelp.cancellationNotShowingText') }}
     </p>
     <desktop-generic-back-link v-if="!isNativeApp"
                                id="desktopBackLink"

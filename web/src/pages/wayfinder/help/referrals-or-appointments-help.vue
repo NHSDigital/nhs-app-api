@@ -6,8 +6,8 @@
     <p id="missingAppointmentsHelpText">
       {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.missingAppointmentsHelpText') }}
     </p>
-    <p id="Under18HelpText">
-      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.Under18HelpText') }}
+    <p id="under18HelpText">
+      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.under18HelpText') }}
     </p>
     <h2 id="changeNotShowingHelpTitle">
       {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeNotShowingHelpTitle') }}
@@ -15,8 +15,17 @@
     <p id="changeNotShowingHelpText">
       {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeNotShowingHelpText') }}
     </p>
-    <p id="changeNeedApprovalHelpText">
-      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeNeedApprovalHelpText') }}
+    <h2 id="appointmentChangeOrCancellationNotShowingTitle">
+      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.appointmentChangeOrCancellationNotShowingTitle') }}
+    </h2>
+    <p id="changeOrCancellationTextOne">
+      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeOrCancellationTextOne') }}
+    </p>
+    <p id="changeOrCancellationTextTwo">
+      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeOrCancellationTextTwo') }}
+    </p>
+    <p id="changeOrCancellationTextThree">
+      {{ $t('wayfinder.wayfinderHelp.referralsOrAppointmentsHelp.changeOrCancellationTextThree') }}
     </p>
     <desktop-generic-back-link v-if="!isNativeApp"
                                id="desktopBackLink"

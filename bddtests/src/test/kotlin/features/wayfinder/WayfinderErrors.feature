@@ -35,16 +35,14 @@ Feature: Wayfinder Errors
       | timing out            | zu     |
       | encountering an issue | 4u     |
 
-  Scenario: A user can easily contact the service desk when they encounter a partial error with Wayfinder
+  Scenario: A user can still see appointments and referrals when they encounter a partial error with Wayfinder
     Given I am a user whose surgery has enabled Wayfinder
-    And I cannot view referrals or appointments due to a partial error
+    And I get a partial error returned for a supplier
     And I am logged in
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
-    Then I see a helpful message indicating unavailable secondary care services with a 4u service desk reference
-    When I click the contact us link with the 4u error code
-    Then a new tab has been opened by the link
+    Then I see a booked appointment
 
   Scenario: A user is not at the minimum age to get a valid response from Wayfinder
     Given I am a user whose surgery has enabled Wayfinder
