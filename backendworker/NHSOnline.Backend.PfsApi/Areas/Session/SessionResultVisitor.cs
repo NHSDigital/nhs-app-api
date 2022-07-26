@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
-            var loginData = await LoginLogMetrics(httpContext, userSession, referrer);
+            await LoginLogMetrics(httpContext, userSession, referrer);
 
             await _auditor.PostOperationAuditSessionEvent(responseBody.AccessToken,
                                                             string.IsNullOrEmpty(responseBody.NhsNumber) ? " " : responseBody.NhsNumber,
@@ -75,11 +75,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                                                             $"Successful Login with SessionId: {userSession.Key}",
                                                             referrer,
                                                             integrationReferrer);
-
-            await _auditor.PostOperationAuditLoginDeviceEvent(responseBody.AccessToken,
-                                                              userSession is P9UserSession p9Session ? p9Session.NhsNumber : string.Empty,
-                                                              AuditingOperations.LoginDevice,
-                                                              loginData.UserAgent);
 
             return new CreatedResult(string.Empty, responseBody);
         }
@@ -137,12 +132,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
         }
 
-        private async Task<LoginData> LoginLogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
+        private async Task LoginLogMetrics(HttpContext httpContext, UserSession userSession, string referrer)
         {
-            var loginData = CreateLoginData(httpContext, userSession,  referrer);
-            await _metricLogger.Login(loginData);
-
-            return loginData;
+            await _metricLogger.Login(CreateLoginData(httpContext, userSession,  referrer));
         }
 
         private async Task GpSessionCreatedLogMetrics(HttpContext httpContext, UserSession userSession, string referrer)

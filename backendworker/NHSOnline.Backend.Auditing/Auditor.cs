@@ -76,14 +76,7 @@ namespace NHSOnline.Backend.Auditing
                 string.Empty, string.Empty, providerId, providerName, jumpOffId, parameters);
         }
 
-        public async Task PostOperationAuditLoginDeviceEvent(string accessToken, string nhsNumber, string operation,
-            string userAgent, params object[] parameters)
-        {
-            await AuditLoginDeviceEvent(AuditType.PostOperationAudit, accessToken, nhsNumber, operation,
-                userAgent, parameters);
-        }
-
-        private async Task Audit(AuditType auditType, string operation, string details, params object[] parameters)
+        private async Task Audit(AuditType auditType, string operation, string details,  params object[] parameters)
         {
             var auditUserContext = _scopeProvider.Value?.UserContext()
                                    ?? throw new NoAuditKeyException("Cannot audit outside of HttpContextAuditorScope");
@@ -100,8 +93,7 @@ namespace NHSOnline.Backend.Auditing
                 nhsNumber = auditUserContext.LinkedAccountNhsNumber;
             }
 
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, null,
-                null, null, null, null, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, null, null, null, null, null, parameters);
         }
 
         private async Task AuditRegistrationEvent(
@@ -113,8 +105,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             const string nhsLoginSubject = "";
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details,
-                null, null, null, null, null, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, null, null, null, null, null, parameters);
         }
 
         private async Task AuditSessionEvent(AuditType auditType,
@@ -128,8 +119,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer,
-                integrationReferrer, null, null, null, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer, integrationReferrer, null, null, null, parameters);
         }
 
         private async Task AuditSilverIntegrationEvent(
@@ -149,21 +139,6 @@ namespace NHSOnline.Backend.Auditing
             await AuditInternal(
                 auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details, referrer,
                 integrationReferrer, providerId, providerName, jumpOffId, parameters);
-        }
-
-        private async Task AuditLoginDeviceEvent(
-            AuditType auditType,
-            string accessToken,
-            string nhsNumber,
-            string operation,
-            string userAgent,
-            params object[] parameters)
-        {
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            var details = $"Device details returned: {userAgent}";
-            await AuditInternal(
-                auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details,
-                null, null, null, null,  null,parameters);
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
@@ -205,8 +180,7 @@ namespace NHSOnline.Backend.Auditing
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
 
-            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details,
-                referrer, integrationReferrer, providerId, providerName, jumpOffId, parameters);
+            var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, referrer, integrationReferrer, providerId, providerName, jumpOffId, parameters);
 
             switch (auditType)
             {

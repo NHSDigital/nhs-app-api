@@ -23,9 +23,6 @@ namespace NHSOnline.Backend.Auditing
         Task PostOperationAuditSilverIntegrationEvent(string accessToken, string nhsNumber, string operation, string details,
             string providerId, string providerName, string jumpOffId, params object[] parameters);
 
-        Task PostOperationAuditLoginDeviceEvent(string accessToken, string nhsNumber, string operation,
-            string userAgent, params object[] parameters);
-
         IDisposable BeginScope(HttpContext httpContext);
 
         IAuditBuilder Audit();

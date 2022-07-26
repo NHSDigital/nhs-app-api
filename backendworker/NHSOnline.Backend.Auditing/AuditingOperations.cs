@@ -91,6 +91,5 @@ namespace NHSOnline.Backend.Auditing
         public const string InitialNotificationPromptDecision = "InitialNotificationPrompt_Decision";
         public const string SilverIntegrationJumpOffClick = "SilverIntegration_JumpOff_Click";
         public const string BiometricsOptInDecision = "BiometricsRegistration_Decision";
-        public const string LoginDevice = "Login_Device";
     }
 }
