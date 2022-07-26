@@ -1,105 +1,107 @@
 <template>
-  <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
-    <div v-if="error">
-      <health-record-errors :error="error"/>
-    </div>
-    <div v-else>
-      <inset-text v-if="showTemplate && hasSummaryRecordAccess && !hasDetailedRecordAccess"
-                  :compact="true">
-        <p>
-          {{ $t('myRecord.askYourGpForDcrAccess') }}
-          <a style="vertical-align: baseline; display: inline"
-             :href="helpAndSupportUrl"
-             target="_blank" rel="noopener noreferrer">
-            {{ $t('myRecord.findOutMoreAboutRequestingAccess') }}</a>
-        </p>
-      </inset-text>
-
-
-      <div v-if="showPatientDetails"
-           id="mainDiv"
-           data-sid="user-info-details">
-        <h2 data-sid="patient-name"
-            :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
-              'nhsuk-u-margin-bottom-0']"
-            data-hj-suppress>
-          {{ $store.state.myRecord.patientDetails.patientName }}
-        </h2>
-        <p class="nhsuk-label nhsuk-u-margin-top-0
-                    nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-          {{ $t('myRecord.dateOfBirth') }}:
-        </p>
-        <p data-sid="user-date-of-birth"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
-                      'nhsuk-u-margin-bottom-0']">
-          {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
-        </p>
-        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
-                    nhsuk-u-font-weight-bold">
-          {{ $t('myRecord.nhsNumber') }}:
-        </p>
-        <p data-sid="user-nhs-number"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
-          {{ $store.state.myRecord.patientDetails.nhsNumber }}
-        </p>
-        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
-                    nhsuk-u-font-weight-bold">
-          {{ $t('myRecord.address') }}:
-        </p>
-        <p data-sid="user-address"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
-           data-hj-suppress>
-          {{ $store.state.myRecord.patientDetails.address }}
-        </p>
+  <div v-if="showTemplate">
+    <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
+      <div v-if="error">
+        <health-record-errors :error="error"/>
       </div>
+      <div v-else>
+        <inset-text v-if="hasSummaryRecordAccess && !hasDetailedRecordAccess"
+                    :compact="true">
+          <p>
+            {{ $t('myRecord.askYourGpForDcrAccess') }}
+            <a style="vertical-align: baseline; display: inline"
+               :href="helpAndSupportUrl"
+               target="_blank" rel="noopener noreferrer">
+              {{ $t('myRecord.findOutMoreAboutRequestingAccess') }}</a>
+          </p>
+        </inset-text>
 
-      <proxy-patient-details v-else-if="showTemplate && isProxying"
-                             :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
 
-      <div v-if="showTemplate && hasRecordAccess" :class="$style.summaryRecordContainer"
-           data-purpose="medical-record-menu">
-        <menu-item-list>
-          <template v-if="hasSummaryRecordAccess">
-            <scr-emis-gp-record v-if="supplier === 'EMIS'"/>
+        <div v-if="showPatientDetails"
+             id="mainDiv"
+             data-sid="user-info-details">
+          <h2 data-sid="patient-name"
+              :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
+                'nhsuk-u-margin-bottom-0']"
+              data-hj-suppress>
+            {{ $store.state.myRecord.patientDetails.patientName }}
+          </h2>
+          <p class="nhsuk-label nhsuk-u-margin-top-0
+                      nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
+            {{ $t('myRecord.dateOfBirth') }}:
+          </p>
+          <p data-sid="user-date-of-birth"
+             :class="[$style['user-info'],
+                      'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
+                        'nhsuk-u-margin-bottom-0']">
+            {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
+          </p>
+          <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+                      nhsuk-u-font-weight-bold">
+            {{ $t('myRecord.nhsNumber') }}:
+          </p>
+          <p data-sid="user-nhs-number"
+             :class="[$style['user-info'],
+                      'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
+            {{ $store.state.myRecord.patientDetails.nhsNumber }}
+          </p>
+          <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+                      nhsuk-u-font-weight-bold">
+            {{ $t('myRecord.address') }}:
+          </p>
+          <p data-sid="user-address"
+             :class="[$style['user-info'],
+                      'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
+             data-hj-suppress>
+            {{ $store.state.myRecord.patientDetails.address }}
+          </p>
+        </div>
 
-            <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
+        <proxy-patient-details v-else-if="isProxying"
+                               :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
 
-            <scr-vision-gp-record v-if="supplier === 'VISION'"/>
-          </template>
+        <div v-if="hasRecordAccess" :class="$style.summaryRecordContainer"
+             data-purpose="medical-record-menu">
+          <menu-item-list>
+            <template v-if="hasSummaryRecordAccess">
+              <scr-emis-gp-record v-if="supplier === 'EMIS'"/>
 
-          <template v-if="hasDetailedRecordAccess">
-            <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
+              <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
 
-            <dcr-tpp-gp-record v-if="supplier === 'TPP'"/>
+              <scr-vision-gp-record v-if="supplier === 'VISION'"/>
+            </template>
 
-            <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
-          </template>
-        </menu-item-list>
+            <template v-if="hasDetailedRecordAccess">
+              <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
 
-        <p v-if="!hasDetailedRecordAccess">{{ $t('myRecord.thisIsASummary') }}</p>
+              <dcr-tpp-gp-record v-if="supplier === 'TPP'"/>
 
-        <glossary/>
-      </div>
-      <div v-else class="pull-content">
-        <div v-if="hasLoaded">
-          <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
-            <shutter :feature="'medicalRecord'" />
+              <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
+            </template>
+          </menu-item-list>
+
+          <p v-if="!hasDetailedRecordAccess">{{ $t('myRecord.thisIsASummary') }}</p>
+
+          <glossary/>
+        </div>
+        <div v-else class="pull-content">
+          <div v-if="hasLoaded">
+            <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
+              <shutter :feature="'medicalRecord'" />
+            </div>
+            <card v-else id="errorMsg" class="nhsuk-u-margin-bottom-6">
+              <p>
+                <strong>{{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}</strong>
+              </p>
+              <p>{{ $t('myRecord.contactSurgeryForMoreInformation') }} </p>
+            </card>
           </div>
-          <card v-else id="errorMsg" class="nhsuk-u-margin-bottom-6">
-            <p>
-              <strong>{{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}</strong>
-            </p>
-            <p>{{ $t('myRecord.contactSurgeryForMoreInformation') }} </p>
-          </card>
         </div>
       </div>
     </div>
-  </div>
-  <div v-else>
-    <Warning />
+    <div v-else>
+      <Warning />
+    </div>
   </div>
 </template>
 
@@ -169,8 +171,7 @@ export default {
       return get('$store.state.myRecord.hasLoaded')(this);
     },
     showPatientDetails() {
-      return (this.showTemplate &&
-           !this.isProxying &&
+      return (!this.isProxying &&
            this.$store.getters['myRecord/patientDetailsExist']);
     },
     hasAgreedToMedicalWarning() {
