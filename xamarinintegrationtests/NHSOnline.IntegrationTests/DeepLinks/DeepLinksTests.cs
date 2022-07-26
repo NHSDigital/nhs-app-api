@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.DeepLinks
     public class DeepLinksTests
     {
         [NhsAppAndroidTest]
+        [NhsAppCanaryTest]
         public void BackgroundAppDeepLink(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -41,6 +42,7 @@ namespace NHSOnline.IntegrationTests.DeepLinks
         }
 
         [NhsAppAndroidTest]
+        [NhsAppCanaryTest]
         public void ClosedAppDeepLink(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()

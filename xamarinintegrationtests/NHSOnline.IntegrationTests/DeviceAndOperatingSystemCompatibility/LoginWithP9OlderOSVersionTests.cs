@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
     [TestClass]
     public class LoginWithP9OlderOSVersionTests
     {
-		[NhsAppFlakyTest]
+        [NhsAppCanaryTest]
         [NhsAppIOSTest(IOSDevice = IOSDevice.iPhoneX, OSVersion = IOSVersion.Eleven)]
         public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS11(IIOSDriverWrapper driver)
         {
@@ -77,6 +77,7 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertOnPage(driver);
         }
 
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS9, OSVersion = AndroidOSVersion.Eight)]
         public void PatientWithProofLevelNineCanSuccessfullyLogInOnAndroid8(IAndroidDriverWrapper driver)
         {

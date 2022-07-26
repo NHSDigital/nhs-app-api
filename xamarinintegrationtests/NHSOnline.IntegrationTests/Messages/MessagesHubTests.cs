@@ -20,6 +20,7 @@ namespace NHSOnline.IntegrationTests.Messages
     [BusinessRule("BR-MES-01.7", "Show 'Online consultations' panel on messages hub page")]
     public class MessagesHubTests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientIsShownTheMessagesHubPageAndroid(IAndroidDriverWrapper driver)
         {
@@ -43,6 +44,7 @@ namespace NHSOnline.IntegrationTests.Messages
                 .AssertPkbElements();
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientIsShownTheMessagesHubPageIos(IIOSDriverWrapper driver)
         {

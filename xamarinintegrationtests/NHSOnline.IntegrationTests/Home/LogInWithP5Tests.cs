@@ -14,6 +14,7 @@ namespace NHSOnline.IntegrationTests.Home
     [BusinessRule("BR-HOM-02.1", "User registered to P5 level cannot see their NHS number")]
     public class LogInWithP5Tests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)
         {
@@ -50,6 +51,7 @@ namespace NHSOnline.IntegrationTests.Home
                 .PageContent.AssertNhsNumberNotVisible();
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanSuccessfullyLogInIos(IIOSDriverWrapper driver)
         {

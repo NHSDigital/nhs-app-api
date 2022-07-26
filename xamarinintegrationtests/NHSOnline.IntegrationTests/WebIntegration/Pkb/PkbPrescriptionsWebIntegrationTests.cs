@@ -15,6 +15,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
     [TestClass]
     public class PkbPrescriptionsWebIntegrationTests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenAndroid(IAndroidDriverWrapper driver)
         {
@@ -41,6 +42,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Pkb
                 .AssertNativeHeader();
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientCanAccessTheirPkbPrescriptionsFromThePrescriptionsScreenIOS(IIOSDriverWrapper driver)
         {

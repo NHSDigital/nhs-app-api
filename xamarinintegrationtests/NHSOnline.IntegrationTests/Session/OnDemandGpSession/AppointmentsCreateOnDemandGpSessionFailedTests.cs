@@ -22,6 +22,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
     [BusinessRule("BR-GEN-04.8", "Failure to obtain a GP session when the user has initiated another attempt to get a GP session via a try again displays a specific service unavailable shutter page to the user")]
     public class AppointmentsCreateOnDemandGpSessionFailedTests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientSeesServiceSpecificGpSessionErrorScreensWhenTryingToViewAppointmentsAndThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemAndroid(IAndroidDriverWrapper driver)
         {
@@ -71,6 +72,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver);
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientSeesServiceSpecificGpSessionErrorScreensWhenThereIsAFailureCreatingAGpSessionOnDemandAndCanReportTheProblemIOS(IIOSDriverWrapper driver)
         {

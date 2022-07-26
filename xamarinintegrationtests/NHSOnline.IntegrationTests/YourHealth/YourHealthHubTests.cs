@@ -23,6 +23,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
         private const string SharedHealthPageTitle = "Shared health links";
         private const string RecordSharingPageTitle = "Record Sharing";
 
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientIsShownTheYourHealthHubPageAndroid(IAndroidDriverWrapper driver)
         {
@@ -44,6 +45,7 @@ namespace NHSOnline.IntegrationTests.YourHealth
                 .AssertVaccineRecordElements();
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientIsShownTheYourHealthHubPageIos(IIOSDriverWrapper driver)
         {

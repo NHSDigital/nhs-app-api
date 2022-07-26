@@ -21,6 +21,7 @@ namespace NHSOnline.IntegrationTests.Appointments
     public class AdditionalGpServicesTests
     {
         [NhsAppAndroidTest]
+        [NhsAppCanaryTest]
         public void APatientIsShownTheOlcLeaveDialogChoosesToStayThenChoosesToLeaveAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -71,6 +72,7 @@ namespace NHSOnline.IntegrationTests.Appointments
         }
 
         [NhsAppIOSTest]
+        [NhsAppCanaryTest]
         public void APatientIsShownTheOlcLeaveDialogChoosesToStayThenChoosesToLeaveIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()

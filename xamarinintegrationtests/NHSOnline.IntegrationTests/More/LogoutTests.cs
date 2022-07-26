@@ -16,6 +16,7 @@ namespace NHSOnline.IntegrationTests.More
     [BusinessRule("BR-LOG-07.1", "Logging out of the app displays the logged out home screen")]
     public class LogoutTests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanLogOutFromMoreScreenAndroid(IAndroidDriverWrapper driver)
         {
@@ -37,6 +38,7 @@ namespace NHSOnline.IntegrationTests.More
                 .AssertOnPage(driver);
         }
 
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientWithProofLevelNineUsingKeyboardCanLogOutFromMoreScreenAndroid(IAndroidDriverWrapper driver)
         {

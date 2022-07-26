@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.Prescriptions
     [BusinessRule("BR-PRE-01", "Show prescriptions hub page")]
     public class PrescriptionsHubTests
     {
+        [NhsAppCanaryTest]
         [NhsAppAndroidTest]
         public void APatientIsShownThePrescriptionHubPageAndroid(IAndroidDriverWrapper driver)
         {
@@ -33,6 +34,7 @@ namespace NHSOnline.IntegrationTests.Prescriptions
                 .AssertPkbElements();
         }
 
+        [NhsAppCanaryTest]
         [NhsAppIOSTest]
         public void APatientIsShownThePrescriptionHubPageIos(IIOSDriverWrapper driver)
         {
