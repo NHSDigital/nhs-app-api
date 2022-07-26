@@ -191,6 +191,22 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                         providerId, providerName, jumpOffId);
                 }
             }
+
+            public async Task AuditLoginDeviceEvent(
+                string accessToken,
+                string nhsNumber,
+                string operation,
+                string userAgent,
+                params object[] parameters)
+            {
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.PostOperationAuditLoginDeviceEvent(accessToken, nhsNumber, operation,
+                        userAgent, parameters);
+                }
+            }
         }
 
         [TestInitialize]
@@ -535,6 +551,29 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                AccessToken,
                nhsNumber,
                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+        }
+
+        [TestMethod]
+        public async Task AuditLoginDeviceEvent_HappyPath()
+        {
+            await _systemUnderTest.AuditLoginDeviceEvent(
+                AccessToken,
+                _nhsNumber1, "Login Operation", "Test UserAgent");
+
+            _stream.Position = 0;
+            using var streamReader = new StreamReader(_stream);
+            var testString = streamReader.ReadLine();
+
+            testString.Should().Contain("Test UserAgent");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditLoginDeviceEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            await _systemUnderTest.AuditLoginDeviceEvent(AccessToken, nhsNumber, "Test Operation",
+                "Test UserAgent");
         }
 
         [TestMethod]
