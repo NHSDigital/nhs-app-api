@@ -35,14 +35,14 @@
       </span>
     </p>
 
-    <p class="nhsuk-u-margin-bottom-3">
+    <p v-if="hasReviewDueDate" class="nhsuk-u-margin-bottom-3">
       <strong>
         <span data-purpose="review-due-date-header">
           {{ $t('wayfinder.referrals.reviewDate') }}
         </span>
       </strong>
       <br>
-      <span data-purpose="review-due-date">
+      <span data-purpose="review-due-date" >
         {{ reviewDueDate | longDate }}
       </span>
     </p>
@@ -100,6 +100,9 @@ export default {
   computed: {
     hasSpecialty() {
       return !isBlankString(this.specialty);
+    },
+    hasReviewDueDate() {
+      return !isBlankString(this.reviewDueDate);
     },
   },
 };
