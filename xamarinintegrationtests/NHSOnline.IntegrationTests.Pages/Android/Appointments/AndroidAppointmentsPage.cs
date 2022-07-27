@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -24,6 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
 
         public static AndroidAppointmentsPage AssertOnPage(IAndroidDriverWrapper driver, bool screenshot = false, bool isWayfinderEnabled = false)
         {
+            using var timeout = ExtendedTimeout.FromSeconds(10);
             var page = new AndroidAppointmentsPage(driver, isWayfinderEnabled);
             page.PageContent.AssertOnPage();
 

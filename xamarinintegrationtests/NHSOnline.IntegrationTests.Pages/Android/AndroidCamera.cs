@@ -13,29 +13,23 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidImageButton CameraShutterButton => AndroidImageButton.WithDescription(_driver,
-            "Take photo", "Shutter");
+        private AndroidGLButton CameraShutterButton => AndroidGLButton.WithText(_driver,"Shutter");
 
-        private AndroidImageButton DoneButton => AndroidImageButton.WithDescription(_driver,
-            "Done");
+        private AndroidLabel OkLabel => AndroidLabel.WithText(_driver, "OK");
 
         public static AndroidCamera AssertDisplayed(IAndroidDriverWrapper driver)
         {
             var camera = new AndroidCamera(driver);
-            camera.CameraShutterButton.AssertEitherVisible();
+            camera.CameraShutterButton.AssertVisible();
             return camera;
         }
 
-        public AndroidCamera TakePhoto()
-        {
-            CameraShutterButton.ClickEither();
-            return this;
-        }
+        public void TakePhoto() => CameraShutterButton.Click();
 
-        public void Done()
+        public void ClickOk()
         {
             using var timeout = ExtendedTimeout.FromSeconds(20);
-            DoneButton.Click();
+            OkLabel.Click();
         }
     }
 }

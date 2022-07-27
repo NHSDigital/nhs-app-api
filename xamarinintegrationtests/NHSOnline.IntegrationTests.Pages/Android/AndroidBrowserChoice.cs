@@ -1,4 +1,5 @@
 using FluentAssertions;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -52,7 +53,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private void SelectAndUseApp()
         {
             TargetAppChoice.Click();
-            JustOnceButton.Click();
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        JustOnceButton.Click();
+                    },
+                    "No AndroidElement found matching ByAndroidUIAutomator(new UiSelector().className(\"android.widget.Button\").textMatches(\"(JUST ONCE|Just once)\"))",
+                    () =>
+                    {
+                        IsDisplayed().Should().BeFalse("Expected if 'Just Once' can't be found that it has already closed the dialog");
+                    });
         }
 
         private void UseSelectedApp() => JustOnceButton.Click();

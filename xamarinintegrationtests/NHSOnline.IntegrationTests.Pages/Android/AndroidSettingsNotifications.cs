@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Settings");
 
-        private AndroidToggle NotificationsEnabled => AndroidToggle.WithText(_driver, "ON");
+        private AndroidToggle NotificationsEnabled => AndroidToggle.WithText(_driver, "Settings, Show notifications, On");
 
         public static AndroidSettingsNotifications AssertOnPage(IAndroidDriverWrapper driver)
         {

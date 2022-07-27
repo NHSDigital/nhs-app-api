@@ -46,17 +46,13 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertDisplayed(driver)
                 .Allow();
 
-            AndroidLocationPermissionDialog
-                .AssertDisplayed(driver)
-                .Allow();
-
             AndroidCamera
                 .AssertDisplayed(driver)
                 .TakePhoto();
 
             AndroidCamera
                 .AssertDisplayed(driver)
-                .Done();
+                .ClickOk();
 
             AndroidStubbedLoginUpliftPage
                 .AssertOnPage(driver)

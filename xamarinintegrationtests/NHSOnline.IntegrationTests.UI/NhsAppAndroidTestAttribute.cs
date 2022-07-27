@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.UI
     {
         internal AndroidBrowserStackCapability Capabilities { get; }
 
-        public AndroidDevice AndroidDevice { get; set; } = AndroidDevice.Pixel3;
+        public AndroidDevice AndroidDevice { get; set; } = AndroidDevice.GalaxyS10;
 
         public AndroidOSVersion OSVersion { get; set; } = AndroidOSVersion.Nine;
 

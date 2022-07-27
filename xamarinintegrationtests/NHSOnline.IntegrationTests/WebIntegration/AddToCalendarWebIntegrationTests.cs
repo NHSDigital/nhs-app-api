@@ -46,33 +46,9 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AddCalendarDetails(ValidStartTime, ValidEndTime)
                 .AddCalendarEvent();
 
-            var androidGoogleCalendarsApp = AndroidGoogleCalendarsApp
+            AndroidPlatformCalendarsApp
                 .AssertOnPage(driver)
-                .NavigateThroughOverview()
-                .ConfirmGotIt();
-
-            TransitoryErrorHandler.HandleSpecificFailure()
-                .Alternate(() =>
-                    {
-                        androidGoogleCalendarsApp.AssertDetailsArePassed();
-                    },
-                    "No AndroidElement found matching By.XPath: .//android.widget.EditText[normalize-space(@text)='Test Subject']",
-                    () =>
-                    {
-                        Console.WriteLine("Add An Event To The Calendar RetryHandler revert action. Attempt to refresh calendar sync and try again.");
-
-                        // Manually sync Calendar by pressing 'Refresh' button
-                        driver.SendKey(AndroidKeyCode.Keycode_MENU);
-                        androidGoogleCalendarsApp.ClickRefreshText();
-
-                        Thread.Sleep(TimeSpan.FromSeconds(10));
-
-                        // Try re-add App event
-                        driver.PressBackButton();
-
-                        androidCalendarPage
-                            .AddCalendarEventClick();
-                    });
+                .AssertDetailsArePassed();
         }
 
         [NhsAppIOSTest]
@@ -177,10 +153,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDisplayed(driver)
                 .AddEventManually();
 
-            AndroidGoogleCalendarsApp
-                .AssertOnPage(driver)
-                .NavigateThroughOverview()
-                .ConfirmGotIt();
+            AndroidPlatformCalendarsApp
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]

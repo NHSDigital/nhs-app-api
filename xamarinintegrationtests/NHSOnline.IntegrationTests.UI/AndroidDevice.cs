@@ -8,6 +8,7 @@ namespace NHSOnline.IntegrationTests.UI
         Pixel4,
         Pixel6,
         GalaxyS9,
+        GalaxyS10,
         GalaxyS20Ultra,
         GalaxyS21
     }
@@ -22,6 +23,7 @@ namespace NHSOnline.IntegrationTests.UI
                 AndroidDevice.Pixel4 => "Google Pixel 4",
                 AndroidDevice.Pixel6 => "Google Pixel 6",
                 AndroidDevice.GalaxyS9 => "Samsung Galaxy S9",
+                AndroidDevice.GalaxyS10 => "Samsung Galaxy S10",
                 AndroidDevice.GalaxyS20Ultra => "Samsung Galaxy S20 Ultra",
                 AndroidDevice.GalaxyS21 => "Samsung Galaxy S21",
                 _ => throw new ArgumentOutOfRangeException(nameof(device), device, null)
