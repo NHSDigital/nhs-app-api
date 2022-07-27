@@ -88,7 +88,7 @@ Feature: Push Notifications
     Then the Account and settings page settings links are available
     And I click the Manage notifications link on the account and settings page
     And the Notifications Settings page is displayed
-    When I click the link called 'NHS App privacy policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/privacy'
+    When I click the link called 'NHS account privacy policy' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/privacy'
     Then a new tab has been opened by the link
 
   @smoketest

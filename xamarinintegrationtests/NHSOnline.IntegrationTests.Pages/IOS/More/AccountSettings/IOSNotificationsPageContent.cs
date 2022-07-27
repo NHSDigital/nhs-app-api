@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More.AccountSettings
         }
 
         private IOSLabel NotificationsToggleLabel =>
-            IOSLabel.WithText(_interactor, "Turn on notifications on this device");
+            IOSLabel.WithText(_interactor, "Tell me when I get new messages from my GP surgery and other healthcare services");
 
         public void ToggleOnNotifications()
         {

@@ -4,6 +4,7 @@ import apiErrors from './apiErrors';
 import appointments from './appointments';
 import components from './components';
 import dataSharing from './dataSharing';
+import exampleNotifications from './exampleNotifications';
 import forbiddenErrors from './forbiddenErrors';
 import generic from './generic';
 import glossary from './glossary';
@@ -17,6 +18,7 @@ import logout from './logout';
 import loginSettings from './loginSettings';
 import menuItems from './menuItems';
 import messages from './messages';
+import moreThanOneDevice from './morethanOneDevice';
 import myRecord from './myRecord';
 import navigation from './navigation';
 import nominatedPharmacy from './nominatedPharmacy';
@@ -42,6 +44,7 @@ export default {
   appointments,
   components,
   dataSharing,
+  exampleNotifications,
   forbiddenErrors,
   generic,
   glossary,
@@ -55,6 +58,7 @@ export default {
   loginSettings,
   menuItems,
   messages,
+  moreThanOneDevice,
   myRecord,
   navigation,
   nominatedPharmacy,

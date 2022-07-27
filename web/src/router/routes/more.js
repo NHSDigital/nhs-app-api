@@ -5,7 +5,8 @@ import MoreAccountAndSettingsLoginSettingsErrorPage from '@/pages/more/account-a
 import MoreAccountAndSettingsManageNotificationsPage from '@/pages/more/account-and-settings/manage-notifications';
 import MoreAccountAndSettingsLegalAndCookiesIndexPage from '@/pages/more/account-and-settings/legal-and-cookies';
 import MoreAccountAndSettingsLegalAndCookiesMangeCookiesPage from '@/pages/more/account-and-settings/legal-and-cookies/manage-cookies';
-
+import MoreAccountAndSettingsExampleNotificationsPage from '@/pages/more/account-and-settings/manage-notifications/example-notifications';
+import MoreAccountAndSettingsMoreThanOneDevicePage from '@/pages/more/account-and-settings/manage-notifications/more-than-one-device';
 import {
   MORE_PATH,
   INDEX_PATH,
@@ -19,6 +20,8 @@ import {
   MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH,
   MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
   MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH,
 } from '@/router/paths';
 import {
   MORE_NAME,
@@ -29,6 +32,8 @@ import {
   MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME,
   MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME,
   MORE_ACCOUNTANDSETTINGS_MANAGENOTIFICATIONS_NAME,
+  MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_NAME,
+  MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_NAME,
 } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_MORE } from '@/router/routes/linked-profiles';
 import {
@@ -161,6 +166,30 @@ export const MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS = {
   },
 };
 
+export const MORE_ACCOUNT_AND_SETTINGS_EXAMPLE_NOTIFICATIONS = {
+  path: MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_NAME,
+  component: MoreAccountAndSettingsExampleNotificationsPage,
+  meta: {
+    headerKey: 'navigation.pages.headers.exampleNotifications',
+    titleKey: 'navigation.pages.titles.exampleNotifications',
+    proofLevel: proofLevel.P5,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_EXAMPLENOTIFICATIONS_CRUMB,
+  },
+};
+
+export const MORE_ACCOUNT_AND_SETTINGS_MORETHAN_ONEDEVICE = {
+  path: MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH,
+  name: MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_NAME,
+  component: MoreAccountAndSettingsMoreThanOneDevicePage,
+  meta: {
+    headerKey: 'navigation.pages.headers.moreThanOneDevice',
+    titleKey: 'navigation.pages.titles.moreThanOneDevice',
+    proofLevel: proofLevel.P5,
+    crumb: breadcrumbs.MORE_ACCOUNT_AND_SETTINGS_MORETHANONEDEVICE_CRUMB,
+  },
+};
+
 export const MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_INDEX = {
   path: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH,
   name: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME,
@@ -207,4 +236,6 @@ export default [
   MORE_ACCOUNT_AND_SETTINGS_MANAGE_NOTIFICATIONS,
   MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_INDEX,
   MORE_ACCOUNT_AND_SETTINGS_LOGIN_SETTINGS_ERROR,
+  MORE_ACCOUNT_AND_SETTINGS_EXAMPLE_NOTIFICATIONS,
+  MORE_ACCOUNT_AND_SETTINGS_MORETHAN_ONEDEVICE,
 ];

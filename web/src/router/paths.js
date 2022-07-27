@@ -23,6 +23,8 @@ export const MORE_ACCOUNTANDSETTINGS_FACE_ID_PATH = 'more/account-and-settings/f
 export const MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH = 'more/account-and-settings/fingerprint';
 export const MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH = 'more/account-and-settings/login-options';
 export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH = 'more/account-and-settings/login-settings/error';
+export const MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH = 'more/account-and-settings/manage-notifications/example-notifications';
+export const MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH = 'more/account-and-settings/manage-notifications/more-than-one-device';
 export const ADVICE_PATH = 'advice';
 export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
@@ -163,6 +165,8 @@ export default {
   MORE_ACCOUNTANDSETTINGS_FINGERPRINT_PATH,
   MORE_ACCOUNTANDSETTINGS_LOGINOPTIONS_PATH,
   MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
+  MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH,
   ADVICE_PATH,
   GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,

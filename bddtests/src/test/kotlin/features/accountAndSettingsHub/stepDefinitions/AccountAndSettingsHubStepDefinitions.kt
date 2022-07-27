@@ -5,14 +5,19 @@ import features.sharedSteps.BiometricSteps
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.accountAndSettings.AccountAndSettingsPage
 import pages.accountAndSettings.AccountAndSettingsLoginSettingsPage
+import pages.accountAndSettings.AccountAndSettingsPage
+import pages.accountAndSettings.ExampleNotificationsPage
+import pages.accountAndSettings.NotificationsSettingsPage
+import pages.accountAndSettings.MoreThanOneDevicePage
 
 class AccountAndSettingsHubStepDefinitions {
 
     lateinit var accountAndSettingsPage: AccountAndSettingsPage
     lateinit var accountAndSettingsLoginSettings: AccountAndSettingsLoginSettingsPage
-
+    lateinit var manageNotificationsPage: NotificationsSettingsPage
+    lateinit var exampleNotificationsPage: ExampleNotificationsPage
+    lateinit var manageNotificationsForMoreThanOneDevice: MoreThanOneDevicePage
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
@@ -74,6 +79,24 @@ class AccountAndSettingsHubStepDefinitions {
             "Manage notifications" -> accountAndSettingsPage.manageNotificationsLink.click()
             "Legal and cookies" -> accountAndSettingsPage.legalAndCookiesLink.click()
         }
+    }
+
+    @Then("^I click the (.*) link on the manage notifications page$")
+    fun iClickTheLinkOnManageNotificationsPage(linkText: String) {
+        when (linkText) {
+            "Example notifications" ->  manageNotificationsPage.exampleNotifications.click()
+            "More than one device" ->  manageNotificationsPage.moreThanOneDevice.click()
+        }
+    }
+
+    @Then("^the Example notifications page is displayed$")
+    fun theExampleNotificationPageIsDisplayed() {
+        exampleNotificationsPage.assertDisplayed()
+    }
+
+    @Then("^the Manage notifications for more than one device page is displayed$")
+    fun theManageNotificationsForMoreThanOneDeviceIsDisplayed() {
+        manageNotificationsForMoreThanOneDevice.assertDisplayed()
     }
 
     @Then("^I see the account and settings (.*) biometric page$")

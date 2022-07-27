@@ -14,41 +14,25 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         internal NotificationsPageContent(IWebInteractor interactor)
         {
             _interactor = interactor;
-
-            AboutNotificationsExpander = WebLinkExpander.WithText(_interactor, "About notifications on your devices");
-
-            IfYouWantToGetNotificationsText = AboutNotificationsExpander.Contains(interactor => WebText.WithTagAndText(
-                interactor,
-                "p",
-                "If you want to get notifications, you need to turn them on for each device you use to access the NHS App."));
-
-            IfYouShareThisDeviceText = AboutNotificationsExpander.Contains(_interactor => WebText.WithTagAndText(
-                _interactor,
-                "p",
-                "If you share this device with other people, they may see your notifications."));
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
 
-        private WebText WeUseNotifications => WebText.WithTagAndText(_interactor, "p",
-            "We use notifications to tell you when you get a new message.");
-
-        private WebText TheNhsAndConnected => WebText.WithTagAndText(_interactor, "p",
-        "The NHS and connected healthcare providers, like your GP surgery, may send you messages using the NHS App.");
-
-        private WebLinkExpander AboutNotificationsExpander { get; }
-
-        private WebText IfYouShareThisDeviceText { get; }
-
-        private WebText IfYouWantToGetNotificationsText { get; }
-
-        private WebLink PrivacyLink => WebLink.WithText(_interactor, "NHS App privacy policy");
+        private WebText ManageNotificationsPreamble => WebText.WithTagAndText(_interactor, "p",
+            "Turn on notifications to:");
+        
+        private WebMenuItem SeeExampleNotifications => WebMenuItem.WithTitle(_interactor, "See example notifications");
+        
+        private WebMenuItem ManageNotificationsMoreThanOneDevice => WebMenuItem.WithTitle(_interactor,
+            "Managing notifications if you have more than one device");
+        
+        private WebLink PrivacyLink => WebLink.WithText(_interactor, "NHS account privacy policy");
 
         private WebText MoreInfoText => WebText.WithTagAndText(_interactor, "p",
-            "More information is available in the NHS App privacy policy.");
+            "More information is available in the NHS account privacy policy.");
 
         private WebToggle NotificationsToggle => WebToggle.WithLabel(_interactor,
-            "Turn on notifications on this deviceWhen off, you may not be told about new messages unless you log in");
+            "Tell me when I get new messages from my GP surgery and other healthcare services");
 
         private WebLink NotificationSettingsLink => WebLink.WithText(_interactor,
             "Choose how notifications are shown on this device (opens your device settings)");
@@ -85,10 +69,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            PrivacyLink,
             NotificationsToggle,
-            AboutNotificationsExpander,
-            NotificationSettingsLink
+            SeeExampleNotifications,
+            ManageNotificationsMoreThanOneDevice,
+            NotificationSettingsLink,
+            PrivacyLink
         };
 
         internal void AssertOnPage() => TitleText.AssertVisible();
@@ -102,18 +87,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         public void AssertPageElements()
         {
             TitleText.AssertVisible();
-            WeUseNotifications.AssertVisible();
-            TheNhsAndConnected.AssertVisible();
-
-            AboutNotificationsExpander.AssertVisible();
-            AboutNotificationsExpander.AssertCollapsed();
-            AboutNotificationsExpander.Toggle();
-            AboutNotificationsExpander.AssertExpanded();
-            IfYouWantToGetNotificationsText.AssertVisible();
-            IfYouShareThisDeviceText.AssertVisible();
-
+            ManageNotificationsPreamble.AssertContainsVisible();
             MoreInfoText.AssertVisible();
             NotificationSettingsLink.AssertVisible();
+            SeeExampleNotifications.AssertVisible();
+            ManageNotificationsMoreThanOneDevice.AssertVisible();
         }
 
         public void AssertNotificationsTurnedOffErrorPageElements()

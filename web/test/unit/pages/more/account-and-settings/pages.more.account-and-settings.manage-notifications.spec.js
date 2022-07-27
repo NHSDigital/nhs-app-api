@@ -1,7 +1,13 @@
 import Notifications from '@/pages/more/account-and-settings/manage-notifications';
 import { initialState } from '@/store/modules/notifications/mutation-types';
 import { createStore, mount } from '../../../helpers';
+import { redirectTo } from '@/lib/utils';
+import {
+  MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH,
+  MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH,
+} from '@/router/paths';
 
+jest.mock('@/lib/utils');
 jest.mock('@/services/native-app');
 
 describe('manage notifications', () => {
@@ -18,6 +24,8 @@ describe('manage notifications', () => {
     };
 
     $store = createStore({ state });
+
+    redirectTo.mockClear();
 
     wrapper = mount(Notifications, {
       $store,
@@ -48,6 +56,16 @@ describe('manage notifications', () => {
       notificationsRegistered: true,
       notificationsDecisionSource: 'Toggle',
     });
+  });
+
+  it('will redirect to example notification page when function navigateToExampleNotifications is called', () => {
+    wrapper.vm.navigateToExampleNotifications();
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_PATH);
+  });
+
+  it('will redirect to more than one device page when function navigateToNotificationsToMoreThanOneDevice is called ', () => {
+    wrapper.vm.navigateToNotificationsToMoreThanOneDevice();
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_PATH);
   });
 
   describe('created', () => {

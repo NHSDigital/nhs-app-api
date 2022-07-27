@@ -15,6 +15,8 @@ export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_NAME = 'more-account-and-se
 export const MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME = 'more-account-and-settings-legal-and-cookies-manage-cookies';
 export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME = 'more-account-and-settings-login-settings';
 export const MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME = 'more-account-and-settings-login-settings-error';
+export const MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_NAME = 'more-account-and-settings-manage-notifications-example-notifications';
+export const MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_NAME = 'more-account-and-settings-manage-notifications-morethan-one-device';
 export const ADVICE_NAME = 'advice';
 export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
@@ -157,6 +159,8 @@ const names = [
   MORE_ACCOUNTANDSETTINGS_LEGALANDCOOKIES_MANAGECOOKIES_NAME,
   MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME,
   MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_NAME,
+  MORE_ACCOUNTANDSETTINGS_EXAMPLE_NOTIFICATIONS_NAME,
+  MORE_ACCOUNTANDSETTINGS_MORETHAN_ONE_DEVICE_NAME,
   ADVICE_NAME,
   GET_HEALTH_ADVICE_NAME,
   CHECKYOURSYMPTOMS_NAME,

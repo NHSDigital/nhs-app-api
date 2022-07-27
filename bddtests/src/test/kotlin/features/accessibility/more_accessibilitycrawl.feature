@@ -28,6 +28,30 @@
       And the notifications toggle is displayed as on
       And the ManageNotifications page is saved to disk
 
+    Scenario: The example notifications page is captured
+      Given I am using the native app user agent
+      And I am a user wishing to enable push notifications
+      And I am logged in
+      When I navigate to the More page
+      And I click the Account and settings link on the More page
+      And I click the Manage notifications link on the account and settings page
+      Then the Notifications Settings page is displayed
+      And I click the Example notifications link on the manage notifications page
+      And the Example notifications page is displayed
+      And the ExampleNotifications page is saved to disk
+
+    Scenario: The manage notifications for more than one device page is captured
+      Given I am using the native app user agent
+      And I am a user wishing to enable push notifications
+      And I am logged in
+      When I navigate to the More page
+      And I click the Account and settings link on the More page
+      And I click the Manage notifications link on the account and settings page
+      Then the Notifications Settings page is displayed
+      And I click the More than one device link on the manage notifications page
+      And the Manage notifications for more than one device page is displayed
+      And the ManageNotificationsForMoreThanOneDevice page is saved to disk
+
     Scenario Outline: The account and settings biometric verification links are captured
       Given I am a EMIS patient using the native app
       And I am logged in
