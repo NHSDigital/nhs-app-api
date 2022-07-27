@@ -391,24 +391,6 @@ stages:
               runUpgradeTests: true
               nativeVersion: '$(native.xamarin.version)'
 
-      - stage: xamarin_integration_canary_tests
-        variables:
-          - group: IntegrationTests-CosmosSqlApiConnection
-        displayName: XIT - Canary
-        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
-        dependsOn:
-          - web
-          - backend
-          - xamarin_browserstack
-          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-            - pr_changes
-        jobs:
-          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-            parameters:
-              runCanaryTests: true
-              nativeVersion: '$(native.xamarin.version)'
-
       - stage: xamarin_integration_flaky_tests
         variables:
           - group: IntegrationTests-CosmosSqlApiConnection
@@ -426,6 +408,24 @@ stages:
             parameters:
               runFlakyTests: true
               nativeVersion: '$(native.xamarin.version)'
+
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}: 
+        - stage: xamarin_integration_canary_tests
+          variables:
+            - group: IntegrationTests-CosmosSqlApiConnection
+          displayName: XIT - Canary
+          ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+            condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
+          dependsOn:
+            - web
+            - backend
+            - xamarin_browserstack
+            - pr_changes
+          jobs:
+            - template: .azuredevops/templates/integration-tests-xamarin-job.yml
+              parameters:
+                runCanaryTests: true
+                nativeVersion: '$(native.xamarin.version)'
 
     - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
       - stage: xamarin_integration_flipbook_tests
@@ -451,6 +451,16 @@ stages:
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-job-generate-flipbook.yml
 
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - stage: xamarin_integration_canary_report_generation
+        displayName: XIT - Generate Canary Report
+        condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
+        dependsOn:
+          - xamarin_integration_canary_tests
+          - pr_changes
+        jobs:
+          - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
+
     - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true'), eq(variables['source.tag'], 'False')) }}:
       - stage: xamarin_integration_report_generation
         displayName: XIT - Generate Reports
@@ -458,7 +468,6 @@ stages:
         dependsOn:
           - xamarin_integration_upgrade_tests
           - xamarin_integration_tests
-          - xamarin_integration_canary_tests
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
 
@@ -469,15 +478,6 @@ stages:
         dependsOn:
           - xamarin_integration_upgrade_tests
           - xamarin_integration_tests
-          - pr_changes
-        jobs:
-          - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
-
-      - stage: xamarin_pr_integration_canary_report_generation
-        displayName: XIT - Generate Canary Reports
-        condition: and(succeededOrFailed(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'False'))
-        dependsOn:
-          - xamarin_integration_canary_tests
           - pr_changes
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-generate-reports.yml
