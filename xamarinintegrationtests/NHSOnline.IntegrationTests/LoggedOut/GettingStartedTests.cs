@@ -10,7 +10,9 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
+    [BusinessRule("BR-LOG-01.1", "Launching the app displays the logged out home screen")]
     [BusinessRule("BR-LOG-02.1", "Continuing with NHS login displays the getting started screen")]
+    [BusinessRule("BR-LOG-02.2", "Acknowledging the before you start screen displays NHS Login")]
     [BusinessRule("BR-LOG-02.3", "Navigating back from before you start screen displays the Logged out home screen")]
     [BusinessRule("BR-LOG-09.3", "Invoking native back on the getting started screen displays the logged out home screen")]
     public sealed class GettingStartedTests
