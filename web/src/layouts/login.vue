@@ -10,7 +10,6 @@
         <div v-else>
           <web-header :show-menu="false" :show-links="false" :show-header-buttons="false"/>
         </div>
-        <session-expired-banner v-if="showSessionExpiredBanner"/>
         <main v-if="isNativeApp" :class="$style.homeMain">
           <flash-message/>
           <slot id="mainContent"/>
@@ -76,7 +75,6 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 import HomeHeader from '@/components/HomeHeader';
 import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
-import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import DownloadAppPanel from '@/components/widgets/DownloadAppPanel';
@@ -94,7 +92,6 @@ export default {
     ConnectionError,
     FlashMessage,
     HomeHeader,
-    SessionExpiredBanner,
     WebFooter,
     WebHeader,
     DownloadAppPanel,
@@ -120,11 +117,6 @@ export default {
       symptomButtonId: 'btn_home_symptoms',
       symptomsUrl: GET_HEALTH_ADVICE_PATH,
     };
-  },
-  computed: {
-    showSessionExpiredBanner() {
-      return this.$store.state.session.showExpiryMessage || this.$route.query.showExpiryMessage;
-    },
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
