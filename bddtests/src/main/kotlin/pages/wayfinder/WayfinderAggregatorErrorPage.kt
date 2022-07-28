@@ -35,7 +35,7 @@ open class WayfinderAggregatorErrorPage : HybridPageObject() {
 
     private val underMinimumAgeText = HybridPageElement(
         webDesktopLocator = "//p[contains(text(), \"If you're aged 15 or under you may be able to access" +
-            "  your referrals and appointments using other services.\")]",
+            " your referrals and appointments using other services.\")]",
         page = this
     )
 
