@@ -31,6 +31,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     {
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
+        [Ignore("Outstanding ticket (705318) with BS Support ignoring until resolution")]
         public async Task APatientCanTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -201,6 +202,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
 
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
+        [Ignore("Outstanding ticket (705318) with BS Support ignoring until resolution")]
         public async Task APatientCanTryAgainByClosingTheErrorWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
@@ -339,6 +341,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
 
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
+        [Ignore("Outstanding ticket (705318) with BS Support ignoring until resolution")]
         public async Task APatientCanUseNativeBackToTryAgainWhenThereIsAConnectionErrorWhenLoadingTheNhsAppWebAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)

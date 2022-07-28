@@ -24,6 +24,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     {
         [NhsAppFlakyTest]
         [NhsAppAndroidTest]
+        [Ignore("Outstanding ticket (705318) with BS Support ignoring until resolution")]
         public async Task APatientCanGoBackToHomeWhenThereIsAConnectionErrorCreatingOnDemandGpSessionAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
