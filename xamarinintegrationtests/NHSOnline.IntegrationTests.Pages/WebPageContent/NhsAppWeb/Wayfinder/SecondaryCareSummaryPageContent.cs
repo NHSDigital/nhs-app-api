@@ -37,8 +37,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
         private WebText UnderSixteenErrorSubtext => WebText.WithTagAndText(
             _interactor,
             "p",
-            "You must be aged 16 or over to access your referrals and appointments in the NHS App. "
-            + "You may be able to do this using other services.");
+            "If you're aged 15 or under you may be able to access" +
+            "  your referrals and appointments using other services.");
+
+        private WebText NoOtherServicesShowingSubtext => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "If no other services are showing, you'll need to contact the relevant organisation" +
+            " or healthcare provider for more information.");
 
         private WebText BookOrManageReferralsOrAppointmentsHeader => WebText.WithTagAndText(
             _interactor,
@@ -103,6 +109,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
                 case WayfinderErrorType.underSixteen:
                     ErrorTitleText.AssertVisible();
                     UnderSixteenErrorSubtext.AssertVisible();
+                    NoOtherServicesShowingSubtext.AssertVisible();
                     break;
                 case WayfinderErrorType.none:
                 default:
