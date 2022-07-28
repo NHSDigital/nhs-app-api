@@ -6,7 +6,8 @@
 
         <template v-if="hasErrored">
           <template v-if="showDoesNotMeetMinimumAgeError">
-            <p>{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
+            <p id="doesNotMeetMinimumAge">{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
+            <p id="noOtherServicesShowing">{{ $t('wayfinder.errors.noOtherServicesShowing') }}</p>
           </template>
 
           <template v-else>

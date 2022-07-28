@@ -20,6 +20,8 @@ let referralsInReviewHelpLink;
 let otherAvailableServicesMenuItems;
 let ersJumpOffMenuItem;
 let backButton;
+let doesNotMeetMinimumAgeMessage;
+let noOtherServicesShowingMessage;
 
 const setupStore = (
   hasActionableReferralsAndAppointments,
@@ -27,6 +29,7 @@ const setupStore = (
   hasReferralsInReviewNotOverdue,
   isNativeApp,
   hasApiError,
+  hasApiErrorForUnderAge,
 ) => {
   let actionableReferralsAndAppointments = [];
   let confirmedAppointments = [];
@@ -81,6 +84,12 @@ const setupStore = (
     apiError = {
       status: 500,
       serviceDeskReference: '521211',
+    };
+  }
+
+  if (hasApiErrorForUnderAge) {
+    apiError = {
+      status: 470,
     };
   }
 
@@ -328,6 +337,29 @@ describe('Summary care response with API error', () => {
 
       expect(ersJumpOffMenuItem.exists()).toBe(true);
       expect(otherAvailableServicesMenuItems.exists()).toBe(true);
+    });
+  });
+});
+
+describe('Summary care response with API error for underage', () => {
+  beforeEach(() => {
+    $store = setupStore(false, false, false, false, false, true);
+    wrapper = mountPage();
+  });
+
+  describe('if page errored', () => {
+    it('show error message for minimum age', () => {
+      doesNotMeetMinimumAgeMessage = wrapper.find('#doesNotMeetMinimumAge');
+
+      expect(doesNotMeetMinimumAgeMessage.exists()).toBe(true);
+      expect(doesNotMeetMinimumAgeMessage.text()).toEqual('If you\'re aged 15 or under you may be able to access your referrals and appointments using other services.');
+    });
+
+    it('show message for no other services showing', () => {
+      noOtherServicesShowingMessage = wrapper.find('#noOtherServicesShowing');
+
+      expect(noOtherServicesShowingMessage.exists()).toBe(true);
+      expect(noOtherServicesShowingMessage.text()).toEqual('If no other services are showing, you\'ll need to contact the relevant organisation or healthcare provider for more information.');
     });
   });
 });

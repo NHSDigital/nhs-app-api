@@ -69,7 +69,8 @@ export default {
     cannotViewOrManageReferralsAndAppointments: 'Cannot view or manage referrals and appointments',
     cannotViewTryAgain: 'Try again. If the problem continues and you need to access your referrals or appointments now you may be able to do this using other services.',
     contactUs: 'Contact us if the problem continues, quoting error code {errorCode}',
-    doesNotMeetMinimumAge: 'You must be aged 16 or over to access your referrals and appointments in the NHS App. You may be able to do this using other services.',
+    doesNotMeetMinimumAge: 'If you\'re aged 15 or under you may be able to access your referrals and appointments using other services.',
+    noOtherServicesShowing: 'If no other services are showing, you\'ll need to contact the relevant organisation or healthcare provider for more information.',
   },
   wayfinderHelp: {
     referralsOrAppointmentsHelp: {
