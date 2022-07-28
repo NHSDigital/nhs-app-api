@@ -111,7 +111,7 @@ export default {
   },
   computed: {
     showCount() {
-      return this.count !== undefined;
+      return this.count !== null && this.count !== undefined;
     },
     showMeta() {
       return this.showCount || this.showIndicator;

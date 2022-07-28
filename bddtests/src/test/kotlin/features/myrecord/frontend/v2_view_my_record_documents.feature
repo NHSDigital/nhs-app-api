@@ -9,6 +9,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 0 for Documents
     And I click the Documents link on my record - Medical Record v2
     Then I see a message that I have no information available for a specific record - Medical Record v2
     Examples:
@@ -33,13 +34,14 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of <Count> for Documents
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     And I see a message that no further information is available for this section in GP Medical Record
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Count |
+      | EMIS      | 3     |
+      | TPP       | 4     |
 
   Scenario: An EMIS user can view a list of Documents on their record if the pageCount is null
     Given I am a EMIS user setup to use medical record version 2

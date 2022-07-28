@@ -10,7 +10,7 @@
                               record.testResults.data.length)"
                :click-func="goToUrl"
                :click-param="testResultsPath"
-               :count="record.testResults.data.length"/>
+               :count="record.testResults.hasErrored ? undefined : record.testResults.data.length"/>
     <menu-item v-else id="test-results"
                data-purpose="test-results"
                header-tag="h2"
@@ -31,7 +31,7 @@
                               record.tppDcrEvents.data.length)"
                :click-func="goToUrl"
                :click-param="eventsPath"
-               :count="record.tppDcrEvents.data.length"/>
+               :count="record.tppDcrEvents.hasErrored ? undefined : record.tppDcrEvents.data.length"/>
 
     <sjr-if journey="documents">
       <menu-item id="documents"
@@ -44,7 +44,7 @@
                                 record.documents.data.length)"
                  :click-func="goToUrl"
                  :click-param="documentsPath"
-                 :count="record.documents.data.length"/>
+                 :count="record.documents.hasErrored ? undefined : record.documents.data.length"/>
     </sjr-if>
   </div>
 </template>

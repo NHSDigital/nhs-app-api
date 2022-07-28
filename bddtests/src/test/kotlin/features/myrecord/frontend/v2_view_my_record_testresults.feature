@@ -29,6 +29,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 1 for Test results
     And I click the Test results link on my record - Medical Record v2
     Then I see one test result with one value - Medical Record v2
 
@@ -39,6 +40,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records without any count for Test results
     And I click the Test results link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 

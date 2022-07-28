@@ -8,6 +8,7 @@ Feature: Consultations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 2 for Consultations
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see the expected consultations and events - Medical Record v2
     And I see a message that no further information is available for this section in GP Medical Record
@@ -24,6 +25,7 @@ Feature: Consultations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 0 for Consultations
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see a message that I have no information available for a specific record - Medical Record v2
 
@@ -49,6 +51,7 @@ Feature: Consultations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records without any count for Consultations
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 

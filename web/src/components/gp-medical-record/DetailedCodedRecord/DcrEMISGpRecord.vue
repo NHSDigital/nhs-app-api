@@ -10,7 +10,7 @@
                               record.immunisations.data.length)"
                :click-func="goToUrl"
                :click-param="immunisationsPath"
-               :count="record.immunisations.data.length"/>
+               :count="record.immunisations.hasErrored ? undefined : record.immunisations.data.length"/>
 
     <menu-item id="healthConditions"
                data-purpose="healthConditions"
@@ -22,7 +22,7 @@
                               record.problems.data.length)"
                :click-func="goToUrl"
                :click-param="healthConditionsPath"
-               :count="record.problems.data.length"/>
+               :count="record.problems.hasErrored ? undefined : record.problems.data.length"/>
 
     <menu-item id="test-results"
                data-purpose="test-results"
@@ -34,7 +34,7 @@
                               record.testResults.data.length)"
                :click-func="goToUrl"
                :click-param="testResultsPath"
-               :count="record.testResults.data.length"/>
+               :count="record.testResults.hasErrored ? undefined : record.testResults.data.length"/>
 
     <menu-item id="consultations"
                data-purpose="consultations"
@@ -46,7 +46,7 @@
                               record.consultations.data.length)"
                :click-func="goToUrl"
                :click-param="consultationsPath"
-               :count="record.consultations.data.length"/>
+               :count="record.consultations.hasErrored ? undefined : record.consultations.data.length"/>
     <sjr-if journey="documents">
       <menu-item id="documents"
                  data-purpose="documents"
@@ -58,7 +58,7 @@
                                 record.documents.data.length)"
                  :click-func="goToUrl"
                  :click-param="documentsPath"
-                 :count="record.documents.data.length"/>
+                 :count="record.documents.hasErrored ? undefined : record.documents.data.length"/>
     </sjr-if>
   </div>
 </template>

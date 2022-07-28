@@ -4,6 +4,7 @@ import models.Patient
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.sharedElements.LinkElement
 import pages.sharedElements.LinksContent
@@ -71,6 +72,13 @@ class MedicalRecordV2Page : HybridPageObject() {
         return linkElement.link(linkText)
     }
 
+    private fun medicalRecordMenuItemCountIndicator(linkText: String): HybridPageElement {
+        return HybridPageElement(
+            webDesktopLocator = "//li[.//h2[contains(text(), \"$linkText\")]]//span[contains(@id,'_countIndicator')]",
+            page = this,
+            helpfulName = "Count Indicator")
+    }
+
     fun assertDemographicsContent(patient: Patient) {
         val fullContent =
                 ExpectedPageStructure()
@@ -82,6 +90,14 @@ class MedicalRecordV2Page : HybridPageObject() {
                         .paragraph("Address:")
                         .paragraph(patient.contactDetails.address.full())
         ExpectedPageStructureAssertor().assert(this, fullContent.build())
+    }
+
+    fun assertCounterIndicatorIsNotPresent(linkText: String) {
+        medicalRecordMenuItemCountIndicator(linkText).assertElementNotPresent()
+    }
+
+    fun assertRecordCount(count: Int, linkText: String) {
+        Assert.assertEquals(count.toString(), medicalRecordMenuItemCountIndicator(linkText).text)
     }
 
     fun assertInfoAskingForDcrAccessVisible() {

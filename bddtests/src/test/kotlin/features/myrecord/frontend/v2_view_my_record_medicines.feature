@@ -8,13 +8,16 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of <Count> for Medicines
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
+    And I see the medical records with count of <AcuteMedicinesCount> for Acute (short-term) medicines
     When I click the Acute medicines link - Medical Record v2
     Then I see the expected acute medicines - Medical Record v2
     And I see a message that no further information is available for this section in GP Medical Record
     When I click the Back link
     Then I see the medical record v2 medicines page
+    And I see the medical records with count of <CurrentMedicinesCount> for Repeat medicines: current
     When I click the Current medicines link - Medical Record v2
     Then I see the expected current medicines - Medical Record v2
     And I see a message that no further information is available for this section in GP Medical Record
@@ -28,13 +31,13 @@ Feature: Medicines Frontend - Medical Record v2
     When I click the Back link
     Then I see the medical record v2 page
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
+      | GP System | Count | AcuteMedicinesCount | CurrentMedicinesCount |
+      | EMIS      | 7     | 2                   | 5                     |
+      | TPP       | 4     | 1                   | 3                     |
     @smoketest
     Examples:
-      | GP System |
-      | VISION    |
+      | GP System | Count | AcuteMedicinesCount | CurrentMedicinesCount |
+      | VISION    | 2     | 1                   | 1                     |
 
   Scenario Outline: A <GP System> user receives bad medicines data sees an error - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
@@ -43,12 +46,15 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records without any count for Medicines
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
+    And I see the medical records without any count for Acute (short-term) medicines
     When I click the Acute medicines link - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
     When I click the Back link
     Then I see the medical record v2 medicines page
+    And I see the medical records without any count for Repeat medicines: current
     When I click the Current medicines link - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
     When I click the Back link
@@ -68,6 +74,7 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 0 for Medicines
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2

@@ -76,10 +76,13 @@ export default {
     if (!(this.$store.state.myRecord.record || {}).medications) {
       await this.$store.dispatch('myRecord/load');
     }
-    this.acuteMedicinesCount =
-      this.$store.state.myRecord.record.medications.data.acuteMedications.length;
-    this.currentMedicinesCount =
-      this.$store.state.myRecord.record.medications.data.currentRepeatMedications.length;
+
+    if (!this.$store.state.myRecord.record.medications.hasErrored) {
+      this.acuteMedicinesCount =
+        this.$store.state.myRecord.record.medications.data.acuteMedications.length;
+      this.currentMedicinesCount =
+        this.$store.state.myRecord.record.medications.data.currentRepeatMedications.length;
+    }
   },
   methods: {
     getEffectiveDate(effectiveDate, defaultValue) {
@@ -92,7 +95,10 @@ export default {
         nextDate.rawValue : this.$options.filters.datePart(nextDate.value, nextDate.datePart);
     },
     getAriaLabel(sectionTitle, count) {
-      return `${sectionTitle}, ${count} items`;
+      if (count) {
+        return `${sectionTitle}, ${count} items`;
+      }
+      return sectionTitle;
     },
   },
 };

@@ -10,7 +10,7 @@
                               record.allergies.data.length)"
                :click-func="goToUrl"
                :click-param="allergiesAndReactionsPath"
-               :count="record.allergies.data.length"/>
+               :count="record.allergies.hasErrored ? undefined : record.allergies.data.length"/>
 
     <menu-item id="medicines"
                data-purpose="medicines"
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     medicinesCount() {
-      return this.record.medications.data.acuteMedications.length +
+      return this.record.medications.hasErrored ? undefined : this.record.medications.data.acuteMedications.length +
              this.record.medications.data.currentRepeatMedications.length;
     },
   },

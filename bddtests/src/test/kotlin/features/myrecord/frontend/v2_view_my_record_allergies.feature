@@ -39,6 +39,7 @@ Feature: Allergies Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records with count of 2 for Allergies and adverse reactions
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see the expected allergies displayed with unknown date for the second result - Medical Record v2
     And I see a message that no further information is available for this section in GP Medical Record
@@ -50,6 +51,7 @@ Feature: Allergies Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
     When I click the 'Continue' button
+    And I see the medical records without any count for Allergies and adverse reactions
     And I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 

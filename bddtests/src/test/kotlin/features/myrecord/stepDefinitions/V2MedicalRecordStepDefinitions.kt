@@ -46,6 +46,16 @@ open class V2MedicalRecordStepDefinitions {
         medicalRecordV2Page.clickMedicalRecordSectionLink(linkText)
     }
 
+    @When("^I see the medical records without any count for (.*)$")
+    fun thenISeeTheMedicalRecordPageWithoutCountIndicator(linkText: String){
+        medicalRecordV2Page.assertCounterIndicatorIsNotPresent(linkText)
+    }
+
+    @When("^I see the medical records with count of (\\d+) for (.*)$")
+    fun thenISeeTheMedicalRecordPageWithCountOf(count: Int, linkText: String){
+        medicalRecordV2Page.assertRecordCount(count, linkText)
+    }
+    
     @Then("^I see the medical record v2 page$")
     fun thenISeeTheMedicalRecordV2Page(){
         medicalRecordV2Page.pageTitle.assertIsVisible()

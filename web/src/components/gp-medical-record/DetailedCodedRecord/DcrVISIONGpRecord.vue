@@ -10,7 +10,7 @@
                               record.immunisations.data.length)"
                :click-func="goToUrl"
                :click-param="immunisationsPath"
-               :count="record.immunisations.data.length"/>
+               :count="record.immunisations.hasErrored ? undefined : record.immunisations.data.length"/>
 
     <menu-item id="healthConditions"
                data-purpose="healthConditions"
@@ -22,7 +22,7 @@
                               record.problems.data.length)"
                :click-func="goToUrl"
                :click-param="healthConditionsPath"
-               :count="record.problems.data.length"/>
+               :count="record.problems.hasErrored ? undefined : record.problems.data.length"/>
 
     <menu-item id="test-results"
                data-purpose="test-results"
