@@ -15,10 +15,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
 
         public YourHealthPageContent PageContent { get; }
 
-        public static IOSYourHealthPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSYourHealthPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSYourHealthPage(driver);
             page.PageContent.AssertOnPage();
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSYourHealthPage));
+            }
             return page;
         }
     }
