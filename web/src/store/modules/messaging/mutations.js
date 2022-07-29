@@ -9,6 +9,7 @@ import {
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
+  SET_UNREADMESSAGE_SENDER_COUNT,
 } from './mutation-types';
 
 export default {
@@ -43,4 +44,13 @@ export default {
       state.hasUnread = data.some(message => (message.unreadCount > 0));
     }
   },
+  [SET_UNREADMESSAGE_SENDER_COUNT](state, data) {
+    if (data) {
+      const unreadSendersCount = data.filter(sender => sender.unreadCount > 0).length;
+      const unreadMessagesCount = data.reduce((total, sender) => (sender.unreadCount > 0 ? total + sender.unreadCount : total), 0);
+      state.totalUnreadMessageCount = unreadMessagesCount;
+      state.totalUnreadSendersCount = unreadSendersCount;
+    }
+  },
+
 };

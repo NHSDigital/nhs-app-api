@@ -133,29 +133,16 @@ describe('index', () => {
     expect(publicHealthNotification2.find('[data-purpose="warning-callout-body"]').text()).toEqual(notification2.body);
   });
 
-  each([
-    ['will show the indicator when there is unread messages', true, true, true, false],
-    ['will show the indicator when there is only unread app messages', false, true, true, false],
-    ['will show the indicator when there is only unread GP messages and OnDemand is enabled', true, false, false, true],
-    ['will show the indicator when there is only unread GP messages and OnDemand is disabled', true, false, true, false],
-    ['will not show the indicator when there is no unread messages', false, false, false, false],
-  ]).it('%s',
-    async (_, hasUnreadGpMessages, hasUnreadAppMessages, showIndicator, onDemandEnabled) => {
-      wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages, onDemandEnabled });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_messages_discIndicator').exists()).toBe(showIndicator);
-    });
-
   describe('messaging link', () => {
     const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
 
     let messagesLink;
 
     each([
-      ['will have text \'View your unread messages\' when there are unread messages', true, true, 'View your unread messages', false],
-      ['will have text \'View your unread messages\' when there are only unread app messages', false, true, 'View your unread messages', false],
+      ['will have text \'View your messages\' when there are unread messages', true, true, 'View your messages', false],
+      ['will have text \'View your messages\' when there are only unread app messages', false, true, 'View your messages', false],
       ['will have text \'View your messages\' when there are only unread GP messages and OnDemand is enabled', true, false, 'View your messages', true],
-      ['will have text \'View your unread messages\' when there are only unread GP messages and OnDemand is disabled', true, false, 'View your unread messages', false],
+      ['will have text \'View your messages\' when there are only unread GP messages and OnDemand is disabled', true, false, 'View your messages', false],
       ['will have text \'View your messages\' when there are no unread messages', false, false, 'View your messages', false],
     ]).it('%s',
       (_, hasUnreadGpMessages, hasUnreadAppMessages, expectedText, onDemandEnabled) => {

@@ -9,6 +9,11 @@
       </shutter-container>
     </div>
     <div v-else>
+      <p v-if="unreadMessageCount > 0" id="unreadMessageAndSenderHeading"
+         tabindex="0">{{
+           $t('messages.unreadMessageAndSenderCountHeading',
+              {unreadMessageCount, unreadSenderCount, messagePlural, senderPlural}) }}
+      </p>
       <ul v-if="hasSenders" id="inboxMessages" :class="$style['nhs-app-message']">
         <li v-for="(sender, index) in senders"
             :key="index"
@@ -21,7 +26,6 @@
              :href="messagePath(sender)"
              :class="$style['nhs-app-message__link']"
              :aria-label="messageLabel(sender)"
-             tabindex="0"
              @click="goToMessages(sender)"
              @click.stop.prevent="$emit('click')">
             <div :class="$style['flex-baseline-container']" aria-hidden="true">
@@ -30,8 +34,8 @@
               </h2>
               <span v-if="sender.unreadCount" :class="$style['nhs-app-message__meta']">
                 <span :id="'unreadIndicator' + index"
-                      :class="$style['nhs-app-message__count']"
-                >{{ sender.unreadCount }}</span>
+                      :class="$style['nhs-app-message__pill']"
+                >{{ unreadCountForIndicator(sender) }}</span>
               </span>
             </div>
           </a>
@@ -85,6 +89,18 @@ export default {
     senders() {
       return this.$store.state.messaging.senders;
     },
+    unreadSenderCount() {
+      return this.$store.state.messaging.totalUnreadSendersCount;
+    },
+    unreadMessageCount() {
+      return this.$store.state.messaging.totalUnreadMessageCount;
+    },
+    messagePlural() {
+      return this.$store.state.messaging.totalUnreadMessageCount > 1 ? 's' : '';
+    },
+    senderPlural() {
+      return this.$store.state.messaging.totalUnreadSendersCount > 1 ? 's' : '';
+    },
   },
   watch: {
     '$route.query.ts': async function watchTimestamp() {
@@ -125,6 +141,10 @@ export default {
           .replace('{plural}', sender.unreadCount > 1 ? 's' : '');
       }
       return label;
+    },
+    unreadCountForIndicator(sender) {
+      const { unreadCount } = sender;
+      return unreadCount < 10 ? unreadCount : '9+';
     },
     sanitizedContent: toPlainText,
     isUnread: message => message.unreadCount > 0,

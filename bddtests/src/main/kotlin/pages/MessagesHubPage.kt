@@ -12,9 +12,9 @@ class MessagesHubPage: HybridPageObject() {
     fun assertUnreadGPIndicatorDisplayed() {
         unreadGPIndicator.assertIsVisible()
     }
-
-    fun assertUnreadAppIndicatorDisplayed() {
-        unreadAppIndicator.assertIsVisible()
+    
+    fun assertUnreadAppCountDisplayed() {
+        unreadAppCount.assertIsVisible()
     }
 
     fun clickOnMenuItem(menuItemId: String) {
@@ -27,8 +27,8 @@ class MessagesHubPage: HybridPageObject() {
     }
 
     private val unreadGPIndicator = getElementByLocator("//*[@id='btn_im1_messaging_discIndicator']")
-
-    private val unreadAppIndicator = getElementByLocator("//*[@id='btn_appMessaging_discIndicator']")
+    
+    private val unreadAppCount = getElementByLocator("//*[@id='btn_appMessaging_countIndicator']")
 
     private val pageTitle = getElementByLocator("//h1[contains(text(),\"Messages\")]",
                                                 "Messages Hub title")

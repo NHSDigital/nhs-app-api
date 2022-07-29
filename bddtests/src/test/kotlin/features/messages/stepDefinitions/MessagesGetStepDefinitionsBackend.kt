@@ -185,7 +185,7 @@ class MessagesGetStepDefinitionsBackend {
         val responseMessagesFacades = responseMessages.map { message ->
             SenderFacade(
                     message.sender,
-                    message.unreadCount,
+                    message.unreadCount.toString(),
                     toFacade(message.messages))
         }
         for (x in 0 until expectedMessages.count()){

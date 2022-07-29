@@ -157,6 +157,12 @@ class MessagesStepDefinitions {
         messageSendersPage.senders.assertAll(MessagesSerenityHelpers.EXPECTED_SENDERS.getOrFail())
     }
 
+    @Then("^the unread message and sender count is displayed on the page$")
+    fun theUnreadMessageAndSenderCountIsDisplayed()
+    {
+        messageSendersPage.assertUnreadMessageAndSenderCountDisplayed()
+    }
+
     @Then("^a message is displayed indicating that there are no messages in the Messages Inbox$")
     fun aMessageIsDisplayedIndicatingThatThereAreNoMessagesInTheMessagesInbox() {
         messageSendersPage.assertNoSenders()

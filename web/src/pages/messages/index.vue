@@ -11,7 +11,7 @@
                    :text="$t('messages.hub.gpSurgeryMessaging')"
                    :description="$t('messages.hub.sendOrViewMessagesFromYourSurgery')"
                    :aria-label="ariaLabelGpMessages()"
-                   :click-func="navigateToGpMessages"/>
+                   :click-func="navigateToGpMessages" />
         <third-party-jump-off-button
           v-if="substraktEnabled"
           id="btn_substrakt_messages"
@@ -20,7 +20,7 @@
         <third-party-jump-off-button v-if="accurxEnabled"
                                      id="btn_accurx_messages"
                                      provider-id="accurx"
-                                     :provider-configuration="thirdPartyProvider.accurx.messages"/>
+                                     :provider-configuration="thirdPartyProvider.accurx.messages" />
         <third-party-jump-off-button v-if="engageEnabled"
                                      id="btn_engage_messages"
                                      provider-id="engage"
@@ -39,11 +39,12 @@
                    header-tag="h2"
                    data-purpose="text_link"
                    :href="appMessagingPath"
-                   :show-indicator="hasUnreadAppMessages"
+                   :count="unreadMessagesCount"
                    :text="$t('messages.hub.yourHealthServiceMessages')"
                    :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
                    :click-func="navigateToAppMessages"
-                   :aria-label="ariaLabelAppMessages()"/>
+                   :aria-label="ariaLabelAppMessages()"
+                   :is-messaging="true"/>
       </menu-item-list>
       <p v-else data-purpose="no-messages-available">
         {{ $t('messages.youHaveNoMessages') }}
@@ -158,6 +159,17 @@ export default {
     accurxEnabled() {
       return this.hasAccurxMessages && !this.isProxying && this.isProofLevel9;
     },
+    unreadMessagesCount() {
+      let total = 0;
+
+      if (this.$store.state.messaging && this.$store.state.messaging.senderMessages) {
+        this.$store.state.messaging.senderMessages.forEach((message) => {
+          if (message !== undefined) total += message.unreadCount;
+        });
+      }
+
+      return total === 0 ? undefined : total;
+    },
   },
   async mounted() {
     if (this.shouldLoadGpMessages && !this.ignoreGpSessionError()) {
@@ -193,10 +205,19 @@ export default {
     },
     ariaLabelAppMessages() {
       const { hasUnreadAppMessages } = this;
+
+      let unreadCountLabel = '';
+
+      if (this.unreadMessagesCount && this.unreadMessagesCount > 0) {
+        unreadCountLabel = `. ${this.$t('messages.youHaveCountUnreadMessagePlural')}`
+          .replace('{count}', this.unreadMessagesCount)
+          .replace('{plural}', this.unreadMessagesCount > 1 ? 's' : '');
+      }
+
       return (hasUnreadAppMessages) ?
         `${this.$t('messages.hub.yourHealthServiceMessages')}
           ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.
-          ${this.$t('messages.youHaveUnreadMessages')}`
+          ${unreadCountLabel}`
         : `${this.$t('messages.hub.yourHealthServiceMessages')}
           ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.`;
     },

@@ -23,7 +23,7 @@ enum class NavigationLinkText (val linkText: String) {
     GP_HEALTH_RECORD("View your GP health record"),
     PRESCRIPTIONS("Order a prescription"),
     MESSAGES("View your messages"),
-    UNREAD_MESSAGES("View your unread messages"),
+    UNREAD_MESSAGES("View your messages"),
     LINKED_PROFILES("Linked profiles"),
 }
 
@@ -72,13 +72,17 @@ open class HomeSteps {
     fun assertLinkIsVisible(link: NavigationLinkText): HybridPageElement {
         return homePage.assertLinkIsVisible(link.linkText)
     }
-
-    fun assertUnreadMessageIndicatorIsDisplayed() {
-        homePage.assertUnreadIndicatorPresent()
+    
+    fun assertUnreadCountIndicatorIsDisplayed() {
+        homePage.assertUnreadCountPresent()
     }
 
     fun assertUnreadMessageIndicatorIsNotDisplayed() {
         homePage.assertUnreadIndicatorNotPresent()
+    }
+    
+    fun assertUnreadCountIndicatorIsNotDisplayed() {
+        homePage.assertUnreadCountNotPresent()
     }
 
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {

@@ -74,7 +74,7 @@ class MessagesHubStepDefinitions {
 
     @Then("^the Messages Hub page is displayed with the unread indicator for app messaging")
     fun assertIsDisplayedWithUnreadIndicatorAppMessaging() {
-        messagesHubPage.assertUnreadAppIndicatorDisplayed()
+        messagesHubPage.assertUnreadAppCountDisplayed()
     }
 
 

@@ -34,6 +34,7 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+    margin-right: nhsuk-spacing(2);
 
     .nhs-app-message__title {
       @include nhsuk-responsive-padding(0);
@@ -89,6 +90,30 @@
           padding-top: 1px;
           padding-bottom: 1px;
         }
+      }
+    }
+
+    .nhs-app-message__pill {
+      @include nhsuk-responsive-padding(1, "left");
+      @include nhsuk-responsive-padding(1, "right");
+      font-weight: 700;
+      font-size: 16px;
+      background-color: $color_nhsuk-red;
+      border-radius: 13px;
+      color: $color_nhsuk-white;
+      display: inline-block;
+      min-width: 36px;
+      min-height: 22px;
+      text-align: center;
+      line-height: 1.4;
+      vertical-align: middle;
+      @include govuk-media-query($until: tablet) {
+        padding-top: 1px;
+        padding-bottom: 1px;
+        min-width: nhsuk-spacing(5);
+        min-height: 18px;
+        font-size: 14px;
+        line-height: 1.1;
       }
     }
   }

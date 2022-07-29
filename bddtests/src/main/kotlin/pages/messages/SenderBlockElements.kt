@@ -25,11 +25,11 @@ class SenderBlockElements(private val page: HybridPageObject) {
     }
 
     fun assertUnread(senderName: String) {
-        Assert.assertTrue("Expected sender to be unread", get(senderName).unreadCount > 0)
+        Assert.assertTrue("Expected sender to be unread", get(senderName).unreadCount > "0")
     }
 
     fun assertRead(senderName: String) {
-        Assert.assertEquals("Expected sender to be read", get(senderName).unreadCount, 0)
+        Assert.assertEquals("Expected sender to be read", get(senderName).unreadCount, "0")
     }
 
     private fun getAll(): List<SenderBlockElement> {
@@ -58,7 +58,7 @@ class SenderBlockElements(private val page: HybridPageObject) {
         private val hasUnread = spanElements.count() == SPAN_COUNT_WITH_UNREAD
 
         val name: String = headerElement.text
-        val unreadCount: Int = if (hasUnread) spanElements.last().text.toInt() else 0
+        val unreadCount: String = if (hasUnread) spanElements.last().text else "0"
 
         fun click() {
             element.click()
@@ -71,7 +71,7 @@ class SenderBlockElements(private val page: HybridPageObject) {
 
     private class SenderFacade(
         val sender: String,
-        val unreadCount: Int
+        val unreadCount: String
     ) {
 
         override fun toString(): String {

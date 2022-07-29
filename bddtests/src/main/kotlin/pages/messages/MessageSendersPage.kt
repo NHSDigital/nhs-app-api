@@ -1,6 +1,7 @@
 package pages.messages
 
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertSingleElementPresent
@@ -16,6 +17,16 @@ class MessageSendersPage : HybridPageObject() {
             this,
             helpfulName = "header")
         header.waitForElement()
+    }
+
+    fun assertUnreadMessageAndSenderCountDisplayed() {
+        val unreadCountSpan = HybridPageElement(
+                "//p[@id='unreadMessageAndSenderHeading']",
+                this,
+                helpfulName = "unreadMessageAndSenderCount")
+
+        unreadCountSpan.waitForElement()
+        Assert.assertNotNull(unreadCountSpan.textValue)
     }
 
     fun assertNoSenders() {

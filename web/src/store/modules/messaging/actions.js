@@ -8,6 +8,7 @@ import {
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
+  SET_UNREADMESSAGE_SENDER_COUNT,
 } from './mutation-types';
 
 export default {
@@ -52,6 +53,7 @@ export default {
         : await this.app.$http.getV1ApiUsersMeMessagesSenders({ ignoreError: true });
 
       commit(LOADED_SENDERS, senders);
+      commit(SET_UNREADMESSAGE_SENDER_COUNT, senders);
     } catch (error) {
       commit(ADD_ERROR, createLocalError(error));
     }

@@ -13,6 +13,7 @@ Feature: Messages
     Then the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
     And the Sender One Canonical sender is displayed as unread
+    And the unread message and sender count is displayed on the page
     When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
     And the unread messages title is displayed

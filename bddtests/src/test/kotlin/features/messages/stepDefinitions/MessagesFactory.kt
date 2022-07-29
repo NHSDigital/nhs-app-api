@@ -122,7 +122,7 @@ class MessagesFactory {
         val senderTwoMessages = createSenderMessages(arrayListOf(senderTwoMessageOne))
 
         val expectedSenderOneSummaryMessage =
-            SenderFacade(senderOneName, 1,
+            SenderFacade(senderOneName, "1",
                 arrayListOf(senderOneMessageThree.copy(sender = senderOneCanonicalName)))
         val expectedSenderOneMessages = senderOneMessages.copy(
             name = senderOneCanonicalName,
@@ -133,7 +133,7 @@ class MessagesFactory {
         val expectedSenderTwoSenderContext =
             SenderContext(senderId = nhsAppSenderId, supplierId = "278d3b75-3498-4d68-8991-506d0006e46f")
         val expectedSenderTwoSummaryMessage =
-            SenderFacade(senderTwoName, 1,
+            SenderFacade(senderTwoName, "1",
                 arrayListOf(
                     senderTwoMessageOne.copy(
                         sender = nhsAppSenderCanonicalName,
@@ -200,7 +200,7 @@ class MessagesFactory {
         }
 
         val senderMessages = createSenderMessages(messages as ArrayList<SingleMessageFacade>)
-        val senderMessage = SenderFacade(senderOneName, 0, arrayListOf(messages.first()))
+        val senderMessage = SenderFacade(senderOneName, "0", arrayListOf(messages.first()))
 
         createMessagesInRepository(arrayListOf(senderMessages), nhsLoginId)
 
@@ -322,7 +322,7 @@ class MessagesFactory {
         val distinctSender = messages.map { message -> message.sender }.distinct()
         Assert.assertEquals("Expected one distinct sender", 1, distinctSender.count())
         val unreadCount = messages.count { message -> !message.read }
-        return SenderFacade(distinctSender.single(), unreadCount, messages)
+        return SenderFacade(distinctSender.single(), unreadCount.toString(), messages)
     }
 
     companion object {

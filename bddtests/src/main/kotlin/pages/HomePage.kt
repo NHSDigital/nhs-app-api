@@ -35,6 +35,11 @@ class HomePage : HybridPageObject() {
         webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
         page = this,
         helpfulName = "Unread Indicator")
+        
+    private val unreadCount = HybridPageElement(
+        webDesktopLocator = "//*[@id='btn_messages_countIndicator']",
+        page = this,
+        helpfulName = "Unread Count")
 
     private val surveyPath = "//div[@data-purpose='survey']"
 
@@ -85,12 +90,16 @@ class HomePage : HybridPageObject() {
             helpfulName = "$linkText Link")
     }
 
-    fun assertUnreadIndicatorPresent() {
-        unreadIndicator.assertIsVisible()
-    }
-
     fun assertUnreadIndicatorNotPresent() {
         unreadIndicator.assertElementNotPresent()
+    }
+    
+    fun assertUnreadCountPresent() {
+        unreadCount.assertIsVisible()
+    }
+    
+    fun assertUnreadCountNotPresent() {
+        unreadCount.assertElementNotPresent()
     }
 
     fun assertPatientDetailIsVisible(detail:String, value: String) {

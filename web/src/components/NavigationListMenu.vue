@@ -20,18 +20,19 @@
                  :header-tag="headerTag"
                  data-purpose="messages-menu-item"
                  :href="messagesPath"
-                 :show-indicator="hasMessageIndicator"
-                 :highlight-text="hasMessageIndicator"
                  :text="messagesLabel"
-                 :aria-label="messagesLabel"
-                 :click-func="navigateToMessages"/>
+                 :aria-label="messagesLabelWithUnreadCount"
+                 :count="unreadMessagesCount"
+                 :click-func="navigateToMessages"
+                 :is-messaging="true"/>
       <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
                  id="linked-profiles-link"
                  :header-tag="headerTag"
                  :href="linkedProfilesPath"
                  :text="$t('navigation.pages.headers.linkedProfiles')"
                  :aria-label="$t('navigation.pages.headers.linkedProfiles')"
-                 :click-func="navigateToLinkedProfiles"/>
+                 :click-func="navigateToLinkedProfiles"
+                 :is-messaging="true"/>
       <menu-item v-if="isProofLevel9"
                  id="menu-item-myRecord"
                  :header-tag="headerTag"
@@ -40,7 +41,8 @@
                  :text="$t('navigation.viewYourGpHealthRecord')"
                  :aria-label="$t('navigation.viewYourGpHealthRecord')"
                  :click-func="goToUrl"
-                 :click-param="gpMedicalRecordPath"/>
+                 :click-param="gpMedicalRecordPath"
+                 :is-messaging="true"/>
       <menu-item v-if="isProofLevel9"
                  id="menu-item-prescriptions"
                  :header-tag="headerTag"
@@ -49,7 +51,8 @@
                  :text="$t('navigation.orderAPrescription')"
                  :aria-label="$t('navigation.orderAPrescription')"
                  :click-func="goToUrl"
-                 :click-param="prescriptionsPath"/>
+                 :click-param="prescriptionsPath"
+                 :is-messaging="true"/>
     </menu-item-list>
   </div>
 </template>
@@ -126,9 +129,19 @@ export default {
       return !this.$store.state.gpMessages.gpMessagingSessionUnavailable;
     },
     messagesLabel() {
-      return this.hasMessageIndicator ?
-        this.$t('navigation.viewYourUnreadMessages')
-        : this.$t('navigation.viewYourMessages');
+      return this.$t('navigation.viewYourMessages');
+    },
+    messagesLabelWithUnreadCount() {
+      let label = `${this.messagesLabel}. `;
+
+      if (this.unreadMessagesCount && this.unreadMessagesCount > 0) {
+        label += this.$t('navigation.youHaveCountUnreadMessagePlural', {
+          count: this.unreadMessagesCount,
+          plural: this.unreadMessagesCount > 1 ? 's' : '',
+        });
+      }
+
+      return label;
     },
     supportsLinkedProfiles() {
       return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
@@ -138,6 +151,17 @@ export default {
     },
     showNetCompanyP5VaccineRecord() {
       return this.hasNetCompanyP5VaccineRecord && !this.isProxying && !this.isProofLevel9;
+    },
+    unreadMessagesCount() {
+      let total = 0;
+
+      if (this.$store.state.messaging && this.$store.state.messaging.senderMessages) {
+        this.$store.state.messaging.senderMessages.forEach((message) => {
+          if (message !== undefined) total += message.unreadCount;
+        });
+      }
+
+      return total === 0 ? undefined : total;
     },
   },
   created() {

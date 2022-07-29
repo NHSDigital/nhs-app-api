@@ -10,7 +10,7 @@
                            :click-param="clickParam"
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
-      <div :class="[$style.listMenuItemContainer, showMeta ? $style['withMeta'] : '']">
+      <div :class="[$style.listMenuItemContainer, showMeta ? $style['withMeta'] : '', isMessaging ? $style['messaging'] : '']">
         <component :is="headerTag"
                    :class="['nhsuk-heading-s',
                             $style.break,
@@ -21,7 +21,13 @@
            :id="descriptionId"
            :data-sid="descriptionDataSid">{{ description }}</p>
 
-        <div v-if="showMeta" :class="$style['listMenuItem__meta']">
+        <div v-if="showMeta && isMessaging" :class="[$style['listMenuItem__meta'], $style['messaging']]">
+          <span v-if="showCount"
+                :id="`${id}_countIndicator`"
+                :class="[$style['listMenuItem__count'], $style['listMenuItem__pill'], $style['messaging']]">
+            {{ unreadMessagesCount }}</span>
+        </div>
+        <div v-else-if="showMeta" :class="$style['listMenuItem__meta']">
           <span v-if="showCount"
                 :id="`${id}_countIndicator`"
                 :class="$style['listMenuItem__count']"
@@ -108,6 +114,10 @@ export default {
       type: Number,
       default: undefined,
     },
+    isMessaging: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     showCount() {
@@ -121,6 +131,9 @@ export default {
         return `${this.text}.${this.$t('messages.youHaveUnreadMessages')}`;
       }
       return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('myRecord.records')})` : this.text;
+    },
+    unreadMessagesCount() {
+      return this.count < 10 ? this.count : '9+';
     },
   },
 };

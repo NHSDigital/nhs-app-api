@@ -11,7 +11,7 @@ const messageItemClass = 'nhs-app-message__item';
 const messageItemUnreadClass = 'nhs-app-message__item--unread';
 const senderSectionClass = 'nhs-app-message';
 const noMessagesSelector = '#noMessages';
-
+const senderAndMessageCountSelector = '#unreadMessageAndSenderHeading';
 let $store;
 let wrapper;
 
@@ -31,6 +31,8 @@ const mountIndex = ({
   const messagingState = initialState();
   messagingState.error = messagingError;
   messagingState.senders = senders;
+  messagingState.totalUnreadSendersCount = senders.filter(sender => sender.unreadCount > 0).length;
+  messagingState.totalUnreadMessageCount = senders.reduce((total, sender) => (sender.unreadCount > 0 ? total + sender.unreadCount : total), 0);
 
   $store = createStore({
     state: {
@@ -111,6 +113,10 @@ describe('messaging index', () => {
       const noMessages = wrapper.find(noMessagesSelector);
       expect(noMessages.exists()).toBe(true);
       expect(noMessages.text()).toBe('You have no messages.');
+    });
+
+    it('will not display unread message count and sender count', () => {
+      expect(wrapper.find(senderAndMessageCountSelector).exists()).toBe(false);
     });
   });
 
@@ -196,6 +202,32 @@ describe('messaging index', () => {
       });
     });
   });
+
+
+  describe('unread message and sender count', () => {
+    it('will display with plural wording for multiple unread messages and single sender', async () => {
+      wrapper = mountIndex({ senders: [{ id: 'test-1', name: 'Test Sender 1', unreadCount: 9 }] });
+      await wrapper.vm.$nextTick();
+      const unreadMessageAndSenderBlock = wrapper.find('#unreadMessageAndSenderHeading');
+      expect(unreadMessageAndSenderBlock.text()).toBe('You have 9 unread messages from 1 sender');
+    });
+
+    it('will display with plural wording for multiple unread messages and multiple senders', async () => {
+      wrapper = mountIndex({ senders: [{ id: 'test-1', name: 'Test Sender 1', unreadCount: 2 },
+        { id: 'test-2', name: 'Test Sender 2', unreadCount: 12 }] });
+      await wrapper.vm.$nextTick();
+      const unreadMessageAndSenderBlock = wrapper.find('#unreadMessageAndSenderHeading');
+      expect(unreadMessageAndSenderBlock.text()).toBe('You have 14 unread messages from 2 senders');
+    });
+
+    it('will display with singular wording for unread messages and sender', async () => {
+      wrapper = mountIndex({ senders: [{ id: 'test-1', name: 'Test Sender 1', unreadCount: 1 }] });
+      await wrapper.vm.$nextTick();
+      const unreadMessageAndSenderBlock = wrapper.find('#unreadMessageAndSenderHeading');
+      expect(unreadMessageAndSenderBlock.text()).toBe('You have 1 unread message from 1 sender');
+    });
+  });
+
 
   describe('desktop', () => {
     let backLink;

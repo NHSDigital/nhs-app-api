@@ -37,6 +37,7 @@ export default {
   toDiscussFurther: 'To discuss this message further, send a new message or phone your GP surgery.',
   unread: 'Unread',
   unreadMessage: 'Unread message',
+  unreadMessageAndSenderCountHeading: 'You have {unreadMessageCount} unread message{messagePlural} from {unreadSenderCount} sender{senderPlural}',
   unreadMessageReceived: 'Unread message received {timePrefix} {date}. Message begins {body}, read more...',
   unreadMessages: 'Unread messages',
   view: 'View',

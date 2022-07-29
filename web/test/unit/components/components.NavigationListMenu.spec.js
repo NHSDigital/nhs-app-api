@@ -15,6 +15,7 @@ const mountAs = ({
   supportsLinkedProfiles = true,
   integrationEnabled = true,
   isProxying = false,
+  unreadMessagesCount = 0,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -29,6 +30,11 @@ const mountAs = ({
         rules: {
           supportsLinkedProfiles,
         },
+      },
+      messaging: {
+        senderMessages: [{
+          unreadCount: unreadMessagesCount,
+        }],
       },
     },
     getters: {
@@ -137,6 +143,16 @@ describe('Navigation Links ', () => {
     });
     it('will not show linked profiles link', () => {
       expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
+    });
+  });
+
+  describe('unread message indicators', () => {
+    each([
+      ['show the indicator when there is unread messages', 1, true],
+      ['not show the indicator when there is no unread messages', 0, false],
+    ]).it('will %s', async (_, count, indicatorShown) => {
+      wrapper = mountAs({ unreadMessagesCount: count });
+      expect(wrapper.find('#btn_messages_countIndicator').exists()).toBe(indicatorShown);
     });
   });
 });

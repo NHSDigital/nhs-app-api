@@ -1,12 +1,13 @@
 import MenuItem from '@/components/MenuItem';
 import { mount } from '../helpers';
 
-const mountComponent = ({ count, showIndicator }) =>
+const mountComponent = ({ count, showIndicator, isMessaging }) =>
   mount(MenuItem, {
     propsData: {
       id: 'testItem',
       count,
       showIndicator,
+      isMessaging,
     },
   });
 
@@ -29,15 +30,21 @@ describe('MenuItem', () => {
     let wrapper;
 
     it('shows the count when count is a positive number', () => {
-      wrapper = mountComponent({ count: 12 });
+      wrapper = mountComponent({ count: 9 });
       expect(wrapper.find('#testItem_countIndicator').exists()).toBe(true);
-      expect(wrapper.find('#testItem_countIndicator').text()).toBe('12');
+      expect(wrapper.find('#testItem_countIndicator').text()).toBe('9');
     });
 
     it('shows the count when count is zero', () => {
       wrapper = mountComponent({ count: 0 });
       expect(wrapper.find('#testItem_countIndicator').exists()).toBe(true);
       expect(wrapper.find('#testItem_countIndicator').text()).toBe('0');
+    });
+
+    it('shows 9+ when the count is greater than 9', () => {
+      wrapper = mountComponent({ count: 12, isMessaging: true });
+      expect(wrapper.find('#testItem_countIndicator').exists()).toBe(true);
+      expect(wrapper.find('#testItem_countIndicator').text()).toBe('9+');
     });
 
     it('does not show count span when there is no count', () => {

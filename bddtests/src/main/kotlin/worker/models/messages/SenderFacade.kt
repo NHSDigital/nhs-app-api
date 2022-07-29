@@ -1,7 +1,7 @@
 package worker.models.messages
 
 data class SenderFacade(val name:String,
-                        val unreadCount:Int,
+                        val unreadCount:String,
                         val messages: List<SingleMessageFacade>)
 
 

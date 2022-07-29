@@ -45,12 +45,13 @@ class HomePageStepDefinitions {
 
     @When("^I can see I have unread messages on the home page$")
     fun iCanSeeUnreadMessageIndicatorOnTheHomePage() {
-        homeSteps.assertUnreadMessageIndicatorIsDisplayed()
+        homeSteps.assertUnreadCountIndicatorIsDisplayed()
     }
 
     @When("^I cannot tell if I have unread messages on the home page$")
     fun iCannotTellIfIHaveUnreadMessagesOnTheHomePage() {
         homeSteps.assertUnreadMessageIndicatorIsNotDisplayed()
+        homeSteps.assertUnreadCountIndicatorIsNotDisplayed()
     }
 
     @Then("^I see the home page$")

@@ -6,6 +6,7 @@ export const LOADED_MESSAGE = 'LOADED_MESSAGE';
 export const SENDER_MESSAGES_LOADED = 'SENDER_MESSAGES_LOADED';
 export const LOADED_SENDERS = 'LOADED_SENDERS';
 export const SET_HAS_UNREAD = 'SET_HAS_UNREAD';
+export const SET_UNREADMESSAGE_SENDER_COUNT = 'UNREAD_MESSAGE_SENDER_COUNT';
 
 export const initialState = () => ({
   error: null,
@@ -14,4 +15,6 @@ export const initialState = () => ({
   senderMessagesLoaded: false,
   senders: [],
   hasUnread: false,
+  totalUnreadMessageCount: 0,
+  totalUnreadSendersCount: 0,
 });

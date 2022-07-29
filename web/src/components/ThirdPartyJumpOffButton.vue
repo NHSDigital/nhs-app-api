@@ -11,7 +11,8 @@
              :text="headerText()"
              :description="descriptionText()"
              :aria-label="headerText() |
-               join(descriptionText() ,'. ')" />
+               join(descriptionText() ,'. ')"
+             :is-messaging="isMessaging" />
 </template>
 
 <script>
@@ -37,6 +38,10 @@ export default {
     providerId: {
       type: String,
       required: true,
+    },
+    isMessaging: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

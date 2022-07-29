@@ -39,6 +39,7 @@ const mountPage = ({
   hasUnreadGPMessages = false,
   ignoreGpSessionError = false,
   gpSessionApiError = undefined,
+  unreadMessagesCount = 0,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -46,7 +47,12 @@ const mountPage = ({
       practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
       device: { isNativeApp: false },
       gpMessages: { hasUnread: hasUnreadGPMessages },
-      messaging: { hasUnread: hasUnreadAppMessages },
+      messaging: {
+        hasUnread: hasUnreadAppMessages,
+        senderMessages: [{
+          unreadCount: unreadMessagesCount,
+        }],
+      },
       session: { ignoreGpSessionError },
       auth: { gpSessionError: gpSessionApiError },
     },
@@ -160,21 +166,12 @@ describe('messages page', () => {
 
   describe('unread message indicators', () => {
     each([
-      ['show the indicator when there is unread GP messages', true, true],
-      ['show the indicator when there is no unread GP messages', false, false],
-    ]).it('will %s', async (_, hasUnread, indicatorShown) => {
-      mountPage({ hasUnreadGPMessages: hasUnread });
+      ['show the indicator when there is unread app messages', 1, true],
+      ['not show the indicator when there is no unread app messages', 0, false],
+    ]).it('will %s', async (_, count, indicatorShown) => {
+      mountPage({ unreadMessagesCount: count });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_im1_messaging_discIndicator').exists()).toBe(indicatorShown);
-    });
-
-    each([
-      ['show the indicator when there is unread app messages', true, true],
-      ['not show the indicator when there is no unread app messages', false, false],
-    ]).it('will %s', async (_, hasUnread, indicatorShown) => {
-      mountPage({ hasUnreadAppMessages: hasUnread });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_appMessaging_discIndicator').exists()).toBe(indicatorShown);
+      expect(wrapper.find('#btn_appMessaging_countIndicator').exists()).toBe(indicatorShown);
     });
   });
 
