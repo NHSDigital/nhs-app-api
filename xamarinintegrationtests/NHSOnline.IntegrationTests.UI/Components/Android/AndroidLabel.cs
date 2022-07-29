@@ -2,6 +2,7 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Android.UiAutomator;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
@@ -25,6 +26,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public static AndroidLabel WithContentDescription(IAndroidInteractor interactor, string description)
             => new(interactor, new DescriptionLocatorStrategy(description));
 
+        public static AndroidLabel WithResourceId(IAndroidInteractor interactor, string resourceId)
+            => new(interactor, new ResourceIdLocatorStrategy(resourceId));
+
         public AndroidLabel ScrollIntoView()
             => new(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
 
@@ -33,6 +37,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _interactor.ActOnElement(
                 FindBy,
                 e => e.Displayed.Should().BeTrue("a label {0} should be displayed", Description));
+        }
+
+        public void AssertTextContains(string expectedText)
+        {
+            _interactor.ActOnElement(
+                FindBy,
+                e => e.Text.Should().Contain(expectedText, "label should contain {0}", expectedText));
         }
 
         public void Click()
@@ -75,6 +86,18 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             public string Selector => $"new UiSelector().className(\"android.widget.TextView\").descriptionContains({_description.QuoteUiAutomatorLiteral()})";
 
             public string Description => $"with description '{_description}'";
+        }
+
+        private sealed class ResourceIdLocatorStrategy : IAndroidLocatorStrategy
+        {
+            private readonly string _resourceId;
+
+            public ResourceIdLocatorStrategy(string resourceId)
+                => _resourceId = resourceId;
+
+            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").resourceIdMatches({_resourceId.QuoteUiAutomatorLiteral()})";
+
+            public string Description => $"with resource-id '{_resourceId}'";
         }
     }
 }

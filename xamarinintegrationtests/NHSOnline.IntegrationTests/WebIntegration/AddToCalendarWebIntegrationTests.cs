@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         private const decimal ValidEndTime = 1893589800.456m; // Wednesday, 2 January 2030 13:10:00.456
         private const decimal InvalidEndTime = 1893589100.789m; // Wednesday, 2 January 2030 12:58:20.789
 
-        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS10, OSVersion = AndroidOSVersion.Nine)]
         public void APatientWithProofLevelNineCanAddAnEventToTheCalendarOnAWebIntegrationCalendarScreenAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -78,7 +78,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertDetailsArePassed();
         }
 
-        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS10, OSVersion = AndroidOSVersion.Nine)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAndErrorDialogCanBeDismissedAndroid(
             IAndroidDriverWrapper driver)
         {
@@ -130,7 +130,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver);
         }
 
-        [NhsAppAndroidTest(AndroidBrowserStackCapability.SignInToGoogle)]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS10, OSVersion = AndroidOSVersion.Nine)]
         public void APatientWithProofLevelNineTryingToCallAnInvalidDateRangeOnAWebIntegrationCalendarScreenIsShownAnErrorDialogAndCanAddedManuallyAndroid(
             IAndroidDriverWrapper driver)
         {
