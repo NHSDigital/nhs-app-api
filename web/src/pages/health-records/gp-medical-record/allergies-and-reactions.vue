@@ -78,6 +78,8 @@ export default {
     },
   },
   async mounted() {
+    this.logOperationAudit();
+
     if (!this.$store.state.myRecord.record.allergies) {
       await this.$store.dispatch('myRecord/load');
     }
@@ -86,6 +88,12 @@ export default {
   methods: {
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;
+    },
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record ALLERGIES AND ADVERSE REACTIONS successfully retrieved.',
+      });
     },
   },
 };

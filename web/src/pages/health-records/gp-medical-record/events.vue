@@ -91,11 +91,21 @@ export default {
       return;
     }
 
+    this.logOperationAudit();
+
     if (!this.$store.state.myRecord.record.tppDcrEvents) {
       await this.$store.dispatch('myRecord/load');
     }
 
     this.events = this.$store.state.myRecord.record.tppDcrEvents;
+  },
+  methods: {
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record CONSULTATIONS AND EVENTS successfully retrieved.',
+      });
+    },
   },
 };
 </script>

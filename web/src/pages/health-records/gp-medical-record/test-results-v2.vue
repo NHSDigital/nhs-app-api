@@ -56,6 +56,8 @@ export default {
     },
   },
   async mounted() {
+    this.logOperationAudit();
+
     this.$store.dispatch('myRecord/clearLastViewedTestResultYear');
     if (!this.$store.state.myRecord.record.testResults) {
       await this.$store.dispatch('myRecord/load');
@@ -68,6 +70,12 @@ export default {
     },
     getAriaLabel(sectionTitle, count) {
       return `${sectionTitle}, ${count} items`;
+    },
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record TEST RESULTS successfully retrieved.',
+      });
     },
   },
 };

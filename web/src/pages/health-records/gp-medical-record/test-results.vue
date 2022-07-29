@@ -33,10 +33,20 @@ export default {
     };
   },
   async mounted() {
+    this.logOperationAudit();
+
     if (!this.$store.state.myRecord.record.testResults) {
       await this.$store.dispatch('myRecord/load');
     }
     this.results = this.$store.state.myRecord.record.testResults;
+  },
+  methods: {
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record TEST RESULTS successfully retrieved.',
+      });
+    },
   },
 };
 </script>

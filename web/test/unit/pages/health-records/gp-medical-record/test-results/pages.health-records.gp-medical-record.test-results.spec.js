@@ -1,16 +1,20 @@
 import testResultsPage from '@/pages/health-records/gp-medical-record/test-results';
 import i18n from '@/plugins/i18n';
 import { createStore, shallowMount } from '../../../../helpers';
+import each from 'jest-each';
 
 let page;
 let $store;
 
-const mountPage = ({ testResults = undefined, isNative = false } = {}) => {
+const expectedOperation = 'PatientRecord_Section_View_Response';
+const expectedDetails = 'Patient record TEST RESULTS successfully retrieved.';
+const mountPage = ({ testResults = undefined, isNative = false, supplierName = 'EMIS' } = {}) => {
   $store = createStore({
     state: {
       device: { isNativeApp: isNative },
       myRecord: {
         record: {
+          supplier: supplierName,
           testResults,
         },
       },
@@ -38,7 +42,11 @@ describe('gp-medical-record test results', () => {
         hasAccess: true,
       },
     });
-    expect($store.dispatch).not.toHaveBeenCalled();
+    expect($store.dispatch).toHaveBeenCalledWith('log/postOperationAudit', {
+      operation: expectedOperation,
+      details: expectedDetails,
+    });
+    expect($store.dispatch).not.toHaveBeenCalledWith('myRecord/load');
   });
 
   it('will have a back link on the desktop website', async () => {
@@ -56,4 +64,19 @@ describe('gp-medical-record test results', () => {
     const backlink = page.find('[id="desktopBackLink"]');
     expect(backlink.exists()).toBe(false);
   });
+});
+
+describe('gp-medical-record test results audit log', () => {
+  each([
+    ['EMIS'],
+    ['TPP'],
+    ['VISION'],
+  ])
+    .it('will post the audit log for %s', (supplierName) => {
+      mountPage({ supplierName });
+      expect($store.dispatch).toHaveBeenCalledWith('log/postOperationAudit', {
+        operation: expectedOperation,
+        details: expectedDetails,
+      });
+    });
 });

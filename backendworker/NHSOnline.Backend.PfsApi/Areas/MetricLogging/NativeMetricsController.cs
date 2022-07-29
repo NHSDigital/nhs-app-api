@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.Areas.MetricLogging.Models;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -60,5 +61,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.MetricLogging
                 _logger.LogExit();
             }
         }
+
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [ApiVersionRoute("api/metrics/postOperationAudit")]
+        public async Task<IActionResult> PostOperationAudit([FromBody] OperationAuditData operationAuditData)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                await _auditor.PostOperationAudit(operationAuditData.Operation, operationAuditData.Details);
+                return new StatusCodeResult(StatusCodes.Status200OK);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
     }
 }

@@ -73,6 +73,7 @@ export default {
     };
   },
   async mounted() {
+    this.logOperationAudit();
     if (!(this.$store.state.myRecord.record || {}).medications) {
       await this.$store.dispatch('myRecord/load');
     }
@@ -99,6 +100,12 @@ export default {
         return `${sectionTitle}, ${count} items`;
       }
       return sectionTitle;
+    },
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record MEDICINES successfully retrieved.',
+      });
     },
   },
 };

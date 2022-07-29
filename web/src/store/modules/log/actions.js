@@ -15,4 +15,16 @@ export default {
   async onInfo(_, message) {
     await sendRequest(this, 'Information', message);
   },
+  async postOperationAudit(_, { operation, details }) {
+    try {
+      await this.app.$http.postV1ApiMetricsPostOperationAudit({
+        operationAuditData: {
+          operation,
+          details,
+        },
+      });
+    } catch {
+      // do nothing as this is just logging
+    }
+  },
 };

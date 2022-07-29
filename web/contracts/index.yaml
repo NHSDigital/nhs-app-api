@@ -6772,6 +6772,29 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/metrics/postOperationAudit: 
+      post: 
+        tags: 
+          - "user-info"
+        summary: "Post an operation audit record"
+        description: "Logs an audit record after a user operation"
+        requestBody: 
+          x-name: "OperationAuditData"
+          required: true
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  operation: 
+                    type: "string"
+                  details: 
+                    type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. The audit record has been succeffully logged."
+          400: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/metrics/biometrics/optIn: 
       post: 
         tags: 
@@ -6780,7 +6803,7 @@
         description: "Records the current user has opted in for biometrics"
         responses: 
           200: 
-            description: "Successful operation. Biometrics logged."
+            description: "Successful operation. Biometrics registration status update logged."
           400: 
             description: "An unexpected error occurred processing the request."
     /v1/api/metrics/biometrics/optOut: 
@@ -6791,7 +6814,7 @@
         description: "Records the current user has opted out for biometrics"
         responses: 
           200: 
-            description: "Successful operation. Biometrics logged."
+            description: "Successful operation. Biometrics registration status update logged."
           400: 
             description: "An unexpected error occurred processing the request."
     /v1/api/users/info: 

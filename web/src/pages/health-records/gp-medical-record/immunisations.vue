@@ -101,6 +101,8 @@ export default {
       return;
     }
 
+    this.logOperationAudit();
+
     if (!this.$store.state.myRecord.record.immunisations) {
       await this.$store.dispatch('myRecord/load');
     }
@@ -116,6 +118,12 @@ export default {
     getNextDateFormatted(nextDate) {
       return nextDate.rawValue != null ?
         nextDate.rawValue : this.$options.filters.datePart(nextDate.value, nextDate.datePart);
+    },
+    logOperationAudit() {
+      this.$store.dispatch('log/postOperationAudit', {
+        operation: 'PatientRecord_Section_View_Response',
+        details: 'Patient record IMMUNISATIONS successfully retrieved.',
+      });
     },
   },
 };

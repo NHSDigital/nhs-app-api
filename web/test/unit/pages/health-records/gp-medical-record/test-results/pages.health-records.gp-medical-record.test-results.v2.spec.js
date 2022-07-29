@@ -1,10 +1,13 @@
 import testResultsV2Page from '@/pages/health-records/gp-medical-record/test-results-v2';
 import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../../../helpers';
+import each from 'jest-each';
 
 let page;
 let $store;
 
+const expectedOperation = 'PatientRecord_Section_View_Response';
+const expectedDetails = 'Patient record TEST RESULTS successfully retrieved.';
 const createTestResults = ({
   associatedTexts,
   date,
@@ -104,4 +107,19 @@ describe('gp-medical-record test results', () => {
     expect(testResultsLink.attributes().href)
       .toEqual('health-records/gp-medical-record/testresultdetail/1');
   });
+});
+
+describe('gp-medical-record test results audit log', () => {
+  each([
+    ['EMIS'],
+    ['TPP'],
+    ['VISION'],
+  ])
+    .it('will post the audit log for %s', (supplierName) => {
+      mountPage({ supplierName });
+      expect($store.dispatch).toHaveBeenCalledWith('log/postOperationAudit', {
+        operation: expectedOperation,
+        details: expectedDetails,
+      });
+    });
 });

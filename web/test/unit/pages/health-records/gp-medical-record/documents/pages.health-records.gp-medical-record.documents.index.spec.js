@@ -2,6 +2,7 @@
 import DocumentsPage from '@/pages/health-records/gp-medical-record/documents/index';
 import i18n from '@/plugins/i18n';
 import { createStore, shallowMount } from '../../../../helpers';
+import each from 'jest-each';
 
 let page;
 let $store;
@@ -29,13 +30,13 @@ const createDocument = ({
     documentIdentifier,
   });
 
-const mountPage = ({ documentData = [createDocument()] } = {}) => {
+const mountPage = ({ documentData = [createDocument()], supplierName = 'EMIS' } = {}) => {
   $store = createStore({
     state: {
       device: { isNativeApp: false },
       myRecord: {
         record: {
-          supplier: 'EMIS',
+          supplier: supplierName,
           documents: {
             data: documentData,
             hasErrored: false,
@@ -158,5 +159,23 @@ describe('gp-medical-record documents', () => {
         isViewable: true,
       });
     });
+  });
+});
+
+describe('gp-medical-record documents audit log', () => {
+  describe('document section operation audit log', () => {
+    each([
+      ['EMIS'],
+      ['TPP'],
+    ])
+      .it('will post the audit log for %s', (supplierName) => {
+        mountPage({ supplierName });
+        const expectedOperation = 'PatientRecord_Section_View_Response';
+        const expectedDetails = 'Patient record DOCUMENTS successfully retrieved.';
+        expect($store.dispatch).toHaveBeenCalledWith('log/postOperationAudit', {
+          operation: expectedOperation,
+          details: expectedDetails,
+        });
+      });
   });
 });

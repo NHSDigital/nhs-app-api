@@ -77,6 +77,24 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /metrics/postOperationAudit:
+    post:
+      tags:
+        - user-info
+      summary: Post an operation audit record
+      description: Logs an audit record after a user operation
+      requestBody:
+        x-name: OperationAuditData
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationAuditData'
+      responses:
+        "200":
+          description: Successful operation. The audit record has been succeffully logged.
+        "400":
+          description: An unexpected error occurred processing the request.
   /metrics/biometrics/optIn:
       post:
         tags:
@@ -172,3 +190,10 @@ components:
       description: Array of nhsloginIds
       items:
         type: string
+    OperationAuditData:
+      type: object
+      properties:
+        operation:
+          type: string
+        details:
+          type: string
