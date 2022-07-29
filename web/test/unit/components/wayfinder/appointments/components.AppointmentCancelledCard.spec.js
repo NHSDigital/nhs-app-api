@@ -59,7 +59,7 @@ describe('Appointment Cancelled Card', () => {
   });
 
   it('will display appointment cancelled message', () => {
-    expect(cancelledInfo.text()).toBe('This appointment has been cancelled. You do not need to do anything.');
+    expect(cancelledInfo.text()).toBe('This appointment has been permanently cancelled. You do not need to do anything.');
   });
 
   it('will display a deep link', () => {

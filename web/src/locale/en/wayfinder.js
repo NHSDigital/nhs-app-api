@@ -24,7 +24,7 @@ export default {
     },
     cancelled: {
       title: 'Cancelled appointment',
-      anAppointmentHasBeenCancelled: 'This appointment has been cancelled. You do not need to do anything.',
+      anAppointmentHasBeenCancelled: 'This appointment has been permanently cancelled. You do not need to do anything.',
       viewThisAppointment: 'View this appointment',
     },
   },
