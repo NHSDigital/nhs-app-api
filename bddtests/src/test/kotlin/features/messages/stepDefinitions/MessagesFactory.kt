@@ -53,6 +53,9 @@ class MessagesFactory {
     private val messageTwo = "Message Two"
     private val messageThree = "Message Three"
 
+    private val nhsAppSenderId = "NHSAPP"
+    private val nhsAppSenderCanonicalName = "NHS APP"
+
     fun setUpUser(patient: Patient? = null) {
         val patientToUse = patient
             ?: ServiceJourneyRulesMapper.findPatientForConfiguration(
@@ -105,11 +108,14 @@ class MessagesFactory {
         )
 
         val expectedSenderTwoSenderContext =
-            SenderContext(senderId = "NHSAPP", supplierId = "278d3b75-3498-4d68-8991-506d0006e46f")
+            SenderContext(senderId = nhsAppSenderId, supplierId = "278d3b75-3498-4d68-8991-506d0006e46f")
         val expectedSenderTwoSummaryMessage =
             SenderFacade(senderTwoName, 1,
                 arrayListOf(
-                    senderTwoMessageOne.copy(sender = "NHS APP", senderContext = expectedSenderTwoSenderContext)
+                    senderTwoMessageOne.copy(
+                        sender = nhsAppSenderCanonicalName,
+                        senderContext = expectedSenderTwoSenderContext
+                    )
                 )
             )
 
@@ -117,7 +123,11 @@ class MessagesFactory {
             arrayListOf(
                 SqlRepositoryRecordCommsSender(
                     senderOneId, senderOneId, SqlRepositoryCommsSender(senderOneId, senderOneCanonicalName,
-                    CosmosSqlConnection.sqlApiDateFormatter.format(oneWeekAgo)))
+                    CosmosSqlConnection.sqlApiDateFormatter.format(oneWeekAgo))),
+                SqlRepositoryRecordCommsSender(
+                    nhsAppSenderId, nhsAppSenderId, SqlRepositoryCommsSender(nhsAppSenderId, nhsAppSenderCanonicalName,
+                    CosmosSqlConnection.sqlApiDateFormatter.format(oneWeekAgo))
+                )
             )
         )
 
