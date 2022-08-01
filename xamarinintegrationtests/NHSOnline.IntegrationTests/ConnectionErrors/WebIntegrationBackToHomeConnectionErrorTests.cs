@@ -23,6 +23,7 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     public class WebIntegrationBackToHomeConnectionErrorTests
     {
         [NhsAppAndroidTest]
+        [Ignore("Outstanding ticket (705318) with BS Support ignoring until resolution")]
         public async Task APatientCanGoBackToHomeWhenThereIsAConnectionErrorDuringWebIntegrationsAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)

@@ -66,7 +66,7 @@ namespace NHSOnline.IntegrationTests.DeepLinks
             AndroidAppointmentsPage.AssertOnPage(driver);
         }
 
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel3, OSVersion = AndroidOSVersion.Nine)]
         public void DeepLinkToSamePage(IAndroidDriverWrapper driver)
         {
             var patient = new TppPatient()
