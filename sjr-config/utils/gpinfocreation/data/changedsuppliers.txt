@@ -953,3 +953,10 @@ Y05353,"WEEKEND SERVICE OOH","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE
 ==================================================================
 Job Run - Sun Jul 24 11:03:38 GMTST 2022
 ==================================================================
+==================================================================
+Job Run - Mon Aug 1 13:58:42 GMTST 2022
+ODS,Organisation,PreviousSupplier,NewSupplier
+L84069,"COLEFORD FAMILY DOCTORS","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+P83024,"KNOWSLEY MEDICAL CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+P83024,"KNOWSLEY MEDICAL CENTRE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+==================================================================

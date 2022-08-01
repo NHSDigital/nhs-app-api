@@ -1,10 +1,7 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - E85032
-    - E85074
     - Y02589
-    - E85008
     - E85636
     - E85659
     - E85077
