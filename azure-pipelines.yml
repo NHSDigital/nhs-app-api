@@ -445,6 +445,8 @@ stages:
 
     - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['native.xamarin.runFlipbookTests'], 'true')) }}:
       - stage: xamarin_integration_flipbook
+        variables:
+          - group: release_notes
         displayName: XIT - Flipbook generation
         dependsOn:
           - xamarin_integration_flipbook_tests

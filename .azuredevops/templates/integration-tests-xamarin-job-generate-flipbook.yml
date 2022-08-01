@@ -35,3 +35,14 @@ jobs:
         inputs:
           artifactName: Flipbook
           targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook/$(native.xamarin.flipbookPdfName).pdf'
+
+      - task: Bash@3
+        displayName: 'Upload flipbook PDF to Slack'
+        inputs:
+          targetType: 'inline'
+          workingDirectory: xamarinintegrationtests/flipbookgeneration/flipbook
+          script: |
+            tag=$(git describe --abbrev=0 --tags)
+            filename=$(native.xamarin.flipbookPdfName).pdf
+            substitutedFilename=Flipbook_${tag}.pdf
+            curl -F file=@${filename} -F "initial_comment=${tag}" -F "title=${substitutedFilename}" -F "filename=${substitutedFilename}" -F channels=$(SLACK_GENERATE_FLIPBOOK_CHANNEL) -H "Authorization: Bearer $(SLACK_API_TOKEN)" https://slack.com/api/files.upload
