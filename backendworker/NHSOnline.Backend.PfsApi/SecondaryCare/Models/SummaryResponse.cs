@@ -66,18 +66,16 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
                     _ => 0,
                 });
 
-            // Cancelled appointments first, then order by date
-            var upcomingAppointmentComparer = Comparer<UpcomingAppointment>.Create((a1, a2) =>
-                a1.IsCancelled && !a2.IsCancelled
-                    ? -1
-                    : CompareAppointmentTimes(a1, a2));
-
             ActionableReferralsAndAppointments = ActionableReferralsAndAppointments
                 .OrderBy(x => x, actionableItemComparer)
                 .ToList();
+
+            // Cancelled appointments first, then order by date
             ConfirmedAppointments = ConfirmedAppointments
-                .OrderBy(a => a, upcomingAppointmentComparer)
+                .OrderByDescending(a => a.IsCancelled)
+                .ThenBy(a => a.AppointmentDateTime)
                 .ToList();
+
             ReferralsInReviewNotOverdue = ReferralsInReviewNotOverdue
                 .OrderBy(r => r.ReferredDateTime)
                 .ToList();

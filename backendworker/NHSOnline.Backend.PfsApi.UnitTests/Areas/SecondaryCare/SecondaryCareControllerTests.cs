@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -58,14 +59,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
             // Act
             var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
+            var objectResult = result.Should().BeAssignableTo<OkObjectResult>();
+            var summaryResponse = objectResult.Subject.Value as SummaryResponse;
 
-            // Assert
-            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().BeEquivalentTo(Context.Data.SummaryResponse);
+            //Assert
+            summaryResponse.Should().NotBeNull();
 
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 7, Total Upcoming Appointments: 9"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 8, Total Upcoming Appointments: 34"));
 
             VerifyNoOtherLoggerCalls();
+
+            // Check sorting: ActionableReferralsAndAppointments - check first Referral comes after Appointments
+            summaryResponse?.ActionableReferralsAndAppointments
+                .Select((value, index) => new { value, index })
+                .Where(pair => pair.value is Referral)
+                .Select(pair => pair.index)
+                .FirstOrDefault()
+                .Should()
+                .Be(2);
+
+            // Check sorting: ConfirmedAppointments - check first non-cancelled Appointment comes after cancelled
+            summaryResponse?.ConfirmedAppointments
+                .Select((value, index) => new { value, index })
+                .Where(pair => pair.value.IsCancelled == false)
+                .Select(pair => pair.index)
+                .FirstOrDefault()
+                .Should()
+                .Be(16);
+
+            // Check sorting: ReferralsInReviewNotOverdue - earliest first
+            summaryResponse?.ReferralsInReviewNotOverdue[0]
+                .ReferralId
+                .Should()
+                .Be("156168111461");
         }
 
         [TestMethod]
