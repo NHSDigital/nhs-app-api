@@ -96,10 +96,9 @@ const getMappedValue = ({ map, statusCode, errorCode }) => {
     return '';
   }
 
-  if (errorCode && map[errorCode] !== undefined) {
-    return map[errorCode];
-  }
-  return map[statusCode] || map.default;
+  return (errorCode && map[errorCode])
+    || map[statusCode]
+    || map.default;
 };
 
 export default {
