@@ -96,12 +96,11 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             var referralId = MapReferralId(activity);
             var referredDate = MapReferralReferredDate(activity);
             var status = MapReferralStatus(activity);
-            var organisation = MapReferralOrganisation(activity);
             var (provider, deepLink) = MapProviderAndDeepLink(activity);
             var serviceSpecialty = MapReferralServiceSpecialty(activity);
             var dueDate = MapReferralDueDate(activity);
 
-            if (referralId is null || referredDate is null || status is null || organisation is null || deepLink is null || provider is null)
+            if (referralId is null || referredDate is null || status is null || deepLink is null || provider is null)
             {
                 return null;
             }
@@ -111,7 +110,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                 ReferralId = referralId,
                 ReferredDateTime = referredDate.Value,
                 Status = status,
-                ReferrerOrganisation = organisation,
                 DeepLinkUrl = deepLink,
                 Provider = provider,
                 ServiceSpecialty = serviceSpecialty,
@@ -173,22 +171,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
         private string MapReferralStatus(CarePlan.ActivityComponent activity)
             => (GetValueFromExtensionWithUrl<Coding>(activity.Detail.Extension, ReferralStateResourceUrl) as Coding)?.Code;
-
-        private string MapReferralOrganisation(CarePlan.ActivityComponent activity)
-        {
-            try
-            {
-                return activity.Detail.Performer
-                    .First(p => string.Equals(p.Type, "Organization", StringComparison.Ordinal))
-                    .Display;
-            }
-            catch (InvalidOperationException e)
-            {
-                _logger.LogError(e, "Could not find Referral Organisation in list of Performers");
-            }
-
-            return null;
-        }
 
         private (string provider, string deepLink) MapProviderAndDeepLink(CarePlan.ActivityComponent activity)
         {

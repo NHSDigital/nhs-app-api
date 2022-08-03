@@ -8,9 +8,9 @@ import pages.assertIsVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/wayfinder/help/confirmed-appointments-help")
 open class ConfirmedAppointmentsHelpPage : HybridPageObject() {
     private val confirmedAppointmentsHelpPageMainTitle = HybridPageElement(
-        webDesktopLocator = "//h1[contains(text(),\"Missing or incorrect confirmed appointments\")]",
+        webDesktopLocator = "//h1[contains(text(),\"Missing, incorrect or cancelled confirmed appointments\")]",
         page = this,
-        helpfulName = "Missing or incorrect confirmed appointments H1"
+        helpfulName = "Missing, incorrect or cancelled confirmed appointments H1"
     )
 
     private val missingAppointmentsHelpTitle = HybridPageElement(

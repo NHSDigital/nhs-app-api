@@ -12,7 +12,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare.Builders
     {
         private int? _referredDaysAgo;
         private ServiceSpecialty _serviceSpecialty;
-        private ReferrerOrganisation _performerOrganisationOdsName;
         private ReferralStatus? _referralStatus;
         private int? _dueDateInDays;
         private ServiceProvider _serviceProvider = ServiceProvider.eRS;
@@ -26,12 +25,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare.Builders
         public ReferralBuilder WithSpecialty(ServiceSpecialty specialty)
         {
             _serviceSpecialty = specialty;
-            return this;
-        }
-
-        public ReferralBuilder WithPerformerOrganisation(ReferrerOrganisation organisationOdsName)
-        {
-            _performerOrganisationOdsName = organisationOdsName;
             return this;
         }
 
@@ -82,9 +75,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare.Builders
 
             var referralStatus = FhirBuilderHelpers.GetReferralStateExtension(_referralStatus.Value.ToString());
 
-            var organisationPerformer = FhirBuilderHelpers
-                .GetOrganisationPerformer(Constants.ReferralProviderOrganisationMappings[_performerOrganisationOdsName]);
-
             var serviceSpecialty = Constants.ServiceSpecialtyMappings[_serviceSpecialty];
 
             return new CarePlan.ActivityComponent
@@ -99,10 +89,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare.Builders
                     {
                         portalLinkExtension,
                         referralStatus,
-                    },
-                    Performer = new List<ResourceReference>
-                    {
-                        organisationPerformer,
                     },
                 },
             };

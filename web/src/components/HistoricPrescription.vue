@@ -3,7 +3,7 @@
        :class="[$style['no-chevron'], $style['list-menu-container_prescriptions']]">
     <div v-if="prescriptionCourse.orderDate != null"
          class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-2">
-      <h3 class="nhs-app-card__title-text nhsuk-heading-xs nhsuk-u-margin-bottom-0"
+      <h3 class="nhs-app-card__title-text nhsuk-heading-xs nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0"
           data-label="order-date">
         {{ prescriptionCourse.orderDate | fullDate }}
       </h3>

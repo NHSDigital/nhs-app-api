@@ -21,10 +21,6 @@ describe('Referral In Review Card', () => {
   let header;
   let specialty;
   let specialtyInfo;
-  let referrerHeader;
-  let referrer;
-  let referralDateHeader;
-  let referralDate;
   let reviewDueDateHeader;
   let reviewDueDate;
   let noSpecialtyInfo;
@@ -33,8 +29,6 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is set', () => {
     beforeEach(() => {
       wrapper = mountComponent({
-        referrerOrganisation: 'Mahogany GP Surgery',
-        referredDateTime: '2022-04-11T10:00:00',
         reviewDueDate: '2022-04-18T10:00:00',
         serviceSpecialty: 'Cardiology',
         deepLinkUrl,
@@ -44,12 +38,8 @@ describe('Referral In Review Card', () => {
       specialty = wrapper.find('[data-purpose="specialty"]');
       specialtyInfo = wrapper.find('[data-purpose="specialty-info"]');
       noSpecialtyInfo = wrapper.find('[data-purpose="no-specialty-info"]');
-      referralDateHeader = wrapper.find('[data-purpose="referral-date-header"]');
-      referralDate = wrapper.find('[data-purpose="referral-date"]');
       reviewDueDateHeader = wrapper.find('[data-purpose="review-due-date-header"]');
       reviewDueDate = wrapper.find('[data-purpose="review-due-date"]');
-      referrerHeader = wrapper.find('[data-purpose="referrer-header"]');
-      referrer = wrapper.find('[data-purpose="referrer"]');
       manageReferralLink = wrapper.find('[data-purpose="manage-referral-link"]');
     });
 
@@ -67,16 +57,6 @@ describe('Referral In Review Card', () => {
 
     it('will hide the no specialty message', () => {
       expect(noSpecialtyInfo.exists()).toBe(false);
-    });
-
-    it('will display the referrer', () => {
-      expect(referrerHeader.text()).toBe('Referred by:');
-      expect(referrer.text()).toBe('Mahogany GP Surgery');
-    });
-
-    it('will display the referral date', () => {
-      expect(referralDateHeader.text()).toBe('Date you were referred:');
-      expect(referralDate.text()).toBe('11 April 2022');
     });
 
     it('will display the review due date', () => {
@@ -98,8 +78,6 @@ describe('Referral In Review Card', () => {
   describe('Requested specialty is empty', () => {
     beforeEach(() => {
       wrapper = mountComponent({
-        referrerOrganisation: 'Willow GP Surgery',
-        referredDateTime: '2022-04-12T10:00:00',
         reviewDueDate: '2022-04-19T10:00:00',
         serviceSpecialty: null,
         deepLinkUrl,
@@ -109,12 +87,8 @@ describe('Referral In Review Card', () => {
       specialty = wrapper.find('[data-purpose="specialty"]');
       specialtyInfo = wrapper.find('[data-purpose="specialty-info"]');
       noSpecialtyInfo = wrapper.find('[data-purpose="no-specialty-info"]');
-      referralDateHeader = wrapper.find('[data-purpose="referral-date-header"]');
-      referralDate = wrapper.find('[data-purpose="referral-date"]');
       reviewDueDateHeader = wrapper.find('[data-purpose="review-due-date-header"]');
       reviewDueDate = wrapper.find('[data-purpose="review-due-date"]');
-      referrerHeader = wrapper.find('[data-purpose="referrer-header"]');
-      referrer = wrapper.find('[data-purpose="referrer"]');
       manageReferralLink = wrapper.find('[data-purpose="manage-referral-link"]');
     });
 
@@ -132,16 +106,6 @@ describe('Referral In Review Card', () => {
 
     it('will display the no specialty message', () => {
       expect(noSpecialtyInfo.text()).toBe('Your healthcare provider has requested for you to be referred. This request is being reviewed. You do not need to do anything.');
-    });
-
-    it('will display the referrer', () => {
-      expect(referrerHeader.text()).toBe('Referred by:');
-      expect(referrer.text()).toBe('Willow GP Surgery');
-    });
-
-    it('will display the referral date', () => {
-      expect(referralDateHeader.text()).toBe('Date you were referred:');
-      expect(referralDate.text()).toBe('12 April 2022');
     });
 
     it('will display the review due date', () => {
@@ -163,8 +127,6 @@ describe('Referral In Review Card', () => {
   describe('Review due date is empty', () => {
     beforeEach(() => {
       wrapper = mountComponent({
-        referrerOrganisation: 'Mahogany GP Surgery',
-        referredDateTime: '2022-04-11T10:00:00',
         reviewDueDate: null,
         serviceSpecialty: 'Cardiology',
         deepLinkUrl,
@@ -174,12 +136,8 @@ describe('Referral In Review Card', () => {
       specialty = wrapper.find('[data-purpose="specialty"]');
       specialtyInfo = wrapper.find('[data-purpose="specialty-info"]');
       noSpecialtyInfo = wrapper.find('[data-purpose="no-specialty-info"]');
-      referralDateHeader = wrapper.find('[data-purpose="referral-date-header"]');
-      referralDate = wrapper.find('[data-purpose="referral-date"]');
       reviewDueDateHeader = wrapper.find('[data-purpose="review-due-date-header"]');
       reviewDueDate = wrapper.find('[data-purpose="review-due-date"]');
-      referrerHeader = wrapper.find('[data-purpose="referrer-header"]');
-      referrer = wrapper.find('[data-purpose="referrer"]');
       manageReferralLink = wrapper.find('[data-purpose="manage-referral-link"]');
     });
 
@@ -197,16 +155,6 @@ describe('Referral In Review Card', () => {
 
     it('will hide the no specialty message', () => {
       expect(noSpecialtyInfo.exists()).toBe(false);
-    });
-
-    it('will display the referrer', () => {
-      expect(referrerHeader.text()).toBe('Referred by:');
-      expect(referrer.text()).toBe('Mahogany GP Surgery');
-    });
-
-    it('will display the referral date', () => {
-      expect(referralDateHeader.text()).toBe('Date you were referred:');
-      expect(referralDate.text()).toBe('11 April 2022');
     });
 
     it('will hide the review due date', () => {

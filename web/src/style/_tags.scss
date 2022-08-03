@@ -89,7 +89,7 @@ $color_nhsuk-orange: #ED8B00;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  column-gap: nhsuk-spacing(2);
+  gap: nhsuk-spacing(2);
   flex-wrap: wrap;
 
   .nhs-app-card__title-text {

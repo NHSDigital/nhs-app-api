@@ -26,15 +26,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 {ServiceSpecialty.None, string.Empty}
             };
 
-        public static Dictionary<ReferrerOrganisation, string> ReferralProviderOrganisationMappings { get; } =
-            new()
-            {
-                {ReferrerOrganisation.Willow, "Willow GP Surgery"},
-                {ReferrerOrganisation.Oak, "Oak GP Surgery"},
-                {ReferrerOrganisation.Birch, "Birch GP Surgery"},
-                {ReferrerOrganisation.Mahogany, "Mahogany GP Surgery"},
-            };
-
         public static Dictionary<ServiceProvider, string> ProviderUrlMappings { get; } =
             new()
             {

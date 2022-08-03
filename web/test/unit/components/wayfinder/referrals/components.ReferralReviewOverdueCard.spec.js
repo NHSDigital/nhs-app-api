@@ -22,19 +22,13 @@ describe('Referral Ready Overdue Card', () => {
   let specialty;
   let specialtyInfo;
   let noSpecialtyInfo;
-  let referralDateHeader;
-  let referralDate;
   let reviewDueDateHeader;
   let reviewDueDate;
-  let referrerHeader;
-  let referrer;
   let contactClinicButton;
 
   describe('Requested specialty is set', () => {
     beforeEach(() => {
       wrapper = mountComponent({
-        referrerOrganisation: 'Fir GP Surgery',
-        referredDateTime: '2022-04-04T10:00:00',
         reviewDueDate: '2022-04-05T10:00:00',
         serviceSpecialty: 'Cardiology',
         deepLinkUrl,
@@ -44,12 +38,8 @@ describe('Referral Ready Overdue Card', () => {
       specialty = wrapper.find('[data-purpose="specialty"]');
       specialtyInfo = wrapper.find('[data-purpose="specialty-info"]');
       noSpecialtyInfo = wrapper.find('[data-purpose="no-specialty-info"]');
-      referralDateHeader = wrapper.find('[data-purpose="referral-date-header"]');
-      referralDate = wrapper.find('[data-purpose="referral-date"]');
       reviewDueDateHeader = wrapper.find('[data-purpose="review-due-date-header"]');
       reviewDueDate = wrapper.find('[data-purpose="review-due-date"]');
-      referrerHeader = wrapper.find('[data-purpose="referrer-header"]');
-      referrer = wrapper.find('[data-purpose="referrer"]');
       contactClinicButton = wrapper.find('[data-purpose="contact-clinic-button"]');
     });
 
@@ -69,19 +59,9 @@ describe('Referral Ready Overdue Card', () => {
       expect(noSpecialtyInfo.exists()).toBe(false);
     });
 
-    it('will display the referred by value', () => {
-      expect(referrerHeader.text()).toBe('Referred by:');
-      expect(referrer.text()).toBe('Fir GP Surgery');
-    });
-
     it('will display the review date value', () => {
       expect(reviewDueDateHeader.text()).toBe('Due to be reviewed by:');
       expect(reviewDueDate.text()).toBe('5 April 2022');
-    });
-
-    it('will display the referred date value', () => {
-      expect(referralDateHeader.text()).toBe('Date you were referred:');
-      expect(referralDate.text()).toBe('4 April 2022');
     });
 
     it('will display a button', () => {
@@ -98,8 +78,6 @@ describe('Referral Ready Overdue Card', () => {
   describe('Requested specialty is not set', () => {
     beforeEach(() => {
       wrapper = mountComponent({
-        referrerOrganisation: 'Sycamore GP Surgery',
-        referredDateTime: '2022-04-01T10:00:00',
         reviewDueDate: '2022-04-02T10:00:00',
         serviceSpecialty: null,
         deepLinkUrl,
@@ -109,12 +87,8 @@ describe('Referral Ready Overdue Card', () => {
       specialty = wrapper.find('[data-purpose="specialty"]');
       specialtyInfo = wrapper.find('[data-purpose="specialty-info"]');
       noSpecialtyInfo = wrapper.find('[data-purpose="no-specialty-info"]');
-      referralDateHeader = wrapper.find('[data-purpose="referral-date-header"]');
-      referralDate = wrapper.find('[data-purpose="referral-date"]');
       reviewDueDateHeader = wrapper.find('[data-purpose="review-due-date-header"]');
       reviewDueDate = wrapper.find('[data-purpose="review-due-date"]');
-      referrerHeader = wrapper.find('[data-purpose="referrer-header"]');
-      referrer = wrapper.find('[data-purpose="referrer"]');
       contactClinicButton = wrapper.find('[data-purpose="contact-clinic-button"]');
     });
 
@@ -134,19 +108,9 @@ describe('Referral Ready Overdue Card', () => {
       expect(noSpecialtyInfo.text()).toBe('Your healthcare provider has requested for you to be referred. A review of this request is overdue. You need to contact the clinic.');
     });
 
-    it('will display the referred by value', () => {
-      expect(referrerHeader.text()).toBe('Referred by:');
-      expect(referrer.text()).toBe('Sycamore GP Surgery');
-    });
-
     it('will display the review date value', () => {
       expect(reviewDueDateHeader.text()).toBe('Due to be reviewed by:');
       expect(reviewDueDate.text()).toBe('2 April 2022');
-    });
-
-    it('will display the referred date value', () => {
-      expect(referralDateHeader.text()).toBe('Date you were referred:');
-      expect(referralDate.text()).toBe('1 April 2022');
     });
 
     it('will display a button', () => {

@@ -45,11 +45,11 @@ describe('Appointment Booked Card', () => {
   });
 
   it('will display the formatted date', () => {
-    expect(appointmentDateTime.find('strong').text()).toBe('Monday 18 April 2022');
+    expect(appointmentDateTime.find('.nhsuk-body').text()).toBe('Monday 18 April 2022');
   });
 
   it('will display formatted time', () => {
-    expect(appointmentDateTime.find('span').text()).toContain('10.00am');
+    expect(appointmentDateTime.find('.nhsuk-body-l').text()).toContain('10.00am');
   });
 
   it('will display a button', () => {

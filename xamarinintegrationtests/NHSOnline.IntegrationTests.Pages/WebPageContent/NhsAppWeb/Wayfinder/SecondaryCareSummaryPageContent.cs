@@ -59,19 +59,19 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
         private WebText InReviewReferralsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
-            "In review");
+            "Referrals being reviewed");
 
         public WebMenuItem MissingOrIncorrectReferralsOrAppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing or incorrect referrals or appointments");
+            "Missing, incorrect or cancelled referrals or appointments");
 
         public WebMenuItem ConfirmedAppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing or incorrect confirmed appointments");
+            "Missing, incorrect or cancelled confirmed appointments");
 
         public WebMenuItem InReviewReferralsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing or incorrect referrals in review");
+            "Missing, incorrect or cancelled referrals in review");
 
         public  WebButton ReadyToConfirmAppointmentDeepLinkButton => WebButton.WithText(
             _interactor,

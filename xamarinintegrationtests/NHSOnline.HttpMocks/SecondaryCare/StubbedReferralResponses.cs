@@ -28,7 +28,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.inReview)
                 .WithReferredDateDaysAgo(4)
                 .WithSpecialty(ServiceSpecialty.General)
-                .WithPerformerOrganisation(ReferrerOrganisation.Mahogany)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralInReviewPkb() =>
@@ -36,7 +35,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.inReview)
                 .WithReferredDateDaysAgo(3)
                 .WithSpecialty(ServiceSpecialty.General)
-                .WithPerformerOrganisation(ReferrerOrganisation.Birch)
                 .WithProvider(ServiceProvider.PKB)
                 .Build();
 
@@ -46,7 +44,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferredDateDaysAgo(8)
                 .WithDueDateInDays(5)
                 .WithSpecialty(ServiceSpecialty.Cardiology)
-                .WithPerformerOrganisation(ReferrerOrganisation.Willow)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralInReviewDueNoSpecialty() =>
@@ -63,7 +60,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferredDateDaysAgo(5)
                 .WithMissedDueDateDaysAgo(2)
                 .WithSpecialty(ServiceSpecialty.Haematology)
-                .WithPerformerOrganisation(ReferrerOrganisation.Oak)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralInReviewOverdueNoSpecialty() =>
@@ -72,7 +68,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferredDateDaysAgo(5)
                 .WithMissedDueDateDaysAgo(2)
                 .WithSpecialty(ServiceSpecialty.None)
-                .WithPerformerOrganisation(ReferrerOrganisation.Oak)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralBookable() =>
@@ -80,7 +75,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.bookable)
                 .WithReferredDateDaysAgo(16)
                 .WithSpecialty(ServiceSpecialty.Paediatrics)
-                .WithPerformerOrganisation(ReferrerOrganisation.Willow)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralBookableNoSpecialty() =>
@@ -88,7 +82,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.bookable)
                 .WithReferredDateDaysAgo(16)
                 .WithSpecialty(ServiceSpecialty.None)
-                .WithPerformerOrganisation(ReferrerOrganisation.Willow)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralBookableWasCancelled() =>
@@ -96,7 +89,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.bookableWasCancelled)
                 .WithReferredDateDaysAgo(9)
                 .WithSpecialty(ServiceSpecialty.Neurology)
-                .WithPerformerOrganisation(ReferrerOrganisation.Birch)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralInReviewUrgent() =>
@@ -104,7 +96,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.bookableWasCancelled)
                 .WithReferredDateDaysAgo(10)
                 .WithSpecialty(ServiceSpecialty.None)
-                .WithPerformerOrganisation(ReferrerOrganisation.Birch)
                 .Build();
 
         private static CarePlan.ActivityComponent ReferralBookableWasCancelledNoSpecialty() =>
@@ -112,7 +103,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 .WithReferralStatus(ReferralStatus.bookableWasCancelled)
                 .WithReferredDateDaysAgo(9)
                 .WithSpecialty(ServiceSpecialty.None)
-                .WithPerformerOrganisation(ReferrerOrganisation.Birch)
                 .Build();
     }
 }

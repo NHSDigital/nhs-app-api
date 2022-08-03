@@ -2,7 +2,7 @@
 export default {
   bookOrManageReferralsAndAppointmentsTitle: 'Book or manage your referrals and appointments',
   confirmedAppointmentsTitle: 'Confirmed Appointments',
-  inReviewTitle: 'In review',
+  inReviewTitle: 'Referrals being reviewed',
   noConfirmedAppointments: 'You have no confirmed appointments to view or manage.',
   noReferralsOrAppointments: 'You have no referrals or appointments to view or manage.',
   noReferralsInReview: 'You have no referrals being reviewed.',
@@ -13,12 +13,14 @@ export default {
   referralsSectionTitle: 'Referrals',
   upcomingAppointmentsSectionTitle: 'Upcoming Appointments',
   appointments: {
+    tagPromptText: 'The status of this appointment is',
     booked: {
       title: 'Booked appointment',
       viewOrManageAppointment: 'View or manage this appointment',
     },
     readyToConfirm: {
       title: 'Ready to confirm appointment',
+      tagText: 'Action',
       anAppointmentHasBeenBooked: 'An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.',
       contactTheClinicToConfirm: 'Contact the clinic to confirm',
     },
@@ -38,28 +40,30 @@ export default {
     contactTheOrganisation: 'Contact the organisation that referred you if a referral is missing.',
   },
   referrals: {
-    referredBy: 'Referred by:',
-    referredDate: 'Date you were referred:',
     reviewDate: 'Due to be reviewed by:',
     manageThisReferral: 'View or manage this referral',
+    tagPromptText: 'The status of this referral is',
     inReview: {
       title: 'Referral request in review',
+      tagText: 'Pending',
       yourHealthcareProviderHasRequested: 'Your healthcare provider has requested for you to be referred to {specialty}. This request is being reviewed. You do not need to do anything.',
       yourHealthcareProviderHasRequestedNoSpecialty: 'Your healthcare provider has requested for you to be referred. This request is being reviewed. You do not need to do anything.',
     },
     readyToBook: {
       title: 'Ready to rebook',
+      tagText: 'Action',
       youNeedToRebookYour: 'You need to rebook your {specialty} referral appointment as the one you had booked has been cancelled.',
       youNeedToRebookYourNoSpecialty: 'You need to rebook your referral appointment as the one you had booked has been cancelled.',
       bookOrManageThisReferral: 'Book or manage this referral',
     },
     bookable: {
       title: 'Ready to book',
-      yourReferralAppointmentIsReadyToBook: 'Your referral appointment to {specialty} is ready to book.',
+      tagText: 'Action',
       bookOrManageThisReferral: 'Book or manage this referral',
     },
     overdue: {
       title: 'Review by clinic overdue',
+      tagText: 'Pending',
       youNeedToContact: 'Your healthcare provider has requested for you to be referred. A review of this request is overdue. You need to contact the clinic.',
       youNeedToContactSpecialty: 'Your healthcare provider has requested for you to be referred to {specialty}. A review of this request is overdue. You need to contact the clinic.',
       contactTheClinic: 'Contact the clinic',

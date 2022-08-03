@@ -40,15 +40,11 @@ const setupStore = (
     actionableReferralsAndAppointments = [{
       referralId: '4',
       status: 'bookable',
-      referrerOrganisation: 'Mahogany GP Surgery',
-      referredDateTime: '2022-04-10T10:00:00',
       serviceSpecialty: 'Cardiology',
       deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/bookable/4',
     }, {
       referralId: '17',
       status: 'inReview',
-      referrerOrganisation: 'Mahogany GP Surgery',
-      referredDateTime: '2022-04-10T10:00:00',
       reviewDueDate: '2022-04-18T10:00:00',
       serviceSpecialty: 'Haematology',
       deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/overdue/17',
@@ -72,8 +68,6 @@ const setupStore = (
     referralsInReviewNotOverdue = [{
       referralId: '3',
       status: 'inReview',
-      referrerOrganisation: 'Mahogany GP Surgery',
-      referredDateTime: '2022-04-10T10:00:00',
       reviewDueDate: '2300-04-18T10:00:00',
       serviceSpecialty: 'Cardiology',
       deepLinkUrl: 'http://stubs.local.bitraft.io:8080/referral/inreview/3',
@@ -149,22 +143,22 @@ describe('Summary care response with each type of summary item', () => {
     });
   });
 
-  it('Missing or incorrect referrals or appointments link is visible', () => {
+  it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
     referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
   });
 
-  it('Missing or incorrect confirmed appointments link is visible', () => {
+  it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
     confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
   });
 
-  it('Missing or incorrect referrals in review link is visible', () => {
+  it('Missing, incorrect or cancelled referrals in review link is visible', () => {
     referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-    expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
   });
 
   it('show other available services menu items without eRS jump-off', () => {
@@ -218,16 +212,16 @@ describe('Summary care response with only actionable items', () => {
     });
   });
 
-  it('Missing or incorrect referrals or appointments link is visible', () => {
+  it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
     referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
   });
 
-  it('Missing or incorrect confirmed appointments link is visible', () => {
+  it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
     confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
   });
 
   it('show other available services menu items without eRS jump-off', () => {
@@ -238,10 +232,10 @@ describe('Summary care response with only actionable items', () => {
     expect(otherAvailableServicesMenuItems.exists()).toBe(true);
   });
 
-  it('Missing or incorrect referrals in review link is visible', () => {
+  it('Missing, incorrect or cancelled referrals in review link is visible', () => {
     referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-    expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
   });
 
   describe('if there are no confirmed appointments', () => {
@@ -290,22 +284,22 @@ describe('Summary care response with no summary items', () => {
       });
     });
 
-    it('Missing or incorrect referrals or appointments link is visible', () => {
+    it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
       referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
 
-      expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing or incorrect referrals or appointments');
+      expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
     });
 
-    it('Missing or incorrect confirmed appointments link is visible', () => {
+    it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
       confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
 
-      expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing or incorrect confirmed appointments');
+      expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
     });
 
-    it('Missing or incorrect referrals in review link is visible', () => {
+    it('Missing, incorrect or cancelled referrals in review link is visible', () => {
       referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
 
-      expect(referralsInReviewHelpLink.text()).toEqual('Missing or incorrect referrals in review');
+      expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
     });
 
     it('show other available services menu items without eRS jump-off', () => {

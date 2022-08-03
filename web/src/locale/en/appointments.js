@@ -157,9 +157,9 @@ export default {
       checkIfYouNeedUrgentHelp: 'Check if you need urgent help and find out what to do next',
     },
     missingOrIncorrectReferralsOrAppointments: {
-      ReferralsOrAppointments: 'Missing or incorrect referrals or appointments',
-      ConfirmedAppointments: 'Missing or incorrect confirmed appointments',
-      ReferralsInReview: 'Missing or incorrect referrals in review',
+      ReferralsOrAppointments: 'Missing, incorrect or cancelled referrals or appointments',
+      ConfirmedAppointments: 'Missing, incorrect or cancelled confirmed appointments',
+      ReferralsInReview: 'Missing, incorrect or cancelled referrals in review',
     },
   },
   hub: {

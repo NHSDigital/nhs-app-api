@@ -3,7 +3,7 @@ import { createStore, mount } from '../../../helpers';
 
 jest.mock('@/lib/utils');
 
-describe('Missing or incorrect referrals or appointments link clicked from index page', () => {
+describe('Missing, incorrect or cancelled referrals or appointments link clicked from index page', () => {
   let $store;
   let wrapper;
   let missingAppointmentsHelpTitle;

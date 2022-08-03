@@ -82,26 +82,26 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val referralsOrAppointmentsHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals or appointments\")]",
+        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled referrals or appointments\")]",
         page = this,
-        helpfulName = "Missing or incorrect referrals or appointments - h2"
+        helpfulName = "Missing, incorrect or cancelled referrals or appointments - h2"
     )
 
     private val confirmedAppointmentsHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect confirmed appointments\")]",
+        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled confirmed appointments\")]",
         page = this,
-        helpfulName = "Missing or incorrect confirmed appointments - h2"
+        helpfulName = "Missing, incorrect or cancelled confirmed appointments - h2"
     )
 
     private val referralsInReviewHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing or incorrect referrals in review\")]",
+        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled referrals in review\")]",
         page = this,
-        helpfulName = "Missing or incorrect referrals in review - h2"
+        helpfulName = "Missing, incorrect or cancelled referrals in review - h2"
     )
 
-    private val referralsOrAppointmentsHelpTitle = "Missing or incorrect referrals or appointments"
-    private val confirmedAppointmentsHelpTitle = "Missing or incorrect confirmed appointments"
-    private val referralsInReviewHelpTitle = "Missing or incorrect referrals in review"
+    private val referralsOrAppointmentsHelpTitle = "Missing, incorrect or cancelled referrals or appointments"
+    private val confirmedAppointmentsHelpTitle = "Missing, incorrect or cancelled confirmed appointments"
+    private val referralsInReviewHelpTitle = "Missing, incorrect or cancelled referrals in review"
 
     var content = LinksWithDescriptionsContent(
         linkBlockTitle = "Wayfinder Help links",
@@ -114,15 +114,15 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     val links by lazy { LinksElement(this, content) }
 
     val missingOrIncorrectReferralsOrAppointmentsLink by lazy {
-        links.link("Missing or incorrect referrals or appointments")
+        links.link("Missing, incorrect or cancelled referrals or appointments")
     }
 
     val confirmedAppointmentsLink by lazy {
-        links.link("Missing or incorrect confirmed appointments")
+        links.link("Missing, incorrect or cancelled confirmed appointments")
     }
 
     val referralsInReviewLink by lazy {
-        links.link("Missing or incorrect referrals in review")
+        links.link("Missing, incorrect or cancelled referrals in review")
     }
 
     fun assertWayfinderTitleIsDisplayed() {

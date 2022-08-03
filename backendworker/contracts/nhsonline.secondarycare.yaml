@@ -82,7 +82,6 @@ components:
         - itemType
         - referralId
         - referredDatetime
-        - referrerOrganisation
         - status
         - provider
         - deepLinkUrl
@@ -102,9 +101,6 @@ components:
         serviceSpecialty:
           type: string
           description: The specialty of the department the patient is being referred to.
-        referrerOrganisation:
-          type: string
-          description: Patient friendly name of the referrer organisation.
         status:
           type: string
           description: Possible referral states.
@@ -133,7 +129,6 @@ components:
         - itemType
         - referralId
         - referredDatetime
-        - referrerOrganisation
         - status
         - provider
         - deepLinkUrl
@@ -153,9 +148,6 @@ components:
         serviceSpecialty:
           type: string
           description: The specialty of the department the patient is being referred to.
-        referrerOrganisation:
-          type: string
-          description: Patient friendly name of the referrer organisation.
         status:
           type: string
           description: Possible referral states.

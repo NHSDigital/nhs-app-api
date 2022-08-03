@@ -1,20 +1,27 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
-    <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('wayfinder.appointments.cancelled.title') }}
-    </h3>
-    <p data-purpose="appointment-date-time">
-      <strong>{{ appointmentDateTime | fullDate }}</strong><br>
-      <span>{{ appointmentDateTime | formatDate('h.mma') }}</span>
-    </p>
-    <p data-purpose="location-description"
-       class="nhsuk-u-margin-bottom-3">
-      {{ locationDescription }}
-    </p>
-    <p data-purpose="appointment-cancelled-info"
-       class="nhsuk-u-margin-bottom-3">
+
+    <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
+      <h3 class="nhs-app-card__title-text nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
+        {{ $t('wayfinder.appointments.cancelled.title') }}
+      </h3>
+    </div>
+
+    <p class="nhsuk-body-s nhsuk-u-margin-bottom-3" data-purpose="appointment-cancelled-info">
       {{ $t('wayfinder.appointments.cancelled.anAppointmentHasBeenCancelled') }}
     </p>
+
+    <p data-purpose="appointment-date-time">
+      <strong>
+        <span class="nhsuk-body">{{ appointmentDateTime | fullDate }}</span><br>
+        <span class="nhsuk-body-l">{{ appointmentDateTime | formatDate('h.mma') }}</span>
+      </strong>
+    </p>
+
+    <p class="nhsuk-body-l nhsuk-u-margin-bottom-3" data-purpose="location-description">
+      {{ locationDescription }}
+    </p>
+
     <p class="nhsuk-u-margin-bottom-3">
       <strong>
         <a data-purpose="view-appointment-link"

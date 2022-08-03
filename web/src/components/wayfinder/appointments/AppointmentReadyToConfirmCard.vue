@@ -1,13 +1,23 @@
 <template>
   <Card class="nhsuk-u-margin-bottom-5">
-    <h3 class="nhsuk-u-margin-bottom-1">
-      {{ $t('wayfinder.appointments.readyToConfirm.title') }}
-    </h3>
-    <p data-purpose="location-description">
-      {{ locationDescription }}
-    </p>
-    <p data-purpose="appointment-advice">
+
+    <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
+      <h3 class="nhs-app-card__title-text nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
+        {{ $t('wayfinder.appointments.readyToConfirm.title') }}
+      </h3>
+      <span data-label="status-text"
+            class="nhsuk-tag nhs-app-card__title-tag"
+            :class="[tagStyle]"
+            :aria-label="tagAriaLabel">
+        {{ tagText }}
+      </span>
+    </div>
+
+    <p class="nhsuk-body-s nhsuk-u-margin-bottom-3" data-purpose="appointment-advice">
       {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
+    </p>
+    <p class="nhsuk-body-l" data-purpose="location-description">
+      {{ locationDescription }}
     </p>
     <primary-button data-purpose="contact-the-clinic-button"
                     @click="goToUrlViaRedirector(deepLinkUrl)">
@@ -39,6 +49,17 @@ export default {
       locationDescription: this.item.locationDescription,
       deepLinkUrl: this.item.deepLinkUrl,
     };
+  },
+  computed: {
+    tagText() {
+      return this.$t('wayfinder.appointments.readyToConfirm.tagText');
+    },
+    tagAriaLabel() {
+      return `${this.$t('wayfinder.appointments.tagPromptText')} ${this.tagText}`;
+    },
+    tagStyle() {
+      return this.tagText === 'Action' ? 'nhsuk-tag--red' : 'nhsuk-tag--yellow';
+    },
   },
 };
 </script>

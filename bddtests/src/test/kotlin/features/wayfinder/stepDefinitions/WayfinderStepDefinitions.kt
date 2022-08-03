@@ -66,17 +66,17 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAndAppointments(provider)
     }
 
-    @Given("^I see the Missing or incorrect referrals or appointments link")
+    @Given("^I see the Missing, incorrect or cancelled referrals or appointments link")
     fun iSeeTheMissingOrIncorrectReferralsOrAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsOrAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing or incorrect confirmed appointments link")
+    @Given("^I see the Missing, incorrect or cancelled confirmed appointments link")
     fun iSeeTheMissingOrIncorrectConfirmedAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertConfirmedAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing or incorrect referrals in review link")
+    @Given("^I see the Missing, incorrect or cancelled referrals in review link")
     fun iSeeTheMissingOrIncorrectReferralsInReviewLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
     }
@@ -107,17 +107,17 @@ class WayfinderStepDefinitions {
         wayfinderAggregatorErrorPage.clickContactUsLinkWithPrefix(prefix)
     }
 
-    @When("^I click the Missing or incorrect referrals or appointments link$")
+    @When("^I click the Missing, incorrect or cancelled referrals or appointments link$")
     fun iClickTheMissingOrIncorrectReferralsOrApppointmentslink() {
         wayfinderReferralsAndAppointmentsPage.missingOrIncorrectReferralsOrAppointmentsLink.click()
     }
 
-    @When("^I click the Missing or incorrect confirmed appointments link")
+    @When("^I click the Missing, incorrect or cancelled confirmed appointments link")
     fun iClickTheMissingOrIncorrectConfirmedApppointmentslink() {
         wayfinderReferralsAndAppointmentsPage.confirmedAppointmentsLink.click()
     }
 
-    @When("^I click the Missing or incorrect referrals in review link")
+    @When("^I click the Missing, incorrect or cancelled referrals in review link")
     fun iClickTheMissingOrIncorrectReferralsInReviewlink() {
         wayfinderReferralsAndAppointmentsPage.referralsInReviewLink.click()
     }
@@ -192,17 +192,17 @@ class WayfinderStepDefinitions {
         }
     }
 
-    @Then("^I am navigated to the help page for Missing or incorrect referrals or appointments$")
+    @Then("^I am navigated to the help page for Missing, incorrect or cancelled referrals or appointments$")
     fun assertReferralsOrAppointmentsHelpPageDisplayed() {
         referralsOrAppointmentsHelpPage.assertHelpPageIsDisplayed()
     }
 
-    @Then("^I am navigated to the help page for Missing or incorrect confirmed appointments$")
+    @Then("^I am navigated to the help page for Missing, incorrect or cancelled confirmed appointments$")
     fun assertConfirmedAppointmentsHelpPageDisplayed() {
         confirmedAppointmentsHelpPage.assertHelpPageIsDisplayed()
     }
 
-    @Then("^I am navigated to the help page for Missing or incorrect referrals in review$")
+    @Then("^I am navigated to the help page for Missing, incorrect or cancelled referrals in review$")
     fun assertReferralsInReviewHelpPageDisplayed() {
         referralsInReviewHelpPage.assertHelpPageIsDisplayed()
     }
