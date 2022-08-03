@@ -8,8 +8,6 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using GeoCoordinatePortable;
-using OpeningTime = NHSOnline.Backend.NominatedPharmacy.Models.OpeningTime;
-using GpSearchOpeningTime = NHSOnline.Backend.PfsApi.GpSearch.Models.OpeningTime;
 using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
@@ -54,19 +52,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 {
                     new ContactInformation{ ContactValue = phone, ContactMethodType = OrganisationContactMethodType.Telephone}
                 },
-                OpeningTimes = new List<GpSearchOpeningTime>
+                OpeningTimes = new List<OpeningTimeEntry>
                 {
-                    new GpSearchOpeningTime { Weekday = WeekDay.Monday, Times = "01:00-18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { Weekday = WeekDay.Tuesday, Times = "02:00-18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { Weekday = WeekDay.Wednesday, Times = "03:00-18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { Weekday = WeekDay.Thursday, Times = "04:00-18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { Weekday = WeekDay.Friday, Times = "05:00-18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { Weekday = WeekDay.Saturday, Times = "06:00-17:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
-                    new GpSearchOpeningTime { AdditionalOpeningDate = "Apr 19 2019", IsOpen = false },
-                    new GpSearchOpeningTime { AdditionalOpeningDate = "Apr 21 2019", IsOpen = false },
-                    new GpSearchOpeningTime { AdditionalOpeningDate = "Apr 22 2019", IsOpen = false },
-                    new GpSearchOpeningTime { AdditionalOpeningDate = "May  6 2019", IsOpen = false },
-                    new GpSearchOpeningTime { AdditionalOpeningDate = "May 27 2019", IsOpen = false },
+                    new OpeningTimeEntry { Weekday = WeekDay.Monday, OpeningTime = "01:00", ClosingTime = "18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Tuesday, OpeningTime = "02:00", ClosingTime = "18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Wednesday, OpeningTime = "03:00", ClosingTime = "18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Thursday, OpeningTime = "04:00", ClosingTime = "18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Friday, OpeningTime = "05:00", ClosingTime = "18:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Saturday, OpeningTime = "06:00", ClosingTime = "17:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true },
+                    new OpeningTimeEntry { Weekday = WeekDay.Sunday, OpeningTime = "", ClosingTime = "17:00", OpeningTimeType = OpeningTimeType.General, IsOpen = true }, // empty opening time
+                    new OpeningTimeEntry { Weekday = WeekDay.Monday, OpeningTime = "06:00", ClosingTime = "", OpeningTimeType = OpeningTimeType.General, IsOpen = true }, // empty closing time
+                    new OpeningTimeEntry { Weekday = WeekDay.Tuesday, OpeningTime = "", ClosingTime = "", OpeningTimeType = OpeningTimeType.General, IsOpen = true }, // empty opening & closing times
+                    new OpeningTimeEntry { AdditionalOpeningDate = "Apr 19 2019", IsOpen = false },
+                    new OpeningTimeEntry { AdditionalOpeningDate = "Apr 21 2019", IsOpen = false },
+                    new OpeningTimeEntry { AdditionalOpeningDate = "Apr 22 2019", IsOpen = false },
+                    new OpeningTimeEntry { AdditionalOpeningDate = "May  6 2019", IsOpen = false },
+                    new OpeningTimeEntry { AdditionalOpeningDate = "May 27 2019", IsOpen = false },
                 },
             };
 

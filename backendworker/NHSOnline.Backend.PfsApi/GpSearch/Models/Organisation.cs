@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 
         public Geocode Geocode { get; set; }
 
-        public List<OpeningTime> OpeningTimes { get; set; } = new List<OpeningTime>();
+        public List<OpeningTimeEntry> OpeningTimes { get; set; } = new List<OpeningTimeEntry>();
 
         public List<ContactInformation> Contacts { get; set; } = new List<ContactInformation>();
 

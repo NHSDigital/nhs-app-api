@@ -41,12 +41,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 Postcode = pharmacy.Postcode,
                 OdsCode = pharmacy.ODSCode,
                 TelephoneNumber = pharmacy.Contacts?.FirstOrDefault(x => x.ContactMethodType == OrganisationContactMethodType.Telephone)?.ContactValue,
-                OpeningTimes = (pharmacy.OpeningTimes ?? new List<GpSearch.Models.OpeningTime>())
-                    .Where(x => x.IsOpen && x.Weekday.HasValue)
+                OpeningTimes = (pharmacy.OpeningTimes ?? new List<OpeningTimeEntry>())
+                    .Where(x =>
+                        x.IsOpen
+                        && x.Weekday.HasValue
+                        && !string.IsNullOrEmpty(x.OpeningTime)
+                        && !string.IsNullOrEmpty(x.ClosingTime))
                     .Select(x => new OpeningTime
                     {
                         Day = x.Weekday?.ToString(),
-                        Time = x.Times,
+                        Time = $"{x.OpeningTime}-{x.ClosingTime}",
                     })
             };
             return pharmacyDetails;
