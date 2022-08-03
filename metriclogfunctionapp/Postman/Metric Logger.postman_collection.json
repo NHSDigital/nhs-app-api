@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d3df1e53-5d86-4259-b754-94dddac5f20b",
+		"_postman_id": "7deab7ba-eaa2-4e93-bac8-6ab8c4f91190",
 		"name": "Metric Logger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10704675"
@@ -561,6 +561,40 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"Id\": \"213d7ae1-1e26-4b98-a4ef-75994fd0846b\",\r\n        \"Timestamp\": \"2022-05-27T11:12:47.3068548Z\",\r\n        \"AuditId\": \"213d7ae1-1e26-4b98-a4ef-75994fd0846b\",\r\n        \"NhsLoginSubject\": \"AFF0A112-X001-000F-BF99-147D64025:S0\",\r\n        \"NhsNumber\": \"550 019 0757\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Vision\",\r\n        \"Operation\": \"PatientRecord_Section_View_Response\",\r\n        \"Details\": \"Patient record TEST RESULTS successfully retrieved.\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"loadtest\",\r\n        \"SessionId\": \"c69711d8-2013-4dd1-acad-5bbbfecdb35e\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"id\": \"95ad044c-3f9a-42c4-8d13-e8754b9bee63\",\r\n        \"_rid\": \"XR9GALdybyjcGFMCAADAAw==\",\r\n        \"_self\": \"dbs/XR9GAA==/colls/XR9GALdybyg=/docs/XR9GALdybyjcGFMCAADAAw==/\",\r\n        \"_etag\": \"\\\"91002cc5-0000-1100-0000-6290b22f0000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1653649967\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Last Login Patient Identifier Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"Id\": \"dbd2221d-3327-4ec4-adc2-c647bd9604da\",\r\n        \"Timestamp\": \"2022-02-15T16:16:38.8840116Z\",\r\n        \"AuditId\": \"dbd2221d-3327-4ec4-adc2-c647bd9604da\",\r\n        \"NhsLoginSubject\": \"3c90d2d7-5474-4acd-8722-c7c332881421\",\r\n        \"NhsNumber\": \"969 211 3736\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"CitizenId_Session_Create_Request\",\r\n        \"Details\": \"Create Citizen Id Session\",\r\n        \"ApiVersion\": null,\r\n        \"WebVersion\": null,\r\n        \"NativeVersion\": null,\r\n        \"id\": \"da3fd40f-1761-46d6-b5fb-fc72b9a0e269\",\r\n        \"_rid\": \"RuVQAKPVga8BAAAAAAAAAA==\",\r\n        \"_self\": \"dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8BAAAAAAAAAA==/\",\r\n        \"_etag\": \"\\\"0102c1af-0000-1100-0000-620bd5a30000\\\"\",\r\n        \"_attachments\": \"attachments/\",\r\n        \"_ts\": 1644942755\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

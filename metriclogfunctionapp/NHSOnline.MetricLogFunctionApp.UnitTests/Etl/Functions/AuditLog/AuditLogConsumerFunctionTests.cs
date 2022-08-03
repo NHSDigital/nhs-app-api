@@ -15,15 +15,16 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.Medica
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.LastLoginPatientIdentifier;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.SilverIntegrationJumpOff;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
@@ -39,6 +40,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<BiometricsToggleMetric>> _biometricsToggleEtl;
         private Mock<IAuditLogEtl<ConsentMetric>> _consentEtl;
         private Mock<IAuditLogEtl<DeviceMetric>> _deviceMetricEtl;
+        private Mock<IAuditLogEtl<LastLoginPatientIdentifier>> _lastLoginPatientIdentifierEtl;
         private Mock<IAuditLogEtl<LoginMetric>> _loginEtl;
         private Mock<IAuditLogEtl<MedicalRecordViewMetric>> _medicalRecordView;
         private Mock<IAuditLogEtl<MedicalRecordSectionViewMetric>> _medicalRecordSectionViewMetricEtl;
@@ -67,6 +69,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _consentEtl = new Mock<IAuditLogEtl<ConsentMetric>>();
             _deviceMetricEtl = new Mock<IAuditLogEtl<DeviceMetric>>();
             _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
+            _lastLoginPatientIdentifierEtl = new Mock<IAuditLogEtl<LastLoginPatientIdentifier>>();
             _loginEtl = new Mock<IAuditLogEtl<LoginMetric>>();
             _medicalRecordSectionViewMetricEtl = new Mock<IAuditLogEtl<MedicalRecordSectionViewMetric>>();
             _medicalRecordView = new Mock<IAuditLogEtl<MedicalRecordViewMetric>>();
@@ -79,8 +82,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _organDonationRegistrationWithdrawEtl = new Mock<IAuditLogEtl<OrganDonationRegistrationWithdrawMetric>>();
             _repeatPrescriptionEtl = new Mock<IAuditLogEtl<RepeatPrescriptionMetric>>();
             _secondaryCareSummaryEtl = new Mock<IAuditLogEtl<SecondaryCareSummaryMetric>>();
-            _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
             _silverIntegrationJumpOffEtl = new Mock<IAuditLogEtl<SilverIntegrationJumpOffMetric>>();
+            _webIntegrationReferralEtl = new Mock<IAuditLogEtl<WebIntegrationReferralsMetric>>();
             _logger = new Mock<IEtlLogger<AuditLogConsumerFunction>>();
             _queueLogger = new Mock<ILogger<AuditLogConsumerFunction>>();
 
@@ -91,6 +94,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _consentEtl.Object,
                 _deviceMetricEtl.Object,
                 _initialPromptEtl.Object,
+                _lastLoginPatientIdentifierEtl.Object,
                 _loginEtl.Object,
                 _medicalRecordSectionViewMetricEtl.Object,
                 _medicalRecordView.Object,
@@ -103,8 +107,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _organDonationRegistrationWithdrawEtl.Object,
                 _repeatPrescriptionEtl.Object,
                 _secondaryCareSummaryEtl.Object,
-                _webIntegrationReferralEtl.Object,
                 _silverIntegrationJumpOffEtl.Object,
+                _webIntegrationReferralEtl.Object,
                 _logger.Object,
                 _queueLogger.Object);
         }
@@ -132,6 +136,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _initialPromptEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _lastLoginPatientIdentifierEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _loginEtl.Verify(etl =>
                 etl.ExecuteDependentEvent(It.IsAny<ILogger<AuditLogConsumerFunction>>(),It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _medicalRecordSectionViewMetricEtl.Verify(etl =>
@@ -152,9 +158,9 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _secondaryCareSummaryEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
-            _webIntegrationReferralEtl.Verify(etl =>
-                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _silverIntegrationJumpOffEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _webIntegrationReferralEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
         }
 

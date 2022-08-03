@@ -570,6 +570,32 @@ Login_Device Body:
 ]
 ```
 
+LastLoginPatientIdentifier Body:
+```bash
+[
+    {
+        "Id": "dbd2221d-3327-4ec4-adc2-c647bd9604da",
+        "Timestamp": "2022-02-15T16:16:38.8840116Z",
+        "AuditId": "dbd2221d-3327-4ec4-adc2-c647bd9604da",
+        "NhsLoginSubject": "3c90d2d7-5474-4acd-8722-c7c332881421",
+        "NhsNumber": "969 211 3736",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "Unknown",
+        "Operation": "CitizenId_Session_Create_Request",
+        "Details": "Create Citizen Id Session",
+        "ApiVersion": null,
+        "WebVersion": null,
+        "NativeVersion": null,
+        "id": "da3fd40f-1761-46d6-b5fb-fc72b9a0e269",
+        "_rid": "RuVQAKPVga8BAAAAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8BAAAAAAAAAA==/",
+        "_etag": "\"0102c1af-0000-1100-0000-620bd5a30000\"",
+        "_attachments": "attachments/",
+        "_ts": 1644942755
+    }
+]
+```
+
 ## Running the Metric Logger Integration Tests Locally 
 
 The ideal way of checking that changes you have made locally work is by kicking off the Integration test environment which can be done by running this command in the root of the metric logger function app folder

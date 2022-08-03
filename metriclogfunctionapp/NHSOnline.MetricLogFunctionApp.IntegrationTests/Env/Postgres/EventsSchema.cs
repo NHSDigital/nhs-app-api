@@ -17,15 +17,21 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<AppointmentCancelMetricRow> AppointmentCancelMetric =>
             Table<AppointmentCancelMetricRow>();
 
+        internal PostgresTable<BiometricsToggleMetricRow> BiometricsToggleMetric => Table<BiometricsToggleMetricRow>();
+
         internal PostgresTable<ConsentMetricRow> ConsentMetric => Table<ConsentMetricRow>();
 
         internal PostgresTable<DeviceRow> Device => Table<DeviceRow>();
 
+        internal PostgresTable<InitialPromptMetricRow> InitialPromptMetric => Table<InitialPromptMetricRow>();
+
+        internal PostgresTable<LastLoginPatientIdentifierRow> LastLoginPatientIdentifier =>
+            Table<LastLoginPatientIdentifierRow>();
+
         internal PostgresTable<LoginMetricRow> LoginMetric => Table<LoginMetricRow>();
 
-        internal PostgresTable<WebIntegrationReferralsMetricRow> WebIntegrationReferrals => Table<WebIntegrationReferralsMetricRow>();
-
-        internal PostgresTable<SecondaryCareSummaryMetricRow> SecondaryCareSummaryMetric => Table<SecondaryCareSummaryMetricRow>();
+        internal PostgresTable<MedicalRecordSectionViewMetricRow> MedicalRecordSectionViewMetric =>
+            Table<MedicalRecordSectionViewMetricRow>();
 
         internal PostgresTable<MedicalRecordViewMetricRow> MedicalRecordViewMetric =>
             Table<MedicalRecordViewMetricRow>();
@@ -44,24 +50,21 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<OrganDonationRegistrationGetMetricRow> OrganDonationRegistrationGetMetric =>
             Table<OrganDonationRegistrationGetMetricRow>();
 
-        internal PostgresTable<OrganDonationRegistrationWithdrawMetricRow> OrganDonationRegistrationWithdrawMetric =>
-            Table<OrganDonationRegistrationWithdrawMetricRow>();
-
         internal PostgresTable<OrganDonationRegistrationUpdateMetricRow> OrganDonationRegistrationUpdateMetric =>
             Table<OrganDonationRegistrationUpdateMetricRow>();
+
+        internal PostgresTable<OrganDonationRegistrationWithdrawMetricRow> OrganDonationRegistrationWithdrawMetric =>
+            Table<OrganDonationRegistrationWithdrawMetricRow>();
 
         internal PostgresTable<PrescriptionOrdersMetricRow> PrescriptionOrdersMetric =>
             Table<PrescriptionOrdersMetricRow>();
 
-        internal PostgresTable<InitialPromptMetricRow> InitialPromptMetric => Table<InitialPromptMetricRow>();
+        internal PostgresTable<SecondaryCareSummaryMetricRow> SecondaryCareSummaryMetric => Table<SecondaryCareSummaryMetricRow>();
 
         internal PostgresTable<SilverIntegrationJumpOffMetricRow> SilverIntegrationJumpOffMetric =>
             Table<SilverIntegrationJumpOffMetricRow>();
 
-        internal PostgresTable<BiometricsToggleMetricRow> BiometricsToggleMetric => Table<BiometricsToggleMetricRow>();
-
-        internal PostgresTable<MedicalRecordSectionViewMetricRow> MedicalRecordSectionViewMetric =>
-            Table<MedicalRecordSectionViewMetricRow>();
+        internal PostgresTable<WebIntegrationReferralsMetricRow> WebIntegrationReferrals => Table<WebIntegrationReferralsMetricRow>();
 
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);

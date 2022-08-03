@@ -12,20 +12,21 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Device;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Update;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.InitialPrompt;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Notification.Toggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Create;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Get;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Withdraw;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Consent;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.LastLoginPatientIdentifier;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.Login;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndLogin.WebIntegrationReferrals;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RepeatPrescription;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.SilverIntegrationJumpOff;
-using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.OrganDonationRegistration.Update;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Wayfinder.SecondaryCareSummary;
 using NHSOnline.MetricLogFunctionApp.Etl.Logging;
 
 namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
@@ -38,6 +39,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<ConsentMetric> _consentEtl;
         private readonly IAuditLogEtl<DeviceMetric> _deviceEtl;
         private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
+        private readonly IAuditLogEtl<LastLoginPatientIdentifier> _lastLoginPatientIdentifierEtl;
         private readonly IAuditLogEtl<LoginMetric> _loginEtl;
         private readonly IAuditLogEtl<MedicalRecordSectionViewMetric> _medicalRecordSectionViewEtl;
         private readonly IAuditLogEtl<MedicalRecordViewMetric> _medicalRecordViewEtl;
@@ -50,8 +52,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> _organDonationRegistrationWithdrawEtl;
         private readonly IAuditLogEtl<RepeatPrescriptionMetric> _repeatPrescriptionEtl;
         private readonly IAuditLogEtl<SecondaryCareSummaryMetric> _secondaryCareSummaryEtl;
-        private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IAuditLogEtl<SilverIntegrationJumpOffMetric> _silverIntegrationJumpOffEtl;
+        private readonly IAuditLogEtl<WebIntegrationReferralsMetric> _webIntegrationReferralEtl;
         private readonly IEtlLogger<AuditLogConsumerFunction> _logger;
         private readonly ILogger _queueLogger;
 
@@ -62,6 +64,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<ConsentMetric> consentEtl,
             IAuditLogEtl<DeviceMetric> deviceEtl,
             IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
+            IAuditLogEtl<LastLoginPatientIdentifier> lastLoginPatientIdentifierEtl,
             IAuditLogEtl<LoginMetric> loginEtl,
             IAuditLogEtl<MedicalRecordSectionViewMetric> medicalRecordSectionViewEtl,
             IAuditLogEtl<MedicalRecordViewMetric> medicalRecordViewEtl,
@@ -74,8 +77,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<OrganDonationRegistrationWithdrawMetric> organDonationRegistrationWithdrawEtl,
             IAuditLogEtl<RepeatPrescriptionMetric> repeatPrescriptionEtl,
             IAuditLogEtl<SecondaryCareSummaryMetric> secondaryCareSummaryEtl,
-            IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IAuditLogEtl<SilverIntegrationJumpOffMetric> silverIntegrationJumpOffEtl,
+            IAuditLogEtl<WebIntegrationReferralsMetric> webIntegrationReferralEtl,
             IEtlLogger<AuditLogConsumerFunction> logger,
             ILogger<AuditLogConsumerFunction> queueLogger)
         {
@@ -85,6 +88,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _consentEtl = consentEtl;
             _deviceEtl = deviceEtl;
             _initialPromptEtl = initialPromptEtl;
+            _lastLoginPatientIdentifierEtl = lastLoginPatientIdentifierEtl;
             _loginEtl = loginEtl;
             _medicalRecordSectionViewEtl = medicalRecordSectionViewEtl;
             _medicalRecordViewEtl = medicalRecordViewEtl;
@@ -97,8 +101,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _organDonationRegistrationWithdrawEtl = organDonationRegistrationWithdrawEtl;
             _repeatPrescriptionEtl = repeatPrescriptionEtl;
             _secondaryCareSummaryEtl = secondaryCareSummaryEtl;
-            _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _silverIntegrationJumpOffEtl = silverIntegrationJumpOffEtl;
+            _webIntegrationReferralEtl = webIntegrationReferralEtl;
             _logger = logger;
             _queueLogger = queueLogger;
         }
@@ -141,6 +145,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _deviceEtl.Execute(events);
                 await _initialPromptEtl.Execute(events);
+                await _lastLoginPatientIdentifierEtl.Execute(events);
                 await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _medicalRecordSectionViewEtl.Execute(events);
                 await _medicalRecordViewEtl.Execute(events);
@@ -153,8 +158,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _organDonationRegistrationWithdrawEtl.Execute(events);
                 await _repeatPrescriptionEtl.Execute(events);
                 await _secondaryCareSummaryEtl.Execute(events);
-                await _webIntegrationReferralEtl.Execute(events);
                 await _silverIntegrationJumpOffEtl.Execute(events);
+                await _webIntegrationReferralEtl.Execute(events);
             }
             catch (Exception e)
             {

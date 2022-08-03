@@ -45,7 +45,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions
             actual.Should().Be(expected, assertionFailMessage);
         }
 
-        private static AuditRecord _DefaultRecord = new()
+        private static readonly AuditRecord DefaultRecord = new()
         {
             AuditId = "AuditId",
             NhsLoginSubject = "NhsLoginSubject-Test",
@@ -79,32 +79,32 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions
 
             var result = new AuditRecord()
             {
-                AuditId = FieldOrDefault(record.AuditId, _DefaultRecord.AuditId),
-                NhsLoginSubject = FieldOrDefault(record.NhsLoginSubject, _DefaultRecord.NhsLoginSubject),
-                NhsNumber = FieldOrDefault(record.NhsNumber, _DefaultRecord.NhsNumber),
+                AuditId = FieldOrDefault(record.AuditId, DefaultRecord.AuditId),
+                NhsLoginSubject = FieldOrDefault(record.NhsLoginSubject, DefaultRecord.NhsLoginSubject),
+                NhsNumber = FieldOrDefault(record.NhsNumber, DefaultRecord.NhsNumber),
                 IsActingOnBehalfOfAnother = record.IsActingOnBehalfOfAnother,
-                Supplier = FieldOrDefault(record.Supplier, _DefaultRecord.Supplier),
-                Operation = FieldOrDefault(record.Operation, _DefaultRecord.Operation),
-                Details = FieldOrDefault(record.Details, _DefaultRecord.Details),
-                ApiVersion = FieldOrDefault(record.ApiVersion, _DefaultRecord.ApiVersion),
-                WebVersion = FieldOrDefault(record.WebVersion, _DefaultRecord.WebVersion),
-                NativeVersion = FieldOrDefault(record.NativeVersion, _DefaultRecord.NativeVersion),
-                Environment = FieldOrDefault(record.Environment, _DefaultRecord.Environment),
-                SessionId = FieldOrDefault(record.SessionId, _DefaultRecord.SessionId),
-                Timestamp =  FieldOrDefault(record.Timestamp, _DefaultRecord.Timestamp),
-                ProofLevel = FieldOrDefault(record.ProofLevel, _DefaultRecord.ProofLevel),
-                ODS = FieldOrDefault(record.ODS, _DefaultRecord.ODS),
-                Referrer = FieldOrDefault(record.Referrer, _DefaultRecord.Referrer),
-                ProviderId = FieldOrDefault(record.ProviderId,_DefaultRecord.ProviderId),
-                ProviderName = FieldOrDefault(record.ProviderName,_DefaultRecord.ProviderName),
-                JumpOffId = FieldOrDefault(record.JumpOffId,_DefaultRecord.JumpOffId)
+                Supplier = FieldOrDefault(record.Supplier, DefaultRecord.Supplier),
+                Operation = FieldOrDefault(record.Operation, DefaultRecord.Operation),
+                Details = FieldOrDefault(record.Details, DefaultRecord.Details),
+                ApiVersion = FieldOrDefault(record.ApiVersion, DefaultRecord.ApiVersion),
+                WebVersion = FieldOrDefault(record.WebVersion, DefaultRecord.WebVersion),
+                NativeVersion = FieldOrDefault(record.NativeVersion, DefaultRecord.NativeVersion),
+                Environment = FieldOrDefault(record.Environment, DefaultRecord.Environment),
+                SessionId = FieldOrDefault(record.SessionId, DefaultRecord.SessionId),
+                Timestamp =  FieldOrDefault(record.Timestamp, DefaultRecord.Timestamp),
+                ProofLevel = FieldOrDefault(record.ProofLevel, DefaultRecord.ProofLevel),
+                ODS = FieldOrDefault(record.ODS, DefaultRecord.ODS),
+                Referrer = FieldOrDefault(record.Referrer, DefaultRecord.Referrer),
+                ProviderId = FieldOrDefault(record.ProviderId, DefaultRecord.ProviderId),
+                ProviderName = FieldOrDefault(record.ProviderName, DefaultRecord.ProviderName),
+                JumpOffId = FieldOrDefault(record.JumpOffId, DefaultRecord.JumpOffId)
             };
 
             if (String.IsNullOrEmpty(record.IntegrationReferrer))
             {
                 result.IntegrationReferrer =
                     String.IsNullOrEmpty(record.Referrer)
-                    ? _DefaultRecord.IntegrationReferrer
+                    ? DefaultRecord.IntegrationReferrer
                     : $@"int-{record.Referrer}";
             }
 
