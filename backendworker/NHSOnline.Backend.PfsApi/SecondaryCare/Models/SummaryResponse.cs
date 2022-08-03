@@ -70,9 +70,9 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
                 .OrderBy(x => x, actionableItemComparer)
                 .ToList();
 
-            // Cancelled appointments first, then order by date
+            // Booked appointments before cancelled, then order by date
             ConfirmedAppointments = ConfirmedAppointments
-                .OrderByDescending(a => a.IsCancelled)
+                .OrderBy(a => a.IsCancelled)
                 .ThenBy(a => a.AppointmentDateTime)
                 .ToList();
 

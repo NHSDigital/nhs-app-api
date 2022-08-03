@@ -79,10 +79,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .Should()
                 .Be(2);
 
-            // Check sorting: ConfirmedAppointments - check first non-cancelled Appointment comes after cancelled
+            // Check sorting: ConfirmedAppointments - check first cancelled Appointment comes after booked
             summaryResponse?.ConfirmedAppointments
                 .Select((value, index) => new { value, index })
-                .Where(pair => pair.value.IsCancelled == false)
+                .Where(pair => pair.value.IsCancelled)
                 .Select(pair => pair.index)
                 .FirstOrDefault()
                 .Should()
