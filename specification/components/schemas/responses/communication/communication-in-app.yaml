@@ -9,7 +9,7 @@ properties:
     description: |
       An array of identifiers used to identify this request.
 
-      This array will always include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`.
+      This array will always include a globally unique identifier assigned by the API, with the system `https://fhir.nhs.uk/Id/nhs-app-communication-id`.
 
       It will include optional identifiers that were provided in the request if the API recognised the identifier system name.
     items:
@@ -19,7 +19,7 @@ properties:
           type: string
           format: uri
           description: The namespace of the identifier value.
-          example: urn:ietf:rfc:3986
+          example: https://fhir.nhs.uk/Id/nhs-app-communication-id
         value:
           type: string
           description: The value of the identifier.
