@@ -7,7 +7,6 @@
 @import '~nhsuk-frontend/packages/core/tools/typography';
 
 @import "../colours";
-@import "../tags";
 
 .list-menu-container_prescriptions {
   padding: 0.8em 2em 0.8em 1em;
@@ -43,13 +42,4 @@
   margin-top: 0;
   margin-bottom: 12px;
   color: #425563;
-}
-
-.nhs-app-message__date {
-  flex-shrink: 0;
-  margin-left: nhsuk-spacing(2);
-  font-size: 1em;
-  float: right;
-  @include nhsuk-typography-responsive(16);
-  font-weight: 600;
 }

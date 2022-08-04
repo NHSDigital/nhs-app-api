@@ -26,7 +26,7 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
             " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
 
     val orderedByLabel = HybridPageElement(
-            webDesktopLocator = "//p[@id='orderedByValue']",
+            webDesktopLocator = "//p[@data-purpose='ordered-by']",
             helpfulName = "ordered by label",
             page = this
     )

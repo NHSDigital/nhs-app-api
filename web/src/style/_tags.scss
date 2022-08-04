@@ -1,3 +1,6 @@
+@import '~nhsuk-frontend/packages/core/tools/all';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+
 @import "./colours";
 
 $color_nhsuk-aqua-green: #00A499;
@@ -80,4 +83,20 @@ $color_nhsuk-orange: #ED8B00;
   background-color: tint($color_nhsuk-yellow, 50%);
   border-color: shade($color_nhsuk-yellow, 70%);
   color: shade($color_nhsuk-yellow, 70%);
+}
+
+.nhs-app-card__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  column-gap: nhsuk-spacing(2);
+  flex-wrap: wrap;
+
+  .nhs-app-card__title-text {
+    padding-top: 0;
+  }
+
+  .nhs-app-card__title-tag {
+    font-weight: 600;
+  }
 }
