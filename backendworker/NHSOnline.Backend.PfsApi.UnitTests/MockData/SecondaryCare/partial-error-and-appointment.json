@@ -25,7 +25,7 @@
                     }
                   ],
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
-                  "valueUrl": "https://nhsapp-pkb.devstacks.pkb.io/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D273235339474%26nhsStyle%3Dtrue"
+                  "valueUrl": "https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D273235339474%26nhsStyle%3Dtrue"
                 },
                 {
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
