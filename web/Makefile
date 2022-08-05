@@ -1,6 +1,8 @@
 ALL_SCRIPTS := $(sort $(wildcard buildscripts/*.sh))
 TEST_SCRIPTS := $(sort $(wildcard buildscripts/*test*.sh))
-BUILD_SCRIPTS := $(sort $(filter-out $(TEST_SCRIPTS),$(ALL_SCRIPTS)))
+SECURITY_SCRIPTS := $(sort $(wildcard buildscripts/*security*.sh))
+ALL_WITHOUT_SECURITY_SCRIPTS := $(filter-out $(SECURITY_SCRIPTS),$(ALL_SCRIPTS))
+BUILD_SCRIPTS := $(sort $(filter-out $(TEST_SCRIPTS),$(ALL_WITHOUT_SECURITY_SCRIPTS)))
 
 build: $(BUILD_SCRIPTS) ## Build all web components
 test: $(TEST_SCRIPTS) ## Unit test all web components
