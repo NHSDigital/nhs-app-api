@@ -33,7 +33,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         displayName: Publish Xamarin tests flipbook
         inputs:
-          artifactName: Flipbook
+          artifactName: Flipbook_$(System.JobAttempt)
           targetPath: 'xamarinintegrationtests/flipbookgeneration/flipbook/$(native.xamarin.flipbookPdfName).pdf'
 
       - task: Bash@3

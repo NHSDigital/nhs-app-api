@@ -30,7 +30,13 @@ namespace NHSOnline.IntegrationTests.UI
             if (isFlipBookTest)
             {
                 var flipBookConfig = Configuration.Get<FlipBookConfig>("FlipBookConfig");
-                Directory.CreateDirectory($"{flipBookConfig.FlipBookPath}{testMethod.TestMethodName}/screenshots");
+                var path = $"{flipBookConfig.FlipBookPath}{testMethod.TestMethodName}/screenshots";
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+
+                Directory.CreateDirectory(path);
             }
 
             try
