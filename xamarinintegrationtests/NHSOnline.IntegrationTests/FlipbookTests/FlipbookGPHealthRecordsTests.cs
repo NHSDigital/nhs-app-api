@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot: true)
                 .Navigation
                 .NavigateToYourHealth();
 
