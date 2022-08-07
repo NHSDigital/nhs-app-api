@@ -9,4 +9,9 @@
       <ProjectReference Include="..\NHSOnline.IntegrationTests.UI\NHSOnline.IntegrationTests.UI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="WebPageContent\NhsAppWeb\YourHealth\YourHealthTemporaryProblemPageContent.cs" />
+      <Compile Remove="WebPageContent\NhsAppWeb\YourHealth\YourHealthUnavailablePageContent.cs" />
+    </ItemGroup>
+
 </Project>

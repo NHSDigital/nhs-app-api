@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
-using NHSOnline.IntegrationTests.Pages.IOS;
+using NHSOnline.HttpMocks.Emis;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
@@ -13,8 +13,8 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
     {
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "A user logs into the app - iOS",
-            FlipbookTestName = "View your GP health record - no access")]
-        public void APatientWithProofLevelNineCanViewHealthRecordWithNoAccessIOS(IIOSDriverWrapper driver)
+            FlipbookTestName = "View your GP Health Records")]
+        public void APatientWithProofLevelNineCanViewHealthPage(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -23,24 +23,84 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
-                .AssertOnPage(driver, screenshot: true)
+                .AssertOnPage(driver)
                 .Navigation
                 .NavigateToYourHealth();
 
             IOSYourHealthPage
-                .AssertOnPage(driver, true)
+                .AssertOnPage(driver, screenshot: true)
                 .PageContent
                 .NavigateToGPHealthRecord();
 
             IOSGpMedicalRecordPage
-                .AssertOnPage(driver, true)
+                .AssertOnPage(driver, true);
+        }
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "View your GP Health Records - iOS",
+            FlipbookTestName = "View your GP health record - no access")]
+        public void APatientWithProofLevelNineHasNoAccessToHealthRecordIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithBehaviour(new EmisRecordsForbiddenBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation
+                .NavigateToYourHealth();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .PageContent
+                .NavigateToGPHealthRecord();
+
+            IOSGpMedicalRecordPage
+                .AssertOnPage(driver)
                 .PageContent
                 .Continue();
 
-            IOSSessionExpiryPrompt.ExtendIfDisplayed(driver);
+            IOSGpMedicalRecordPage
+                .AssertOnPage(driver, true, true);
+        }
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "View your GP Health Records - iOS",
+            FlipbookTestName = "View your GP health record - service unavailable")]
+        public void APatientWithProofLevelNineCannotViewHealthRecordWithServiceUnavailableIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithBehaviour(new EmisCreateSessionFailureBehaviour())
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation
+                .NavigateToYourHealth();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .PageContent
+                .NavigateToGPHealthRecord();
 
             IOSGpMedicalRecordPage
-                .AssertOnPage(driver, true);
+                .AssertOnPage(driver)
+                .PageContent
+                .Continue();
+
+            IOSGpMedicalRecordErrorPage
+                .AssertOnPage(driver, true)
+                .TryAgain();
+
+            IOSGpMedicalRecordErrorPage
+                 .AssertOnPage(driver, true, postTryAgain: true);
         }
     }
 }

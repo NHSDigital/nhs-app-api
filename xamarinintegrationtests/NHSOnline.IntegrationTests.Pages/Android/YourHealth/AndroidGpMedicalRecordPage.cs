@@ -15,10 +15,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
 
         public GpMedicalRecordPageContent PageContent { get; }
 
-        public static AndroidGpMedicalRecordPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidGpMedicalRecordPage AssertOnPage(IAndroidDriverWrapper driver, bool expectForbiddenError = false)
         {
             var page = new AndroidGpMedicalRecordPage(driver);
-            page.PageContent.AssertOnPage();
+            page.PageContent.AssertOnPage(expectForbiddenError);
             return page;
         }
     }

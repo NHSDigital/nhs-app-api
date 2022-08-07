@@ -7,5 +7,9 @@ namespace NHSOnline.HttpMocks.Emis
         public static TPatient WithBehaviour<TPatient>(this TPatient patient, IEmisCreateSessionBehaviour behaviour)
             where TPatient : Patient
             => patient.WithBehaviour<TPatient, IEmisCreateSessionBehaviour>(behaviour);
+
+        public static TPatient WithBehaviour<TPatient>(this TPatient patient, IEmisRecordsBehaviour behaviour)
+            where TPatient : Patient
+            => patient.WithBehaviour<TPatient, IEmisRecordsBehaviour>(behaviour);
     }
 }

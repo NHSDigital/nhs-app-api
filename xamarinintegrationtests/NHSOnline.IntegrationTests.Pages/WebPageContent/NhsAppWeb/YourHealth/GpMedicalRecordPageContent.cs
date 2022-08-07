@@ -15,16 +15,24 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your GP health record");
 
+        private WebText YouDoNotHaveAccessToYourGpMedicalRecord => WebText.WithTagAndText(_interactor, "p",
+            "You do not currently have online access to your medical record");
+
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         public WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
-        internal void AssertOnPage()
+        internal void AssertOnPage(bool expectForbiddenError)
         {
             // Extending timeout to allow SSO to complete
             using var extendedTimeout = ExtendedTimeout.FromSeconds(15);
 
             TitleText.AssertVisible();
+
+            if (expectForbiddenError)
+            {
+                YouDoNotHaveAccessToYourGpMedicalRecord.AssertVisible();
+            }
         }
 
         public void ClickBackBreadcrumb() => BackBreadcrumb.Click();

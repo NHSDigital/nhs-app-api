@@ -19,7 +19,6 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
     public class YourHealthCreateOnDemandGpSessionFailedTests
     {
         [NhsAppAndroidTest]
-        [Ignore("Issue in web where back navigation brings about server error")]
         public void APatientSeesServiceSpecificGpSessionErrorScreensWhenTryingToAccessYourHealthAndThereIsAFailureCreatingAGpSessionOnDemandAndroid(IAndroidDriverWrapper driver)
         {
             var fo = new EmisPatient()
@@ -48,13 +47,12 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .PageContent.Login(brie);
 
-            AndroidYourHealthTemporaryProblemPage
+            AndroidGPMedicalRecordErrorPage
                 .AssertOnPage(driver)
-                .AssertPageElements()
                 .TryAgain();
 
-            AndroidYourHealthUnavailablePage
-                .AssertOnPage(driver);
+            AndroidGPMedicalRecordErrorPage
+                .AssertOnPage(driver, postTryAgain: true);
 
             driver.PressBackButton();
 
@@ -63,7 +61,6 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
         }
 
         [NhsAppIOSTest]
-        [Ignore("Issue in web where back navigation brings about server error")]
         public void APatientSeesServiceSpecificGpSessionErrorScreensWhenTryingToAccessYourHealthAndThereIsAFailureCreatingAGpSessionOnDemandIOS(IIOSDriverWrapper driver)
         {
             var anna = new EmisPatient()
@@ -93,14 +90,12 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
                 .AssertOnPage(driver)
                 .PageContent.Login(crew);
 
-            IOSYourHealthTemporaryProblemPage
+            IOSGpMedicalRecordErrorPage
                 .AssertOnPage(driver)
-                .AssertPageElements()
                 .TryAgain();
 
-            IOSYourHealthUnavailablePage
-                .AssertOnPage(driver)
-                .AssertPageElements()
+            IOSGpMedicalRecordErrorPage
+                .AssertOnPage(driver, postTryAgain: true)
                 .PageContent.ReportAProblem();
 
             IOSBrowserOverlayContactUsPage
