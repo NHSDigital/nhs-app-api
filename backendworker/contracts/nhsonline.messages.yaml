@@ -133,7 +133,36 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
-
+  /users/me/messages/metadata:
+    get:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - messages
+      summary: Retrieve messages metadata
+      description: Retrieves unread messages count pertaining to the authorized user.
+      parameters:
+        - in: header
+          name: NHSO-Request-ID
+          required: false
+          description: A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. Unread messages count is retrieved.
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/MessagesMetadataResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
   /users/me/messages/senders:
     get:
       security:
@@ -169,7 +198,6 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
-
   /users/me/messages/{messageId}/link-clicked/metrics:
     post:
       security:
@@ -356,6 +384,13 @@ components:
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         sendTime: 2019-09-17T02:15:12.35Z
         read: true
+    MessagesMetadataResponse:
+      type: object
+      properties:
+        unreadMessageCount:
+          type: integer
+      example:
+        unreadMessageCount: 6
     SenderResponse:
       type: object
       properties:

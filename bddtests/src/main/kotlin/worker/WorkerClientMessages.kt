@@ -5,6 +5,7 @@ import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
 import worker.models.messages.MessageCreateResponse
+import worker.models.messages.MessagesMetadataResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
@@ -53,6 +54,22 @@ class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, v
 
         if (response != null) {
             return gson.fromJson(response, MessagesResponseMessage::class.java)
+        }
+
+        return null
+    }
+
+    fun getMessagesMetadata(authToken: String?): MessagesMetadataResponse? {
+        val uriBuilder = URIBuilder(uri("me") + "/metadata")
+
+        val httpGet = RequestBuilder
+            .get(uriBuilder.build().toString())
+            .addAuthorizationIfNotNull(authToken)
+
+        val response = httpGet.sendAndGetResult(sender)
+
+        if (response != null) {
+            return gson.fromJson(response, MessagesMetadataResponse::class.java)
         }
 
         return null

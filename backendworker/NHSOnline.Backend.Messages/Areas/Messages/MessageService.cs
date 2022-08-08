@@ -162,6 +162,27 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
+        public async Task<MessagesMetadataResult> GetMessagesMetadata(AccessToken accessToken)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result = await _messageRepository.CountUnreadMessages(accessToken.Subject);
+
+                return result.Accept(new RepositoryGetMessagesMetadataResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Messages Metadata Get has failed with exception");
+                return new MessagesMetadataResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument,
             AccessToken accessToken, string messageId)
         {

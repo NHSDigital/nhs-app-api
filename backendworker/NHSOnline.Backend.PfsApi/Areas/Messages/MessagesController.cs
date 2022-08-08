@@ -178,6 +178,30 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
         }
 
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ApiVersionRoute("api/me/messages/metadata")]
+        public async Task<IActionResult> GetMessagesMetadata()
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var result = await _messageService.GetMessagesMetadata(_accessTokenProvider.AccessToken);
+
+                return result.Accept(new MessagesMetadataResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get messages metadata with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         [HttpPatch]
         [Authorize(AuthenticationSchemes = Constants.AuthenticationSchemeGroupings.JwtAndCookieAuthenticationScheme)]
         [ApiVersionRoute("api/me/messages/{messageId}")]

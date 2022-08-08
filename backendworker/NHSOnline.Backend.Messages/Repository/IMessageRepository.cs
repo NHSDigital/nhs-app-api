@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.Messages.Repository
 {
     public interface IMessageRepository
     {
+        Task<RepositoryCountResult> CountUnreadMessages(string nhsLoginId);
         Task<RepositoryCreateResult<UserMessage>> Create(UserMessage userMessage);
         Task<RepositoryFindResult<UserMessage>> FindMessagesFromSenderByName(string nhsLoginId, string sender);
         Task<RepositoryFindResult<UserMessage>> FindMessagesFromSenderById(string nhsLoginId, string senderId);

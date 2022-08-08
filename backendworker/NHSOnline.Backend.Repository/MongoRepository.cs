@@ -28,6 +28,20 @@ namespace NHSOnline.Backend.Repository
             _logger = logger;
         }
 
+        public async Task<RepositoryCountResult> Count(Expression<Func<TRecord, bool>> filter, string recordName)
+        {
+            try
+            {
+                var count = await CountRecords(filter, recordName);
+                return new RepositoryCountResult.Found(count);
+            }
+            catch (MongoException exception)
+            {
+                _logger.LogError(exception, $"Mongo Failure. Count {recordName}.");
+                return new RepositoryCountResult.RepositoryError();
+            }
+        }
+
         public async Task<RepositoryCreateResult<TRecord>> Create(TRecord record, string recordName)
         {
             try
@@ -178,6 +192,14 @@ namespace NHSOnline.Backend.Repository
                         yield return record;
                     }
                 } while (await records.MoveNextAsync());
+            }
+        }
+
+        private async Task<long> CountRecords(Expression<Func<TRecord, bool>> filter, string recordName)
+        {
+            using (_logger.WithTimer($"Mongo Find {recordName}."))
+            {
+                return await _mongoClientService.CountAsync(_mongoConfig, filter);
             }
         }
 

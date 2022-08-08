@@ -15,6 +15,8 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
         Task<MessagesResult> GetMessagesBySenderId(AccessToken accessToken, string senderId);
 
+        Task<MessagesMetadataResult> GetMessagesMetadata(AccessToken accessToken);
+
         Task<MessagesResult> GetSummaryMessages(AccessToken accessToken);
 
         Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument, AccessToken accessToken, string messageId);

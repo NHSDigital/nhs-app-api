@@ -176,6 +176,66 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
+        [TestMethod]
+        public async Task GetMessagesMetadata_SuccessFound_ReturnsOK()
+        {
+            // Arrange
+            var response = new MessagesMetadataResponse()
+            {
+                MessagesMetadata = new MessagesMetadata { UnreadMessageCount = 2 }
+            };
+
+            _mockMessageService
+                .Setup(x => x.GetMessagesMetadata(_accessToken))
+                .ReturnsAsync(new MessagesMetadataResult.Found(response));
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata();
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeAssignableTo<MessagesMetadata>()
+                .Subject.Should().BeEquivalentTo(response.MessagesMetadata);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesMetadata_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockMessageService
+                .Setup(x => x.GetMessagesMetadata(_accessToken))
+                .ReturnsAsync(new MessagesMetadataResult.BadGateway());
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata();
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesMetadata_MessageServiceThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockMessageService
+                .Setup(x => x.GetMessagesMetadata(_accessToken))
+                .Throws<ArgumentException>();
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata();
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
         [TestCleanup]
         public void Dispose() => _systemUnderTest?.Dispose();
     }

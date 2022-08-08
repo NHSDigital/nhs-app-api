@@ -93,6 +93,8 @@ paths:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1devices~1notifications~1{notificationId}
   /v1/api/users/me/messages:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages
+  /v1/api/users/me/messages/metadata:
+    $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1metadata
   /v1/api/users/me/messages/{messageId}:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1{messageId}
   /v1/api/users/me/messages/senders:

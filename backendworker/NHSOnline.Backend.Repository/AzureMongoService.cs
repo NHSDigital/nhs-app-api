@@ -90,6 +90,15 @@ namespace NHSOnline.Backend.Repository
                     .FindAsync(filter, findOptions));
         }
 
+        public async Task<long> CountAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter) where TRecord : RepositoryRecord
+        {
+            return await DoWithRecoveryAsync(
+                config.DatabaseName,
+                async mongoDatabase => await mongoDatabase
+                    .GetCollection<TRecord>(config.CollectionName)
+                    .CountDocumentsAsync(filter));
+        }
+
         public async Task<UpdateResult> UpdateManyAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter, UpdateDefinition<TRecord> updates) where TRecord : RepositoryRecord
         {
             return await DoWithRecoveryAsync(

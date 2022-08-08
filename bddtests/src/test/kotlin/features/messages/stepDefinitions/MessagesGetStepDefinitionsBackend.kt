@@ -24,16 +24,12 @@ class MessagesGetStepDefinitionsBackend {
 
     @Given("^I am an api user wishing to get my messages$")
     fun iAmAnApiUserWishingToGetTheirMessages() {
-        val factory = MessagesFactory()
-        factory.setUpUser()
-        factory.setUpMultipleMessagesInCache()
+        setUpHandler()
     }
 
     @Given("^I am an api user wishing to get my messages from v1 endpoint$")
     fun iAmAnApiUserWishingToGetTheirMessagesfromV1Endpoint() {
-        val factory = MessagesFactory()
-        factory.setUpUser()
-        factory.setUpMultipleMessagesInCache(true)
+        setUpHandler(true)
     }
 
     @Given("^I am an api user with proof level 5 wishing to get my messages$")
@@ -155,7 +151,6 @@ class MessagesGetStepDefinitionsBackend {
                 MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<Array<MessagesResponse>>()
         val expectedMessages =
                 MessagesSerenityHelpers.EXPECTED_SENDERS.getOrFail<ArrayList<SenderFacade>>()
-
         assertReceivedMessages(expectedMessages, responseMessages)
     }
 
@@ -243,11 +238,7 @@ class MessagesGetStepDefinitionsBackend {
         assertNotNull(response)
         assertNotNull(response.senders)
         val expectedSenders = expectedMessages.map { message ->
-            Sender(
-                null,
-                message.name,
-                message.unreadCount
-            )
+            Sender(null, message.name, message.unreadCount)
         }
 
         Assert.assertEquals("Number Of Senders", expectedSenders.count(), response.senders.count())
@@ -282,9 +273,15 @@ class MessagesGetStepDefinitionsBackend {
         }
     }
 
+    private fun setUpHandler(isV1SendersEndpoint: Boolean = false)
+    {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpMultipleMessagesInCache(isV1SendersEndpoint)
+    }
+
     private fun assertReceivedMessages(expectedMessages: ArrayList<SenderFacade>,
                                        responseMessages: Array<MessagesResponse>) {
-
         Assert.assertEquals("Number Of Messages", expectedMessages.count(), responseMessages.count())
         responseMessages.forEach { response ->
             response.messages.forEach { message -> assertNotNull("SentTime", message.sentTime) }

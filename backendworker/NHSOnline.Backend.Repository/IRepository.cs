@@ -6,6 +6,10 @@ namespace NHSOnline.Backend.Repository
 {
     public interface IRepository<TRecord>
     {
+        public Task<RepositoryCountResult> Count(
+            Expression<Func<TRecord, bool>> filter,
+            string recordName);
+
         public Task<RepositoryCreateResult<TRecord>> Create(
             TRecord record,
             string recordName);

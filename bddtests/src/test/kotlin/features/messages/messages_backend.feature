@@ -211,3 +211,23 @@ Feature: Messages Backend
     And I have logged in and have a valid session cookie
     When I try to get a list of message senders from v2 endpoint
     Then I receive a "No Content" success code
+
+  Scenario: An api user can get a unread count of their messages
+    Given I am an api user wishing to get my unread count of messages
+    And I have logged in and have a valid session cookie
+    When I get unread count of my messages from the api
+    Then I receive a "OK" success code
+    And I receive unread count of my messages
+
+  Scenario: An api user getting a unread count of their messages where no messages are stored will receive a 200
+    Given I am an api user wishing to get my unread count of messages, but I have no messages
+    And I have logged in and have a valid session cookie
+    When I get unread count of my messages from the api
+    Then I receive a "OK" success code
+    And I receive unread count of my messages
+
+  Scenario: An api user getting a unread count of their messages without an access token will receive a 401
+    Given I am an api user wishing to get my unread count of messages
+    And I have logged in and have a valid session cookie
+    When I get unread count of my messages from the api without an access token
+    Then I receive an "Unauthorized" error

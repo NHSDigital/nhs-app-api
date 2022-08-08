@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.Repository
         Task<DeleteResult> DeleteOneAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter) where TRecord : RepositoryRecord;
         Task<IAsyncCursor<TRecord>> FindAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter, FindOptions<TRecord> findOptions) where TRecord : RepositoryRecord;
         Task<UpdateResult> UpdateManyAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter, UpdateDefinition<TRecord> updates) where TRecord : RepositoryRecord;
+        Task<long> CountAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter)
+            where TRecord : RepositoryRecord;
 
 
         Task InsertOneDocumentAsync(IRepositoryConfiguration config, BsonDocument record);

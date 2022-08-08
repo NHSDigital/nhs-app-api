@@ -70,6 +70,7 @@ class MessagesFactory {
         MessagesSerenityHelpers.TARGET_SENDER_ID.set(senderOneId)
         MessagesSerenityHelpers.TARGET_MESSAGE.set(messageOne)
         MessagesSerenityHelpers.TARGET_UNREAD_MESSAGE.set(messageTwo)
+        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES_COUNT.set(0)
     }
 
     fun setUpMultipleMessagesInCache(isV1SendersEndpoint: Boolean = false) {
@@ -118,6 +119,8 @@ class MessagesFactory {
                     )
                 )
             )
+
+        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES_COUNT.set(2)
 
         createSendersIfNotExists(
             arrayListOf(

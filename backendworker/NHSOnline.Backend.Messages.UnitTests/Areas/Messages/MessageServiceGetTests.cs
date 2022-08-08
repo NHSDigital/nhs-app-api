@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         private const string NhsNumber = "NhsNumber";
         private const string Sender = "Sender";
         private const string SenderId = "SenderId";
+        private const int UnreadMessageCount = 3;
 
         private IMessageService _systemUnderTest;
         private Mock<IMessagesConfiguration> _mockMessagesConfiguration;
@@ -510,6 +511,69 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             VerifySetups();
 
             result.Should().BeAssignableTo<MessagesResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task GetMessagesMetadata_Found()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(_accessToken.Subject))
+                .ReturnsAsync(new RepositoryCountResult.Found(3));
+
+            var expected = new MessagesMetadataResponse
+            {
+                MessagesMetadata = new MessagesMetadata { UnreadMessageCount = UnreadMessageCount }
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<MessagesMetadataResult.Found>()
+                .Subject.Response.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesMetadata_WhenNoMessages_ReturnsFoundWithZeroUnReadMessagesCount()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(_accessToken.Subject))
+                .ReturnsAsync(new RepositoryCountResult.Found(0));
+
+            var expected = new MessagesMetadataResponse
+            {
+                MessagesMetadata = new MessagesMetadata { UnreadMessageCount = 0 }
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<MessagesMetadataResult.Found>()
+                .Subject.Response.Should().BeEquivalentTo(expected);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesMetadata_RepositoryReturnsError_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(NhsLoginId))
+                .ReturnsAsync(new RepositoryCountResult.RepositoryError());
+
+            // Act
+            var result = await _systemUnderTest.GetMessagesMetadata(_accessToken);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<MessagesMetadataResult.BadGateway>();
         }
 
         [TestMethod]

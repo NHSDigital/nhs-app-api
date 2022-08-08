@@ -5,6 +5,7 @@ import utils.set
 import worker.JsonPatch
 import worker.WorkerClient
 import worker.models.messages.MessageCreateResponse
+import worker.models.messages.MessagesMetadataResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
@@ -42,6 +43,14 @@ class MessagesApi {
                 .messages
                 .getMessage(authToken, messageId)
             MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.set(response)
+            return response
+        }
+
+        fun getMessagesMetadata(authToken: String?): MessagesMetadataResponse? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .messages
+                .getMessagesMetadata(authToken)
+            MessagesSerenityHelpers.GET_MESSAGES_METADATA_RESPONSE.set(response)
             return response
         }
 

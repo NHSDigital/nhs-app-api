@@ -6305,6 +6305,43 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/messages/metadata: 
+      get: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "messages"
+        summary: "Retrieve messages metadata"
+        description: "Retrieves unread messages count pertaining to the authorized user."
+        parameters: 
+          - 
+            in: "header"
+            name: "NHSO-Request-ID"
+            required: false
+            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. Unread messages count is retrieved."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    unreadMessageCount: 
+                      type: "integer"
+                  example: 
+                    unreadMessageCount: 6
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/users/me/messages/{messageId}: 
       get: 
         security: 

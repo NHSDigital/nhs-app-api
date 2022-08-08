@@ -77,6 +77,11 @@ namespace NHSOnline.Backend.Repository
             return await GetCollection<TRecord>(config).UpdateManyAsync(filter, updates);
         }
 
+        public async Task<long> CountAsync<TRecord>(IRepositoryConfiguration config, Expression<Func<TRecord, bool>> filter) where TRecord : RepositoryRecord
+        {
+            return await GetCollection<TRecord>(config).CountDocumentsAsync(filter);
+        }
+
         public async Task InsertOneDocumentAsync(IRepositoryConfiguration config, BsonDocument record)
         {
             await GetCollection<BsonDocument>(config).InsertOneAsync(record);

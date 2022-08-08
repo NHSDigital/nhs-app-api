@@ -6,7 +6,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import org.junit.Assert
 import utils.getOrFail
-import utils.set
 import worker.models.messages.CommsSenderResponse
 
 class CommsSendersGetStepDefinitionsBackend {

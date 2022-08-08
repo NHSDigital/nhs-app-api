@@ -34,6 +34,26 @@ namespace NHSOnline.Backend.Messages.Repository
             _canonicalSenderNameService = canonicalSenderNameService;
         }
 
+        public async Task<RepositoryCountResult> CountUnreadMessages(string nhsLoginId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                new ValidateAndLog(_logger)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
+                    .IsValid();
+
+                return await _repository.Count(x => x.NhsLoginId == nhsLoginId &
+                    !x.ReadTime.HasValue,
+                    RecordName);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<RepositoryCreateResult<UserMessage>> Create(UserMessage userMessage)
         {
             try

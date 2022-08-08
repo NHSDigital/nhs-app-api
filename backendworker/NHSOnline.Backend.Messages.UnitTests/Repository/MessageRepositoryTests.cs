@@ -505,7 +505,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             VerifyAll();
         }
 
-                [TestMethod]
+        [TestMethod]
         public void FindAllForUserV1_WhenNhsLoginIdIsNull_ThrowsException()
         {
             // Act
@@ -557,6 +557,35 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             VerifyAll();
         }
 
+        [TestMethod]
+        public async Task CountUnreadMessages_WhenNhsLoginIdIsNull_ThrowsException()
+        {
+            // Act
+            await FluentActions.Awaiting(() => _systemUnderTest.CountUnreadMessages(null))
+                .Should().ThrowAsync<ArgumentException>();
+
+            // Assert
+            VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task CountUnreadMessages_ReturnsCount()
+        {
+            // Arrange
+            _mockRepository.Setup(x =>
+                    x.Count(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryCountResult.Found(2));
+
+            // Act
+            var result = await _systemUnderTest.CountUnreadMessages("nhsLoginId");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<RepositoryCountResult.Found>()
+                .Subject.Count.Should().Be(2);
+
+            VerifyAll();
+        }
 
         private void VerifyAll()
         {
