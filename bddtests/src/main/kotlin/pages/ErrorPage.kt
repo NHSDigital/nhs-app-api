@@ -9,6 +9,8 @@ open class ErrorPage : HybridPageObject() {
     private val headerLocator = String.format(errorTextFinderFormat, "msg-header")
     private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
+    private val ifYouNeedToBookAnAppointmentTextLocator =
+        String.format(errorTextFinderFormat, "ifYouNeedToBookAnAppointment-text")
     private val backLinkLocator = "//*[@data-purpose='back-button']"
     private val backToPrescriptionsLinkLocator = "//*[@id='prescriptionsLink']"
     private val desktopBackButtonLocator = "//*[@data-purpose='retry-or-back-button']"
@@ -22,6 +24,8 @@ open class ErrorPage : HybridPageObject() {
     val subHeading = findElementByLocator(subHeaderLocator)
 
     val errorText1 = findElementByLocator(messageTextLocator)
+
+    val errorIfYouNeedToBookAnAppointment = findElementByLocator(ifYouNeedToBookAnAppointmentTextLocator)
 
     val button = findElementByLocator(desktopBackButtonLocator)
 
@@ -85,6 +89,11 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertMessageText(messageText: String): ErrorPage {
         assertEquals("Content message incorrect. ", messageText, errorText1.text)
+        return this
+    }
+
+    fun assertIfYouNeedToBookAnAppointmentText(messageText: String): ErrorPage {
+        assertEquals("Content message incorrect. ", messageText, errorIfYouNeedToBookAnAppointment.text)
         return this
     }
 

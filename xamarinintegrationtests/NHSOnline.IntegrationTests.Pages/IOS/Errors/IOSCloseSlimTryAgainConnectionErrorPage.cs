@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Errors
             return page;
         }
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Connection error");
+        private IOSLabel Title => IOSLabel.WithText(_driver, "Cannot connect to the NHS App");
 
         private IOSLink GoTo111Link => IOSLink.WithText(_driver, "Go to 111.nhs.uk");
 

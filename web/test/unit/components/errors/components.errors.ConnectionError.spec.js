@@ -42,13 +42,15 @@ describe('ConnectionError.vue', () => {
 
     it('will show the correct message', () => {
       const paragraphs = wrapper.findAll('p');
-      expect(paragraphs.at(0).text()).toBe('There is a problem with your internet connection');
+      expect(paragraphs.at(0).text()).toBe('Check your connection and try again.');
 
-      const messageElement = paragraphs.at(1);
-      expect(messageElement.text()).toContain('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to');
-      expect(messageElement.text()).toContain('111.nhs.uk');
-      expect(messageElement.text()).toContain('or call 111.');
-      expect(messageElement.attributes()['aria-label']).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.');
+      const messageElement1 = paragraphs.at(1);
+      expect(messageElement1.text()).toContain('If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.');
+
+      const messageElement2 = paragraphs.at(2);
+      expect(messageElement2.text()).toContain('111.nhs.uk');
+      expect(messageElement2.text()).toContain('or call 111.');
+      expect(messageElement2.attributes()['aria-label']).toBe('For urgent medical advice, go to 111.nhs.uk or call one one one.');
     });
 
     it('will not update the header and title when there no longer is a connection error', () => {

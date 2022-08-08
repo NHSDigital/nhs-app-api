@@ -22,6 +22,14 @@
             {{ backToPrescriptionsLinkText }}
           </a>
         </message-text>
+        <message-text v-if="isSystemOrServerError">
+          <a id="systemOrServerErrorBackLink" :href="backLinkUrl"> {{ $t('apiErrors.goBackAndTryAgain') }} </a>
+        </message-text>
+        <message-text v-if="isSystemOrServerError || isGenericServiceDownError"
+                      :is-before-footer="true"
+                      :unindent="isPlainNativeError"
+                      data-purpose="ifYouNeedToBookAnAppointment-text"
+                      v-html="$t('apiErrors.ifYouNeedToBookAnAppointment')"/>
         <message-text :is-before-footer="true"
                       :unindent="isPlainNativeError"
                       :aria-label="messageLabel"
@@ -38,7 +46,7 @@
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :unindent="isPlainNativeError"
                    :class="$style.additionalInformation"/>
-        <message-text v-if="hasSessionReferenceCode">
+        <message-text v-if="hasSessionReferenceCode && !isGenericServiceDownError">
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>
       </message-dialog>
@@ -253,6 +261,13 @@ export default {
     },
     showError() {
       return this.hasApiError && !this.$store.state.errors.hasConnectionProblem;
+    },
+    isSystemOrServerError() {
+      return this.pageHeader === this.getText('apiErrors.pageHeader')
+        && this.statusCode !== 404 && this.statusCode !== 502;
+    },
+    isGenericServiceDownError() {
+      return this.pageHeader === this.getText('apiErrors.502.pageHeader') && this.statusCode === 502;
     },
   },
   updated() {

@@ -6,15 +6,17 @@ import organDonation from './apiErrorsOrganDonation';
 import prescriptions from './apiErrorsPrescriptions';
 
 export default {
-  pageHeader: 'Server error',
-  header: 'We\'re experiencing technical difficulties',
+  pageHeader: 'The service is unavailable',
+  header: 'This might be a temporary problem.',
   reportAProblem: 'Report a problem',
   referenceReference: 'Reference: {reference}',
   tryAgainNow: 'Try again now.',
+  goBackAndTryAgain: 'Go back and try again',
+  ifYouNeedToBookAnAppointment: 'If you need to book an appointment or get a prescription now, use your GP surgery\'s website or call the surgery directly.',
   subheader: '',
   message: {
-    text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
-    label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+    text: 'For urgent medical advice, go to {111link} or call 111.',
+    label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
   },
   404: {
     pageTitle: 'Page not found',
@@ -26,11 +28,14 @@ export default {
     },
   },
   502: {
-    pageTitle: 'Service currently unavailable',
-    pageHeader: 'Service currently unavailable',
-    header: 'This service is not available right now',
+    pageTitle: 'The service is unavailable',
+    pageHeader: 'The service is unavailable',
+    header: 'This might be a temporary problem',
     retryButtonText: 'Try again',
-    message: 'Try again in a few moments.',
+    message: {
+      text: 'For urgent medical advice, go to {111link} or call 111.',
+      label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
+    },
   },
   components: {
     account,

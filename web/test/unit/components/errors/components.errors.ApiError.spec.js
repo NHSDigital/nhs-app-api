@@ -546,7 +546,7 @@ describe('api errors', () => {
 
       it('will return the value if the key exists in the locale file', () => {
         wrapper = mountApiError();
-        expect(wrapper.vm.getText('apiErrors.pageHeader')).toEqual('Server error');
+        expect(wrapper.vm.getText('apiErrors.pageHeader')).toEqual('The service is unavailable');
       });
     });
   });

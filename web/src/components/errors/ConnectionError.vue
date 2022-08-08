@@ -3,15 +3,14 @@
        :class="[!isNativeApp && $style.desktopWeb, 'pull-content']">
     <message-dialog message-type="error">
       <message-text>
-        {{ $t('generic.errors.thereIsAProblemWithYourInternetConnection') }}</message-text>
+        {{ $t('generic.errors.checkYourConnection') }}</message-text>
+      <message-text>{{ $t('generic.errors.ifTheProblemContinues') }}</message-text>
       <message-text
-        :aria-label="$t('generic.errors.checkYourConnectionAndTryAgainOneOneOne')">
-        {{ $t('generic.errors.checkYourConnectionAndTryAgain111') }}
-        <a :href="oneOneOneUrl" target="_blank" rel="noopener noreferrer"
-           style="display:inline">
-          {{ $t('generic.nhs111Link') }}
-        </a>
-        {{ $t('generic.orCall') }}
+        :aria-label="$t('generic.errors.urgentMedicalAdvice.label')">
+        {{ $t('generic.errors.urgentMedicalAdvice.forUrgentMedicalAdvice') }}
+        <a :href="oneOneOneUrl" target="_blank" rel="noopener noreferrer" style="display:inline">
+          {{ $t('generic.errors.urgentMedicalAdvice.nhs111Link') }}</a>
+        {{ $t('generic.errors.urgentMedicalAdvice.orCall111') }}
       </message-text>
     </message-dialog>
     <generic-button :class="['nhsuk-button']"
