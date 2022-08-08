@@ -6,7 +6,7 @@ BEGIN
 
     -- On CONFLICT ON Constraint is done so that ReadEvents aren't recorded for Messages Sent which do not exist
     -- in the CommsHubMessagesSent table
-    INSERT INTO compute."CommsHub" ("MessageId","LoginId","SendDate","MessageSendTimestamp","Type","Status","Supplier","CampaignRef","RequestId")
+    INSERT INTO compute."CommsHub" ("MessageId","LoginId","SendDate","MessageSendTimestamp","Type","Status","Supplier","CampaignRef","RequestId","ReceivedTimestamp")
     SELECT
         chms."MessageId"::text
          ,chms."LoginId"::text
@@ -17,6 +17,7 @@ BEGIN
          ,COALESCE(chs."Supplier",'Not Mapped') as "Supplier"
          ,COALESCE(chr."CampaignRef",'None') as "CampaignRef"
          ,chms."RequestId"
+		 ,chr."ReceivedTimestamp"
     FROM events."CommsHubMessagesSent"  chms
              LEFT JOIN events."CommsHubRequests" chr
                        ON chms."RequestId"::text = chr."RequestId"::text
@@ -120,24 +121,108 @@ BEGIN
                       ELSE "CommsHub"."LoggedIn"
                     END);
 
-	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","SendDate","MessageSendTimestamp","InAppStatus","Supplier","CampaignRef","MessageReadTimestamp","InAppUserFirstLoginTimestamp")
+    INSERT INTO compute."CommsHub" ("MessageId","NotificationOutcomeStatus","EndDateTime")
+    SELECT
+        "MessageId",
+        "Status",
+        "EndTime"
+    FROM events."NotificationOutcomeMetric"
+    WHERE ("Timestamp" >= startDate) AND ("Timestamp" < endDate) 
+    ON CONFLICT("MessageId") DO UPDATE
+        SETa
+            "NotificationOutcomeStatus" =
+                ( CASE
+                      WHEN ( "CommsHub"."NotificationOutcomeStatus" IS NULL)
+                          THEN Excluded."NotificationOutcomeStatus"
+                      ELSE "CommsHub"."NotificationOutcomeStatus"
+                    END),
+            "EndDateTime" =
+                ( CASE
+                      WHEN ( "CommsHub"."EndDateTime" IS NULL)
+                          THEN Excluded."EndDateTime"
+                      ELSE "CommsHub"."EndDateTime"
+                    END);
+
+    INSERT INTO compute."CommsHub" ("MessageId","Links","DistinctLinks","AnyLink","FirstLinkClickedTimestamp")
+	SELECT 
+        "MessageId"
+        ,count("Link") as "Links"
+        ,count(distinct "Link") as "DistinctLinks"
+        ,1 as "AnyLink"
+        ,min("ClickedTimestamp") as "FirstLinkClickedTimestamp"
+	FROM events."CommsHubMessagesLinkClicked"
+    WHERE ("Timestamp" >= startDate) AND ("Timestamp" < endDate) 
+	GROUP BY 1
+    ON CONFLICT("MessageId") DO UPDATE
+        SET
+            "AnyLink" =
+                ( CASE
+                      WHEN ( "CommsHub"."AnyLink" IS NULL)
+                          THEN Excluded."AnyLink"
+                      ELSE "CommsHub"."AnyLink"
+                    END),
+            "Links" =
+                ( CASE
+                      WHEN ( "CommsHub"."Links" IS NULL)
+                          THEN Excluded."Links"
+                      ELSE "CommsHub"."Links"
+                    END),
+            "DistinctLinks" =
+                ( CASE
+                      WHEN ( "CommsHub"."DistinctLinks" IS NULL)
+                          THEN Excluded."DistinctLinks"
+                      ELSE "CommsHub"."DistinctLinks"
+                    END),
+            "FirstLinkClickedTimestamp" =
+                ( CASE
+                      WHEN ( "CommsHub"."FirstLinkClickedTimestamp" IS NULL)
+                          THEN Excluded."FirstLinkClickedTimestamp"
+                      ELSE "CommsHub"."FirstLinkClickedTimestamp"
+                    END);
+
+	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","SendDate","InAppStatus","Supplier","CampaignRef","Links","DistinctLinks","AnyLink","FirstLinkClickedTimestamp","MessageSendTimestamp","MessageReadTimestamp","InAppUserFirstLoginTimestamp")
 	SELECT
-        "LoginId",
-        "RequestId",
+        ch1."LoginId",
+        ch1."RequestId",
         "SendDate",
-        "MessageSendTimestamp",
         "Status",
         "Supplier",
         "CampaignRef",
+        "Links",
+        "DistinctLinks",
+        "AnyLink",
+        "FirstLinkClickedTimestamp",
+        ch1."MessageSendTimestamp",
         "MessageReadTimestamp",
         "UserFirstLoginTimestamp"
-	FROM
-        compute."CommsHub"
-	WHERE "Type" = 'In-App'
-	AND "SendDate" >= '2021-01-01'
+	FROM compute."CommsHub" ch1
+		JOIN (SELECT 
+			  "LoginId"
+			  ,"RequestId"
+			  ,max("MessageSendTimestamp") as "MessageSendTimestamp"
+			  FROM compute."CommsHub" 
+			  WHERE 
+			  "Type" = 'In-App'
+			  AND "SendDate" >= '2022-02-06'
+			  AND
+			  (
+					(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+					OR
+					(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
+					OR
+					(("UserFirstLoginTimestamp" >= startDate) AND ("UserFirstLoginTimestamp" < endDate))		
+			  )
+			  GROUP BY 1,2
+			 ) ch2
+			 ON ch1."LoginId" = ch2."LoginId"
+			 AND ch1."RequestId" = ch2."RequestId"
+			 AND ch1."MessageSendTimestamp"=ch2."MessageSendTimestamp"
+	WHERE 
+	"Type" = 'In-App'
+	AND "SendDate" >= '2022-02-06'
 	AND
 	(
-		(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+		((ch1."MessageSendTimestamp" >= startDate) AND (ch1."MessageSendTimestamp" < endDate))
 		OR
 		(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
 		OR
@@ -186,26 +271,67 @@ BEGIN
                       WHEN ( "CommsHubPivot"."InAppUserFirstLoginTimestamp" IS NULL)
                           THEN Excluded."InAppUserFirstLoginTimestamp"
                       ELSE "CommsHubPivot"."InAppUserFirstLoginTimestamp"
+                    END),
+            "Links" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."Links" IS NULL)
+                          THEN Excluded."Links"
+                      ELSE "CommsHubPivot"."Links"
+                    END),
+            "DistinctLinks" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."DistinctLinks" IS NULL)
+                          THEN Excluded."DistinctLinks"
+                      ELSE "CommsHubPivot"."DistinctLinks"
+                    END),
+			"FirstLinkClickedTimestamp" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."FirstLinkClickedTimestamp" IS NULL)
+                          THEN Excluded."FirstLinkClickedTimestamp"
+                      ELSE "CommsHubPivot"."FirstLinkClickedTimestamp"
                     END);
 
-	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","PushStatus","PushUserFirstLoginTimestamp","SendDate","MessageSendTimestamp","Supplier","CampaignRef")
+	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","PushStatus","NotificationOutcomeStatus","SendDate","Supplier","CampaignRef","MessageSendTimestamp","PushUserFirstLoginTimestamp","EndDateTime","ReceivedTimestamp")
 	SELECT
-	"LoginId",
-	"RequestId",
-	"Status",
-	"UserFirstLoginTimestamp",
-	"SendDate",
-	"MessageSendTimestamp",
-	"Supplier",
-	"CampaignRef"
-	FROM
-        compute."CommsHub"
-	WHERE
+        ch1."LoginId",
+        ch1."RequestId",
+        "Status",
+        "NotificationOutcomeStatus",
+        "SendDate",
+        "Supplier",
+        "CampaignRef",
+        ch1."MessageSendTimestamp",
+        "UserFirstLoginTimestamp",
+        "EndDateTime",
+        "ReceivedTimestamp"
+	FROM compute."CommsHub" ch1
+		JOIN (SELECT 
+			  "LoginId"
+			  ,"RequestId"
+			  ,max("MessageSendTimestamp") as "MessageSendTimestamp"
+			  FROM compute."CommsHub" 
+			  WHERE 
+			  "Type" = 'Push'
+			  AND "SendDate" >= '2022-02-06'
+			  AND
+			  (
+					(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+					OR
+					(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
+					OR
+					(("UserFirstLoginTimestamp" >= startDate) AND ("UserFirstLoginTimestamp" < endDate))		
+			  )
+			  GROUP BY 1,2
+			 ) ch2
+			 ON ch1."LoginId" = ch2."LoginId"
+			 AND ch1."RequestId" = ch2."RequestId"
+			 AND ch1."MessageSendTimestamp"=ch2."MessageSendTimestamp"
+	WHERE 
 	"Type" = 'Push'
-	AND "SendDate" >= '2021-01-01'
+	AND "SendDate" >= '2022-02-06'
 	AND
 	(
-		(("MessageSendTimestamp" >= startDate) AND ("MessageSendTimestamp" < endDate))
+		((ch1."MessageSendTimestamp" >= startDate) AND (ch1."MessageSendTimestamp" < endDate))
 		OR
 		(("MessageReadTimestamp" >= startDate) AND ("MessageReadTimestamp" < endDate))
 		OR
@@ -237,7 +363,7 @@ BEGIN
                       ELSE "CommsHubPivot"."MessageSendTimestamp"
                     END),
 			"Supplier" =
-                ( CASE
+                ( CASE                     
                       WHEN ( "CommsHubPivot"."Supplier" IS NULL OR "CommsHubPivot"."Supplier" = 'Not Mapped')
                           THEN COALESCE(Excluded."Supplier",' Not Mapped')
                       ELSE COALESCE("CommsHubPivot"."Supplier", 'Not Mapped')
@@ -247,6 +373,24 @@ BEGIN
                       WHEN ( "CommsHubPivot"."CampaignRef" IS NULL)
                           THEN Excluded."CampaignRef"
                       ELSE "CommsHubPivot"."CampaignRef"
+                    END),
+			"NotificationOutcomeStatus" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."NotificationOutcomeStatus" IS NULL)
+                          THEN Excluded."NotificationOutcomeStatus"
+                      ELSE "CommsHubPivot"."NotificationOutcomeStatus"
+                    END),
+			"EndDateTime" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."EndDateTime" IS NULL)
+                          THEN Excluded."EndDateTime"
+                      ELSE "CommsHubPivot"."EndDateTime"
+                    END),
+			"ReceivedTimestamp" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."ReceivedTimestamp" IS NULL)
+                          THEN Excluded."ReceivedTimestamp"
+                      ELSE "CommsHubPivot"."ReceivedTimestamp"
                     END);
 
 END;
