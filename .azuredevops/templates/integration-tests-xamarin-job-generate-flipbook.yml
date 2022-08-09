@@ -38,11 +38,20 @@ jobs:
 
       - task: Bash@3
         displayName: 'Upload flipbook PDF to Slack'
+        env:
+          IS_MANUAL_RUN: $(native.xamarin.runFlipbookTests)
         inputs:
           targetType: 'inline'
           workingDirectory: xamarinintegrationtests/flipbookgeneration/flipbook
           script: |
-            tag=$(git describe --abbrev=0 --tags)
             filename=$(native.xamarin.flipbookPdfName).pdf
-            substitutedFilename=Flipbook_${tag}.pdf
-            curl -F file=@${filename} -F "initial_comment=${tag}" -F "title=${substitutedFilename}" -F "filename=${substitutedFilename}" -F channels=$(SLACK_GENERATE_FLIPBOOK_CHANNEL) -H "Authorization: Bearer $(SLACK_API_TOKEN)" https://slack.com/api/files.upload
+            if [ "$IS_MANUAL_RUN" == "True" ]; then
+              substitutedFilename=${filename}
+              initialComment="Flipbook manually generated from $(Build.SourceBranchName)"
+            else
+              tag=$(git describe --abbrev=0 --tags)
+              substitutedFilename=Flipbook_${tag}.pdf
+              initialComment=${tag}
+            fi
+
+            curl -F file=@${filename} -F "initial_comment=${initialComment}" -F "title=${substitutedFilename}" -F "filename=${substitutedFilename}" -F channels=$(SLACK_GENERATE_FLIPBOOK_CHANNEL) -H "Authorization: Bearer $(SLACK_API_TOKEN)" https://slack.com/api/files.upload
