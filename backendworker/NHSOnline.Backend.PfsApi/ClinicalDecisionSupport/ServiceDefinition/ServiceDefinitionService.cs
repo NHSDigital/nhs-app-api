@@ -97,17 +97,16 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         {
             _logger.LogEnter();
 
-            var provider = _olcProvidersSettings.Providers
-                .FirstOrDefault(a => a.Provider.Equals(providerKey, StringComparison.Ordinal));
+            var providerName = GetProviderNameFor(providerKey);
 
-            if (provider is null)
+            if (providerName is null)
             {
                 return new ServiceDefinitionResult.NotFound();
             }
 
             _logger.LogExit();
 
-            return new ServiceDefinitionResult.Success(provider.ProviderName);
+            return new ServiceDefinitionResult.Success(providerName);
         }
 
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(
@@ -214,6 +213,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 return await _querySender.SendIsValidQueryAndHandleResponse(
                     providerKey,
+                    GetProviderNameFor(providerKey),
+                    userSession,
                     _serializer.SerializeToString(parameters));
             }
             finally
@@ -225,5 +226,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private string GetNhsLoginId(P5UserSession userSession)
             => AccessToken.Parse(_logger, userSession.CitizenIdUserSession.AccessToken).Subject;
 
+        public string GetProviderNameFor(string providerKey)
+        {
+            var provider = _olcProvidersSettings.Providers
+                .FirstOrDefault(a => a.Provider.Equals(providerKey, StringComparison.Ordinal));
+
+            return provider?.ProviderName;
+        }
     }
 }

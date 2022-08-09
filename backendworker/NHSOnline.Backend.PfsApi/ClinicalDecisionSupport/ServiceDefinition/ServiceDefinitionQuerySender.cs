@@ -12,8 +12,10 @@ using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
 using NHSOnline.Backend.Support.Sanitization;
+using NHSOnline.Backend.Support.Session;
 using STU3Models = stu3::Hl7.Fhir.Model;
 using STU3Serialization = stu3::Hl7.Fhir.Serialization;
 
@@ -58,6 +60,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
         public async Task<ServiceDefinitionIsValidResult> SendIsValidQueryAndHandleResponse(
             string providerKey,
+            string providerName,
+            P9UserSession userSession,
             string requestBody)
         {
             HttpResponseMessage responseMessage;
@@ -108,6 +112,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 if (isValid.Value)
                 {
+                    await RaiseAuditLog(providerKey, providerName, userSession);
+
                     return new ServiceDefinitionIsValidResult.Valid();
                 }
                 return new ServiceDefinitionIsValidResult.Invalid();
@@ -256,6 +262,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
+        }
+
+        private async Task RaiseAuditLog(string providerKey, string providerName, P9UserSession userSession)
+        {
+            await _auditor.PreOperationAuditGoldIntegrationEvent(
+                userSession.CitizenIdUserSession.AccessToken,
+                userSession.NhsNumber,
+                AuditingOperations.GoldIntegrationJumpOffClick,
+                "The user has jumped off to an integration partner",
+                providerKey,
+                providerName,
+                "onlineConsultation");
         }
     }
 }

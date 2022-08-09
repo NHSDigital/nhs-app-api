@@ -89,6 +89,7 @@ namespace NHSOnline.Backend.Auditing
         public const string SecondaryCareGetSummaryResult = "SecondaryCare_GetSummaryResult";
         public const string NotificationToggleResponse = "NotificationToggle_Response";
         public const string InitialNotificationPromptDecision = "InitialNotificationPrompt_Decision";
+        public const string GoldIntegrationJumpOffClick = "GoldIntegration_JumpOff_Click";
         public const string SilverIntegrationJumpOffClick = "SilverIntegration_JumpOff_Click";
         public const string BiometricsOptInDecision = "BiometricsRegistration_Decision";
         public const string LoginDevice = "Login_Device";

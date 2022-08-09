@@ -174,6 +174,24 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 }
             }
 
+            public async Task AuditGoldIntegrationEvent(
+            string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string providerId,
+            string providerName,
+            string jumpOffId)
+            {
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.PreOperationAuditGoldIntegrationEvent(accessToken, nhsNumber, operation, details,
+                        providerId, providerName, jumpOffId);
+                }
+            }
+
             public async Task AuditSilverIntegrationEvent(
             string accessToken,
             string nhsNumber,
@@ -523,6 +541,34 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "Test Audit",
                 "SomeDetails '{0} {1}'",
                 "with", "parameters");
+        }
+
+        [TestMethod]
+        public async Task AuditGoldIntegrationEvent_HappyPath()
+        {
+            await _systemUnderTest.AuditGoldIntegrationEvent(
+                AccessToken,
+                _nhsNumber1,
+                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().Contain("Test ProviderId");
+            testString.Should().Contain("Test ProviderName");
+            testString.Should().Contain("Test JumpOffId");
+        }
+
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditGoldIntegrationEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
+        {
+            await _systemUnderTest.AuditGoldIntegrationEvent(
+               AccessToken,
+               nhsNumber,
+               "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
         }
 
         [TestMethod]

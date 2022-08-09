@@ -63,6 +63,19 @@ namespace NHSOnline.Backend.Auditing
                 referrer, integrationReferrer, parameters);
         }
 
+        public async Task PreOperationAuditGoldIntegrationEvent(string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string providerId,
+            string providerName,
+            string jumpOffId,
+            params object[] parameters)
+        {
+            await AuditGoldIntegrationEvent(AuditType.PreOperationAudit, accessToken, nhsNumber, operation, details,
+                providerId, providerName, jumpOffId, parameters);
+        }
+
         public async Task PostOperationAuditSilverIntegrationEvent(string accessToken,
             string nhsNumber,
             string operation,
@@ -130,6 +143,23 @@ namespace NHSOnline.Backend.Auditing
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
             await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer,
                 integrationReferrer, null, null, null, parameters);
+        }
+
+        private async Task AuditGoldIntegrationEvent(
+            AuditType auditType,
+            string accessToken,
+            string nhsNumber,
+            string operation,
+            string details,
+            string providerId,
+            string providerName,
+            string jumpOffId,
+            params object[] parameters)
+        {
+            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            await AuditInternal(
+                auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details, null,
+                null, providerId, providerName, jumpOffId, parameters);
         }
 
         private async Task AuditSilverIntegrationEvent(
