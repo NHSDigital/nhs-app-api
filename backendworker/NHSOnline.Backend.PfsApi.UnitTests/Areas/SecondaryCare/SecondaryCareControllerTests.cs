@@ -65,8 +65,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             //Assert
             summaryResponse.Should().NotBeNull();
 
-            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
-            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,"Secondary Care Summary successfully retrieved. Total Referrals: 8, Total Upcoming Appointments: 34"));
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,
+                "Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,
+                "Secondary Care Summary successfully retrieved. Total Referrals: 8, Total Upcoming Appointments: 37"));
 
             VerifyNoOtherLoggerCalls();
 
@@ -79,14 +81,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .Should()
                 .Be(2);
 
-            // Check sorting: ConfirmedAppointments - check first cancelled Appointment comes after booked
+            // Check sorting: ConfirmedAppointments - check first cancelled Appointment comes after booked/pending
             summaryResponse?.ConfirmedAppointments
                 .Select((value, index) => new { value, index })
                 .Where(pair => pair.value.IsCancelled)
                 .Select(pair => pair.index)
                 .FirstOrDefault()
                 .Should()
-                .Be(16);
+                .Be(19);
 
             // Check sorting: ReferralsInReviewNotOverdue - earliest first
             summaryResponse?.ReferralsInReviewNotOverdue[0]

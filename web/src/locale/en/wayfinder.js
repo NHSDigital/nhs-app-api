@@ -18,16 +18,22 @@ export default {
       title: 'Booked appointment',
       viewOrManageAppointment: 'View or manage this appointment',
     },
+    cancelled: {
+      title: 'Cancelled appointment',
+      anAppointmentHasBeenCancelled: 'This appointment has been permanently cancelled. You do not need to do anything.',
+      viewThisAppointment: 'View this appointment',
+    },
+    pendingChange: {
+      title: 'Request to change or cancel appointment',
+      tagText: 'Pending',
+      requestToChangeOrCancel: 'Your request to change or permanently cancel this appointment is being reviewed. You do not need to do anything. If the request is not accepted, this appointment will still show as booked.',
+      viewThisAppointment: 'View this appointment',
+    },
     readyToConfirm: {
       title: 'Ready to confirm appointment',
       tagText: 'Action',
       anAppointmentHasBeenBooked: 'An appointment has been booked for you. You need to contact the clinic to confirm you are able to attend it.',
       contactTheClinicToConfirm: 'Contact the clinic to confirm',
-    },
-    cancelled: {
-      title: 'Cancelled appointment',
-      anAppointmentHasBeenCancelled: 'This appointment has been permanently cancelled. You do not need to do anything.',
-      viewThisAppointment: 'View this appointment',
     },
   },
   noAppointments: {

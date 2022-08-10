@@ -18,6 +18,7 @@
 <script>
 import AppointmentBookedCard from '@/components/wayfinder/appointments/AppointmentBookedCard';
 import AppointmentCancelledCard from '@/components/wayfinder/appointments/AppointmentCancelledCard';
+import AppointmentPendingChangeCard from '@/components/wayfinder/appointments/AppointmentPendingChangeCard';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import { isNonEmptyArray } from '@/lib/utils';
@@ -27,6 +28,7 @@ export default {
   components: {
     AppointmentBookedCard,
     AppointmentCancelledCard,
+    AppointmentPendingChangeCard,
     CardGroup,
     CardGroupItem,
   },
@@ -44,7 +46,11 @@ export default {
         return AppointmentBookedCard;
       }
 
-      return AppointmentCancelledCard;
+      if (appointment.appointmentStatus === 'cancelled') {
+        return AppointmentCancelledCard;
+      }
+
+      return AppointmentPendingChangeCard;
     },
   },
 };

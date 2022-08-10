@@ -1973,6 +1973,90 @@
                 ]
               }
             }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "DrDoctor"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "https://my-uat2.drdoctor.co.uk/appointments/083264822168?from=nhsApp"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "bookedPendingCancellation"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2030-08-31T10:47:25+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "DrDoctor"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "https://my-uat2.drdoctor.co.uk/appointments/228893854244?from=nhsApp"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelledPendingReschedule"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2030-08-21T10:47:25+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
+          },
+          {
+            "detail": {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "DrDoctor"
+                    }
+                  ],
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "https://my-uat2.drdoctor.co.uk/appointments/560944648356?from=nhsApp"
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "bookedPendingReschedule"
+                  }
+                }
+              ],
+              "kind": "Appointment",
+              "scheduledPeriod": {
+                "start": "2030-08-10T10:47:25+00:00"
+              },
+              "description": "The Royal Victoria Hospital, Belfast, BT1"
+            }
           }
         ]
       },

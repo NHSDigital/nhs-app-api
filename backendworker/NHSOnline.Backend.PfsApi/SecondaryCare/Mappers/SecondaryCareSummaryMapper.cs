@@ -239,9 +239,14 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                 return null;
             }
 
-            return string.Equals(status, AppointmentStatus.Cancelled.GetLiteral(), StringComparison.Ordinal)
-                ? status
-                : AppointmentStatus.Booked.GetLiteral();
+            if (!string.Equals(status, AppointmentStatus.Booked.GetLiteral(), StringComparison.Ordinal) &&
+                !string.Equals(status, AppointmentStatus.Cancelled.GetLiteral(), StringComparison.Ordinal))
+            {
+                // Convert all pending change/cancel statuses to one value as they are handled the same
+                status = AppointmentStatus.Pending.GetLiteral();
+            }
+
+            return status;
         }
 
         private string MapUpcomingAppointmentLocation(CarePlan.ActivityComponent activity)
