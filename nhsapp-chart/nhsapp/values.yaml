@@ -356,7 +356,7 @@ api:
 messages:
   mongoDatabaseMessagesCollection: messages
   cosmosSqlDatabaseSendersCollection: senders
-  senderIdEnabled: false
+  senderIdEnabled: true
   senderIdNhsApp: NHSAPP
   supplierIdNhsApp: 278d3b75-3498-4d68-8991-506d0006e46f
   

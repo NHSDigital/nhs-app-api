@@ -50,4 +50,4 @@ api:
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
 
 messages:
-  senderIdEnabled: false
+  senderIdEnabled: true
