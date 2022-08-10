@@ -49,11 +49,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 {
                     try
                     {
-                        var totalCourses = coursesResponse.Body.EligibleRepeats.Repeats.Count;
+                        var totalCoursesCount = coursesResponse.Body.EligibleRepeats.Repeats.Count;
 
                         coursesResponse.Body.EligibleRepeats.Repeats =
                             coursesResponse.Body.EligibleRepeats.Repeats.Where(x => !x.Expired)
                             .OrderBy(x => x.Drug).ToList();
+
+                        var eligibleCoursesCount = coursesResponse.Body.EligibleRepeats.Repeats.Count;
 
                         if (_settings.CoursesMaxCoursesLimit.HasValue)
                         {
@@ -63,12 +65,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                         }
 
                         var numberOfCoursesAfterFiltering = coursesResponse.Body.EligibleRepeats.Repeats.Count;
-                        var numberOfCoursesDiscarded = totalCourses - numberOfCoursesAfterFiltering;
+                        var numberOfCoursesDiscarded = eligibleCoursesCount - numberOfCoursesAfterFiltering;
 
                         var coursesCount = new FilteringCounts
                         {
-                            ReceivedCount = totalCourses,
-                            ReceivedRepeatsCount = totalCourses,
+                            ReceivedCount = totalCoursesCount,
+                            ReceivedRepeatsCount = eligibleCoursesCount,
                             ExcessRepeatsCount = numberOfCoursesDiscarded,
                             ReturnedCount = numberOfCoursesAfterFiltering
                         };

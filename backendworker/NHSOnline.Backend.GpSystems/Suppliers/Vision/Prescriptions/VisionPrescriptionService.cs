@@ -157,7 +157,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                     return new OrderPrescriptionResult.BadGateway();
                 }
 
-                _logger.LogDebug("Vision prescription order placed successfully");
+                _logger.LogInformation($"Prescription ordered successfully. { postRequest.Repeats.Count } ordered.");
                 return new OrderPrescriptionResult.Success();
             }
             catch (HttpRequestException e)

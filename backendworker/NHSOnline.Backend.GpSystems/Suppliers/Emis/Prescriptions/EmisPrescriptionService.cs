@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 if (response.HasSuccessResponse)
                 {
                     _logger.LogSpecialRequestInformation(postRequest.RequestComment);
-                    _logger.LogDebug($"Prescription order placed successfully. {repeatPrescriptionRequest.CourseIds.Count()} ordered.");
+                    _logger.LogInformation($"Prescription ordered successfully. {prescriptionsAttemptingToOrderCount} ordered.");
                     return new OrderPrescriptionResult.Success();
                 }
 

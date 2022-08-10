@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 }
                 
                 _logger.LogSpecialRequestInformation(repeatPrescriptionRequest.SpecialRequest);
-                _logger.LogDebug($"Prescription order placed successfully");
+                _logger.LogInformation($"Prescription ordered successfully. {repeatPrescriptionRequest.CourseIds.Count()} ordered.");
                 return new OrderPrescriptionResult.Success();
 
             }
