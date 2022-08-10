@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showTemplate">
     <div class="nhsuk-u-margin-bottom-4">
       <menu-item-list>
         <menu-item id="acute-medicines"
