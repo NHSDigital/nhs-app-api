@@ -37,13 +37,13 @@ namespace NHSOnline.HttpMocks.Controllers.SecondaryCare
                 return BadRequest("No NHS Number provided");
             }
 
-            if (string.Equals("9392013752", nhsNumber, StringComparison.Ordinal))
+            if (string.Equals("2092013752", nhsNumber, StringComparison.Ordinal))
             {
                 throw new NotImplementedException("Deliberately thrown.");
             }
 
             var errors = GetOperationOutcomeErrorsFromNhsNumber(nhsNumber);
-            if (string.Equals("9290220899", nhsNumber, StringComparison.Ordinal))
+            if (string.Equals("2090220899", nhsNumber, StringComparison.Ordinal))
             {
                 // NHS Number 929 022 0899 (user 13) results results in 403 forbidden due to < 16 years old.
                 Response.StatusCode = StatusCodes.Status403Forbidden;

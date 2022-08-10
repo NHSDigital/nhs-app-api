@@ -28,7 +28,7 @@ class PatientOverviewFactoryTpp {
 
     private fun generateMedicationsList(count:Int, date:String): MutableList<ViewPatientOverviewItem>{
         val medicationList = mutableListOf<ViewPatientOverviewItem>()
-        val medicineName = arrayListOf("Penecillin","Ventolin","Salbutamol","Calpol","Amoxycillin","Ibuprofen")
+        val medicineName = arrayListOf("Penicillin","Ventolin","Salbutamol","Calpol","Amoxycillin","Ibuprofen")
         for (i in 1..count){
             medicationList.add(ViewPatientOverviewItem(
                     date = date,

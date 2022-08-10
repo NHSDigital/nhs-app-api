@@ -13,7 +13,7 @@ source "buildscripts/lib/functions.sh"
 DOCKER_ARGS=()
 DOCKER_ARGS+=(--name "int_test_test_runner")
 DOCKER_ARGS+=(--network "${DOCKER_NETWORK}")
-DOCKER_ARGS+=(--env "Chrome__Arguments__headless=true")
+DOCKER_ARGS+=(--env "Chrome__Arguments__headless=true" --env "NOMINATED_PHARMACY_ENABLED=true")
 DOCKER_ARGS+=(-v "//var/run/docker.sock:/var/run/docker.sock")
 
 set_int_test_config_from_environment

@@ -43,12 +43,12 @@ class MedicationsFactoryTpp: MedicationsFactory() {
                         ViewPatientOverviewItem
                         (
                                 date = tenMonthsAgo,
-                                value = "Penecillin"
+                                value = "Penicillin"
                         ),
                         ViewPatientOverviewItem
                         (
                                 date = twentyMonthsAgo,
-                                value = "Penecillin"
+                                value = "Penicillin"
                         )
                 ),
                 currentRepeats = mutableListOf

@@ -10,5 +10,7 @@ namespace NHSOnline.IntegrationTests.UI
         public string? FlipbookTestName { get; set; }
 
         public string? ParentJourney { get; set; }
+
+        public string? JourneyId { get; set; }
     }
 }

@@ -360,7 +360,7 @@ messages:
   senderIdEnabled: true
   senderIdNhsApp: Y0E3J
   supplierIdNhsApp: 278d3b75-3498-4d68-8991-506d0006e46f
-  
+
 cid:
   containerPort: 8080
   clientAuth: true

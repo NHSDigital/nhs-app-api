@@ -36,6 +36,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => _interactor.ActOnElement(CheckboxFindBy, action);
 
         private By CheckboxFindBy
-            => _by.Input;
+            => _by.Input(1);
     }
 }

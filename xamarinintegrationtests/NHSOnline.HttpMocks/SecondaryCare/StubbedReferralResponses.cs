@@ -9,9 +9,9 @@ namespace NHSOnline.HttpMocks.SecondaryCare
         public static Dictionary<string, IList<CarePlan.ActivityComponent>> ReferralMapping { get; } =
             new()
             {
-                {"9414105131", new List<CarePlan.ActivityComponent>()},
+                {"2014105131", new List<CarePlan.ActivityComponent>()},
                 {
-                    "9414105132", new List<CarePlan.ActivityComponent>()
+                    "2014105132", new List<CarePlan.ActivityComponent>()
                     {
                         ReferralInReviewDue(),
                         ReferralBookable(),

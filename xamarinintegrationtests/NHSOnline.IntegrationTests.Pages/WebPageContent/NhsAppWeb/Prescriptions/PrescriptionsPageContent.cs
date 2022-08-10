@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
@@ -40,6 +41,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             "p",
             "View your current and past medicines or add a record of your own");
 
+        private WebMenuItem YourNominatedPharmacyItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Your nominated pharmacy",
+            "Pharmacy");
+
+        private WebMenuItem NominateANewPharmacyItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Nominate a pharmacy");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public PrescriptionsPageContent AssertPageElements()
@@ -58,6 +68,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             return this;
         }
 
+        public PrescriptionsPageContent AssertNominateANewPharmacy()
+        {
+            // API call required to load this link
+            using var timeout = ExtendedTimeout.FromSeconds(10);
+
+            NominateANewPharmacyItem.AssertVisible();
+            return this;
+        }
+
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             OrderARepeatPrescriptionButton,
@@ -68,6 +87,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         public void NavigateToOrderARepeatPrescription() => OrderARepeatPrescriptionButton.Click();
 
         public void NavigateToHospitalAndOtherPrescriptions() => PkbHospitalAndOtherPrescriptionsMenuItem.Click();
+
+        public void NavigateToNominatedPharmacy() => YourNominatedPharmacyItem.Click();
+
+        public void NavigateToNominateANewPharmacy() => NominateANewPharmacyItem.Click();
 
         public void KeyboardNavigateToOrderARepeatPrescription(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(OrderARepeatPrescriptionButton, navigation);

@@ -2,3 +2,9 @@
 
 # CA2227:Collection properties should be read only, Justification = these classes are DTOs, not needed
 dotnet_diagnostic.CA2227.severity = suggestion
+
+# CA1002: Use Collection not List, Justification = these classes are DTOs, not needed
+dotnet_diagnostic.CA1002.severity = suggestion
+
+# CA1056: Property names 'Url' change to Uri type, Justification = need to match the DTO in Backend
+dotnet_diagnostic.CA1056.severity = suggestion

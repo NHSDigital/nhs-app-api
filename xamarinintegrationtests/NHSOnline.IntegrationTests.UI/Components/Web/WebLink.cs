@@ -34,8 +34,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A link with text {0} should not be displayed", _text);
 
-        public void Click()
-            => ActOnElement(e => e.Click());
+        public void Click(bool findByContains = false)
+            => ActOnElement(e => e.Click(), findByContains);
 
         private void ActOnElement(Action<IWebElement> action, bool findByContains = false)
         {

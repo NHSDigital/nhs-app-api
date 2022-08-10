@@ -20,11 +20,12 @@ namespace NHSOnline.HttpMocks.Domain
         {
             public StringNHSNumber(string stringValue)
             {
+                IntValue = int.Parse(stringValue, CultureInfo.InvariantCulture);
                 StringValue = stringValue.FormatWith(CultureInfo.InvariantCulture);
                 FormattedStringValue = stringValue.FormatWith("000 000 0000", CultureInfo.InvariantCulture);
             }
 
-            public override int IntValue => 0;
+            public override int IntValue { get; }
             public override string StringValue { get; }
             public override string FormattedStringValue { get; }
         }

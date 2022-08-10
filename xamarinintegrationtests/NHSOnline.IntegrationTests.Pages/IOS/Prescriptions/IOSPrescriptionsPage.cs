@@ -1,4 +1,5 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescriptions;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
@@ -18,6 +19,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
         public static IOSPrescriptionsPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSPrescriptionsPage(driver);
+
+            // API calls required to load this page
+            using var timeout = ExtendedTimeout.FromSeconds(20);
             page.PageContent.AssertOnPage();
 
             if (screenshot)

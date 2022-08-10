@@ -18,13 +18,15 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public static WebInputText WithLabel(IWebInteractor interactor, string label)
             => new WebInputText(interactor, label);
 
-        public void EnterText(string text)
-            => ActOnInputElement(e => e.SendKeys(text));
+        public void EnterText(string text, int labelLevel = 1)
+            => ActOnInputElement(e => e.SendKeys(text), labelLevel);
 
-        private void ActOnInputElement(Action<IWebElement> action)
-            => _interactor.ActOnElement(InputFindBy, action);
+        private void ActOnInputElement(Action<IWebElement> action, int labelLevel)
+            => _interactor.ActOnElement(InputFindBy(labelLevel), action);
 
-        private By InputFindBy
-            => _by.Input;
+        private By InputFindBy(int labelLevel)
+        {
+            return _by.Input(labelLevel);
+        }
     }
 }

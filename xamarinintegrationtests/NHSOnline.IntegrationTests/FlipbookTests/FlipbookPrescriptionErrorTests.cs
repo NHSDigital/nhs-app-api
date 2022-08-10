@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
                 .WithBehaviour(new EmisCreateSessionFailureBehaviour())
-                .WithNhsNumber("9305373119")
+                .WithNhsNumber("2147483647")
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 

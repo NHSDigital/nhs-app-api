@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105132");
+                .WithNhsNumber("2014105132");
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -40,7 +40,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105131");
+                .WithNhsNumber("2014105131");
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -85,7 +85,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9392013752");
+                .WithNhsNumber("2092013752");
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -110,7 +110,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
                 .WithAge(13,20)
-                .WithNhsNumber("9290220899");
+                .WithNhsNumber("2090220899");
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);
@@ -134,7 +134,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         {
             var patient = new WayfinderPatient(WayfinderPatientOds.ERS)
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
-                .WithNhsNumber("9414105132");
+                .WithNhsNumber("2014105132");
             using var patients = Mocks.Patients.Add(patient);
 
             LoginProcess.LogIOSPatientIn(driver, patient);

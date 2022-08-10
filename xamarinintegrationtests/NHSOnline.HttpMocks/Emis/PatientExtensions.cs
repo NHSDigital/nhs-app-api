@@ -1,5 +1,4 @@
 using NHSOnline.HttpMocks.Domain;
-using NHSOnline.HttpMocks.Tpp;
 using NHSOnline.HttpMocks.Tpp.Models;
 
 namespace NHSOnline.HttpMocks.Emis
@@ -13,6 +12,10 @@ namespace NHSOnline.HttpMocks.Emis
         public static TPatient WithBehaviour<TPatient>(this TPatient patient, IEmisRecordsBehaviour behaviour)
             where TPatient : Patient
             => patient.WithBehaviour<TPatient, IEmisRecordsBehaviour>(behaviour);
+
+        public static TPatient WithBehaviour<TPatient>(this TPatient patient, IEmisNominatedPharmacyBehaviour behaviour)
+            where TPatient : Patient
+            => patient.WithBehaviour<TPatient, IEmisNominatedPharmacyBehaviour>(behaviour);
 
         public static TPatient WithBehaviour<TPatient>(this TPatient patient, ITppRecordsBehaviour behaviour)
             where TPatient : Patient
