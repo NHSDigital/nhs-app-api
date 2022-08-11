@@ -63,7 +63,7 @@ export default {
     },
     overdue: {
       title: 'Review by clinic overdue',
-      tagText: 'Pending',
+      tagText: 'Action',
       youNeedToContact: 'Your healthcare provider has requested for you to be referred. A review of this request is overdue. You need to contact the clinic.',
       youNeedToContactSpecialty: 'Your healthcare provider has requested for you to be referred to {specialty}. A review of this request is overdue. You need to contact the clinic.',
       contactTheClinic: 'Contact the clinic',
