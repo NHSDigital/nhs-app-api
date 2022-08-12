@@ -68,7 +68,7 @@ resources:
 variables:
   - group: Ops
   - name: terraformVersion
-    value: 0.14.8
+    value: 1.2.7
   - name: REAPPLY_CONFIG
     value: true
   - name: PROJECT_PATH
