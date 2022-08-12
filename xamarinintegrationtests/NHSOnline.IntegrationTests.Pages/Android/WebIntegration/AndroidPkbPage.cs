@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -23,6 +24,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
 
         public static AndroidPkbPage AssertOnPage(IAndroidDriverWrapper driver, string phrPath)
         {
+            // Extending timeout to allow page to finish reloading
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(10);
+
             var page = new AndroidPkbPage(driver, phrPath);
             page.PageContent.AssertOnPage();
             return page;
@@ -53,7 +57,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
         public void NavigateToOpenBrowserOverlay() => PageContent.NavigateToOpenBrowserOverlay();
 
         public void NavigateToOpenExternalBrowser() => PageContent.NavigateToOpenExternalBrowser();
-        
+
         public void NavigateToNativeBackAction() => PageContent.NavigateToNativeBackAction();
 
         public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();

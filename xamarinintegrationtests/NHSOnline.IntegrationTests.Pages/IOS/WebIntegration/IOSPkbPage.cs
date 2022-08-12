@@ -1,4 +1,5 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
@@ -17,6 +18,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
 
         public static IOSPkbPage AssertOnPage(IIOSDriverWrapper driver, string phrPath)
         {
+            // Extending timeout to allow page to finish reloading
+            using var extendedTimeout = ExtendedTimeout.FromSeconds(10);
+
             var page = new IOSPkbPage(driver, phrPath);
             page.PageContent.AssertOnPage();
             return page;
@@ -29,7 +33,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
         public void NavigateToOpenBrowserOverlay() => PageContent.NavigateToOpenBrowserOverlay();
 
         public void NavigateToOpenExternalBrowser() => PageContent.NavigateToOpenExternalBrowser();
-        
+
         public void NavigateToNativeBackAction() => PageContent.NavigateToNativeBackAction();
 
         public void NavigateToFileUpload() => PageContent.NavigateToFileUpload();
