@@ -1,36 +1,23 @@
 <template>
-  <div data-sid="welcome-info">
+  <div data-sid="welcome-info" class="nhsuk-u-padding-top-3">
+    <h1 ref="welcomePageHeader" tabindex="-1" class="nhsuk-u-margin-bottom-1 nhsuk-heading-l">
+      {{ $t('home.indexPageHeader') }}
+    </h1>
     <dl class="nhsuk-summary-list nhsuk-summary-list--no-border
-               nhs-app-summary-list-inline nhsuk-u-margin-bottom-3">
-      <div v-if="name" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key">
-          {{ $t('home.name') }}:
-        </dt>
-        <dd class="nhsuk-summary-list__value" data-sid="user-name" data-hj-suppress>
-          {{ name }}
-        </dd>
-      </div>
+               nhs-app-summary-list-inline nhsuk-u-margin-bottom-0">
       <div class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key">
-          {{ $t('home.dateOfBirth') }}:
-        </dt>
-        <dd class="nhsuk-summary-list__value" data-sid="user-date-of-birth">
-          {{ dateOfBirth | longDate }}
-        </dd>
+        <div data-sid="user-name" class="nhsuk-summary-list__value" data-hj-suppress >
+          {{ fullNameLine }}
+        </div>
       </div>
-      <div v-if="nhsNumber" id="welcomeSectionNhsNumber" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key">
-          {{ $t('home.nhsNumber') }}:
-        </dt>
-        <dd class="nhsuk-summary-list__value">
-          <generic-voice-over-text-split :text="nhsNumber"
-                                         data-sid="user-nhs-number"/>
-        </dd>
+      <div v-if="nhsNumber" :class="[$style['info-key'], 'nhsuk-summary-list__row']">
+        {{ $t('home.nhsNumber') }}:
+        <generic-voice-over-text-split :text="nhsNumber" data-sid="user-nhs-number" />
       </div>
     </dl>
+    <span aria-hidden="true" :class="$style['callout-arrow__solo']" />
   </div>
 </template>
-
 <script>
 import GenericVoiceOverTextSplit from './widgets/GenericVoiceOverTextSplit';
 
@@ -38,18 +25,41 @@ export default {
   name: 'WelcomeSection',
   components: { GenericVoiceOverTextSplit },
   props: {
-    dateOfBirth: {
+    displayName: {
       type: String,
-      default: '',
-    },
-    name: {
-      type: String,
-      default: '',
+      required: true,
     },
     nhsNumber: {
       type: String,
       default: '',
     },
   },
+  computed: {
+    fullNameLine() {
+      return this.displayName.toUpperCase();
+    },
+  },
+  updated() {
+    this.focusWelcomePageHeader();
+  },
+  mounted() {
+    this.focusWelcomePageHeader();
+  },
+  methods: {
+    focusWelcomePageHeader() {
+      if (document.activeElement !== null) {
+        document.activeElement.blur();
+      }
+      if (this.$refs.welcomePageHeader) {
+        this.$refs.welcomePageHeader.focus();
+      }
+    },
+  },
 };
 </script>
+
+<style lang="scss" module scoped>
+  @import '@/style/_screensizes';
+  @import "@/style/custom/callout-arrow";
+  @import "@/style/custom/welcome-section";
+</style>

@@ -89,12 +89,12 @@ describe('ContentHeader.vue', () => {
         wrapper = mountAs({
           linkedAccountsState: {
             actingAsUser: {
-              name: 'david',
+              fullName: 'david',
             },
           },
         });
 
-        const warning = wrapper.find('#acting-as-other-user-warning');
+        const warning = wrapper.find('#acting-as-other-user-switch');
 
         // assert
         expect(wrapper.vm.isProxying).toBe(true);
@@ -157,11 +157,11 @@ describe('ContentHeader.vue', () => {
         },
         linkedAccountsState: {
           actingAsUser: {
-            name: 'david',
+            fullName: 'david',
           },
         },
       });
-      const warning = wrapper.find('#acting-as-other-user-warning');
+      const warning = wrapper.find('#acting-as-other-user-switch');
 
       // assert
       expect(wrapper.vm.demographicsQuestionAnswered).toBe(false);

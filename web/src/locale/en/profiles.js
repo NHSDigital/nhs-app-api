@@ -20,6 +20,7 @@ export default {
   youCanAccessForTheFollowingPeople: 'You can access services in the app for the following people.',
   youCanBookAppointments: 'You can book appointments for them, order repeat prescriptions, and view their health record, where appropriate.',
   youDoNotHaveAny: 'You do not have any linked profiles set up on your account.',
+  switchProfile: 'Switch profile',
   shutter: {
     prescriptions: {
       header: 'You do not have access to {name}\'s repeat prescriptions',

@@ -17,16 +17,17 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Home");
+        private WebText MobileTitleText => WebText.WithTagAndText(_interactor, "h1", @"We're here for you");
 
-        private WebDefinitionTerm NameDefinitionTerm => WebDefinitionTerm.WithTerm(_interactor, "Name:");
+        private WebText TabletTitleText => WebText.WithTagAndText(
+            _interactor, "h1", "Access your NHS services any time, day or night");
 
         private WebDefinitionTerm NhsNumberTerm => WebDefinitionTerm.WithTerm(_interactor, "NHS number:");
 
         private WebText YellowProxyUserBannerText(string linkedPatientName) =>
             WebText.WithTagAndText(_interactor, "p", $"Acting on behalf of {linkedPatientName}");
 
-        private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
+        private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
 
         private WebMenuItem BookYourCovidVaccinationMenuItem => WebMenuItem.WithTitle(_interactor, "Book or manage a coronavirus (COVID-19) vaccination");
 
@@ -36,19 +37,22 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         public WebMenuItem GpHealthMenuItem => WebMenuItem.WithTitle(_interactor, "View your GP health record");
 
-        public WebMenuItem PrescriptionsMenuItem => WebMenuItem.WithTitle(_interactor, "Order a prescription");
+        public WebMenuItem PrescriptionsMenuItem => WebMenuItem.WithTitle(_interactor, "Order a repeat prescription");
+
+        private WebButton FindNhsServicesNearYouButton => WebButton.WithText(_interactor,"Find NHS services near you");
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
+            MessagesMenuItem,
+            GpHealthMenuItem,
+            PrescriptionsMenuItem,
             GetYourCovidPassMenuItem,
             BookYourCovidVaccinationMenuItem,
-            MessagesMenuItem,
             LinkedProfilesMenuItem,
-            GpHealthMenuItem,
-            PrescriptionsMenuItem
+            FindNhsServicesNearYouButton
         };
 
-        public void AssertNameDisplayedFor(string patientName) => NameDefinitionTerm.AssertValue(patientName);
+        public void AssertNameDisplayedFor(string patientName) => WebText.WithText(_interactor, patientName);
 
         public void AssertUserAgent(Platform platform) =>
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
@@ -68,6 +72,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
 
-        internal void AssertOnPage() => TitleText.AssertVisible();
+        internal void AssertOnPage() => MobileTitleText.AssertVisible();
+
+        internal void AssertOnTabletPage() => TabletTitleText.AssertVisible();
     }
 }

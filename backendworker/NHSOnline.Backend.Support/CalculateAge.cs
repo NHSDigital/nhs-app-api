@@ -26,8 +26,8 @@ namespace NHSOnline.Backend.Support
         {
             var now = _timeProvider.LocalNow;
 
-            var ageIsLessThanOneYear = dateOfBirth.AddYears(1) > now;
-            if (ageIsLessThanOneYear)
+            var ageIsLessThanTwoYears = dateOfBirth.AddYears(2) > now;
+            if (ageIsLessThanTwoYears)
             {
                 return CalculateAgeInMonths(dateOfBirth, now);
             }

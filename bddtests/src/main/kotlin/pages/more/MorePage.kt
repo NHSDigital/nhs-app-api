@@ -32,7 +32,6 @@ class MorePage : HybridPageObject() {
     val accountAndSettingsLink = link("Account and settings")
     val gncrAdminLink = link("Great North Care Record preferences")
     val helpAndSupportLink = link("Help and support")
-    val cookieLink = link("Cookies")
     val loginAndPasswordOptionsLink = link("Login options")
     val faceIDLink = link("Face ID")
     val touchIDLink = link("Touch ID")

@@ -15,19 +15,16 @@ data class PatientAge(val dateOfBirth: String) {
         val ageYears: Int = getAgePart(dateOfBirth, ChronoUnit.YEARS)
         var formattedAge = ""
         if (ageYears == 0 && ageMonths == 0) {
-            formattedAge = "Less than one month old"
+            formattedAge = "Less than 1 month old"
         }
-        if (ageYears == 0 && ageMonths == 1) {
-            formattedAge = ageMonths.toString() + " month old"
+        else if (ageYears == 0 && ageMonths == 1) {
+            formattedAge = "$ageMonths month old"
         }
-        if (ageYears == 0 && ageMonths > 1) {
-            formattedAge = ageMonths.toString() + " months old"
+        else if (ageYears == 1 || (ageYears == 0 && ageMonths > 1)) {
+            formattedAge = calculateMonths(ageYears, ageMonths) + " months old"
         }
-        if (ageYears == 1 && ageMonths >= 0) {
-            formattedAge = ageYears.toString() + " year old"
-        }
-        if (ageYears > 1 && ageMonths >= 0) {
-            formattedAge = ageYears.toString() + " years old"
+        else if (ageYears > 1) {
+            formattedAge = "$ageYears years old"
         }
         return formattedAge
     }
@@ -54,5 +51,9 @@ data class PatientAge(val dateOfBirth: String) {
             ChronoUnit.MONTHS -> (unit.between(dateOfBirth, LocalDate.now()) % MONTHS_IN_YEAR).toInt()
             else -> throw IllegalArgumentException("Only years or months are supported")
         }
+    }
+
+    private fun calculateMonths(years: Int, months: Int) : String {
+        return ((years * MONTHS_IN_YEAR) + months).toString()
     }
 }

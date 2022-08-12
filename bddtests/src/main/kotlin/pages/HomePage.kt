@@ -13,27 +13,41 @@ class HomePage : HybridPageObject() {
 
     val headerText: String = "Home"
 
-    val welcomeInfo = HybridPageElement(
-        webDesktopLocator = "//div[@data-sid='welcome-info']",
+    val userInfoDisplay = HybridPageElement(
+        webDesktopLocator = "//section[@id='picture-banner-section']",
         page = this,
-        helpfulName = "Welcome info"
+        helpfulName = "Picture Banner Info"
     )
 
-    val welcomeInfoProxy = HybridPageElement(
-        webDesktopLocator = "//div[@data-sid='welcome-info-proxy']",
+    val userInfoDisplayProxy = HybridPageElement(
+        webDesktopLocator = "//section[@id='proxy-picture-banner-section']",
         page = this,
-        helpfulName = "Welcome info"
+        helpfulName = "Picture Banner Info"
+    )
+
+    private val nameInfoLargeScreen = HybridPageElement(
+            webDesktopLocator = "//div[@data-sid='hero-user-name']",
+            page = this,
+            helpfulName = "Large Screen User Info"
+    )
+
+    private val nhsNumberInfoLargeScreen = HybridPageElement(
+            webDesktopLocator = "//span[@data-sid='hero-user-nhs-number']",
+            page = this,
+            helpfulName = "Large Screen NHS Number"
     )
 
     private val unreadIndicator = HybridPageElement(
         webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
         page = this,
-        helpfulName = "Unread Indicator")
+        helpfulName = "Unread Indicator"
+    )
         
     private val unreadCount = HybridPageElement(
         webDesktopLocator = "//*[@id='btn_messages_countIndicator']",
         page = this,
-        helpfulName = "Unread Count")
+        helpfulName = "Unread Count"
+    )
 
     private val surveyPath = "//div[@data-purpose='survey']"
 
@@ -64,8 +78,8 @@ class HomePage : HybridPageObject() {
         page = this
     )
 
-    val actingAsOtherUserWarning = HybridPageElement(
-        webDesktopLocator = "//*[@id='acting-as-other-user-warning']",
+    val switchProfileLink = HybridPageElement(
+        webDesktopLocator = "//*[@id='acting-as-other-user-switch']",
         page = this
     )
 
@@ -96,29 +110,27 @@ class HomePage : HybridPageObject() {
         unreadCount.assertElementNotPresent()
     }
 
-    fun assertPatientDetailIsVisible(detail:String, value: String) {
-        val element = getPatientDetailElement(detail).assertIsVisible()
-        assertEquals("Expected $detail to be $value", value, element.text)
+    fun assertPatientNameIsVisible(requiredValue: String) {
+        val displayedNameLarge = nameInfoLargeScreen.assertIsVisible().textValue
+        assertEquals("Expected displayed to be $requiredValue", requiredValue, displayedNameLarge)
     }
 
-    fun assertPatientDetailIsNotPresent(detail:String) {
-        getPatientDetailElement(detail).assertElementNotPresent()
+    fun assertNhsNumberIsVisible(requiredValue: String) {
+        val displayedName = nhsNumberInfoLargeScreen.assertIsVisible().textValue
+        assertEquals("Expected displayed to be $requiredValue", requiredValue, displayedName)
     }
 
-    private fun getPatientDetailElement(detail:String) : HybridPageElement {
-        return HybridPageElement(
-            webDesktopLocator =
-              "${welcomeInfo.webDesktopLocator}//dt[normalize-space(text())='$detail:']/following-sibling::dd[1]",
-            page = this
-        )
+    fun assertNhsNumberIsNotPresent() {
+        nhsNumberInfoLargeScreen.assertElementNotPresent()
     }
 
     fun assertHasProxyPatientDetails(expectedDetails: ArrayList<String>) {
         val actualDetails = arrayListOf<String>()
-        welcomeInfoProxy.actOnTheElement {
+        userInfoDisplayProxy.actOnTheElement {
             actualDetails.addAll(
                     it.findElements<WebElement>(
-                            By.xpath("//div[@class='nhsuk-summary-list__row']"))
+                            By.xpath(
+                                ".//div[@class='nhsuk-summary-list__row']"))
                             .map { element -> element.text })
         }
         assertCollection("ProxyPatientDetails", expectedDetails, actualDetails)

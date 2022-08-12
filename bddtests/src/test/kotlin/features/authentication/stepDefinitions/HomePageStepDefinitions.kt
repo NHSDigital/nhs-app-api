@@ -4,7 +4,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.NavigationLinkText
-import features.authentication.steps.PatientDetail
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
@@ -79,15 +78,21 @@ class HomePageStepDefinitions {
         browser.shouldHaveUrl(SURVEY_URL)
     }
 
-    @Then("^I don't see my (.*) on the home page$")
-    fun iDontSeeMyDetailOnTheHomePage(detail: String) {
-        homeSteps.assertPatientDetailIsNotPresent(PatientDetail.fromLabel(detail))
+    @Then("^I don't see my NHS number on the home page$")
+    fun iDontSeeMyNhsNumberOnTheHomePage() {
+        homeSteps.assertPatientNhsNumberIsNotPresent()
     }
 
-    @Then("^I see my (.*) on the home page$")
-    fun iSeeMyDetailOnTheHomePage(detail: String) {
+    @Then("^I see my Name on the home page$")
+    fun iSeeMyNameOnTheHomePage() {
         val patient = SerenityHelpers.getPatient()
-        homeSteps.assertPatientDetailIsVisible(patient, PatientDetail.fromLabel(detail))
+        homeSteps.assertPatientNameIsVisible(patient)
+    }
+
+    @Then("^I see my NHS Number on the home page$")
+    fun iSeeMyNhsNumberOnTheHomePage() {
+        val patient = SerenityHelpers.getPatient()
+        homeSteps.assertNhsNumberIsVisible(patient)
     }
 
     @Then("^I see the proxy patient details of age and gp surgery$")

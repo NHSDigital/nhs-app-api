@@ -1,10 +1,5 @@
 <template>
   <div v-if="showTemplate">
-    <welcome-section v-if="!isProxying"
-                     :name="currentProfile.name"
-                     :date-of-birth="currentProfile.dateOfBirth"
-                     :nhs-number="currentProfile.nhsNumber" />
-    <proxy-welcome-section v-else :proxy-age="proxyAge" :proxy-details="currentProfile"/>
     <public-health-notification
       v-for="publicHealthNotification in publicHealthNotifications"
       :id="`public-health-notification-${publicHealthNotification.id}`"
@@ -14,6 +9,10 @@
       :title="publicHealthNotification.title"
       :body="publicHealthNotification.body"/>
     <navigation-list-menu v-if="!isProxying" />
+    <nhs-arrow-banner id="nhs-arrow-right-icon"
+                      class="nhsuk-u-margin-top-3"
+                      :banner-text="$t('home.findNearestService')"
+                      :click-action="findServicesUrl"/>
     <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
@@ -22,6 +21,7 @@
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 import get from 'lodash/fp/get';
 import NavigationListMenu from '@/components/NavigationListMenu';
+import NhsArrowBanner from '@/components/widgets/NhsArrowBanner.vue';
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 import ProxyWelcomeSection from '@/components/ProxyWelcomeSection';
 import PublicHealthNotification from '@/components/widgets/PublicHealthNotification';
@@ -36,6 +36,7 @@ export default {
     ProxyWelcomeSection,
     PublicHealthNotification,
     WelcomeSection,
+    NhsArrowBanner,
   },
   mixins: [CalculateAgeInMonthsAndYears],
   data() {
@@ -43,6 +44,7 @@ export default {
       publicHealthNotifications: get('publicHealthNotifications', this.$store.state.serviceJourneyRules.rules.homeScreen),
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
+      findServicesUrl: this.$store.$env.FIND_NEAREST_SERVICE_URL,
     };
   },
   computed: {

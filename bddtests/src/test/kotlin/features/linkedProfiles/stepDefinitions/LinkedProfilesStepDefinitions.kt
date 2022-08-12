@@ -1,5 +1,6 @@
 package features.linkedProfiles.stepDefinitions
 
+import constants.DateTimeFormats
 import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -22,9 +23,11 @@ import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
+import models.PatientAge
 import models.linkedProfiles.LinkedProfileOption
 import models.patients.PatientHandler
 import net.thucydides.core.annotations.Steps
+import org.joda.time.DateTime
 import org.junit.Assert
 import pages.HomePage
 import pages.text
@@ -109,6 +112,29 @@ class LinkedProfilesStepDefinitions {
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
     }
 
+    @Given("^I am logged in as a (.*) user with a linked profile with age (.*) years and (.*) months$")
+    fun iAmLoggedInWithALinkedProfileWithAgeInYearsAndMonths(gpSystem: String, years: Int, months: Int) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithLinkedProfiles().copy()
+
+        val linkedAccount = patient.linkedAccounts.first().copy(age = PatientAge(generateAge(years, months)));
+        patient.linkedAccounts = setOf(linkedAccount)
+
+        PatientHandler.getForSupplier(supplier).setOdsCode(patient, "IM1")
+        SerenityHelpers.setGpSupplier(supplier)
+        setupAndLogIn(patient, supplier)
+    }
+
+    private fun generateAge(years: Int, months: Int) : String {
+        var date = DateTime.now()
+        if (years == 0 && months == 0) {
+            date = date.minusWeeks(1)
+        } else {
+            date = date.minusYears(years).minusMonths(months)
+        }
+        return date.toString(DateTimeFormats.dateWithoutTimeFormat)
+    }
+
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier, hasProxyAccounts: Boolean = true) {
         setup(patient, gpSystem, hasProxyAccounts)
         browser.goToApp()
@@ -132,7 +158,6 @@ class LinkedProfilesStepDefinitions {
                     .getForSupplier(gpSystem)
                     .enabled(patient)
         }
-
     }
 
     @Given("^the GP Practice has enabled all medical records for the proxy patient$")
@@ -198,7 +223,7 @@ class LinkedProfilesStepDefinitions {
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
                 GlobalSerenityHelpers.SWITCHED_LINKED_ACCOUNT, linkedAccount)
 
-        linkedProfilesPage.selectLinkedProfile(linkedAccount.formattedFullName())
+        linkedProfilesPage.selectLinkedProfile(linkedAccount.formattedUpperCaseFullName())
     }
 
     @Then("^I select a linked profile$")
@@ -267,7 +292,7 @@ class LinkedProfilesStepDefinitions {
                 bannerText.contains("Acting on behalf of"))
 
         Assert.assertTrue("Banner does not contain expected name",
-                bannerText.contains(expectedProfile.profile.formattedFullName()))
+                bannerText.contains(expectedProfile.profile.formattedUpperCaseFullName()))
     }
 
     @Then("^I see information on how to setup a linked profile$")
@@ -286,8 +311,9 @@ class LinkedProfilesStepDefinitions {
 
         linkedPatients.forEachIndexed { index, patient ->
             Assert.assertEquals(
-                    "Linked profile name did not match",
-                    patient.formattedFullName(),displayedLinkedProfiles[index].name)
+                "Linked profile name did not match",
+                patient.formattedUpperCaseFullName(),
+                displayedLinkedProfiles[index].name)
 
             Assert.assertEquals(
                     "Linked profile age did not match",

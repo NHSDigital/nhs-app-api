@@ -4,7 +4,7 @@ import { createStore, mount } from '../helpers';
 describe('WelcomeSection.vue', () => {
   let wrapper;
 
-  const mountWelcomeSection = nhsNumber => mount(WelcomeSection, {
+  const mountWelcomeSection = ({ displayName, nhsNumber }) => mount(WelcomeSection, {
     $store: createStore({
       state: {
         device: {
@@ -13,6 +13,7 @@ describe('WelcomeSection.vue', () => {
       },
     }),
     propsData: {
+      displayName,
       nhsNumber,
     },
   });
@@ -22,8 +23,8 @@ describe('WelcomeSection.vue', () => {
       let nhsNumberSection;
 
       beforeEach(() => {
-        wrapper = mountWelcomeSection('123456789');
-        nhsNumberSection = wrapper.find('#welcomeSectionNhsNumber');
+        wrapper = mountWelcomeSection({ displayName: 'name', nhsNumber: '123456789' });
+        nhsNumberSection = wrapper.find('[data-sid="user-nhs-number"]');
       });
 
       it('will display nhs number section', () => {
@@ -31,17 +32,17 @@ describe('WelcomeSection.vue', () => {
       });
 
       it('will display the passed in nhs number', () => {
-        expect(nhsNumberSection.text().replace(/\n|\r/g, '').replace(/  +/g, ' ')).toBe('NHS number: 123456789');
+        expect(nhsNumberSection.text().replace(/\n|\r/g, '').replace(/  +/g, ' ')).toBe('123456789');
       });
     });
 
     describe('nhs number does not have value', () => {
       beforeEach(() => {
-        wrapper = mountWelcomeSection(undefined);
+        wrapper = mountWelcomeSection({ displayName: 'name', nhsNumber: undefined });
       });
 
       it('will not display nhs number section', () => {
-        expect(wrapper.find('#welcomeSectionNhsNumber').exists()).toBe(false);
+        expect(wrapper.find('[data-sid="user-nhs-number"]').exists()).toBe(false);
       });
     });
   });

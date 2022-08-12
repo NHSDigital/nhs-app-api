@@ -9,7 +9,7 @@ Feature: Login with proxy access
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
     And I see the proxy patient details of age and gp surgery
-    And I click the proxy warning
+    And I click the Switch Profile link
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
     And I click the Switch to my profile button for the main user
@@ -240,7 +240,7 @@ Feature: Login with proxy access
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
     And I see the proxy patient details of age and gp surgery
-    And I click the proxy warning
+    And I click the Switch Profile link
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
     And I click the Switch to my profile button for the main user
@@ -381,3 +381,20 @@ Feature: Login with proxy access
     And the GP System session has expired when viewing prescriptions
     When I retrieve the 'prescription repeat courses' page directly
     Then I see appropriate try again shutter screen for prescriptions when there is no GP session
+
+  Scenario Outline: A user with proxy accounts is shown the proxy's age in the correct format
+    Given I am logged in as a EMIS user with a linked profile with age <Years> years and <Months> months
+    When I can see and follow the Linked profiles link
+    Then the linked profiles page is displayed
+    And linked profiles are displayed
+    Examples:
+      | Years| Months |
+      | 0    | 0      |
+      | 0    | 1      |
+      | 0    | 2      |
+      | 1    | 0      |
+      | 1    | 11     |
+      | 2    | 0      |
+      | 2    | 4      |
+      | 6    | 11     |
+      | 34   | 0      |

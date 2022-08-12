@@ -142,7 +142,7 @@
       And I select a linked profile
       And I click the Switch to this profile button for the proxy user
       And I see the proxy patient details of age and gp surgery
-      And I click the proxy warning
+      And I click the Switch Profile link
       Then the switch profiles page is displayed
       And the correct proxy user details are displayed
       And the More_LP17SwitchmyProfile page is saved to disk

@@ -483,22 +483,18 @@ textarea {
 }
 
 // Focus and Hover for Linked Profile Banner
-#acting-as-other-user-warning{
+#acting-as-other-user-switch{
   &:focus {
     box-shadow: none !important;
 
-    p {
-      @include nhsuk-banner-focus;
-      @include nhsuk-focused-link-width;
-    }
+    @include nhsuk-banner-focus;
+    @include nhsuk-focused-link-width;
   }
 
   &:hover {
     text-decoration: none !important;
 
-    p {
-      @include nhsuk-banner-hover;
-      @include nhsuk-focused-link-width;
-    }
+    @include nhsuk-banner-hover;
+    @include nhsuk-focused-link-width;
   }
 }

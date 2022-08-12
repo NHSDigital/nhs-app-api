@@ -58,7 +58,7 @@ Feature: Hospital Appointments
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And the 'Hospital and other services' link is not available on the Appointments Hub
-    When I click the proxy warning
+    When I click the Switch Profile link
     And I click the Switch to my profile button for the main user
     And I navigate to Appointments
     Then the Appointments Hub page is displayed

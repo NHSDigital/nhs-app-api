@@ -15,7 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
                 new LoggedInHomePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
-        public static IOSLoggedInHomePage AssertOnPage(IIOSDriverWrapper driver,
+        public static IOSLoggedInHomePage AssertOnPage(
+            IIOSDriverWrapper driver,
             bool screenshot = false)
         {
             var page = new IOSLoggedInHomePage(driver);
@@ -29,7 +30,24 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             return page;
         }
 
-        public IOSLoggedInHomePage AssertOnPage(IOSLoggedInHomePage page, IIOSDriverWrapper driver,
+        public static IOSLoggedInHomePage AssertOnTabletPage(
+            IIOSDriverWrapper driver,
+            bool screenshot = false)
+        {
+            var page = new IOSLoggedInHomePage(driver);
+            page.PageContent.AssertOnTabletPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSLoggedInHomePage));
+            }
+
+            return page;
+        }
+
+        public IOSLoggedInHomePage AssertOnPage(
+            IOSLoggedInHomePage page,
+            IIOSDriverWrapper driver,
             bool screenshot = false)
         {
             page.PageContent.AssertOnPage();

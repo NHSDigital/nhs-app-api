@@ -52,7 +52,8 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.GpHealthMenuItem.Click();
+                .PageContent
+                .GpHealthMenuItem.Click();
 
             IOSGpMedicalRecordPage
                 .AssertOnPage(driver)

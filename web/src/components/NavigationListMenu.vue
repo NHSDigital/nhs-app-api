@@ -1,20 +1,6 @@
 <template>
   <div>
-    <menu-item-list-header id="nav-popular-services-list-header"
-                           header-tag="h2"
-                           :widen-on-tablet="true"
-                           :text="$t('navigation.popularServices')"/>
-    <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-0">
-      <third-party-jump-off-button v-if="showNetCompanyVaccineRecord"
-                                   id="btn_netCompany_vaccine_record"
-                                   provider-id="netCompany"
-                                   :provider-configuration="thirdPartyProvider.netCompany.
-                                     vaccineRecord" />
-      <third-party-jump-off-button v-if="showNetCompanyP5VaccineRecord"
-                                   id="btn_netCompanyP5_vaccine_record"
-                                   provider-id="netCompany"
-                                   :provider-configuration="thirdPartyProvider.netCompany.
-                                     vaccineRecordP5" />
+    <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-3">
       <menu-item id="btn_messages"
                  :header-tag="headerTag"
                  data-purpose="messages-menu-item"
@@ -23,18 +9,6 @@
                  :aria-label="messagesLabelWithUnreadCount"
                  :count="unreadMessagesCount"
                  :click-func="navigateToMessages"
-                 :is-messaging="true"/>
-      <third-party-jump-off-button v-if="showNBSAppointmentBookings"
-                                   id="btn_nbs_booking"
-                                   provider-id="nbs"
-                                   :provider-configuration="thirdPartyProvider.nbs.appointmentBookings"/>
-      <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
-                 id="linked-profiles-link"
-                 :header-tag="headerTag"
-                 :href="linkedProfilesPath"
-                 :text="$t('navigation.pages.headers.linkedProfiles')"
-                 :aria-label="$t('navigation.pages.headers.linkedProfiles')"
-                 :click-func="navigateToLinkedProfiles"
                  :is-messaging="true"/>
       <menu-item v-if="isProofLevel9"
                  id="menu-item-myRecord"
@@ -55,6 +29,31 @@
                  :aria-label="$t('navigation.orderAPrescription')"
                  :click-func="goToUrl"
                  :click-param="prescriptionsPath"
+                 :is-messaging="true"/>
+      <third-party-jump-off-button v-if="showNetCompanyVaccineRecord"
+                                   id="btn_netCompany_vaccine_record"
+                                   provider-id="netCompany"
+                                   :provider-configuration="thirdPartyProvider.netCompany.
+                                     vaccineRecord" />
+      <third-party-jump-off-button v-if="showNetCompanyP5VaccineRecord"
+                                   id="btn_netCompanyP5_vaccine_record"
+                                   provider-id="netCompany"
+                                   :provider-configuration="thirdPartyProvider.netCompany.
+                                     vaccineRecordP5" />
+      <third-party-jump-off-button v-if="showNBSAppointmentBookings"
+                                   id="btn_nbs_booking"
+                                   provider-id="nbs"
+                                   :provider-configuration="thirdPartyProvider.nbs.appointmentBookings"/>
+      <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
+                 id="linked-profiles-link"
+                 :header-tag="headerTag"
+                 :href="linkedProfilesPath"
+                 :text="$t('navigation.pages.headers.linkedProfiles')"
+                 :aria-label="ariaLabelCaption(
+                   'navigation.pages.headers.linkedProfiles',
+                   'navigation.pages.headers.linkedProfilesDescription')"
+                 :click-func="navigateToLinkedProfiles"
+                 :description="$t('navigation.pages.headers.linkedProfilesDescription')"
                  :is-messaging="true"/>
     </menu-item-list>
   </div>
@@ -176,6 +175,9 @@ export default {
       this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
       this.$store.dispatch('navigation/setBackLinkOverride', INDEX_PATH);
       this.goToUrl(this.linkedProfilesPath);
+    },
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
     },
   },
 };

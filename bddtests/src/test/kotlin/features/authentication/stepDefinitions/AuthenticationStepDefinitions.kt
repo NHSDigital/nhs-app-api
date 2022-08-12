@@ -237,9 +237,9 @@ class AuthenticationStepDefinitions {
         home.homePage.banner.assertSingleElementPresent("Expected yellow banner")
     }
 
-    @Then("^I click the proxy warning$")
-    fun iClickProxyWarning() {
-        home.homePage.actingAsOtherUserWarning.click()
+    @Then("^I click the Switch Profile link$")
+    fun iClickSwitchProfileLink() {
+        home.homePage.switchProfileLink.click()
     }
 
     @Then("^I do not see the yellow banner$")

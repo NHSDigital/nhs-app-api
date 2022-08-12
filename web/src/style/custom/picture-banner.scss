@@ -1,0 +1,16 @@
+@import '@/style/_screensizes';
+.info-key {
+  display: inline;
+}
+.info-value {
+  display: inline;
+}
+.custom-header-picture {
+  background-image: url(~@/assets/hero-banner-image.jpg);
+  height: 232px !important;
+  min-height: 232px !important;
+}
+.custom-hero-overlay {
+  height: 232px !important;
+  min-height: 232px !important;
+}

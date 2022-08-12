@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Components.Web;
@@ -73,7 +74,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
 
         private void KeyboardNavigateToAndActivateFocusable(IFocusable focusable, AndroidKeyboardNavigation keyboardPageContentNavigation)
         {
-            keyboardPageContentNavigation.TabBetween(LinkedProfilesMenuItem, focusable);
+            keyboardPageContentNavigation.TabBetween(FocusableElements.First(), focusable);
             keyboardPageContentNavigation.PressEnterKey();
         }
     }

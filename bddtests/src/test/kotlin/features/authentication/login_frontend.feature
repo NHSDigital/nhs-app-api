@@ -3,17 +3,15 @@
 Feature: Login frontend
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
-
   Scenario Outline: A <GP System> user can see the home page after logging in
     Given I am a <GP System> patient
     And I am logged in
     Then I see my Name on the home page
-    And I see my Date of birth on the home page
-    And I see my NHS number on the home page
+    And I see my NHS Number on the home page
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the Order a prescription link
+    And I can see and follow the Order a repeat prescription link
     When I click the home icon
     Then I see the home page
     And I can see and follow the View your messages link
@@ -27,13 +25,12 @@ Feature: Login frontend
     Given I am a EMIS patient
     And I am logged in
     Then I see my Name on the home page
-    And I see my Date of birth on the home page
-    And I see my NHS number on the home page
+    And I see my NHS Number on the home page
     And I see the home page header
     And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the Order a prescription link
+    And I can see and follow the Order a repeat prescription link
     When I click the home icon
     Then I see the home page
     And I can see and follow the View your messages link
@@ -56,7 +53,6 @@ Feature: Login frontend
     Given I am a patient with proof level 5
     And I am logged in
     Then I see my Name on the home page
-    And I see my Date of birth on the home page
     And I don't see my NHS number on the home page
 
   Scenario: A patient with proof level 5 sees the home page after logging in
@@ -77,8 +73,7 @@ Feature: Login frontend
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     Then I see my Name on the home page
-    And I see my Date of birth on the home page
-    And I see my NHS number on the home page
+    And I see my NHS Number on the home page
     And I can see and follow the Linked profiles link
     Examples:
       | GP System |
@@ -89,8 +84,7 @@ Feature: Login frontend
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     Then I see my Name on the home page
-    And I see my Date of birth on the home page
-    And I see my NHS number on the home page
+    And I see my NHS Number on the home page
     And I can't see the Linked profiles link on the homepage
     Examples:
       | GP System |

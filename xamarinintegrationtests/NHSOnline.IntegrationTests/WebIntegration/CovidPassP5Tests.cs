@@ -98,7 +98,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.GetYourCovidPass();
+                .PageContent
+                .GetYourCovidPass();
 
             IOSStubbedNetCompanyInternalPage
                 .AssertOnPage(driver)

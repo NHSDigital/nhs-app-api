@@ -15,7 +15,7 @@
             v-for="(item, index) in linkedAccounts"
             :id="`linked-account-menu-item-${index}`"
             :key="index"
-            :text="item.fullName"
+            :text="displayedName(item.fullName)"
             :click-func="onLinkedProfileClicked"
             :click-param="item.id"
             :description="getDisplayedAgeText(item)"
@@ -88,6 +88,9 @@ export default {
   methods: {
     ariaLabelCaption(fullName, age) {
       return `${fullName}. ${age}`;
+    },
+    displayedName(fullName) {
+      return fullName.toUpperCase();
     },
     onLinkedProfileClicked(id) {
       const selectedLinkedAccount = find(item => item.id === id)(this.linkedAccounts);

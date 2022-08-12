@@ -21,7 +21,7 @@ enum class PatientDetail(val label: String) {
 
 enum class NavigationLinkText (val linkText: String) {
     GP_HEALTH_RECORD("View your GP health record"),
-    PRESCRIPTIONS("Order a prescription"),
+    PRESCRIPTIONS("Order a repeat prescription"),
     MESSAGES("View your messages"),
     UNREAD_MESSAGES("View your messages"),
     LINKED_PROFILES("Linked profiles"),
@@ -34,14 +34,19 @@ open class HomeSteps {
     @Steps
     lateinit var webHeader: WebHeader
 
-    @Step
-    fun assertPatientDetailIsVisible(patient: Patient, detail: PatientDetail) {
-        homePage.assertPatientDetailIsVisible(detail.label, getDetailValue(patient, detail))
+    fun assertPatientNameIsVisible(patient: Patient) {
+        val name = patient.formattedFullName(false).toUpperCase()
+        homePage.assertPatientNameIsVisible(name)
+    }
+
+    fun assertNhsNumberIsVisible(patient: Patient) {
+        val number = patient.formattedNHSNumber()
+        homePage.assertNhsNumberIsVisible(number)
     }
 
     @Step
-    fun assertPatientDetailIsNotPresent(detail: PatientDetail) {
-        homePage.assertPatientDetailIsNotPresent(detail.label)
+    fun assertPatientNhsNumberIsNotPresent() {
+        homePage.assertNhsNumberIsNotPresent()
     }
 
     @Step
@@ -51,14 +56,14 @@ open class HomeSteps {
 
     @Step
     fun assertHeaderVisible() {
-        webHeader.getPageTitle().withText("Home")
-        homePage.welcomeInfo.assertIsVisible()
+        webHeader.getPageTitle().withText("Access your NHS services any time, day or night")
+        homePage.userInfoDisplay.assertIsVisible()
     }
 
     @Step
     fun assertProxyHeaderVisible() {
-        webHeader.getPageTitle().withText("Home")
-        homePage.welcomeInfoProxy.assertIsVisible()
+        webHeader.getPageTitle().withText("Access your NHS services any time, day or night")
+        homePage.userInfoDisplayProxy.assertIsVisible()
     }
 
     @Step
@@ -72,7 +77,7 @@ open class HomeSteps {
     fun assertLinkIsVisible(link: NavigationLinkText): HybridPageElement {
         return homePage.assertLinkIsVisible(link.linkText)
     }
-    
+
     fun assertUnreadCountIndicatorIsDisplayed() {
         homePage.assertUnreadCountPresent()
     }
@@ -80,24 +85,16 @@ open class HomeSteps {
     fun assertUnreadMessageIndicatorIsNotDisplayed() {
         homePage.assertUnreadIndicatorNotPresent()
     }
-    
+
     fun assertUnreadCountIndicatorIsNotDisplayed() {
         homePage.assertUnreadCountNotPresent()
     }
 
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
         return arrayListOf(
-                "Name: ${proxyPatient.profile.formattedFullName(true)}",
-                "Age: ${proxyPatient.profile.age.formattedAge()}",
-                "GP surgery: ${proxyPatient.gpPracticeName}"
+            "${proxyPatient.profile.formattedFullName(true).toUpperCase()}",
+            "${proxyPatient.profile.age.formattedAge()}",
+            "${proxyPatient.gpPracticeName}"
         )
-    }
-
-    private fun getDetailValue(patient: Patient, detail: PatientDetail): String {
-        return when (detail) {
-            PatientDetail.NAME -> patient.formattedFullName(false)
-            PatientDetail.DOB -> patient.age.formattedDateOfBirth()
-            PatientDetail.NHS_NUMBER -> patient.formattedNHSNumber()
-        }
     }
 }

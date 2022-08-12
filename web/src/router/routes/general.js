@@ -27,6 +27,7 @@ export const INDEX = {
     titleKey: 'navigation.pages.titles.home',
     crumb: breadcrumbs.INDEX_CRUMB,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+    shouldShowContentHeader: false,
   },
 };
 

@@ -73,7 +73,7 @@ describe('linked profile index', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-0');
       expect(linkedProfileMenuItem.exists()).toBe(true);
       expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 0. 20 years old');
-      expect(linkedProfileMenuItem.text()).toContain('user 0');
+      expect(linkedProfileMenuItem.text()).toContain('USER 0');
       expect(wrapper.find('#linked-account-age-0').text()).toEqual('20 years old');
       expect(wrapper.find(NoLinkedProfiles).exists()).toBe(false);
     });
@@ -83,7 +83,7 @@ describe('linked profile index', () => {
 
       expect(linkedProfileMenuItem.exists()).toBe(true);
       expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 1. 42 years old');
-      expect(linkedProfileMenuItem.text()).toContain('user 1');
+      expect(linkedProfileMenuItem.text()).toContain('USER 1');
       expect(wrapper.find('#linked-account-age-1').text()).toEqual('42 years old');
       expect(wrapper.find(NoLinkedProfiles).exists()).toBe(false);
     });

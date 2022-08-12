@@ -1,0 +1,22 @@
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '@/style/_screensizes';
+.webheader-blue {
+  background-color: $color_nhsuk-blue;
+  color: $color_nhsuk-white;
+}
+@include tabletAndBelow{
+  .welcomeInfo{
+    display: block;
+  }
+  .heroBanner{
+    display: none;
+  }
+};
+@include fromTablet{
+  .welcomeInfo{
+    display: none;
+  }
+  .heroBanner{
+    display: block;
+  }
+};

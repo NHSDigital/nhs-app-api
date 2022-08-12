@@ -208,6 +208,8 @@ spec:
           value: "https://www.nhs.uk/nhs-app/nhs-app-legal-and-cookies/nhs-app-open-source-licences/"
         - name: NOMINATED_PHARMACY_DSP_URL
           value: "https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies"
+        - name: FIND_NEAREST_SERVICE_URL
+          value: "https://www.nhs.uk/nhs-services/services-near-you/"
         - name: GPATHAND_APP_DOWNLOAD_URL
           value: "https://www.gpathand.nhs.uk/download-app"
         - name: EMERGENCY_PRESCRIPTIONS_URL

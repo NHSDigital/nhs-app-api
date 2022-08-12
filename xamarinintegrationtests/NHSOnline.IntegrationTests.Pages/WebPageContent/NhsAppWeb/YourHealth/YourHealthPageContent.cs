@@ -13,9 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Your health");
 
-        internal WebMenuItem CovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
-
-        private WebText CovidPassText => WebText.WithTagAndText(_interactor, "p", "View and download your COVID Pass for travel abroad");
+        internal WebMenuItem CovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "Get your NHS COVID Pass");
 
         internal WebMenuItem VaccineRecordMenuItem => WebMenuItem.WithTitle(_interactor, "Check your COVID-19 vaccine record");
 
@@ -53,7 +51,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
         public YourHealthPageContent AssertCovidPassElements()
         {
             CovidPassMenuItem.AssertVisible();
-            CovidPassText.AssertVisible();
             return this;
         }
 

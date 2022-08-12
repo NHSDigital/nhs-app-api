@@ -44,7 +44,8 @@ namespace NHSOnline.IntegrationTests.NativeFooter
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .PageContent.PrescriptionsMenuItem.Click();
+                .PageContent
+                .PrescriptionsMenuItem.Click();
 
             IOSPrescriptionsPage
                 .AssertOnPage(driver)

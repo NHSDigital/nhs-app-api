@@ -42,6 +42,18 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow("2021-04-12", "2021-12-31T04:30:00", 8)]
         [DataRow("2021-04-12", "2022-01-01T04:30:00", 8)]
         [DataRow("2021-04-12", "2022-04-11T04:30:00", 11)]
+        [DataRow("2021-04-12", "2022-05-11T04:30:00", 12)]
+        [DataRow("2021-04-12", "2022-06-11T04:30:00", 13)]
+        [DataRow("2021-04-12", "2022-07-11T04:30:00", 14)]
+        [DataRow("2021-04-12", "2022-08-11T04:30:00", 15)]
+        [DataRow("2021-04-12", "2022-09-11T04:30:00", 16)]
+        [DataRow("2021-04-12", "2022-10-11T04:30:00", 17)]
+        [DataRow("2021-04-12", "2022-11-11T04:30:00", 18)]
+        [DataRow("2021-04-12", "2022-12-11T04:30:00", 19)]
+        [DataRow("2021-04-12", "2023-01-11T04:30:00", 20)]
+        [DataRow("2021-04-12", "2023-02-11T04:30:00", 21)]
+        [DataRow("2021-04-12", "2023-03-11T04:30:00", 22)]
+        [DataRow("2021-04-12", "2023-04-11T04:30:00", 23)]
         public void CalculateAgeInMonthsAndYears_AgeLessThanZero_ReturnsNumberOfMonths(string dateOfBirth, string now, int expectedMonths)
         {
             // Arrange

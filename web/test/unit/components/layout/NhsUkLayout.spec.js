@@ -42,12 +42,14 @@ const createPage = ($store, route = INDEX) => {
   });
 };
 
-const createLayoutStore = (isNativeApp, enabled = true, versionEnabled = true) => createStore({
+const createLayoutStore = (isNativeApp, enabled = true, versionEnabled = true, isProxying = false) => createStore({
   $cookies: mockCookies(),
   getters: {
     'errors/showApiError': false,
     'serviceJourneyRules/myRecordHubEnabled': enabled,
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
+    'session/isProxying': isProxying,
+    'session/currentProfile': { name: 'name' },
   },
   state: {
     appVersion: {
@@ -71,6 +73,15 @@ const createLayoutStore = (isNativeApp, enabled = true, versionEnabled = true) =
     http: {
       loadingUrls: [],
     },
+    linkedAccounts: {
+      actingAsUser: {
+        id: 'user-id-0',
+        fullName: 'mr user 0',
+        ageMonths: '10',
+        ageYears: '26',
+        gpPracticeName: 'practice x',
+      },
+    },
   },
 });
 
@@ -91,6 +102,7 @@ describe('NhsUkLayout', () => {
       [REPEAT_COURSES.name, REPEAT_COURSES],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
         $store.$cookies.get = jest.fn();
@@ -109,6 +121,7 @@ describe('NhsUkLayout', () => {
       [HEALTH_RECORDS.name, HEALTH_RECORDS],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
         $store.$cookies.get = jest.fn();
@@ -124,6 +137,7 @@ describe('NhsUkLayout', () => {
       [GP_MEDICAL_RECORD_GP_AT_HAND.name, GP_MEDICAL_RECORD_GP_AT_HAND],
     ])('silver integration enabled for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         $store = createLayoutStore(isNative, true);
         wrapper = createPage($store, page);
         $store.$cookies.get = jest.fn();
@@ -138,6 +152,7 @@ describe('NhsUkLayout', () => {
       [GP_MEDICAL_RECORD.name, GP_MEDICAL_RECORD],
     ])('silver integration is not enabled for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         $store = createLayoutStore(isNative, false);
         wrapper = createPage($store, page);
         $store.$cookies.get = jest.fn();
@@ -150,6 +165,7 @@ describe('NhsUkLayout', () => {
 
     describe('is before version for web biometrics', () => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         $store = createLayoutStore({ isNative, versionEnabled: false });
         $store.$cookies.get = jest.fn();
       });
@@ -162,6 +178,7 @@ describe('NhsUkLayout', () => {
 
   describe('is web', () => {
     beforeEach(() => {
+      window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
       $store = createLayoutStore(false);
     });
 
@@ -187,6 +204,7 @@ describe('NhsUkLayout', () => {
       [LOGIN.name, LOGIN],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         wrapper = createPage($store, page);
       });
 
@@ -204,6 +222,7 @@ describe('NhsUkLayout', () => {
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         wrapper = createPage($store, page);
       });
 
@@ -216,12 +235,26 @@ describe('NhsUkLayout', () => {
       [LOGIN.name, LOGIN],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
         wrapper = createPage($store, page);
       });
 
       it('will not show breadcrumb', () => {
         expect(wrapper.vm.shouldShowBreadCrumb).toBe(false);
       });
+    });
+  });
+
+  describe('Welcome Banner Display', () => {
+    beforeEach(() => {
+      window.matchMedia = jest.fn(() => ({ matches: true, addEventListener: jest.fn() }));
+    });
+    it('will display the proxy welcome section when proxying', () => {
+      const isNative = true;
+      $store = createLayoutStore(isNative, true, true, true);
+      wrapper = createPage($store, INDEX);
+      const WelcomeBanner = wrapper.find('[id="welcome-banner"]');
+      expect(WelcomeBanner.exists()).toBe(true);
     });
   });
 });

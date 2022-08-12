@@ -17,18 +17,21 @@
             </strong>
           </p>
         </div>
-        <a v-if="isProxying" id="acting-as-other-user-warning"
-           :class="$style['banner']"
-           role="link"
-           tabindex="0"
-           @click="proxyBannerClicked"
-           @keypress.enter="proxyBannerClicked">
-          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
-              nhsuk-u-margin-bottom-0 nhsuk-body-s">
-            {{ $t('profiles.actingOnBehalfOf') }}
-            <strong>{{ actingAsPersonName }}</strong>
-          </p>
-        </a>
+        <div v-if="isProxying" class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2">
+          <span id="acting-as-other-user-warning" :class="[
+            $style['bannerText'], 'nhsuk-u-padding-right-5',
+            'nhsuk-u-margin-bottom-0']">
+            {{ $t('profiles.actingOnBehalfOf') }} {{ actingAsPersonName }}
+          </span >
+          <a id="acting-as-other-user-switch"
+             :class="[$style['bannerLink']]"
+             role="link"
+             tabindex="0"
+             @click="proxyBannerClicked"
+             @keypress.enter="proxyBannerClicked" >
+            {{ $t('profiles.switchProfile') }}
+          </a>
+        </div>
       </warning-banner>
 
       <div :class="['nhsuk-width-container']">
@@ -134,7 +137,7 @@ export default {
       return warningBanner;
     },
     actingAsPersonName() {
-      return this.$store.state.linkedAccounts.actingAsUser.fullName;
+      return this.$store.state.linkedAccounts.actingAsUser.fullName.toUpperCase();
     },
   },
   methods: {
@@ -165,4 +168,3 @@ export default {
 <style module lang="scss" scoped>
   @import "@/style/custom/content-header";
 </style>
-

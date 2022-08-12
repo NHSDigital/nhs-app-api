@@ -4,7 +4,6 @@
     <div id="app"
          ref="nhsAppRoot"
          :tabindex="!$store.state.device.isNativeApp ? -1 : false">
-
       <slot name="header">
         <div v-if="shouldShowFullDesktopHeader">
           <web-header ref="headerMenu"/>
@@ -12,10 +11,14 @@
         <div v-else-if="shouldShowSlimDesktopHeader">
           <web-header :show-menu="false" :show-links="false"/>
         </div>
+
         <content-header id="content-header"
                         :show-bread-crumb="shouldShowBreadCrumb"
                         :show-content-header="shouldShowContentHeader"/>
+
+        <welcome-banner v-if="isIndexRoute" id="welcome-banner" />
       </slot>
+
       <div id="maincontent" ref="mainContent" tabindex="-1">
         <main :class="mainClass">
           <spinner/>
@@ -52,21 +55,23 @@
 import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ClearBackLinkOverrideMixin from '@/plugins/mixinDefinitions/ClearBackLinkOverrideMixin';
+import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HotJar from '@/components/widgets/HotJar';
+import isFunction from 'lodash/fp/isFunction';
 import Modal from '@/components/modal/Modal';
 import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import QualtricsIntercept from '@/components/widgets/QualtricsIntercept';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
+import showShutterPage from '@/lib/proxy/shutter';
 import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
-import isFunction from 'lodash/fp/isFunction';
-import showShutterPage from '@/lib/proxy/shutter';
+import WelcomeBanner from '@/components/WelcomeBanner';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import {
   DOCUMENT_DETAIL_NAME,
@@ -88,8 +93,13 @@ export default {
     SurveyBar,
     WebFooter,
     WebHeader,
+    WelcomeBanner,
   },
-  mixins: [ClearBackLinkOverrideMixin, ResetSpinnerMixin],
+  mixins: [
+    ClearBackLinkOverrideMixin,
+    ResetSpinnerMixin,
+    CalculateAgeInMonthsAndYears,
+  ],
   props: {
     hasFooter: {
       type: Boolean,
@@ -183,6 +193,9 @@ export default {
     isLoading() {
       return this.$store.getters['http/isLoading'];
     },
+    isIndexRoute() {
+      return this.$route.name === INDEX_NAME;
+    },
   },
   watch: {
     $route(to, from) {
@@ -244,3 +257,6 @@ export default {
   },
 };
 </script>
+<style lang="scss" module scoped>
+  @import "@/style/custom/home-banner";
+</style>
