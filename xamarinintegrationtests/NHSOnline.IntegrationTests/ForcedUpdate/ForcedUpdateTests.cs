@@ -44,10 +44,23 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
                 .AssertPageElements()
                 .Upgrade();
 
-            AndroidNhsAppPlayStorePage
-                .AssertOnPage(driver)
-                .AssertPageElements()
-                .InstallAvailable();
+            var androidNhsAppPlayStorePage = AndroidNhsAppPlayStorePage
+                .AssertOnPage(driver);
+
+            androidNhsAppPlayStorePage.AssertPageElements();
+
+            TransitoryErrorHandler.HandleSpecificFailure()
+                .Alternate(() =>
+                    {
+                        // Play store app has now changed layout and Button no longer has the text property.
+                        androidNhsAppPlayStorePage.InstallAvailableFallback();
+                    },
+                    "A button with text: 'Install' should be present.",
+                    () =>
+                    {
+                        // Old layout is now the fallback - may still be applicable on some devices
+                        androidNhsAppPlayStorePage.InstallAvailable();
+                    });
         }
 
         [NhsAppIOSTest]

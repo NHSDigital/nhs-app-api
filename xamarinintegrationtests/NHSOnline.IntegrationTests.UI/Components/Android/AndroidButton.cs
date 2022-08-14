@@ -41,6 +41,28 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         private By FindBy => MobileBy.AndroidUIAutomator(_locatorStrategy.Selector);
 
+        public bool IsButtonPresentWithinParentElement(string parentElementXpath)
+        {
+            var isPresent = false;
+
+            _interactor.ActOnDriver((driver, _) =>
+            {
+                try
+                {
+                    var parentElementSelector = By.XPath(parentElementXpath);
+                    var parentElement = (AndroidElement) driver.FindElement(parentElementSelector);
+                    var element = parentElement.FindElementByClassName("android.widget.Button");
+                    isPresent = element != null;
+                }
+                catch (NoSuchElementException)
+                {
+                    isPresent = false;
+                }
+            });
+
+            return isPresent;
+        }
+
         string IFocusable.ElementDescription
             => new FocusableDescriptionBuilder { Tag = "android.widget.Button", Text = _locatorStrategy.Description }.Description;
 

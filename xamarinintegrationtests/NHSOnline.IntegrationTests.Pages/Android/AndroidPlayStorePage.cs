@@ -1,3 +1,4 @@
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -29,5 +30,16 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         public void InstallAvailable() => InstallButton.AssertVisible();
+
+        public void InstallAvailableFallback()
+        {
+            var textIdentifier = "Install";
+
+            // Play store app is changing layout and Button no longer has the text property - it is now on a sibling element.
+            var isPresent = InstallButton.IsButtonPresentWithinParentElement(
+                $".//android.widget.TextView[normalize-space(@text)='{textIdentifier}']/../..");
+
+            isPresent.Should().BeTrue("A button with text: '{ButtonText}' should be present.", textIdentifier);
+        }
     }
 }
