@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "7deab7ba-eaa2-4e93-bac8-6ab8c4f91190",
+		"_postman_id": "050294cf-670b-43d5-82e2-4cc5684f58a5",
 		"name": "Metric Logger",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "10704675"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -119,6 +118,40 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\r\n    {\r\n        \"AuditId\": \"4cd7631b-242c-465a-9017-f6e089461554\",\r\n        \"NhsLoginSubject\": \"9d9a2a6b-809e-42f0-90ec-5271f7b02679\",\r\n        \"NhsNumber\": \"969 211 3868\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"Unknown\",\r\n        \"Operation\": \"TermsAndConditions_RecordConsent_Response\",\r\n        \"Details\": \"Initial Consent Successfully recorded\",\r\n        \"ApiVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9\",\r\n        \"WebVersion\": \"de565225610ed8e3cf3caab6024b61184f8e28a9 (commit:de5652256)\",\r\n        \"NativeVersion\": null,\r\n        \"Environment\": \"CS-Test\",\r\n        \"SessionId\": \"850578da-0813-46c0-84f0-9219fa583ffd\",\r\n        \"Timestamp\": \"2022-03-23T08:15:00.8572498Z\",\r\n        \"ProofLevel\": \"P5\",\r\n        \"ODS\": \"CS099\",\r\n        \"Referrer\": \"CS-099\",\r\n        \"IntegrationReferrer\": \"IntRef189\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host_address}}/api/AuditLog_Etl_Http?code={{code}}",
+							"protocol": "http",
+							"host": [
+								"{{host_address}}"
+							],
+							"path": [
+								"api",
+								"AuditLog_Etl_Http"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{code}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Gold Integration Jump Off Event to Metric Logger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    { \"Id\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"Timestamp\": \"2022-03-09T11:34:58.2045278Z\",\r\n        \"AuditId\": \"8f276db5-db9d-4d68-a6ba-760f07f4adb8\",\r\n        \"NhsLoginSubject\": \"24fe1e19-df2c-423e-961a-7c717c0b1333\",\r\n        \"NhsNumber\": \"966 118 3252\",\r\n        \"IsActingOnBehalfOfAnother\": false,\r\n        \"Supplier\": \"eConsult\",\r\n        \"Operation\": \"GoldIntegration_JumpOff_Click\",\r\n        \"Details\": \"The user has jumped off to an integration partner\",\r\n        \"ApiVersion\": \"develop\",\r\n        \"WebVersion\": \"develop (commit:7d710d306)\",\r\n        \"NativeVersion\": \"android 2.5.0\",\r\n        \"Environment\": \"onboardingsandpit\",\r\n        \"IntegrationReferrer\": null,\r\n        \"SessionId\": \"54842c1d-5903-49f9-b5a9-bd9c9caf6f21\",\r\n        \"ProofLevel\": \"P9\",\r\n        \"ProviderId\":\"eConsult\",\r\n        \"ProviderName\":\"eConsult\",\r\n        \"JumpOffId\":\"onlineConsultation\",\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

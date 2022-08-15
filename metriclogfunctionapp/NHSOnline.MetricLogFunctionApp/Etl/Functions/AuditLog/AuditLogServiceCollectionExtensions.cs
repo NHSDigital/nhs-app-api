@@ -4,6 +4,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Device;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.GoldIntegrationJumpOff;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
@@ -43,6 +44,9 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
 
             serviceCollection.AddTransient<IAuditLogEtl<DeviceMetric>, DeviceMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<DeviceMetric>, DeviceEventParser>();
+
+            serviceCollection.AddTransient<IAuditLogEtl<GoldIntegrationJumpOffMetric>, GoldIntegrationJumpOffMetricEtl>();
+            serviceCollection.AddTransient<IAuditLogParser<GoldIntegrationJumpOffMetric>, GoldIntegrationJumpOffEventParser>();
 
             serviceCollection.AddTransient<IAuditLogEtl<InitialPromptMetric>, InitialPromptMetricEtl>();
             serviceCollection.AddTransient<IAuditLogParser<InitialPromptMetric>, InitialPromptEventParser>();

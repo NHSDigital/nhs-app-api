@@ -29,6 +29,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
             Table<LastLoginPatientIdentifierRow>();
 
         internal PostgresTable<LoginMetricRow> LoginMetric => Table<LoginMetricRow>();
+        
+        internal PostgresTable<GoldIntegrationJumpOffMetricRow> GoldIntegrationJumpOffMetric =>
+            Table<GoldIntegrationJumpOffMetricRow>();
 
         internal PostgresTable<MedicalRecordSectionViewMetricRow> MedicalRecordSectionViewMetric =>
             Table<MedicalRecordSectionViewMetricRow>();

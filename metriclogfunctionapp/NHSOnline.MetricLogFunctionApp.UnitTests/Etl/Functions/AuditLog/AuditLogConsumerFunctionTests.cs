@@ -11,6 +11,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Device;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.GoldIntegrationJumpOff;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
@@ -41,6 +42,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
         private Mock<IAuditLogEtl<ConsentMetric>> _consentEtl;
         private Mock<IAuditLogEtl<DeviceMetric>> _deviceMetricEtl;
         private Mock<IAuditLogEtl<LastLoginPatientIdentifier>> _lastLoginPatientIdentifierEtl;
+        private Mock<IAuditLogEtl<GoldIntegrationJumpOffMetric>> _goldIntegrationJumpOffEtl;
         private Mock<IAuditLogEtl<LoginMetric>> _loginEtl;
         private Mock<IAuditLogEtl<MedicalRecordViewMetric>> _medicalRecordView;
         private Mock<IAuditLogEtl<MedicalRecordSectionViewMetric>> _medicalRecordSectionViewMetricEtl;
@@ -68,6 +70,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _biometricsToggleEtl = new Mock<IAuditLogEtl<BiometricsToggleMetric>>();
             _consentEtl = new Mock<IAuditLogEtl<ConsentMetric>>();
             _deviceMetricEtl = new Mock<IAuditLogEtl<DeviceMetric>>();
+            _goldIntegrationJumpOffEtl = new Mock<IAuditLogEtl<GoldIntegrationJumpOffMetric>>();
             _initialPromptEtl = new Mock<IAuditLogEtl<InitialPromptMetric>>();
             _lastLoginPatientIdentifierEtl = new Mock<IAuditLogEtl<LastLoginPatientIdentifier>>();
             _loginEtl = new Mock<IAuditLogEtl<LoginMetric>>();
@@ -93,6 +96,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
                 _biometricsToggleEtl.Object,
                 _consentEtl.Object,
                 _deviceMetricEtl.Object,
+                _goldIntegrationJumpOffEtl.Object,
                 _initialPromptEtl.Object,
                 _lastLoginPatientIdentifierEtl.Object,
                 _loginEtl.Object,
@@ -133,6 +137,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog
             _consentEtl.Verify(etl =>
                 etl.ExecuteDependentEvent(It.IsAny<ILogger<AuditLogConsumerFunction>>(),It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _deviceMetricEtl.Verify(etl =>
+                etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
+            _goldIntegrationJumpOffEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));
             _initialPromptEtl.Verify(etl =>
                 etl.Execute(It.Is<IList<AuditRecord>>(e => e[0].Operation == "This is a Test Message")));

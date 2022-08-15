@@ -511,6 +511,39 @@ SilverIntegrationJumpOff Body:
 ]
 ```
 
+GoldIntegrationJumpOff Body:
+```bash
+[
+    {
+        "Id": "8f276db5-db9d-4d68-a6ba-760f07f4adb8",
+        "Timestamp": "2022-03-09T11:34:58.2045278Z",
+        "AuditId": "8f276db5-db9d-4d68-a6ba-760f07f4adb8",
+        "NhsLoginSubject": "24fe1e19-df2c-423e-961a-7c717c0b1333",
+        "NhsNumber": "966 118 3252",
+        "IsActingOnBehalfOfAnother": false,
+        "Supplier": "eConsult",
+        "Operation": "GoldIntegration_JumpOff_Click",
+        "Details": "The user has jumped off to an integration partner",
+        "ApiVersion": "develop",
+        "WebVersion": "develop (commit:7d710d306)",
+        "NativeVersion": "android 2.5.0",
+        "Environment": "onboardingsandpit",
+        "IntegrationReferrer": null,
+        "SessionId": "54842c1d-5903-49f9-b5a9-bd9c9caf6f21",
+        "ProofLevel": "P9",
+        "ProviderId":"eConsult",
+        "ProviderName":"eConsult",
+        "JumpOffId":"onlineConsultation",
+        "id": "54842c1d-5903-49f9-b5a9-bd9c9caf6f21",
+        "_rid": "RuVQAKPVga8bowEAAAAAAA==",
+        "_self": "dbs/RuVQAA==/colls/RuVQAKPVga8=/docs/RuVQAKPVga8bowEAAAAAAA==/",
+        "_etag": "\"e4011bab-0000-1100-0000-622890e20000\"",
+        "_attachments": "attachments/",
+        "_ts": 1646825698
+    }
+]
+```
+
 PatientRecordSectionView Body:
 ```bash
 [

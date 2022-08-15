@@ -10,6 +10,7 @@ using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Book;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Appointment.Cancel;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.BiometricsToggle;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.Device;
+using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.GoldIntegrationJumpOff;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.MedicalRecordView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.MedicalRecord.SectionView;
 using NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.NominatedPharmacy.Create;
@@ -38,6 +39,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
         private readonly IAuditLogEtl<BiometricsToggleMetric> _biometricsToggleEtl;
         private readonly IAuditLogEtl<ConsentMetric> _consentEtl;
         private readonly IAuditLogEtl<DeviceMetric> _deviceEtl;
+        private readonly IAuditLogEtl<GoldIntegrationJumpOffMetric> _goldIntegrationJumpOffEtl;
         private readonly IAuditLogEtl<InitialPromptMetric> _initialPromptEtl;
         private readonly IAuditLogEtl<LastLoginPatientIdentifier> _lastLoginPatientIdentifierEtl;
         private readonly IAuditLogEtl<LoginMetric> _loginEtl;
@@ -63,6 +65,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             IAuditLogEtl<BiometricsToggleMetric> biometricsToggleEtl,
             IAuditLogEtl<ConsentMetric> consentEtl,
             IAuditLogEtl<DeviceMetric> deviceEtl,
+             IAuditLogEtl<GoldIntegrationJumpOffMetric> goldIntegrationJumpOffEtl,
             IAuditLogEtl<InitialPromptMetric> initialPromptEtl,
             IAuditLogEtl<LastLoginPatientIdentifier> lastLoginPatientIdentifierEtl,
             IAuditLogEtl<LoginMetric> loginEtl,
@@ -87,6 +90,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
             _biometricsToggleEtl = biometricsToggleEtl;
             _consentEtl = consentEtl;
             _deviceEtl = deviceEtl;
+            _goldIntegrationJumpOffEtl = goldIntegrationJumpOffEtl;
             _initialPromptEtl = initialPromptEtl;
             _lastLoginPatientIdentifierEtl = lastLoginPatientIdentifierEtl;
             _loginEtl = loginEtl;
@@ -144,6 +148,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog
                 await _biometricsToggleEtl.Execute(events);
                 await _consentEtl.ExecuteDependentEvent(_queueLogger,events);
                 await _deviceEtl.Execute(events);
+                await _goldIntegrationJumpOffEtl.Execute(events);
                 await _initialPromptEtl.Execute(events);
                 await _lastLoginPatientIdentifierEtl.Execute(events);
                 await _loginEtl.ExecuteDependentEvent(_queueLogger,events);
