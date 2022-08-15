@@ -39,7 +39,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             var isPresent = InstallButton.IsButtonPresentWithinParentElement(
                 $".//android.widget.TextView[normalize-space(@text)='{textIdentifier}']/../..");
 
-            isPresent.Should().BeTrue("A button with text: '{ButtonText}' should be present.", textIdentifier);
+            isPresent.Should().BeTrue("A button with text: '{0}' should be present.", textIdentifier);
         }
     }
 }
