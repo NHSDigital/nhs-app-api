@@ -669,7 +669,6 @@ target:
     - E84067
     - E84076
     - E84620
-    - E84626
     - E84637
     - E84638
     - E84665
@@ -678,6 +677,8 @@ target:
     - F81060
     - Y01090
     - Y03049
+    - F81105
+    - F81119
 journeys:
   cdssAdvice:
     provider: eConsult
