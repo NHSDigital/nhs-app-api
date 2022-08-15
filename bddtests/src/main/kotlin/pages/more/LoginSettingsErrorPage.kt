@@ -10,7 +10,7 @@ import pages.assertIsVisible
 class LoginSettingsErrorPage : HybridPageObject() {
 
     private val cannotFindTitleLocator = "//h1[normalize-space(text())='We cannot find your %s']"
-    private val cannotChangeTitleLocator = "//h1[normalize-space(text())='We could not change your " +
+    private val cannotChangeTitleLocator = "//h1[normalize-space(text())='Cannot change your " +
             "%s" +
             " settings']"
     private val cannotFindTextLocator = "//p[@data-sid='cannotFindBiometrics']"

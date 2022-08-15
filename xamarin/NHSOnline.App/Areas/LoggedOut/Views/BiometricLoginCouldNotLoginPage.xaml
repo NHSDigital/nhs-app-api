@@ -6,14 +6,13 @@
                                     xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
                                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.BiometricLoginCouldNotLoginPage"
                                     x:Name="Page"
-                                    PageDescription="We could not log you in">
+                                    PageDescription="Cannot log in">
     <ScrollView BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         <panels:ResponsiveLayoutPanel>
             <StackLayout>
-                <elements:Heading1 Text="We could not log you in" x:Name="Heading" />
+                <elements:Heading1 Text="Cannot log in" x:Name="Heading" />
                 
-                <elements:Paragraph Text="Go back and try logging in again." />
-                <elements:Paragraph Text="If you keep seeing this message, you'll need to log in using your email, password and security code." />
+                <elements:Paragraph Text="You need to log in using your email, password and security code." />
                 
                 <elements:LinkLabel Text="Back to login"
                                     Command="{Binding BackHomeCommand, Source={x:Reference Name=Page}}" />

@@ -218,7 +218,6 @@ export default {
     youCannotUse: 'You cannot use the NHS app if you have not accepted NHS login terms of use.',
   },
   biometrics: {
-    goBackToTheHomepage: 'Go back to the homepage and try logging in again.',
-    ifYouKeepSeeingThisLoginWithEmailAndPassword: 'If you keep seeing this message, go back to the homepage and log in using your email, password and security code.',
+    ifYouKeepSeeingThisLoginWithEmailAndPassword: 'You need to log in using your email, password and security code.',
   },
 };
