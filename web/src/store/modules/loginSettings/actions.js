@@ -1,9 +1,11 @@
-import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
+import {
+  BIOMETRICS_ERROR_REGISTRATION_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
+} from '@/router/paths';
 import NativeApp from '@/services/native-app';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import biometricActions from '@/lib/biometrics/biometricActions';
 import biometricRegistrationOutcomes from '@/lib/biometrics/biometricRegistrationOutcomes';
-import { BIOMETRICS_REGISTRATION_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
 import {
   SET_WAITING,
@@ -59,6 +61,53 @@ export default {
     NativeApp.updateBiometricRegistrationWithToken(accessToken);
   },
 
+  async biometricPromptCompletion({ commit }, deviceResponse) {
+    commit(SET_WAITING, false);
+
+    let deviceResponseParam = deviceResponse;
+
+    if (typeof deviceResponseParam !== 'object') {
+      deviceResponseParam = JSON.parse(deviceResponse);
+    }
+
+    const { action, outcome, errorCode } = deviceResponseParam;
+
+    if (outcome === biometricRegistrationOutcomes.Failure) {
+      if (errorCode === biometricErrorCodes.CannotFindBiometrics
+        || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
+        commit(ADD_ERROR_CODE, errorCode);
+        this.app.$router.push({ path: BIOMETRICS_ERROR_REGISTRATION_PATH });
+      } else {
+        addApiError(this,
+          500,
+          biometricErrorCodes.Unknown,
+          'Unknown error occurred while updating biometric registration status');
+      }
+
+      return;
+    }
+
+    if (outcome === biometricRegistrationOutcomes.Success) {
+      if (action === biometricActions.Register) {
+        try {
+          await this.app.$http.postV1ApiMetricsBiometricsOptIn();
+        } catch {
+          // do nothing as this is just logging
+        }
+        commit(UPDATE_REGISTRATION_STATUS, true);
+      } else if (action === biometricActions.Deregister) {
+        try {
+          await this.app.$http.postV1ApiMetricsBiometricsOptOut();
+        } catch {
+          // do nothing as this is just logging
+        }
+        commit(UPDATE_REGISTRATION_STATUS, false);
+      }
+
+      NativeApp.goToLoggedInHomeScreen();
+    }
+  },
+
   async biometricCompletion({ commit }, deviceResponse) {
     commit(SET_WAITING, false);
 
@@ -101,10 +150,6 @@ export default {
           // do nothing as this is just logging
         }
         commit(UPDATE_REGISTRATION_STATUS, false);
-      }
-
-      if (this.app.$router.currentRoute.name === BIOMETRICS_REGISTRATION_NAME) {
-        NativeApp.goToLoggedInHomeScreen();
       }
     }
   },

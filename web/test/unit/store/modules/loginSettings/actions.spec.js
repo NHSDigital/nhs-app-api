@@ -1,6 +1,9 @@
 import actions from '@/store/modules/loginSettings/actions';
-import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
-import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME, BIOMETRICS_REGISTRATION_NAME } from '@/router/names';
+import {
+  BIOMETRICS_ERROR_REGISTRATION_PATH,
+  MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH,
+} from '@/router/paths';
+import { BIOMETRICS_REGISTRATION_NAME, MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME } from '@/router/names';
 import NativeApp from '@/services/native-app';
 import { SET_WAITING,
   CLEAR_ERROR_CODE,
@@ -175,12 +178,52 @@ describe('loginSettings actions', () => {
     });
   });
 
+  describe('biometricPromptCompletion', () => {
+    let $router;
+    let commit;
+
+    beforeEach(() => {
+      commit = jest.fn();
+      $router = createRouter();
+      actions.app = { $router };
+    });
+    describe('error', () => {
+      const deviceResponse = { action: 'Deregister', outcome: 'Failed', errorCode: '10004' };
+      it('will redirect to Biometrics Error Page ', () => {
+        actions.biometricPromptCompletion({ commit }, deviceResponse);
+        expect(actions.app.$router.push).toHaveBeenCalledWith({ path: BIOMETRICS_ERROR_REGISTRATION_PATH });
+      });
+    });
+
+    describe('register', () => {
+      const deviceResponse = { action: 'Register', outcome: 'Success', errorCode: '' };
+
+      beforeEach(() => {
+        $router = createRouter(BIOMETRICS_REGISTRATION_NAME);
+        actions.app = {
+          $router,
+          $http: {
+            postV1ApiMetricsBiometricsOptIn: jest.fn(() => Promise.resolve()),
+            postV1ApiMetricsBiometricsOptOut: jest.fn(() => Promise.resolve()),
+          },
+        };
+        commit = jest.fn();
+        actions.biometricPromptCompletion({ commit }, deviceResponse);
+      });
+
+      it('will call native callback to redirect to home screen', () => {
+        expect(NativeApp.goToLoggedInHomeScreen).toBeCalled();
+      });
+    });
+  });
+
   describe('biometricCompletion', () => {
     describe('register', () => {
       let commit;
       let $router;
       const deviceResponse =
         { action: 'Register', outcome: 'Success', errorCode: '' };
+
       beforeEach(() => {
         $router = createRouter(BIOMETRICS_REGISTRATION_NAME);
         actions.app = {
@@ -232,6 +275,26 @@ describe('loginSettings actions', () => {
 
       beforeEach(() => {
         redirectTo.mockClear();
+      });
+
+      describe('redirects to correct error page', () => {
+        let commit;
+        const deviceResponse = { action: 'Deregister', outcome: 'Failed', errorCode: '10004' };
+
+        beforeEach(() => {
+          commit = jest.fn();
+          $router = createRouter();
+          actions.app = { $router };
+        });
+
+        it('when on the login settings path ', () => {
+          actions.app.$router.currentRoute = { name: MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_NAME };
+          actions.biometricCompletion({ commit }, deviceResponse);
+
+          expect(redirectTo).toHaveBeenCalledWith({
+            $router, $store: actions,
+          }, MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH);
+        });
       });
 
       describe('10004', () => {

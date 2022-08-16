@@ -35,6 +35,7 @@ export const APPOINTMENT_ADD_TO_CALENDAR_NAME = 'appointments-gp-appointments-ad
 export const APPOINTMENT_GP_AT_HAND_NAME = 'appointments-gp-at-hand';
 export const APPOINTMENT_INFORMATICA_NAME = 'appointments-informatica';
 export const BIOMETRICS_REGISTRATION_NAME = 'biometrics-registration';
+export const BIOMETRICS_ERROR_REGISTRATION_NAME = 'biometrics-registration-error';
 export const DATA_SHARING_OVERVIEW_NAME = 'data-sharing';
 export const DATA_SHARING_WHERE_USED_NAME = 'data-sharing-where-used';
 export const DATA_SHARING_DOES_NOT_APPLY_NAME = 'data-sharing-does-not-apply';

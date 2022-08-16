@@ -1,4 +1,4 @@
-import Biometrics from '@/pages/biometrics';
+import Biometrics from '@/pages/biometrics-registration/index';
 import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../../helpers';
 

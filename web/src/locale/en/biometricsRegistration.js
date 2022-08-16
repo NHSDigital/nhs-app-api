@@ -28,5 +28,54 @@ export default {
     yes: 'Yes, turn on Touch ID',
     no: 'No, do not turn on Touch ID',
   },
+  errors: {
+    cannotFindBiometrics: {
+      title: {
+        fingerPrintFaceOrIris: 'fingerprint, face or iris (biometrics)',
+        face: 'Face ID',
+        touch: 'Touch ID',
+      },
+      checkYourDevice: 'Check your device settings to make sure you have:',
+      turnOnBiometrics: {
+        fingerPrintFaceOrIris: 'turned on biometrics',
+        face: 'turned on Face ID',
+        touch: 'turned on Touch ID',
+      },
+      addedBiometrics: {
+        fingerPrintFaceOrIris: 'added a fingerprint, face or iris scan',
+        face: 'added a face scan',
+        touch: 'added a fingerprint scan',
+      },
+      ifYouCannotUse: {
+        fingerPrintFaceOrIris: 'If you cannot use biometrics, you\'ll need to log in using your email, password and security code.',
+        face: 'If you cannot use Face ID, you\'ll need to log in using your email, password and security code.',
+        touch: 'If you cannot use Touch ID, you\'ll need to log in using your email, password and security code.',
+      },
+    },
+    cannotTurnOnBiometrics: {
+      title: {
+        fingerPrintFaceOrIris: 'fingerprint, face or iris recognition (biometrics)',
+        face: 'Face ID',
+        touch: 'Touch ID',
+      },
+      technicalProblem: {
+        face: 'We cannot turn on Face ID due to a technical problem.',
+        touch: 'We cannot turn on Touch ID due to a technical problem.',
+        fingerPrintFaceOrIris: 'We cannot turn on fingerprint, face or iris recognition (biometrics) due to a technical problem.',
+      },
+      tryAgainLater: 'Try again later.',
+      ifYouStillCannotTurnOn: {
+        face: 'If you still cannot turn on Face ID, ',
+        touch: 'If you still cannot turn on Touch ID, ',
+        fingerPrintFaceOrIris: 'If you still cannot turn on biometrics, ',
+      },
+      getHelpWithLoggingIn: 'get help with logging in using biometrics',
+      loginUsingOtherMeans: {
+        face: 'If you cannot turn on Face ID, you\'ll need to log in using your email, password and security code.',
+        touch: 'If you cannot turn on Touch ID, you\'ll need to log in using your email, password and security code.',
+        fingerPrintFaceOrIris: 'If you cannot turn on biometrics, you\'ll need to log in using your email, password and security code.',
+      },
+    },
+  },
 
 };

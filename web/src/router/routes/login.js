@@ -6,11 +6,12 @@ import TermsAndConditionsPage from '@/pages/terms-and-conditions';
 import UserResearchPage from '@/pages/user-research';
 import Notifications from '@/pages/notifications/index';
 import NotificationsGenericError from '@/pages/notifications/notifications-generic-error';
-import Biometrics from '@/pages/biometrics';
+import Biometrics from '@/pages/biometrics-registration/index';
+import BiometricsError from '@/pages/biometrics-registration/error';
 
 import {
   AUTH_RETURN_PATH,
-  BEGINLOGIN_PATH,
+  BEGINLOGIN_PATH, BIOMETRICS_ERROR_REGISTRATION_PATH,
   BIOMETRICS_REGISTRATION_PATH,
   LOGIN_BIOMETRIC_ERROR_PATH,
   LOGIN_PATH,
@@ -22,7 +23,7 @@ import {
 } from '@/router/paths';
 import {
   AUTH_RETURN_NAME,
-  BEGINLOGIN_NAME,
+  BEGINLOGIN_NAME, BIOMETRICS_ERROR_REGISTRATION_NAME,
   BIOMETRICS_REGISTRATION_NAME,
   LOGIN_BIOMETRIC_ERROR_NAME,
   LOGIN_NAME,
@@ -40,12 +41,30 @@ import nativeLogout from '@/middleware/nativeLogout';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { APP_LOGIN_HELP_PATH } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
+import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 
 const getTermsConditionTitle = (store, i18n) => (
   i18n.t(store.state.termsAndConditions.updatedConsentRequired
     ? 'termsAndConditions.updated.title'
     : 'navigation.pages.headers.termsAndConditions')
 );
+
+const getBiometricsErrorHeaderTitle = (prefix, store, i18n) => {
+  const biometricType = store.getters['loginSettings/biometricType'];
+  let biometricTypeName;
+  const errorCode = store.getters['loginSettings/biometricError'];
+
+  switch (errorCode) {
+    case biometricErrorCodes.CannotFindBiometrics:
+      biometricTypeName = i18n.t(`biometricsRegistration.errors.cannotFindBiometrics.title.${biometricType}`);
+      return i18n.t(`${prefix}.biometricsRegistrationErrorCannotFind`, { biometricType: biometricTypeName });
+    case biometricErrorCodes.CannotChangeBiometrics:
+      biometricTypeName = i18n.t(`biometricsRegistration.errors.cannotTurnOnBiometrics.title.${biometricType}`);
+      return i18n.t(`${prefix}.biometricsRegistrationErrorCannotChange`, { biometricType: biometricTypeName });
+    default:
+      return i18n.t(`${prefix}.loginSettingsErrorUnknown`);
+  }
+};
 
 export const LOGIN = {
   path: LOGIN_PATH,
@@ -182,6 +201,19 @@ export const BIOMETRICS = {
   },
 };
 
+export const BIOMETRICS_REGISTRATION_ERROR = {
+  path: BIOMETRICS_ERROR_REGISTRATION_PATH,
+  name: BIOMETRICS_ERROR_REGISTRATION_NAME,
+  component: BiometricsError,
+  meta: {
+    headerKey: (store, i18n) => getBiometricsErrorHeaderTitle('navigation.pages.headers', store, i18n),
+    titleKey: (store, i18n) => getBiometricsErrorHeaderTitle('navigation.pages.titles', store, i18n),
+    proofLevel: proofLevel.P5,
+    crumb: {},
+    helpPath: APP_LOGIN_HELP_PATH,
+  },
+};
+
 export default [
   LOGIN,
   LOGIN_BIOMETRIC_ERROR,
@@ -193,4 +225,5 @@ export default [
   NOTIFICATIONS,
   NOTIFICATIONS_GENERIC_ERROR,
   BIOMETRICS,
+  BIOMETRICS_REGISTRATION_ERROR,
 ];
