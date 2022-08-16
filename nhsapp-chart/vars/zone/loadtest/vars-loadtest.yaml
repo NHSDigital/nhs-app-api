@@ -137,8 +137,8 @@ metrics:
   cpuLimit: "300m"
 
 splunk:
-  pidIndex: apppid_nhsapp_staging
-  specialCategoryIndex: appspecialcategory_nhsapp_staging
+  pidIndex: apppid_nhsapp_loadtest
+  specialCategoryIndex: appspecialcategory_nhsapp_loadtest
 
 qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"

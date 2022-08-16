@@ -9,7 +9,7 @@ metadata:
     version: {{ .Chart.AppVersion | quote }}
   annotations:
     collectord.io/logs-override.1-match: '(?i)NhsNumber'
-    collectord.io/logs-override.1-index: {{ default $.Values.splunk.pidIndex "apppid_nhsapp_dev" }}
+    collectord.io/logs-override.1-index: {{ default "apppid_nhsapp_dev" $.Values.splunk.pidIndex }}
 spec:
   selector:
     matchLabels:
