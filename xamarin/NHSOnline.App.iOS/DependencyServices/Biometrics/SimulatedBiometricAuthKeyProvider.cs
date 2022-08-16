@@ -29,7 +29,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
         public Task<IBiometricAuthKey> CreateBiometricKey()
         {
             using var context = new LAContext();
-            var supported = BiometricsHardware.HasDeviceOwnerPermittedUseOfBiometricHardware(context, out var state);
+            var supported = BiometricsHardware.HasBiometricHardware(context, out var state);
             if (!supported || state == BiometricHardwareState.Unusable || context.EvaluatedPolicyDomainState is null)
             {
                 throw new InvalidOperationException("Cannot create auth key: Biometrics unusable");

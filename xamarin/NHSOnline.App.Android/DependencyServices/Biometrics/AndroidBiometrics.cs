@@ -192,8 +192,5 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             key = default;
             return false;
         }
-
-        // At the moment, the only scenario involved is FaceID
-        public bool IsPermissionBased() => false;
     }
 }

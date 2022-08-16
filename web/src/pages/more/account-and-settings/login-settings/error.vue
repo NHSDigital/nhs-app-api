@@ -26,14 +26,6 @@
           {{ $t('loginSettings.biometrics.errors.cannotChangeBiometricSettings.paragraph2') }}
         </p>
       </div>
-      <div v-if="cannotUseBiometrics" class="nhsuk-u-padding-top-4">
-        <p>
-          {{ $t(`${CannotUseBiometricsText}.youNeedTo`) }}
-          <a id="app-turn-on-biometric-type" href="#" :class="$style['inline-hyperlink']" @click.prevent.stop="openAppSettings">
-            {{ $t(`${CannotUseBiometricsText}.turnOnBiometricsInYourDeviceSettingsLink`) }}</a>
-          {{ $t(`${CannotUseBiometricsText}.beforeYouCanTurnOnBiometricsInNHSApp`) }}
-        </p>
-      </div>
     </div>
   </div>
 </template>
@@ -43,7 +35,6 @@ import { MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH } from '@/router/paths';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import { redirectTo } from '@/lib/utils';
 import { NHS_APP_LOGGING_IN_HELP } from '@/router/externalLinks';
-import NativeApp from '@/services/native-app';
 
 export default {
   name: 'LoginSettingsErrorPage',
@@ -56,8 +47,6 @@ export default {
       cannotFindErrorText: `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${biometricType}`,
       cannotFindBiometricsErrorCode: biometricErrorCodes.CannotFindBiometrics,
       cannotChangeBiometricsErrorCode: biometricErrorCodes.CannotChangeBiometrics,
-      cannotUseBiometricErrorCode: biometricErrorCodes.CannotUseBiometrics,
-      CannotUseBiometricsText: `loginSettings.biometrics.errors.cannotUseBiometricSettings.${biometricType}`,
       helpLink: NHS_APP_LOGGING_IN_HELP,
     };
   },
@@ -65,23 +54,11 @@ export default {
     isAndroid() {
       return this.$store.state.device.source === 'android';
     },
-    cannotUseBiometrics() {
-      return !this.isAndroid && this.error === this.cannotUseBiometricErrorCode;
-    },
   },
   created() {
     if (this.$store.getters['loginSettings/biometricError'] === undefined) {
       redirectTo(this, MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH);
     }
   },
-  methods: {
-    openAppSettings() {
-      NativeApp.openAppSettings();
-    },
-  },
 };
 </script>
-<style module lang="scss" scoped>
-  @import "@/style/custom/a-inline";
-</style>
-

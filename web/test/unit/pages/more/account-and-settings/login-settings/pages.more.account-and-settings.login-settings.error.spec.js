@@ -89,29 +89,5 @@ describe('login settings page', () => {
           MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_PATH);
       });
     });
-
-    describe('cannot use biometric registration', () => {
-      let turnOnBiometricDeviceSettingHyperlink;
-      beforeEach(() => {
-        mountPage({ errorCode: biometricErrorCodes.CannotUseBiometrics });
-      });
-
-      it('will have information showing -You need to', () => {
-        expect(wrapper.findAll('p').at(0).text()).toContain('You need to');
-      });
-
-      it('will have information showing-turn on Face ID in your device settings', () => {
-        expect(wrapper.findAll('p').at(0).text()).toContain('turn on Face ID in your device settings');
-      });
-
-      it('will have information showing-before you can turn on Face ID in the NHS App', () => {
-        expect(wrapper.findAll('p').at(0).text()).toContain('before you can turn on Face ID in the NHS App.');
-      });
-
-      it('will have hyperlink to turn on biometric Face Id device settings', () => {
-        turnOnBiometricDeviceSettingHyperlink = wrapper.findAll('a').at(0);
-        expect(turnOnBiometricDeviceSettingHyperlink.exists()).toBe(true);
-      });
-    });
   });
 });

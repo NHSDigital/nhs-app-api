@@ -70,7 +70,8 @@ export default {
     const { action, outcome, errorCode } = deviceResponseParam;
 
     if (outcome === biometricRegistrationOutcomes.Failure) {
-      if (biometricErrorCodes.CombinedBiometricErrorList.includes(errorCode)) {
+      if (errorCode === biometricErrorCodes.CannotFindBiometrics
+        || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
         commit(ADD_ERROR_CODE, errorCode);
         redirectTo({ $router: this.app.$router, $store: this },
           MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH);

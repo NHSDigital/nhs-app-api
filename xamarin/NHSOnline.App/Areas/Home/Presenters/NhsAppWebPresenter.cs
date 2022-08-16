@@ -12,7 +12,6 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
@@ -22,7 +21,6 @@ using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using BiometricStatus = NHSOnline.App.Controls.WebViews.Payloads.BiometricStatus;
 
 namespace NHSOnline.App.Areas.Home.Presenters
 {
@@ -48,7 +46,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IFileHandler _fileHandler;
         private readonly IDialogPresenter _dialogPresenter;
         private readonly FileDownloadService _fileDownloadService;
-        private readonly IBiometrics _biometrics;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -65,8 +62,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ICalendar calendar,
             IFileHandler fileHandler,
             IDialogPresenter dialogPresenter,
-            FileDownloadService fileDownloadService,
-            IBiometrics biometrics)
+            FileDownloadService fileDownloadService)
         {
             _model = model;
             _view = view;
@@ -84,7 +80,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _fileHandler = fileHandler;
             _dialogPresenter = dialogPresenter;
             _fileDownloadService = fileDownloadService;
-            _biometrics = biometrics;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -383,8 +378,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                     case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false }:
                         completion.Action = "Register";
                         completion.Outcome = BiometricOutcome.Failed.ToString();
-                        completion.ErrorCode = _biometrics.IsPermissionBased() ?
-                                BiometricErrorCode.CannotUseBiometrics.ToString() : BiometricErrorCode.CannotFindBiometrics.ToString();
+                        completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();
                         break;
 
                     case BiometricStatusResult.HardwarePresent { Registered: true }:

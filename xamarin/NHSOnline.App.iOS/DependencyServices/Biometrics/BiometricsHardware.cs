@@ -10,7 +10,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger<BiometricsHardware>();
 
-        internal static bool HasDeviceOwnerPermittedUseOfBiometricHardware(LAContext context, out BiometricHardwareState state)
+        internal static bool HasBiometricHardware(LAContext context, out BiometricHardwareState state)
         {
             NSError? error = null;
             try
