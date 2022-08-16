@@ -1,7 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <TargetFramework>xamarin.ios</TargetFramework>
-    <SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <!-- Ensure xamarin/buildscripts/lib/set_env.sh native versions are also updated when bumping these -->
     <NhsAppBundleShortVersion Condition=" '$(NhsAppBundleShortVersion)' == '' ">2.17.0</NhsAppBundleShortVersion>
@@ -33,11 +32,6 @@
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Platform)\$(DebugMode)</OutputPath>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <AssemblyTitle>NHSOnline.App.iOS</AssemblyTitle>
-    <Product>NHSOnline.App.iOS</Product>
-    <Copyright>Copyright ©  2014</Copyright>
-    <AssemblyVersion>3.6.0.0</AssemblyVersion>
-    <FileVersion>3.6.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' " />
@@ -111,6 +105,74 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
   <ItemGroup>
+    <Compile Include="Compatibility.cs" />
+    <Compile Include="Controllers\AlertDialogBoxController.cs" />
+    <Compile Include="Controllers\IosViewController.cs" />
+    <Compile Include="Controllers\CalendarEventController.cs" />
+    <Compile Include="DependencyServices\AlertDialog\IosDialogPresenter.cs" />
+    <Compile Include="DependencyServices\IosPreHomeLogoutMonitor.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricRegistrationDomainState.cs" />
+    <Compile Include="DependencyServices\Biometrics\BiometricsHardware.cs" />
+    <Compile Include="DependencyServices\Biometrics\IBiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Biometrics\IosBiometrics.cs" />
+    <Compile Include="DependencyServices\Biometrics\SimulatedBiometricAuthKeyProvider.cs" />
+    <Compile Include="DependencyServices\Calendar\ApplicationEventStore.cs" />
+    <Compile Include="DependencyServices\Calendar\CreateEventEditView.cs" />
+    <Compile Include="DependencyServices\Calendar\IosCalendar.cs" />
+    <Compile Include="DependencyServices\IosAccessibilityService.cs" />
+    <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
+    <Compile Include="DependencyServices\IosCookieService.cs" />
+    <Compile Include="DependencyServices\IosFileHandler.cs" />
+    <Compile Include="DependencyServices\IosInstallReferrer.cs" />
+    <Compile Include="DependencyServices\IosLifecycle.cs" />
+    <Compile Include="DependencyServices\IosNativeLog.cs" />
+    <Compile Include="DependencyServices\IosPlatformVersion.cs" />
+    <Compile Include="DependencyServices\IosSettingsService.cs" />
+    <Compile Include="DependencyServices\IosNativeAppVersionCheckService.cs" />
+    <Compile Include="DependencyServices\IosUpdateService.cs" />
+    <Compile Include="DependencyServices\Notifications\IosGetPnsTokenResponse.cs" />
+    <Compile Include="DependencyServices\Notifications\IosNotifications.cs" />
+    <Compile Include="DependencyServices\Notifications\RemoteNotificationRecievedHandler.cs" />
+    <Compile Include="DependencyServices\Notifications\RemoteNotificationRegistrationHandler.cs" />
+    <Compile Include="Effects\IosAccessibilityEffect.cs" />
+    <Compile Include="Effects\IosAccessibilityFocusEffect.cs" />
+    <Compile Include="Effects\SafeAreaMarginEffectBottom.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectTopOrientationAware.cs" />
+    <Compile Include="Extensions\NSDataExtensions.cs" />
+    <Compile Include="Extensions\UIApplicationExtensions.cs" />
+    <Compile Include="Handlers\UserNotificationCenterHandler.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\ButtonElementRenderer.cs" />
+    <Compile Include="Renderers\ContentPageRenderer.cs" />
+    <Compile Include="Renderers\CreateSessionSwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\Heading1Renderer.cs" />
+    <Compile Include="Renderers\StackLayoutRenderer.cs" />
+    <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\WebViews\BaseWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\PageLoadRedirectAggregatorExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\PageNavigationAggregatorExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\WebIntegrationRequestRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeSwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginOnDemandGpSessionWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
+    <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
+    <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
+    <Compile Include="Renderers\WebViews\WebViewUIDelegate.cs" />
+    <Compile Include="SecureScreen.cs" />
     <None Include="Info.template.plist" />
     <None Include="Info.plist">
       <DependentUpon>Info.template.plist</DependentUpon>
@@ -119,6 +181,7 @@
     <None Include="Entitlements.plist">
       <DependentUpon>Entitlements.template.plist</DependentUpon>
     </None>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -132,11 +195,26 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj" />
-    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj" />
-    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
-    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj" />
-    <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj">
+      <Project>{66B1EC4C-A6BC-4E74-B12D-546C56031F4C}</Project>
+      <Name>NHSOnline.App.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj">
+      <Project>{85425714-f320-4935-81d4-b8727cfc9cdf}</Project>
+      <Name>NHSOnline.App.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj">
+      <Project>{7783bcd8-95f8-4645-95a9-28fef39731ba}</Project>
+      <Name>NHSOnline.App.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj">
+      <Project>{3e4fec39-10ff-479f-a542-48d3fc8d012b}</Project>
+      <Name>NHSOnline.App.Threading</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
+      <Project>{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}</Project>
+      <Name>NHSOnline.App</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="GeneratePlists.targets" />
   <ItemGroup>
@@ -222,6 +300,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="iProov.iOS" Version="9.2.0" />
-    <PackageReference Include="Xamarin.Swift" Version="1.0.8" />
+    <PackageReference Include="Xamarin.Swift" Version="1.0.11" />
   </ItemGroup>
 </Project>

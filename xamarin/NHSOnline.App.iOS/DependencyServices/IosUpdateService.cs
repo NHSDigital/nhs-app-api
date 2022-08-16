@@ -14,7 +14,7 @@ namespace NHSOnline.App.iOS.DependencyServices
         public async Task OpenAppStoreUrl()
         {
             var storeUrl = NSUrl.FromString("https://apps.apple.com/gb/app/nhs-app/id1388411277");
-            await UIApplication.SharedApplication.OpenUrlAsync(storeUrl, new UIApplicationOpenUrlOptions()).ResumeOnThreadPool();
+            await UIApplication.SharedApplication.OpenUrlAsync(storeUrl!, new UIApplicationOpenUrlOptions()).ResumeOnThreadPool();
         }
     }
 }
