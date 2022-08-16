@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
         internal LinkedProfilesUnavailablePageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, linked profiles are unavailable");
+            "h1", "Cannot show linked profiles");
 
         private WebText IfYouNeedAccessText => WebText.WithTagAndText(_interactor,
             "p", "If you need to access health services on behalf of someone else, contact their GP surgery directly or try again later.");

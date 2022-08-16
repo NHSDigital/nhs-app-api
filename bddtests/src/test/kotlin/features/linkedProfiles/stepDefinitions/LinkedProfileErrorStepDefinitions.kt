@@ -19,7 +19,7 @@ class LinkedProfileErrorStepDefinitions {
 
     @Then("^I see what I can do next with a linked accounts error message and reference code '(.*)'")
     fun iSeeWhatICanDoNextWithALinkedAccountsErrorMessage(prefix: String) {
-        linkedAccountsGpSessionError.assertPageHeader("Sorry, linked profiles are unavailable")
+        linkedAccountsGpSessionError.assertPageHeader("Cannot show linked profiles")
                 .assertReferenceCode(prefix)
                 .assertParagraphText("If you need to access health services on behalf of someone else, " +
                         "contact their GP surgery directly or try again later.")

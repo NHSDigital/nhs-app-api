@@ -183,9 +183,9 @@ open class OrganDonationStepDefinitions {
     @Then("^I see what I can do next with an organ donation error message$")
     fun iSeeOrganDonationUnavailableNoGpSession(){
         gpSessionError
-            .assertPageHeader("Sorry, organ donation is unavailable")
+            .assertPageHeader("Cannot access organ donation information")
             .assertParagraphText(
-                "You are not currently able to view or manage your organ donation decision using the NHS App.")
+                "You are not currently able to view or manage your organ donation decision using your NHS account.")
             .assertLink("NHSApp.Enquiries@nhsbt.nhs.uk")
             .assertHeaderTag("Email", "h3")
     }
