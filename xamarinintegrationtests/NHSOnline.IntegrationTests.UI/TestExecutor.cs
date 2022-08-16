@@ -55,13 +55,20 @@ namespace NHSOnline.IntegrationTests.UI
 
                 logs.Info("{0} => {1} - {2}", _displayName, testResult.Outcome, retryStatus);
 
-                logs.UpdateResult(testResult, retryStatus);
+                // Update retry status in log if final attempt
+                var updatedRetryStatus = ShouldRetry() ? retryStatus : RetryStatus.NoRetry;
+                logs.UpdateResult(testResult, updatedRetryStatus);
 
                 testResult.DisplayName = _displayName;
                 testResult.Duration = timer.Elapsed;
 
                 results.Add(testResult);
-            } while (config.RetryOnFlakyErrors && retryStatus.ShouldRetry && InRetryWindow());
+            } while (ShouldRetry());
+
+            bool ShouldRetry()
+            {
+                return config.RetryOnFlakyErrors && retryStatus.ShouldRetry && InRetryWindow();
+            }
 
             return results.ToArray();
 

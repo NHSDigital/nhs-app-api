@@ -1,4 +1,7 @@
 parameters:
+  - name: runMainTests
+    type: boolean
+    default: false
   - name: runUpgradeTests
     type: boolean
     default: false
@@ -18,6 +21,10 @@ jobs:
   - job:
     displayName: Build and Integration Test
     timeoutInMinutes: 180
+
+    variables:
+      previous.xitmain.jobattempt.foldername: ''
+
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
@@ -38,6 +45,24 @@ jobs:
           artifactName: Xamarin iOS Clients
           itemPattern: |
             Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa
+
+      - task: PowerShell@2
+        displayName: Set Previous XIT Main Attempt Folder Name Variable
+        condition: and(ne(variables['System.JobAttempt'], '1'), eq('${{ parameters['runMainTests'] }}', 'True'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            [int] $previousJobAttempt = ([int] $(System.JobAttempt)) - 1
+            [string] $previousJobAttemptFolderName = "Xamarin Integration Test Files Attempt-$previousJobAttempt"
+            Write-Host "Setting the name of the previous job attempt XIT Main output folder to '$previousJobAttemptFolderName'."
+            Write-Host "##vso[task.setvariable variable=previous.xitmain.jobattempt.foldername;]$previousJobAttemptFolderName"
+
+      - task: DownloadPipelineArtifact@2
+        displayName: Download Previous XIT Main Test Results
+        condition: and(ne(variables['System.JobAttempt'], '1'), eq('${{ parameters['runMainTests'] }}', 'True'))
+        inputs:
+          artifactName: '$(previous.xitmain.jobattempt.foldername)'
+          path: '$(System.ArtifactsDirectory)/$(previous.xitmain.jobattempt.foldername)'
 
       - task: Bash@3
         displayName: Initialise Secrets
@@ -90,9 +115,12 @@ jobs:
           NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk"
           NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
           USE_APP_UPGRADE_CONFIG: ${{ parameters['runUpgradeTests'] }}
+          MAIN_RUN: ${{ parameters['runMainTests'] }}
           CANARY_RUN: ${{ parameters['runCanaryTests'] }}
           FLIPBOOK_RUN: ${{ parameters['runFlipbookTests'] }}
           FLAKY_RUN: ${{ parameters['runFlakyTests'] }}
+          JOB_ATTEMPT: $(System.JobAttempt)
+          XIT_MAIN_PREVIOUS_ATTEMPT_FOLDER_PATH: "$(System.ArtifactsDirectory)/$(previous.xitmain.jobattempt.foldername)"
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/06_run_integration_tests.sh
 

@@ -386,6 +386,7 @@ stages:
         jobs:
           - template: .azuredevops/templates/integration-tests-xamarin-job.yml
             parameters:
+              runMainTests: true
               nativeVersion: '$(native.xamarin.version)'
 
       - stage: xamarin_integration_upgrade_tests

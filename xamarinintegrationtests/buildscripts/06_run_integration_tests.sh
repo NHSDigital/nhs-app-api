@@ -10,6 +10,9 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
+# shellcheck source=lib/functions_retry_failed_tests.sh
+source "buildscripts/lib/functions_retry_failed_tests.sh"
+
 DOCKER_ARGS=()
 DOCKER_ARGS+=(--name "int_test_test_runner")
 DOCKER_ARGS+=(--network "${DOCKER_NETWORK}")
@@ -43,9 +46,23 @@ then
 elif [ "$FLAKY_RUN" == 'True' ]
 then
   TEST_FILTER="TestCategory=NhsAppFlakyTest"
+elif [ "$JOB_ATTEMPT" != "1" ] && [ "$MAIN_RUN" == 'True' ]
+then
+  dqt='"'
+  export RETRIED_TEST_FILTER_STRING=""
+  echo "GETTING FAILED TESTS FROM PREVIOUS ATTEMPT"
+
+  RETRY_TESTS_PREVIOUS_RESULT_FILE_NAME=$(IFS=$'\n'; find "$XIT_MAIN_PREVIOUS_ATTEMPT_FOLDER_PATH" -name '*.json' -print0; unset IFS;)
+
+  echo "RETRY_TESTS_PREVIOUS_RESULT_FILE_NAME: $RETRY_TESTS_PREVIOUS_RESULT_FILE_NAME"
+
+  ParseFailedTestMethodNames "${RETRY_TESTS_PREVIOUS_RESULT_FILE_NAME}"
+
+  TEST_FILTER="${dqt}${RETRIED_TEST_FILTER_STRING}${dqt}"
 else
   TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest&TestCategory!=NhsAppFlakyTest"'
 fi
+
 info "Using test filter ${TEST_FILTER}"
 
 docker run \
