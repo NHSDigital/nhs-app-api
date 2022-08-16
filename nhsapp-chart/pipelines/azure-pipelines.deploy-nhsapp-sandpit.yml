@@ -10,7 +10,7 @@ schedules:
       - develop
 
 pool:
-  vmImage: 'ubuntu-18.04'
+  vmImage: 'ubuntu-latest'
 
 parameters:
 - name: namespace

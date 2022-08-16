@@ -3,7 +3,7 @@ name: ${{ parameters.namespace }}-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(R
 trigger: none
 
 pool:
-  vmImage: 'ubuntu-18.04'
+  vmImage: 'ubuntu-latest'
 
 parameters:
 - name: namespace
