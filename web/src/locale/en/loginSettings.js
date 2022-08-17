@@ -44,12 +44,19 @@ export default {
           fingerPrintFaceOrIris: 'Check that you have added a fingerprint, face or iris in your device\'s security settings.',
         },
         weCannotSupport: 'We cannot support fingerprint, face or iris recognition (biometrics) on Android devices with sensors that do not meet Google\'s increased security settings.',
-        getHelp: 'Get help with logging in using biometrics',
+        getHelp: 'Get help with logging in using biometrics.',
         ifYouCantUseBiometrics: 'If you cannot use biometrics, you\'ll need to log in using your email, password and security code.',
       },
       cannotChangeBiometricSettings: {
         paragraph1: 'Go back and try again.',
         paragraph2: 'If you keep seeing this message, return to your settings later.',
+      },
+      cannotUseBiometricSettings: {
+        face: {
+          youNeedTo: 'You need to',
+          turnOnBiometricsInYourDeviceSettingsLink: 'turn on Face ID in your device settings',
+          beforeYouCanTurnOnBiometricsInNHSApp: 'before you can turn on Face ID in the NHS App.',
+        },
       },
     },
   },

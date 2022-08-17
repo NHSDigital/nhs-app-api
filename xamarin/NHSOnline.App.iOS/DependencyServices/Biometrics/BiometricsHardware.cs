@@ -1,3 +1,4 @@
+using System;
 using Foundation;
 using LocalAuthentication;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger<BiometricsHardware>();
 
-        internal static bool HasBiometricHardware(LAContext context, out BiometricHardwareState state)
+        internal static bool HasDeviceOwnerPermittedUseOfBiometricHardware(LAContext context, out BiometricHardwareState state, out bool enrolled)
         {
             NSError? error = null;
             try
@@ -19,6 +20,7 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
                 if (enabled)
                 {
                     state = BiometricHardwareState.Usable;
+                    enrolled = true;
                     return true;
                 }
 
@@ -26,13 +28,13 @@ namespace NHSOnline.App.iOS.DependencyServices.Biometrics
 
                 state = BiometricHardwareState.Unusable;
 
-                return (LAStatus?)(long?)error?.Code switch
+                enrolled = (LAStatus?)(long?)error?.Code switch
                 {
-                    LAStatus.BiometryNotEnrolled => true,
-                    LAStatus.BiometryLockout => true,
-                    LAStatus.BiometryNotAvailable => false,
-                    _ => false
+                    LAStatus.BiometryNotEnrolled => false,
+                    LAStatus.BiometryLockout => false,
+                    _ => true
                 };
+                return enrolled;
             }
             finally
             {

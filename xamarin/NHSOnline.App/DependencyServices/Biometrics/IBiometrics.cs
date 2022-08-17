@@ -8,6 +8,7 @@ namespace NHSOnline.App.DependencyServices.Biometrics
         Task<BiometricStatus> FetchBiometricStatus(string fidoUsername);
 
         Task<IBiometricAuthKey> CreateBiometricKey(string fidoUsername);
+
         bool TryGetKey(string fidoUsername, [NotNullWhen(true)] out IBiometricAuthKey? key);
     }
 }

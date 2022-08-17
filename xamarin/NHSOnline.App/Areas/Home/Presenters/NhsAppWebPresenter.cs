@@ -12,6 +12,7 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
@@ -21,6 +22,7 @@ using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using BiometricStatus = NHSOnline.App.Controls.WebViews.Payloads.BiometricStatus;
 
 namespace NHSOnline.App.Areas.Home.Presenters
 {
@@ -46,6 +48,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IFileHandler _fileHandler;
         private readonly IDialogPresenter _dialogPresenter;
         private readonly FileDownloadService _fileDownloadService;
+        private readonly IBiometrics _biometrics;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -62,7 +65,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             ICalendar calendar,
             IFileHandler fileHandler,
             IDialogPresenter dialogPresenter,
-            FileDownloadService fileDownloadService)
+            FileDownloadService fileDownloadService,
+            IBiometrics biometrics)
         {
             _model = model;
             _view = view;
@@ -80,6 +84,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _fileHandler = fileHandler;
             _dialogPresenter = dialogPresenter;
             _fileDownloadService = fileDownloadService;
+            _biometrics = biometrics;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -375,7 +380,14 @@ namespace NHSOnline.App.Areas.Home.Presenters
                         completion.ErrorCode = registerResult.ErrorCode?.ToString() ?? string.Empty;
                         break;
 
-                    case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false }:
+                    // EnrolledAtDeviceLevel should only be used for ios Face ID
+                    case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false, EnrolledAtDeviceLevel: true }:
+                        completion.Action = "Register";
+                        completion.Outcome = BiometricOutcome.Failed.ToString();
+                        completion.ErrorCode = BiometricErrorCode.CannotUseBiometrics.ToString();
+                        break;
+
+                    case BiometricStatusResult.HardwarePresent { Registered: false, Usable: false, EnrolledAtDeviceLevel: false }:
                         completion.Action = "Register";
                         completion.Outcome = BiometricOutcome.Failed.ToString();
                         completion.ErrorCode = BiometricErrorCode.CannotFindBiometrics.ToString();

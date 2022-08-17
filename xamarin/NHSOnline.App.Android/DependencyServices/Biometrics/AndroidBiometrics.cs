@@ -30,11 +30,11 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
 
             BiometricStatus.FingerPrintFaceOrIris Unusable() =>
                 new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Unusable,
-                    DeriveBiometricRegistrationStatus(fidoUsername));
+                    DeriveBiometricRegistrationStatus(fidoUsername), false);
 
             BiometricStatus.FingerPrintFaceOrIris Usable() =>
                 new BiometricStatus.FingerPrintFaceOrIris(BiometricHardwareState.Usable,
-                    DeriveBiometricRegistrationStatus(fidoUsername));
+                    DeriveBiometricRegistrationStatus(fidoUsername), false);
 
             BiometricStatus.HardwareNotPresent HardwareNotPresent() => new BiometricStatus.HardwareNotPresent();
 
@@ -192,5 +192,6 @@ namespace NHSOnline.App.Droid.DependencyServices.Biometrics
             key = default;
             return false;
         }
+
     }
 }

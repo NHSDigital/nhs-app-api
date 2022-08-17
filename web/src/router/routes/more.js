@@ -61,9 +61,16 @@ const getLoginSettingsErrorHeaderTitle = (prefix, store, i18n) => {
 
   const errorCode = store.getters['loginSettings/biometricError'];
 
-  return errorCode === biometricErrorCodes.CannotFindBiometrics
-    ? i18n.t(`${prefix}.loginSettingsErrorCannotFind`, { biometricType: biometricTypeName })
-    : i18n.t(`${prefix}.loginSettingsErrorCannotChange`, { biometricType: biometricTypeName });
+  switch (errorCode) {
+    case biometricErrorCodes.CannotFindBiometrics:
+      return i18n.t(`${prefix}.loginSettingsErrorCannotFind`, { biometricType: biometricTypeName });
+    case biometricErrorCodes.CannotChangeBiometrics:
+      return i18n.t(`${prefix}.loginSettingsErrorCannotChange`, { biometricType: biometricTypeName });
+    case biometricErrorCodes.CannotUseBiometrics:
+      return i18n.t(`${prefix}.loginSettingsErrorCannotUse`, { biometricType: biometricTypeName });
+    default:
+      return i18n.t(`${prefix}.loginSettingsErrorUnknown`);
+  }
 };
 
 export const MORE = {

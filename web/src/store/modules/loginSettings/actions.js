@@ -73,8 +73,7 @@ export default {
     const { action, outcome, errorCode } = deviceResponseParam;
 
     if (outcome === biometricRegistrationOutcomes.Failure) {
-      if (errorCode === biometricErrorCodes.CannotFindBiometrics
-        || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
+      if (biometricErrorCodes.CombinedBiometricErrorList.includes(errorCode)) {
         commit(ADD_ERROR_CODE, errorCode);
         this.app.$router.push({ path: BIOMETRICS_ERROR_REGISTRATION_PATH });
       } else {
@@ -120,8 +119,7 @@ export default {
     const { action, outcome, errorCode } = deviceResponseParam;
 
     if (outcome === biometricRegistrationOutcomes.Failure) {
-      if (errorCode === biometricErrorCodes.CannotFindBiometrics
-        || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
+      if (biometricErrorCodes.CombinedBiometricErrorList.includes(errorCode)) {
         commit(ADD_ERROR_CODE, errorCode);
         redirectTo({ $router: this.app.$router, $store: this },
           MORE_ACCOUNTANDSETTINGS_LOGIN_SETTINGS_ERROR_PATH);

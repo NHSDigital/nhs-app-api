@@ -20,19 +20,21 @@ namespace NHSOnline.App.Services.FIDO
 
         internal abstract class HardwarePresent : BiometricStatusResult
         {
-            internal HardwarePresent(bool usable, bool registered)
+            internal HardwarePresent(bool usable, bool registered, bool enrolledAtDeviceLevel)
             {
                 Usable = usable;
                 Registered = registered;
+                EnrolledAtDeviceLevel = enrolledAtDeviceLevel;
             }
 
             internal bool Usable { get; }
             internal bool Registered { get; }
+            internal bool EnrolledAtDeviceLevel { get; }
         }
 
         internal sealed class FingerPrintFaceOrIris : HardwarePresent
         {
-            internal FingerPrintFaceOrIris(bool usable, bool registered) : base(usable, registered)
+            internal FingerPrintFaceOrIris(bool usable, bool registered, bool enrolledAtDeviceLevel) : base(usable, registered, enrolledAtDeviceLevel)
             {
             }
 
@@ -41,7 +43,7 @@ namespace NHSOnline.App.Services.FIDO
 
         internal sealed class TouchId : HardwarePresent
         {
-            internal TouchId(bool usable, bool registered) : base(usable, registered)
+            internal TouchId(bool usable, bool registered, bool enrolledAtDeviceLevel) : base(usable, registered, enrolledAtDeviceLevel)
             {
             }
 
@@ -50,7 +52,7 @@ namespace NHSOnline.App.Services.FIDO
 
         internal sealed class FaceId : HardwarePresent
         {
-            internal FaceId(bool usable, bool registered) : base(usable, registered)
+            internal FaceId(bool usable, bool registered, bool enrolledAtDeviceLevel) : base(usable, registered, enrolledAtDeviceLevel)
             {
             }
 
@@ -80,21 +82,24 @@ namespace NHSOnline.App.Services.FIDO
             {
                 var usable = fingerPrintFaceOrIris.State == BiometricHardwareState.Usable;
                 var registered = IsRegistered(fingerPrintFaceOrIris.RegistrationStatus);
-                return new FingerPrintFaceOrIris(usable, registered);
+                var enrolled = fingerPrintFaceOrIris.Enrolled;
+                return new FingerPrintFaceOrIris(usable, registered, enrolled);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.TouchId touchId)
             {
                 var usable = touchId.State == BiometricHardwareState.Usable;
                 var registered = IsRegistered(touchId.RegistrationStatus);
-                return new TouchId(usable, registered);
+                var enrolled = touchId.Enrolled;
+                return new TouchId(usable, registered, enrolled);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.FaceId faceId)
             {
                 var usable = faceId.State == BiometricHardwareState.Usable;
                 var registered = IsRegistered(faceId.RegistrationStatus);
-                return new FaceId(usable, registered);
+                var enrolled = faceId.Enrolled;
+                return new FaceId(usable, registered, enrolled);
             }
 
             public BiometricStatusResult Visit(BiometricStatus.LegacySensorNotValid legacySensorNotValid)

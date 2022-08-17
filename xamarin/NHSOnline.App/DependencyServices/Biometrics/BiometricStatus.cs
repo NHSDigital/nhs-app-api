@@ -16,20 +16,22 @@ namespace NHSOnline.App.DependencyServices.Biometrics
 
         public abstract class HardwarePresent: BiometricStatus
         {
-            internal HardwarePresent(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
+            internal HardwarePresent(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus, bool enrolled)
             {
                 State = state;
                 RegistrationStatus = registrationStatus;
+                Enrolled = enrolled;
             }
 
             public BiometricHardwareState State { get; }
             public BiometricRegistrationStatus RegistrationStatus { get; }
+            public bool Enrolled { get;  }
         }
 
         public sealed class FingerPrintFaceOrIris : HardwarePresent
         {
-            public FingerPrintFaceOrIris(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
-                : base(state, registrationStatus)
+            public FingerPrintFaceOrIris(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus, bool enrolled)
+                : base(state, registrationStatus, enrolled)
             {
             }
 
@@ -38,8 +40,8 @@ namespace NHSOnline.App.DependencyServices.Biometrics
 
         public sealed class FaceId : HardwarePresent
         {
-            public FaceId(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
-                : base(state, registrationStatus)
+            public FaceId(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus, bool enrolled)
+                : base(state, registrationStatus, enrolled)
             {
             }
 
@@ -48,8 +50,8 @@ namespace NHSOnline.App.DependencyServices.Biometrics
 
         public sealed class TouchId : HardwarePresent
         {
-            public TouchId(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus)
-                : base(state, registrationStatus)
+            public TouchId(BiometricHardwareState state, BiometricRegistrationStatus registrationStatus, bool enrolled)
+                : base(state, registrationStatus, enrolled)
             {
             }
 
