@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCodes:
+    - "A12355"
+journeys:
+  wayfinder:
+    isEnabled: true
