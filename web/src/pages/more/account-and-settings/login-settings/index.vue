@@ -13,9 +13,10 @@
         <p id="biometricInformation" class="nhsuk-u-padding-bottom-3">
           {{ biometricInformation }}
         </p>
-        <message-dialog-generic message-type="warning" :icon-text="$t('generic.important')">
+        <message-dialog-generic message-type="warning" :icon-text="$t('biometricsRegistration.ifYouShareThisDevice')">
           <message-text>
-            {{ biometricWarningText }}
+            <p> {{ biometricWarningText }}</p>
+            <p> {{ biometricAdditionalWarningText }}</p>
           </message-text>
         </message-dialog-generic>
         <div class="nhsuk-u-margin-top-5">
@@ -58,7 +59,10 @@ export default {
       return this.$t(`loginSettings.biometrics.biometricInformation.${this.biometricType}`);
     },
     biometricWarningText() {
-      return this.$t(`loginSettings.biometrics.warningText.${this.biometricType}`);
+      return this.$t(`biometricsRegistration.${this.biometricType}.warningText`);
+    },
+    biometricAdditionalWarningText() {
+      return this.$t('biometricsRegistration.thisMeansTheyCanSee');
     },
     biometricSupported() {
       return this.$store.getters['loginSettings/biometricSupported'];

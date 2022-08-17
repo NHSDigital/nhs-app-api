@@ -15,18 +15,21 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Turn on Touch ID");
 
         private WebText TouchLetsYouLoginText => WebText.WithTagAndText(_interactor, "p",
-            "You can log in with your fingerprint Instead of a password and security code.");
+            "You can log in with your fingerprint instead of a password and security code.");
 
-        private WebText ImportantInformationPanel => WebText.WithTagAndText(_interactor, "p",
-            "All fingerprints registered on this device will be able to access connected health websites and apps that use your NHS login information.");
+        private WebText IfYouShareThisDevicePanel => WebText.WithTagAndText(_interactor, "p",
+            "Anyone else who uses Touch ID on this device can log in to your NHS app.");
 
+        private WebText AdditionalInformationPanel => WebText.WithTagAndText(_interactor, "p",
+            "This means they can see your prescriptions and GP health record.");
 
         public void AssertOnPage() => TitleText.AssertVisible();
 
         public void AssertPageElements()
         {
             TouchLetsYouLoginText.AssertVisible();
-            ImportantInformationPanel.AssertVisible();
+            IfYouShareThisDevicePanel.AssertVisible();
+            AdditionalInformationPanel.AssertVisible();
         }
     }
 }

@@ -6,9 +6,10 @@
                           :errors="biometricsErrorText"
                           :errors-ids="`notifications-${getFirstChoiceValue('choices')}`"/>
       <p> {{ biometricText }} </p>
-      <message-dialog-generic message-type="warning" :icon-text="$t('generic.important')">
+      <message-dialog-generic message-type="warning" :icon-text="$t('biometricsRegistration.ifYouShareThisDevice')">
         <message-text>
-          {{ biometricWarningText }}
+          <p> {{ biometricWarningText }}</p>
+          <p> {{ biometricAdditionalWarningText }}</p>
         </message-text>
       </message-dialog-generic>
       <nhs-uk-radio-group
@@ -78,6 +79,9 @@ export default {
     },
     biometricWarningText() {
       return this.$t(`biometricsRegistration.${this.biometricType}.warningText`);
+    },
+    biometricAdditionalWarningText() {
+      return this.$t('biometricsRegistration.thisMeansTheyCanSee');
     },
     biometricsErrorText() {
       return this.$t(`biometricsRegistration.${this.biometricType}.errorText`);

@@ -17,8 +17,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         private WebText TouchIdLetsYouLoginText => WebText.WithTagAndText(_interactor, "p",
             "Touch ID lets you log in with your fingerprint instead of a password and security code.");
 
-        private WebText ImportantInformationPanel => WebText.WithTagAndText(_interactor, "p",
-            "All fingerprints registered on this device will be able to access connected health websites and apps that use your NHS login information.");
+        private WebText IfYouShareThisDevicePanel => WebText.WithTagAndText(_interactor, "p",
+            "Anyone else who uses Touch ID on this device can log in to your NHS app.");
+
+        private WebText AdditionalInformationPanel => WebText.WithTagAndText(_interactor, "p",
+            "This means they can see your prescriptions and GP health record.");
 
         private WebToggle BiometricsToggle => WebToggle.WithLabel(_interactor, "Log in with Touch ID");
 
@@ -30,7 +33,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More.Account
         public void AssertPageElements()
         {
             TouchIdLetsYouLoginText.AssertVisible();
-            ImportantInformationPanel.AssertVisible();
+            IfYouShareThisDevicePanel.AssertVisible();
+            AdditionalInformationPanel.AssertVisible();
             BiometricsToggle.AssertToggledOff();
         }
     }
