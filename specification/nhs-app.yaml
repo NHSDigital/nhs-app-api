@@ -73,6 +73,7 @@ info:
     * includes authorisation
     * is for initial development and [integration testing](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing)
     * points to the [Onboarding Sandpit NHS App environment](https://www-onboardingsandpit.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Sandpit environment
+    * has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 20 requests per second per application
 
     We have created a [Postman collection](https://github.com/NHSDigital/nhs-app-api/tree/master/postman) during internal development and testing of the API, which you may find useful when working with this environment.
 
@@ -83,8 +84,12 @@ info:
     * includes authorisation
     * is for formal release testing and assurance when onboarding with NHS Login
     * points to the [Onboarding AOS NHS App environment](https://www-onboardingaos.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Integration (AOS) environment
+    * has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 20 requests per second per application
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
+
+    ### Production
+    Our production environment has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 200 requests per second per application. 
 
     ## Onboarding
     You need to get your product or service approved by us before you can use this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
