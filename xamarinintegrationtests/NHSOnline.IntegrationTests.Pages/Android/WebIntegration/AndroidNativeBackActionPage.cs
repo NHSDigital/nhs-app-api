@@ -45,6 +45,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.WebIntegration
             return page;
         }
 
+        public AndroidNativeBackActionPage PressBackButton(IAndroidDriverWrapper driver)
+        {
+            var page = new AndroidNativeBackActionPage(driver);
+            driver.PressBackButton();
+            return page;
+        }
+
         public AndroidNativeBackActionPage ClickSetBackActionButton(IAndroidDriverWrapper driver)
         {
             var page = new AndroidNativeBackActionPage(driver);

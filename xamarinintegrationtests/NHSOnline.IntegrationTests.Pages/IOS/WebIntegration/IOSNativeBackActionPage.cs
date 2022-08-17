@@ -44,6 +44,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return page;
         }
 
+        public IOSNativeBackActionPage SwipeBackAction(IIOSDriverWrapper driver)
+        {
+            var page = new IOSNativeBackActionPage(driver);
+            driver.SwipeBack();
+            return page;
+        }
+
         public IOSNativeBackActionPage ClickSetBackActionButton(IIOSDriverWrapper driver)
         {
             var page = new IOSNativeBackActionPage(driver);

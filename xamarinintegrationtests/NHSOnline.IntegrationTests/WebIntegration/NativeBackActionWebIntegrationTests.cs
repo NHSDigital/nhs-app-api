@@ -37,7 +37,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .EnterNativeBackAction(driver, "window.location.href = \"http://stackoverflow.com\"")
                 .ClickSetBackActionButton(driver)
-                .ClickSimulateBackButton(driver);
+                .ClickSetBackActionButton(driver)
+                .PressBackButton(driver);
 
             AndroidBrowserOverlayBrowserChoice
                 .IfDisplayed(driver, choice => choice.ChooseChrome());
@@ -63,7 +64,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .EnterNativeBackAction(driver, "window.location.href = \"http://stackoverflow.com\"")
                 .ClickSetBackActionButton(driver)
-                .ClickSimulateBackButton(driver);
+                .SwipeBackAction(driver);
 
             IOSBrowserOverlay
                 .AssertInBrowserOverlay(driver)
@@ -85,7 +86,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .ClickSetBackActionButton(driver)
-                .ClickSimulateBackButton(driver);
+                .PressBackButton(driver);
 
             AndroidNativeBackActionPage
                 .AssertOnPage(driver)
@@ -107,7 +108,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
                 .ClickSetBackActionButton(driver)
-                .ClickSimulateBackButton(driver);
+                .SwipeBackAction(driver);
 
             IOSNativeBackActionPage
                 .AssertOnPage(driver)

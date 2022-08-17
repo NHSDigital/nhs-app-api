@@ -180,7 +180,11 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             return true;
         }
 
-        public bool OnSwipeBack() => true;
+        public bool OnSwipeBack()
+        {
+            BackRequestedCommand.Execute(true);
+            return true;
+        }
 
         private void AccessibilityFocus()
         {
