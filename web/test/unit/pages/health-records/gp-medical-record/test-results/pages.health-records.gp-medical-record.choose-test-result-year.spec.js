@@ -191,6 +191,21 @@ describe('gp-medical-record choose test result year', () => {
         expect(dependency.redirectTo)
           .toHaveBeenCalledWith(page.vm, `${CHOOSE_TEST_RESULT_YEAR_PATH}?page=1`);
       });
+
+      it('will not show previous and next pagination links when user is too young to require them', () => {
+        linkedAccountData = {
+          actingAsUser: {
+            ageYears: 2,
+          },
+        };
+        mountPage({ linkedAccountData, testResultData: [], pageNumber: 1, isProxying });
+
+        const previousPagination = page.find('[id="previousPagination"]');
+        const nextPagination = page.find('[id="nextPagination"]');
+
+        expect(previousPagination.exists()).toBe(false);
+        expect(nextPagination.exists()).toBe(false);
+      });
     });
   });
 });

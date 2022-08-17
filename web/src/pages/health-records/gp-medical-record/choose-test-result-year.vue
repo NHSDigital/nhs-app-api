@@ -13,15 +13,15 @@
                      href="#"
                      data-sid="view-older-results"/>
         </menu-item-list>
-        <pagination v-if="!showPastYearRange"
-                    :previous-link="futureYearRangePath"
-                    :previous-title="futureYearRange"/>
-        <pagination v-else-if="!showFutureYearRange"
-                    :next-link="pastYearRangePath"
-                    :next-title="pastYearRange" />
-        <pagination v-else
+        <pagination v-if="showPastYearRange && showFutureYearRange"
                     :previous-link="futureYearRangePath"
                     :previous-title="futureYearRange"
+                    :next-link="pastYearRangePath"
+                    :next-title="pastYearRange" />
+        <pagination v-if="!showPastYearRange && showFutureYearRange"
+                    :previous-link="futureYearRangePath"
+                    :previous-title="futureYearRange"/>
+        <pagination v-else-if="showPastYearRange && !showFutureYearRange"
                     :next-link="pastYearRangePath"
                     :next-title="pastYearRange" />
       </div>
