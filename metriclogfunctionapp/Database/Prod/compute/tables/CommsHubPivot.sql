@@ -22,3 +22,6 @@ ALTER TABLE compute."CommsHubPivot"
             ADD COLUMN IF NOT EXISTS "EndDateTime" timestamp with time zone NULL;
 
 CALL perms.apply_compute_table_permissions('compute', 'CommsHubPivot');
+
+CREATE INDEX IF NOT EXISTS CommsHubPivot_MessageSendTimestamp_idx
+    on compute."CommsHubPivot" ("MessageSendTimestamp");
