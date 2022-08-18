@@ -260,13 +260,13 @@ namespace Nhs.App.Api.Integration.Tests
 
             var responseObject = await DeserializeFhirResponseAsync(response);
             var identifier = responseObject.Identifier
-                .Should().ContainSingle(x => x.System == FhirR4IdentifierSystem.UniformResourceIdentifier)
+                .Should().ContainSingle(x => x.System == FhirR4IdentifierSystem.CommunicationId)
                 .Subject;
 
             if (!Guid.TryParse(identifier.Value, out _))
             {
                 Assert.Fail(
-                    $"Expected the value of the identifier with system {FhirR4IdentifierSystem.UniformResourceIdentifier} to be parseable as a GUID, but '{identifier.Value}' is not.");
+                    $"Expected the value of the identifier with system {FhirR4IdentifierSystem.CommunicationId} to be parseable as a GUID, but '{identifier.Value}' is not.");
             }
 
             response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{identifier.Value}");
