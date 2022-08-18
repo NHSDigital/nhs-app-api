@@ -8,7 +8,7 @@ namespace Nhs.App.Api.Integration.Tests
         // Identifier systems
         public const string CampaignId = "https://fhir.nhs.uk/NHSApp/campaign-id";
         public const string RequestReference = "https://fhir.nhs.uk/NHSApp/request-id";
-        public const string UniformResourceIdentifier = "urn:ietf:rfc:3986";
         public const string Requester = "https://fhir.nhs.uk/Id/ods-organization-code";
+        public const string CommunicationId = "https://fhir.nhs.uk/Id/nhs-app-communication-id";
     }
 }
