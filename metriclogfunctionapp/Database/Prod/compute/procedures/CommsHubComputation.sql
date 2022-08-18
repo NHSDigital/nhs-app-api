@@ -72,6 +72,12 @@ BEGIN
                       WHEN ( "CommsHub"."Supplier" IS NULL OR "CommsHub"."Supplier" = 'Not Mapped')
                           THEN COALESCE(Excluded."Supplier",'Not Mapped')
                       ELSE COALESCE("CommsHub"."Supplier",'Not Mapped')
+                    END),
+            "ReceivedTimestamp" =
+                ( CASE
+                      WHEN ( "CommsHub"."ReceivedTimestamp" IS NULL)
+                          THEN Excluded."ReceivedTimestamp"
+                      ELSE "CommsHub"."ReceivedTimestamp"
                     END);
 
     INSERT INTO compute."CommsHub" ("MessageId","ReadEvents","MessageReadTimestamp")
@@ -289,6 +295,12 @@ BEGIN
                       WHEN ( "CommsHubPivot"."FirstLinkClickedTimestamp" IS NULL)
                           THEN Excluded."FirstLinkClickedTimestamp"
                       ELSE "CommsHubPivot"."FirstLinkClickedTimestamp"
+                    END),
+            "AnyLink" =
+                ( CASE
+                      WHEN ( "CommsHubPivot"."AnyLink" IS NULL)
+                          THEN Excluded."AnyLink"
+                      ELSE "CommsHubPivot"."AnyLink"
                     END);
 
 	INSERT INTO compute."CommsHubPivot" ("LoginId","RequestId","PushStatus","NotificationOutcomeStatus","SendDate","Supplier","CampaignRef","MessageSendTimestamp","PushUserFirstLoginTimestamp","EndDateTime","ReceivedTimestamp")
