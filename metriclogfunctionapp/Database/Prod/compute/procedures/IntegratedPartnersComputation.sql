@@ -27,6 +27,14 @@ BEGIN
       AND "Timestamp" < "endDate"
       AND "ProviderName" not like ('%+%');
 
+    INSERT INTO JumpOffMetrics ("Timestamp", "ProviderName", "JumpOffId", "SessionId")
+    SELECT  "Timestamp"
+         ,"ProviderName"
+         ,"JumpOffId"
+         ,"SessionId"
+    FROM events."GoldIntegrationJumpOffMetric"
+    WHERE "Timestamp" >= "startDate"
+      AND "Timestamp" < "endDate";
 
     INSERT INTO JumpOffEvents ("Date","OdsCode","Provider","JumpOff")
     SELECT  jumpOffs."Timestamp"        AS "Date"
