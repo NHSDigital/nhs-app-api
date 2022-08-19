@@ -12,7 +12,7 @@ items:
       nullable: false
     communicationId:
       type: string
-      description: Globally unique identifier of the original communication request. This corresponds to the identifier returned with system `urn:ietf:rfc:3986` when the request was made to send the communication. As each communication request may have been sent to multiple recipients via multiple channels, many events may be returned for each communicationId.
+      description: Globally unique identifier of the original communication request. This corresponds to the identifier returned with system `https://fhir.nhs.uk/Id/nhs-app-communication-id` when the request was made to send the communication. As each communication request may have been sent to multiple recipients via multiple channels, many events may be returned for each communicationId.
       example: "5f0b1083-e179-47a7-b274-b30b5052a8f3"
       nullable: false
       maxLength: 36
