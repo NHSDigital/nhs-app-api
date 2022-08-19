@@ -43,8 +43,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .Allow();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidCamera
                 .AssertDisplayed(driver)

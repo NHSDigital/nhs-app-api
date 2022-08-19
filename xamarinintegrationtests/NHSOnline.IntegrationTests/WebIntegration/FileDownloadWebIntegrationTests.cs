@@ -58,8 +58,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidGooglePhotosApp
                 .AssertOnPage(driver);
@@ -109,8 +108,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidGooglePhotosApp
                 .AssertOnPage(driver);
@@ -192,8 +190,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Deny();
+                .ClickDenyIfPresent(driver);
 
             AndroidFileDownloadPage
                 .AssertOnPage(driver);
@@ -335,8 +332,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)
@@ -369,8 +365,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)
@@ -403,8 +398,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)
@@ -441,8 +435,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)
@@ -479,8 +472,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Allow();
+                .ClickAllowIfPresent(driver);
 
             AndroidFileDownloadErrorPage
                 .AssertOnPage(driver)

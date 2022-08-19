@@ -1,5 +1,7 @@
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
 {
@@ -15,11 +17,35 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidLabel PermissionsText => AndroidLabel.WhichMatches(_driver,
             "Allow .* to access .* on your device\\?");
 
-        public static AndroidFilePermissionsDialog AssertDisplayed(IAndroidDriverWrapper driver)
+        public static void ClickAllowIfPresent(IAndroidDriverWrapper driver)
         {
             var permissionsDialog = new AndroidFilePermissionsDialog(driver);
-            permissionsDialog.PermissionsText.AssertVisible();
-            return permissionsDialog;
+            if (IsPresent(permissionsDialog))
+            {
+                permissionsDialog.Allow();
+
+            }
+        }
+
+        public static void NoActionIfPresent(IAndroidDriverWrapper driver)
+        {
+            var permissionsDialog = new AndroidFilePermissionsDialog(driver);
+            IsPresent(permissionsDialog);
+        }
+
+        public static void ClickDenyIfPresent(IAndroidDriverWrapper driver)
+        {
+            var permissionsDialog = new AndroidFilePermissionsDialog(driver);
+            if (IsPresent(permissionsDialog))
+            {
+                permissionsDialog.Deny();
+
+            }
+        }
+
+        private static bool IsPresent(AndroidFilePermissionsDialog permissionsDialog)
+        {
+            return permissionsDialog.PermissionsText.IsPresent();
         }
     }
 }

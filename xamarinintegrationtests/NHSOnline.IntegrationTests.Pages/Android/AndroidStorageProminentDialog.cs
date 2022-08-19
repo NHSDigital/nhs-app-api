@@ -16,6 +16,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidButton AllowButton => AndroidButton.WithText(_driver, "Allow");
 
+        private AndroidButton CancelButton => AndroidButton.WithText(_driver, "Cancel");
+
         public static AndroidStorageProminentDialog AssertDisplayed(IAndroidDriverWrapper driver)
         {
             var permissionsDialog = new AndroidStorageProminentDialog(driver);
@@ -24,5 +26,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         public void Ok() => AllowButton.Click();
+
+        public void Cancel() => CancelButton.Click();
     }
 }

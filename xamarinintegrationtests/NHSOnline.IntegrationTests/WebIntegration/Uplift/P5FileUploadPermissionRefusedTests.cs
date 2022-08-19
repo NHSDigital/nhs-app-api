@@ -34,8 +34,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .Ok();
 
             AndroidFilePermissionsDialog
-                .AssertDisplayed(driver)
-                .Deny();
+                .ClickDenyIfPresent(driver);
 
             /*
              Permissions dialog just closed on DENY,

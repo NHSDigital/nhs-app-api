@@ -3,6 +3,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android.UiAutomator;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
@@ -37,6 +38,24 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _interactor.ActOnElement(
                 FindBy,
                 e => e.Displayed.Should().BeTrue("a label {0} should be displayed", Description));
+        }
+
+        public bool IsPresent()
+        {
+            var isPresent = true;
+
+            try
+            {
+                _interactor.ActOnElement(
+                    FindBy,
+                    e => e.Displayed.Should().BeTrue("a label {0} should be displayed", Description));
+            }
+            catch (AssertFailedException)
+            {
+                isPresent = false;
+            }
+
+            return isPresent;
         }
 
         public void AssertTextContains(string expectedText)
