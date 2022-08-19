@@ -4,6 +4,7 @@ namespace NHSOnline.HttpMocks.Domain
 {
     public enum WayfinderPatientOds
     {
+        ACCURX,
         ERS,
         GNCR,
         PKB,
@@ -19,6 +20,7 @@ namespace NHSOnline.HttpMocks.Domain
         {
             return odsCode switch
             {
+                WayfinderPatientOds.ACCURX => "wayfinder_with_accurx_enabled",
                 WayfinderPatientOds.ERS => "wayfinder_with_ers_enabled",
                 WayfinderPatientOds.GNCR => "wayfinder_with_gncr_enabled",
                 WayfinderPatientOds.PKB => "wayfinder_with_pkb_enabled",

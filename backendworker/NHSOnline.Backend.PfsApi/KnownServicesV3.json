@@ -7,21 +7,15 @@
         "https://111.service.nhs.uk"
       ]
     },
-    "nhs_uk": {
-      "url": "https://www.nhs.uk",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false
+    "accurx": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
     },
-    "ndop": {
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false
+    "accurxWayfinder": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
     },
-    "hotjar": {
-      "url": "https://in.hotjar.com",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false
-    },
-    "cid_settings": {
+    "cid_access": {
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
@@ -33,11 +27,11 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
-    "cid_uaf": {
+    "cid_idvm": {
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
-    "cid_access": {
+    "cid_settings": {
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
@@ -46,30 +40,38 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
-    "cid_idvm": {
+    "cid_uaf": {
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
-    "ers": {
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true
-    },
-    "pkb": {
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true
+    "drDoctor": {
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     },
     "engage": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true
     },
-    "substraktPatientPack": {
+    "ers": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    },
+    "gncr": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true
     },
-    "nhsd": {
-      "url": "https://vaccine-status-dev-uks.azurewebsites.net",
+    "hotjar": {
+      "url": "https://in.hotjar.com",
       "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true
+      "requiresAssertedLoginIdentity": false
+    },
+    "ndop": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "netcall": {
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     },
     "netCompany": {
       "url": "https://stdevpistatic01.z33.web.core.windows.net",
@@ -79,24 +81,26 @@
         "https://nhscovidpass.queue-it.net"
       ]
     },
-    "gncr": {
+    "nhs_uk": {
+      "url": "https://www.nhs.uk",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false
+    },
+    "nhsd": {
+      "url": "https://vaccine-status-dev-uks.azurewebsites.net",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    },
+    "pkb": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
+    "substraktPatientPack": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true
     },
     "wellnessAndPrevention": {
       "url": "https://hub-dev.wpalpha.clouddev.works",
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
-    },
-    "accurx": {
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true
-    },
-    "drDoctor": {
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
-    },
-    "netcall": {
       "requiresAssertedLoginIdentity": true,
       "showThirdPartyWarning": true
     },

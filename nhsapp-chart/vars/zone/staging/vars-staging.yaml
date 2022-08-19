@@ -80,6 +80,8 @@ api:
   imagePullPolicy: Always
   knownServicesOverrides:
     services__111__url: https://nhsapp.staging.111.nhs.uk
+    services__accurx__url: https://nhsapp-florey.dev.accurx.com
+    services__accurxWayfinder__url: https://patient.dev.accurx.com
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__cid_settings__url: https://settings.ext.signin.nhs.uk
     services__cid_account__url: https://account.ext.signin.nhs.uk
@@ -91,7 +93,6 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.test.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.test.substrakthealth.com
     services__gncr__url: https://my-sandpit.gncr.org.uk
-    services__accurx__url: https://nhsapp-florey.dev.accurx.com
     services__drDoctor__url: https://my-uat2.drdoctor.co.uk
     services__drDoctor_login__url: https://login-uat2.drdoctor.co.uk
     services__engage__url: https://nhs1-nhsapp.engage.gp
@@ -103,6 +104,8 @@ api:
     services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
     services__zesty__url: https://enterprise.ytsez-sandbox.co.uk
     servicesV3__111__url: https://nhsapp.staging.111.nhs.uk
+    servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
+    servicesV3__accurxWayfinder__url: https://patient.dev.accurx.com
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
     servicesV3__cid_account__url: https://account.ext.signin.nhs.uk
@@ -114,7 +117,6 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__gncr__url: https://my-sandpit.gncr.org.uk
-    servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
     servicesV3__drDoctor__url: https://my-uat2.drdoctor.co.uk
     servicesV3__drDoctor__domains__1: https://login-uat2.drdoctor.co.uk
     servicesV3__engage__url: https://nhs1-nhsapp.engage.gp

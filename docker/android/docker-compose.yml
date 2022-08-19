@@ -12,6 +12,7 @@ services:
       --log-facility=- \
         -h \
         -A /accurx.stubs.local.bitraft.io/10.0.2.2 \
+        -A /accurxwayfinder.stubs.local.bitraft.io/10.0.2.2 \
         -A /api.local.bitraft.io/10.0.2.2 \
         -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /deeplinklauncher.stubs.local.bitraft.io/10.0.2.2 \

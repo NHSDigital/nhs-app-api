@@ -11,6 +11,7 @@ target:
     - "WF0005"
     - "WF0006"
     - "WF0007"
+    - "WF0008"
 journeys:
   wayfinder:
     isEnabled: true

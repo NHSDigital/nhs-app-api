@@ -121,6 +121,8 @@ api:
   imagePullPolicy: IfNotPresent
   knownServicesOverrides:
     services__111__url: https://111.nhs.uk
+    services__accurx__url: https://accurx.nhs.uk
+    services__accurxWayfinder__url: https://accurxwayfinder.com
     services__ndop__url: https://app.your-data-matters.service.nhs.uk
     services__cid_settings__url: https://settings.login.nhs.uk
     services__cid_account__url: https://account.login.nhs.uk
@@ -135,7 +137,6 @@ api:
     services__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.production.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.production.substrakthealth.com
-    services__accurx__url: https://accurx.nhs.uk
     services__engage__url: https://nhsapp.engage.gp
     services__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
@@ -144,6 +145,8 @@ api:
     services__netcall__url: https://patienthub.co.uk
     services__zesty__url: https://patient-portal.zesty.co.uk
     servicesV3__111__url: https://111.nhs.uk
+    servicesV3__accurx__url: https://accurx.nhs.uk
+    servicesV3__accurxWayfinder__url: https://accurxwayfinder.com
     servicesV3__ndop__url: https://app.your-data-matters.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.login.nhs.uk
     servicesV3__cid_account__url: https://account.login.nhs.uk
@@ -158,7 +161,6 @@ api:
     servicesV3__substraktPatientPack__url: https://jump-point.production.substrakthealth.com
     servicesV3__substraktPatientPack__domains__1: https://admin-request.production.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.production.substrakthealth.com
-    servicesV3__accurx__url: https://accurx.nhs.uk
     servicesV3__engage__url: https://nhsapp.engage.gp
     servicesV3__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     servicesV3__netCompany__url: https://covid-status.service.nhsx.nhs.uk

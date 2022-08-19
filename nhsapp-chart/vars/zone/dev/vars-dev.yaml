@@ -66,6 +66,7 @@ api:
   knownServicesOverrides:
     services__111__url: https://nhsapp.staging.111.nhs.uk
     services__accurx__url: https://nhsapp-florey.dev.accurx.com
+    services__accurxWayfinder__url: https://patient.dev.accurx.com
     services__cid_settings__url: https://settings.ext.signin.nhs.uk
     services__cid_account__url: https://account.ext.signin.nhs.uk
     services__cid_auth__url: https://auth.ext.signin.nhs.uk
@@ -91,6 +92,7 @@ api:
     services__zesty__url: https://enterprise.ytsez-sandbox.co.uk
     servicesV3__111__url: https://nhsapp.staging.111.nhs.uk
     servicesV3__accurx__url: https://nhsapp-florey.dev.accurx.com
+    servicesV3__accurxWayfinder__url: https://patient.dev.accurx.com
     servicesV3__cid_settings__url: https://settings.ext.signin.nhs.uk
     servicesV3__cid_account__url: https://account.ext.signin.nhs.uk
     servicesV3__cid_auth__url: https://auth.ext.signin.nhs.uk

@@ -47,6 +47,7 @@ services:
       default:
         aliases:
           - accurx.stubs.local.bitraft.io
+          - accurxwayfinder.stubs.local.bitraft.io
           - auth.nhslogin.stubs.local.bitraft.io
           - drdoctor.stubs.local.bitraft.io
           - engage.stubs.local.bitraft.io

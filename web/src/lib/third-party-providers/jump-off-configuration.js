@@ -212,6 +212,11 @@ const thirdPartyProvider = {
     },
   },
   wayfinder: {
+    accurxWayfinder: {
+      jumpOffId: 'accurxWayfinder',
+      acceptablePathsRegex: '^\\/api\\/OpenIdConnect\\/AuthenticateManageAppointment\\?.*$',
+      redirectPath: '/api/OpenIdConnect/AuthenticateManageAppointment?',
+    },
     ers: {
       jumpOffId: 'ersWayfinder',
       acceptablePathsRegex: '^\\/nhslogin(\\/?\\?.*)?$',

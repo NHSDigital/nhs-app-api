@@ -5583,6 +5583,7 @@
                             type: "string"
                             description: "The linked referral or portal system."
                             enum: 
+                              - "accurx"
                               - "pkb"
                               - "ers"
                               - "drdoctor"
@@ -5632,6 +5633,7 @@
                             type: "string"
                             description: "The linked referral or portal system."
                             enum: 
+                              - "accurx"
                               - "pkb"
                               - "ers"
                               - "drdoctor"
@@ -5671,6 +5673,7 @@
                                 type: "string"
                                 description: "The linked referral or portal system."
                                 enum: 
+                                  - "accurx"
                                   - "pkb"
                                   - "ers"
                                   - "drdoctor"
@@ -5718,6 +5721,7 @@
                                 type: "string"
                                 description: "The linked referral or portal system."
                                 enum: 
+                                  - "accurx"
                                   - "pkb"
                                   - "ers"
                                   - "drdoctor"
@@ -5764,6 +5768,7 @@
                                 type: "string"
                                 description: "The linked referral or portal system."
                                 enum: 
+                                  - "accurx"
                                   - "pkb"
                                   - "ers"
                                   - "drdoctor"

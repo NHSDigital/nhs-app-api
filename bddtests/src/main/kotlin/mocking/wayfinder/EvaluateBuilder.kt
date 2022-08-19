@@ -1001,6 +1001,8 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
     fun returnReferralsAndUpcomingAppointmentsForProvider(provider: String): Mapping {
         val deepLink = when(provider){
+            "AccurxWayfinder" -> "http://accurxwayfinder.stubs.local.bitraft.io:8080/api/OpenIdConnect/AuthenticateManageAppointment?" +
+                "appointmentToken=XXXX"
             "DrDoctor" -> "http://drdoctor.stubs.local.bitraft.io:8080/appointments/" +
                 "123456?from=nhsApp"
             "PKB" -> "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?" +

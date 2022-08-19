@@ -36,6 +36,282 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
+    "accurx": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "accurxWayfinder": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "cid_settings": {
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid_account": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid_auth": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid_access": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid_idvm": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid_signin": {
+      "url": "https://signin.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/#/account/consent-to-use-login",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "cid_uaf": {
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "drDoctor": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "drDoctor_login": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "engage": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "ers": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "gncr": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "hotjar": {
+      "url": "https://in.hotjar.com",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "integrationLevel": "Bronze",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/s",
+          "queryString": "siteId=859152&amp;surveyId=95785",
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "ndop": {
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "netcall": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
+    "netCompany": {
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": false,
+      "url": "https://stdevpistatic01.z33.web.core.windows.net",
+      "subServices": [
+        {
+          "path": "/api/PdfDirectDownload",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/api/walletPassIos",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "netCompany_queueIt": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": false,
+      "url": "https://nhscovidpass.queue-it.net"
+    },
+    "nhsd": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": false,
+      "url": "https://vaccine-status-dev-uks.azurewebsites.net"
+    },
     "nhs_uk": {
       "url": "https://www.nhs.uk",
       "javaScriptInteractionMode": "None",
@@ -72,133 +348,6 @@
           "validateSession": false
         }
       ]
-    },
-    "ndop": {
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "Gold",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "hotjar": {
-      "url": "https://in.hotjar.com",
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "AppTab",
-      "integrationLevel": "Bronze",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false,
-      "subServices": [
-        {
-          "path": "/s",
-          "queryString": "siteId=859152&amp;surveyId=95785",
-          "javaScriptInteractionMode": "None",
-          "menuTab": "None",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": false
-        }
-      ]
-    },
-    "cid_settings": {
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "cid_account": {
-      "subServices": null,
-      "javaScriptInteractionMode": "NhsLogin",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "cid_auth": {
-      "subServices": null,
-      "javaScriptInteractionMode": "NhsLogin",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "cid_uaf": {
-      "subServices": null,
-      "javaScriptInteractionMode": "NhsLogin",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "cid_access": {
-      "subServices": null,
-      "javaScriptInteractionMode": "NhsLogin",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    "cid_signin": {
-      "url": "https://signin.nhs.uk",
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false,
-      "subServices": [
-        {
-          "path": "/#/account/consent-to-use-login",
-          "queryString": null,
-          "javaScriptInteractionMode": "None",
-          "menuTab": "None",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": false
-        }
-      ]
-    },
-    "cid_idvm": {
-      "subServices": null,
-      "javaScriptInteractionMode": "NhsLogin",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showSpinner": false,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
     },
     "nhs_web_app": {
       "url": "https://WebAppBaseUrl",
@@ -417,17 +566,6 @@
         }
       ]
     },
-    "ers": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "Gold",
-      "showSpinner": true,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": true
-    },
     "pkb": {
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -445,17 +583,6 @@
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "Gold",
-      "showSpinner": true,
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": true
-    },
-    "engage": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
       "showSpinner": true,
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
@@ -494,78 +621,6 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    "nhsd": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": false,
-      "url": "https://vaccine-status-dev-uks.azurewebsites.net"
-    },
-    "netCompany": {
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": false,
-      "url": "https://stdevpistatic01.z33.web.core.windows.net",
-      "subServices": [
-        {
-          "path": "/api/PdfDirectDownload",
-          "queryString": null,
-          "javaScriptInteractionMode": "None",
-          "menuTab": "None",
-          "viewMode": "AppTab",
-          "integrationLevel": "Bronze",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": false
-        },
-        {
-          "path": "/api/walletPassIos",
-          "queryString": null,
-          "javaScriptInteractionMode": "None",
-          "menuTab": "None",
-          "viewMode": "AppTab",
-          "integrationLevel": "Bronze",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": false
-        }
-      ]
-    },
-    "netCompany_queueIt": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": false,
-      "url": "https://nhscovidpass.queue-it.net"
-    },
-    "gncr": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": true
-    },
     "wellnessAndPrevention": {
       "url": "https://hub-dev.wpalpha.clouddev.works",
       "requiresAssertedLoginIdentity": true,
@@ -573,50 +628,6 @@
       "validateSession": true,
       "javaScriptInteractionMode": "SilverThirdParty",
       "viewMode": "WebView"
-    },
-    "accurx": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "showThirdPartyWarning": true,
-      "requiresAssertedLoginIdentity": true,
-      "validateSession": true
-    },
-    "drDoctor": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "validateSession": true,
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
-    },
-    "drDoctor_login": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "validateSession": true,
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
-    },
-    "netcall": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "validateSession": true,
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
     },
     "zesty": {
       "subServices": null,

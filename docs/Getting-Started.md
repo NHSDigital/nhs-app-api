@@ -98,6 +98,7 @@ Before running the app locally, some entries need to be added to your machine's 
 
 ```bash
 127.0.0.1 accurx.stubs.local.bitraft.io
+127.0.0.1 accurxwayfinder.stubs.local.bitraft.io
 127.0.0.1 api.local.bitraft.io
 127.0.0.1 auth.nhslogin.stubs.local.bitraft.io
 127.0.0.1 cid.local.bitraft.io
@@ -136,6 +137,7 @@ If you have difficulty accessing web.local.bitraft.io:3000 and web is running in
 
 ```bash
 ::1 accurx.stubs.local.bitraft.io
+::1 accurxwayfinder.stubs.local.bitraft.io
 ::1 api.local.bitraft.io
 ::1 auth.nhslogin.stubs.local.bitraft.io
 ::1 cid.local.bitraft.io

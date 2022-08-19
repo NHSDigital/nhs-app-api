@@ -33,6 +33,7 @@ api:
   publicURL: api-onboardingaos.nhsapp.service.nhs.uk
   knownServicesOverrides:
     services__accurx__url: https://staging.accurx.nhs.uk
+    services__accurxWayfinder__url: https://patientstaging.accurx.com
     services__cid_settings__url: https://settings.aos.signin.nhs.uk
     services__cid_account__url: https://account.aos.signin.nhs.uk
     services__cid_auth__url: https://auth.aos.signin.nhs.uk
@@ -54,6 +55,7 @@ api:
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
     services__zesty__url: https://patient-portal-wayfinder-test.zesty.co.uk
     servicesV3__accurx__url: https://staging.accurx.nhs.uk
+    servicesV3__accurxWayfinder__url: https://patientstaging.accurx.com
     servicesV3__cid_settings__url: https://settings.aos.signin.nhs.uk
     servicesV3__cid_account__url: https://account.aos.signin.nhs.uk
     servicesV3__cid_auth__url: https://auth.aos.signin.nhs.uk

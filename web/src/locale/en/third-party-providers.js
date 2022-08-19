@@ -414,6 +414,10 @@ export default {
       descriptionText: '',
     },
     wayfinderJumpOffs: {
+      accurxWayfinder: {
+        serviceId: 'accurx',
+        providerName: 'Accurx',
+      },
       ers: {
         serviceId: 'ers',
         providerName: 'Electronic Referral Service',

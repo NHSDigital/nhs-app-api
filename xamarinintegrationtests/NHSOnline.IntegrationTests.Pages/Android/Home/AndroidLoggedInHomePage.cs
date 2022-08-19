@@ -14,11 +14,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
         private HashSet<string> KeyboardNavigationOds =
             new()
             {
+                EmisPatientOds.Accurx.ToOdsCodeString(),
                 EmisPatientOds.Pkb.ToOdsCodeString(),
                 EmisPatientOds.AllSilversEnabled.ToOdsCodeString(),
                 EmisPatientOds.Substrakt.ToOdsCodeString(),
                 EmisPatientOds.Gncr.ToOdsCodeString(),
-                EmisPatientOds.Accurx.ToOdsCodeString()
             };
         private string InvalidPatientAssertionMessage = "Emis PKB patient is required to use keyboard navigation";
         public AndroidFullNavigation Navigation { get; }
