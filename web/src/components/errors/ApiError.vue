@@ -2,20 +2,19 @@
 <template>
   <div v-if="showError" :class="!isNativeApp && $style.desktopWeb">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
-      <message-dialog :override-style="overrideStyle"
-                      message-type="error"
+      <message-dialog override-style="plain"
                       :focusable="true"
                       :aria-live="ariaLive">
         <message-text v-if="!isEmpty(header)"
                       :is-header="true"
                       :unindent="isPlainNativeError"
-                      :override-style="overrideStyle"
+                      override-style="plain"
                       data-purpose="msg-header">
           {{ header }}
         </message-text>
         <message-text v-if="subheader !== '' && displayPrescriptionsSubheader"
                       :unindent="isPlainNativeError"
-                      :override-style="overrideStyle"
+                      override-style="plain"
                       data-purpose="msg-subheader">
           {{ subheader }}
           <a v-if="displayBackToPrescriptionsLinkText" id="prescriptionsLink" :href="prescriptionsPath">

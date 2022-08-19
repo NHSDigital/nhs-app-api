@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:panels="clr-namespace:NHSOnline.App.Controls.Panels;assembly=NHSOnline.App.Controls"
              xmlns:elements="clr-namespace:NHSOnline.App.Controls.Elements;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Panels.TryAgainNetworkError"
              x:Name="Root">
     <elements:Heading1 Text="Cannot connect to the NHS App" x:Name="Heading" />
     
-    <panels:NhsErrorCallout LabelText="Error">
-        <StackLayout>
-            <elements:Paragraph Text="Check your connection and try again." />
-            <elements:Paragraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly." />
-            <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
+    <StackLayout>
+        <elements:Paragraph Text="Check your connection and try again." />
+        <elements:Paragraph Text="If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly." />
+        <elements:Paragraph Text="For urgent medical advice, use NHS 111 online or call 111." />
                         
-            <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Root}}" />
-            <elements:LinkLabel Text="Try again" Command="{Binding TryAgainCommand, Source={x:Reference Name=Root}}"/>
-        </StackLayout>
-    </panels:NhsErrorCallout>
+        <elements:LinkLabel Text="Go to 111.nhs.uk" Command="{Binding OneOneOneCommand, Source={x:Reference Name=Root}}" />
+        <elements:LinkLabel Text="Try again" Command="{Binding TryAgainCommand, Source={x:Reference Name=Root}}"/>
+    </StackLayout>
 </StackLayout>

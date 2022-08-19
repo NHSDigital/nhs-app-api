@@ -1,7 +1,7 @@
 <template>
   <div v-if="showError"
        :class="[!isNativeApp && $style.desktopWeb, 'pull-content']">
-    <message-dialog message-type="error">
+    <message-dialog override-style="plain">
       <message-text>
         {{ $t('generic.errors.checkYourConnection') }}</message-text>
       <message-text>{{ $t('generic.errors.ifTheProblemContinues') }}</message-text>

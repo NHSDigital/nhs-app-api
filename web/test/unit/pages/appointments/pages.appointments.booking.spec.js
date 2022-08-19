@@ -6,7 +6,7 @@ import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
-  EventBus: { $emit: jest.fn() },
+  EventBus: { $on: jest.fn(), $emit: jest.fn() },
 }));
 
 Vue.mixin({
