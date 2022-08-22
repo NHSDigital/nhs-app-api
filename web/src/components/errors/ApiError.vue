@@ -42,6 +42,16 @@
             {{ deviceSettingsText }}
           </a>
         </message-text>
+        <message-text v-if="additionalOrganDonationMessage"
+                      :is-before-footer="true"
+                      :unindent="isPlainNativeError"
+                      :aria-label="messageLabel"
+                      data-purpose="msg-text">
+          {{ additionalOrganDonationMessage }}
+          <a :href="organDonationRegisterDecision" :class="$style['inline-hyperlink']">
+            {{ additionalOrganDonationMessageLinkText }}
+          </a>
+        </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :unindent="isPlainNativeError"
                    :class="$style.additionalInformation"/>
@@ -99,6 +109,7 @@ import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { isBlankString } from '@/lib/utils';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import ServiceDeskReferenceLink from '@/components/errors/ServiceDeskReferenceLink';
+import { ORGAN_DONATION_REGISTER_DECISION_URL } from '@/router/externalLinks';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -135,6 +146,7 @@ export default {
       isNativeApp: this.$store.state.device.isNativeApp,
       symptomCheckerUrl: this.$store.$env.SYMPTOM_CHECKER_URL,
       prescriptionsPath: `/${PRESCRIPTIONS_PATH}`,
+      organDonationRegisterDecision: ORGAN_DONATION_REGISTER_DECISION_URL,
     };
   },
   computed: {
@@ -188,6 +200,12 @@ export default {
     },
     messageText() {
       return (isObject(this.message) ? this.message.text : this.message).replace(/{111link}/g, this.get111HyperLink);
+    },
+    additionalOrganDonationMessage() {
+      return this.getMessage('additionalOrganDonationMessage.insteadYouCan');
+    },
+    additionalOrganDonationMessageLinkText() {
+      return this.getMessage('additionalOrganDonationMessage.registerYourDecision');
     },
     deviceSettings() {
       return this.getMessage('deviceSettings');
@@ -374,5 +392,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "@/style/custom/api-error"
+  @import "@/style/custom/api-error";
+  @import "@/style/custom/a-inline";
 </style>

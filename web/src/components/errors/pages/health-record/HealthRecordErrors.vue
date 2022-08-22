@@ -33,7 +33,7 @@
     <shutter-container id="shutter-dialog-599">
       <error-title title="gpSessionErrors.healthRecord.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.healthRecord.youAreNotCurrentlyAble"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
+      <error-paragraph from="gpSessionErrors.healthRecord.tryLoadingHealthRecordAgain"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
     </shutter-container>
 

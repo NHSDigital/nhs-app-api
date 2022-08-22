@@ -20,7 +20,7 @@ describe('ContactOrganDonation', () => {
 
   describe('text translations', () => {
     it('will display the email label', () => {
-      expect(wrapper.text()).toContain('Email');
+      expect(wrapper.text().replace((/ {2}|\r\n|\n|\r/gm), '')).toContain('If you keep seeing this message, email NHSApp.Enquiries@nhsbt.nhs.uk (NHS Blood and Transplant) for help.');
     });
 
     it('will display the NHSApp Enquiries email', () => {

@@ -142,8 +142,8 @@ class PrescriptionsErrorStepDefinitions {
                 "You are not currently able to order or view repeat prescriptions online."
                 )
                 .assertShutterParagraphText("This may be a temporary problem.")
-                .assertPageHeader("Sorry, there is a problem getting your repeat prescription information")
-                .assertPageTitle("Sorry, there is a problem getting your repeat prescription information")
+                .assertPageHeader("Cannot access repeat prescriptions")
+                .assertPageTitle("Cannot access repeat prescriptions")
     }
 
     @Then("^I see what I can do next with a prescriptions error message and reference code '(.*)'$")

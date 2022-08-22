@@ -19,6 +19,13 @@
       <error-paragraph from="gpSessionErrors.organDonation.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
       <error-button from="generic.tryAgain" @click="tryAgain" />
+      <p>
+        {{ $t('gpSessionErrors.organDonation.ifTheProblemContinues') }}
+        <a :href="organDonationCheckRegistration" :class="$style['inline-hyperlink']">
+          {{ $t('gpSessionErrors.organDonation.contactNHSOrganDonationLinkText') }}
+        </a>
+        {{ $t('gpSessionErrors.organDonation.checkYourOrganDonationDecision') }}
+      </p>
     </shutter-container>
 
   </div>
@@ -32,6 +39,7 @@ import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import { redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
 import { ORGAN_DONATION_PATH } from '@/router/paths';
+import { ORGAN_DONATION_CHECK_REGISTRATION_URL } from '@/router/externalLinks';
 
 export default {
   name: 'OrganDonationErrors',
@@ -61,6 +69,7 @@ export default {
   data() {
     return {
       hasRetried: gpSessionErrorHasRetried(),
+      organDonationCheckRegistration: ORGAN_DONATION_CHECK_REGISTRATION_URL,
     };
   },
   watch: {
@@ -76,3 +85,6 @@ export default {
   },
 };
 </script>
+<style module lang="scss" scoped>
+@import "@/style/custom/a-inline";
+</style>

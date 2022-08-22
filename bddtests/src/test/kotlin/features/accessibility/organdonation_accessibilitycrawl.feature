@@ -81,6 +81,15 @@ Feature: Organ donation accessibility
     And I see an appropriate Organ Donation error message without a retry option
     And the OrganDonation_GenericError page is saved to disk
 
+    Scenario: The 'Organ donation GP session error - temporary problem' page is captured
+      And I am using the native app user agent
+      And Reference data is available for EMIS
+      And I am an EMIS patient whose GP system is unavailable
+      And I am logged in
+      When I retrieve the 'Organ Donation' page directly
+      And I see appropriate try again error message for organ donation when there is no GP session
+      And the OrganDonation_TemporaryProblem page is saved to disk
+
   Scenario: The 'Organ decision received (but not yet processed)' page is captured
     Given I am a EMIS user registered as opt-in with organ donation, who wishes to opt-out but will cause a conflict
     And I am logged in

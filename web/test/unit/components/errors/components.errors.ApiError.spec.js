@@ -193,7 +193,7 @@ describe('api errors', () => {
         });
 
         it('will have text', () => {
-          expect(message.text()).toBe('You can contact NHS Blood and Transplant to get help with this.');
+          expect(message.text()).toBe('You cannot register your decision or update your organ donation preferences right now.');
         });
 
         it('will not have label', () => {

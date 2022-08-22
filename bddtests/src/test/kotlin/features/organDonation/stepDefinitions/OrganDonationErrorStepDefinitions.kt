@@ -244,7 +244,7 @@ class OrganDonationErrorStepDefinitions {
 
     @Then("^I see an appropriate Organ Donation error message without a retry option$")
     fun iSeeAnAppropriateOrganDonationErrorMessageWithNoOptionToRetry() {
-        organDonationErrorPage.assertHeaderText(organDonationErrorPage.errorHeader)
+        organDonationErrorPage.assertPageHeader(organDonationErrorPage.errorHeader)
                 .assertMessageText(organDonationErrorPage.errorMessageNoRetry)
                 .assertNoButton(OD_ERROR_RETRY_BUTTON)
         organDonationErrorPage.assertContactDetails()
@@ -252,7 +252,7 @@ class OrganDonationErrorStepDefinitions {
 
     @Then("^I see an appropriate Organ Donation decision processing message without a retry option$")
     fun iSeeAnAppropriateOrganDonationProcessingMessageWithNoOptionToRetry() {
-        organDonationErrorPage.assertHeaderText(organDonationErrorPage.processingHeader)
+        organDonationErrorPage.assertPageHeader(organDonationErrorPage.processingHeader)
                 .assertMessageText(organDonationErrorPage.processingMessage)
                 .assertNoButton(OD_ERROR_RETRY_BUTTON)
         organDonationErrorPage.assertContactDetails()
@@ -260,7 +260,7 @@ class OrganDonationErrorStepDefinitions {
 
     @Then("^I see an appropriate Organ Donation error message with a retry option$")
     fun iSeeAnAppropriateOrganDonationErrorMessageWithOptionToRetry() {
-        organDonationErrorPage.assertHeaderText(organDonationErrorPage.errorHeader)
+        organDonationErrorPage.assertPageHeader(organDonationErrorPage.errorHeader)
                 .assertMessageText(organDonationErrorPage.errorMessageWithRetry)
                 .assertHasButton(OD_ERROR_RETRY_BUTTON)
         organDonationErrorPage.assertContactDetails()

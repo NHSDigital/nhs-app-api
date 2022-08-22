@@ -3,9 +3,8 @@
     <message-text :is-header="true"
                   :unindent="unindent">
       {{ $t('organDonation.contactOrganDonation.email') }}
-    </message-text>
-    <message-text :unindent="unindent">
-      <a href="mailto:NHSApp.Enquiries@nhsbt.nhs.uk">NHSApp.Enquiries@nhsbt.nhs.uk</a>
+      <a href="mailto:NHSApp.Enquiries@nhsbt.nhs.uk" :class="$style['inline-hyperlink']">NHSApp.Enquiries@nhsbt.nhs.uk</a>
+      {{ $t('organDonation.contactOrganDonation.forHelp') }}
     </message-text>
   </div>
 </template>
@@ -26,3 +25,6 @@ export default {
   },
 };
 </script>
+<style module lang="scss" scoped>
+  @import "@/style/custom/a-inline";
+</style>

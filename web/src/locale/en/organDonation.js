@@ -47,7 +47,8 @@ export default {
     contactSurgeryToAmendPostalAddress: 'Contact your GP surgery to amend your postal address.',
   },
   contactOrganDonation: {
-    email: 'Email',
+    email: 'If you keep seeing this message, email ',
+    forHelp: ' (NHS Blood and Transplant) for help.',
   },
   decisionDetails: {
     decisionDetails: 'Decision details',

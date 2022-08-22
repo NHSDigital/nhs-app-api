@@ -81,9 +81,10 @@ open class MedicalRecordStepDefinitions {
     fun iSeeAppropriateTryAgainShutterScreenWhenThereIsNoGpSessionForGpMedicalRecord() {
         errorDialogPage
                 .assertShutterParagraphText("You are not currently able to view your GP health record online.")
-                .assertShutterParagraphText("This may be a temporary problem.")
-                .assertPageHeader("Sorry, there is a problem getting your GP health record")
-                .assertPageTitle("Sorry, there is a problem getting your GP health record")
+                .assertShutterParagraphText("This may be a temporary problem. You can try loading your " +
+                        "GP health record again.")
+                .assertPageHeader("Cannot show GP health record")
+                .assertPageTitle("Cannot show GP health record")
     }
 
     @Then("^I see what I can do next with a medical record error message and reference code '(.*)'$")

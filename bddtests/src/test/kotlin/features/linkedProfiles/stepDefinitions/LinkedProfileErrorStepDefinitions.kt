@@ -13,8 +13,8 @@ class LinkedProfileErrorStepDefinitions {
     fun iSeeAppropriateTryAgainShutterScreenWhenThereIsNoGpSession() {
         errorDialogPage.assertShutterParagraphText("You are not currently able to access linked profiles.")
                 .assertShutterParagraphText("This may be a temporary problem.")
-                .assertPageHeader("Sorry, there is a problem getting your linked profiles information")
-                .assertPageTitle("Sorry, there is a problem getting your linked profiles information")
+                .assertPageHeader("Cannot show linked profile information")
+                .assertPageTitle("Cannot show linked profile information")
     }
 
     @Then("^I see what I can do next with a linked accounts error message and reference code '(.*)'")

@@ -174,8 +174,8 @@ open class OrganDonationStepDefinitions {
     @Then("^I see appropriate try again error message for organ donation when there is no GP session$")
     fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSessionForOrganDonation() {
         errorDialogPage
-            .assertPageHeader("Sorry, there is a problem with organ donation")
-            .assertPageTitle("Sorry, there is a problem with organ donation")
+            .assertPageHeader("Cannot access organ donation details")
+            .assertPageTitle("Cannot access organ donation details")
             .assertShutterParagraphText("You are not currently able to view or manage your organ donation decision.")
             .assertShutterParagraphText("This may be a temporary problem.")
     }

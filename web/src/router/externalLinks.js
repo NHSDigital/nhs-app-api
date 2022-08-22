@@ -1,5 +1,7 @@
 export const ORGAN_DONATION_FIND_OUT_MORE_URL = 'https://www.organdonation.nhs.uk/app/app-donation/';
 export const ORGAN_DONATION_URL = 'https://www.organdonation.nhs.uk/';
+export const ORGAN_DONATION_CHECK_REGISTRATION_URL = 'https://www.organdonation.nhs.uk/register-your-decision/check-registration/';
+export const ORGAN_DONATION_REGISTER_DECISION_URL = 'https://www.organdonation.nhs.uk/register-your-decision/';
 export const SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS = '?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20';
 export const YOUR_NHS_DATA_MATTERS_URL = 'https://www.nhs.uk/your-nhs-data-matters/';
 export const OTHER_WAYS_TO_MAKE_A_CHOICE_URL = 'https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/';

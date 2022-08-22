@@ -1,33 +1,25 @@
 package pages.organDonation
 
 import org.junit.Assert
-import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import pages.ErrorPage
+import pages.text
 
 class OrganDonationErrorPage: ErrorPage() {
 
-    val errorHeader = "Something went wrong"
+    val errorHeader = "Cannot access organ donation details"
     val errorMessageWithRetry = "If the problem persists you can contact NHS Blood and Transplant " +
             "to get help with this."
-    val errorMessageNoRetry = "You can contact NHS Blood and Transplant to get help with this."
+    val errorMessageNoRetry = "You cannot register your decision or update your organ donation preferences right now."
     val processingHeader = "Decision being processed"
     val processingMessage = "Check back later to confirm that your decision has been registered."
+    val contactDetailsText = "If you keep seeing this message, email NHSApp.Enquiries@nhsbt.nhs.uk " +
+            "(NHS Blood and Transplant) for help.";
 
     private val contactDetailsFinderFormat = "//div[@data-purpose='error']//div[@data-purpose='msg-contactdetails']"
     private val contactDetailsLocation = findElementByLocator(contactDetailsFinderFormat)
-    private val contactDetailsText = arrayOf("Email", "NHSApp.Enquiries@nhsbt.nhs.uk")
 
     fun assertContactDetails() {
-        contactDetailsLocation.actOnTheElement {
-            val actualText = it.findElements<WebElement>(By.xpath(".//p"))
-                    .map { element -> element.text }.toTypedArray()
-
-
-            contactDetailsText.forEach { expected ->
-                Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
-                        actualText.contains(expected))
-            }
-        }
+        Assert.assertEquals("Contact Details message incorrect. ",
+            contactDetailsText, contactDetailsLocation.text);
     }
 }

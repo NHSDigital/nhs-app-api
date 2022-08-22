@@ -11,7 +11,7 @@ export default {
   },
   prescriptions: {
     otherThingsYouCanDo: 'Other things you can do',
-    tryAgainHeader: 'Sorry, there is a problem getting your repeat prescription information',
+    tryAgainHeader: 'Cannot access repeat prescriptions',
     youAreNotCurrentlyAble: 'You are not currently able to order or view repeat prescriptions online.',
     youCanNotOrderOrViewPrescriptions: 'Sorry, you cannot order or view repeat prescriptions online',
     repeatPrescriptionsCannotOrder: 'Cannot order or view repeat prescriptions online',
@@ -22,7 +22,7 @@ export default {
   },
   linkedProfiles: {
     sorryLinkedProfiles: 'Cannot show linked profiles',
-    temporaryHeader: 'Sorry, there is a problem getting your linked profiles information',
+    temporaryHeader: 'Cannot show linked profile information',
     youAreNotCurrentlyAble: 'You are not currently able to access linked profiles.',
     ifYouNeedAccessToHealthServices: 'If you need to access health services on behalf of someone else, contact their GP surgery directly or try again later.',
     ifYouHaveAccessedLinkedProfiles: 'If you have accessed linked profiles before, select ',
@@ -30,15 +30,16 @@ export default {
   },
   healthRecord: {
     otherThingsYouCanDo: 'Other things you can do',
-    tryAgainHeader: 'Sorry, there is a problem getting your GP health record',
+    tryAgainHeader: 'Cannot show GP health record',
     youAreNotCurrentlyAble: 'You are not currently able to view your GP health record online.',
+    tryLoadingHealthRecordAgain: 'This may be a temporary problem. You can try loading your GP health record again.',
     healthRecordUnavailable: 'Sorry, your GP health record is unavailable',
     ifYouNeedInformationNow: 'If you need this information now, contact your GP surgery.',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
   },
   organDonation: {
     otherThingsYouCanDo: 'Other things you can do',
-    tryAgainHeader: 'Sorry, there is a problem with organ donation',
+    tryAgainHeader: 'Cannot access organ donation details',
     youAreNotCurrentlyAble: 'You are not currently able to view or manage your organ donation decision.',
     temporaryProblem: 'This may be a temporary problem.',
     organDonationUnavailable: 'Cannot access organ donation information',
@@ -47,6 +48,9 @@ export default {
     ifYouNeedInformationNowEmail: 'Email',
     emailText: 'NHSApp.Enquiries@nhsbt.nhs.uk',
     emailLink: 'mailto: NHSApp.Enquiries@nhsbt.nhs.uk',
+    ifTheProblemContinues: 'If the problem continues, ',
+    contactNHSOrganDonationLinkText: 'contact NHS organ donation',
+    checkYourOrganDonationDecision: ' to check your organ donation decision.',
   },
   genericOnDemand: {
     serviceUnavailable: 'Sorry, this service is unavailable',
