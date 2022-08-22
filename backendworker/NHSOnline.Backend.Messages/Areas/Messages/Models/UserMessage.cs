@@ -33,5 +33,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         [BsonElement]
         public SenderContext SenderContext { get; set; }
 
+        [BsonElement]
+        public UserMessageReply Reply { get; set; }
     }
 }

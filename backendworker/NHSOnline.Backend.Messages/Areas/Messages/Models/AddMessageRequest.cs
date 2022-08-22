@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         public int Version { get; set; }
         public string Body { get; set; }
         public AddMessageSenderContext SenderContext { get; set; }
+        public AddMessageReply Reply { get; set; }
     }
 }

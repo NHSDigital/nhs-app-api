@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
 {
@@ -28,7 +30,8 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                 Version = firstSource.Version,
                 Body = firstSource.Body,
                 SentTime = DateTime.UtcNow,
-                SenderContext = MapSenderContext(firstSource.SenderContext)
+                SenderContext = MapSenderContext(firstSource.SenderContext),
+                Reply = MapMessageReply(firstSource.Reply),
             };
         }
 
@@ -52,6 +55,29 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                 SenderId = senderContext.SenderId,
                 SupplierId = senderContext.SupplierId
             };
+        }
+
+        private static UserMessageReply MapMessageReply(AddMessageReply addMessageReply)
+        {
+            if (addMessageReply != null)
+            {
+                return new UserMessageReply()
+                {
+                    Options = MapMessageReplyOptions(addMessageReply.Options),
+                };
+            }
+            return null;
+        }
+
+        private static List<UserReplyOption> MapMessageReplyOptions(IReadOnlyCollection<AddReplyOption> addReplyOption)
+        {
+            var options = addReplyOption?.Select(o => new UserReplyOption
+                {
+                    Code = o.Code,
+                    Display = o.Display
+                })
+                .ToList();
+            return options;
         }
     }
 }

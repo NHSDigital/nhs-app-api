@@ -3,4 +3,5 @@ package worker.models.messages
 data class MessageRequest(var sender: String,
                           var body: String,
                           var version: Int,
-                          var senderContext: SenderContext? = null)
+                          var senderContext: SenderContext? = null,
+                          var reply: Reply? = null)

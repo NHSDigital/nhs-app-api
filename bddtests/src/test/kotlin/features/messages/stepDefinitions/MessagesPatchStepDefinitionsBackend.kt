@@ -13,13 +13,6 @@ import worker.models.messages.MessageRequest
 
 class MessagesPatchStepDefinitionsBackend {
 
-    @Given("^I am an api user with an unread message$")
-    fun iAmAnApiUserWithAnUnreadMessage() {
-        val factory = MessagesFactory()
-        factory.setUpUser()
-        factory.setUpSingleUnreadMessage()
-    }
-
     @Given("^I am an api user with a read message$")
     fun iAmAnApiUserWithAReadMessage() {
         val factory = MessagesFactory()

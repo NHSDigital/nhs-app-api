@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -104,6 +105,15 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     SenderId = "SenderId",
                     SupplierId = "SupplierId",
                     TransmissionId = "TransmissionId"
+                },
+                Reply = new AddMessageReply()
+                {
+                    Options = new List<AddReplyOption>()
+                    {
+                        new AddReplyOption() { Code = "SMOKE", Display = "SMOKE" },
+                        new AddReplyOption() { Code = "NO", Display = "NO" },
+                        new AddReplyOption() { Code = "NEVER", Display = "NEVER" }
+                    }
                 }
             };
 
@@ -129,6 +139,53 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SupplierId = "SupplierId",
                 TransmissionId = "TransmissionId"
             });
+            result.Reply.Should().BeEquivalentTo(new UserMessageReply()
+            {
+                Options = new List<UserReplyOption>()
+                {
+                    new UserReplyOption() { Code = "SMOKE", Display = "SMOKE" },
+                    new UserReplyOption() { Code = "NO", Display = "NO" },
+                    new UserReplyOption() { Code = "NEVER", Display = "NEVER" }
+                }
+            });
+        }
+
+        [TestMethod]
+        public void Map_RequestMessageReplyIsNull_MappedMessageReplyIsNull()
+        {
+            // Arrange
+            var request = new AddMessageRequest
+            {
+                Reply = null
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(request, NhsLoginId);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Reply.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void Map_RequestMessageReplyOptionIsNull_MappedMessageReplyOptionIsNull()
+        {
+            // Arrange
+            var request = new AddMessageRequest
+            {
+                Reply = new AddMessageReply()
+                {
+                    Options = null
+                }
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(request, NhsLoginId);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Reply.Should().NotBeNull();
+            result.Reply.Options.Should().BeNull();
         }
     }
 }

@@ -17,21 +17,8 @@ import worker.models.messages.SenderFacade
 import worker.models.messages.SingleMessageFacade
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
-import worker.models.messages.Sender
-import worker.models.messages.SendersResponse
 
 class MessagesGetStepDefinitionsBackend {
-
-    @Given("^I am an api user wishing to get my messages$")
-    fun iAmAnApiUserWishingToGetTheirMessages() {
-        setUpHandler()
-    }
-
-    @Given("^I am an api user wishing to get my messages from v1 endpoint$")
-    fun iAmAnApiUserWishingToGetTheirMessagesfromV1Endpoint() {
-        setUpHandler(true)
-    }
-
     @Given("^I am an api user with proof level 5 wishing to get my messages$")
     fun iAmAnApiUserWithProofLevelFiveWishingToGetMyMessages() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
@@ -41,21 +28,10 @@ class MessagesGetStepDefinitionsBackend {
         factory.setUpMultipleMessagesInCache()
     }
 
-    @Given("^I am an api user wishing to get my messages, but I have no messages$")
-    fun iAmAnApiUserWishingToGetTheirMessagesButIHaveNoMessages() {
-        val factory = MessagesFactory()
-        factory.setUpUser()
-    }
-
     @When("^I get a summary of my messages from the api$")
     fun iGetASummaryOfMyMessagesFromTheApi() {
         val authToken = SerenityHelpers.getPatient().accessToken
         MessagesApi.getSummary(authToken)
-    }
-
-    @When("^I get a summary of my messages from the api without an access token$")
-    fun iGetMyMessagesFromTheApiWithoutAuthToken() {
-        MessagesApi.getSummary(authToken = null)
     }
 
     @Then("^an attempt to get a summary of my messages with an invalid access token will return an Unauthorised error$")
@@ -70,12 +46,6 @@ class MessagesGetStepDefinitionsBackend {
         val authToken = SerenityHelpers.getPatient().accessToken
         val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
         MessagesApi.getFromSenderByName(authToken, targetSender)
-    }
-
-    @When("^I get my messages from a sender by name from the api without an access token$")
-    fun iGetMyMessagesFromASenderByNameFromTheApiWithoutAuthToken() {
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        MessagesApi.getFromSenderByName(null, targetSender)
     }
 
     @When("^I get my messages from a sender by sender Id from the api$")
@@ -186,18 +156,6 @@ class MessagesGetStepDefinitionsBackend {
         MessagesApi.getMessage(authToken, messageId)
     }
 
-    @When("^I try to get the message senders without passing an access token$")
-    fun iTryToGetTheMessageSendersWithoutPassingAnAccessToken() {
-        val authToken = ""
-        MessagesApi.getSenders(authToken)
-    }
-
-    @When("^I try to get the message senders from v2 endpoint without passing an access token$")
-    fun iTryToGetTheMessageSendersWithoutPassingAnAccessTokenV2() {
-        val authToken = ""
-        MessagesApi.getSendersV2(authToken)
-    }
-
     @When("^I try to get the message using a blank string$")
     fun iTryToGetTheMessageUsingABlankString(){
         val authToken = SerenityHelpers.getPatient().accessToken
@@ -217,69 +175,6 @@ class MessagesGetStepDefinitionsBackend {
         val response = MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<MessagesResponseMessage>()
         assertNotNull("Message Id", response.id)
     }
-
-    @When("^I try to get a list of message senders$")
-    fun iTryToGetAListOfMessageSenders() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        MessagesApi.getSenders(authToken)
-    }
-
-    @When("^I try to get a list of message senders from v2 endpoint$")
-    fun iTryToGetAListOfMessageSendersV2() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        MessagesApi.getSendersV2(authToken)
-    }
-
-    @Then("^I can see a list of message senders along with a count of unread messages per sender$")
-    fun iCanSeeAListOfMessageSendersAlongWithACountOfUnreadMessagesPerSender() {
-        val response = MessagesSerenityHelpers.GET_SENDERS.getOrFail<SendersResponse>()
-        val expectedMessages = MessagesSerenityHelpers.EXPECTED_SENDERS
-            .getOrFail<ArrayList<SenderFacade>>()
-        assertNotNull(response)
-        assertNotNull(response.senders)
-        val expectedSenders = expectedMessages.map { message ->
-            Sender(null, message.name, message.unreadCount)
-        }
-
-        Assert.assertEquals("Number Of Senders", expectedSenders.count(), response.senders.count())
-
-        for (x in 0 until expectedSenders.count()){
-            Assert.assertEquals(expectedSenders[x].name, response.senders[x].name)
-            Assert.assertEquals(expectedSenders[x].unreadCount, response.senders[x].unreadCount)
-        }
-    }
-
-    @Then("^I can see a list of message senders from v2 endpoint along with a count of unread messages per sender$")
-    fun iCanSeeAListOfMessageSendersAlongWithACountOfUnreadMessagesPerSenderV2() {
-        val response = MessagesSerenityHelpers.GET_SENDERS.getOrFail<SendersResponse>()
-        val expectedMessages = MessagesSerenityHelpers.EXPECTED_SENDERS
-            .getOrFail<ArrayList<SenderFacade>>()
-        assertNotNull(response)
-        assertNotNull(response.senders)
-        val expectedSenders = expectedMessages.map { message ->
-            Sender(
-                message.messages[0].senderContext!!.senderId,
-                message.name,
-                message.unreadCount
-            )
-        }
-
-        Assert.assertEquals("Number Of Senders", expectedSenders.count(), response.senders.count())
-
-        for (x in 0 until expectedSenders.count()){
-            Assert.assertEquals(expectedSenders[x].id, response.senders[x].id)
-            Assert.assertEquals(expectedSenders[x].name, response.senders[x].name)
-            Assert.assertEquals(expectedSenders[x].unreadCount, response.senders[x].unreadCount)
-        }
-    }
-
-    private fun setUpHandler(isV1SendersEndpoint: Boolean = false)
-    {
-        val factory = MessagesFactory()
-        factory.setUpUser()
-        factory.setUpMultipleMessagesInCache(isV1SendersEndpoint)
-    }
-
     private fun assertReceivedMessages(expectedMessages: ArrayList<SenderFacade>,
                                        responseMessages: Array<MessagesResponse>) {
         Assert.assertEquals("Number Of Messages", expectedMessages.count(), responseMessages.count())
@@ -322,7 +217,7 @@ class MessagesGetStepDefinitionsBackend {
                     message.id,
                     message.sender,
                     message.body,
-                    message.read?.toLowerCase() =="true" ,
+                    message.read?.toLowerCase() == "true",
                     message.sentTime,
                     message.version,
                     message.senderContext)

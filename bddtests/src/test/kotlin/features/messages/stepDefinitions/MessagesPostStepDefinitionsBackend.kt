@@ -10,6 +10,8 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.models.messages.MessageRequest
+import worker.models.messages.Reply
+import worker.models.messages.ReplyOption
 import worker.models.messages.SenderContext
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -40,14 +42,16 @@ class MessagesPostStepDefinitionsBackend {
     }
 
     private fun iAmAnApiUserWishingToPostAMessage(
-        senderContext: SenderContext? = null
+        senderContext: SenderContext? = null,
+        reply: Reply? = null
     ) {
         MongoDBConnection.MessagesCollection.clearCache()
         val message = MessageRequest(
             sender = "Sender One",
             body = "Message One",
             version = MessageVersion.PLAIN_TEXT.value,
-            senderContext = senderContext
+            senderContext = senderContext,
+            reply = reply
         )
         val nhsLoginId = "0123456789ABCDEF"
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
@@ -106,6 +110,32 @@ class MessagesPostStepDefinitionsBackend {
             "Incorrect status code returned. Invalid Param: $invalidParam",
             HttpStatus.SC_BAD_REQUEST,
             errorResponse!!.statusCode
+        )
+    }
+
+    @Given("^I am an api user wishing to post a message with reply options$")
+    fun iAmAApiUserWishingToPostAMessageWithReplyOptions() {
+        iAmAnApiUserWishingToPostAMessage(
+            senderContext = SenderContext(
+                supplierId = "supplierId",
+                senderId = "senderId",
+                communicationId = "communicationId",
+                transmissionId = "transmissionId",
+                communicationCreatedDateTime = Instant.now().truncatedTo(ChronoUnit.MILLIS).toString(),
+                requestReference = "requestReference",
+                campaignId = "campaignId",
+                odsCode = "odsCode",
+                nhsNumber = "nhsNumber",
+                nhsLoginId = "nhsLoginId"
+            ),
+            reply = Reply(
+                options = listOf(ReplyOption(code = "SMOKE", display = "SMOKE"),
+                    ReplyOption(code = "EX", display = "EX"),
+                    ReplyOption(code = "NEVER", display = "NEVER")
+                ),
+                response = null,
+                responseDateTime = null
+            )
         )
     }
 }
