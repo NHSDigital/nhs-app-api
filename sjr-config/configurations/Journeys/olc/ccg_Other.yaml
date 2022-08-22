@@ -679,6 +679,9 @@ target:
     - Y03049
     - F81105
     - F81119
+    - F81198
+    - F81640
+    - H82055
 journeys:
   cdssAdvice:
     provider: eConsult
