@@ -14,14 +14,6 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
             return await httpEndpointCallers.AuditLogConsumer.PostJson(parameters);
         }
 
-        internal static async Task<HttpResponseMessage> PostReferrerLogin(this HttpEndpointCallers httpEndpointCallers,
-            string startDateTime,
-            string endDateTime)
-        {
-            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
-            return await httpEndpointCallers.ReferrerLogin.PostJson(request);
-        }
-
         internal static async Task<HttpResponseMessage> PostDailyDeviceReferralUsage(
             this HttpEndpointCallers httpEndpointCallers,
             string startDateTime,
@@ -30,6 +22,22 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Http
             var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
 
             return await httpEndpointCallers.DailyDeviceReferralUsage.PostJson(request);
+        }
+
+        internal static async Task<HttpResponseMessage> PostDeviceInfo(this HttpEndpointCallers httpEndpointCallers,
+            string startDateTime,
+            string endDateTime)
+        {
+            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
+            return await httpEndpointCallers.DeviceInfo.PostJson(request);
+        }
+
+        internal static async Task<HttpResponseMessage> PostReferrerLogin(this HttpEndpointCallers httpEndpointCallers,
+            string startDateTime,
+            string endDateTime)
+        {
+            var request = new { StartDateTime = startDateTime, EndDateTime = endDateTime };
+            return await httpEndpointCallers.ReferrerLogin.PostJson(request);
         }
 
         internal static async Task<HttpResponseMessage> PostReferrerServiceJourney(

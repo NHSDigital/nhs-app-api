@@ -13,7 +13,13 @@ BEGIN
                 CASE WHEN ios."Generation" IS NOT NULL THEN COALESCE(TRIM(ios."Generation"), 'Unknown') ELSE COALESCE(TRIM(dev."DeviceModel"), 'Unknown') END AS "DeviceModel",
                 COALESCE(TRIM(dev."DeviceOS"), 'Unknown') AS "DeviceOS",
                 COALESCE(TRIM(dev."DeviceOSVersion"), 'Unknown') AS "DeviceOSVersion",
-                CASE WHEN "AppVersion" IS NULL THEN 'Browser' ELSE 'Native' END AS "Access"
+                CASE
+                    WHEN "AppVersion" IS NULL THEN CASE
+                        WHEN LOWER(dev."UserAgent") SIMILAR TO '%(android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini)%' THEN 'Mobile browser'
+                        ELSE 'Browser'
+                    END
+                    ELSE 'Native'
+                END AS "Access"
             FROM "events"."Device" dev
                      LEFT JOIN
                  (

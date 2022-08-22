@@ -11,6 +11,12 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 
         internal ComputeSchema(PostgresWrapper postgres) => _postgres = postgres;
 
+        internal PostgresTable<DailyDeviceReferralUsageRow> DailyDeviceReferralUsage =>
+            Table<DailyDeviceReferralUsageRow>();
+
+        internal PostgresTable<DeviceInfoRow> DeviceInfo =>
+            Table<DeviceInfoRow>();
+
         internal PostgresTable<FirstLoginsRow> FirstLogins =>
             Table<FirstLoginsRow>();
 
@@ -25,8 +31,5 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 
         private PostgresTable<TRow> Table<TRow>([CallerMemberName] string viewName = "") where TRow : ITableRow
             => _postgres.Table<TRow>(SchemaName, viewName);
-
-        internal PostgresTable<DailyDeviceReferralUsageRow> DailyDeviceReferralUsage =>
-            Table<DailyDeviceReferralUsageRow>();
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.MetricLogFunctionApp.Compute.DailyDeviceReferralUsage;
+using NHSOnline.MetricLogFunctionApp.Compute.DeviceInfo;
 using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
 using NHSOnline.MetricLogFunctionApp.Compute.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.ReferrerLogin;
@@ -19,9 +20,10 @@ namespace NHSOnline.MetricLogFunctionApp.Compute
 
         private static void AddFunctions(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddDeviceInfo();
+            serviceCollection.AddDailyDeviceReferralUsage();
             serviceCollection.AddFirstLogins();
             serviceCollection.AddReferrerLogin();
-            serviceCollection.AddDailyDeviceReferralUsage();
             serviceCollection.AddReferrerServiceJourney();
             serviceCollection.AddWayfinder();
         }
