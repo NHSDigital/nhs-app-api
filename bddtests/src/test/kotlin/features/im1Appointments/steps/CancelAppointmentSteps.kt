@@ -60,7 +60,7 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheValidationErrorSummary() {
-        cancelAppointmentPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
+        cancelAppointmentPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There is a problem",
                 "Select a reason for cancelling"))
     }
 

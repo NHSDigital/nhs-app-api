@@ -84,15 +84,15 @@ export default {
     nonRepeatPrescription: 'A non-repeat prescription',
     nonRepeatPrescriptionHint: 'A one-off, short-term or acute medicine that you may have been prescribed before',
     errors: {
-      thereIsAProblem: 'There\'s a problem',
-      chooseTypeOfPrescription: 'Choose a type of prescription',
+      thereIsAProblem: 'There is a problem',
+      chooseTypeOfPrescription: 'Select a type of prescription',
     },
     continueButton: 'Continue',
   },
   repeatCourses: {
     errors: {
-      thereIsAProblem: 'There\'s a problem',
-      enterSpecialRequests: 'Add a note about your prescription',
+      thereIsAProblem: 'There is a problem',
+      enterSpecialRequests: 'Enter a note about your prescription',
       selectAtLeastOne: 'Select at least one medicine',
     },
     currentlyAvailableRepeatPrescriptions: 'Medications currently available for repeat prescription',

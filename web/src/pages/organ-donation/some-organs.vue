@@ -2,16 +2,10 @@
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div ref="validationMessage" tabindex="-1">
-
-        <form-error-summary v-if="showErrors && !areAllSelected"
+        <form-error-summary v-if="showErrors"
                             :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="$t('organDonation.someOrgans.chooseYesOrNoForEachOrgan')"
-                            :errors-ids="getFirstNotStated() + '-Yes'"/>
-
-        <form-error-summary v-if="showErrors && areAllSelected && !hasYesSelection"
-                            :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan')"
-                            :errors-ids="choices[0] + '-Yes'"/>
+                            :errors="getErrors"
+                            :errors-ids="getErrorIds"/>
       </div>
       <div>
         <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
@@ -89,7 +83,48 @@ export default {
       return includes(YES)(this.currentChoices);
     },
     showErrors() {
-      return this.hasTriedToContinue && !this.hasMadeChoices;
+      const errors = this.getErrors;
+      return this.hasTriedToContinue && (!this.hasMadeChoices || errors.length > 0);
+    },
+    getErrors() {
+      const errors = [];
+
+      if (!this.areAllSelected) {
+        const organs = Object.keys(this.$store.state.organDonation.registration.decisionDetails.choices);
+        const decisions = Object.values(this.$store.state.organDonation.registration.decisionDetails.choices);
+
+        for (let i = 0; i < organs.length; i += 1) {
+          if (decisions[i] === NOT_STATED) {
+            errors.push(this.$t('organDonation.someOrgans.chooseYesOrNoFor') + organs[i].toLowerCase());
+          }
+        }
+      }
+
+      if (this.areAllSelected && !this.hasYesSelection) {
+        errors.push(this.$t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan'));
+      }
+
+      return errors;
+    },
+    getErrorIds() {
+      const errorsIds = [];
+
+      if (!this.areAllSelected) {
+        const organs = Object.keys(this.$store.state.organDonation.registration.decisionDetails.choices);
+        const decisions = Object.values(this.$store.state.organDonation.registration.decisionDetails.choices);
+
+        for (let i = 0; i < organs.length; i += 1) {
+          if (decisions[i] === NOT_STATED) {
+            errorsIds.push(`${organs[i]}-Yes`);
+          }
+        }
+      }
+
+      if (this.areAllSelected && !this.hasYesSelection) {
+        errorsIds.push(`${this.choices[0]}-Yes`);
+      }
+
+      return errorsIds;
     },
     showInlineErrors() {
       return this.showErrors && !this.areAllSelected;
@@ -123,17 +158,6 @@ export default {
     },
     moreAboutOrgansClicked() {
       redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
-    },
-    getFirstNotStated() {
-      const organs = Object.keys(this.$store.state.organDonation.registration.decisionDetails.choices);
-      const decisions = Object.values(this.$store.state.organDonation.registration.decisionDetails.choices);
-
-      for (let i = 0; i < organs.length; i += 1) {
-        if (decisions[i] === NOT_STATED) {
-          return organs[i];
-        }
-      }
-      return '';
     },
   },
 };

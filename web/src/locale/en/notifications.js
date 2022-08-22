@@ -1,7 +1,7 @@
 export default {
   aboutNotifications: 'About notifications on your devices',
   allowNotifications: 'Allow notifications',
-  chooseIfYouWantToGetNotifications: 'Choose if you want to get notifications',
+  chooseIfYouWantToGetNotifications: 'Select an option',
   doNotSendNotifications: 'No, do not send notifications on this device',
   doYouWantToGetNotifications: 'Do you want to get NHS App notifications?',
   iAcceptNotifications: 'I accept the NHS App sending notifications on this device',

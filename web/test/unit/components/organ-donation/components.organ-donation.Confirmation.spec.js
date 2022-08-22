@@ -101,7 +101,7 @@ describe('confirmation', () => {
         const span = wrapperFn().find('#accuracy-checkbox-error span');
         expect(span.exists()).toBe(accuracy);
         if (accuracy) {
-          expect(span.text()).toBe('Check your information. Confirm if it is accurate.');
+          expect(span.text()).toBe('Confirm if your information is accurate');
         }
       });
 
@@ -109,7 +109,7 @@ describe('confirmation', () => {
         const span = wrapperFn().find('#privacy-checkbox-error span');
         expect(span.exists()).toBe(privacy);
         if (privacy) {
-          expect(span.text()).toBe('Read the privacy statement. Confirm if you give your consent.');
+          expect(span.text()).toBe('Confirm if you agree to the privacy statement');
         }
       });
     };

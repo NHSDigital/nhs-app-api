@@ -7,7 +7,7 @@ export default {
   iWantToChangeMyDecision: 'I want to change my decision',
   manageYourOrganDonationDecision: 'Manage your organ donation decision',
   registerYourDecision: 'Register your decision',
-  thereIsAProblem: 'There\'s a problem',
+  thereIsAProblem: 'There is a problem',
   thinkYouHaveRegisteredAlready: 'Think you have registered already?',
   thisIsStillMyDecision: 'This is still my decision',
   additionalDetails: {
@@ -33,9 +33,9 @@ export default {
   },
   confirmation: {
     confirmation: 'Confirmation',
-    checkYourInformation: 'Check your information. Confirm if it is accurate.',
+    checkYourInformation: 'Confirm if your information is accurate',
     iConfirmTheInformation: 'I confirm that the information given in this form is true, complete and accurate',
-    readThePrivacyStatementAndConfirmConstent: 'Read the privacy statement. Confirm if you give your consent.',
+    readThePrivacyStatementAndConfirmConstent: 'Confirm if you agree to the privacy statement',
     iHaveReadThe: 'I have read the ',
     privacyStatement: 'privacy statement',
     andGiveConsent: ' and give consent for the use of my information in accordance with the terms',
@@ -59,7 +59,7 @@ export default {
   },
   faith: {
     askFamilyWhenYouDie: 'When you die, NHS staff can ask your family (and anyone else appropriate) about your faith and beliefs. This is how NHS staff will find out about any end of life wishes you might have.',
-    chooseYesNoOrPreferNot: 'Choose yes, no or prefer not to say.',
+    chooseYesNoOrPreferNot: 'Select yes, no or prefer not to say',
     faithSlashBeliefs: 'Faith / beliefs',
     faithSlashBeliefsDetails: 'Faith / beliefs details',
     iWouldLikeStaffToSpeakToMyFamilyAboutFaithSlashBeliefs: 'I would like NHS staff to speak to my family and anyone else appropriate about how organ donation can go ahead in line with my faith / beliefs',
@@ -67,7 +67,7 @@ export default {
     noThisIsNotApplicable: 'No - this is not applicable to me',
     preferNotToSay: 'Prefer not to say',
     recordWhetherToAskFamilyWhenYouDie: 'Record here whether you want our specialist nurses to discuss your faith or beliefs with your family when you die, at the same time they approach them about organ donation.',
-    respondToFaithBeliefDeclaration: 'Respond to the faith/belief declaration. Choose yes, no or prefer not to say.',
+    respondToFaithBeliefDeclaration: 'Select yes, no or prefer not to say',
     yesThisIsApplicable: 'Yes - this is applicable to me',
     endOfLifeWishes: {
       examplesOfEndOfLifeWishes: 'Examples of end of life wishes ',
@@ -164,17 +164,16 @@ export default {
     personalDetails: 'Personal details',
   },
   reviewYourDecision: {
-    checkInformationAndConfirm: 'Check your information. Confirm if it is accurate.',
-    readPrivacyStatmentAndConsent: 'Read the privacy statement. Confirm if you give your consent.',
+    checkInformationAndConfirm: 'Confirm if your information is accurate',
+    readPrivacyStatmentAndConsent: 'Confirm if you agree to the privacy statement',
     aboutYou: 'About you',
     submitMyDecision: 'Submit my decision',
   },
   someOrgans: {
     yes: 'Yes',
     no: 'No',
-    chooseYesOrNoFor: 'Choose either ‘yes’ or ‘no’ for ',
-    chooseYesOrNoForEachOrgan: 'Choose either ‘yes’ or ‘no’ for each organ.',
-    chooseYesForAtLeastOneOrgan: 'To continue, choose ‘yes’ for at least one organ.',
+    chooseYesOrNoFor: 'Select either \'yes\' or \'no\' for ',
+    chooseYesForAtLeastOneOrgan: 'Select \'yes\' for at least one organ',
     yourChoice: 'Your choice',
     findOutMoreAboutOrgansAndTissue: 'Find out more about organs and tissue',
     pleaseSelectWhichYouWouldLikeToDonate: 'Please select which organs and tissue you would like to donate:',
@@ -218,7 +217,7 @@ export default {
   withdrawReason: {
     differentToOptingOut: 'Withdrawing from the NHS Organ Donor Register is different from recording a decision not to donate (opting out). If you withdraw, we will not know your decision.',
     findOutMoreAboutThe: 'Find out more about the ',
-    giveAReasonForWithdrawing: 'Give a reason for withdrawing your decision',
+    giveAReasonForWithdrawing: 'Select a reason for withdrawing your decision',
     ifYouDoNotWantTheWayToTellUsIs: 'If you do not want to be an organ donor, the best way to tell us is to ',
     lawAndExcludedGroups: 'law and excluded groups',
     makeSureYourFamilyKnow: 'Whatever you decide, please make sure your family know your decision.',
@@ -233,7 +232,7 @@ export default {
   },
   yourChoice: {
     allMyOrgansAndTissue: 'All my organs and tissue',
-    chooseToDonate: 'Choose to donate all or some of your organs.',
+    chooseToDonate: 'Select to donate some or all of your organs.',
     chooseWhichOrgansAndTissue: 'Choose which of your organs and tissue to donate.',
     helpUpToNinePeople: 'Help up to nine people through organ donation and even more through tissue donation.',
     someOrgansAndTissue: 'Some organs and tissue',

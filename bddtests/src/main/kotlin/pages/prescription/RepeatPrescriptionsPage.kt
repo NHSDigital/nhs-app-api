@@ -65,7 +65,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun isNoSpecialRequestTextEnteredMessageVisible(): Boolean {
-        val message = "Add a note about your prescription"
+        val message = "Enter a note about your prescription"
         return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 

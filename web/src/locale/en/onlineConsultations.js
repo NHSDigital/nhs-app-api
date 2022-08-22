@@ -29,7 +29,7 @@ export default {
     findOutWhatToDo: 'Find out what to do if you think you might have coronavirus',
   },
   validationErrors: {
-    thereIsAProblem: 'There\'s a problem',
+    thereIsAProblem: 'There is a problem',
     message: {
       attachment: 'Select a file',
       boolean: 'Select an option',

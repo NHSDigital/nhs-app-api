@@ -17,12 +17,12 @@ class TermsAndConditionsPage : HybridPageObject() {
     val mainErrorMessage = HybridPageElement(
         webDesktopLocator = "//a",
         page = this
-    ).withNormalisedText("You cannot continue without agreeing")
+    ).withNormalisedText("Confirm if you agree with the terms of use and necessary cookies")
 
     val checkboxErrorMessage = HybridPageElement(
         webDesktopLocator = "//span",
         page = this
-    ).withNormalisedText("You cannot use the NHS App without agreeing")
+    ).withNormalisedText("Confirm if you agree with the terms of use and necessary cookies")
 
     val acceptTermsAndConditionsCheckBox = CheckBoxElement(
             page = this,

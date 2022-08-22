@@ -13,6 +13,25 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
     lateinit var organDonationYourChoicePage: OrganDonationSpecificOrganChoicePage
     lateinit var organDonationFindOutMoreAboutOrgansAndTissuePage: OrganDonationFindOutMoreAboutOrgansAndTissuePage
+    private var organDonationAllMissingChoices: String = """
+        |Select either 'yes' or 'no' for heart
+        |Select either 'yes' or 'no' for lungs
+        |Select either 'yes' or 'no' for kidney
+        |Select either 'yes' or 'no' for liver
+        |Select either 'yes' or 'no' for corneas
+        |Select either 'yes' or 'no' for pancreas
+        |Select either 'yes' or 'no' for tissue
+        |Select either 'yes' or 'no' for smallbowel
+        """.trimMargin()
+    private var organDonationAllMissingChoicesButHeart: String = """
+        |Select either 'yes' or 'no' for lungs
+        |Select either 'yes' or 'no' for kidney
+        |Select either 'yes' or 'no' for liver
+        |Select either 'yes' or 'no' for corneas
+        |Select either 'yes' or 'no' for pancreas
+        |Select either 'yes' or 'no' for tissue
+        |Select either 'yes' or 'no' for smallbowel
+        """.trimMargin()
 
     @When("^I choose which organs to donate")
     fun iChooseWhichOrgansToDonate() {
@@ -45,30 +64,26 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
     @Then("^a validation message is shown if a user attempts to continue without selecting a decision for all organs")
     fun aValidationMessageIsShownIfAUserAttemptsToContinueWithoutSelectingADecisionForAllOrgans() {
-
-        val errorMessage = arrayListOf("There's a problem",
-                "Choose either ‘yes’ or ‘no’ for each organ.")
+        val errorMessage = arrayListOf("There is a problem", organDonationAllMissingChoices)
 
         organDonationYourChoicePage.assertAllOptionsUnselected()
         organDonationYourChoicePage.clickContinue()
         organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(errorMessage)
 
-        val organToDonate =
-                OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                        .getOrFail<OrganDecisions>().optIn.first()
-
+        val organToDonate = OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED.getOrFail<OrganDecisions>().optIn.first()
+        val errorMessageWithoutHeart = arrayListOf("There is a problem", organDonationAllMissingChoicesButHeart)
+        
         organDonationYourChoicePage.chooseOption(organToDonate, true)
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(errorMessage)
-
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(errorMessageWithoutHeart)
     }
 
     @Then("^a validation message is shown if a user attempts to continue with all specific organ options set to no")
     fun aValidationMessageIsShownIfAUserAttemptsToContinueWithAllSpecificOrganOptionsSetToNo() {
         organDonationYourChoicePage.organOptions.forEach { option -> option.select(false) }
         organDonationYourChoicePage.clickContinue()
-        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
-                "To continue, choose ‘yes’ for at least one organ."))
+        organDonationYourChoicePage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There is a problem",
+                "Select 'yes' for at least one organ"))
     }
 
     @Then("^my previous decisions are displayed on the Organ Donation Specific Organ Choice page")

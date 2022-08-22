@@ -70,7 +70,7 @@ export default {
       },
       pleaseChooseADifferentAppointment: 'Go back and choose another appointment',
       theAppointmentIsNoLongerAvailable: 'This appointment is no longer available',
-      thereIsAProblem: 'There\'s a problem',
+      thereIsAProblem: 'There is a problem',
       youCanGoBack: 'You can go back to see what you have already booked and cancel any appointments that you may no longer need.',
       youCannotBookAnyMore: 'Your GP surgery only allows a certain number of appointments to be booked through your account.',
       youHaveReachedYourAppoinmentLimit: 'Cannot book any more appointments right now',
@@ -91,7 +91,7 @@ export default {
     reasonForCancelling: 'Reason for cancelling',
     selectAReason: 'Select a reason for cancelling',
     selectReason: 'Select reason',
-    thereIsAProblem: 'There\'s a problem',
+    thereIsAProblem: 'There is a problem',
     youHaveCancelledNamesAppointment: 'You have cancelled {name}\'s appointment.',
   },
   coronavirus: {

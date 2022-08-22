@@ -6,15 +6,15 @@ export default {
   },
   errors: {
     youCannotContinue: {
-      header: 'There\'s a problem',
-      text: 'You cannot continue without agreeing',
+      header: 'There is a problem',
+      text: 'Confirm if you agree with the terms of use and necessary cookies',
     },
   },
   initial: {
     acceptConditionsCheckBox: {
       acceptCookies: 'I accept the use of \'strictly necessary\' cookies as detailed in the',
       understandAndAccept: 'I understand and accept the',
-      youCannotUseWithoutAgreeing: 'You cannot use the NHS App without agreeing',
+      youCannotUseWithoutAgreeing: 'Confirm if you agree with the terms of use and necessary cookies',
     },
     analyticsCookieCheckBox: {
       text: 'I accept the use of optional analytic cookies used to improve performance.',
@@ -42,7 +42,7 @@ export default {
     acceptConditionsCheckBox: {
       acceptCookies: 'I agree to the use of \'strictly necessary\' cookies as described in the updated',
       understandAndAgree: 'I understand and agree to the updated',
-      youCannotUseWithoutAgreeing: 'You cannot use the NHS App without agreeing',
+      youCannotUseWithoutAgreeing: 'Confirm if you agree with the terms of use and necessary cookies',
     },
     btnAccept: 'Continue',
     ifYouDoNotAgree: 'If you don\'t agree, you won\'t be able to continue accessing or using the NHS App.',

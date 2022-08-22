@@ -139,7 +139,7 @@ describe('nhsuk radio group', () => {
 
         const validationError = errorSummary.find('ul li');
 
-        expect(errorSummary.text()).toContain('There\'s a problem');
+        expect(errorSummary.text()).toContain('There is a problem');
         expect(validationError.text()).toEqual('Select one or more options');
       });
     });

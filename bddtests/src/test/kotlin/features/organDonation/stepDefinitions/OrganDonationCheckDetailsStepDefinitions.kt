@@ -91,9 +91,9 @@ open class OrganDonationCheckDetailsStepDefinitions {
             "checked")
     fun aValidationMessageIsShownIfBothOrEitherOfTheRequiredConditionsForOrganDonationAreNotChecked() {
 
-        val problem = "There's a problem"
-        val accuracyValidationMessage = "Check your information. Confirm if it is accurate."
-        val privacyStatementValidationMessage = "Read the privacy statement. Confirm if you give your consent."
+        val problem = "There is a problem"
+        val accuracyValidationMessage = "Confirm if your information is accurate"
+        val privacyStatementValidationMessage = "Confirm if you agree to the privacy statement"
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertIsVisible()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertIsVisible()

@@ -29,9 +29,9 @@ Feature: Push Notifications
     And I log in to the app expecting to see the notifications prompt
     Then I see the notifications prompt
     When I click the 'Continue' button
-    Then I see 'There's a problem' form error summary heading
-    And I see 'Choose if you want to get notifications' form error summary reason item
-    And I see 'Choose if you want to get notifications' inline error
+    Then I see 'There is a problem' form error summary heading
+    And I see 'Select an option' form error summary reason item
+    And I see 'Select an option' inline error
     When I click the 'Yes, turn on notifications on this device' radio button
     And I click the 'Continue' button
     And I allow notifications

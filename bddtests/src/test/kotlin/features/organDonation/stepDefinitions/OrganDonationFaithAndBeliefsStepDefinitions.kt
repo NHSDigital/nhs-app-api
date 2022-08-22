@@ -55,8 +55,9 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
 
         organDonationFaithAndBeliefsPage.radioButtons.assertAllUnselected()
         organDonationFaithAndBeliefsPage.clickContinue()
-        organDonationFaithAndBeliefsPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf("There's a problem",
-                "Respond to the faith/belief declaration. Choose yes, no or prefer not to say."))
+        organDonationFaithAndBeliefsPage.validationBanner.assertFormErrorSummaryVisible(arrayListOf(
+                "There is a problem",
+                "Select yes, no or prefer not to say"))
     }
 
     @Then("^the previous option on the Organ Donation Faith And Beliefs page is selected")
