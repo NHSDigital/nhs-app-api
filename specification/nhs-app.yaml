@@ -416,7 +416,7 @@ paths:
         ## Overview
         Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have sent to NHS App users.
 
-        > This endpoint is currently in development and is not yet available for use. This documentation is provided to give early visibility of forthcoming functionality
+        > This endpoint is currently in development and is not yet available for use. This documentation is provided to give early visibility of forthcoming functionality.
       
         This report will include events detailing the outcome of an attempt to send each communication. For in-app messages, an event will also be included in this report if the recipient reads the message.
 
