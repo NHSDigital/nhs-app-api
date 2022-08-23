@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
+import worker.models.userInfo.GetUserInfoV2Response
 import worker.models.userInfo.UserAndInfoResponse
 import worker.models.userInfo.UserResearchPreferenceRequest
 
@@ -40,5 +41,16 @@ class WorkerClientUserInfo(val config: Config, val sender: WorkerClientSender, v
                 .addExternalSystemApiKey(includeApiKey)
 
         return httpGet.sendAndGetResult(sender, gson, Array<String>::class.java)
+    }
+
+    fun getUserInfoV2(odsCode: String?, nhsNumber: String?, includeApiKey: Boolean): GetUserInfoV2Response? {
+        val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.userInfoV2)
+            .setParameterIfNotNull("odsCode", odsCode)
+            .setParameterIfNotNull("nhsNumber", nhsNumber)
+
+        val httpGet = RequestBuilder.get(uriBuilder.build().toString())
+            .addExternalSystemApiKey(includeApiKey)
+
+        return httpGet.sendAndGetResult(sender, gson, GetUserInfoV2Response::class.java)
     }
 }

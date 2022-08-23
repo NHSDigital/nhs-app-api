@@ -93,6 +93,30 @@ Feature: User Info Backend
     Then I receive an "OK" success code
     And I receive an empty list of NhsLoginIds from user info endpoint
 
+  Scenario: An api user can retrieve a list of users that are linked to a given nhs number
+    Given I am an api user wishing to get a list of NhsLoginIds that are linked to a given nhs number
+    When I get user info details based on an nhs number from V2 endpoint
+    Then I receive an "OK" success code
+    And I receive a list of users from user info V2 endpoint
+
+  Scenario: An api user getting users on the user info V2 endpoint using an nhs number with no linked records will receive an empty list
+    Given I am an api user wishing to get NhsLoginIds, but the nhs number I am using is not linked to any records
+    When I get user info details based on an nhs number from V2 endpoint
+    Then I receive an "OK" success code
+    And I receive an empty list of users from user info V2 endpoint
+
+  Scenario: An api user can retrieve a list of Users that are linked to a given ods code
+    Given I am an api user wishing to get a list of NhsLoginIds that are linked to a given ods code
+    When I get user info details based on an ods code from V2 endpoint
+    Then I receive an "OK" success code
+    And I receive a list of users from user info V2 endpoint
+
+  Scenario: An api user getting users on the user info V2 endpoint using an ods code with no linked records will receive an empty list
+    Given I am an api user wishing to get NhsLoginIds, but the ods code I am using is not linked to any records
+    When I get user info details based on an ods code from V2 endpoint
+    Then I receive an "OK" success code
+    And I receive an empty list of users from user info V2 endpoint
+
   Scenario: An api user getting NhsLoginIds on the user info endpoint without ods code or nhs number will receive a 400
     Given I am an api user wishing to get a list of NhsLoginIds
     When I get user info details without ods code or nhs number
@@ -106,4 +130,19 @@ Feature: User Info Backend
   Scenario: An api user getting NhsLoginIds on the user info endpoint without the api key will receive a 401
     Given I am an api user wishing to get a list of NhsLoginIds that are linked to a given nhs number
     When I get user info details based on an nhs number without the api key
+    Then I receive a "Unauthorized" error
+
+  Scenario: An api user getting NhsLoginIds on the user info V2 endpoint without ods code or nhs number will receive a 400
+    Given I am an api user wishing to get a list of NhsLoginIds
+    When I get user info details V2 without ods code or nhs number
+    Then I receive a "Bad Request" error
+
+  Scenario: An api user getting NhsLoginIds on the user info V2 endpoint with both ods code and nhs number will receive a 400
+    Given I am an api user wishing to get a list of NhsLoginIds
+    When I get user info details V2 with ods code and nhs number
+    Then I receive a "Bad Request" error
+
+  Scenario: An api user getting NhsLoginIds on the user info V2 endpoint without the api key will receive a 401
+    Given I am an api user wishing to get a list of NhsLoginIds that are linked to a given nhs number
+    When I get user info details V2 based on an nhs number without the api key
     Then I receive a "Unauthorized" error

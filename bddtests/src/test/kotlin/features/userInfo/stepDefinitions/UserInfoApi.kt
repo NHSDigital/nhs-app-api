@@ -36,5 +36,12 @@ class UserInfoApi {
                     .userInfo.getUserInfo(odsCode, nhsNumber, includeApiKey)
             UserInfoSerenityHelpers.GET_USER_INFO_NHSLOGINIDS_RESPONSE.set(response)
         }
+
+        fun getUserInfoV2(odsCode: String?, nhsNumber: String?, includeApiKey: Boolean = true) {
+            val response = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .userInfo.getUserInfoV2(odsCode, nhsNumber, includeApiKey)
+            UserInfoSerenityHelpers.GET_USER_INFO_V2_RESPONSE.set(response)
+        }
     }
 }

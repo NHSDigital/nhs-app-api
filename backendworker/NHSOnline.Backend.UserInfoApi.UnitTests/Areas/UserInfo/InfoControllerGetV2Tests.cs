@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         private const string NhsLoginId1 = "NhsLoginId1";
         private const string NhsLoginId2 = "NhsLoginId2";
         private const string NhsNumber = "NhsNumber";
+        private static readonly DateTime LastLogin = DateTime.UtcNow;
 
         private InfoController _systemUnderTest;
 
@@ -35,14 +36,24 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
         private readonly UserAndInfo[] _userInfoRecords =
         {
-            new UserAndInfo { NhsLoginId = NhsLoginId1, Info = new Info { NhsNumber = NhsNumber, OdsCode = OdsCode }},
-            new UserAndInfo { NhsLoginId = NhsLoginId2, Info = new Info { NhsNumber = NhsNumber, OdsCode = OdsCode }}
+            new UserAndInfo
+            {
+                NhsLoginId = NhsLoginId1,
+                Info = new Info { NhsNumber = NhsNumber, OdsCode = OdsCode },
+                Timestamp = LastLogin
+            },
+            new UserAndInfo
+            {
+                NhsLoginId = NhsLoginId2,
+                Info = new Info { NhsNumber = NhsNumber, OdsCode = OdsCode },
+                Timestamp = LastLogin
+            }
         };
 
         private readonly IEnumerable<InfoUserV2> _outputRecords = new[]
         {
-            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId1, OdsCode = OdsCode },
-            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId2, OdsCode = OdsCode }
+            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId1, OdsCode = OdsCode, LastLogin = LastLogin },
+            new InfoUserV2 { NhsNumber = NhsNumber, NhsLoginId = NhsLoginId2, OdsCode = OdsCode, LastLogin = LastLogin }
         };
 
         [TestInitialize]

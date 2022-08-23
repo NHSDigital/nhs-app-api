@@ -16,7 +16,8 @@ namespace NHSOnline.Backend.UserInfo.Areas.UserInfo
                 {
                     NhsLoginId = x.NhsLoginId,
                     NhsNumber = x.Info.NhsNumber,
-                    OdsCode = x.Info.OdsCode
+                    OdsCode = x.Info.OdsCode,
+                    LastLogin = x.Timestamp
                 })
             });
         }

@@ -17,6 +17,7 @@ import utils.getOrFail
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.set
+import worker.models.userInfo.UserInfoV2Response
 import java.util.UUID
 
 class UserInfoFactory {
@@ -80,76 +81,111 @@ class UserInfoFactory {
         setUpMultipleExistingUserInfoRecords(null, targetNhsNumber, runUuid)
     }
 
-    fun setUpMultipleExistingUserInfoRecords(odsCode: String?, nhsNumber: String?, runUuid: UUID) {
+    fun setUpMultipleExistingUserInfoRecords(targetOdsCode: String?, targetNhsNumber: String?, runUuid: UUID) {
 
         val nhsLoginId1 = "NhsLoginIdBdd1-$runUuid"
         val nhsLoginId2 = "NhsLoginIdBdd2-$runUuid"
         val nhsLoginId3 = "NhsLoginIdBdd3-$runUuid"
         val nhsLoginId4 = "NhsLoginIdBdd4-$runUuid"
 
-        val odsCodePlusUuid = "${odsCode ?: "odsCodeX"}-$runUuid"
-        val nhsNumberPlusUuid = "${nhsNumber ?: "1111111111"}-$runUuid"
+        val odsCode = "${targetOdsCode ?: "odsCodeX"}-$runUuid"
+        val nhsNumber = "${targetNhsNumber ?: "1111111111"}-$runUuid"
 
-        val values = arrayListOf(
-            createUserInfo(nhsLoginId1, odsCodePlusUuid, "1111111111-$runUuid"),
-            createUserInfo(nhsLoginId2, odsCodePlusUuid, "1111111112-$runUuid"),
-            createUserInfo(nhsLoginId3, odsCodePlusUuid, nhsNumberPlusUuid),
-            createUserInfo(nhsLoginId4, "OdsCodeX-$runUuid", nhsNumberPlusUuid)
+        val mongoRepositoryUserInfoEntries = arrayListOf(
+            createUserInfo(
+                nhsLoginId1, odsCode, "1111111112-$runUuid", "2022-06-20T13:00:00.5086666Z"),
+            createUserInfo(
+                nhsLoginId2, odsCode, "1111111113-$runUuid", "2022-06-20T13:01:00.5086666Z"),
+            createUserInfo(
+                nhsLoginId3, odsCode, nhsNumber, "2022-06-20T13:02:00.5086666Z"),
+            createUserInfo(
+                nhsLoginId4, "OdsCodeX-$runUuid", nhsNumber, "2022-06-20T13:03:00.5086666Z")
         )
 
-        val sqlUserValues = arrayListOf(
-            createSqlUserInfo(nhsLoginId1, odsCodePlusUuid, "1111111111-$runUuid"),
-            createSqlUserInfo(nhsLoginId2, odsCodePlusUuid, "1111111112-$runUuid"),
-            createSqlUserInfo(nhsLoginId3, odsCodePlusUuid, nhsNumberPlusUuid),
-            createSqlUserInfo(nhsLoginId4, "OdsCodeX-$runUuid", nhsNumberPlusUuid)
-        )
+        val expectedLoginIds = if (targetOdsCode != null) {
+            arrayListOf(nhsLoginId1, nhsLoginId2, nhsLoginId3)
+        }
+        else if (targetNhsNumber != null) {
+            arrayListOf(nhsLoginId3, nhsLoginId4)
+        }
+        else {
+            arrayListOf()
+        }
 
-        if (odsCode != null) {
-            UserInfoSerenityHelpers.EXPECTED_NHSLOGINIDS.set(arrayListOf(nhsLoginId1, nhsLoginId2, nhsLoginId3))
+        val expectedUserInfoResponses = getExpectedUserInfoResponses(expectedLoginIds, mongoRepositoryUserInfoEntries)
+
+        UserInfoSerenityHelpers.EXPECTED_NHSLOGINIDS.set(expectedLoginIds)
+        UserInfoSerenityHelpers.EXPECTED_USERINFOS.set(expectedUserInfoResponses)
+
+        addUserInfoToMongoCollection(mongoRepositoryUserInfoEntries)
+        addUserInfoToSqlApiContainers(mongoRepositoryUserInfoEntries)
+    }
+
+    private fun createUserInfo(nhsLoginId: String, odsCode: String, nhsNumber: String, timestamp: String)
+    : MongoRepositoryUserAndInfo {
+        return MongoRepositoryUserAndInfo(
+                NhsLoginId = nhsLoginId,
+                Info = MongoRepositoryUserInfo(odsCode, nhsNumber),
+                Timestamp = timestamp)
+    }
+
+    private fun getExpectedUserInfoResponses(expectedLoginIds: ArrayList<String>,
+                                            mongoRepositoryUserInfoEntries: List<MongoRepositoryUserAndInfo>
+    ) : List<UserInfoV2Response> {
+        return mongoRepositoryUserInfoEntries
+            .filter{ userInfo -> expectedLoginIds.contains(userInfo.NhsLoginId) }
+            .map { userInfo ->
+                UserInfoV2Response(
+                    nhsLoginId = userInfo.NhsLoginId,
+                    nhsNumber = userInfo.Info.NhsNumber.orEmpty(),
+                    odsCode = userInfo.Info.OdsCode,
+                    lastLogin = userInfo.Timestamp
+                )
+            }
+    }
+
+    private fun addUserInfoToMongoCollection(mongoRepositoryUserInfoEntries: List<MongoRepositoryUserAndInfo>) {
+        MongoDBConnection.UserInfoCollection.clearAndInsertValues(mongoRepositoryUserInfoEntries)
+    }
+
+    private fun addUserInfoToSqlApiContainers(mongoRepositoryUserInfoEntries: List<MongoRepositoryUserAndInfo>) {
+        val sqlApiRepositoryUserInfoEntries = mongoRepositoryUserInfoEntries.map { userInfo ->
+            createSqlUserInfo(
+                userInfo.NhsLoginId, userInfo.Info.OdsCode, userInfo.Info.NhsNumber.orEmpty(), userInfo.Timestamp)
         }
-        if (nhsNumber != null) {
-            UserInfoSerenityHelpers.EXPECTED_NHSLOGINIDS.set(arrayListOf(nhsLoginId3, nhsLoginId4))
-        }
-        MongoDBConnection.UserInfoCollection.clearAndInsertValues(values)
 
         CosmosSqlConnection.UserInfoNhsNumberContainer.insertValues(
-            sqlUserValues.map { x ->
-                    SqlRepositoryRecordUserAndInfo(x.Info.NhsNumber.orEmpty(),
-                            x.id,
-                        SqlRepositoryUserAndInfo(x.Info, x.id))
-                })
+            sqlApiRepositoryUserInfoEntries.map { x ->
+                SqlRepositoryRecordUserAndInfo(x.Info.NhsNumber.orEmpty(),
+                    x.id,
+                    SqlRepositoryUserAndInfo(x.Info, x.id, x.TimeStamp))
+            })
 
         CosmosSqlConnection.UserInfoOdsCodeContainer.insertValues(
-            sqlUserValues.map { x ->
+            sqlApiRepositoryUserInfoEntries.map { x ->
                 SqlRepositoryRecordUserAndInfo(x.Info.OdsCode,
                     x.id,
-                    SqlRepositoryUserAndInfo(x.Info, x.id))
-                })
+                    SqlRepositoryUserAndInfo(x.Info, x.id, x.TimeStamp))
+            })
 
-        val deletion = { deleteItemsInSqlContainers(sqlUserValues) }
+        val deletion = { deleteItemsInSqlContainers(sqlApiRepositoryUserInfoEntries) }
         GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
     }
 
-    private fun createUserInfo(nhsLoginId: String, odsCode: String, nhsNumber: String) : MongoRepositoryUserAndInfo {
-        return MongoRepositoryUserAndInfo(
-                NhsLoginId = nhsLoginId,
-                Info = MongoRepositoryUserInfo(odsCode, nhsNumber))
-    }
-
-    private fun createSqlUserInfo(nhsLoginId: String, odsCode: String, nhsNumber: String) : SqlRepositoryUserAndInfo {
+    private fun createSqlUserInfo(nhsLoginId: String, odsCode: String, nhsNumber: String, timestamp: String) :
+        SqlRepositoryUserAndInfo {
         return SqlRepositoryUserAndInfo(
             id = nhsLoginId,
-            Info = SqlRepositoryUserInfo(odsCode, nhsNumber)
+            Info = SqlRepositoryUserInfo(odsCode, nhsNumber),
+            TimeStamp = timestamp
         )
     }
 
-    private fun deleteItemsInSqlContainers(sqlUserValues: ArrayList<SqlRepositoryUserAndInfo>) {
-
+    private fun deleteItemsInSqlContainers(sqlUserValues: List<SqlRepositoryUserAndInfo>) {
         sqlUserValues.map { item ->
                 CosmosSqlConnection.UserInfoNhsNumberContainer.deleteValue(item.id, item.Info.NhsNumber!!)
                 CosmosSqlConnection.UserInfoOdsCodeContainer.deleteValue(item.id, item.Info.OdsCode)
             }
-
     }
 
     private fun deleteItemInSqlContainers(patient: Patient) {
