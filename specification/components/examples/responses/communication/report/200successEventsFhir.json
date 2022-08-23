@@ -1,0 +1,220 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 7,
+    "link": [ {
+        "relation": "self",
+        "url": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task?day=2022-08-19&page=1"
+    },        
+    {
+        "relation": "last",
+        "url": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task?day=2022-08-19&page=1"
+    }],
+    "entry": [ 
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/b2ac2ae7-1a24-4e90-8f3f-9a62c6ebb4e7",
+        "resource": {
+            "id": "b2ac2ae7-1a24-4e90-8f3f-9a62c6ebb4e7",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+                    "value": "optional campaign id"
+                },
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/request-id",
+                    "value": "optional request reference"
+                },
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "882cc757-5096-4565-9779-af25a751a65f"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Delivered"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T09:15:12Z",
+            "lastModified": "2022-08-19T09:15:56Z"
+        }
+    },
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/a762b523-4e04-4a47-8cdb-e28b06dd3ea1",
+        "resource": {
+            "id": "a762b523-4e04-4a47-8cdb-e28b06dd3ea1",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+                    "value": "optional campaign id"
+                },
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/request-id",
+                    "value": "optional request reference"
+                },
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "882cc757-5096-4565-9779-af25a751a65f"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Notified"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T09:15:12Z",
+            "lastModified": "2022-08-19T09:16:02Z"
+        }
+    },
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/71fedfbc-d1c9-4342-8ee0-b8201b15f28f",
+        "resource": {
+            "id": "71fedfbc-d1c9-4342-8ee0-b8201b15f28f",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+                    "value": "optional campaign id"
+                },
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/request-id",
+                    "value": "optional request reference"
+                },
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "882cc757-5096-4565-9779-af25a751a65f"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Read"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T09:15:12Z",
+            "lastModified": "2022-08-19T09:38:17Z"
+        }
+    },
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/8c241d11-8957-4148-a298-0df6ffcb5521",
+        "resource": {
+            "id": "8c241d11-8957-4148-a298-0df6ffcb5521",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Delivered"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T11:51:05Z",
+            "lastModified": "2022-08-19T11:51:07Z"
+        }
+    },
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/f2c5b23f-387c-4c9e-87c9-346bd8bd9f03",
+        "resource": {
+            "id": "f2c5b23f-387c-4c9e-87c9-346bd8bd9f03",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Unnotified"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T11:51:05Z",
+            "lastModified": "2022-08-19T11:51:34Z"
+        }
+    },
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/0dc3ba21-ec8f-4d93-a74b-0d717c186dbe",
+        "resource": {
+            "id": "0dc3ba21-ec8f-4d93-a74b-0d717c186dbe",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
+                }
+            ],
+            "status": "completed",   
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Read"
+                    }
+                ]
+            },
+            "authoredOn": "2022-08-19T11:51:05Z",
+            "lastModified": "2022-08-19T13:17:30Z"
+        }
+    }, 
+    {
+        "fullUrl": "https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/46fb07d6-e679-4ff8-97af-538935a707a3",
+        "resource": {
+            "id": "46fb07d6-e679-4ff8-97af-538935a707a3",
+            "resourceType": "Task",
+            "intent": "order",
+            "identifier": [
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+                    "value": "flu campaign 202208"
+                },
+                {
+                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "value" : "01389fa3-2cb9-4440-b075-c4902b526fbc"
+                }
+            ],
+            "status": "rejected",
+            "statusReason": {
+                "text": "NHS number not found"
+            },
+            "code": {
+                "coding": [
+                    {
+                        "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                        "code": "Rejected"
+                    }
+                ]
+            },
+            "authoredOn": "2021-08-19T15:20:52Z",
+            "lastModified": "2021-08-19T15:20:56Z"
+        }
+    }]
+}
