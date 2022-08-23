@@ -1,0 +1,147 @@
+title: Bundle resource containing tasks
+type: object
+description: A bundle resource containing tasks representing events relating to in-app messages and push notifications that you have previously sent to NHS App users.
+required:
+  - resourceType
+  - type
+  - link
+  - entry
+properties: 
+  resourceType:
+    type: string
+    enum:
+      - Bundle
+    example: 'Bundle'
+  type:
+    type: string
+    enum:
+      - searchset
+    example: 'searchset'
+  link:
+    type: array
+    minItems: 1
+    maxItems: 3
+    items:
+      type: object
+      required: 
+        - relation
+        - url
+      properties:
+        relation:
+          type: string
+          enum:
+            - self
+            - last
+            - next
+          example: 'self'
+        url:  
+          type: string
+          example: 'https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task?day=2022-08-19&page=1'
+  entry:
+    type: array
+    items:
+      type: object
+      description: Details a single event relating to an in-app message or push notification that was previously sent to an NHS App user.
+      required:
+        - fullUrl
+        - resource
+      properties:
+        fullUrl:
+          type: string
+          example: 'https://api.service.nhs.uk/nhs-app/communication/report/events/FHIR/R4/Task/b2ac2ae7-1a24-4e90-8f3f-9a62c6ebb4e7'
+        resource:
+          type: object
+          description: Details a single event relating to an in-app message or push notification that was previously sent to an NHS App user.
+          required:
+            - id
+            - resourceType
+            - intent
+            - status
+            - code
+            - authoredOn
+            - lastModified
+          properties:
+            id:
+              type: string
+              example: b2ac2ae7-1a24-4e90-8f3f-9a62c6ebb4e7
+              description: ID to uniquely identify this event. Note that this is not the ID of the original communication request, which is included in the `identifiers` array.
+            resourceType:
+              type: string
+              enum:
+                - Task
+              example: 'Task'
+            intent:
+              type: string
+              enum:
+                - order
+              example: 'order'
+            identifier:
+              type: array
+              description: |
+                An array of identifiers used to identify the original communication request that is referenced by this event.
+
+                This array will always include a globally unique identifier for the communication request assigned by the API, with the system `https://fhir.nhs.uk/Id/nhs-app-communication-id`. Note that several events may be included for each communication ID – for example a single in-app message might generate a Delivered event and a Read event.
+
+                It will include optional identifiers that were provided in the original communication request if the API recognised the identifier system name.
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                    format: uri
+                    description: The namespace of the identifier value.
+                    example: https://fhir.nhs.uk/Id/nhs-app-communication-id
+                  value:
+                    type: string
+                    description: The value of the identifier.
+                    example: 882cc757-5096-4565-9779-af25a751a65f
+            status:
+              type: string
+              description: This will be `rejected` for events conveying that a communication request has been rejected, and `completed` for the other event types.
+              enum: 
+                - rejected
+                - completed
+              example: 'completed'
+            statusReason:
+              type: string
+              description: For rejected events only, this property will contain an explanation of why the rejection occurred.
+              example: 'NHS number not found'
+            code:
+              type: object
+              description: Indication of the type of event that occurred.
+              required: 
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    oneOf:
+                      - type: object
+                        required:
+                          - system
+                          - code
+                        properties:
+                          system:
+                            type: string
+                            enum: 
+                              - https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status
+                            example: https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status
+                          code:
+                            type: string
+                            enum:
+                              - Delivered
+                              - Rejected
+                              - Notified
+                              - Unnotified
+                              - Read
+                            example: Delivered
+            authoredOn:
+              type: string
+              format: date-time
+              description: The UTC datetime at which the original communication request was received.
+              example: '2022-08-19T09:15:12Z'
+            lastModified:
+              type: string
+              format: date-time
+              description: The UTC datetime at which the event occurred. Note that this may be several days after the datetime at which the communication request was originally made (particularly for Read events).
+              example: '2022-08-19T09:15:56Z'
