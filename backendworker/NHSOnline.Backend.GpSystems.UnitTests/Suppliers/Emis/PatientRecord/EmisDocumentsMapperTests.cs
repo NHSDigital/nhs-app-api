@@ -361,7 +361,56 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-        private Document CreateDocument(int size, string type, EffectiveDate date = null)
+        [TestMethod]
+        public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithNullSize_ReturnsResultValues()
+        {
+            // Arrange
+            var today = DateTime.Now;
+            var twoDaysAgo = today.AddDays(-2);
+            var item = new MedicationRootObject
+            {
+                MedicalRecord = new MedicalRecord
+                {
+                    Documents = new List<Document>
+                    {
+                        CreateDocument(null, "pdf", new EffectiveDate { DatePart = "Unknown",
+                            Value = twoDaysAgo }
+                        ),
+                    },
+                }
+            };
+
+            // Act
+            var result = new EmisDocumentsMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().HaveCount(item.MedicalRecord.Documents.Count);
+
+            var document1 = item.MedicalRecord.Documents.ElementAt(0);
+
+            var expectedResult = new PatientDocuments
+            {
+                Data = new List<DocumentItem>
+                {
+                    new DocumentItem
+                    {
+                        DocumentIdentifier = document1.DocumentGuid,
+                        Term = document1.Observation.Term,
+                        IsAvailable = document1.Available,
+                        Extension = document1.Extension,
+                        Size = 0,
+                        EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
+                        Name = document1.Observation.AssociatedText[0].Text,
+                        IsValidFile = true
+                    }
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        private Document CreateDocument(int? size, string type, EffectiveDate date = null)
         {
             return new Document
             {

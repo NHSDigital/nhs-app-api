@@ -33,7 +33,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 DatePart = document.Observation.EffectiveDate?.DatePart
             };
 
-            var isValid = document.Size < Constants.FileConstants.EmisSizeLimit &&
+            var docSize = document.Size ?? 0;
+            var isValid = docSize < Constants.FileConstants.EmisSizeLimit &&
                           Constants.FileConstants.FileTypes.WhiteListTypes.Contains(
                               document.Extension, StringComparer.OrdinalIgnoreCase);
 
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 Name = name,
                 Term = document.Observation.Term,
                 Extension = document.Extension,
-                Size = document.Size,
+                Size = docSize,
                 EffectiveDate = effectiveDate,
                 CodeId = document.Observation.CodeId,
                 IsAvailable = document.Available,

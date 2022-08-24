@@ -49,12 +49,13 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
         mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
-                    .respondWithSuccess(documents)
+                    .respondWithNullSize()
         }
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
-                documents = documents.medicalRecord.documents, includeSize = false)
-        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf(expectedDocuments[0]))
+            documents = documents.medicalRecord.documents, includeSize = false)
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf(
+            expectedDocuments[expectedDocuments.lastIndex]))
     }
 
     override fun enabledWithDocuments(patient: Patient, documentStatus: DocumentStatus?) {
