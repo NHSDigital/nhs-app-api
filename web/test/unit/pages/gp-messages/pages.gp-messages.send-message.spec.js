@@ -3,6 +3,7 @@ import SendMessage from '@/pages/messages/gp-messages/send-message';
 import { redirectTo } from '@/lib/utils';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
+import each from 'jest-each';
 
 jest.mock('@/lib/utils');
 jest.mock('@/services/event-bus', () => ({
@@ -67,20 +68,6 @@ describe('patient messaging messages', () => {
       expect(links.at(1).text()).toBe('call 111.');
     });
 
-    it('will show validation errors if the input is invalid', () => {
-      mountPage({ selectedMessageRecipient: 'Recipient' });
-      wrapper.vm.subjectError = true;
-      wrapper.vm.messageTextError = true;
-
-      const errorDialog = wrapper.find('#form-error-summary');
-      const subjectError = wrapper.find('#subjectText-error-message');
-      const messageError = wrapper.find('#messageText-error-message');
-
-      expect(errorDialog.exists()).toBe(true);
-      expect(subjectError.exists()).toBe(true);
-      expect(messageError.exists()).toBe(true);
-    });
-
     it('will not show the subject field if sendMessageSubjectEnabled is false in SJR', () => {
       mountPage({ selectedMessageRecipient: 'Recipient', sendMessageSubjectEnabled: false });
       const subjectField = wrapper.find('#subjectText');
@@ -98,6 +85,38 @@ describe('patient messaging messages', () => {
       expect(errorDialog.exists()).toBe(false);
       expect(subjectError.exists()).toBe(false);
     });
+  });
+
+  describe('validation error', () => {
+    each([
+      ['subject and message', true, true, true],
+      ['subject and message', false, false, false],
+      ['subject', true, false, true],
+      ['message', false, true, true],
+    ])
+      .it('will show validation error for %s if the input is invalid', (_, isSubjectError, isMessageError, isErrorDialogVisible) => {
+        mountPage({ selectedMessageRecipient: 'Recipient' });
+        wrapper.vm.subjectError = isSubjectError;
+        wrapper.vm.messageTextError = isMessageError;
+
+        const errorDialog = wrapper.find('#form-error-summary');
+        const subjectError = wrapper.find('#subjectText-error-message');
+        const messageError = wrapper.find('#messageText-error-message');
+
+        expect(errorDialog.exists()).toBe(isErrorDialogVisible);
+        expect(subjectError.exists()).toBe(isSubjectError);
+        expect(messageError.exists()).toBe(isMessageError);
+        if (isSubjectError) {
+          expect(wrapper.find('#sendMessageSubject').attributes('class')).toContain('nhsuk-form-group--error');
+        } else {
+          expect(wrapper.find('#sendMessageSubject').attributes('class')).not.toContain('nhsuk-form-group--error');
+        }
+        if (isMessageError) {
+          expect(wrapper.find('#sendMessageText').attributes('class')).toContain('nhsuk-form-group--error');
+        } else {
+          expect(wrapper.find('#sendMessageText').attributes('class')).not.toContain('nhsuk-form-group--error');
+        }
+      });
   });
 
   describe('created', () => {
@@ -135,9 +154,14 @@ describe('patient messaging messages', () => {
       expect(wrapper.vm.backPath).toBe('messages/gp-messages/recipients');
     });
 
-    it('will set the error class if there is an error', () => {
+    it('will set the error class if there is an error within the subject field', () => {
       wrapper.vm.subjectError = true;
-      expect(wrapper.vm.getErrorClass).toBe('nhsuk-form-group--error');
+      expect(wrapper.vm.getSubjectErrorClass).toBe('nhsuk-form-group--error');
+    });
+
+    it('will set the error class if there is an error within the message field', () => {
+      wrapper.vm.messageTextError = true;
+      expect(wrapper.vm.getMessageErrorClass).toBe('nhsuk-form-group--error');
     });
   });
 

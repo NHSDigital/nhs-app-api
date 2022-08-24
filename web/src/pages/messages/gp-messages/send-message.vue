@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate && !hasSent">
-    <div class="nhsuk-grid-row nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
+    <div class="nhsuk-grid-row nhsuk-grid-column-full">
       <form-error-summary v-if="showError"
                           :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
                           :errors="getErrors"
@@ -18,7 +18,7 @@
         </a>
       </p>
       <sjr-if journey="sendMessageSubject">
-        <div :class="['nhsuk-u-padding-top-1', getErrorClass]">
+        <div id="sendMessageSubject" :class="['nhsuk-form-group', getSubjectErrorClass]">
           <label id="subjectTextLabel" for="subjectText" class="nhsuk-label">
             <strong>
               {{ $t('messages.subject') }}
@@ -37,7 +37,7 @@
                               :required="false"/>
         </div>
       </sjr-if>
-      <div :class="['nhsuk-u-padding-top-4', getErrorClass]">
+      <div id="sendMessageText" :class="['nhsuk-form-group', getMessageErrorClass]">
         <label id="messageTextLabel" for="messageText" class="nhsuk-label">
           <strong>
             {{ $t('messages.message') }}
@@ -113,8 +113,11 @@ export default {
     backPath() {
       return GP_MESSAGES_RECIPIENTS_PATH;
     },
-    getErrorClass() {
-      return this.showError ? 'nhsuk-form-group--error' : '';
+    getSubjectErrorClass() {
+      return (this.subjectError && this.subjectEnabled) ? 'nhsuk-form-group--error' : '';
+    },
+    getMessageErrorClass() {
+      return this.messageTextError ? 'nhsuk-form-group--error' : '';
     },
     selectedMessageRecipient() {
       return this.$store.state.gpMessages.selectedMessageRecipient;
