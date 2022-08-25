@@ -228,6 +228,7 @@ Feature: Repeat prescriptions and Your orders accessibility
     When I retrieve the 'Your Prescriptions' page directly
     And I click the View Orders link
     Then I see the appropriate error message for a prescription server error
+    And I see the Contact us link with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/nhs-app-contact-us?errorcode=5t'
     And the SC26_CannotShowPrescriptionInformation page is saved to disk
 
   Scenario: The 'Timeout error getting prescription history and medication list (SC25)' page is captured

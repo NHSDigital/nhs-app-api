@@ -7,6 +7,7 @@ export default {
     text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
     label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
   },
+  contactWithErrorCode: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
   retryButtonText: '',
   view_orders: {
     pageTitle: 'Cannot show prescription information',
@@ -17,6 +18,7 @@ export default {
       text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
+    contactWithErrorCode: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
     retryButtonText: '',
     504: {
       pageTitle: 'Cannot show prescription information',
@@ -49,6 +51,7 @@ export default {
       text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
+    contactWithErrorCode: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
     retryButtonText: '',
     504: {
       pageTitle: 'Cannot show prescription information',
@@ -81,6 +84,7 @@ export default {
       text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
+    contactWithErrorCode: 'Contact us if you keep seeing this message, quoting error code {errorCode}',
     retryButtonText: '',
     504: {
       pageTitle: 'Cannot show prescription information',

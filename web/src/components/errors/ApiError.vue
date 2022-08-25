@@ -49,6 +49,7 @@
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>
       </message-dialog>
+      <service-desk-reference-link v-if="contactWithErrorCode && showServiceDeskReferenceLink"/>
       <form v-if="retryButtonText && !backLinkUrl && !deviceSettings" id="retryButton"
             ref="retryFormRef"
             :action="retryUrl" method="get" tabindex="-1">
@@ -97,6 +98,7 @@ import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { isBlankString } from '@/lib/utils';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
+import ServiceDeskReferenceLink from '@/components/errors/ServiceDeskReferenceLink';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -120,6 +122,7 @@ export default {
     MessageText,
     NativeApp,
     ReportAProblem,
+    ServiceDeskReferenceLink,
   },
   props: {
     ariaLive: {
@@ -209,6 +212,12 @@ export default {
     },
     retryButtonText() {
       return this.getComponentErrorCodeKey('retryButtonText') || this.getComponentKey('retryButtonText');
+    },
+    contactWithErrorCode() {
+      return this.getComponentErrorCodeKey('contactWithErrorCode') || this.getComponentKey('contactWithErrorCode');
+    },
+    showServiceDeskReferenceLink() {
+      return this.statusCode !== 504 && this.statusCode !== 403;
     },
     backToPrescriptionsLinkText() {
       return this.getMessage('backToPrescriptionsLinkText');
