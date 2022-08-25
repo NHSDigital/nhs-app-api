@@ -14,8 +14,9 @@
           <strong>{{ $t('myRecord.gpMedicalRecord.comments') }}</strong>
           <span v-for="(comment, index) in retrieveComments"
                 :id="'documentComment' + index"
-                :key="'Comment'+index"
-                :data-purpose="'documentComment'+index">
+                :key="'Comment' + index"
+                :data-purpose="'documentComment' + index"
+          >
             <pre class="'nhsuk-u-font-size-16">{{ comment }}</pre>
           </span>
         </div>
@@ -33,6 +34,7 @@
                        id="btn_downloadDocument"
                        header-tag="h2"
                        :click-func="startDownload"
+                       :description="documentDescriptionEmisCondition(type, size, supplier)"
                        :text="$t('myRecord.gpMedicalRecord.download')"
                        :aria-label="$t('myRecord.gpMedicalRecord.download')"/>
           </menu-item-list>
@@ -61,7 +63,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import { GP_MEDICAL_RECORD_PATH, DOCUMENTS_PATH } from '@/router/paths';
 import { DOCUMENT_DETAIL_NAME } from '@/router/names';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { isBlankString, isEmptyArray, isTruthy, redirectTo, createRouteByNameObject, datePart, mimeType } from '@/lib/utils';
+import { isBlankString, isNumber, readableBytes, isEmptyArray, isTruthy, redirectTo, createRouteByNameObject, datePart, mimeType } from '@/lib/utils';
 import Glossary from '@/components/Glossary';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
@@ -128,6 +130,7 @@ export default {
     const isDownloadable = get('state.documents.currentDocument.isDownloadable', store);
     const isValidFile = get('state.documents.currentDocument.isValidFile', store);
     const comments = loadComments(store);
+    const supplier = get('state.myRecord.record.supplier', this.$store);
 
     let dateString;
 
@@ -148,6 +151,8 @@ export default {
     this.dateString = dateString;
     this.term = term;
     this.type = type;
+    this.downloadType = this.overrideEmisRtf(type, supplier);
+    this.supplier = supplier;
     this.comments = comments;
     this.size = size;
     this.isValidFile = isValidFile;
@@ -163,6 +168,21 @@ export default {
     }
   },
   methods: {
+    documentDescriptionEmisCondition(type, size, supplier) {
+      if (isBlankString(type)) {
+        return '';
+      }
+
+      if (!isNumber(size) || size < 1) {
+        return `(${type.toUpperCase()})`;
+      }
+
+      if (supplier === 'EMIS' && type.toUpperCase() === 'RTF') {
+        return '(PDF)';
+      }
+
+      return `(${type.toUpperCase()}, ${readableBytes(size)})`;
+    },
     navigateToView() {
       const date = get('state.documents.currentDocument.date', this.$store);
       const datePartString =
@@ -207,8 +227,9 @@ export default {
         fileName = this.dateString;
       }
 
-      const fileExtension = this.mapFileTypeToDownloadType(this.type);
-      const fileMimeType = mimeType(this.type);
+      const fileExtension = this.mapFileTypeToDownloadType(this.downloadType);
+      const fileMimeType = mimeType(this.downloadType);
+
       const isNative = this.$store.state.device.isNativeApp;
 
       await this.$store.dispatch('documents/downloadDocument',
@@ -216,6 +237,7 @@ export default {
           fileName,
           fileExtension,
           mimeType: fileMimeType,
+          requestedFileType: this.downloadType,
           isNative });
     },
 
@@ -230,6 +252,12 @@ export default {
         default:
           return fileType;
       }
+    },
+    overrideEmisRtf(fileType, supplier) {
+      if ((fileType || '').toLowerCase() === 'rtf' && supplier === 'EMIS') {
+        return 'pdf';
+      }
+      return fileType;
     },
     updateHeaderText(term, isValidFile, datePartString, documentType, dateString) {
       if (isValidFile) {

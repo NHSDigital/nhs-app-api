@@ -1,8 +1,11 @@
 package pages.myrecord
 
+import models.ExpectedDocument
+import org.junit.Assert.assertEquals
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
+import pages.text
 import utils.DownloadHelpers
 import java.lang.IllegalArgumentException
 
@@ -10,6 +13,14 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
     private val listMenuPath = "//ul[@data-sid='action-list-menu']//a"
     private val documentInfoPath = "//div[@id='documentInfo']/p"
     private val documentCommentsPath = "//span[@id='documentComment0']/pre"
+    private val documentDownloadSizeAndTypePath = "//a[@id='btn_downloadDocument']//p"
+
+
+    private fun getDocumentDownloadSizeAndType(): HybridPageElement {
+        return HybridPageElement(
+            webDesktopLocator = "$documentDownloadSizeAndTypePath",
+            page = this)
+    }
 
     private fun link(id: String): HybridPageElement {
         return HybridPageElement(
@@ -52,6 +63,26 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
         }
     }
 
+    fun assertFileSizeAndTypeVisible(expectedDocument: ExpectedDocument) {
+        if (expectedDocument.typeAndSize != null) {
+            assertEquals("Document type or size incorrect",
+                    expectedDocument.typeAndSize,
+                    getDocumentDownloadSizeAndType().text)
+        }
+    }
+
+    fun assertEmisFileSizeAndTypeVisible(expectedDocument: ExpectedDocument) {
+        if ( expectedDocument.typeAndSize!!.contains("RTF") ){
+            assertEquals("Document type or size incorrect",
+                    "(PDF)",
+                        getDocumentDownloadSizeAndType().text)
+        }else{
+            assertEquals("Document type or size incorrect",
+                        expectedDocument.typeAndSize,
+                        getDocumentDownloadSizeAndType().text)
+        }
+    }
+    
     fun hasFileDownloaded(expectedFileName: String): Boolean {
         return DownloadHelpers().downloadFile(expectedFileName)
     }

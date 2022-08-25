@@ -56,6 +56,7 @@ export default {
           fileName: `Attachment_${messageDate}`,
           fileExtension: this.type,
           mimeType: this.getMimeType,
+          requestedFileType: this.type,
           isNative: this.$store.state.device.isNativeApp });
     },
   },

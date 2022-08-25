@@ -40,12 +40,12 @@ export default {
       });
     }
   },
-  async downloadDocument({ state }, { documentIdentifier, fileName,
-    fileExtension, mimeType, isNative }) {
+  async downloadDocument(_, { documentIdentifier, fileName,
+    fileExtension, mimeType, requestedFileType, isNative }) {
     const response = await this.app.$http.postV1DocumentsByDocumentidentifierDownload({
       documentIdentifier,
       getPatientDocumentRequest: {
-        type: state.currentDocument.type,
+        type: requestedFileType,
         name: fileName,
       },
     });

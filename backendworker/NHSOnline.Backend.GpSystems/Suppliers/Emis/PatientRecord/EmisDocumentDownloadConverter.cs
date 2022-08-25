@@ -80,9 +80,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _logger.LogInformation("Converting document content to a PDF");
             var imgNodes = htmlDocument.DocumentNode.SelectNodes(".//img");
 
-            foreach (var imageNode in imgNodes)
+            if (imgNodes != null)
             {
-                imageNode.Attributes.Add("width", "100%");
+                foreach (var imageNode in imgNodes)
+                {
+                    imageNode.Attributes.Add("width", "100%");
+                }
             }
 
             return _generatePdf.GetPDF($"<html><body>${htmlDocument.DocumentNode.InnerHtml}</body></html>");

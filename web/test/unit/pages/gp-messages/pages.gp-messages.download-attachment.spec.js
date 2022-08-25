@@ -79,7 +79,7 @@ describe('gp messages urgency page', () => {
       expect(downloadButton.exists()).toBe(true);
     });
 
-    it('will dispatch the download action when clickes', async () => {
+    it('will dispatch the download action when clicked', async () => {
       mountPage();
       const downloadButton = wrapper.find('#downloadButton');
       downloadButton.trigger('click');
@@ -89,6 +89,7 @@ describe('gp messages urgency page', () => {
           fileName: 'Attachment_9 December 2019',
           fileExtension: 'jpg',
           mimeType: 'image/jpeg',
+          requestedFileType: 'jpg',
           isNative: false });
     });
   });

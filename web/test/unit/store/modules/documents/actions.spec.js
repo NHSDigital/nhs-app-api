@@ -12,6 +12,7 @@ sanitize.mockImplementation((f, o) => f.replace('/', o.replacement));
 let commit;
 let state;
 let payLoad;
+let downloadPayload;
 let dispatch;
 let $http;
 
@@ -44,6 +45,16 @@ const mockStoreState = ({
     fileName,
     fileExtension,
     mimeType,
+    isNative,
+  };
+
+  downloadPayload = {
+    documentIdentifier: 'document-id-for-test',
+    updateMetaData: false,
+    fileName,
+    fileExtension,
+    mimeType,
+    requestedFileType: '.type',
     isNative,
   };
 
@@ -146,10 +157,10 @@ describe('documents store actions', () => {
 
     it('will call the postV1DocumentsByDocumentidentifier endpoint with the ' +
        'current document id, name and type', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect($http.postV1DocumentsByDocumentidentifierDownload).toBeCalledWith({
-        documentIdentifier: payLoad.documentIdentifier,
+        documentIdentifier: downloadPayload.documentIdentifier,
         getPatientDocumentRequest: {
           type: '.type',
           name: 'test / file',
@@ -158,32 +169,32 @@ describe('documents store actions', () => {
     });
 
     it('will create a download link', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect(createElement).toHaveBeenCalledWith('a');
       expect(appendChild).toHaveBeenCalledWith(link);
     });
 
     it('will set link href to object URL', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect(link.href).toEqual('mock blob href');
     });
 
     it('will click the download link', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect(link.click).toHaveBeenCalled();
     });
 
     it('will sanitize the filename for download', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect(sanitize).toBeCalledWith('test / file.pdf', { replacement: '_' });
     });
 
     it('will use sanitized filename in download link', async () => {
-      await actions.downloadDocument({ commit, state }, payLoad);
+      await actions.downloadDocument({}, downloadPayload);
 
       expect(link.download).toEqual('test _ file.pdf');
     });
@@ -199,13 +210,13 @@ describe('documents store actions', () => {
       });
 
       it('will call native callback', async () => {
-        await actions.downloadDocument({ commit, state }, payLoad);
+        await actions.downloadDocument({}, downloadPayload);
 
         expect(startDownload).toHaveBeenCalled();
       });
 
       it('will pass document details to native callback', async () => {
-        await actions.downloadDocument({ commit, state }, payLoad);
+        await actions.downloadDocument({}, downloadPayload);
 
         expect(startDownload).toHaveBeenCalledWith(
           'data:application/pdf;base64,W29iamVjdCBPYmplY3Rd',

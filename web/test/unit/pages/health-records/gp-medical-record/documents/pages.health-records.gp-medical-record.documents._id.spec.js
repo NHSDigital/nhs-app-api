@@ -20,12 +20,16 @@ const newStore = ({
   document,
   documentConsultationsWithComments = [],
   gpMedicalRecordDocumentInfoLoggedEnabled = false,
+  supplierName = 'EMIS',
 } = {}) => (
   createStore({
     state: {
       myRecord: {
         hasAcceptedTerms: true,
         documentConsultationsWithComments,
+        record: {
+          supplier: supplierName,
+        },
       },
       documents: {
         currentDocument: document,
@@ -241,11 +245,41 @@ describe('document view', () => {
       }
 
       if (isValidFile && isDownloadable) {
-        expect(downloadItem.text()).toEqual('Download');
+        expect(downloadItem.text()).toEqual('Download (JPG, 1MB)');
       }
       expect(viewItem.exists()).toBe(isValidFile && isViewable);
       expect(downloadItem.exists()).toBe(isValidFile && isDownloadable);
     });
+
+    each([
+      ['EMIS'],
+      ['TPP'],
+      ['VISION'],
+    ]).it('will display the correct actions for the RTF document when supplier is %s', (supplierName) => {
+      const document = {
+        name: undefined,
+        comments: [],
+        size: 1000000,
+        type: 'rtf',
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+      };
+      // Arrange
+      mountPage({ $store: newStore({ document, supplierName }) });
+
+      // Act
+      const downloadItem = page.find('#btn_downloadDocument');
+
+      // Assert
+      if (supplierName === 'EMIS') {
+        expect(downloadItem.text()).toEqual('Download (PDF)');
+      }
+      if (['TPP', 'VISION'].includes(supplierName)) {
+        expect(downloadItem.text()).toEqual('Download (RTF, 1MB)');
+      }
+    });
+
 
     each([{
       type: 'tga',

@@ -151,9 +151,14 @@ open class V2MedicalRecordDocumentsStepDefinitions {
             Supplier.EMIS -> {
                 myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
                 myRecordDocumentInformationPage.headerContainsText(selectedDocument.term!!)
+                myRecordDocumentInformationPage.assertEmisFileSizeAndTypeVisible(selectedDocument)
             }
             Supplier.TPP -> {
                 myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
+                myRecordDocumentInformationPage.assertFileSizeAndTypeVisible(selectedDocument)
+            }
+            Supplier.VISION -> {
+                myRecordDocumentInformationPage.assertFileSizeAndTypeVisible(selectedDocument)
             }
             else -> {
                 throw IllegalArgumentException("${gpSystem.supplierName} not implemented for Medical Record Documents")
