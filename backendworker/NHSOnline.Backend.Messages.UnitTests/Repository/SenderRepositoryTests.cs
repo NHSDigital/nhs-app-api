@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             };
 
             _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("NHSAPP");
+                .Returns("Y0E3J");
 
             Func<IQueryable<DbSender>, IQueryable<DbSender>> capturedQuery = null;
 
@@ -195,13 +195,13 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
             // Arrange
             var sender1 = new DbSender
             {
-                Id = "NHSAPP",
+                Id = "Y0E3J",
                 Name = "NHS App",
                 Timestamp = new DateTime(2000,1,1)
             };
 
             _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("NHSAPP");
+                .Returns("Y0E3J");
 
             Func<IQueryable<DbSender>, IQueryable<DbSender>> capturedQuery = null;
 
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         {
             // Arrange
             _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("NHSAPP");
+                .Returns("Y0E3J");
 
             _mockSqlApiRepository.Setup(s =>
                     s.Find(It.IsAny<Func<IQueryable<DbSender>, IQueryable<DbSender>>>(), "Sender"))

@@ -53,7 +53,7 @@ class MessagesFactory {
     private val messageTwo = "Message Two"
     private val messageThree = "Message Three"
 
-    private val nhsAppSenderId = "NHSAPP"
+    private val nhsAppSenderId = "Y0E3J"
     private val nhsAppSenderCanonicalName = "NHS APP"
 
     fun setUpUser(patient: Patient? = null) {
