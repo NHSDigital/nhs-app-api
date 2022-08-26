@@ -21,7 +21,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
         |Select either 'yes' or 'no' for corneas
         |Select either 'yes' or 'no' for pancreas
         |Select either 'yes' or 'no' for tissue
-        |Select either 'yes' or 'no' for smallbowel
+        |Select either 'yes' or 'no' for small bowel
         """.trimMargin()
     private var organDonationAllMissingChoicesButHeart: String = """
         |Select either 'yes' or 'no' for lungs
@@ -30,7 +30,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
         |Select either 'yes' or 'no' for corneas
         |Select either 'yes' or 'no' for pancreas
         |Select either 'yes' or 'no' for tissue
-        |Select either 'yes' or 'no' for smallbowel
+        |Select either 'yes' or 'no' for small bowel
         """.trimMargin()
 
     @When("^I choose which organs to donate")

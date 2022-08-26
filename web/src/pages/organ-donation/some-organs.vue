@@ -95,7 +95,8 @@ export default {
 
         for (let i = 0; i < organs.length; i += 1) {
           if (decisions[i] === NOT_STATED) {
-            errors.push(this.$t('organDonation.someOrgans.chooseYesOrNoFor') + organs[i].toLowerCase());
+            const organName = this.$t(`organDonation.organs.${organs[i]}`);
+            errors.push(this.$t('organDonation.someOrgans.chooseYesOrNoFor') + organName.toLowerCase());
           }
         }
       }
