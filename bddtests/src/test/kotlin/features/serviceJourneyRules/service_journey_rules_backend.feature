@@ -8,7 +8,7 @@ Feature: Service Journey Rules Backend
     When I login but service journey rules has no configuration for my GP practice
     Then I receive an "ODS Code Not Found" error with service desk reference prefixed "3f"
 
-  @long-running
+  @bug @NHSO-22336
   Scenario: A user fetching the service journey rules but the session has expired, will receive Unauthorized
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value       |
