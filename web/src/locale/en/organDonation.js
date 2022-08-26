@@ -232,7 +232,7 @@ export default {
   },
   yourChoice: {
     allMyOrgansAndTissue: 'All my organs and tissue',
-    chooseToDonate: 'Select to donate some or all of your organs.',
+    chooseToDonate: 'Select to donate some or all of your organs',
     chooseWhichOrgansAndTissue: 'Choose which of your organs and tissue to donate.',
     helpUpToNinePeople: 'Help up to nine people through organ donation and even more through tissue donation.',
     someOrgansAndTissue: 'Some organs and tissue',
