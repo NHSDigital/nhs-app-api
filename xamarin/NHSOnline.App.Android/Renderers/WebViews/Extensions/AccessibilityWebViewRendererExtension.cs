@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 {
-    internal sealed class AccessibilityWebViewRendererExtension: WebViewRendererExtension
+    internal sealed class AccessibilityWebViewRendererExtension: WebViewRendererExtension, IDisposable
     {
         private readonly WebViewRenderer _renderer;
 
@@ -23,17 +23,28 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
                 _renderer.Control?.Settings != null &&
                 _renderer.Element is IAccessibleControl view)
             {
-                view.AccessibilityFocusChangeRequested += (sender, args) =>
-                {
-                    try
-                    {
-                        _renderer.Control.SendAccessibilityEvent(EventTypes.ViewAccessibilityFocused);
-                    }
-                    catch (ObjectDisposedException e)
-                    {
-                        Logger.LogError(e, "Webview has been exposed and we cannot send the accessibility event");
-                    }
-                };
+                view.AccessibilityFocusChangeRequested += (sender, args) => SendViewAccessibilityEvent();
+            }
+        }
+
+        private void SendViewAccessibilityEvent()
+        {
+            try
+            {
+                _renderer.Control.SendAccessibilityEvent(EventTypes.ViewAccessibilityFocused);
+            }
+            catch (ObjectDisposedException e)
+            {
+                Logger.LogError(e, "Webview has been disposed and we cannot send the accessibility event");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_renderer.Element is IAccessibleControl view)
+            {
+                // ReSharper disable once EventUnsubscriptionViaAnonymousDelegate
+                view.AccessibilityFocusChangeRequested -= (sender, args) => SendViewAccessibilityEvent();
             }
         }
     }

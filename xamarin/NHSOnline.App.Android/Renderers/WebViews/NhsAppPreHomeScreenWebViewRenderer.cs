@@ -12,7 +12,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
     {
         public NhsAppPreHomeScreenWebViewRenderer(Context context) : base(context)
         {
-            AddExtension(new AccessibilityWebViewRendererExtension(this));
+            using AccessibilityWebViewRendererExtension accessibilityWebViewRendererExtension = new AccessibilityWebViewRendererExtension(this);
+            AddExtension(accessibilityWebViewRendererExtension);
             AddExtension(new PreHomeScreenJavascriptBridgeWebViewRendererExtension(this));
             AddExtension(new PageNavigationAggregatorExtension());
         }
