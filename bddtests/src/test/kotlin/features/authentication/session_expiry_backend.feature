@@ -32,7 +32,7 @@ Feature: Session Extend Backend
       | EMIS      | ze     |
       | TPP       | zt     |
 
-  @bug @NHSO-22336
+  @long-running
   Scenario Outline: When the session extend endpoint is called but the session has become invalid, the <GP System> user receives a 401 response.
     Given I am logged in as a <GP System> user expecting a "unauthorized" response when extending their session
     And I allow my session to expire

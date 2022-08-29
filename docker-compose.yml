@@ -321,7 +321,7 @@ services:
       - |
           sleep 5
           EVAL="db.session.createIndex({_ts:1},{expireAfterSeconds:$${EXPIRE_AFTER_SECONDS:-600}})"
-          mongo --host mongodb.bitraft.io --eval "$$EVAL" development
+          mongosh --host mongodb.bitraft.io --eval "$$EVAL" development
       - "--"
     depends_on:
       - mongodb.bitraft.io
