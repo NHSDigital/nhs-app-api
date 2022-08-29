@@ -339,6 +339,21 @@ stages:
           nativeVersion: '$(native.xamarin.version)'
           buildNumber: '$(native.xamarin.ios.build.number)'
 
+  - ${{ if eq(variables['source.tag'], 'True') }}:
+    - stage: archive_native_apps
+      displayName: Archive Native Apps to SharePoint
+      dependsOn:
+        - xamarin_staging
+        - xamarin_onboarding_sandpit
+        - xamarin_onboarding_aos
+        - xamarin_production
+      variables:
+        - group: sharepoint_integration
+      jobs:
+        - template: .azuredevops/templates/archive-native-apps.yml
+          parameters:
+            sharepointFolderPath: 'Shared Documents/Testing/NativeAppReleaseArchive/$(native.xamarin.version)'
+
   - ${{ if and(or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['native.xamarin.runFlipbookTests'], 'true'), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['source.tag'], 'True')), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
     - stage: xamarin_browserstack
       displayName: Build Xamarin Browserstack Apps

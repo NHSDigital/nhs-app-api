@@ -34,13 +34,6 @@ jobs:
       output.directory: '$(build.binariesDirectory)/xamarin-android'
 
     steps:
-#      - task: UseDotNet@2
-#        displayName: 'Use specific .NET Core sdk - needed until MAUI upgrade complete'
-#        inputs:
-#          version: 6.0.100
-#          includePreviewVersions: false
-#          installationPath: $(Agent.ToolsDirectory)/dotnet
-
       - task: NuGetAuthenticate@0
         displayName: NuGet Authenticate
 

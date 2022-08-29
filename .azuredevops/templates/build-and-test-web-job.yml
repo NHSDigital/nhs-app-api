@@ -90,7 +90,7 @@ jobs:
           script: |
             echo "unit.tests.coverage.exists=$UNIT_TESTS_COVERAGE_EXISTS"
             echo "##vso[task.setvariable variable=unit.tests.coverage.exists;isOutput=true]$UNIT_TESTS_COVERAGE_EXISTS"
-  
+
       - task: ShellScript@2
         displayName: Build web docker image
         inputs:
