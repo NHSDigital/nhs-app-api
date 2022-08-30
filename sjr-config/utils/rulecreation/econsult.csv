@@ -69,7 +69,6 @@ barnet,Barnet,CCG,Barnet,North Central London,watlingmedicalcentre,Watling Medic
 barnet,Barnet,CCG,Barnet,North Central London,wentworthmedical,Wentworth Medical Practice,E83035,11781
 barnet,Barnet,CCG,Barnet,North Central London,woodlands-medicalpractice,Woodlands Medical Practice,Y00316,4423
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,beechwoodsurgery,Beechwood Surgery,F81023,12014
-basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,fryernsmedicalcentre,Fryerns Medical Centre,F81707,2193
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,mountavenuesurgery,Mount Avenue Surgery,F81055,13800
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,noakbridgemedicalcentre,Noak Bridge Medical Centre,F81666,3492
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,queensparksurgery,Queens Park Surgery,F81222,4937
@@ -1480,7 +1479,6 @@ towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North Ea
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,bethnalgreenhealthcentre,Bethnal Green Health Centre,F84083,8493
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,citywellbeingpractice,City Wellbeing Practice,F84114,7209
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,docklandsmedicalcentre,Docklands Medical Centre,F84656,8008
-towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,goughwalksurgery,Gough Walk Practice,F84025,5006
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,islandmedicalcentre,Island Medical Centre,F84647,6889
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,jubileestreetpractice,Jubilee Street Practice,F84031,11411
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,limehousepractice,Limehouse General Practice,F84054,11246
@@ -1548,7 +1546,6 @@ walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,highroadsurger
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,highamhillmedicalcentre,Higham Hill Medical Centre,F86679,5391
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,kingsheadmp,Kings Head Medical Practice,F86700,3750
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,kiyanimedicalpractice,Kiyani Medical Practice,F86701,3132
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,llmedicareagarwal,L.L. Medical Care LTD Agarwal And Agrawal Practice,F86625,6000
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,langthornesharmafamilypractice,Langthorne Sharma Family Practice,F86705,2916
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,larkshallmedicalcentre,Larkshall Medical Centre,F86664,8409
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,leytonhealthcare,Leyton Healthcare,F86074,13500
@@ -1857,7 +1854,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Goldington Road Surgery,Y00328,
 ,,,Other,,,Wellsbourne Healthcare CIC,Y06007,
 ,,,Other,,,Victoria Park Health Centre,C82124,
-,,,Other,,,Laindon Medical Group,F81108,
 ,,,Other,,,Amherst Medical Practice,G82013,
 ,,,Other,,,Newton Place Surgery,G82039,
 ,,,Other,,,The Vine Medical Centre,G82164,
@@ -2056,7 +2052,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Wallingford Medical Practice,K84037,
 ,,,Other,,,The Elms Medical Centre,N82070,
 ,,,Other,,,Sancta Maria Surgery,F81197,
-,,,Other,,,The Derry Court Medical Practice,F81669,
 ,,,Other,,,Crane Surgery,G82605,
 ,,,Other,,,Wide Way Medical Centre,H85029,
 ,,,Other,,,Figges Marsh Surgery,H85090,
@@ -2190,7 +2185,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Alcester Health Centre,M84049,
 ,,,Other,,,Ling House Medical Centre,B83008,
 ,,,Other,,,London Road Surgery,F81041,
-,,,Other,,,Island Health,F84710,
 ,,,Other,,,Loxwood Medical Practice,H82031,
 ,,,Other,,,Lindfield Medical Centre,H82035,
 ,,,Other,,,St Peter's Surgery,J82208,
@@ -2250,7 +2244,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Upton Village Surgery,N81100,
 ,,,Other,,,Poulter Road Medical Centre,N82648,
 ,,,Other,,,The Robins Surgery,Y00312,
-,,,Other,,,St Andrews Health Centre,Y03023,
 ,,,Other,,,Clayton's Test Practice,A12345,
 ,,,Other,,,Reynolds Medical Centre,A91169,
 ,,,Other,,,Priory Gardens Surgery,E81014,
