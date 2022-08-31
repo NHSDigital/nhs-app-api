@@ -301,9 +301,3 @@ spec:
           initialDelaySeconds: 20
           periodSeconds: 10
           timeoutSeconds: 2
-
-      hostAliases:
-      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
-        hostnames:
-        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
-        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"

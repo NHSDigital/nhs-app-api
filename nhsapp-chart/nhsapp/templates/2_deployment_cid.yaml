@@ -222,9 +222,3 @@ spec:
 {{- with $.Values.probes.proxy }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
-
-      hostAliases:
-      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
-        hostnames:
-        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
-        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"

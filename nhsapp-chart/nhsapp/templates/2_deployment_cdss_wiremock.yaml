@@ -125,9 +125,4 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 1
 
-      hostAliases:
-      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
-        hostnames:
-        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
-        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
  {{- end }}

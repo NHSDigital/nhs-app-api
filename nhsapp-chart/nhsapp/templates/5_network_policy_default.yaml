@@ -49,8 +49,6 @@ spec:
   - Egress
   egress:
   - to:
-    - ipBlock:
-        cidr: {{ $.Values.clusterIP }}  # yamllint disable-line rule:trailing-spaces
 {{- range $.Values.trustedNetworks }}
     - ipBlock:
         cidr: {{ . }}  # yamllint disable-line rule:trailing-spaces
