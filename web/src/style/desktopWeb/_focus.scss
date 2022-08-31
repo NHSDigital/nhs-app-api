@@ -240,7 +240,7 @@ button {
 }
 
 // Focus and Hover for Panel Links on GP Messages & App Messages
-#gpInboxMessages a, #inboxMessages a {
+#gpInboxMessages a, #inboxMessages a, #inboxMessages-read a, #inboxMessages-unread a {
   &:focus {
     @include nhsuk-hover-link-background-reset;
 

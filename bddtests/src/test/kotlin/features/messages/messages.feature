@@ -15,6 +15,7 @@ Feature: Messages
     And the Sender One Canonical sender is displayed as unread
     When I click on Sender One Canonical sender
     Then the Sender Messages page is displayed
+    And the unread messages title is displayed
     And my messages from the sender are displayed
     # We need to check the functionality to mark the messages as read with the back button,
     # to ensure that the state is updated
@@ -22,6 +23,7 @@ Feature: Messages
     Then the Message page is displayed
     When I click the 'Back' breadcrumb
     Then the Sender Messages page is displayed
+    And the read messages title is displayed
     And my messages from the sender are displayed as read
     When I click the 'Back' breadcrumb
     Then the Message Senders page is displayed

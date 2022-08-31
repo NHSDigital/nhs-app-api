@@ -1,25 +1,36 @@
 @import "@/style/custom/summary-message";
 @import '@/style/desktopWeb/_focus';
 
+.nhs-app-message__group {
+  margin-top: 10px;
+}
+
+.nhs-app-message__group-spaced {
+  margin-top: 25px;
+}
+
 .nhs-app-message__link .flex-baseline-container {
-  align-items: stretch; /* override */
+  justify-content: flex-start;
 
   .nhs-app-message__summary {
     @include nhsuk-responsive-padding(0, "bottom");
     @include nhsuk-responsive-margin(0, "bottom");
+    @include nhsuk-responsive-padding(3, "left");
+    @include nhsuk-responsive-margin(2, "top");
     color: $nhsuk-secondary-text-color;
     flex-grow: 1;
     flex-shrink: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: break-word;
     max-width: fit-content;
     align-self: flex-start;
-    &.nhs-app-message__summary--unread {
-      font-weight: $nhsuk-font-bold;
+
+    @include govuk-media-query($until: tablet) {
+      -webkit-line-clamp: 3;
     }
   }
 
@@ -28,6 +39,52 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
+    width: 80%;
+
+    .nhs-app-message__date {
+      margin-left: nhsuk-spacing(3);
+      @include nhsuk-typography-responsive(16);
+      font-weight: $nhsuk-font-normal;
+      color: $nhsuk-secondary-text-color;
+      word-break: break-word;
+      justify-content: right; 
+
+      @include govuk-media-query($until: tablet) {
+        margin-left: nhsuk-spacing(2);
+      }
+    }   
+
+    @include govuk-media-query($until: tablet) {
+      margin-left: nhsuk-spacing(2);
+    }
+  }
+
+  .nhs-app-message__pill {
+    flex-shrink: 0;
+    @include nhsuk-typography-responsive(14);
+    background-color: $color_nhsuk-red;
+    border-radius: nhsuk-spacing(3);
+    display: inline-block;
+    min-width: nhsuk-spacing(4);
+    min-height: 11px;
+    text-align: center;
+    @include govuk-media-query($until: tablet) {
+      padding-top: 1px;
+      padding-bottom: 1px;
+      min-width: 22px;
+      min-height: 10px;
+    }
+    &.nhs-app-message__pill--read {
+      background-color: transparent;
+    }
+  }    
+}
+
+.nhs-app-message__title {
+  font-weight: normal;
+  margin-bottom: 15px;
+  &.nhs-app-message__title--unread {
+    color: $color_nhsuk-red;
   }
 }

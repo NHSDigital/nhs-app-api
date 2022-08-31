@@ -56,6 +56,7 @@ export default {
     ],
   },
   youHaveCountUnreadMessagePlural: 'You have {count} unread message{plural}. ',
+  youHaveCountUnreadMessagePluralFromSender: 'You have {count} unread message{plural} from {sender}.',
   youHaveNoMessages: 'You have no messages.',
   youHaveUnreadMessages: 'You have unread messages.',
   youNeedToSelectYesOrNo: 'You need to select yes or no',

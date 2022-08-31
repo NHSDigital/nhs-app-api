@@ -167,6 +167,11 @@ class MessagesStepDefinitions {
         messagesPage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail())
     }
 
+    @Then("^the unread messages title is displayed$")
+    fun theUnreadMessagesTitleIsDisplayed() {
+        messagesPage.assertTitleDisplayed(MessagesSerenityHelpers.UNREAD_MESSAGES_TITLE_ID.getOrFail())
+    }
+
     @Then("^my messages from the sender are displayed$")
     fun myMessagesFromTheSenderAreDisplayed() {
         val expectedUnreadMessages = MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES
@@ -175,6 +180,11 @@ class MessagesStepDefinitions {
                 .getOrFail<ArrayList<SingleMessageFacade>>()
         messagesPage.messages.assertRead(expectedReadMessages)
         messagesPage.messages.assertUnread(expectedUnreadMessages)
+    }
+
+    @Then("^the read messages title is displayed$")
+    fun theReadMessagesTitleIsDisplayed() {
+        messagesPage.assertTitleDisplayed(MessagesSerenityHelpers.READ_MESSAGES_TITLE_ID.getOrFail())
     }
 
     @Then("^my messages from the sender are displayed as read$")

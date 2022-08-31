@@ -73,6 +73,9 @@ class MessagesFactory {
             ReplyOption(code = "No", display = "NO")
     ))
 
+    private val unreadMessagesTitleId = "unreadCountMessagesTitle"
+    private val readMessagesTitleId = "readMessagesTitle"
+
     fun setUpUser(patient: Patient? = null) {
         val patientToUse = patient
             ?: ServiceJourneyRulesMapper.findPatientForConfiguration(
@@ -88,6 +91,8 @@ class MessagesFactory {
         MessagesSerenityHelpers.TARGET_MESSAGE.set(messageOne)
         MessagesSerenityHelpers.TARGET_UNREAD_MESSAGE.set(messageTwo)
         MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES_COUNT.set(0)
+        MessagesSerenityHelpers.UNREAD_MESSAGES_TITLE_ID.set(unreadMessagesTitleId)
+        MessagesSerenityHelpers.READ_MESSAGES_TITLE_ID.set(readMessagesTitleId)
     }
 
     fun setUpMultipleMessagesInCache(isV1SendersEndpoint: Boolean = false) {

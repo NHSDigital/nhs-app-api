@@ -10,9 +10,12 @@ dependency.redirectTo = jest.fn();
 
 const messageItemClass = 'nhs-app-message__item';
 const messageSectionClass = 'nhs-app-message';
-const messageUnreadIndicatorClass = 'nhs-app-message__meta';
+const messageUnreadIndicatorClass = 'nhs-app-message__pill';
+const messageReadIndicatorClass = 'nhs-app-message__pill--read';
 const messageBodyUnreadClass = 'nhs-app-message__summary--unread';
 const messageDateUnreadClass = 'nhs-app-message__date--unread';
+const unreadMessageTitleId = 'unreadCountMessagesTitle';
+const readMessageTitleId = 'readMessagesTitle';
 
 const shutterContainer = '[data-purpose="shutter-container"]';
 
@@ -22,6 +25,17 @@ const defaultMessages = [
   { body: 'Unread Message 3', read: false, sentTime: '2020-01-14T00:00:00.000Z', sender: 'Test Sender' },
   { body: 'Message 4', read: true, sentTime: '2020-01-13T15:00:00.000Z', sender: 'Test Sender' },
   { body: 'Unread Message 5', read: false, sentTime: '2020-01-09T17:00:00.000Z', sender: 'Test Sender' },
+];
+
+const unreadMessages = [
+  { body: 'Unread Message 3', read: false, sentTime: '2020-01-14T00:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Unread Message 5', read: false, sentTime: '2020-01-09T17:00:00.000Z', sender: 'Test Sender' },
+];
+
+const readMessages = [
+  { body: 'Message 1', read: true, sentTime: '2020-01-14T16:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Message 2', read: true, sentTime: '2020-01-14T12:00:00.000Z', sender: 'Test Sender' },
+  { body: 'Message 4', read: true, sentTime: '2020-01-13T15:00:00.000Z', sender: 'Test Sender' },
 ];
 
 let wrapper;
@@ -60,6 +74,7 @@ const mountSenderMessages = ({
       [messageItemClass]: messageItemClass,
       [messageSectionClass]: messageSectionClass,
       [messageUnreadIndicatorClass]: messageUnreadIndicatorClass,
+      [messageReadIndicatorClass]: messageReadIndicatorClass,
       [messageBodyUnreadClass]: messageBodyUnreadClass,
       [messageDateUnreadClass]: messageDateUnreadClass,
     },
@@ -162,6 +177,59 @@ describe('messaging sender messages', () => {
         });
       });
 
+      describe('and there has been no error and only have unread messages loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
+
+          beforeEach(() => {
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, messages: unreadMessages });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
+          });
+
+          it('will display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will not display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(false);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(2);
+            expect(messageItems.at(0).text()).toContain('Unread Message 3');
+            expect(messageItems.at(1).text()).toContain('Unread Message 5');
+          });
+        });
+      });
+
+      describe('and there has been no error and only have read messages loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
+
+          beforeEach(() => {
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, messages: readMessages });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
+          });
+
+          it('will not display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(false);
+          });
+
+          it('will display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(3);
+            expect(messageItems.at(0).text()).toContain('Message 1');
+            expect(messageItems.at(1).text()).toContain('Message 2');
+            expect(messageItems.at(2).text()).toContain('Message 4');
+          });
+        });
+      });
+
       describe('and there has been no error and messages have loaded', () => {
         describe('inbox', () => {
           let messageItems;
@@ -176,16 +244,24 @@ describe('messaging sender messages', () => {
             expect(wrapper.find(shutterContainer).exists()).toBe(false);
           });
 
-          it('will display all messages', () => {
-            expect(messageItems.length).toBe(5);
-            expect(messageItems.at(0).text()).toContain('Message 1');
-            expect(messageItems.at(1).text()).toContain('Message 2');
-            expect(messageItems.at(2).text()).toContain('Unread Message 3');
-            expect(messageItems.at(3).text()).toContain('Message 4');
-            expect(messageItems.at(4).text()).toContain('Unread Message 5');
+          it('will display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(true);
           });
 
-          describe.each([0, 1, 3])('read message', (messageIndex) => {
+          it('will display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(5);
+            expect(messageItems.at(0).text()).toContain('Unread Message 3');
+            expect(messageItems.at(1).text()).toContain('Unread Message 5');
+            expect(messageItems.at(2).text()).toContain('Message 1');
+            expect(messageItems.at(3).text()).toContain('Message 2');
+            expect(messageItems.at(4).text()).toContain('Message 4');
+          });
+
+          describe.each([2, 3, 4])('read message', (messageIndex) => {
             let readMessage;
 
             beforeEach(() => {
@@ -200,24 +276,16 @@ describe('messaging sender messages', () => {
               expect(readMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
             });
 
-            it('will not show unread indicator', () => {
-              expect(readMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
+            it('will style indicator as read', () => {
+              expect(readMessage.find(`.${messageReadIndicatorClass}`).exists()).toBe(true);
             });
           });
 
-          describe.each([2, 4])('unread messages', (messageIndex) => {
+          describe.each([0, 1])('unread messages', (messageIndex) => {
             let unreadMessage;
 
             beforeEach(() => {
               unreadMessage = messageItems.at(messageIndex);
-            });
-
-            it('will style body as unread', () => {
-              expect(unreadMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
-            });
-
-            it('will style date time as unread', () => {
-              expect(unreadMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
             });
 
             it('will show unread indicator', () => {
@@ -226,11 +294,11 @@ describe('messaging sender messages', () => {
           });
 
           describe.each([
-            [0, 'today', 'Red message received at 4pm'],
-            [1, 'midday', 'Red message received at Midday'],
-            [2, 'midnight', 'Unread message received at Midnight'],
-            [3, 'yesterday', 'Red message received  Yesterday'],
-            [4, 'a few days ago', 'Unread message received on Thursday'],
+            [0, 'midnight', 'Unread message received at Midnight'],
+            [1, 'a few days ago', 'Unread message received on Thursday'],
+            [2, 'today', 'Red message received at 4pm'],
+            [3, 'midday', 'Red message received at Midday'],
+            [4, 'yesterday', 'Red message received  Yesterday'],
           ])('aria label', (messageIndex, time, description) => {
             it(`will describe ${time} correctly`, () => {
               expect(messageItems.at(messageIndex).find('a').attributes('aria-label')).toContain(description);
@@ -345,6 +413,59 @@ describe('messaging sender messages', () => {
         });
       });
 
+      describe('and there has been no error and only have unread messages loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
+
+          beforeEach(() => {
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, messages: unreadMessages });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
+          });
+
+          it('will display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will not display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(false);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(2);
+            expect(messageItems.at(0).text()).toContain('Unread Message 3');
+            expect(messageItems.at(1).text()).toContain('Unread Message 5');
+          });
+        });
+      });
+
+      describe('and there has been no error and only have read messages loaded', () => {
+        describe('inbox', () => {
+          let messageItems;
+
+          beforeEach(() => {
+            mountSenderMessages({ sender: 'Test Sender', senderIdEnabled: false, messages: readMessages });
+            $store.state.messaging.senderMessagesLoaded = true;
+            messageItems = wrapper.findAll(`.${messageItemClass}`);
+          });
+
+          it('will not display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(false);
+          });
+
+          it('will display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(3);
+            expect(messageItems.at(0).text()).toContain('Message 1');
+            expect(messageItems.at(1).text()).toContain('Message 2');
+            expect(messageItems.at(2).text()).toContain('Message 4');
+          });
+        });
+      });
+
       describe('and there has been no error and messages have loaded', () => {
         describe('inbox', () => {
           let messageItems;
@@ -359,16 +480,24 @@ describe('messaging sender messages', () => {
             expect(wrapper.find(shutterContainer).exists()).toBe(false);
           });
 
-          it('will display all messages', () => {
-            expect(messageItems.length).toBe(5);
-            expect(messageItems.at(0).text()).toContain('Message 1');
-            expect(messageItems.at(1).text()).toContain('Message 2');
-            expect(messageItems.at(2).text()).toContain('Unread Message 3');
-            expect(messageItems.at(3).text()).toContain('Message 4');
-            expect(messageItems.at(4).text()).toContain('Unread Message 5');
+          it('will display unread message title', () => {
+            expect(wrapper.find(`#${unreadMessageTitleId}`).exists()).toBe(true);
           });
 
-          describe.each([0, 1, 3])('read message', (messageIndex) => {
+          it('will display read message title', () => {
+            expect(wrapper.find(`#${readMessageTitleId}`).exists()).toBe(true);
+          });
+
+          it('will display all messages', () => {
+            expect(messageItems.length).toBe(5);
+            expect(messageItems.at(0).text()).toContain('Unread Message 3');
+            expect(messageItems.at(1).text()).toContain('Unread Message 5');
+            expect(messageItems.at(2).text()).toContain('Message 1');
+            expect(messageItems.at(3).text()).toContain('Message 2');
+            expect(messageItems.at(4).text()).toContain('Message 4');
+          });
+
+          describe.each([2, 3, 4])('read message', (messageIndex) => {
             let readMessage;
 
             beforeEach(() => {
@@ -383,24 +512,16 @@ describe('messaging sender messages', () => {
               expect(readMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(false);
             });
 
-            it('will not show unread indicator', () => {
-              expect(readMessage.find(`.${messageUnreadIndicatorClass}`).exists()).toBe(false);
+            it('will style indicator as read', () => {
+              expect(readMessage.find(`.${messageReadIndicatorClass}`).exists()).toBe(true);
             });
           });
 
-          describe.each([2, 4])('unread messages', (messageIndex) => {
+          describe.each([0, 1])('unread messages', (messageIndex) => {
             let unreadMessage;
 
             beforeEach(() => {
               unreadMessage = messageItems.at(messageIndex);
-            });
-
-            it('will style body as unread', () => {
-              expect(unreadMessage.find(`.${messageBodyUnreadClass}`).exists()).toBe(true);
-            });
-
-            it('will style date time as unread', () => {
-              expect(unreadMessage.find(`.${messageDateUnreadClass}`).exists()).toBe(true);
             });
 
             it('will show unread indicator', () => {
@@ -409,11 +530,11 @@ describe('messaging sender messages', () => {
           });
 
           describe.each([
-            [0, 'today', 'Red message received at 4pm'],
-            [1, 'midday', 'Red message received at Midday'],
-            [2, 'midnight', 'Unread message received at Midnight'],
-            [3, 'yesterday', 'Red message received  Yesterday'],
-            [4, 'a few days ago', 'Unread message received on Thursday'],
+            [0, 'midnight', 'Unread message received at Midnight'],
+            [1, 'a few days ago', 'Unread message received on Thursday'],
+            [2, 'today', 'Red message received at 4pm'],
+            [3, 'midday', 'Red message received at Midday'],
+            [4, 'yesterday', 'Red message received  Yesterday'],
           ])('aria label', (messageIndex, time, description) => {
             it(`will describe ${time} correctly`, () => {
               expect(messageItems.at(messageIndex).find('a').attributes('aria-label')).toContain(description);

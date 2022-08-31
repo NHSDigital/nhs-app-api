@@ -18,4 +18,13 @@ open class MessagesBasePage : HybridPageObject() {
             helpfulName = "header")
         header.waitForElement()
     }
+
+    fun assertTitleDisplayed(id: String) {
+        val path = "//p[@id='${id}']"
+        val h5 = HybridPageElement(
+                path,
+                this,
+                helpfulName = "unreadCountTitle")
+        h5.waitForElement()
+    }
 }

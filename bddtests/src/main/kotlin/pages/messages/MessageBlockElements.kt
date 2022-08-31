@@ -67,7 +67,7 @@ class MessageBlockElements(private val page:HybridPageObject) {
     }
 
     private class MessageBlockElement(private val element: WebElementFacade, index: Int) {
-        val messageBody: String = element.findElement<WebElement>(By.xpath("./p")).text
+        val messageBody: String = element.findElement<WebElement>(By.xpath("./div/p")).text
         val sentTime: String = element.findElement<WebElement>(By.xpath("./div/time")).text
         val isUnread: Boolean = element.containsElements(By.xpath("//*[@id='unreadIndicator${index}']"))
 

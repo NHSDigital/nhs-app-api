@@ -20,40 +20,81 @@
           </page-title>
         </div>
       </div>
-      <ul :id="$style['inboxMessages']" :class="$style['nhs-app-message']">
-        <li v-for="(message, index) in messages"
-            :key="index"
-            :class="$style['nhs-app-message__item']">
-          <a :href="messagePath(message.id)"
-             :class="$style['nhs-app-message__link']"
-             :aria-label="messageLabel(message)"
-             tabindex="0"
-             @click.stop.prevent="goToMessage(message.id)">
-            <div :class="$style['flex-baseline-container']" aria-hidden="true">
-              <p id="subject"
-                 :class="{
-                   'nhsuk-body-s': true,
-                   [$style['nhs-app-message__summary']]: true,
-                   [$style['nhs-app-message__summary--unread']]: !message.read
-                 }">
-                {{ toPlainText(message.body) }}
-              </p>
-              <div :class="$style['flex-column-container']">
-                <formatted-date-time :date-time="message.sentTime"
-                                     :class="{
-                                       [$style['nhs-app-message__date']]: true,
-                                       [$style['nhs-app-message__date--unread']]: !message.read
-                                     }"
-                                     summary-time-format />
-                <span v-if="!message.read" :class="$style['nhs-app-message__meta']">
-                  <span :id="'unreadIndicator' + index"
-                        :class="$style['nhs-app-message__count']">{{ $t('messages.unread') }}</span>
-                </span>
+      <div v-if="unreadMessages.length > 0" :class="$style['nhs-app-message__group']">
+        <p
+          id="unreadCountMessagesTitle"
+          :class="[$style['nhs-app-message__title'], $style['nhs-app-message__title--unread']]"
+          :aria-label="unreadMessagesAriaLabel"
+          role="heading"
+          tab-index="0">
+          {{ unreadMessagesLabel }}
+        </p>
+        <ul :id="$style['inboxMessages-unread']" :class="$style['nhs-app-message']">
+          <li v-for="(message, index) in unreadMessages"
+              :key="index"
+              :class="$style['nhs-app-message__item']">
+            <a :href="messagePath(message.id)"
+               :class="$style['nhs-app-message__link']"
+               :aria-label="messageLabel(message)"
+               @click.stop.prevent="goToMessage(message.id)">
+              <div :class="$style['flex-baseline-container']" aria-hidden="true">
+                <span :id="'unreadIndicator' + index"
+                      :class="$style['nhs-app-message__pill']" />
+                <div :class="$style['flex-column-container']">
+                  <formatted-date-time
+                    :date-time="message.sentTime"
+                    :class="{
+                      [$style['nhs-app-message__date']]: true
+                    }"
+                    summary-time-format />
+                  <p id="subject"
+                     :class="{
+                       'nhsuk-body-s': true,
+                       [$style['nhs-app-message__summary']]: true
+                     }">
+                    {{ toPlainText(message.body) }}
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
-        </li>
-      </ul>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div v-if="readMessages.length > 0"
+           :class="[$style['nhs-app-message__group'], unreadMessages.length > 0 ? $style['nhs-app-message__group-spaced'] : '']">
+        <p
+          id="readMessagesTitle"
+          :class="$style['nhs-app-message__title']">Read messages</p>
+        <ul :id="$style['inboxMessages-read']" :class="$style['nhs-app-message']">
+          <li v-for="(message, index) in readMessages"
+              :key="index"
+              :class="$style['nhs-app-message__item']">
+            <a :href="messagePath(message.id)"
+               :class="$style['nhs-app-message__link']"
+               :aria-label="messageLabel(message)"
+               @click.stop.prevent="goToMessage(message.id)">
+              <div :class="$style['flex-baseline-container']" aria-hidden="true">
+                <span :class="[$style['nhs-app-message__pill'], $style['nhs-app-message__pill--read']]" />
+                <div :class="$style['flex-column-container']">
+                  <formatted-date-time
+                    :date-time="message.sentTime"
+                    :class="{
+                      [$style['nhs-app-message__date']]: true
+                    }"
+                    summary-time-format />
+                  <p id="subject"
+                     :class="{
+                       'nhsuk-body-s': true,
+                       [$style['nhs-app-message__summary']]: true
+                     }">
+                    {{ toPlainText(message.body) }}
+                  </p>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
 
       <desktop-generic-back-link v-if="!isNativeApp"
                                  data-purpose="back-link"
@@ -104,6 +145,36 @@ export default {
     },
     messages() {
       return get('messages')(first(this.$store.state.messaging.senderMessages)) || [];
+    },
+    unreadMessages() {
+      return this.messages.filter((message) => !message.read) || [];
+    },
+    readMessages() {
+      return this.messages.filter((message) => message.read) || [];
+    },
+    unreadMessagesLabel() {
+      const { unreadCount } = this.$store.state.messaging.senderMessages[0];
+
+      if (unreadCount && unreadCount > 0) {
+        return this.$t('messages.youHaveCountUnreadMessagePlural')
+          .replace('{count}', unreadCount)
+          .replace('{plural}', unreadCount > 1 ? 's' : '')
+          .replace('.', '');
+      }
+
+      return '';
+    },
+    unreadMessagesAriaLabel() {
+      const { unreadCount } = this.$store.state.messaging.senderMessages[0];
+
+      if (unreadCount && unreadCount > 0) {
+        return this.$t('messages.youHaveCountUnreadMessagePluralFromSender')
+          .replace('{count}', unreadCount)
+          .replace('{plural}', unreadCount > 1 ? 's' : '')
+          .replace('{sender}', this.senderName);
+      }
+
+      return '';
     },
     ifProblemContinuesText() {
       return this.$t('messages.error.ifTheProblemContinuesContactSenderDirectly', { sender: this.senderName });
