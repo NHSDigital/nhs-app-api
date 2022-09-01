@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         internal PrescriptionsTemporaryProblemPageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, there is a problem getting your repeat prescription information");
+            "h1", "Cannot access repeat prescriptions");
 
         private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
             "p", "You are not currently able to order or view repeat prescriptions online.");

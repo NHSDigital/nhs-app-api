@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, there is a problem getting your GP health record");
+            "h1", "Cannot show GP health record");
 
         private WebText PostTryAgainTitleText => WebText.WithTagAndText(_interactor,
             "h1", "Sorry, your GP health record is unavailable");
@@ -27,7 +27,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
         private WebText TemporaryProblemText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "This may be a temporary problem.");
+            "This may be a temporary problem. You can try loading your GP health record again.");
 
         private WebButton TryAgainButton => WebButton.WithText(
             _interactor,

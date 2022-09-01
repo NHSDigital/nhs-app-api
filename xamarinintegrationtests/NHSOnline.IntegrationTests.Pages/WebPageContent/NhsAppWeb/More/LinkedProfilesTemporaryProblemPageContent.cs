@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.More
         internal LinkedProfilesTemporaryProblemPageContent(IWebInteractor interactor) => _interactor = interactor;
 
         private WebText TitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, there is a problem getting your linked profiles information");
+            "h1", "Cannot show linked profile information");
 
         private WebText UnableToBookText => WebText.WithTagAndText(_interactor,
             "p", "You are not currently able to access linked profiles.");

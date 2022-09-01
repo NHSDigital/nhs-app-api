@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             _interactor = interactor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Something went wrong");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Cannot access organ donation details");
 
         public WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 

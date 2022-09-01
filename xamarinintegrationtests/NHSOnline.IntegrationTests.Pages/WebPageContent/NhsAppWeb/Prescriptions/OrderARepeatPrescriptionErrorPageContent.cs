@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
         private WebText ErrorTitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
-            "Sorry, there is a problem getting your repeat prescription information");
+            "Cannot access repeat prescriptions");
 
         internal void AssertOnPage()
         {
