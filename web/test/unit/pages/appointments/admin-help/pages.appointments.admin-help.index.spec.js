@@ -312,7 +312,7 @@ describe('Admin Help page', () => {
 
         const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
 
-        expect(demographicsQuestionParagraphs[0].text()).toEqual('Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.');
+        expect(demographicsQuestionParagraphs[0].text()).toEqual('Use this service to contact your GP surgery for things like test results, fit notes (sick notes), GP letters and medical reports.');
         expect(demographicsQuestionParagraphs[1].text()).toEqual('It takes around 5 minutes to answer a few questions.');
         expect(demographicsQuestionParagraphs[2].text()).toEqual('To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.');
       });

@@ -11,10 +11,10 @@ open class AppointmentHubPage : HybridPageObject() {
     private val gpAppointmentsDescription = "View and manage appointments at your surgery"
 
     private val engageAdminTitle = "Additional GP services"
-    private val engageAdminDescription = "Get sick notes and GP letters or ask about recent tests"
+    private val engageAdminDescription = "Get fit notes (sick notes) and GP letters or ask about recent tests"
 
     private val olcAdminHelpTitle = "Additional GP services"
-    private val olcAdminHelpDescription = "Get sick notes and GP letters or ask about recent tests"
+    private val olcAdminHelpDescription = "Get fit notes (sick notes) and GP letters or ask about recent tests"
 
     var content = LinksWithDescriptionsContent(
             linkBlockTitle = "Appointments",

@@ -7,7 +7,7 @@ export default {
     itTakesAroundFiveMinutes: 'It takes around 5 minutes to answer a few questions.',
     onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
     toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
-    useThisServiceToContactYourSurgery: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
+    useThisServiceToContactYourSurgery: 'Use this service to contact your GP surgery for things like test results, fit notes (sick notes), GP letters and medical reports.',
     weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
   },
   appointment: {
@@ -147,9 +147,9 @@ export default {
   guidance: {
     additionalGpServices: {
       additionalGpServices: 'Additional GP services',
-      getSickNotesAndLetters: 'Get sick notes and GP letters or ask about recent tests',
+      getSickNotesAndLetters: 'Get fit notes (sick notes) and GP letters or ask about recent tests',
       engage: {
-        getSickNotesAndLetters: 'Get sick notes and GP letters or ask your GP surgery about something else',
+        getSickNotesAndLetters: 'Get fit notes (sick notes) and GP letters or ask your GP surgery about something else',
       },
     },
     OneOneOne: {

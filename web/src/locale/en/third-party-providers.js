@@ -20,7 +20,7 @@ export default {
         id: 'admin',
         jumpOffContent: {
           headerText: 'Additional GP services',
-          descriptionText: 'Get sick notes and GP letters or ask your GP surgery about something else',
+          descriptionText: 'Get fit notes (sick notes) and GP letters or ask your GP surgery about something else',
         },
         thirdPartyWarning: {
           featureName: 'Additional GP services',

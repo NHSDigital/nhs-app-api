@@ -40,12 +40,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
         private WebText AdditionalGpServicesMenuText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "Get sick notes and GP letters or ask about recent tests");
+            "Get fit notes (sick notes) and GP letters or ask about recent tests");
 
         private WebText EngageAdditionalGpServicesMenuText => WebText.WithTagAndText(
             _interactor,
             "p",
-            "Get sick notes and GP letters or ask your GP surgery about something else");
+            "Get fit notes (sick notes) and GP letters or ask your GP surgery about something else");
 
         private WebMenuItem HospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
