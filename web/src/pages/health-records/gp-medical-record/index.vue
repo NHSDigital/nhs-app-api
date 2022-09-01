@@ -214,8 +214,8 @@ export default {
 
       const { error } = this;
       if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried()) {
-        EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.healthRecord.healthRecordUnavailable');
-        EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.healthRecord.healthRecordUnavailable');
+        EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.healthRecord.cannotShowGPHealthRecord');
+        EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.healthRecord.cannotShowGPHealthRecord');
       }
     },
   },

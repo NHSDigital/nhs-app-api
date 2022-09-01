@@ -3,12 +3,12 @@
 
     <div v-if="hasRetried">
       <error-page id="healthRecordGpSessionError"
-                  header-locale-ref="gpSessionErrors.healthRecord.healthRecordUnavailable"
+                  header-locale-ref="gpSessionErrors.healthRecord.cannotShowGPHealthRecord"
                   :code="error.serviceDeskReference"
                   :update-header="false"
                   :show-back-link="false">
         <template #content>
-          <p>{{ $t('gpSessionErrors.healthRecord.ifYouNeedInformationNow') }}</p>
+          <p>{{ $t('gpSessionErrors.healthRecord.problemConnectingToGP') }}</p>
           <contact-111 :text="$t('gpSessionErrors.healthRecord.forUrgentMedicalAdvice')"/>
         </template>
       </error-page>
@@ -30,7 +30,7 @@
       </menu-item-list>
     </div>
 
-    <shutter-container id="shutter-dialog-599">
+    <shutter-container v-else id="shutter-dialog-599">
       <error-title title="gpSessionErrors.healthRecord.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.healthRecord.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.healthRecord.tryLoadingHealthRecordAgain"/>

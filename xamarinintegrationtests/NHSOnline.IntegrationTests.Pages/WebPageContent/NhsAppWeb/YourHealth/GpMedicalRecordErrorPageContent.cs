@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.YourHealth
             "h1", "Cannot show GP health record");
 
         private WebText PostTryAgainTitleText => WebText.WithTagAndText(_interactor,
-            "h1", "Sorry, your GP health record is unavailable");
+            "h1", "Cannot show GP health record");
 
         private WebText UnableToBookText => WebText.WithTagAndText(
             _interactor,

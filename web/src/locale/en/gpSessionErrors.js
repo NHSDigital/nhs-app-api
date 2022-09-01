@@ -33,8 +33,8 @@ export default {
     tryAgainHeader: 'Cannot show GP health record',
     youAreNotCurrentlyAble: 'You are not currently able to view your GP health record online.',
     tryLoadingHealthRecordAgain: 'This may be a temporary problem. You can try loading your GP health record again.',
-    healthRecordUnavailable: 'Sorry, your GP health record is unavailable',
-    ifYouNeedInformationNow: 'If you need this information now, contact your GP surgery.',
+    cannotShowGPHealthRecord: 'Cannot show GP health record',
+    problemConnectingToGP: 'There was a problem connecting to your GP surgery.',
     forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
   },
   organDonation: {

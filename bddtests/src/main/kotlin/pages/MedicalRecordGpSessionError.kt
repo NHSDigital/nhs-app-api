@@ -2,7 +2,7 @@ package pages
 
 open class MedicalRecordGpSessionError: GpSessionError() {
 
-    private val medicalRecordHeader = setupHeader("Sorry, your GP health record is unavailable");
+    private val medicalRecordHeader = setupHeader("Cannot show GP health record");
 
     fun assertMedicalRecordHeader() : MedicalRecordGpSessionError{
         medicalRecordHeader.assertIsVisible()
