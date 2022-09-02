@@ -142,6 +142,16 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
+        public ValidateAndLog IsListValidLength<T>(IEnumerable<T> value, string name, int length, ValidationOptions options = ValidationOptions.None)
+        {
+            if (value.Count() > length)
+            {
+                HandleError(name, $"The count of operations is more than expected value {length}", options);
+            }
+
+            return this;
+        }
+        
         public ValidateAndLog IsListValid<T>(IEnumerable<T> value, Func<T, bool> invalidItemsSelector, string name, ValidationOptions options = ValidationOptions.None)
         {
             if(value == null || value.Any(invalidItemsSelector))

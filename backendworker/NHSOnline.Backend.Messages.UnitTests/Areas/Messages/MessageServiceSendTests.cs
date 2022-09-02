@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
@@ -43,6 +44,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 new Mock<IMapper<UserMessage, MessagesResponse>>(MockBehavior.Strict).Object,
                 new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
                 _mockAddMessageToUserMessageMapper.Object,
+                new Mock<IMapper<Operation<Message>, MessagePatchType>>().Object,
                 _mockMessagesValidationService.Object);
         }
 

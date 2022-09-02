@@ -22,6 +22,8 @@ import utils.toSingleElementList
 import worker.JsonPatch
 import worker.JsonPatchOperation
 import worker.models.messages.MessageRequest
+import worker.models.messages.Reply
+import worker.models.messages.ReplyOption
 import worker.models.messages.SenderContext
 import worker.models.messages.SenderFacade
 import worker.models.messages.SingleMessageFacade
@@ -33,6 +35,8 @@ private const val SEVEN_DAYS: Long = 7
 private const val TWO_MONTHS: Long = 2
 private const val ONE_MONTH: Long = 1
 private const val INVALID_MESSAGE_BODY: Int = 1234
+private const val MESSAGE_RESPONSE = "SMOKE"
+private const val MESSAGE_SECOND_RESPONSE = "NEVER";
 
 class MessagesFactory {
 
@@ -55,6 +59,19 @@ class MessagesFactory {
 
     private val nhsAppSenderId = "Y0E3J"
     private val nhsAppSenderCanonicalName = "NHS APP"
+
+    private val messageReplyWithQuestionnaireAndResponse = Reply(options = arrayListOf(
+        ReplyOption(code = MESSAGE_RESPONSE, display = "SMOKE"),
+        ReplyOption(code = MESSAGE_SECOND_RESPONSE, display = "NEVER"),
+        ReplyOption(code = "No", display = "NO")
+        ),
+        response = MESSAGE_RESPONSE)
+
+    private val messageReplyWithQuestionnaire = Reply(options = arrayListOf(
+            ReplyOption(code = MESSAGE_RESPONSE, display = "SMOKE"),
+            ReplyOption(code = MESSAGE_SECOND_RESPONSE, display = "NEVER"),
+            ReplyOption(code = "No", display = "NO")
+    ))
 
     fun setUpUser(patient: Patient? = null) {
         val patientToUse = patient
@@ -79,15 +96,15 @@ class MessagesFactory {
 
         val senderOneMessageOne = SingleMessageFacade(
             "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
+            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, null
         )
         val senderOneMessageTwo = SingleMessageFacade(
             "1.2", senderOneName, messageTwo, false, MongoDBConnection.mongoDateFormatter.format(oneMonthAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
+            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, null
         )
         val senderOneMessageThree = SingleMessageFacade(
             "1.3", senderOneName, messageThree, true, MongoDBConnection.mongoDateFormatter.format(oneWeekAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
+            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, null
         )
         val senderOneMessages = createSenderMessages(
             arrayListOf(senderOneMessageOne, senderOneMessageTwo, senderOneMessageThree)
@@ -95,7 +112,7 @@ class MessagesFactory {
 
         val senderTwoMessageOne = SingleMessageFacade(
             "2.1", senderTwoName, messageOne, false, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
-            MessageVersion.PLAIN_TEXT.value, null
+            MessageVersion.PLAIN_TEXT.value, null, null
         )
         val senderTwoMessages = createSenderMessages(arrayListOf(senderTwoMessageOne))
 
@@ -172,7 +189,8 @@ class MessagesFactory {
                 UUID.randomUUID().toString(), senderOneName, "message ${index + 1} ${prefixInternalLink(link)}", true,
                 MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo.minusDays(index.toLong())),
                 messageVersion.value,
-                senderOneSenderContext
+                senderOneSenderContext,
+                null
             )
         }
 
@@ -210,16 +228,54 @@ class MessagesFactory {
         val nhsLoginId = patient.subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         val message = SingleMessageFacade(
-            "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
-            MessageVersion.PLAIN_TEXT.value, senderOneSenderContext
+                "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(twoMonthsAgo),
+                MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, null
         )
 
         val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
         MongoDBConnection.MessagesCollection.clearAndInsertJson(arrayListOf(messageToInsert))
 
         val insertedMessage = MongoDBConnection.MessagesCollection
-            .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
-            .first()
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
+        MessagesSerenityHelpers.MESSAGE_ID.set(insertedMessage._id?.toHexString())
+        MessagesSerenityHelpers.EXPECTED_MESSAGE.set(insertedMessage)
+    }
+
+    fun setUpSingleMessageWithQuestionnaire() {
+        val patient = SerenityHelpers.getPatient()
+        val nhsLoginId = patient.subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        val message = SingleMessageFacade(
+                "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(timeNow),
+                MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, messageReplyWithQuestionnaire
+        )
+
+        val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
+        MongoDBConnection.MessagesCollection.clearAndInsertJson(arrayListOf(messageToInsert))
+
+        val insertedMessage = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
+        MessagesSerenityHelpers.MESSAGE_ID.set(insertedMessage._id?.toHexString())
+        MessagesSerenityHelpers.EXPECTED_MESSAGE.set(insertedMessage)
+    }
+
+    fun setUpSingleMessageWithQuestionnaireAndResponse() {
+        val patient = SerenityHelpers.getPatient()
+        val nhsLoginId = patient.subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        val message = SingleMessageFacade(
+                "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(timeNow),
+                MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, messageReplyWithQuestionnaireAndResponse
+        )
+
+        val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
+        MongoDBConnection.MessagesCollection.clearAndInsertJson(arrayListOf(messageToInsert))
+
+        val insertedMessage = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
         MessagesSerenityHelpers.MESSAGE_ID.set(insertedMessage._id?.toHexString())
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(insertedMessage)
     }
@@ -266,6 +322,11 @@ class MessagesFactory {
 
     companion object {
         val patchToUpdateAsRead = JsonPatch(JsonPatchOperation.ADD, "/read", true)
+        val patchToUpdateAsReplied = JsonPatch(JsonPatchOperation.ADD, "/reply/response", MESSAGE_RESPONSE)
+        val patchToUpdateAsRepliedChangedResponse = JsonPatch(JsonPatchOperation.ADD, "/reply/response",
+                                                              MESSAGE_SECOND_RESPONSE)
+        val patchToUpdateAsRepliedInvalidResponse = JsonPatch(JsonPatchOperation.ADD, "/reply/response",
+                "TEST_RESPONSE")
     }
 
     private fun prefixInternalLink(link: String): String {

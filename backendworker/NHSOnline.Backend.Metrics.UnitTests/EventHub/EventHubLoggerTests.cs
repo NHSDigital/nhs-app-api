@@ -331,6 +331,79 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedPidData, "NhsNumber=NHS+Number");
         }
 
+        [TestMethod]
+        public async Task MessageReply_LogsMessageReplyEventLogDataToPidAndNonPidEventHubs()
+        {
+            // Arrange
+            var messageReplyEventLogData = new MessageReplyEventLogData("Message ID", "Message Response",
+                new SenderContextEventLogData(
+                    "Supplier ID",
+                    "Sender ID",
+                    "Communication ID",
+                    "Transmission ID",
+                    new DateTime(2021, 04, 22, 01, 05, 25),
+                    "Request Reference",
+                    "Campaign ID",
+                    "Ods Code",
+                    "NHS Number",
+                    "NHS Login ID"
+                ));
+            
+            var loggedPidData = string.Empty;
+            var loggedNonPidData = string.Empty;
+
+            _mockNonPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedNonPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockNonPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(false);
+
+            _mockPidEventHubClient.Setup(x => x.WriteToEventHub(It.IsAny<string>()))
+                .Callback<string>(x => loggedPidData = x)
+                .Returns(Task.CompletedTask);
+            _mockPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(true);
+
+            // Act
+            await _systemUnderTest.MessageReply(messageReplyEventLogData);
+
+            // Assert
+            VerifyMocks();
+
+            loggedNonPidData.Split(' ').Should().HaveCount(14);
+            AssertTimeStamp(loggedNonPidData);
+            AssertContains(loggedNonPidData, "Action=MessageReply");
+            AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedNonPidData, "MessageId=Message+ID");
+            AssertContains(loggedNonPidData, "Response=Message+Response");
+            AssertContains(loggedNonPidData, "SupplierId=Supplier+ID");
+            AssertContains(loggedNonPidData, "SenderId=Sender+ID");
+            AssertContains(loggedNonPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedNonPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedNonPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedNonPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedNonPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedNonPidData, "OdsCode=Ods+Code");
+            AssertContains(loggedNonPidData, "NhsLoginId=NHS+Login+ID");
+            AssertDoesNotContain(loggedNonPidData, "NhsNumber=NHS+Number");
+
+            loggedPidData.Split(' ').Should().HaveCount(15);
+            AssertTimeStamp(loggedPidData);
+            AssertContains(loggedPidData, "Action=MessageReply");
+            AssertContains(loggedPidData, "EnvironmentName=TestEnv");
+            AssertContains(loggedPidData, "MessageId=Message+ID");
+            AssertContains(loggedPidData, "Response=Message+Response");
+            AssertContains(loggedPidData, "SupplierId=Supplier+ID");
+            AssertContains(loggedPidData, "SenderId=Sender+ID");
+            AssertContains(loggedPidData, "CommunicationId=Communication+ID");
+            AssertContains(loggedPidData, "TransmissionId=Transmission+ID");
+            AssertContains(loggedPidData, "CommunicationCreatedDateTime=2021-04-22T01%3a05%3a25%3a000");
+            AssertContains(loggedPidData, "RequestReference=Request+Reference");
+            AssertContains(loggedPidData, "CampaignId=Campaign+ID");
+            AssertContains(loggedPidData, "OdsCode=Ods+Code");
+            AssertContains(loggedPidData, "NhsLoginId=NHS+Login+ID");
+            AssertContains(loggedPidData, "NhsNumber=NHS+Number");
+        }
+        
+
         private static void AssertContains(string logData, string expected)
         {
             logData.Split(' ').Should().Contain(expected);

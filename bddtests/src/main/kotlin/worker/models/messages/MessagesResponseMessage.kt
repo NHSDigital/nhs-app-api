@@ -7,5 +7,6 @@ data class MessagesResponseMessage(
         val body: String,
         val read: String?,
         val sentTime: String,
-        val senderContext: SenderContext?
+        val senderContext: SenderContext?,
+        val reply: Reply?
 )

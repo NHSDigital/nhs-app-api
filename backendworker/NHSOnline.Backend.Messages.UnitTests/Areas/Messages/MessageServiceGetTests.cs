@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -73,6 +74,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 _mockUserMessageToResponseMapper.Object,
                 _mockSummaryMessagesToResponseMapper.Object,
                 new Mock<IMapper<AddMessageRequest, string, UserMessage>>().Object,
+                new Mock<IMapper<Operation<Message>, MessagePatchType>>().Object,
                 _mockValidationService.Object);
         }
 

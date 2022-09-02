@@ -47,10 +47,12 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         public class Updated : MessagePatchResult
         {
             public UserMessage UserMessage { get; }
+            public MessagePatchType MessagePatchType { get; }
 
-            public Updated(UserMessage userMessage)
+            public Updated(UserMessage userMessage, MessagePatchType patchType)
             {
                 UserMessage = userMessage;
+                MessagePatchType = patchType;
             }
 
             public override T Accept<T>(IMessagePatchResultVisitor<T> visitor)

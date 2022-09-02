@@ -220,7 +220,7 @@ class MessagesGetStepDefinitionsBackend {
                     message.read?.toLowerCase() == "true",
                     message.sentTime,
                     message.version,
-                    message.senderContext)
+                    message.senderContext, message.reply)
         }
     }
 }

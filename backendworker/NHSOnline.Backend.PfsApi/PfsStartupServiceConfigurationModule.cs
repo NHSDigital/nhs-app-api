@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -64,6 +65,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IMapper<UserMessage, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<AddMessageRequest, string, UserMessage>, UserMessageMapper>();
+            services.AddSingleton<IMapper<Operation<Message>,MessagePatchType>, MessagePatchTypeMapper>();
             services.AddScoped<IMessageLinkClickedService, MessageLinkClickedService>();
             services.AddSingleton<IMessageLinkClickedValidationService, MessageLinkClickedValidationService>();
             services.AddSingleton<IMapper<SenderContext, SenderContextEventLogData>, MessageSenderContextEventLogDataMapper>();

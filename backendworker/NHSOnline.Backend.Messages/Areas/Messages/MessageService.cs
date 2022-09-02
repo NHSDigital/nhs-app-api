@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
         private readonly IMapper<UserMessage, MessagesResponse> _userMessageToResponseMapper;
         private readonly IMapper<List<SummaryMessage>, MessagesResponse> _summaryMessagesToResponseMapper;
         private readonly IMapper<AddMessageRequest, string, UserMessage> _addMessageToUserMessageMapper;
+        private readonly IMapper<Operation<Message>, MessagePatchType> _messagePatchTypeMapper;
         private readonly IMessagesValidationService _validator;
 
         public MessageService
@@ -33,6 +35,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             IMapper<UserMessage, MessagesResponse> userMessageToResponseMapper,
             IMapper<List<SummaryMessage>, MessagesResponse> summaryMessagesToResponseMapper,
             IMapper<AddMessageRequest, string, UserMessage> addMessageToUserMessageMapper,
+            IMapper<Operation<Message>, MessagePatchType> messagePatchTypeMapper,
             IMessagesValidationService validator)
         {
             _messagesConfiguration = messagesConfiguration;
@@ -42,6 +45,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             _userMessageToResponseMapper = userMessageToResponseMapper;
             _summaryMessagesToResponseMapper = summaryMessagesToResponseMapper;
             _addMessageToUserMessageMapper = addMessageToUserMessageMapper;
+            _messagePatchTypeMapper = messagePatchTypeMapper;
             _validator = validator;
         }
 
@@ -195,8 +199,18 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                     return new MessagePatchResult.BadRequest();
                 }
 
+                var messagePatchType = _messagePatchTypeMapper.Map(messagePatchDocument.Operations.FirstOrDefault());
+                if (messagePatchType == MessagePatchType.Unknown)
+                {
+                    var operations = messagePatchDocument.Operations.Select(operation =>
+                        string.Join("-", new[] { "operation=" + operation.op, "path=" + operation.path }));
+                    _logger.LogError("Unsupported operations in Message Update: {Operations}",
+                        string.Join(",", operations));
+                    return new MessagePatchResult.BadRequest();
+                }
+
                 var filtersAndUpdates =
-                    new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
+                    new UpdateMessageMapperStep().Map(messagePatchDocument, messagePatchType);
                 if (filtersAndUpdates.Failed(out var repositoryUpdatesFailure))
                 {
                     return repositoryUpdatesFailure;
@@ -219,7 +233,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
                 var record = foundResult.Records.First();
 
-                return new MessagePatchResult.Updated(record);
+                return new MessagePatchResult.Updated(record, messagePatchType);
             }
             catch (Exception e)
             {
@@ -240,7 +254,8 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             {
                 var result = await _messageRepository.FindAllForUser(accessToken.Subject);
 
-                return result.Accept(new RepositoryFindUserSendersResultVisitor(_messagesConfiguration.SenderIdEnabled));
+                return result.Accept(
+                    new RepositoryFindUserSendersResultVisitor(_messagesConfiguration.SenderIdEnabled));
             }
             catch (Exception e)
             {

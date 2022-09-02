@@ -55,5 +55,60 @@ class MessagesPatchStepDefinitionsBackend {
             .first()
         Assert.assertEquals(expectedMessage.ReadTime, message.ReadTime)
     }
+
+    @Given("^I am an api user with a questionnaire message$")
+    fun apiUserWithQuestionnaireMessage() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaire()
+    }
+
+    @When("^I patch the message to indicate that it has been replied$")
+    fun theMessageHasBeenReplied() {
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
+        MessagesApi.patch(authToken, messageId, MessagesFactory.patchToUpdateAsReplied)
+    }
+
+    @When("^I patch the message to indicate that it has been replied with different response$")
+    fun theMessageHasBeenRepliedWithDifferentResponse() {
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
+        MessagesApi.patch(authToken, messageId, MessagesFactory.patchToUpdateAsRepliedChangedResponse)
+    }
+
+    @Then("^the message has been marked with response in the repository$")
+    fun theMessageWithResponseIsAvailableInTheDatabase() {
+
+        val message = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
+        Assert.assertNotNull(message.Reply?.ResponseDateTime)
+        Assert.assertNotNull(message.Reply?.Response)
+    }
+
+    @Given("^I am an api user with a questionnaire message which is already replied$")
+    fun iAmAnApiUserWithARepliedMessage() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaireAndResponse()
+    }
+
+    @Then("^the message has not been updated with request's reply in the repository$")
+    fun theMessagesHasNotBeenUpdatedWithReplyInTheDatabase() {
+        val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MongoRepositoryMessage>()
+        val message = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
+        Assert.assertEquals(expectedMessage.Reply?.ResponseDateTime,message.Reply?.ResponseDateTime)
+        Assert.assertEquals(expectedMessage.Reply?.Response,message.Reply?.Response)
+    }
+
+    @When("^I patch the message to indicate that it has been replied with invalid response$")
+    fun theMessageHasBeenRepliedWithInvalidResponse() {
+        val authToken = SerenityHelpers.getPatient().accessToken
+        val messageId = MessagesSerenityHelpers.MESSAGE_ID.getOrFail<String>()
+        MessagesApi.patch(authToken, messageId, MessagesFactory.patchToUpdateAsRepliedInvalidResponse)
+    }
 }
 

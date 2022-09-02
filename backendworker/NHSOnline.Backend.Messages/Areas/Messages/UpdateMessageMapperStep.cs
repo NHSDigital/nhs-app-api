@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Messages.Areas.Messages.Models;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
@@ -13,37 +12,34 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     internal sealed class UpdateMessageMapperStep
     {
-        private readonly ILogger _logger;
-
-        public UpdateMessageMapperStep(ILogger<MessageService> logger)
+        internal ProcessResult<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>),
+                MessagePatchResult>
+            Map(JsonPatchDocument<Message> messagePatchDocument, MessagePatchType patchType)
         {
-            _logger = logger;
-        }
-
-        internal ProcessResult<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>), MessagePatchResult>
-            Map(JsonPatchDocument<Message> messagePatchDocument)
-        {
-            var invalidOperations = new List<string>();
             var updates = new UpdateRecordBuilder<UserMessage>();
             var filters = new List<Expression<Func<UserMessage, bool>>>();
-            foreach (var operation in messagePatchDocument.Operations)
+            var operation = messagePatchDocument.Operations.FirstOrDefault();
+            if (operation == null)
             {
-                switch (operation)
-                {
-                    case { OperationType: OperationType.Add, path: "/read" }:
-                        updates.Set(x => x.ReadTime, operation.value.Equals(true) ? DateTime.UtcNow : (DateTime?)null);
-                        filters.Add(userMessage => userMessage.ReadTime == null);
-                        break;
-                    default:
-                        invalidOperations.Add($"{operation.path} : {operation.OperationType}");
-                        break;
-                }
+                return (filters, updates);
             }
 
-            if (invalidOperations.Any())
+            switch (patchType)
             {
-                _logger.LogError($"Invalid operations in Message Update: {string.Join(", ", invalidOperations)}");
-                return new MessagePatchResult.BadRequest();
+                case MessagePatchType.Read:
+                    updates.Set(x => x.ReadTime, operation.value.Equals(true) ? DateTime.UtcNow : (DateTime?) null);
+                    filters.Add(userMessage => userMessage.ReadTime == null);
+                    break;
+                case MessagePatchType.Reply:
+                    var userResponse = Convert.ToString(operation.value, CultureInfo.InvariantCulture);
+                    updates.Set(x => x.Reply.Response, !string.IsNullOrEmpty(userResponse) ? userResponse : null);
+                    updates.Set(x => x.Reply.ResponseDateTime,
+                        !string.IsNullOrEmpty(userResponse) ? DateTime.UtcNow : (DateTime?) null);
+                    filters.Add(userMessage => userMessage.Reply != null &&
+                                               userMessage.Reply.Response == null &&
+                                               userMessage.Reply.ResponseDateTime == null &&
+                                               userMessage.Reply.Options.Any(s => s.Code == userResponse));
+                    break;
             }
 
             return (filters, updates);

@@ -5,9 +5,10 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Messages.Areas.Messages
 {
-    public class MessagesValidationService: IMessagesValidationService
+    public class MessagesValidationService : IMessagesValidationService
     {
         private readonly ILogger<IMessagesValidationService> _logger;
+        private const int AllowedOperationsCount = 1;
 
         public MessagesValidationService(ILogger<IMessagesValidationService> logger)
         {
@@ -18,6 +19,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
         {
             return new ValidateAndLog(_logger)
                 .IsListPopulated(jsonPatch.Operations, nameof(jsonPatch.Operations))
+                .IsListValidLength(jsonPatch.Operations, nameof(jsonPatch.Operations), AllowedOperationsCount)
                 .IsListValid(jsonPatch.Operations, x => string.IsNullOrWhiteSpace(x.op),
                     nameof(jsonPatch.Operations))
                 .IsNotNullOrWhitespace(messageId, nameof(messageId))

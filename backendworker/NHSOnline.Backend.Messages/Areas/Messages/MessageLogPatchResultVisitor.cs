@@ -30,34 +30,44 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             _logger = logger;
         }
 
-        public Task Visit(MessagePatchResult.BadRequest result)
-            => Task.CompletedTask;
-
-        public Task Visit(MessagePatchResult.NoChange result)
-            => Task.CompletedTask;
+        public Task Visit(MessagePatchResult.BadRequest result) => Task.CompletedTask;
+        
+        public Task Visit(MessagePatchResult.NoChange result) => Task.CompletedTask;
 
         public async Task Visit(MessagePatchResult.Updated result)
         {
+            var tasks = new List<Task>();
             try
             {
-                var tasks = new List<Task>();
-                if (result.UserMessage.SenderContext != null)
+                switch (result.MessagePatchType)
                 {
-                    var messageSenderContextEventLogData =
-                        _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
+                    case MessagePatchType.Read:
+                        if (result.UserMessage.SenderContext != null)
+                        {
+                            var messageSenderContextEventLogData =
+                                _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
 
-                    tasks.Add(_eventHubLogger.MessageRead(new MessageReadEventLogData(
-                        result.UserMessage.Id.ToString(),messageSenderContextEventLogData)));
+                            tasks.Add(_eventHubLogger.MessageRead(new MessageReadEventLogData(
+                                result.UserMessage.Id.ToString(), messageSenderContextEventLogData)));
+                        }
+
+                        tasks.Add(_metricLogger.MessageRead(
+                            new MessageReadData(
+                                result.UserMessage.Id.ToString(),
+                                result.UserMessage.SenderContext?.CommunicationId,
+                                result.UserMessage.SenderContext?.TransmissionId,
+                                result.UserMessage.SenderContext?.CampaignId,
+                                result.UserMessage.SenderContext?.SupplierId)
+                        ));
+                        break;
+                    case MessagePatchType.Reply:
+                        var messageReplySenderContextEventLogData =
+                            _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
+                        tasks.Add(_eventHubLogger.MessageReply(new MessageReplyEventLogData(
+                            result.UserMessage.Id.ToString(), result.UserMessage.Reply?.Response,
+                            messageReplySenderContextEventLogData)));
+                        break;
                 }
-
-                tasks.Add(_metricLogger.MessageRead(
-                    new MessageReadData(
-                        result.UserMessage.Id.ToString(),
-                        result.UserMessage.SenderContext?.CommunicationId,
-                        result.UserMessage.SenderContext?.TransmissionId,
-                        result.UserMessage.SenderContext?.CampaignId,
-                        result.UserMessage.SenderContext?.SupplierId)
-                ));
 
                 await Task.WhenAll(tasks);
             }
@@ -66,14 +76,12 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                 _logger.LogError(e, "Error when logging patch result");
             }
         }
-
-        public Task Visit(MessagePatchResult.NotFound result)
-            => Task.CompletedTask;
-
-        public Task Visit(MessagePatchResult.BadGateway result)
-            => Task.CompletedTask;
-
-        public Task Visit(MessagePatchResult.InternalServerError result)
-            => Task.CompletedTask;
+        
+        public Task Visit(MessagePatchResult.NotFound result) => Task.CompletedTask;
+        
+        public Task Visit(MessagePatchResult.BadGateway result) => Task.CompletedTask;
+        
+        public Task Visit(MessagePatchResult.InternalServerError result) => Task.CompletedTask;
+        
     }
 }

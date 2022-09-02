@@ -176,9 +176,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         }
 
         [DataTestMethod]
-        [DataRow("something","something", null)]
-        [DataRow("something",null, null)]
-        [DataRow("something",null, "something")]
+        [DataRow("something", "something", null)]
+        [DataRow("something", null, null)]
+        [DataRow("something", null, "something")]
         [DataRow(null, "something", "something")]
         [DataRow(null, null, "something")]
         [DataRow(null, "something", null)]
@@ -217,7 +217,21 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             _systemUnderTest.IsMessageIdValid(messageId).Should().BeFalse();
         }
+        
+        [TestMethod]
+        public void IsPatchRequestValid_MoreThanOneOperation_ReturnsFalse()
+        {
+            //Arrange
+            _jsonPatchDoc.Operations.Add(_validPatchOperation);
+            _jsonPatchDoc.Operations.Add(_validPatchOperation);
 
+            // Act
+            var result = _systemUnderTest.IsPatchRequestValid(_jsonPatchDoc, _userMessageId);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+        
         private static AddMessageRequest BuildValidAddMessageRequest()
         {
             return new AddMessageRequest

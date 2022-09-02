@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Patch_MessageServiceReturnsUpdated_ReturnsNoContent()
+        public async Task Patch_MessageRead_MessageServiceReturnsUpdated_ReturnsNoContent()
         {
             // Arrange
             const string communicationId = "communicationId_2345";
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                         SupplierId = supplierId,
                         TransmissionId = transmissionId
                     }
-                }));
+                }, MessagePatchType.Read));
 
             MessageReadEventLogData messageReadEventLogData = null;
             _mockEventHubLogger.Setup(x => x.MessageRead(It.IsAny<MessageReadEventLogData>()))
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Patch_WithNoSenderContext_DoesNotSendEventLog()
+        public async Task Patch_MessageRead_WithNoSenderContext_DoesNotSendEventLog()
         {
             // Arrange
             _mockMessageService.Setup(x =>
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     Id = new ObjectId(MessageId),
                     ReadTime = new DateTime(2021, 04, 22, 01, 05, 25),
                     SenderContext = null
-                }));
+                }, MessagePatchType.Read));
 
             _mockMetricLogger.Setup(x => x.MessageRead(It.Is<MessageReadData>(mrd =>
                     mrd.CommunicationId == null &&
@@ -140,6 +140,44 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             result.Should().BeAssignableTo<NoContentResult>();
         }
 
+        [TestMethod]
+        public async Task Patch_MessageReply_MessageServiceReturnsUpdated_ReturnsNoContent()
+        {
+            // Arrange
+            const string response = "response";
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.Updated(new UserMessage
+                {
+                    Id = new ObjectId(MessageId),
+                    Reply = new UserMessageReply()
+                    {
+                        Response = response,
+                        ResponseDateTime = DateTime.Now
+                    },
+                    SenderContext = new SenderContext()
+                }, MessagePatchType.Reply));
+
+            MessageReplyEventLogData messageReplyEventLogData = null;
+            _mockEventHubLogger.Setup(x => x.MessageReply(It.IsAny<MessageReplyEventLogData>()))
+                .Callback<MessageReplyEventLogData>(x => messageReplyEventLogData = x)
+                .Returns(Task.CompletedTask);
+            
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), MessageId);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            _mockEventHubLogger.VerifyAll();
+
+            result.Should().BeAssignableTo<NoContentResult>();
+
+            messageReplyEventLogData.Should().NotBeNull();
+        }
+        
         [TestMethod]
         public async Task Patch_MessageServiceReturnsNoChange_ReturnsNoContent()
         {

@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Metrics.EventHub
         Task MessageCreated(MessageCreatedEventLogData data);
         Task MessageLinkClicked(MessageLinkClickedEventLogData data);
         Task MessageRead(MessageReadEventLogData data);
+        Task MessageReply(MessageReplyEventLogData data);
         Task NotificationEnqueued(NotificationEnqueuedEventLogData data);
     }
 }

@@ -193,6 +193,28 @@ Feature: Messages Backend
     When I get unread count of my messages from the api without an access token
     Then I receive an "Unauthorized" error
 
+  Scenario: An api user can respond to a message questionnaire
+    Given I am an api user with a questionnaire message
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been replied
+    Then I receive a "No Content" success code
+    And the message has been marked with response in the repository
+
+  Scenario: An api user cannot respond to a message questionnaire which is already replied
+    Given I am an api user with a questionnaire message which is already replied
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been replied with different response
+    Then I receive a "Not Found" success code
+    And the message has not been updated with request's reply in the repository
+
+  Scenario: An api user cannot respond to a message questionnaire with an invalid reply
+    Given I am an api user with a questionnaire message
+    And I have logged in and have a valid session cookie
+    When I patch the message to indicate that it has been replied with invalid response
+    Then I receive a "Not Found" success code
+    And the message has not been updated with request's reply in the repository
+
+
   Scenario: An api user can post messages with reply options specified
     Given I am an api user wishing to post a message with reply options
     When I post a message to the api
