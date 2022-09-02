@@ -7,9 +7,6 @@ namespace NHSOnline.HttpMocks.Spine.Models
     public class Addr
     {
         [XmlElement(ElementName="streetAddressLine", Namespace="urn:hl7-org:v3", IsNullable = true)]
-        [SuppressMessage("Usage", "CA2227:Collection properties should be read only",
-            Justification = "Required for mocks")]
-
         [SuppressMessage("Usage", "CA1002:Collection properties should be read only",
             Justification = "Required for mocks")]
         public List<string?>? StreetAddressLine { get; set; }

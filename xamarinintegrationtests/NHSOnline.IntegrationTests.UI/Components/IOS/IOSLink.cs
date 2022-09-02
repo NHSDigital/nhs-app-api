@@ -23,7 +23,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => new IOSLink(interactor, new TextLocatorStrategy(interactor, text));
 
         public static IOSLink WhichMatches(IIOSInteractor interactor, string pattern)
-            => new IOSLink(interactor, new MatchesLocatorStrategy(interactor, pattern));
+            => new IOSLink(interactor, new MatchesLocatorStrategy(interactor, pattern, true));
+
+        public static IOSLink WhichContains(IIOSInteractor interactor, string pattern)
+            => new IOSLink(interactor, new MatchesLocatorStrategy(interactor, pattern, false));
 
         public IOSLink ScrollIntoView()
             => new IOSLink(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
@@ -33,44 +36,44 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public void Touch() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Tap());
 
-        private sealed class TextLocatorStrategy : IIOSLocatorStrategy
+        private abstract class BaseLinkLocatorStrategy : IIOSLocatorStrategy
         {
-            private readonly IIOSInteractor _interactor;
-            private readonly string _text;
-
-            public TextLocatorStrategy(IIOSInteractor interactor, string text)
-            {
-                _interactor = interactor;
-                _text = text;
-            }
-
-            public string Description => $"with text '{_text}'";
-
-            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label == {_text.QuotePredicateLiteral()}");
-
-            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
-            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
-        }
-
-        private sealed class MatchesLocatorStrategy : IIOSLocatorStrategy
-        {
-            private readonly IIOSInteractor _interactor;
             private readonly string _pattern;
+            protected IIOSInteractor Interactor { get; set; }
 
-            public MatchesLocatorStrategy(IIOSInteractor interactor, string pattern)
+            protected BaseLinkLocatorStrategy(IIOSInteractor interactor, string pattern, By findBy)
             {
-                _interactor = interactor;
+                Interactor = interactor;
                 _pattern = pattern;
+                FindBy = findBy;
             }
 
             public string Description => $"which matches '{_pattern}'";
 
-            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label MATCHES {_pattern.QuotePredicateLiteral()}");
+            public virtual By FindBy { get; }
 
-            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
-            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
+            public void ActOnElementContext(Action<ElementContext<IIOSBrowserStackDriver, IOSElement>> action) => Interactor.ActOnElementContext(FindBy, action);
+            public void AssertCannotBeFound(string because) => Interactor.AssertElementCannotBeFound(FindBy, because);
         }
 
+        private sealed class TextLocatorStrategy : BaseLinkLocatorStrategy
+        {
+            public TextLocatorStrategy(IIOSInteractor interactor, string text) :
+                base(interactor,
+                    text,
+                    MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label == {text.QuotePredicateLiteral()}"))
+            {
+            }
+        }
 
+        private sealed class MatchesLocatorStrategy : BaseLinkLocatorStrategy
+        {
+            public MatchesLocatorStrategy(IIOSInteractor interactor, string pattern, bool exactMatch) :
+                base(interactor,
+                    pattern,
+                    MobileBy.IosNSPredicate($"type == 'XCUIElementTypeLink' AND label {(exactMatch ? "MATCHES" : "CONTAINS")} {pattern.QuotePredicateLiteral()}"))
+            {
+            }
+        }
     }
 }

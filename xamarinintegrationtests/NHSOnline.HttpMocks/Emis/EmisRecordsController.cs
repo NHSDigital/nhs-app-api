@@ -13,7 +13,6 @@ namespace NHSOnline.HttpMocks.Emis
         {
             _patients = patients;
         }
-
         [HttpGet("record")]
         public IActionResult RecordsGet([FromQuery] string? userPatientLinkToken)
         {

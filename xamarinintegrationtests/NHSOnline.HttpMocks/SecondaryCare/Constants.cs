@@ -13,8 +13,6 @@ namespace NHSOnline.HttpMocks.SecondaryCare
         private const string KnownServiceBaseUrlPkb = "https://pkb.securestubs.local.bitraft.io";
         private const string KnownServiceBaseUrlZesty = "http://zesty.stubs.local.bitraft.io:8080";
 
-        public const string FhirDateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'sszzz";
-
         public static Dictionary<ServiceSpecialty, string> ServiceSpecialtyMappings { get; } =
             new()
             {

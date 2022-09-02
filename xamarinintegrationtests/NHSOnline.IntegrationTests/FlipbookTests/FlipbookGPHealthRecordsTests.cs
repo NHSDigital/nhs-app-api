@@ -1,6 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.Emis;
+using NHSOnline.HttpMocks.GpMedicalRecord;
+using NHSOnline.HttpMocks.Tpp.Models;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
@@ -65,6 +67,47 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .Continue();
 
             IOSGpMedicalRecordPage
+                .AssertOnPage(driver, true, true);
+        }
+
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "View your GP Health Records - iOS",
+            FlipbookTestName = "View your GP health record - cannot view large file")]
+        public void APatientWithProofLevelNineCannotViewLargeFileFromHealthRecordIOSTpp(IIOSDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithBehaviour(new TppRecordTooLargeBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation
+                .NavigateToYourHealth();
+
+            IOSYourHealthPage
+                .AssertOnPage(driver)
+                .PageContent
+                .NavigateToGPHealthRecord();
+
+            IOSGpMedicalRecordPage
+                .AssertOnPage(driver)
+                .PageContent
+                .Continue();
+
+            IOSGpMedicalRecordListPage
+                .AssertOnPage(driver, true, CareRecordLevel.Detailed)
+                .DocumentsClick();
+
+            IOSGpMedicalRecordDocumentsPage
+                .AssertOnPage(driver, true)
+                .DocumentDetailLink.Touch();
+
+            IOSGpMedicalRecordDocumentsPage
                 .AssertOnPage(driver, true, true);
         }
 

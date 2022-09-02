@@ -1,9 +1,6 @@
-using System;
-
 namespace NHSOnline.HttpMocks.Tpp.Models
 {
-    [Serializable]
-    public sealed class User
+    public class PatientSelectedReply
     {
         public Person? Person { get; set; }
     }

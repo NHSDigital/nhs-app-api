@@ -27,25 +27,38 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => new (interactor, text, searchPrefix);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("A link with text {0} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("A link with text {0} should be displayed", _text), false);
+
+        public void AssertVisibleContains()
+            => ActOnElement(e => e.Displayed.Should().BeTrue("A link with text {0} should be displayed", _text), true);
 
         public void AssertNotVisible() => _interactor.IsPresent(FindBy).Should().BeFalse("A link with text {0} should not be displayed", _text);
 
         public void Click()
             => ActOnElement(e => e.Click());
 
-        private void ActOnElement(Action<IWebElement> action)
-            => _interactor.ActOnElement(FindBy, action);
-
-        public WebLink ScrollTo()
+        private void ActOnElement(Action<IWebElement> action, bool findByContains = false)
         {
+            var by = findByContains ? FindByContains : FindBy;
+
+            _interactor.ActOnElement(by, action);
+        }
+
+        public WebLink ScrollTo(bool findByContains = false)
+        {
+            var by = findByContains ? FindByContains : FindBy;
+
             _interactor.ActOnElementContext(
-                FindBy, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
+                by, c => new Actions(c.Driver).MoveToElement(c.Element).Perform());
+
             return this;
         }
 
         private By FindBy
             => By.XPath($"{_searchPrefix}//a[normalize-space(string())={_text.QuoteXPathLiteral()}]");
+
+        private By FindByContains
+            => By.XPath($"{_searchPrefix}//a[.//*[contains(text(),{_text.QuoteXPathLiteral()})]]");
 
         string IFocusable.ElementDescription
             => new FocusableDescriptionBuilder {Tag = "a", Text = _text}.Description;

@@ -9,8 +9,6 @@ namespace NHSOnline.HttpMocks.Spine.Models
         [XmlElement(ElementName="prefix", Namespace="urn:hl7-org:v3", IsNullable = true)]
         public string? Prefix { get; set; }
 
-        [SuppressMessage("Usage", "CA2227:Collection properties should be read only",
-            Justification = "Required for mocks")]
         [SuppressMessage("Usage", "CA1002:Collection properties should be read only",
             Justification = "Required for mocks")]
         [XmlElement(ElementName="given", Namespace="urn:hl7-org:v3", IsNullable = true)]

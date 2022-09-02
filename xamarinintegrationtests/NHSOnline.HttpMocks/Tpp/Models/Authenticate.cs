@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Tpp.Models
 {
-    public class Authenticate
+    public class Authenticate : AbstractTppRequestModel
     {
         [XmlAttribute("accountId")]
         public string? AccountId { get; set; }

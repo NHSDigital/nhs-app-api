@@ -1,7 +1,9 @@
+using System;
 using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Tpp.Models
 {
+    [Serializable]
     public sealed class NationalId
     {
         [XmlAttribute("type")]

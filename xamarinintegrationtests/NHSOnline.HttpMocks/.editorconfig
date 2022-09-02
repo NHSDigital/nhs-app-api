@@ -1,0 +1,4 @@
+[*.cs]
+
+# CA2227:Collection properties should be read only, Justification = these classes are DTOs, not needed
+dotnet_diagnostic.CA2227.severity = suggestion

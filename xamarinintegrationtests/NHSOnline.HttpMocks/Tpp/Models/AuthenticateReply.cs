@@ -1,10 +1,11 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Tpp.Models
 {
-    internal class AuthenticateReply
+    [Serializable]
+    public class AuthenticateReply
     {
         [XmlAttribute("patientId")]
         public string? PatientId { get; set; }
@@ -21,7 +22,7 @@ namespace NHSOnline.HttpMocks.Tpp.Models
         public string? Suid { get; set; }
 
         [XmlElement("Person")]
-        public List<Person> People { get; } = new List<Person>();
+        public Collection<Person> People { get; } = new Collection<Person>();
 
         public Registration? Registration { get; set; }
     }

@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.HttpMocks.Nhs.Models
 {
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only",
-        Justification = "Required for mocks")]
     public class NhsAzureSearchOrganisationItem
     {
         public string? OrganisationName{ get; set; }

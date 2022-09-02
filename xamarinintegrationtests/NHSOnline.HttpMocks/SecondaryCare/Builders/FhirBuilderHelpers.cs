@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Hl7.Fhir.ElementModel.Types;
 using Hl7.Fhir.Model;
+using NHSOnline.HttpMocks.GpMedicalRecord;
 using CarePlan = Hl7.Fhir.Model.CarePlan;
 using Code = Hl7.Fhir.Model.Code;
 using Date = Hl7.Fhir.Model.Date;
 using DateTime = System.DateTime;
-using Duration = Hl7.Fhir.Model.Duration;
 
 namespace NHSOnline.HttpMocks.SecondaryCare.Builders
 {
@@ -75,7 +74,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare.Builders
         {
             var period = new Period
             {
-                Start = DateTime.UtcNow.AddDays(startDaysOffset).ToString(Constants.FhirDateTimeFormat, CultureInfo.InvariantCulture),
+                Start = DateTime.UtcNow.AddDays(startDaysOffset).ToString(GpMedicalRecordConstants.FhirDateTimeFormat, CultureInfo.InvariantCulture),
             };
 
             return period;
