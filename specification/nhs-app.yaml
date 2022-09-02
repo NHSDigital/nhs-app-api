@@ -105,6 +105,9 @@ info:
     name: NHS App API Support
     url: "https://digital.nhs.uk/developer/help-and-support"
     email: app.onboarding@nhs.net
+x-spec-publication:
+  try-this-api:
+    disabled: true
 servers:
   - url: "https://dev.api.service.nhs.uk/nhs-app"
     description: Development environment.
