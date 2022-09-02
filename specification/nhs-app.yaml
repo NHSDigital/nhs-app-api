@@ -405,22 +405,22 @@ paths:
                   summary: API is receiving a high volume of requests
                   value:
                     $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
-  /communication/report/events/FHIR/R4/Task:
+  /communication/report/receipts/FHIR/R4/Task:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
       - $ref: "#/components/parameters/CorrelationId"
     get:
-      summary: Get a daily communication event report (New FHIR version)
-      operationId: get-event-report-fhir
+      summary: Get a daily receipt report
+      operationId: get-receipt-report
       description: |
         ## Overview
-        Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have sent to NHS App users.
+        Use this endpoint to get a daily report of receipts relating to in-app messages and push notifications that you have sent to NHS App users.
 
         > This endpoint is currently in development and is not yet available for use. This documentation is provided to give early visibility of forthcoming functionality.
       
-        This report will include events detailing the outcome of an attempt to send each communication. For in-app messages, an event will also be included in this report if the recipient reads the message.
+        This report will include receipts detailing the outcome of an attempt to send each communication. For in-app messages, a receipts will also be included in this report if the recipient reads the message.
 
-        The following five types of event may be included in this response:
+        The following five types of receipt may be included in this response:
 
         * `Rejected` – a request to send a communication was rejected. For example, this could happen if the NHS number of the intended recipient does not correspond to an NHS App user.
         * `Delivered` – an in-app message has been successfully added to a user’s inbox.
@@ -428,13 +428,13 @@ paths:
         * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
         * `Read` – a user has read an in-app message for the first time.
 
-        In addition to this daily report endpoint, we also plan to offer the ability for onboarded partners to receive these events in realtime by having us push individual Task resources to an endpoint that you make available to us for this purpose. We call this feature "real-time receipts". [Contact the NHS App team](mailto:app.onboarding@nhs.net) for additional information on how to subscribe to real-time receipts.
+        In addition to this daily report endpoint, we also plan to offer the ability for onboarded partners to receive these receipts in realtime by having us push individual Task resources to an endpoint that you make available to us for this purpose. We call this feature "real-time receipts". [Contact the NHS App team](mailto:app.onboarding@nhs.net) for additional information on how to subscribe to real-time receipts.
 
         ## Pagination
         To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header or `Link` array in the response body should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
       parameters:
         - name: day
-          description: The day for which to retrieve an event report.
+          description: The day for which to retrieve a receipt report.
           example: "2022-08-22"
           in: query
           required: true
@@ -462,9 +462,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: components/schemas/responses/communication/report/events-fhir.yaml
+                $ref: components/schemas/responses/communication/report/receipts.yaml
               example:
-                $ref: components/examples/responses/communication/report/200successEventsFhir.json
+                $ref: components/examples/responses/communication/report/200successReceipts.json
         "400":
           description: There is an error in your request.
           headers:
@@ -502,7 +502,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401ExpiredAccessToken.json
         "403":
-          description: You are not authorised to perform this operation. Some client applications may not be permitted to access the event report endpoint. To discuss granting your application access to this endpoint, [contact the NHS App team](mailto:app.onboarding@nhs.net).
+          description: You are not authorised to perform this operation. Some client applications may not be permitted to access the receipt report endpoint. To discuss granting your application access to this endpoint, [contact the NHS App team](mailto:app.onboarding@nhs.net).
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -545,7 +545,7 @@ paths:
         ## Overview
         Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have sent to NHS App users.
 
-        > This endpoint is scheduled for deprecation. We are working on an [updated version](https://digital.nhs.uk/developer/api-catalogue/nhs-app#api-Communication-get-event-report-fhir) that will return responses represented as FHIR Task resources, and will provide richer information regarding the outcome of push notification requests. If you have not already begun integrating with this endpoint, we encourage you to consider waiting until the new endpoint is available.
+        > This endpoint is scheduled for deprecation. We are working on an [updated version](https://digital.nhs.uk/developer/api-catalogue/nhs-app#api-Communication-get-receipt-report) that will return responses represented as FHIR Task resources, and will provide richer information regarding the outcome of push notification requests. If you have not already begun integrating with this endpoint, we encourage you to consider waiting until the new endpoint is available.
 
         This report will include events detailing the outcome of an attempt to send each communication. For in-app messages, an event will also be included in this report if the recipient reads the message.
 
