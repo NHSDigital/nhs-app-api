@@ -1,25 +1,17 @@
 <template>
   <p :class="[
-    'error-message',
-    $style['validation-text'],
+    'nhsuk-error-message',
     !$store.state.device.isNativeApp && $style.desktopWeb
   ]">
-    <error-marker-icon/>
     <span data-purpose="error">
       <slot/>
     </span>
   </p>
 </template>
 
-
 <script>
-import ErrorMarkerIcon from '@/components/icons/ErrorMarkerIcon';
-
 export default {
   name: 'ErrorMessage',
-  components: {
-    ErrorMarkerIcon,
-  },
 };
 </script>
 
