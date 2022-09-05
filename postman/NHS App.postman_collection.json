@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "aec4f810-b62d-4fcf-ab0b-a5bdaaa82a97",
+		"_postman_id": "7fdd18a3-125c-46cb-9d30-edae553e049d",
 		"name": "NHS App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "98471"
 	},
 	"item": [
 		{
@@ -386,6 +387,132 @@
 							"key": "page",
 							"value": "1",
 							"description": "Page of daily event report to retrieve."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Receipt Report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/nhs-app/communication/report/receipts/FHIR/R4/Task/?day=2021-08-03&page=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"nhs-app",
+						"communication",
+						"report",
+						"receipts",
+						"FHIR",
+						"R4",
+						"Task",
+						""
+					],
+					"query": [
+						{
+							"key": "day",
+							"value": "2021-08-03",
+							"description": "Day for which to retrieve daily receipt report."
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page of daily receipt report to retrieve."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Replies Report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/nhs-app/communication/report/replies/FHIR/R4/CommunicationRequest/?day=2021-08-03&page=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"nhs-app",
+						"communication",
+						"report",
+						"replies",
+						"FHIR",
+						"R4",
+						"CommunicationRequest",
+						""
+					],
+					"query": [
+						{
+							"key": "day",
+							"value": "2021-08-03",
+							"description": "Day for which to retrieve daily replies report."
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"description": "Page of daily replies report to retrieve."
 						}
 					]
 				}
