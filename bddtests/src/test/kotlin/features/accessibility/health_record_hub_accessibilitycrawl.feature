@@ -260,3 +260,14 @@ Feature: Health record hub page accessibility
     When I click the 'Continue' button
     And I see appropriate try again shutter screen for gp medical record when there is no GP session
     And the HealthRecord_GPSessionErrorTemporaryProblem page is saved to disk
+
+  Scenario: The 'GP health record GP session error - Other things you can do' page is captured
+    Given I am an EMIS patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
+    And I see appropriate try again shutter screen for gp medical record when there is no GP session
+    And I click the 'Try again' button
+    Then I see what I can do next with a medical record error message and reference code '3e'
+    And the HealthRecord_GPSessionErrorOtherthings page is saved to disk

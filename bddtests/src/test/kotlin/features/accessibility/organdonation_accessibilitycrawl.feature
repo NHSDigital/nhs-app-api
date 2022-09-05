@@ -113,3 +113,14 @@ Feature: Organ donation accessibility
     When I click the Find out more about organs and tissue link
     Then the Find Out More About Organs And Tissue Page is displayed
     And the OrganDonation_AboutOrgansAndTissue page is saved to disk
+
+  Scenario: The 'Organ donation GP session error - service unavailable' page is captured
+    And I am using the native app user agent
+    And Reference data is available for EMIS
+    And I am an EMIS patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    And I see appropriate try again error message for organ donation when there is no GP session
+    And I click the 'Try again' button on an Organ Donation page
+    Then I see what I can do next with an organ donation error message
+    And the OrganDonation_ServiceUnavailable page is saved to disk
