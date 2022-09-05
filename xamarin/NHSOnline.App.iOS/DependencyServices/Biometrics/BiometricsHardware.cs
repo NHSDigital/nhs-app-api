@@ -1,4 +1,3 @@
-using System;
 using Foundation;
 using LocalAuthentication;
 using Microsoft.Extensions.Logging;
