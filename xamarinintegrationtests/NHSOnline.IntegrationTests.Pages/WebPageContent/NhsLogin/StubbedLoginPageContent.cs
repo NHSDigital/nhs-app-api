@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
 
         private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS login");
 
         private WebInputText PatientIdWebInputText => WebInputText.WithLabel(_interactor, "Patient ID");
 

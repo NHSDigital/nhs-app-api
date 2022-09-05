@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = webInteractor;
         }
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Uplift");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS login - Uplift");
 
         private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
 

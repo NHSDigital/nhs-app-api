@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
 
         private WebLink BackLink => WebLink.WithText(_interactor, "Back");
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Internal Page");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS login - Internal Page");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
 

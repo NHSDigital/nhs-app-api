@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
 
         internal StubbedLoginEnterEmailPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Enter Email");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS login - Enter Email");
 
         internal void AssertOnPage() => TitleText.AssertVisible();
     }

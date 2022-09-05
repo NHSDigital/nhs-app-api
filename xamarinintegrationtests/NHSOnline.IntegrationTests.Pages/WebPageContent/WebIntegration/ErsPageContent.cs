@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
 
-        private WebLink NhsLoginLink => WebLink.WithText(_interactor, "NHS Login");
+        private WebLink NhsLoginLink => WebLink.WithText(_interactor, "NHS login");
 
         private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
 

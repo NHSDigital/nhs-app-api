@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "NetCompany Internal Page");
 
-        private WebLink NhsLoginUpliftLink => WebLink.WithText(_interactor, "NHS Login Uplift");
+        private WebLink NhsLoginUpliftLink => WebLink.WithText(_interactor, "NHS login Uplift");
 
         internal void AssertOnPage() => Title.AssertVisible();
 

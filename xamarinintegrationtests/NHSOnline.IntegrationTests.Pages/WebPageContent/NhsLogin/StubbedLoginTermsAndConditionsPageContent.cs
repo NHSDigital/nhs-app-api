@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsLogin
 
         internal StubbedLoginTermsAndConditionsPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login - Terms and Conditions");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS login - Terms and Conditions");
 
         private WebInputSubmit DeclineButton => WebInputSubmit.WithText(_interactor, "Decline");
 

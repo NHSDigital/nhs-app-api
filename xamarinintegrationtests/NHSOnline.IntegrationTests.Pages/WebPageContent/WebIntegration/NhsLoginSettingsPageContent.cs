@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "NHS Login Settings");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "NHS login Settings");
 
         private WebLink BackLink => WebLink.WithText(_interactor, "Back");
 

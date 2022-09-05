@@ -62,7 +62,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNhsLogin();
 
-            // NHS Login should load in WebView
+            // NHS login should load in WebView
             AndroidStubbedLoginPageFullHeader
                 .AssertOnPage(driver)
                 .AssertNativeHeader()
@@ -227,7 +227,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertOnPage(driver)
                 .PageContent.NavigateToNhsLogin();
 
-            // NHS Login should load in WebView
+            // NHS login should load in WebView
             IOSErsNhsLoginPage
                 .AssertOnPage(driver)
                 .AssertNativeHeader()

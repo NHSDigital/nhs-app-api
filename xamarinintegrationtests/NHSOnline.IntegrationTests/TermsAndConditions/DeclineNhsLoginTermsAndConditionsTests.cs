@@ -47,7 +47,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                         AndroidLoggedOutHomePage
                             .AssertOnPage(driver);
                     },
-                    "No IWebElement found matching By.XPath: //h1[normalize-space()='NHS Login - Terms and Conditions']",
+                    "No IWebElement found matching By.XPath: //h1[normalize-space()='NHS login - Terms and Conditions']",
                     // Intermittent issue where the on-screen keyboard appears. Clicking 'Login' again will continue test.
                     () => { androidStubbedLoginPageSlimHeader.PageContent.LoginButtonClick(); });
         }
