@@ -75,7 +75,6 @@ export default {
     return {
       loaded: false,
       isNativeApp: this.$store.state.device.isNativeApp,
-      senderIdEnabled: this.$store.$env.MESSAGES_SENDER_ID_ENABLED,
       backLink: MESSAGES_PATH,
     };
   },
@@ -118,18 +117,10 @@ export default {
       this.loaded = true;
     },
     messagePath(sender) {
-      const senderQuery = this.senderIdEnabled
-        ? `senderId=${sender.id}`
-        : `sender=${sender.name}`;
-
-      return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?${senderQuery}`;
+      return `${HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH}?senderId=${sender.id}`;
     },
     goToMessages(sender) {
-      const queryParams = this.senderIdEnabled
-        ? { senderId: sender.id }
-        : { sender: sender.name };
-
-      redirectTo(this, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, queryParams);
+      redirectTo(this, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { senderId: sender.id });
     },
     messageLabel(sender) {
       let label = this.$t('messages.messagesFromSender')

@@ -238,8 +238,6 @@ spec:
           value: "https://www.nhs.uk/nhs-app/nhs-app-help-and-support/getting-started-with-the-nhs-app/who-can-use-the-nhs-app/"
         - name: GO_TO_NHS_WEBSITE
           value: "https://www.nhs.uk/"
-        - name: MESSAGES_SENDER_ID_ENABLED
-          value: "{{ $.Values.messages.senderIdEnabled }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

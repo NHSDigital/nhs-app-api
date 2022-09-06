@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
     public class MessageServicePatchTests
     {
         private MessageService _systemUnderTest;
-        private Mock<IMessagesConfiguration> _mockMessagesConfiguration;
         private Mock<IMessageRepository> _mockMessageRepository;
         private Mock<IMessagesValidationService> _mockMessagesValidationService;
         private Mock<IMapper<Operation<Message>, MessagePatchType>> _mockPatchMessageTypeMapper;
@@ -37,7 +36,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockMessagesConfiguration = new Mock<IMessagesConfiguration>();
             _mockMessageRepository = new Mock<IMessageRepository>();
             _userMessageId = "fd9fb3db27402da79fe66515"; //24 digit hex regex
 
@@ -54,7 +52,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
 
             _systemUnderTest = new MessageService(
-                _mockMessagesConfiguration.Object,
                 _mockMessageRepository.Object,
                 mockLogger.Object,
                 new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict).Object,
@@ -470,7 +467,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 
             _mockPatchMessageTypeMapper.Setup(s => s.Map(It.IsAny<Operation<Message>>()))
                 .Returns(MessagePatchType.Unknown);
-            
+
             // Act
             var result = await _systemUnderTest.UpdateMessage(
                 new JsonPatchDocument<Message>(),

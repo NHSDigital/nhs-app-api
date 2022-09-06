@@ -89,9 +89,7 @@ export default {
       return this.$store.state.messaging.message;
     },
     sender() {
-      return this.$store.$env.MESSAGES_SENDER_ID_ENABLED
-        ? get('senderId')(this.message)
-        : get('sender')(this.message);
+      return get('senderId')(this.message);
     },
     senderName() {
       return get('sender')(this.message) || '';
@@ -131,11 +129,7 @@ export default {
       this.loaded = true;
     },
     backClicked() {
-      const request = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
-        ? { senderId: this.sender }
-        : { sender: this.sender };
-
-      redirectTo(this, this.backLink, request);
+      redirectTo(this, this.backLink, { senderId: this.sender });
     },
   },
 };

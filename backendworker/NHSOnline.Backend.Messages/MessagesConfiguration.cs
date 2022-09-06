@@ -8,12 +8,9 @@ namespace NHSOnline.Backend.Messages
     {
         public MessagesConfiguration(IConfiguration configuration, ILogger<MessagesConfiguration> logger)
         {
-            SenderIdEnabled = configuration.GetBoolOrThrow("MESSAGES_SENDER_ID_ENABLED", logger);
             SenderIdNhsApp = configuration.GetOrThrow("MESSAGES_SENDER_ID_NHS_APP", logger);
             SupplierIdNhsApp = configuration.GetOrThrow("MESSAGES_SUPPLIER_ID_NHS_APP", logger);
         }
-
-        public bool SenderIdEnabled { get; }
 
         public string SenderIdNhsApp { get; }
 

@@ -15,7 +15,7 @@ class MessagesMetadataGetStepDefinitionsBackend {
     fun iAmAnApiUserWishingToGetUnReadCountOfMessages() {
         val factory = MessagesFactory()
         factory.setUpUser()
-        factory.setUpMultipleMessagesInCache(true)
+        factory.setUpMultipleMessagesInCache()
     }
 
     @Given("^I am an api user wishing to get my unread count of messages, but I have no messages$")

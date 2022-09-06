@@ -15,15 +15,11 @@ const mountMessage = ({
   message,
   isNativeApp = true,
   error = false,
-  senderIdEnabled = true,
 } = {}) => {
   $store = createStore({
     state: {
       messaging: { error, message },
       device: { isNativeApp },
-    },
-    $env: {
-      MESSAGES_SENDER_ID_ENABLED: senderIdEnabled,
     },
   });
 
@@ -203,51 +199,24 @@ describe('messaging message', () => {
       });
     });
 
-    describe('sender id enabled', () => {
-      describe('desktop', () => {
-        beforeEach(async () => {
-          wrapper = mountMessage({
-            messageId: '1234',
-            message: { body: 'read message 1', senderId: 'test-sender', sender: 'test sender', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
-            isNativeApp: false,
-            senderIdEnabled: true,
-          });
-          await wrapper.vm.$nextTick();
-          backLink = wrapper.find('[data-purpose=back-link]');
+    describe('desktop', () => {
+      beforeEach(async () => {
+        wrapper = mountMessage({
+          messageId: '1234',
+          message: { body: 'read message 1', senderId: 'test-sender', sender: 'test sender', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+          isNativeApp: false,
         });
-
-        it('will show', () => {
-          expect(backLink.exists()).toBe(true);
-        });
-
-        it('will redirect to sender messages when clicked', () => {
-          backLink.find('a').trigger('click');
-          expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { senderId: 'test-sender' });
-        });
+        await wrapper.vm.$nextTick();
+        backLink = wrapper.find('[data-purpose=back-link]');
       });
-    });
 
-    describe('sender id not enabled', () => {
-      describe('desktop', () => {
-        beforeEach(async () => {
-          wrapper = mountMessage({
-            messageId: '1234',
-            message: { body: 'read message 1', senderId: 'test-sender', sender: 'test sender', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
-            isNativeApp: false,
-            senderIdEnabled: false,
-          });
-          await wrapper.vm.$nextTick();
-          backLink = wrapper.find('[data-purpose=back-link]');
-        });
+      it('will show', () => {
+        expect(backLink.exists()).toBe(true);
+      });
 
-        it('will show', () => {
-          expect(backLink.exists()).toBe(true);
-        });
-
-        it('will redirect to sender messages when clicked', () => {
-          backLink.find('a').trigger('click');
-          expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { sender: 'test sender' });
-        });
+      it('will redirect to sender messages when clicked', () => {
+        backLink.find('a').trigger('click');
+        expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, { senderId: 'test-sender' });
       });
     });
   });

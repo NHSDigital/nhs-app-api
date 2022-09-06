@@ -16,7 +16,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 {
     public class MessageService : IMessageService
     {
-        private readonly IMessagesConfiguration _messagesConfiguration;
         private readonly IMessageRepository _messageRepository;
         private readonly ILogger<MessageService> _logger;
         private readonly IMapper<List<UserMessage>, MessagesResponse> _userMessagesToResponseMapper;
@@ -28,7 +27,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
         public MessageService
         (
-            IMessagesConfiguration messagesConfiguration,
             IMessageRepository messageRepository,
             ILogger<MessageService> logger,
             IMapper<List<UserMessage>, MessagesResponse> userMessagesToResponseMapper,
@@ -38,7 +36,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             IMapper<Operation<Message>, MessagePatchType> messagePatchTypeMapper,
             IMessagesValidationService validator)
         {
-            _messagesConfiguration = messagesConfiguration;
             _messageRepository = messageRepository;
             _logger = logger;
             _userMessagesToResponseMapper = userMessagesToResponseMapper;
@@ -94,27 +91,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             catch (Exception e)
             {
                 _logger.LogError(e, "Message Get has failed with exception");
-                return new MessagesResult.InternalServerError();
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        public async Task<MessagesResult> GetMessagesBySender(AccessToken accessToken, string sender)
-        {
-            _logger.LogEnter();
-
-            try
-            {
-                var result = await _messageRepository.FindMessagesFromSenderByName(accessToken.Subject, sender);
-
-                return result.Accept(new RepositoryFindMessagesResultVisitor(_userMessagesToResponseMapper));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Get Messages by Sender has failed with exception");
                 return new MessagesResult.InternalServerError();
             }
             finally
@@ -246,7 +222,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
-        public async Task<UserSendersResult> GetSendersV2(AccessToken accessToken)
+        public async Task<UserSendersResult> GetSenders(AccessToken accessToken)
         {
             _logger.LogEnter();
 
@@ -254,29 +230,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             {
                 var result = await _messageRepository.FindAllForUser(accessToken.Subject);
 
-                return result.Accept(
-                    new RepositoryFindUserSendersResultVisitor(_messagesConfiguration.SenderIdEnabled));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Get Senders has failed with exception");
-                return new UserSendersResult.InternalServerError();
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        public async Task<UserSendersResult> GetSenders(AccessToken accessToken)
-        {
-            _logger.LogEnter();
-
-            try
-            {
-                var result = await _messageRepository.FindAllForUserV1(accessToken.Subject);
-
-                return result.Accept(new RepositoryFindUserSendersResultVisitor(false));
+                return result.Accept(new RepositoryFindUserSendersResultVisitor());
             }
             catch (Exception e)
             {

@@ -18,22 +18,14 @@ class MessagesApi {
             return get(authToken, true)
         }
 
-        fun getFromSenderByName(authToken: String?, targetSender: String): Array<MessagesResponse>? {
-            return get(authToken, false, targetSender = targetSender)
-        }
-
         fun getFromSenderById(authToken: String?, targetSenderId: String): Array<MessagesResponse>? {
             return get(authToken, false, targetSenderId = targetSenderId)
         }
 
-        fun get(authToken: String?,
-                summary: Boolean,
-                targetSender: String? = null,
-                targetSenderId: String? = null
-        ): Array<MessagesResponse>? {
+        fun get(authToken: String?, summary: Boolean, targetSenderId: String? = null): Array<MessagesResponse>? {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .messages
-                    .get(authToken, summary, targetSender, targetSenderId)
+                    .get(authToken, summary, targetSenderId)
             MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.set(response)
             return response
         }
@@ -58,14 +50,6 @@ class MessagesApi {
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .messages
                 .getSenders(authToken)
-            MessagesSerenityHelpers.GET_SENDERS.set(response)
-            return response
-        }
-
-        fun getSendersV2(authToken: String?): SendersResponse? {
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .messages
-                .getSendersV2(authToken)
             MessagesSerenityHelpers.GET_SENDERS.set(response)
             return response
         }

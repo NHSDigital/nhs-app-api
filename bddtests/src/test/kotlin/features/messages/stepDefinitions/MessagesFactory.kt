@@ -95,7 +95,7 @@ class MessagesFactory {
         MessagesSerenityHelpers.READ_MESSAGES_TITLE_ID.set(readMessagesTitleId)
     }
 
-    fun setUpMultipleMessagesInCache(isV1SendersEndpoint: Boolean = false) {
+    fun setUpMultipleMessagesInCache() {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
@@ -158,30 +158,19 @@ class MessagesFactory {
 
         createMessagesInRepository(arrayListOf(senderOneMessages, senderTwoMessages), nhsLoginId)
 
-        if(isV1SendersEndpoint) {
-            MessagesSerenityHelpers.EXPECTED_SENDERS.set(
-                arrayListOf(expectedSenderOneSummaryMessage, expectedSenderTwoSummaryMessage)
+        MessagesSerenityHelpers.EXPECTED_SENDERS.set(
+            arrayListOf(
+                expectedSenderOneSummaryMessage.copy(name = senderOneCanonicalName),
+                expectedSenderTwoSummaryMessage.copy(name = "NHS APP")
             )
-            MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(senderOneMessages)
-            MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(arrayListOf(senderOneMessageTwo))
-            MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(
-                senderOneMessageThree, senderOneMessageOne))
-        }
-        else {
-            MessagesSerenityHelpers.EXPECTED_SENDERS.set(
-                arrayListOf(
-                    expectedSenderOneSummaryMessage.copy(name = senderOneCanonicalName),
-                    expectedSenderTwoSummaryMessage.copy(name = "NHS APP")
-                )
-            )
+        )
 
-            MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(expectedSenderOneMessages)
-            MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(
-                arrayListOf(senderOneMessageTwo.copy(sender = senderOneCanonicalName)))
-            MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(
-                senderOneMessageThree.copy(sender = senderOneCanonicalName),
-                senderOneMessageOne.copy(sender = senderOneCanonicalName)))
-        }
+        MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.set(expectedSenderOneMessages)
+        MessagesSerenityHelpers.EXPECTED_UNREAD_MESSAGES.set(
+            arrayListOf(senderOneMessageTwo.copy(sender = senderOneCanonicalName)))
+        MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(
+            senderOneMessageThree.copy(sender = senderOneCanonicalName),
+            senderOneMessageOne.copy(sender = senderOneCanonicalName)))
     }
 
     fun setUpMultipleMessagesWithContentInCache(table: DataTable, messageVersion: MessageVersion) {

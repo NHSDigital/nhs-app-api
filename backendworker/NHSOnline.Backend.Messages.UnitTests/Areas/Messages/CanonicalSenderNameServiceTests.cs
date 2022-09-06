@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             _mockConfiguration = new Mock<IMessagesConfiguration>();
             _mockConfiguration.SetupGet(c => c.SenderIdNhsApp).Returns(NhsAppId);
             _mockConfiguration.SetupGet(c => c.SupplierIdNhsApp).Returns(NhsAppSupplierId);
-            _mockConfiguration.SetupGet(c => c.SenderIdEnabled).Returns(true);
 
             _systemUnderTest = new CanonicalSenderNameService(_mockSenderService.Object, _mockConfiguration.Object);
         }
@@ -289,36 +288,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 .Should().ThrowAsync<ArgumentException>();
 
             // Assert
-            VerifyAll();
-        }
-
-        [TestMethod]
-        public async Task UpdateWithCanonicalSenderName_WhenSenderIdDisabled_DoesNothing()
-        {
-            // Arrange
-            const string expectedSenderName = "Not CanonicalSenderName";
-            const string senderId = "Sender Id";
-
-            _mockConfiguration.SetupGet(c => c.SenderIdEnabled).Returns(false);
-
-            var userMessage = new UserMessage
-            {
-                Sender = "Not CanonicalSenderName",
-                SenderContext = new SenderContext
-                {
-                    SenderId = senderId,
-                    SupplierId = NhsAppSupplierId
-                }
-            };
-
-            // Act
-            await _systemUnderTest.UpdateWithCanonicalSenderName(new []{userMessage});
-
-            // Assert
-            userMessage.Sender.Should().Be(expectedSenderName);
-            userMessage.SenderContext.SenderId.Should().Be(senderId);
-            userMessage.SenderContext.SupplierId.Should().Be(NhsAppSupplierId);
-
             VerifyAll();
         }
 

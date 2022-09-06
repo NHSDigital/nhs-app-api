@@ -27,8 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         private readonly ILogger<MessagesController> _logger;
         private readonly IMetricLogger _metricLogger;
         private readonly IEventHubLogger _eventHubLogger;
-        private readonly IMapper<SenderContext, SenderContextEventLogData>
-            _messageSenderContextEventLogDataMapper;
+        private readonly IMapper<SenderContext, SenderContextEventLogData> _messageSenderContextEventLogDataMapper;
 
         public MessagesController
         (
@@ -50,11 +49,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [HttpPost]
         [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
         [ApiVersionRoute("api/{nhsLoginId}/messages")]
-        public async Task<IActionResult> Post
-        (
+        public async Task<IActionResult> Post(
             [FromBody] AddMessageRequest addMessageRequest,
-            [FromRoute(Name = "nhsLoginId")] string nhsLoginId
-        )
+            [FromRoute(Name = "nhsLoginId")] string nhsLoginId)
         {
             try
             {
@@ -81,16 +78,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ApiVersionRoute("api/me/messages")]
-        public async Task<IActionResult> Get(
-            [FromQuery] string sender = null,
-            [FromQuery] string senderId = null,
-            [FromQuery] bool summary = false)
+        public async Task<IActionResult> Get([FromQuery] string senderId = null, [FromQuery] bool summary = false)
         {
             try
             {
                 _logger.LogEnter();
 
-                var messagesResult = await GetUserMessages(sender, senderId, summary, _accessTokenProvider.AccessToken);
+                var messagesResult = await GetUserMessages(senderId, summary, _accessTokenProvider.AccessToken);
 
                 return messagesResult.Accept(new MessagesResultVisitor());
             }
@@ -132,30 +126,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ApiVersion("2")]
-        [ApiVersionRoute("api/me/messages/senders")]
-        public async Task<IActionResult> GetSendersV2()
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                var result = await _messageService.GetSendersV2(_accessTokenProvider.AccessToken);
-
-                return result.Accept(new UserSendersResultVisitor());
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Failed to get senders with exception");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ApiVersionRoute("api/me/messages/senders")]
         public async Task<IActionResult> GetSenders()
         {
@@ -230,31 +200,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
         }
 
-        private async Task<MessagesResult> GetUserMessages(string sender, string senderId, bool summary, AccessToken accessToken)
+        private async Task<MessagesResult> GetUserMessages(string senderId, bool summary, AccessToken accessToken)
         {
-            var hasSender = !string.IsNullOrWhiteSpace(sender);
             var hasSenderId = !string.IsNullOrWhiteSpace(senderId);
 
-            if (!hasSender && !hasSenderId && !summary ||
-                hasSender && summary ||
-                hasSender && hasSenderId ||
-                hasSenderId && summary)
+            if (!hasSenderId && !summary || hasSenderId && summary)
             {
-                _logger.LogError("Exactly one of `sender`, `senderId` or `summary` is required");
+                _logger.LogError("Exactly one of `senderId` or `summary` is required");
                 return new MessagesResult.BadRequest();
             }
 
-            if (hasSender)
-            {
-                return await _messageService.GetMessagesBySender(accessToken, sender);
-            }
-
-            if (hasSenderId)
-            {
-                return await _messageService.GetMessagesBySenderId(accessToken, senderId);
-            }
-
-            return await _messageService.GetSummaryMessages(accessToken);
+            return hasSenderId
+                ? await _messageService.GetMessagesBySenderId(accessToken, senderId)
+                : await _messageService.GetSummaryMessages(accessToken);
         }
     }
 }

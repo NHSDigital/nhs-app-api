@@ -74,47 +74,6 @@ namespace NHSOnline.Backend.Messages.Repository
 
         [SuppressMessage("Microsoft.Globalization", "CA1309",
             Justification = "Method 'CompareOrdinal' is not supported in repository")]
-        public async Task<RepositoryFindResult<UserMessage>> FindMessagesFromSenderByName(string nhsLoginId, string sender)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                new ValidateAndLog(_logger)
-                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
-                    .IsNotNull(sender, nameof(sender), ThrowError)
-                    .IsValid();
-
-                return await Find(d => d.NhsLoginId == nhsLoginId && d.Sender == sender);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        [SuppressMessage("Microsoft.Globalization", "CA1309",
-            Justification = "Method 'CompareOrdinal' is not supported in repository")]
-        public async Task<RepositoryFindResult<UserMessage>> FindAllForUserV1(string nhsLoginId)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                new ValidateAndLog(_logger)
-                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
-                    .IsValid();
-
-                return await _repository.Find(x => x.NhsLoginId == nhsLoginId, RecordName);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        [SuppressMessage("Microsoft.Globalization", "CA1309",
-            Justification = "Method 'CompareOrdinal' is not supported in repository")]
         public async Task<RepositoryFindResult<UserMessage>> FindMessagesFromSenderById(string nhsLoginId, string senderId)
         {
             try

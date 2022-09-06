@@ -81,12 +81,9 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
 
         public async Task UpdateWithCanonicalSenderName(ICollection<UserMessage> messages)
         {
-            if (_config.SenderIdEnabled)
+            foreach (var message in messages)
             {
-                foreach (var message in messages)
-                {
-                    await UpdateUserMessageWithCanonicalSenderName(message);
-                }
+                await UpdateUserMessageWithCanonicalSenderName(message);
             }
         }
 

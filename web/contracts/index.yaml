@@ -6235,23 +6235,16 @@
               type: "string"
           - 
             in: "query"
-            name: "sender"
-            required: false
-            description: "The name of sender to filter by. This parameter is incompatible with `summary` and `senderId`."
-            schema: 
-              type: "string"
-          - 
-            in: "query"
             name: "senderId"
             required: false
-            description: "The id of sender to filter by. This parameter is incompatible with `summary` and `sender`."
+            description: "The id of sender to filter by. This parameter is incompatible with `summary`."
             schema: 
               type: "string"
           - 
             in: "query"
             name: "summary"
             required: false
-            description: "Indicates to return only the latest message per sender. This parameter is incompatible with `sender` and `senderId`."
+            description: "Indicates to return only the latest message per sender. This parameter is incompatible with `senderId`."
             schema: 
               type: "boolean"
         responses: 
@@ -6303,7 +6296,7 @@
           204: 
             description: "Successful operation. Content is empty."
           400: 
-            description: "Either `sender`, `senderId` or `summary` is required."
+            description: "Either `senderId` or `summary` is required."
           401: 
             description: "Access token is missing or invalid."
           500: 
@@ -6477,53 +6470,6 @@
             description: "Access token is missing or invalid."
           404: 
             description: "Message to be updated cannot be found."
-          500: 
-            description: "An unexpected error occurred processing the request."
-          502: 
-            description: "An unexpected error occurred processing the request."
-    /v1/api/users/me/messages/senders: 
-      get: 
-        security: 
-          - 
-            nhsLoginBearerAuth: []
-        tags: 
-          - "messages"
-        summary: "Gets a list of senders who have sent messages to the authorized user"
-        description: "Gets a list of senders who have sent messages to the authorized user"
-        parameters: 
-          - 
-            in: "header"
-            name: "NHSO-Request-ID"
-            required: false
-            description: "A request identifier, should provide something unique on each separate request to allow NHS App to easily retrieve relevant log entries for debugging purposes."
-            schema: 
-              type: "string"
-        responses: 
-          200: 
-            description: "Successful operation. List of senders are retrieved."
-            content: 
-              application/json: 
-                schema: 
-                  type: "object"
-                  properties: 
-                    senders: 
-                      type: "array"
-                      items: 
-                        type: "object"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "ID of the sender."
-                          name: 
-                            type: "string"
-                            description: "The sender's name."
-                          unreadCount: 
-                            type: "integer"
-                            description: "The number of unread messages."
-          204: 
-            description: "Successful operation. Content is empty."
-          401: 
-            description: "Access token is missing or invalid."
           500: 
             description: "An unexpected error occurred processing the request."
           502: 

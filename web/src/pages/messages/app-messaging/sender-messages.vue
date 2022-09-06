@@ -200,20 +200,14 @@ export default {
     loadMessages() {
       this.$store.dispatch('messaging/clear');
 
-      const sender = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
-        ? this.$route.query.senderId
-        : this.$route.query.sender;
+      const { senderId } = this.$route.query;
 
-      if (!sender) {
+      if (!senderId) {
         redirectTo(this, this.backLink);
         return;
       }
 
-      const request = this.$store.$env.MESSAGES_SENDER_ID_ENABLED
-        ? { senderId: sender }
-        : { sender };
-
-      this.$store.dispatch('messaging/load', request);
+      this.$store.dispatch('messaging/load', { senderId });
     },
     messageLabel(message) {
       let timePrefix = this.$t('generic.on');

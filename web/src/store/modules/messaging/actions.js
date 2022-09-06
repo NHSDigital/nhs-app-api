@@ -48,9 +48,9 @@ export default {
   },
   async loadSenders({ commit }) {
     try {
-      const { senders } = this.$env.MESSAGES_SENDER_ID_ENABLED
-        ? await this.app.$httpV2.getV2ApiUsersMeMessagesSenders({ ignoreError: true })
-        : await this.app.$http.getV1ApiUsersMeMessagesSenders({ ignoreError: true });
+      const { senders } = await this.app.$httpV2.getV2ApiUsersMeMessagesSenders({
+        ignoreError: true,
+      });
 
       commit(LOADED_SENDERS, senders);
       commit(SET_UNREADMESSAGE_SENDER_COUNT, senders);

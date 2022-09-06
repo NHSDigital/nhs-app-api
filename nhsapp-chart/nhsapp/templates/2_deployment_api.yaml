@@ -450,8 +450,6 @@ spec:
           value: comms-{{ $.Values.cosmosCommsDbName }}-sql
         - name: SENDERS_CONTAINER
           value: {{ $.Values.messages.cosmosSqlDatabaseSendersCollection }}
-        - name: MESSAGES_SENDER_ID_ENABLED
-          value: "{{ $.Values.messages.senderIdEnabled }}"
         - name: MESSAGES_SENDER_ID_NHS_APP
           value: "{{ $.Values.messages.senderIdNhsApp }}"
         - name: MESSAGES_SUPPLIER_ID_NHS_APP

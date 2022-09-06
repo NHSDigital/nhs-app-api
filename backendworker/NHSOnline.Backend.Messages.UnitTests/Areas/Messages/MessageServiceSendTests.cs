@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         private const string NhsLoginId = "NHSLoginId";
 
         private MessageService _systemUnderTest;
-        private Mock<IMessagesConfiguration> _mockMessagesConfiguration;
         private Mock<IMessageRepository> _mockMessageRepository;
         private Mock<IMessagesValidationService> _mockMessagesValidationService;
         private Mock<IMapper<AddMessageRequest, string, UserMessage>> _mockAddMessageToUserMessageMapper;
@@ -30,14 +29,12 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockMessagesConfiguration = new Mock<IMessagesConfiguration>();
             _mockMessageRepository = new Mock<IMessageRepository>();
             _mockMessagesValidationService = new Mock<IMessagesValidationService>(MockBehavior.Strict);
             _mockAddMessageToUserMessageMapper =
                 new Mock<IMapper<AddMessageRequest, string, UserMessage>>(MockBehavior.Strict);
 
             _systemUnderTest = new MessageService(
-                _mockMessagesConfiguration.Object,
                 _mockMessageRepository.Object,
                 new Mock<ILogger<MessageService>>().Object,
                 new Mock<IMapper<List<UserMessage>, MessagesResponse>>(MockBehavior.Strict).Object,

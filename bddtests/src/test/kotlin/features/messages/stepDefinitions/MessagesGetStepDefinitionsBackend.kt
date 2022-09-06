@@ -41,74 +41,35 @@ class MessagesGetStepDefinitionsBackend {
         }
     }
 
-    @When("^I get my messages from a sender by name from the api$")
-    fun iGetMyMessagesFromASenderByNameFromTheApi() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        MessagesApi.getFromSenderByName(authToken, targetSender)
-    }
-
-    @When("^I get my messages from a sender by sender Id from the api$")
-    fun iGetMyMessagesFromASenderByIdFromTheApi() {
+    @When("^I get my messages from a sender from the api$")
+    fun iGetMyMessagesFromASenderFromTheApi() {
         val authToken = SerenityHelpers.getPatient().accessToken
         val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
         MessagesApi.getFromSenderById(authToken, targetSenderId)
     }
 
-    @When("^I get my messages from a sender by sender Id from the api without an access token$")
-    fun iGetMyMessagesFromASenderByIdFromTheApiWithoutAuthToken() {
+    @When("^I get my messages from a sender from the api without an access token$")
+    fun iGetMyMessagesFromASenderFromTheApiWithoutAuthToken() {
         val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
         MessagesApi.getFromSenderById(null, targetSenderId)
-    }
-
-    @When("^I get my messages with a summary flag and a target sender$")
-    fun iGetMyMessagesWithASummaryFlagAndATargetSender() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        MessagesApi.get(authToken, true, targetSender)
     }
 
     @When("^I get my messages with a summary flag and a target sender Id$")
     fun iGetMyMessagesWithASummaryFlagAndATargetSenderId() {
         val authToken = SerenityHelpers.getPatient().accessToken
         val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
-        MessagesApi.get(authToken, true, targetSenderId = targetSenderId)
+        MessagesApi.get(authToken, true, targetSenderId)
     }
 
-    @When("^I get my messages with a target sender and a target sender Id$")
-    fun iGetMyMessagesWithATargetSenderAndATargetSenderId() {
+    @When("^I get my messages without a summary flag or target sender Id$")
+    fun iGetMyMessagesWithoutASummaryFlagOrTargetSenderId() {
         val authToken = SerenityHelpers.getPatient().accessToken
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
-        MessagesApi.get(authToken, false, targetSender = targetSender, targetSenderId = targetSenderId)
+        MessagesApi.get(authToken, false, null)
     }
 
-    @When("^I get my messages with a summary flag, a target sender and a target sender Id$")
-    fun iGetMyMessagesWithASummaryFlagTargetSenderAndATargetSenderId() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
-        MessagesApi.get(authToken, true, targetSender = targetSender, targetSenderId = targetSenderId)
-    }
-
-    @When("^I get my messages without a summary flag, target sender name, or target sender Id$")
-    fun iGetMyMessagesWithoutASummaryFlagTargetSenderNameOrTargetSenderId() {
-        val authToken = SerenityHelpers.getPatient().accessToken
-        MessagesApi.get(authToken, false, null, null)
-    }
-
-    @Then("^an attempt to get messages from a sender by name with an invalid access token " +
+    @Then("^an attempt to get messages from a sender with an invalid access token " +
             "will return an Unauthorised error$")
-    fun aAttemptToGetMessagesFromASenderByNameWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
-        val targetSender = MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail<String>()
-        InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { token ->
-            MessagesApi.getFromSenderByName(token, targetSender)
-        }
-    }
-
-    @Then("^an attempt to get messages from a sender by sender Id with an invalid access token " +
-            "will return an Unauthorised error$")
-    fun aAttemptToGetMessagesFromASenderByIdWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
+    fun aAttemptToGetMessagesFromASenderWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
         val targetSenderId = MessagesSerenityHelpers.TARGET_SENDER_ID.getOrFail<String>()
         InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { token ->
             MessagesApi.getFromSenderById(token, targetSenderId)

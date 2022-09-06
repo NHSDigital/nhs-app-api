@@ -57,112 +57,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        [DataRow(null, null, false)]
-        [DataRow("sender", "senderId", false)]
-        [DataRow("sender", null, true)]
-        [DataRow(null, "senderId", true)]
-        [DataRow("sender", "senderId", true)]
-        public async Task Get_ArgumentsAreNotValid_ReturnsBadRequest(string sender, string senderId, bool summary)
+        [DataRow(null, false)]
+        [DataRow("senderId", true)]
+        public async Task Get_ArgumentsAreNotValid_ReturnsBadRequest(string senderId, bool summary)
         {
             // Act
-            var result = await _systemUnderTest.Get(sender, senderId, summary);
+            var result = await _systemUnderTest.Get(senderId, summary);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        }
-
-        [TestMethod]
-        public async Task Get_WithSender_SuccessFound()
-        {
-            // Arrange
-            var response = new MessagesResponse
-            {
-                SenderMessages = new List<SenderMessages>
-                {
-                    new SenderMessages { Sender = "Test Sender", UnreadCount = 1 }
-                }
-            };
-
-            _mockMessageService.Setup(x => x.GetMessagesBySender(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagesResult.Found(response));
-
-            // Act
-            var result = await _systemUnderTest.Get("sender");
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<List<SenderMessages>>()
-                .Subject.Should().BeEquivalentTo(response.SenderMessages);
-        }
-
-        [TestMethod]
-        public async Task Get_WithSender_SuccessNone()
-        {
-            // Arrange
-            _mockMessageService.Setup(x => x.GetMessagesBySender(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagesResult.None());
-
-            // Act
-            var result = await _systemUnderTest.Get("sender");
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<NoContentResult>();
-        }
-
-        [TestMethod]
-        public async Task Get_WithSender_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
-        {
-            // Arrange
-            _mockMessageService.Setup(x => x.GetMessagesBySender(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagesResult.BadGateway());
-
-            // Act
-            var result = await _systemUnderTest.Get("sender");
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-        }
-
-        [TestMethod]
-        public async Task Get_WithSender_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockMessageService.Setup(x => x.GetMessagesBySender(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .ReturnsAsync(new MessagesResult.InternalServerError());
-
-            // Act
-            var result = await _systemUnderTest.Get("sender");
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
-        [TestMethod]
-        public async Task Get_WithSender_MessageServiceThrowsException_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockMessageService.Setup(x => x.GetMessagesBySender(It.IsAny<AccessToken>(), It.IsAny<string>()))
-                .Throws<ArgumentException>();
-
-            // Act
-            var result = await _systemUnderTest.Get("sender");
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
@@ -181,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.Found(response));
 
             // Act
-            var result = await _systemUnderTest.Get(senderId: "senderId");
+            var result = await _systemUnderTest.Get("senderId");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -199,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.None());
 
             // Act
-            var result = await _systemUnderTest.Get(senderId: "senderId");
+            var result = await _systemUnderTest.Get("senderId");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -215,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Get(senderId: "senderId");
+            var result = await _systemUnderTest.Get("senderId");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -232,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Get(senderId: "senderId");
+            var result = await _systemUnderTest.Get("senderId");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -249,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Get(senderId: "senderId");
+            var result = await _systemUnderTest.Get("senderId");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -352,91 +256,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task GetSendersV2_WhenFound_ReturnsOk()
-        {
-            // Arrange
-            var response = new UserSendersResponse
-            {
-                Senders = new List<UserSender>
-                {
-                    new UserSender
-                    {
-                        Id = "Sender Id",
-                        Name = "Sender Name",
-                        UnreadCount = 1
-                    }
-                }
-            };
-
-            _mockMessageService
-                .Setup(x => x.GetSendersV2(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new UserSendersResult.Found(response));
-
-            // Act
-            var result = await _systemUnderTest.GetSendersV2();
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeAssignableTo<UserSendersResponse>()
-                .Subject.Should().BeEquivalentTo(response);
-        }
-
-        [TestMethod]
-        public async Task GetSendersV2_WhenNotFound_ReturnsNoContent()
-        {
-            // Arrange
-            _mockMessageService
-                .Setup(x => x.GetSendersV2(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new UserSendersResult.None());
-
-            // Act
-            var result = await _systemUnderTest.GetSendersV2();
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<NoContentResult>();
-        }
-
-        [TestMethod]
-        public async Task GetSendersV2_WhenMessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
-        {
-            // Arrange
-            _mockMessageService
-                .Setup(x => x.GetSendersV2(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new UserSendersResult.BadGateway());
-
-            // Act
-            var result = await _systemUnderTest.GetSendersV2();
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-        }
-
-        [TestMethod]
-        public async Task GetSendersV2_WhenMessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockMessageService
-                .Setup(x => x.GetSendersV2(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new UserSendersResult.InternalServerError());
-
-            // Act
-            var result = await _systemUnderTest.GetSendersV2();
-
-            // Assert
-            _mockMessageService.VerifyAll();
-
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
-        [TestMethod]
         public async Task GetSenders_WhenFound_ReturnsOk()
         {
             // Arrange
@@ -446,6 +265,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 {
                     new UserSender
                     {
+                        Id = "Sender Id",
                         Name = "Sender Name",
                         UnreadCount = 1
                     }

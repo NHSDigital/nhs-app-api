@@ -23,7 +23,6 @@ const defaultSenders = [
 ];
 
 const mountIndex = ({
-  senderIdEnabled = false,
   messagingError = false,
   senders = defaultSenders,
   isNativeApp = true,
@@ -40,9 +39,6 @@ const mountIndex = ({
       device: {
         isNativeApp,
       },
-    },
-    $env: {
-      MESSAGES_SENDER_ID_ENABLED: senderIdEnabled,
     },
   });
 
@@ -147,38 +143,22 @@ describe('messaging index', () => {
       expect(wrapper.find(noMessagesSelector).exists()).toBe(false);
     });
 
-    describe('when sender id is enabled', () => {
-      beforeEach(async () => {
-        wrapper = mountIndex({ senderIdEnabled: true });
-        await wrapper.vm.$nextTick();
-        senderSection = wrapper.find(`.${senderSectionClass}`);
-      });
-
-      it('will pass the sender id in the query parameters to the sender messages page', () => {
-        const messageLink = senderSection.find(`.${messageItemClass} a`);
-        messageLink.trigger('click');
-
-        expect(dependency.redirectTo).toBeCalledWith(
-          wrapper.vm,
-          'messages/app-messaging/sender-messages',
-          { senderId: 'test-1' },
-        );
-        expect(messageLink.attributes().href).toBe('messages/app-messaging/sender-messages?senderId=test-1');
-      });
+    beforeEach(async () => {
+      wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
+      senderSection = wrapper.find(`.${senderSectionClass}`);
     });
 
-    describe('when sender id is not enabled', () => {
-      it('will pass the sender name in the query parameters to the sender messages page', () => {
-        const messageLink = senderSection.find(`.${messageItemClass} a`);
-        messageLink.trigger('click');
+    it('will pass the sender id in the query parameters to the sender messages page', () => {
+      const messageLink = senderSection.find(`.${messageItemClass} a`);
+      messageLink.trigger('click');
 
-        expect(dependency.redirectTo).toBeCalledWith(
-          wrapper.vm,
-          'messages/app-messaging/sender-messages',
-          { sender: 'Test Sender 1' },
-        );
-        expect(messageLink.attributes().href).toBe('messages/app-messaging/sender-messages?sender=Test Sender 1');
-      });
+      expect(dependency.redirectTo).toBeCalledWith(
+        wrapper.vm,
+        'messages/app-messaging/sender-messages',
+        { senderId: 'test-1' },
+      );
+      expect(messageLink.attributes().href).toBe('messages/app-messaging/sender-messages?senderId=test-1');
     });
 
     describe('senders with unread messages', () => {

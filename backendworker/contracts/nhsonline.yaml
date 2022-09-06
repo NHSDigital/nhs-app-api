@@ -97,8 +97,6 @@ paths:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1metadata
   /v1/api/users/me/messages/{messageId}:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1{messageId}
-  /v1/api/users/me/messages/senders:
-    $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1senders
   /v1/api/users/me/messages/{messageId}/link-clicked/metrics:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages~1{messageId}~1link-clicked~1metrics
   /v2/api/users/me/messages/senders:
