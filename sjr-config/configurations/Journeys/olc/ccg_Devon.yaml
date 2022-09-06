@@ -4,7 +4,6 @@ target:
     - L83034
     - L83100
     - L83045
-    - L83148
     - L83092
     - L83143
     - L83079
@@ -15,7 +14,6 @@ target:
     - L83077
     - L83084
     - L83025
-    - L83081
 journeys:
   cdssAdvice:
     provider: eConsult

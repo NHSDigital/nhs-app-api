@@ -284,7 +284,6 @@ sderbyshire,Derby and Derbyshire,CCG,Derby and Derbyshire,Derbyshire,wingerworth
 devon,Devon,CCG,Devon,Devon,albanysurgery,Albany Surgery,L83034,10546
 devon,Devon,CCG,Devon,Devon,beaconmedicalgroup,Beacon Medical Group,L83100,43000
 devon,Devon,CCG,Devon,Devon,towerhousesurgery,Bovey Tracey And Chudleigh Practice,L83045,14561
-devon,Devon,CCG,Devon,Devon,chillingtonsurgery,Chillington Health Centre,L83148,3850
 devon,Devon,CCG,Devon,Devon,collegesurgery,College Surgery Partnership,L83092,18000
 devon,Devon,CCG,Devon,Devon,hillbartonsurgery,Hill Barton Surgery,L83143,3904
 devon,Devon,CCG,Devon,Devon,idelanesurgery,Ide Lane Surgery,L83079,7624
@@ -295,7 +294,6 @@ devon,Devon,CCG,Devon,Devon,mountpleasanthealthcentre,Mount Pleasant Health Cent
 devon,Devon,CCG,Devon,Devon,theheavitreepractice,The Heavitree Practice,L83077,7600
 devon,Devon,CCG,Devon,Devon,slmp,The South Lawn Medical Practice,L83084,7595
 devon,Devon,CCG,Devon,Devon,wallingbrook,Wallingbrook Health Group,L83025,6885
-devon,Devon,CCG,Devon,Devon,yealmmedical,Yealm Medical Centre,L83081,7000
 dorset,Dorset,CCG,Dorset,Dorset,corbinavenuesurgery,Barcellos Family Practice,J81621,6483
 dorset,Dorset,CCG,Dorset,Dorset,bartonhousemedicalpractice,Barton House Medical Practice,J81074,5330
 dorset,Dorset,CCG,Dorset,Dorset,beaufortroadsurgery,Beaufort Road Surgery,J81018,11500
@@ -1485,7 +1483,6 @@ towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North Ea
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,merchantstreet,Merchant Street,F84118,5359
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,ststephens,St Stephen's Health Centre,F84034,13078
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,stkatharinedocks,St. Katherine Dock Practice,F84731,1977
-towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,stroutsplace,Strouts Place Medical Centre,F84051,4064
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,blithehalemedicalcentre,The Blithehale Health Centre,F84718,12115
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,thespitalfieldspractice,The Spitalfields Practice,F84081,13378
 valeroyal,Vale Royal,CCG,Vale Royal,Cheshire and Merseyside,highstreetmedicalpractice,High Street Medical Practice,N81040,6000
@@ -1604,13 +1601,11 @@ whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,par
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,ringwoodmc,Ringwood Medical Centre,J82039,11115
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,shepherdspring,Shepherds Spring Medical Centre,J82082,12707
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,standrewssurgery,St Andrews Surgery,J82071,10700
-whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stclementspractice,St Clements Surgery,J82035,17435
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stockbridgesurgery,Stockbridge Surgery,J82016,9100
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,stokewood,Stokewood Surgery,J82018,16995
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,testvalesurgery,Testvale Surgery,J82132,13607
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,alresfordsurgery,The Alresford Surgery,J82124,9600
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,arnewoodpractice,The Arnewood Practice,J82007,13317
-whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,friarsgatepractice,The Friarsgate Practice,J82130,25000
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,thefryernsurgery,The Fryern Surgery,J82019,14500
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,twinoaksmedicalcentre,Twin Oaks Medical Centre,J82151,4211
 whampshire,West Hampshire,CCG,West Hampshire,Hampshire and the Isle of Wight,twyford-surgery,Twyford Surgery,J82116,9700
@@ -1823,7 +1818,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Pinfold Medical Practice,C82011,
 ,,,Other,,,Hawthorn Medical Practice,C83045,
 ,,,Other,,,Stanhope Surgery,E82638,
-,,,Other,,,Abbamoor surgery,F82670,
 ,,,Other,,,Swan Surgery,J82098,
 ,,,Other,,,Redwood House Surgery,K81097,
 ,,,Other,,,Sea Mills Surgery,L81077,
@@ -2349,3 +2343,4 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Surgery,F81198,
 ,,,Other,,,Aryan Medical Centre,F81640,
 ,,,Other,,,Billingshurst Surgery,H82055,
+,,,Other,,,Felmores Medical Centre,F81186,
