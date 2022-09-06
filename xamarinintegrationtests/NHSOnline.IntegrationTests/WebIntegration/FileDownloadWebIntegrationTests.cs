@@ -239,6 +239,56 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanDownloadAFileWithAnInvalidNameFromAWebIntegrationDownloadFileScreenIOS(
+            IIOSDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsIOS(driver);
+
+            IOSFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeader()
+                .PageContent.DownloadInvalidName();
+
+            IOSShareFilePanel
+                .AssertDisplayedDocumentFile(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void
+            APatientWithProofLevelNineCanDownloadAFileWithAnInvalidNameFromAWebIntegrationDownloadFileScreenAndroid(
+                IAndroidDriverWrapper driver)
+        {
+            var patient = new PkbPatient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            NavigateToAddToDocumentDownloadViaPkbHospitalAppointmentsAndroid(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver)
+                .AssertNativeHeaderAllIcons()
+                .PageContent.DownloadInvalidName();
+
+            AndroidStorageProminentDialog
+                .AssertDisplayed(driver)
+                .Ok();
+
+            AndroidFilePermissionsDialog
+                .ClickAllowIfPresent(driver);
+
+            AndroidFileDownloadPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
         public void
             APatientWithProofLevelNineWillBeShownARelevantErrorScreenWhenDownloadingACorruptedPassKitFileFromAWebIntegrationDownloadFileScreenAndCanTryAgainIOS(
                 IIOSDriverWrapper driver)

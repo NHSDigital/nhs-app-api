@@ -24,6 +24,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         private WebButton DownloadZipFileButton => WebButton.WithText(_interactor, "Download zip file");
 
+        private WebButton DownloadInvalidNameFileButton => WebButton.WithText(_interactor, "Download test invalid name file");
+
         internal void AssertOnPage() => TitleText.AssertVisible();
 
         public void DownloadImage() => DownloadImageButton.Click();
@@ -31,6 +33,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         public void DownloadPass() => DownloadPassButton.Click();
 
         public void DownloadZip() => DownloadZipFileButton.Click();
+
+        public void DownloadInvalidName() => DownloadInvalidNameFileButton.Click();
 
         public void DownloadCorruptedPass()
         {

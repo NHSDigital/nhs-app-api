@@ -114,7 +114,8 @@ namespace NHSOnline.HttpMocks.WebIntegrations
                 CorruptedPassKitBase64 = System.IO.File.ReadAllText($"{basePath}/CorruptedPKPass.txt"),
                 ZipFileBase64String = System.IO.File.ReadAllText($"{basePath}/TestZipFile.txt"),
                 ImageBase64String = System.IO.File.ReadAllText($"{basePath}/HandAndFootXrayImage.txt"),
-                PkPassBase64String = System.IO.File.ReadAllText($"{basePath}/PKPass.txt")
+                PkPassBase64String = System.IO.File.ReadAllText($"{basePath}/PKPass.txt"),
+                InvalidNameBase64String = System.IO.File.ReadAllText($"{basePath}/InvalidName.txt")
             };
 
             return View("~/Views/WebIntegrations/WebIntegrationFunctionalityPages/DocumentDownloadPage.cshtml", model);

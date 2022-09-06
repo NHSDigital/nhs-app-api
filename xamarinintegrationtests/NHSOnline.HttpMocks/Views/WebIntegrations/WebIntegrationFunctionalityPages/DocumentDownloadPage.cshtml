@@ -69,6 +69,18 @@
             
           nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
         } 
+        
+        function downloadTestInvalidNameFile(base64) {
+                  let mimeType;
+                  let base64Data;
+                  let filename;
+                          
+                  filename= "06/08/2022.pdf";
+                  mimeType = 'application/pdf';
+                  base64Data = base64;
+                    
+                  nhsapp.storage.downloadFromBytes(base64Data, filename, mimeType);
+        } 
     </script>
 </head>
 <body>
@@ -101,6 +113,11 @@
         <li class="list-group-item">
             <button id="test-corrupted-download" onclick="downloadTestCorruptedFile('@Model.CorruptedBase64String');">
                 Download test corrupted file
+            </button>
+        </li>
+        <li class="list-group-item">
+            <button id="test-invalid-name" onclick="downloadTestInvalidNameFile('@Model.InvalidNameBase64String');">
+                Download test invalid name file
             </button>
         </li>
         <li class="list-group-item">

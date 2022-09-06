@@ -17,5 +17,7 @@ namespace NHSOnline.HttpMocks.Domain
         public string? ZipFileBase64String { get; set; }
 
         public string? PkPassBase64String { get; set; }
+
+        public string? InvalidNameBase64String { get; set; }
     }
 }
