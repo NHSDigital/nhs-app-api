@@ -13,7 +13,7 @@
 </template>
 <script>
 import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
-import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
+import { NO, YES } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   name: 'OrganChoice',
@@ -29,7 +29,7 @@ export default {
       type: String,
       required: true,
     },
-    showErrors: {
+    showError: {
       type: Boolean,
       required: true,
     },
@@ -47,9 +47,6 @@ export default {
   computed: {
     currentChoice() {
       return this.$store.state.organDonation.registration.decisionDetails.choices[this.organName];
-    },
-    showError() {
-      return this.showErrors && this.currentChoice === NOT_STATED;
     },
   },
   methods: {

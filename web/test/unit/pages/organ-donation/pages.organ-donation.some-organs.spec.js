@@ -363,7 +363,7 @@ describe('organ donation some organs page', () => {
     });
 
     it('will pass choice made validation', () => {
-      expect(wrapper.vm.hasMadeChoices).toEqual(true);
+      expect(wrapper.vm.areAllSelected && wrapper.vm.hasYesSelection).toEqual(true);
     });
   });
 });

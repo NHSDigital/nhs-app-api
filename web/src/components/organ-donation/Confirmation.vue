@@ -5,8 +5,7 @@
       <error-message v-if="showAccuracyError" id="accuracy-checkbox-error">
         {{ $t('organDonation.confirmation.checkYourInformation') }}
       </error-message>
-      <generic-checkbox v-model="isAccuracyAccepted"
-                        value="accuracy-checkbox"
+      <generic-checkbox value="accuracy-checkbox"
                         name="name"
                         :required="true"
                         :a-described-by="showAccuracyError ?
@@ -20,8 +19,7 @@
       <error-message v-if="showPrivacyError" id="privacy-checkbox-error">
         {{ $t('organDonation.confirmation.readThePrivacyStatementAndConfirmConstent') }}
       </error-message>
-      <generic-checkbox v-model="isPrivacyAccepted"
-                        value="privacy-checkbox"
+      <generic-checkbox value="privacy-checkbox"
                         name="name"
                         :required="true"
                         :a-described-by="showPrivacyError ? 'privacy-checkbox-error' : undefined"
@@ -53,6 +51,14 @@ export default {
       type: Boolean,
       required: true,
     },
+    isAccuracyAccepted: {
+      type: Boolean,
+      required: true,
+    },
+    isPrivacyAccepted: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -67,22 +73,6 @@ export default {
     };
   },
   computed: {
-    isAccuracyAccepted: {
-      get() {
-        return this.$store.state.organDonation.isAccuracyAccepted;
-      },
-      set(value) {
-        this.$store.dispatch('organDonation/setAccuracyAcceptance', value);
-      },
-    },
-    isPrivacyAccepted: {
-      get() {
-        return this.$store.state.organDonation.isPrivacyAccepted;
-      },
-      set(value) {
-        this.$store.dispatch('organDonation/setPrivacyAcceptance', value);
-      },
-    },
     showAccuracyError() {
       return this.submitAttempted && !this.isAccuracyAccepted;
     },

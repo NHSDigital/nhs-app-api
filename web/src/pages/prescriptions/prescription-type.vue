@@ -132,7 +132,7 @@ export default {
       return this.selectedValue;
     },
     showErrors() {
-      return this.hasTriedToContinue && !this.selectedValue;
+      return this.hasTriedToContinue;
     },
     getBackPath() {
       return PRESCRIPTIONS_PATH;

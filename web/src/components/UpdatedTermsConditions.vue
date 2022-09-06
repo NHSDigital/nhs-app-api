@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate">
-    <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
+    <div v-if="hasTriedToContinue && showTermsNotAcceptedError" id="error_msg">
       <form-error-summary :header-locale-ref="'termsAndConditions.errors.youCannotContinue.header'"
                           :errors="$t('termsAndConditions.errors.youCannotContinue.text')"
                           :errors-ids="'termsAndConditions-agree_checkbox'"/>
@@ -27,7 +27,7 @@
       <p> {{ $t('termsAndConditions.updated.ifYouDoNotAgree') }} </p>
     </div>
     <div :class="getErrorState()">
-      <error-message v-if="hasTriedToContinue && !areTermsAccepted"
+      <error-message v-if="hasTriedToContinue && showTermsNotAcceptedError"
                      id="error_txt"
                      role="alert"
                      :class="$style.validationText">
@@ -36,7 +36,7 @@
       <fieldset class="nhsuk-fieldset">
         <legend>
           <generic-checkbox :value="termsAcceptedValue"
-                            :a-described-by="hasTriedToContinue && !areTermsAccepted ?
+                            :a-described-by="hasTriedToContinue && showTermsNotAcceptedError ?
                               'error_txt' : undefined"
                             checkbox-id="termsAndConditions-agree_checkbox"
                             @input="termsSelectionChanged">
@@ -98,6 +98,7 @@ export default {
       areTermsAccepted: false,
       termsAcceptedValue: 'terms',
       hasTriedToContinue: false,
+      showTermsNotAcceptedError: false,
     };
   },
   methods: {
@@ -111,11 +112,12 @@ export default {
 
         this.$router.push({ path: NOTIFICATIONS_PATH, query: this.$route.query });
       } else {
+        this.showTermsNotAcceptedError = true;
         EventBus.$emit(FOCUS_ERROR_ELEMENT);
       }
     },
     getErrorState() {
-      if (this.hasTriedToContinue && !this.areTermsAccepted) {
+      if (this.hasTriedToContinue && this.showTermsNotAcceptedError) {
         return this.$style.validationBorderLeft;
       }
       return null;

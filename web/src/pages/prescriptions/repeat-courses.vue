@@ -2,7 +2,7 @@
   <div v-if="showTemplate && !gpSessionApiError">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
-        <form-error-summary v-if="error"
+        <form-error-summary v-if="courseSelectionError || specialRequestError"
                             :header-locale-ref="'prescriptions.repeatCourses.errors.thereIsAProblem'"
                             :errors="getErrors"
                             :errors-ids="getErrorsIds"/>
@@ -14,11 +14,11 @@
                 {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}</h2>
             </legend>
             <div :class="selectMedicationErrorStyle">
-              <error-message v-if="error && !courseSelectionValid" id="error-type">
+              <error-message v-if="courseSelectionError" id="error-type">
                 {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
               </error-message>
               <repeat-prescription v-model="selected"
-                                   :a-described-by="error && !courseSelectionValid ?
+                                   :a-described-by="courseSelectionError ?
                                      'error-type' : undefined"/>
             </div>
             <div v-if="specialRequestNecessity !== 'NotAllowed'"
@@ -48,18 +48,18 @@
                    class="nhsuk-body-m" >
                   {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryMessage') }}</p>
               </div>
-              <error-message v-if="showMandatoryReasonError" id="special-request-error">
+              <error-message v-if="specialRequestError" id="special-request-error">
                 {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
               </error-message>
               <generic-text-area id="specialRequest"
                                  ref="specialRequest"
                                  v-model="specialRequest"
                                  :required="(specialRequestNecessity === 'Mandatory')"
-                                 :error.sync="showMandatoryReasonError"
+                                 :error.sync="specialRequestError"
                                  :text-area-classes="['nhsuk-u-margin-bottom-0']"
                                  text-area-ref="specialRequest"
                                  :data-maxlength="`${specialRequestCharacterLimit}`"
-                                 :a-described-by="showMandatoryReasonError ?
+                                 :a-described-by="specialRequestError ?
                                    'specialRequestCharactersRemaining special-request-error'
                                    : 'specialRequestCharactersRemaining'"
                                  @focus.once="onFocusSpecialRequest"/>
@@ -168,6 +168,8 @@ export default {
       selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
       tryAgainPath: PRESCRIPTION_REPEAT_COURSES_PATH,
       medicalAbbreviationsPath: this.$store.$env.CLINICAL_ABBREVIATIONS_URL,
+      courseSelectionError: false,
+      specialRequestError: false,
     };
   },
   computed: {
@@ -200,28 +202,24 @@ export default {
       return false;
     },
     getErrors() {
-      const { validated } = this.$store.state.repeatPrescriptionCourses;
-
       const errors = [];
 
-      if (validated && !this.courseSelectionValid) {
+      if (this.courseSelectionError) {
         errors.push(this.$t('prescriptions.repeatCourses.errors.selectAtLeastOne'));
       }
-      if (validated && !this.specialRequestValid) {
+      if (this.specialRequestError) {
         errors.push(this.$t('prescriptions.repeatCourses.errors.enterSpecialRequests'));
       }
 
       return errors;
     },
     getErrorsIds() {
-      const { validated } = this.$store.state.repeatPrescriptionCourses;
-
       const errorsIds = [];
 
-      if (validated && !this.courseSelectionValid) {
+      if (this.courseSelectionError) {
         errorsIds.push(this.repeatPrescriptionCourses[0].id);
       }
-      if (validated && !this.specialRequestValid) {
+      if (this.specialRequestError) {
         errorsIds.push('specialRequest');
       }
 
@@ -238,9 +236,6 @@ export default {
     showRepeatCourses() {
       const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
       return hasLoaded && repeatPrescriptionCourses.length > 0;
-    },
-    showMandatoryReasonError() {
-      return this.error && !this.specialRequestValid;
     },
     specialRequestNecessity() {
       return this.$store.state.repeatPrescriptionCourses
@@ -269,13 +264,13 @@ export default {
     },
     mandatoryReasonErrorStyle() {
       if (this.specialRequestNecessity === 'Mandatory' &&
-        this.error && !this.specialRequestValid) {
+        this.specialRequestError) {
         return 'nhsuk-form-group--error';
       }
       return '';
     },
     selectMedicationErrorStyle() {
-      return (this.error && !this.courseSelectionValid) ? 'nhsuk-form-group--error' : '';
+      return this.courseSelectionError ? 'nhsuk-form-group--error' : '';
     },
     specialRequestCharacterLimit() {
       return this.$store.state.repeatPrescriptionCourses.specialRequestCharacterLimit;
@@ -346,6 +341,8 @@ export default {
             isValid: this.courseSelectionValid && this.specialRequestValid,
             submitted: true,
           };
+          this.courseSelectionError = !this.courseSelectionValid;
+          this.specialRequestError = !this.specialRequestValid;
           this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
           EventBus.$emit(FOCUS_ERROR_ELEMENT);
         });

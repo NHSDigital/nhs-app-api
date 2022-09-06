@@ -175,10 +175,10 @@ describe('TermsConditions error state', () => {
     expect(wrapper.vm.getErrorState()).toBe('mock validation border');
   });
 
-  it('changes error state when terms checked', () => {
+  it('does NOT change error state when terms checked', () => {
     wrapper.vm.areTermsAccepted = true;
     wrapper.vm.isAnalyticsCookieAccepted = true;
-    expect(wrapper.vm.getErrorState()).toBeNull();
+    expect(wrapper.vm.getErrorState()).toBe('mock validation border');
   });
 
   it('will set focus on the error component', () => {

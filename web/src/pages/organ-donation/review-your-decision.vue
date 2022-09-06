@@ -31,7 +31,9 @@
         <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
         <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
       </div>
-      <confirmation :submit-attempted="submitAttempted"/>
+      <confirmation :submit-attempted="submitAttempted"
+                    :is-accuracy-accepted="isAccuracyAccepted"
+                    :is-privacy-accepted="isPrivacyAccepted"/>
       <generic-button id="submit-button"
                       class="nhsuk-button"
                       :disabled="isDisabled"
@@ -83,15 +85,11 @@ export default {
       isOptInDecision: this.$store.state.organDonation.registration.decision === DECISION_OPT_IN,
       isWithdrawing: this.$store.state.organDonation.isWithdrawing,
       submitAttempted: false,
+      isAccuracyAccepted: this.$store.state.organDonation.isAccuracyAccepted,
+      isPrivacyAccepted: this.$store.state.organDonation.isPrivacyAccepted,
     };
   },
   computed: {
-    isAccuracyAccepted() {
-      return this.$store.state.organDonation.isAccuracyAccepted;
-    },
-    isPrivacyAccepted() {
-      return this.$store.state.organDonation.isPrivacyAccepted;
-    },
     showAdditionalDetails() {
       return !this.isWithdrawing && (!this.$store.state.organDonation.isReaffirming ||
         this.wasSomeOrgans);
@@ -135,6 +133,8 @@ export default {
 
       this.$nextTick(() => {
         this.submitAttempted = true;
+        this.isAccuracyAccepted = this.$store.state.organDonation.isAccuracyAccepted;
+        this.isPrivacyAccepted = this.$store.state.organDonation.isPrivacyAccepted;
 
         if (this.showErrors) {
           EventBus.$emit(FOCUS_ERROR_ELEMENT);

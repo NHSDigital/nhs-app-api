@@ -82,15 +82,13 @@ export default {
         { value: NOT_STATED, label: this.$t('organDonation.faith.preferNotToSay') },
       ],
       hasTriedToContinue: false,
+      hasMadeDecision: false,
       selectedValue: this.currentValue,
     };
   },
   computed: {
     currentChoice() {
       return this.$store.state.organDonation.registration.faithDeclaration;
-    },
-    hasMadeDecision() {
-      return !!this.currentChoice;
     },
     showError() {
       return this.hasTriedToContinue && !this.hasMadeDecision;
@@ -116,6 +114,7 @@ export default {
 
       this.$nextTick(() => {
         this.hasTriedToContinue = true;
+        this.hasMadeDecision = !!this.currentChoice;
 
         if (this.showError) {
           EventBus.$emit(FOCUS_ERROR_ELEMENT);

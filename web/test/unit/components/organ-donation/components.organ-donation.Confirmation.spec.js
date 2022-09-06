@@ -9,10 +9,12 @@ describe('confirmation', () => {
   let $store;
   let wrapper;
 
-  const mountConfirmation = ({ submitAttempted = false } = {}) => mount(Confirmation, {
+  const mountConfirmation = ({ submitAttempted = false, isAccuracyAccepted = false, isPrivacyAccepted = false } = {}) => mount(Confirmation, {
     $store,
     propsData: {
       submitAttempted,
+      isAccuracyAccepted,
+      isPrivacyAccepted,
     },
     mountOpts: { i18n },
   });
@@ -34,15 +36,15 @@ describe('confirmation', () => {
 
   describe('isAccuracyAccepted setter', () => {
     it('will dispatch `setAccuracyAcceptance`', () => {
-      wrapper.vm.isAccuracyAccepted = true;
+      wrapper.vm.selectedValueChanged('accuracy-checkbox');
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAccuracyAcceptance', true);
     });
   });
 
   describe('isPrivacyAccepted setter', () => {
     it('will dispatch `setPrivacyAcceptance`', () => {
-      wrapper.vm.isPrivacyAccepted = false;
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setPrivacyAcceptance', false);
+      wrapper.vm.selectedValueChanged('privacy-checkbox');
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setPrivacyAcceptance', true);
     });
   });
 
@@ -114,14 +116,9 @@ describe('confirmation', () => {
       });
     };
 
-    beforeEach(() => {
-      wrapper = mountConfirmation({ submitAttempted: true });
-    });
-
     describe('when both are not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = false;
-        $store.state.organDonation.isPrivacyAccepted = false;
+        wrapper = mountConfirmation({ submitAttempted: true, isAccuracyAccepted: false, isPrivacyAccepted: false });
       });
 
       assertInlineMessage({ accuracy: true, privacy: true }, () => wrapper);
@@ -129,8 +126,7 @@ describe('confirmation', () => {
 
     describe('when privacy is not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = true;
-        $store.state.organDonation.isPrivacyAccepted = false;
+        wrapper = mountConfirmation({ submitAttempted: true, isAccuracyAccepted: true, isPrivacyAccepted: false });
       });
 
       assertInlineMessage({ accuracy: false, privacy: true }, () => wrapper);
@@ -138,8 +134,7 @@ describe('confirmation', () => {
 
     describe('when accuracy is not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = false;
-        $store.state.organDonation.isPrivacyAccepted = true;
+        wrapper = mountConfirmation({ submitAttempted: true, isAccuracyAccepted: false, isPrivacyAccepted: true });
       });
 
       assertInlineMessage({ accuracy: true, privacy: false }, () => wrapper);
@@ -147,8 +142,7 @@ describe('confirmation', () => {
 
     describe('when both are accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = true;
-        $store.state.organDonation.isPrivacyAccepted = true;
+        wrapper = mountConfirmation({ submitAttempted: true, isAccuracyAccepted: true, isPrivacyAccepted: true });
       });
 
       assertInlineMessage({ accuracy: false, privacy: false }, () => wrapper);

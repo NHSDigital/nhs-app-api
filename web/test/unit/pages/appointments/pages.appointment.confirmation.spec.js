@@ -131,13 +131,13 @@ describe('appointments confirmation page', () => {
               wrapper.vm.telephoneNumber = '1234';
             });
 
-            it('will hide the telephone error when updated', () => {
-              expect(findErrorReasons().exists()).toBe(false);
+            it('will NOT hide the telephone error when updated', () => {
+              expect(findErrorReasons().exists()).toBe(true);
             });
 
-            it('will hide the error container when updated', () => {
+            it('will NOT hide the error container when updated', () => {
               errorContainer = findErrorContainer();
-              expect(errorContainer.exists()).toBe(false);
+              expect(errorContainer.exists()).toBe(true);
             });
           });
         });
@@ -167,13 +167,13 @@ describe('appointments confirmation page', () => {
               wrapper.vm.symptoms = 'boo';
             });
 
-            it('will hide the reason error when updated', () => {
-              expect(findErrorReasons().exists()).toBe(false);
+            it('will NOT hide the reason error when updated', () => {
+              expect(findErrorReasons().exists()).toBe(true);
             });
 
-            it('will hide the error container when updated', () => {
+            it('will NOT hide the error container when updated', () => {
               errorContainer = findErrorContainer();
-              expect(errorContainer.exists()).toBe(false);
+              expect(errorContainer.exists()).toBe(true);
             });
           });
         });

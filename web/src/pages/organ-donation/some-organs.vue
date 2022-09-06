@@ -4,8 +4,8 @@
       <div ref="validationMessage" tabindex="-1">
         <form-error-summary v-if="showErrors"
                             :header-locale-ref="'organDonation.thereIsAProblem'"
-                            :errors="getErrors"
-                            :errors-ids="getErrorIds"/>
+                            :errors="errors"
+                            :errors-ids="errorIds"/>
       </div>
       <div>
         <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
@@ -22,7 +22,7 @@
       <organ-choice v-for="choice in choices" :key="choice"
                     :title="`organDonation.organs.${choice}`"
                     :organ-name="choice"
-                    :show-errors="showInlineErrors"/>
+                    :show-error="showInlineErrors && isNotStated(choice)"/>
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
@@ -66,6 +66,11 @@ export default {
       activeErrorMessage: '',
       choices: Object.keys(initialState().registration.decisionDetails.choices),
       hasTriedToContinue: false,
+      hasMadeChoices: false,
+      showInlineErrors: false,
+      decisionsAfterContinue: [],
+      errors: [],
+      errorIds: [],
       setAllOrganChoice: 'organDonation/setSomeOrgans',
     };
   },
@@ -75,9 +80,6 @@ export default {
     },
     currentChoices() {
       return this.$store.state.organDonation.registration.decisionDetails.choices;
-    },
-    hasMadeChoices() {
-      return this.areAllSelected && this.hasYesSelection;
     },
     hasYesSelection() {
       return includes(YES)(this.currentChoices);
@@ -127,9 +129,6 @@ export default {
 
       return errorsIds;
     },
-    showInlineErrors() {
-      return this.showErrors && !this.areAllSelected;
-    },
   },
   beforeMount() {
     if (
@@ -149,6 +148,11 @@ export default {
 
       this.$nextTick(() => {
         this.hasTriedToContinue = true;
+        this.hasMadeChoices = this.areAllSelected && this.hasYesSelection;
+        this.showInlineErrors = this.showErrors && !this.areAllSelected;
+        this.errors = this.getErrors;
+        this.errorIds = this.getErrorIds;
+        this.decisionsAfterContinue = Object.values(this.$store.state.organDonation.registration.decisionDetails.choices);
 
         if (this.showErrors) {
           EventBus.$emit(FOCUS_ERROR_ELEMENT);
@@ -159,6 +163,17 @@ export default {
     },
     moreAboutOrgansClicked() {
       redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
+    },
+    isNotStated(organName) {
+      const organs = Object.keys(this.$store.state.organDonation.registration.decisionDetails.choices);
+
+      for (let i = 0; i < organs.length; i += 1) {
+        if (organs[i] === organName) {
+          return this.decisionsAfterContinue[i] === NOT_STATED;
+        }
+      }
+
+      return false;
     },
   },
 };

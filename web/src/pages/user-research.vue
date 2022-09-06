@@ -74,16 +74,18 @@ export default {
       hasTriedToContinue: false,
       privacyPolicyUrl: this.$store.$env.PRIVACY_POLICY_URL,
       selectedValue: undefined,
+      showNoSelectionError: false,
     };
   },
   computed: {
     showError() {
-      return this.hasTriedToContinue && isUndefined(this.selectedValue);
+      return this.hasTriedToContinue && this.showNoSelectionError;
     },
   },
   methods: {
     async onContinue() {
       this.hasTriedToContinue = true;
+      this.showNoSelectionError = isUndefined(this.selectedValue);
 
       if (!this.showError) {
         try {

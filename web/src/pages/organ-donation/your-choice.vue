@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       hasTriedToContinue: false,
+      hasMadeDecision: false,
       radioButtons: [
         {
           label: this.$t('organDonation.yourChoice.allMyOrgansAndTissue'),
@@ -83,9 +84,6 @@ export default {
   computed: {
     currentChoice() {
       return get('$store.state.organDonation.registration.decisionDetails.all')(this);
-    },
-    hasMadeDecision() {
-      return !(this.currentChoice === '' || this.currentChoice === undefined);
     },
     showErrors() {
       return this.hasTriedToContinue && !this.hasMadeDecision;
@@ -113,6 +111,7 @@ export default {
 
       this.$nextTick(() => {
         this.hasTriedToContinue = true;
+        this.hasMadeDecision = this.currentChoice !== '' && this.currentChoice !== undefined;
 
         if (this.showErrors) {
           EventBus.$emit(FOCUS_ERROR_ELEMENT);

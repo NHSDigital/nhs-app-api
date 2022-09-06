@@ -18,7 +18,7 @@ describe('organ choice component', () => {
     propsData: {
       title: 'organDonation.organs.heart',
       organName: 'heart',
-      showErrors: false,
+      showError: false,
     },
     mountOpts: { i18n },
   });

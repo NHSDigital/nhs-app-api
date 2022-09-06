@@ -250,10 +250,10 @@ export default {
       return this.showReasonError || this.showTelephoneError;
     },
     showReasonError() {
-      return this.reasonError && !this.symptoms;
+      return this.reasonError;
     },
     showTelephoneError() {
-      return this.telephoneNumberError && !this.telephoneNumber;
+      return this.telephoneNumberError;
     },
     slotEndTime() {
       if (!this.slot) return undefined;

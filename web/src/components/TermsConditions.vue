@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
+    <div v-if="hasTriedToContinue && showTermsNotAcceptedError" id="error_msg">
       <form-error-summary :header-locale-ref="'termsAndConditions.errors.youCannotContinue.header'"
                           :errors="$t('termsAndConditions.errors.youCannotContinue.text')"
                           :errors-ids="'termsAndConditions-agree_checkbox'"/>
@@ -33,7 +33,7 @@
       <h2>{{ $t('termsAndConditions.initial.manageCookies.title') }}</h2>
     </div>
     <div :class="getErrorState()">
-      <error-message v-if="hasTriedToContinue && !areTermsAccepted"
+      <error-message v-if="hasTriedToContinue && showTermsNotAcceptedError"
                      id="error_txt"
                      :class="$style.validationText">
         {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.youCannotUseWithoutAgreeing') }}
@@ -43,7 +43,7 @@
           <p>{{ $t('termsAndConditions.initial.manageCookies.text') }}</p>
         </legend>
         <generic-checkbox :value="termsAcceptedValue"
-                          :a-described-by="hasTriedToContinue && !areTermsAccepted ?
+                          :a-described-by="hasTriedToContinue && showTermsNotAcceptedError ?
                             'error_txt' : undefined"
                           checkbox-id="termsAndConditions-agree_checkbox"
                           @onCheckedChanged="termsSelectionChanged">
@@ -111,6 +111,7 @@ export default {
       termsAcceptedValue: 'terms',
       analyticsAcceptedValue: 'analytics',
       hasTriedToContinue: false,
+      showTermsNotAcceptedError: false,
     };
   },
   methods: {
@@ -124,6 +125,7 @@ export default {
         this.hasTriedToContinue = true;
 
         if (!this.areTermsAccepted) {
+          this.showTermsNotAcceptedError = true;
           EventBus.$emit(FOCUS_ERROR_ELEMENT);
           return;
         }
@@ -140,7 +142,7 @@ export default {
       });
     },
     getErrorState() {
-      if (this.hasTriedToContinue && !this.areTermsAccepted) {
+      if (this.hasTriedToContinue && this.showTermsNotAcceptedError) {
         return this.$style.validationBorderLeft;
       }
       return null;
