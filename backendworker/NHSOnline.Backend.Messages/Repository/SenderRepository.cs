@@ -15,17 +15,14 @@ namespace NHSOnline.Backend.Messages.Repository
     {
         private readonly ILogger<SenderRepository> _logger;
         private readonly ISqlApiRepository<DbSender> _repository;
-        private readonly IMessagesConfiguration _messagesConfiguration;
         private const string RecordName = nameof(Sender);
 
         public SenderRepository(
             ILogger<SenderRepository> logger,
-            ISqlApiRepository<DbSender> repository,
-            IMessagesConfiguration messagesConfiguration)
+            ISqlApiRepository<DbSender> repository)
         {
             _logger = logger;
             _repository = repository;
-            _messagesConfiguration = messagesConfiguration;
         }
 
         public async Task<RepositoryCreateResult<DbSender>> CreateOrUpdate(DbSender sender)
@@ -78,11 +75,8 @@ namespace NHSOnline.Backend.Messages.Repository
                     .IsNotNull(limit, nameof(limit), ThrowError)
                     .IsValid();
 
-                var senderIdNhsApp = _messagesConfiguration.SenderIdNhsApp;
-
                 IQueryable<DbSender> QueryFunction(IQueryable<DbSender> query) =>
                     query.Where(x => x.Timestamp <= lastUpdatedBefore)
-                        .Where(x => x.Id != senderIdNhsApp)
                         .OrderBy(x => x.Timestamp)
                         .Take(limit);
 

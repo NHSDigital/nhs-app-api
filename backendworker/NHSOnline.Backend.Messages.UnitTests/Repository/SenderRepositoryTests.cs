@@ -18,19 +18,16 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         private ISenderRepository _systemUnderTest;
         private Mock<ILogger<SenderRepository>> _mockLogger;
         private Mock<ISqlApiRepository<DbSender>> _mockSqlApiRepository;
-        private Mock<IMessagesConfiguration> _mockMessagesConfiguration;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockLogger = new Mock<ILogger<SenderRepository>>();
             _mockSqlApiRepository = new Mock<ISqlApiRepository<DbSender>>(MockBehavior.Strict);
-            _mockMessagesConfiguration = new Mock<IMessagesConfiguration>(MockBehavior.Strict);
 
             _systemUnderTest = new SenderRepository(
                 _mockLogger.Object,
-                _mockSqlApiRepository.Object,
-                _mockMessagesConfiguration.Object);
+                _mockSqlApiRepository.Object);
         }
 
         [TestMethod]
@@ -150,13 +147,10 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
 
             var sender3 = new DbSender
             {
-                Id = "senderId3",
+                Id = "Y0E3J",
                 Name = "senderName",
                 Timestamp = new DateTime(2022,1,2)
             };
-
-            _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("Y0E3J");
 
             Func<IQueryable<DbSender>, IQueryable<DbSender>> capturedQuery = null;
 
@@ -190,49 +184,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task FindByLastUpdated_StaleRecordsIncludesNhsAppSender_NhsAppSenderExcludedFromResults()
-        {
-            // Arrange
-            var sender1 = new DbSender
-            {
-                Id = "Y0E3J",
-                Name = "NHS App",
-                Timestamp = new DateTime(2000,1,1)
-            };
-
-            _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("Y0E3J");
-
-            Func<IQueryable<DbSender>, IQueryable<DbSender>> capturedQuery = null;
-
-            _mockSqlApiRepository.Setup(s => s.Find(It.IsAny<Func<IQueryable<DbSender>, IQueryable<DbSender>>>(), "Sender"))
-                .Callback<Func<IQueryable<DbSender>, IQueryable<DbSender>>, string>((query, recordName) => capturedQuery = query)
-                .ReturnsAsync(new RepositoryFindResult<DbSender>.NotFound());
-
-            // Act
-            var result = await _systemUnderTest.Find(new DateTime(2022,1,1), 1);
-
-            var capturedQueryResult = capturedQuery.Invoke(new List<DbSender>
-            {
-                sender1
-            }.AsQueryable());
-
-            // Assert
-            capturedQueryResult.Should().BeOfType<EnumerableQuery<DbSender>>()
-                .Subject.Should().BeEquivalentTo(new List<DbSender>().AsEnumerable());
-
-            result.Should().BeOfType<RepositoryFindResult<DbSender>.NotFound>();
-
-            VerifyMocks();
-        }
-
-        [TestMethod]
         public void FindByLastUpdated_ButSqlApiThrowsException_ThrowException()
         {
             // Arrange
-            _mockMessagesConfiguration.SetupGet(x => x.SenderIdNhsApp)
-                .Returns("Y0E3J");
-
             _mockSqlApiRepository.Setup(s =>
                     s.Find(It.IsAny<Func<IQueryable<DbSender>, IQueryable<DbSender>>>(), "Sender"))
                 .ThrowsAsync(new AggregateException("exception"));
@@ -249,7 +203,6 @@ namespace NHSOnline.Backend.Messages.UnitTests.Repository
         private void VerifyMocks()
         {
             _mockSqlApiRepository.VerifyAll();
-            _mockMessagesConfiguration.VerifyAll();
         }
     }
 }
