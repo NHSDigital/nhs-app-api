@@ -39,9 +39,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         public async Task<IActionResult> GetServiceDefinition(
             [FromBody] ServiceDefinitionMetaData metaData,
             [FromRoute(Name = "provider")] string provider,
+            [FromQuery] bool demographicsConsentGiven,
             [UserSession] P9UserSession userSession)
         {
-            return await HandleGetServiceDefinition(metaData, provider, userSession, "1");
+            return await HandleGetServiceDefinition(metaData, provider, demographicsConsentGiven, userSession, "1");
         }
 
         [HttpPost]
@@ -49,13 +50,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         public async Task<IActionResult> GetServiceDefinitionV2(
             [FromBody] ServiceDefinitionMetaData metaData,
             [FromRoute(Name = "provider")] string provider,
+            [FromQuery] bool demographicsConsentGiven,
             [UserSession] P9UserSession userSession)
         {
-            return await HandleGetServiceDefinition(metaData, provider, userSession, "2");
+            return await HandleGetServiceDefinition(metaData, provider, demographicsConsentGiven, userSession, "2");
         }
 
-        public async Task<IActionResult> HandleGetServiceDefinition(ServiceDefinitionMetaData metaData, string provider,
-            P9UserSession userSession, string version)
+        public async Task<IActionResult> HandleGetServiceDefinition(ServiceDefinitionMetaData metaData,
+            string provider,
+            bool demographicsConsentGiven,
+            P9UserSession userSession,
+            string version)
         {
             try
             {
@@ -69,6 +74,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                             provider,
                             metaData.Id,
                             description,
+                            demographicsConsentGiven,
                             userSession,
                             version))
                         .Accept(new ServiceDefinitionResultVisitor());

@@ -80,7 +80,7 @@
 
              // Act
              var response = await _systemUnderTest.GetServiceDefinition(serviceDefinitionMetaData,
-                 Provider, _userSession);
+                 Provider, false, _userSession);
 
              // Assert
              var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -103,7 +103,7 @@
 
             // Act
             var response = await _systemUnderTest.GetServiceDefinitionV2(serviceDefinitionMetaData,
-                Provider, _userSession);
+                Provider, false, _userSession);
 
             // Assert
             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -317,10 +317,10 @@
          }
 
          private void MockServiceGetServiceDefinition(ServiceDefinitionResult result, P9UserSession userSession, string provider = Provider, string serviceDefinitionId = ServiceDefinitionId,
-             string description = ServiceDefinitionDescriptionV1, string version = "1")
+             string description = ServiceDefinitionDescriptionV1, bool  demographicsConsentGiven = false, string version = "1")
          {
              Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedGetByIdMatch =
-                 s => s.GetServiceDefinition(provider, serviceDefinitionId, description, userSession, version);
+                 s => s.GetServiceDefinition(provider, serviceDefinitionId, description, demographicsConsentGiven, userSession, version);
 
              _mockServiceDefinitionService
                  .Setup(expectedGetByIdMatch)

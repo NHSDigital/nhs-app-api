@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string providerKey,
             string serviceDefinitionId,
             string serviceDefinitionDescription,
+            bool demographicsConsentGiven,
             P9UserSession userSession,
             string version);
         Task<ServiceDefinitionResult> EvaluateServiceDefinition(string providerKey, string serviceDefinitionId, string serviceDefinitionDescription, Parameters parameters, bool addJavascriptDisabledHeader, bool demographicsConsentGiven, P9UserSession userSession, string version);

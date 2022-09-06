@@ -122,7 +122,7 @@ export default {
       }).catch(() => {});
     }
   },
-  getServiceDefinition({ commit, rootState }, params = {}) {
+  getServiceDefinition({ commit, state, rootState }, params = {}) {
     const store = this;
     const { serviceDefinitionId, provider } = params;
 
@@ -136,6 +136,7 @@ export default {
         type: serviceDefinitionType,
       },
       provider,
+      demographicsConsentGiven: !!state?.demographicsConsentGiven,
     }).then((response) => {
       commit(CLEAR);
       if (response === undefined) {

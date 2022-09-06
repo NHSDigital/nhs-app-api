@@ -133,6 +133,7 @@ describe('online consultations store actions', () => {
           type: 'AdminHelp',
         },
         provider,
+        demographicsConsentGiven: false,
       };
       actionParameters = {
         serviceDefinitionId,

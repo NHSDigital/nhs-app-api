@@ -63,6 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
         private const string ServiceDefinitionDescription = "test admin help";
         private const string SessionId = "9102fb79-bc0e-465d-b2de-2a724ec876dc";
         private const string NhsLoginId = "cb09b2b9-aae3-4162-96d3-0eea6ae938d8";
+        private const bool DemographicsConsentGiven = true;
 
         private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\", \"status\": \"success\" }";
         private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
@@ -173,7 +174,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .Throws<HttpRequestException>();
 
             // Act
-            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -188,7 +189,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
             // Act
-            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -203,7 +204,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
             // Act
-            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -221,7 +222,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
             // Act
-            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -238,7 +239,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
             // Act
-            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -259,7 +260,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
                 .Returns(SessionId);
 
             // Act
-            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             _mockSenderLogger.VerifyLogger(
@@ -277,13 +278,49 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.ServiceDefi
             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
             // Act
-            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
+            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, DemographicsConsentGiven, _userSession, "1");
 
             // Assert
             _mockSenderLogger.VerifyLogger(
                 LogLevel.Information,
                 $"Starting online consultation for {ServiceDefinitionDescription}. ODSCode: {OdsCode}",
                 Times.Never());
+        }
+
+        [TestMethod]
+        public async Task GetServiceDefinition_WhenDemographicConsentIsGiven_ThenUserHasAgreedAuditIsSent()
+        {
+            // Arrange
+            MockCreateInitialServiceDefinitionEvaluateParameters();
+            MockHttpResponseMessage(HttpStatusCode.OK, SessionEndGuidanceResponse);
+            MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+            const string auditType = AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest;
+            const bool demographicsConsentGiven = true;
+
+            // Act
+            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, demographicsConsentGiven, _userSession, "1");
+
+            // Assert
+            _mockAuditor.Verify(x => x.PreOperationAudit(auditType,
+                "User has agreed to share their name, age, NHS number and postal address."));
+        }
+
+        [TestMethod]
+        public async Task GetServiceDefinition_WhenDemographicConsentIsNotGiven_ThenUserHasNotAgreedAuditIsSent()
+        {
+            // Arrange
+            MockCreateInitialServiceDefinitionEvaluateParameters();
+            MockHttpResponseMessage(HttpStatusCode.OK, SessionEndGuidanceResponse);
+            MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+            const string auditType = AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest;
+            const bool demographicsConsentGiven = false;
+
+            // Act
+            await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, demographicsConsentGiven, _userSession, "1");
+
+            // Assert
+            _mockAuditor.Verify(x => x.PreOperationAudit(auditType,
+                "User has not agreed to share their name, age, NHS number and postal address."));
         }
 
         [TestMethod]

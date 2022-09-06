@@ -7190,6 +7190,13 @@
             description: "token sent with the request"
             schema: 
               type: "string"
+          - 
+            in: "query"
+            name: "demographicsConsentGiven"
+            required: false
+            description: "Indicates consent has been given to add demographic information to the requestBody parameters"
+            schema: 
+              type: "boolean"
         requestBody: 
           x-name: "serviceDefinitionMetaData"
           required: true
@@ -7820,6 +7827,13 @@
             description: "token sent with the request"
             schema: 
               type: "string"
+          - 
+            in: "query"
+            name: "demographicsConsentGiven"
+            required: false
+            description: "Indicates consent has been given to add demographic information to the requestBody parameters"
+            schema: 
+              type: "boolean"
         requestBody: 
           x-name: "serviceDefinitionMetaData"
           required: true

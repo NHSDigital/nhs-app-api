@@ -61,6 +61,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string providerKey,
             string serviceDefinitionId,
             string serviceDefinitionDescription,
+            bool demographicsConsentGiven,
             P9UserSession userSession,
             string version)
         {
@@ -73,6 +74,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 var parameters = _fhirParameterHelpers.CreateInitialServiceDefinitionEvaluateParameters(odsCode);
 
                 var nhsLoginId = GetNhsLoginId(userSession);
+
+                await _auditor.PreOperationAudit(
+                    AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
+                    demographicsConsentGiven
+                        ? "User has agreed to share their name, age, NHS number and postal address."
+                        : "User has not agreed to share their name, age, NHS number and postal address.");
 
                 return await _querySender.SendEvaluateQueryAndHandleResponse(
                     providerKey,
@@ -157,9 +164,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                             parameters.Add("patient",
                                 _fhirParameterHelpers.CreateFhirPatient(userSession, demographicsResult.Response.Address ??= ""));
-                            await _auditor.PreOperationAudit(
-                                AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
-                                "User has agreed to share their name, age, NHS number and postal address.");
                         }
                         else
                         {
@@ -168,12 +172,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                                 _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
                         }
                     }
-                }
-                else
-                {
-                    await _auditor.PreOperationAudit(
-                        AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
-                        "User has not agreed to share their name, age, NHS number and postal address.");
                 }
 
                 var nhsLoginId = GetNhsLoginId(userSession);
