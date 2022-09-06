@@ -54,7 +54,9 @@ namespace NHSOnline.App.Services.ForcedUpdate
                 return taskResult;
             }
 
-            throw new InvalidOperationException("Initiate not called before required update check");
+            var taskStatus = _task != null ? _task.Status.ToString() : "undefined";
+            _logger.LogError("Initiate not called before required update check. Task Status: {0} ",taskStatus);
+            return UpdateRequired.Failed;
         }
 
         public async Task OpenAppStoreUrl() => await _updateService.OpenAppStoreUrl().ResumeOnThreadPool();
