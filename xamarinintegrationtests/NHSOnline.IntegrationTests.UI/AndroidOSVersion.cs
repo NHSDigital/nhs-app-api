@@ -8,7 +8,8 @@ namespace NHSOnline.IntegrationTests.UI
         Nine,
         Ten,
         Eleven,
-        Twelve
+        Twelve,
+        Thirteen
     }
 
     public static class AndroidOsVersionExtensions
@@ -22,6 +23,7 @@ namespace NHSOnline.IntegrationTests.UI
                 AndroidOSVersion.Ten => "10.0",
                 AndroidOSVersion.Eleven => "11.0",
                 AndroidOSVersion.Twelve => "12.0",
+                AndroidOSVersion.Thirteen => "13.0",
 
                 _ => throw new ArgumentOutOfRangeException(nameof(osVersion), osVersion, null)
             };

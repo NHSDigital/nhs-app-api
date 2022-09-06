@@ -9,6 +9,7 @@ namespace NHSOnline.IntegrationTests.UI
         iPhoneXR,
         iPhone11Pro,
         iPhone12,
+        iPhone12Pro,
         iPhone13,
         iPadAir4
     }
@@ -24,6 +25,7 @@ namespace NHSOnline.IntegrationTests.UI
                 IOSDevice.iPhoneXR => "iPhone XR",
                 IOSDevice.iPhone11Pro => "iPhone 11 Pro",
                 IOSDevice.iPhone12 => "iPhone 12",
+                IOSDevice.iPhone12Pro => "iPhone 12 Pro",
                 IOSDevice.iPhone13 => "iPhone 13",
                 IOSDevice.iPadAir4 => "iPad Air 4",
                 _ => throw new ArgumentOutOfRangeException(nameof(device), device, null)

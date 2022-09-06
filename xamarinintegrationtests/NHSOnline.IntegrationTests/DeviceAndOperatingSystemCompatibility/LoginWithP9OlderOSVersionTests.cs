@@ -77,6 +77,19 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertOnPage(driver);
         }
 
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone12Pro, OSVersion = IOSVersion.SixteenBeta)]
+        public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS16(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
         [NhsAppCanaryTest]
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS9, OSVersion = AndroidOSVersion.Eight)]
         public void PatientWithProofLevelNineCanSuccessfullyLogInOnAndroid8(IAndroidDriverWrapper driver)
@@ -132,6 +145,19 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
 
         [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel6, OSVersion = AndroidOSVersion.Twelve)]
         public void PatientWithProofLevelNineCanSuccessfullyLogInOnAndroid12(IAndroidDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("Buzz").FamilyName("Aldrin"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogAndroidPatientIn(driver, patient);
+
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.Pixel6Pro, OSVersion = AndroidOSVersion.Thirteen)]
+        public void PatientWithProofLevelNineCanSuccessfullyLogInOnAndroid13(IAndroidDriverWrapper driver)
         {
             var patient = new TppPatient()
                 .WithName(b => b.GivenName("Buzz").FamilyName("Aldrin"));
