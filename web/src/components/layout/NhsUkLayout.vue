@@ -51,6 +51,7 @@
 <script>
 import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
+import ClearBackLinkOverrideMixin from '@/plugins/mixinDefinitions/ClearBackLinkOverrideMixin';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import FlashMessage from '@/components/widgets/FlashMessage';
@@ -88,7 +89,7 @@ export default {
     WebFooter,
     WebHeader,
   },
-  mixins: [ResetSpinnerMixin],
+  mixins: [ClearBackLinkOverrideMixin, ResetSpinnerMixin],
   props: {
     hasFooter: {
       type: Boolean,
