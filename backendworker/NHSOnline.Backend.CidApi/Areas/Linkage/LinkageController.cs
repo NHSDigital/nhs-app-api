@@ -129,6 +129,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                             return BadRequest();
                         }
 
+                        _logger.LogInformation(
+                            $"Create LinkageKey for NhsNumber={createLinkageRequest.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
+
                         if (!HasValidDateOfBirthForLinkage(createLinkageRequest.DateOfBirth))
                         {
                             return await HandleUnderMinimumAge(createLinkageRequest, gpSystem);
@@ -136,8 +139,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                         var linkageService = gpSystem.GetLinkageService();
 
-                        _logger.LogInformation(
-                            $"Create LinkageKey for NhsNumber={createLinkageRequest.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
 
                         await _auditor.PreOperationAuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
                             AuditingOperations.CreateLinkageKeyAuditTypeRequest,

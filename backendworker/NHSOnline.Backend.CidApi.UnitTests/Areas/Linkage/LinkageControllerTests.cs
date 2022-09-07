@@ -355,6 +355,16 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
 
             var mockLinkageService = new Mock<ILinkageService>();
 
+            var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
+            var gpSystem = _fixture.Create<Mock<IGpSystem>>();
+
+            var validationService = MockLinkageValidationService(true);
+            gpSystem.Setup(x => x.GetLinkageValidationService()).Returns(validationService.Object);
+            gpSystem.Setup(x => x.GetLinkageService()).Returns(mockLinkageService.Object);
+
+            var mockGpSystemResolver = _fixture.Create<Mock<IGpSystemResolver>>();
+            mockGpSystemResolver.Setup(x => x.ResolveFromOdsCode(It.IsAny<string>())).ReturnsAsync(Option.Some(gpSystem.Object));
+
             mockLinkageService.Setup(x => x.CreateLinkageKey(
                 It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
                                                    req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
@@ -367,13 +377,21 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var request = BuildCreateLinkageRequest();
 
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge)).Returns(false);
-
-            var linkageController = CreateLinkageController();
+            
+            var linkageController = new LinkageController(
+                logger.Object,
+                _mockAuditor.Object,
+                _mockMinimumAgeValidator.Object,
+                _settings,
+                _odsCodeMassager.Object,
+                mockGpSystemResolver.Object);
 
             // Act
             var result = await linkageController.Post(request);
 
             // Assert
+            logger.VerifyLogger(LogLevel.Information, $"Create LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}", Times.Once());
+
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
         }

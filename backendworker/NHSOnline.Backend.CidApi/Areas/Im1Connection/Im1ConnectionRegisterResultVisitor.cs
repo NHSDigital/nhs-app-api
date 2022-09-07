@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.Support;
 using CreateIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.CreateIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
@@ -21,6 +23,11 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         public IActionResult Visit(Im1ConnectionRegisterResult.Success result)
         {
             Logger.LogInformation("Im1 Connection Registration resulted in a success");
+
+            Logger.LogInformation(!string.IsNullOrEmpty(result.Response.NhsNumbers?.FirstOrDefault()?.NhsNumber)
+                ? $"Im1 Connection Registration successful for NhsNumber={result.Response.NhsNumbers.First().NhsNumber.RemoveWhiteSpace()}"
+                : "Im1 Connection Registration successful but no NHS number returned from supplier");
+
             return new CreatedResult(Request.GetDisplayUrl(), CreateResponse(result.Response));
         }
 

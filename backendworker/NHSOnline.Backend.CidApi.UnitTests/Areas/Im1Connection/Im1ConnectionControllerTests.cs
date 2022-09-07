@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +19,7 @@ using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 using PatientIm1ConnectionResponse = NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.PatientIm1ConnectionResponse;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
@@ -325,6 +326,68 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             _auditor.Verify(x => x.PostOperationAuditRegistrationEvent(_expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
                 AuditingOperations.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+            _logger.VerifyLogger(LogLevel.Information, $"Im1 Connection Registration successful for NhsNumber={_expectedNhsNumbers[0].NhsNumber}", Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalledWithNoNhsNumberInResponse()
+        {
+            // Arrange
+            const string odsCode = DefaultOdsCode;
+            const string patientIdentifier = DefaultConnectionToken;
+
+            var model = _fixture.Create<PatientIm1ConnectionRequest>();
+            model.OdsCode = odsCode;
+
+            var verifyResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse()
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = _expectedNhsNumbers,
+                OdsCode = DefaultOdsCode,
+            };
+
+            var registerResponse = new CreateIm1ConnectionResponse()
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = null,
+                OdsCode = DefaultOdsCode,
+                AccountId = model.AccountId,
+                LinkageKey = model.LinkageKey
+            };
+
+            var expectedResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = null
+            };
+
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.Success(verifyResponse));
+
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+
+            _gpSystemResolver
+                .Setup(x => x.ResolveFromOdsCode(odsCode))
+                .ReturnsAsync(Option.Some(gpSystemMock.Object));
+
+            im1ConnectionService
+                .Setup(x => x.Register(model))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(registerResponse));
+
+            _systemUnderTest = CreateIm1ConnectionController();
+
+            // Act
+            var result = await _systemUnderTest.Post(model);
+
+            // Assert
+            result.Should().BeAssignableTo<CreatedResult>()
+                .Subject.Value.Should().BeAssignableTo<NHSOnline.Backend.CidApi.Areas.Im1Connection.Models.CreateIm1ConnectionResponse>()
+                .Subject.Should().BeEquivalentTo(expectedResponse);
+
+            _auditor.VerifyNoOtherCalls();
+            _logger.VerifyLogger(LogLevel.Information, $"Im1 Connection Registration successful but no NHS number returned from supplier", Times.Once());
         }
 
         [TestMethod]
