@@ -35,8 +35,10 @@ chmod +x prune_releases.sh
 if [[ $dry_run == true ]]; then
   echo "Please review the following script before approving:"
   cat prune_releases.sh
+  rm prune_releases.sh
 elif [[ $dry_run == false ]]; then
   ./prune_releases.sh
+  rm prune_releases.sh
 else
   die "Error setting dry_run variable, exiting..."
 fi
