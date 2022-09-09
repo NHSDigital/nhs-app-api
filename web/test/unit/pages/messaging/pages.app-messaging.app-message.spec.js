@@ -6,6 +6,7 @@ import { createStore, mount, normaliseNewLines } from '../../helpers';
 utils.redirectTo = jest.fn();
 
 const panelItemClass = 'message-panel__item';
+const messageReplyContainerClass = 'messageReply';
 
 let wrapper;
 let $store;
@@ -32,6 +33,7 @@ const mountMessage = ({
     $store,
     $style: {
       [panelItemClass]: panelItemClass,
+      [messageReplyContainerClass]: messageReplyContainerClass,
     },
     mocks: {
       reload: jest.fn(),
@@ -124,7 +126,7 @@ describe('messaging message', () => {
         beforeEach(async () => {
           wrapper = mountMessage({
             messageId,
-            message: { body: 'read message 1', sender: 'test sender', version: 0, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            message: { id: messageId, body: 'read message 1', sender: 'test sender', version: 0, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
           });
           await wrapper.vm.$nextTick();
         });
@@ -147,6 +149,70 @@ describe('messaging message', () => {
 
         it('will not show the shutter container', () => {
           expect(wrapper.find('[data-purpose="shutter-container"]').exists()).toBe(false);
+        });
+
+        it('will not display the message reply container', () => {
+          expect(wrapper.find(`.${messageReplyContainerClass}`).exists()).toBe(false);
+        });
+      });
+
+      describe('has message with keyword replies', () => {
+        beforeEach(async () => {
+          wrapper = mountMessage({
+            messageId,
+            message: {
+              id: messageId,
+              body: 'read message 1',
+              sender: 'test sender',
+              version: 0,
+              read: true,
+              sentTime: '2019-09-14T02:15:12.356Z',
+              reply: {
+                options: [{
+                  code: 'CANCEL',
+                  display: 'CANCEL',
+                }],
+              },
+            },
+          });
+          await wrapper.vm.$nextTick();
+        });
+
+        it('will display the message reply container', () => {
+          expect(wrapper.find(`.${messageReplyContainerClass}`).exists()).toBe(true);
+        });
+
+        it('will dispatch action to save message response and reload message', async () => {
+          await wrapper.vm.sendClicked('CANCEL');
+          expect($store.dispatch).toBeCalledWith('messaging/recordMessageResponse', { messageId: '1234', response: 'CANCEL' });
+          await wrapper.vm.$nextTick();
+          expect($store.dispatch).toBeCalledWith('messaging/loadMessage', { messageId: '1234' });
+        });
+      });
+
+      describe('has message with keyword replies', () => {
+        beforeEach(async () => {
+          wrapper = mountMessage({
+            messageId,
+            message: {
+              body: 'read message 1',
+              sender: 'test sender',
+              version: 0,
+              read: true,
+              sentTime: '2019-09-14T02:15:12.356Z',
+              reply: {
+                options: [{
+                  code: 'CANCEL',
+                  display: 'CANCEL',
+                }],
+              },
+            },
+          });
+          await wrapper.vm.$nextTick();
+        });
+
+        it('will display the message reply container', () => {
+          expect(wrapper.find(`.${messageReplyContainerClass}`).exists()).toBe(true);
         });
       });
     });

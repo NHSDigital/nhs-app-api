@@ -47,3 +47,16 @@ Feature: Messages accessibility
     Then the Message Senders page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
     And the Messages_NoMessages page is saved to disk
+
+  Scenario: A user can see a message with a questionnaire and keyword options
+    Given I am a user wishing to view messages that require a reply
+    And I am logged in
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
+    Then the Message Senders page is displayed
+    And I click on Sender One Canonical sender
+    And the Sender Messages page is displayed
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    When I click on the 'Reply to this message' button
+    Then the radio button options are displayed

@@ -16,6 +16,7 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
         // We cannot serialise an object to create this because the ISODate objects cannot be created like that.
         fun createJson(message: SingleMessageFacade, nhsLoginId: String): String {
             val readString = if (!message.read) null else dateAsIsoDate(ZonedDateTime.now().minusDays(2))
+
             val senderContext =
                 if (message.senderContext != null)
                     ", \"SenderContext\" : { \"SenderId\" : \"${message.senderContext.senderId}\" }"

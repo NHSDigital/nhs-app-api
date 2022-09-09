@@ -31,6 +31,11 @@
         </div>
       </div>
 
+      <message-reply v-if="hasReplyOptions"
+                     :message-reply="messageReply"
+                     :sender-name="senderName"
+                     @send_clicked="sendClicked" />
+
       <desktop-generic-back-link v-if="!isNativeApp"
                                  data-purpose="back-link"
                                  :path="backLink"
@@ -53,6 +58,7 @@ import PageTitle from '@/components/widgets/PageTitle';
 import get from 'lodash/fp/get';
 import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH } from '@/router/paths';
 import { messageVersion, redirectTo } from '@/lib/utils';
+import MessageReply from '@/components/messaging/MessageReply';
 
 export default {
   name: 'AppMessagingAppMessagePage',
@@ -66,6 +72,7 @@ export default {
     LinkifyContent,
     MarkdownContent,
     PageTitle,
+    MessageReply,
   },
   mixins: [ErrorPageMixin],
   data() {
@@ -87,6 +94,12 @@ export default {
     },
     message() {
       return this.$store.state.messaging.message;
+    },
+    messageReply() {
+      return get('reply')(this.message);
+    },
+    hasReplyOptions() {
+      return get('options')(this.messageReply)?.length > 0;
     },
     sender() {
       return get('senderId')(this.message);
@@ -130,6 +143,10 @@ export default {
     },
     backClicked() {
       redirectTo(this, this.backLink, { senderId: this.sender });
+    },
+    async sendClicked(response) {
+      await this.$store.dispatch('messaging/recordMessageResponse', { messageId: this.message.id, response });
+      await this.loadMessage();
     },
   },
 };

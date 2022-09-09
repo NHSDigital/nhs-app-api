@@ -16,10 +16,43 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
     {
         private MessagesResponseMapper _systemUnderTest;
 
+        private UserMessageReply _messageReply;
+        private UserMessageReply _noMessageReply;
+        private UserMessageReply _noMessageReplyResponse;
+
+        private enum MessageReplyOptions
+        {
+            MessageReply,
+            NoMessageReply,
+            NoMessageReplyResponse
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
             _systemUnderTest = new MessagesResponseMapper(new Mock<ILogger<MessagesResponseMapper>>().Object);
+
+            _messageReply = new UserMessageReply
+            {
+                Options = new List<UserReplyOption>()
+                {
+                    new UserReplyOption() { Code = "SMOKE", Display = "SMOKE" },
+                    new UserReplyOption() { Code = "NO", Display = "NO" },
+                    new UserReplyOption() { Code = "NEVER", Display = "NEVER" }
+                },
+                Response = "NO",
+                ResponseDateTime = DateTime.UtcNow
+            };
+            _noMessageReply = null;
+            _noMessageReplyResponse = new UserMessageReply
+            {
+                Options = new List<UserReplyOption>()
+                {
+                    new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
+                },
+                Response = string.Empty,
+                ResponseDateTime = null
+            };
         }
 
         [TestMethod]
@@ -38,7 +71,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SenderContext = new SenderContext
                 {
                     SenderId = senderId
-                }
+                },
+                Reply = _messageReply
             };
 
             var oldestMessage = new UserMessage
@@ -50,7 +84,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SenderContext = new SenderContext
                 {
                     SenderId = senderId
-                }
+                },
+                Reply = _noMessageReply
             };
 
             var latestMessage = new UserMessage
@@ -62,7 +97,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SenderContext = new SenderContext
                 {
                     SenderId = senderId
-                }
+                },
+                Reply = _noMessageReplyResponse
             };
 
             // Act
@@ -84,6 +120,38 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             resultMessages[0].Should().BeEquivalentTo(expectedMessages[0]);
             resultMessages[1].Should().BeEquivalentTo(expectedMessages[1]);
             resultMessages[2].Should().BeEquivalentTo(expectedMessages[2]);
+
+            VerifyMessageReply( resultMessages[0], MessageReplyOptions.NoMessageReplyResponse);
+            VerifyMessageReply( resultMessages[1], MessageReplyOptions.MessageReply);
+            VerifyMessageReply( resultMessages[2], MessageReplyOptions.NoMessageReply);
+        }
+
+        private static void VerifyMessageReply(Message resultMessage, MessageReplyOptions messageReplyOptions)
+        {
+            switch (@messageReplyOptions)
+            {
+                case MessageReplyOptions.MessageReply:
+                    resultMessage.Reply.Should().NotBeNull();
+                    resultMessage.Reply.Options.Should().HaveCount(3);
+                    resultMessage.Reply.Options[0].Code.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.Options[1].Code.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.Options[2].Code.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.Response.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.ResponseDateTime.Should().NotBeNull();
+                    break;
+                case MessageReplyOptions.NoMessageReply:
+                    resultMessage.Reply.Should().BeNull();
+                    break;
+                case MessageReplyOptions.NoMessageReplyResponse:
+                    resultMessage.Reply.Should().NotBeNull();
+                    resultMessage.Reply.Options.Should().HaveCount(1);
+                    resultMessage.Reply.Options[0].Code.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.Response.Should().BeNullOrEmpty();
+                    resultMessage.Reply.ResponseDateTime.Should().BeNull();
+                    break;
+                default:
+                    break;
+            }
         }
 
         [TestMethod]
@@ -114,35 +182,30 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             var currentMessage = new SummaryMessage
             {
                 SentTime = DateTime.UtcNow ,
-                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" },
+                Reply = _messageReply
             };
 
             var oldestMessage = new SummaryMessage
             {
                 SentTime = DateTime.UtcNow.AddSeconds(-10),
-                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" },
+                Reply = _noMessageReply
             };
 
             var latestMessage = new SummaryMessage
             {
                 SentTime = DateTime.UtcNow.AddSeconds(10),
-                SenderContext = new SenderContext { SenderId = "TEST_SENDER" }
+                SenderContext = new SenderContext { SenderId = "TEST_SENDER" },
+                Reply = _noMessageReplyResponse
             };
-
-            // Act
-            var result = _systemUnderTest.Map(new List<SummaryMessage>
-                { currentMessage, oldestMessage, latestMessage });
-
-            // Assert
-            result.SenderMessages.Should().NotBeEmpty();
-            result.SenderMessages.Should().HaveCount(3);
-            result.SenderMessages.Should().BeEquivalentTo(new List<SenderMessages>
+            var expectedMessages = new List<SenderMessages>
             {
                 new SenderMessages
                 {
                     Sender = latestMessage.Sender,
                     UnreadCount = latestMessage.UnreadCount,
-                    Messages =  MapToMessages(latestMessage)
+                    Messages = MapToMessages(latestMessage),
                 },
                 new SenderMessages
                 {
@@ -155,8 +218,20 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     Sender = oldestMessage.Sender,
                     UnreadCount = oldestMessage.UnreadCount,
                     Messages = MapToMessages(oldestMessage)
-                },
-            });
+                }
+            };
+            // Act
+            var result = _systemUnderTest.Map(new List<SummaryMessage>
+                { currentMessage, oldestMessage, latestMessage });
+
+            // Assert
+            result.SenderMessages.Should().NotBeEmpty();
+            result.SenderMessages.Should().HaveCount(3);
+            result.SenderMessages.Should().BeEquivalentTo(expectedMessages);
+
+            VerifyMessageReply(result.SenderMessages[0].Messages[0], MessageReplyOptions.NoMessageReplyResponse);
+            VerifyMessageReply(result.SenderMessages[1].Messages[0], MessageReplyOptions.MessageReply);
+            VerifyMessageReply(result.SenderMessages[2].Messages[0], MessageReplyOptions.NoMessageReply);
         }
 
         [TestMethod]
@@ -195,6 +270,15 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SenderContext = new SenderContext
                 {
                     SenderId = "TEST_SENDER"
+                },
+                Reply = new UserMessageReply
+                {
+                    Options = new List<UserReplyOption>()
+                    {
+                        new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
+                    },
+                    Response = string.Empty,
+                    ResponseDateTime = null
                 }
             };
 
@@ -208,6 +292,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             resultMessage.Body.Should().Be($"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
                                            $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
                                            $"metus id velit ullamcorper pulvinar. Vestibulum fermen");
+            var resultMessageCheck = result.SenderMessages.First();
+            VerifyMessageReply(resultMessageCheck.Messages[0], MessageReplyOptions.NoMessageReplyResponse);
         }
 
         [DataTestMethod]
@@ -227,6 +313,15 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 SenderContext = new SenderContext
                 {
                     SenderId = "TEST_SENDER"
+                },
+                Reply = new UserMessageReply
+                {
+                    Options = new List<UserReplyOption>()
+                    {
+                        new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
+                    },
+                    Response = string.Empty,
+                    ResponseDateTime = null
                 }
             };
 
@@ -238,6 +333,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
             result.SenderMessages.Should().ContainSingle();
             var resultMessage = result.SenderMessages.First().Messages.Should().ContainSingle().Subject;
             resultMessage.Body.Should().Be(body);
+            var resultMessageCheck = result.SenderMessages.First();
+            VerifyMessageReply(resultMessageCheck.Messages[0], MessageReplyOptions.NoMessageReplyResponse);
         }
 
         [TestMethod]
@@ -255,7 +352,16 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 Body = $"Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. " +
                        $"Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id " +
                        $"metus id velit ullamcorper pulvinar. Vestibulum fermen#",
-                Version = 3
+                Version = 3,
+                Reply = new UserMessageReply
+                {
+                    Options = new List<UserReplyOption>()
+                    {
+                        new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
+                    },
+                    Response = string.Empty,
+                    ResponseDateTime = null
+                }
             };
 
             // Act
@@ -276,6 +382,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 $"urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit " +
                 $"ullamcorper pulvinar. Vestibulum fermen#");
             resultMessage.Version.Should().Be(3);
+            var resultMessageCheck = result.SenderMessages.First();
+            VerifyMessageReply(resultMessageCheck.Messages[0], MessageReplyOptions.NoMessageReplyResponse);
         }
 
         [TestMethod]
@@ -297,7 +405,33 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 Version = m.Version,
                 Body = m.Body,
                 Read = m.ReadTime.HasValue,
-                SentTime = m.SentTime
+                SentTime = m.SentTime,
+                Reply = MapMessageReply(m.Reply)
             }).ToList();
+
+        private MessageReply MapMessageReply(UserMessageReply userMessageReply)
+        {
+            if (userMessageReply != null)
+            {
+                return new MessageReply()
+                {
+                    Options = MapMessageReplyOptions(userMessageReply.Options),
+                    Response = userMessageReply.Response,
+                    ResponseDateTime = userMessageReply.ResponseDateTime
+                };
+            }
+            return null;
+        }
+
+        private List<ReplyOption> MapMessageReplyOptions(IReadOnlyCollection<UserReplyOption> userReplyOption)
+        {
+            var options = userReplyOption?.Select(o => new ReplyOption
+                {
+                    Code = o.Code,
+                    Display = o.Display
+                })
+                .ToList();
+            return options;
+        }
     }
 }

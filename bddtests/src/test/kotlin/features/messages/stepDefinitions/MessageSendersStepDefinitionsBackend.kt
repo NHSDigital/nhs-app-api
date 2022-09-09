@@ -9,6 +9,7 @@ import worker.models.messages.Sender
 import worker.models.messages.SenderFacade
 import worker.models.messages.SendersResponse
 
+
 class MessageSendersStepDefinitionsBackend {
 
     @Given("^I am an api user with an unread message$")

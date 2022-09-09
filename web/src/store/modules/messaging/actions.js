@@ -85,4 +85,19 @@ export default {
       request,
     );
   },
+  async recordMessageResponse(_, { messageId, response }) {
+    const request = {
+      messageId,
+      patchMessageRequest: [{
+        op: 'add',
+        path: '/reply/response',
+        value: response,
+      }],
+      ignoreError: true,
+      ignoreLoading: true,
+    };
+    await this.app.$http.patchV1ApiUsersMeMessagesByMessageid(
+      request,
+    );
+  },
 };

@@ -12,13 +12,28 @@ import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.models.messages.MessageCreateResponse
-import worker.models.messages.SenderFacade
-import worker.models.messages.SingleMessageFacade
 import worker.models.messages.MessagesResponse
 import worker.models.messages.MessagesResponseMessage
+import worker.models.messages.SenderFacade
+import worker.models.messages.MessageCreateResponse
+import worker.models.messages.SingleMessageFacade
 
 class MessagesGetStepDefinitionsBackend {
+
+    @Given("^I am an api user having a message with reply$")
+    fun iAmAnApiUserWithMessageWithReply() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaireAndResponse()
+    }
+
+    @Then("^I receive the message with reply$")
+    fun iReceiveTheMessageWithReply() {
+        val response = MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<MessagesResponseMessage>()
+        assertNotNull("Message Id", response.id)
+        assertNotNull("Message Reply", response.reply)
+    }
+
     @Given("^I am an api user with proof level 5 wishing to get my messages$")
     fun iAmAnApiUserWithProofLevelFiveWishingToGetMyMessages() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
@@ -136,6 +151,7 @@ class MessagesGetStepDefinitionsBackend {
         val response = MessagesSerenityHelpers.GET_MESSAGE_RESPONSE.getOrFail<MessagesResponseMessage>()
         assertNotNull("Message Id", response.id)
     }
+
     private fun assertReceivedMessages(expectedMessages: ArrayList<SenderFacade>,
                                        responseMessages: Array<MessagesResponse>) {
         Assert.assertEquals("Number Of Messages", expectedMessages.count(), responseMessages.count())
@@ -181,7 +197,8 @@ class MessagesGetStepDefinitionsBackend {
                     message.read?.toLowerCase() == "true",
                     message.sentTime,
                     message.version,
-                    message.senderContext, message.reply)
+                    message.senderContext,
+                    message.reply)
         }
     }
 }

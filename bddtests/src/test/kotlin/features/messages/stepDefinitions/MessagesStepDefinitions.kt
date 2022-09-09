@@ -207,7 +207,7 @@ class MessagesStepDefinitions {
         errorDialogPage.assertPageTitle("Cannot show messages")
             .assertPageHeader("Cannot show messages")
             .assertShutterParagraphText("There was an error opening your messaging inbox.")
-            .assertShutterParagraphText("You can try opening your inbox again.");
+            .assertShutterParagraphText("You can try opening your inbox again.")
     }
 
     @Then( "^an error is displayed indicating that there was a problem getting messages from (.*)$")
@@ -226,7 +226,7 @@ class MessagesStepDefinitions {
             .assertShutterParagraphText("There was an error opening your message.")
             .assertShutterParagraphText("You can try opening your message again.")
             .assertShutterParagraphText(
-                "If the problem continues, contact the person or organisation who sent the message.");
+                "If the problem continues, contact the person or organisation who sent the message.")
     }
 
     @Then("^I click on the '(.*)' link in the message$")
@@ -244,6 +244,45 @@ class MessagesStepDefinitions {
     @Then("^the Message page is displayed$")
     fun theMessagePageIsDisplayed() {
         messagePage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER_NAME.getOrFail())
+    }
+
+    @Given("^I am a user wishing to view messages that require a reply")
+    fun iAmAUserWishingToViewMessagesThatRequireAReply() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaire()
+    }
+
+    @When("^I click on the 'Reply to this message' button$")
+    fun iClickOnTheReplyToThisMessageButton() {
+        messagePage.clickReplyButtonElement()
+    }
+
+    @Then("^the radio button options are displayed$")
+    fun theRadioButtonOptionsAreDisplayed() {
+        messagePage.assertRadioButtonOptionsExist()
+    }
+    
+     @Then("^I select an option to reply$")
+     fun selectAMessageOption() {
+         messagePage.selectAnOption()
+     }
+    
+     @Then("^I send the reply$")
+     fun iSendTheReply() {
+         messagePage.sendTheReply()
+     }
+    
+     @Then("^I can see the response message$")
+     fun iCanSeeTheResponseMessage() {
+         messagePage.assertResponseContainerExists()
+     }
+
+    @Given("^I am a user wishing to view messages that is already replied to$")
+    fun iAmAUserWishingToViewMessagesThatIsAlreadyRepliedTo() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaireAndResponse()
     }
 
     private fun setupMessagesEnabledPatient(): MessagesFactory {

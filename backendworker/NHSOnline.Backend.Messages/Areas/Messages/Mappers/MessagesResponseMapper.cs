@@ -102,7 +102,32 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                     : userMessage.Body,
                 Read = userMessage.ReadTime.HasValue,
                 SentTime = userMessage.SentTime,
+                Reply = MapMessageReply(userMessage.Reply),
             };
+        }
+
+        private MessageReply MapMessageReply(UserMessageReply userMessageReply)
+        {
+            if (userMessageReply != null)
+            {
+                return new MessageReply()
+                {
+                    Options = MapMessageReplyOptions(userMessageReply.Options),
+                    Response = userMessageReply.Response,
+                    ResponseDateTime = userMessageReply.ResponseDateTime
+                };
+            }
+            return null;
+        }
+
+        private List<ReplyOption> MapMessageReplyOptions(IReadOnlyCollection<UserReplyOption> userReplyOption)
+        {
+            return userReplyOption?.Select(o => new ReplyOption
+            {
+                Code = o.Code,
+                Display = o.Display
+            })
+            .ToList();
         }
     }
 }

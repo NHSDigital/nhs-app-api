@@ -314,3 +314,29 @@ Feature: Messages
     When I click on a message on the Sender Messages page
     Then the Message page is displayed
     And I can't see the Back link
+
+  Scenario: A user can see a message with a questionnaire and respond to it
+    Given I am a user wishing to view messages that require a reply
+    And I am logged in
+    When I navigate to the Messages Hub page
+    And I click the App Messages link on the messages hub page
+    And the Message Senders page is displayed
+    And I click on Sender One Canonical sender
+    Then the Sender Messages page is displayed
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    When I click on the 'Reply to this message' button
+    And I select an option to reply
+    And I send the reply
+    And I can see the response message
+
+  Scenario: A user can see a message which has already been replied
+    Given I am a user wishing to view messages that is already replied to
+    And I am logged in
+    When I navigate to the Messages Hub page
+    And I click the App Messages link on the messages hub page
+    And the Message Senders page is displayed
+    And I click on Sender One Canonical sender
+    Then the Sender Messages page is displayed
+    When I click on a message on the Sender Messages page
+    And I can see the response message

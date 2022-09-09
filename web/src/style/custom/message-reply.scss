@@ -1,0 +1,32 @@
+@import '~nhsuk-frontend/packages/core/settings/colours';
+
+.messageReply {
+
+    .messageReply__reply {
+      background-color: $nhsuk-secondary-button-color;
+      box-shadow: 0 4px 0 $nhsuk-secondary-button-shadow-color;      
+    }
+
+    .messageReply__reply:hover {
+      background-color: $nhsuk-secondary-button-hover-color;
+    }
+
+    .messageReply__reply:focus {
+      background-color: $color_nhsuk-grey-2 !important;
+    }
+
+    .messageReplyOptionsContainer {
+
+      h4 {
+        margin-bottom: 0;
+      }
+    }
+
+    .messageReply__dismiss {
+        display: inline-block;
+        margin-left: 20px;
+        margin-top: 15px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}

@@ -36,7 +36,7 @@ private const val TWO_MONTHS: Long = 2
 private const val ONE_MONTH: Long = 1
 private const val INVALID_MESSAGE_BODY: Int = 1234
 private const val MESSAGE_RESPONSE = "SMOKE"
-private const val MESSAGE_SECOND_RESPONSE = "NEVER";
+private const val MESSAGE_SECOND_RESPONSE = "NEVER"
 
 class MessagesFactory {
 

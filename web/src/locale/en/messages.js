@@ -114,4 +114,18 @@ export default {
       description: 'Fill out a form to send a request, get advice or ask a question',
     },
   },
+  messageReply: {
+    response: {
+      title: 'Your reply has been sent',
+      reply: 'You replied \'{response}\'',
+      message: 'If you need to change your reply, you\'ll need to call {senderName}.',
+    },
+    checkboxOption: {
+      title: 'Reply to this message',
+    },
+    radioOptions: {
+      title: '<h4>Select your reply</h4>',
+    },
+    reply: 'Reply to this message',
+  },
 };

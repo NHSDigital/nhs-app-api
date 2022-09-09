@@ -124,6 +124,12 @@ Feature: Messages Backend
     When I try to get the message using the message id
     Then I receive the message
 
+  Scenario: An api user can retrieve a message with reply using the message id
+    Given I am an api user having a message with reply
+    And I have logged in and have a valid session cookie
+    When I try to get the message using the message id
+    Then I receive the message with reply
+
   Scenario: An api user attempting to retrieve a message without passing an access token will receive a 401
     Given I am an api user with an unread message
     And I have logged in and have a valid session cookie
@@ -182,7 +188,6 @@ Feature: Messages Backend
     When I patch the message to indicate that it has been replied with invalid response
     Then I receive a "Not Found" success code
     And the message has not been updated with request's reply in the repository
-
 
   Scenario: An api user can post messages with reply options specified
     Given I am an api user wishing to post a message with reply options

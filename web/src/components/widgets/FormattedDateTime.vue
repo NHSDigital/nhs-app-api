@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { formatIndividualMessageTime, formatInboxMessageTime } from '@/lib/utils';
+import { formatIndividualMessageTime, formatInboxMessageTime, formatKeywordReplyMessageTime } from '@/lib/utils';
 
 export default {
   name: 'FormattedDateTime',
@@ -18,11 +18,36 @@ export default {
       type: Boolean,
       default: false,
     },
+    timeFormat: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
     formattedTime() {
-      return this.summaryTimeFormat ? formatInboxMessageTime(this.dateTime, this.$t.bind(this)) :
-        formatIndividualMessageTime(this.dateTime, this.$t.bind(this));
+      let formattedTimeValue = '';
+      const timeFormatValue = this.getTimeFormatValue;
+
+      if (timeFormatValue === 0) {
+        formattedTimeValue = formatIndividualMessageTime(this.dateTime, this.$t.bind(this));
+      }
+
+      if (timeFormatValue === 1) {
+        formattedTimeValue = formatInboxMessageTime(this.dateTime, this.$t.bind(this));
+      }
+
+      if (timeFormatValue === 2) {
+        formattedTimeValue = formatKeywordReplyMessageTime(this.dateTime, this.$t.bind(this));
+      }
+
+      return formattedTimeValue;
+    },
+    getTimeFormatValue() {
+      if (this.timeFormat === 0) {
+        return this.summaryTimeFormat ? 1 : 0;
+      }
+
+      return this.timeFormat;
     },
   },
 };

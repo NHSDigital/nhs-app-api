@@ -335,6 +335,21 @@ components:
           description: Message sent time.
         read:
           type: boolean
+        reply:
+          type: object
+          description: Message reply options
+          properties:
+            options:
+              type: array
+              description: Array of reply options for a message
+              items:
+                $ref: "#/components/schemas/ReplyOption"
+            response:
+              type: string
+            responseDateTime:
+              type: string
+              format: date-time
+              description: Response received time.
       example:
         id: 9fbd0bea-5a63-4fd4-b4be-4bcd9c063227
         senderId: B82041
@@ -350,6 +365,13 @@ components:
           type: integer
       example:
         unreadMessageCount: 6
+    ReplyOption:
+      type: object
+      properties:
+        code:
+          type: string
+        display:
+          type: string
     SenderMessagesResponse:
       type: object
       properties:

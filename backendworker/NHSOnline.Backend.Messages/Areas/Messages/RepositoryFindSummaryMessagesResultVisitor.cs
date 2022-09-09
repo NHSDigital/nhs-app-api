@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                         Version = m.Version,
                         Body = m.Body,
                         ReadTime = m.ReadTime,
-                        SentTime = m.SentTime
+                        SentTime = m.SentTime,
+                        Reply = m.Reply
                     })
                     .First()
                 )

@@ -129,6 +129,24 @@ export const formatIndividualMessageTime = (messageTime, $t) => {
   return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);
 };
 
+export const formatKeywordReplyMessageTime = (messageTime, $t) => {
+  const messageMoment = moment(messageTime);
+
+  const localeParams = {
+    dateFormat: 'D MMMM YYYY',
+    timeFormat: get12HourTimeFormat(messageMoment, $t),
+  };
+
+  const formatConfig = {
+    sameDay: $t('generic.todayAtTimeFormat', localeParams),
+    lastDay: $t('generic.yesterdayAtTimeFormat', localeParams),
+    lastWeek: $t('generic.dateFormatAtTimeFormat', localeParams),
+    sameElse: $t('generic.dateFormatAtTimeFormat', localeParams),
+  };
+
+  return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);
+};
+
 export const formatMessageDayWise = (messageTime, $t) => {
   const messageMoment = moment(messageTime);
 

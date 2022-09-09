@@ -24,6 +24,8 @@ describe('messaging actions', () => {
         jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
       getV1ApiUsersMeMessagesByMessageid:
         jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
+      patchV1ApiUsersMeMessagesByMessageid:
+        jest.fn().mockImplementation(() => Promise.resolve(getResponse)),
     };
     $httpV2 = {};
     actions.app = {
@@ -203,6 +205,25 @@ describe('messaging actions', () => {
       it('will not commit `LOADED_SENDERS`', () => {
         expect(commit).not.toBeCalledWith(LOADED_SENDERS, expect.any(String));
       });
+    });
+  });
+
+  describe('recordMessageResponse', () => {
+    it('will call the `patchV1ApiUsersMeMessagesByMessageid` endpoint when recordMessageResponse is invoked', async () => {
+      const expectedPayload = {
+        messageId: 123,
+        patchMessageRequest: [{
+          op: 'add',
+          path: '/reply/response',
+          value: 'user_response',
+        }],
+        ignoreError: true,
+        ignoreLoading: true,
+      };
+
+      await actions.recordMessageResponse({ commit }, { messageId: 123, response: 'user_response' });
+
+      expect($http.patchV1ApiUsersMeMessagesByMessageid).toBeCalledWith(expectedPayload);
     });
   });
 });

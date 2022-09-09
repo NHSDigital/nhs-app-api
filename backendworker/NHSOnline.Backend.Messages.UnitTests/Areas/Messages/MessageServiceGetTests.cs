@@ -43,8 +43,13 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                 new SenderMessages { Sender = Sender }
             }
         };
+
         private readonly SummaryMessage _summaryMessage = new SummaryMessage { Body = Body, Sender = Sender};
-        private readonly UserMessage _userMessage = new UserMessage { Body = Body, Sender = Sender };
+        private readonly UserMessage _userMessage = new UserMessage
+        {
+            Body = Body,
+            Sender = Sender
+        };
 
         [TestInitialize]
         public void TestInitialize()

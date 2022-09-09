@@ -17,5 +17,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         public bool Read { get; set; }
 
         public DateTime SentTime { get; set; }
+
+        public MessageReply Reply { get; set; }
     }
 }
