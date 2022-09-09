@@ -15,6 +15,7 @@ namespace NHSOnline.IntegrationTests.Notifications
     [BusinessRule("BR-NOT-03.8", "Log in on a device when the notifications prompt has been viewed on the device previously does not display the notifications prompt")]
     public class LoginFlowNotificationsPromptCookieTests
     {
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public void APatientDoesNotSeeTheNotificationsPromptWhenTheAppIsRelaunchedAfterDismissingItAndroid(IAndroidDriverWrapper driver)
         {

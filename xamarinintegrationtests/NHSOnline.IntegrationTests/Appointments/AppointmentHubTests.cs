@@ -53,6 +53,7 @@ namespace NHSOnline.IntegrationTests.Appointments
                 .AssertAdditionalGpServicesElements();
         }
 
+        [NhsAppFlakyTest]
         [NhsAppIOSTest]
         public void APatientIsShownTheirGpAppointmentsAndCanNavigateBackWhenAccessingTheGpAppointmentsPageIos(IIOSDriverWrapper driver)
         {

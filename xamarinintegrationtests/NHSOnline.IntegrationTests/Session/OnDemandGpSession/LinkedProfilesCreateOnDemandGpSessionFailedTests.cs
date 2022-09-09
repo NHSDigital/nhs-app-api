@@ -20,6 +20,7 @@ namespace NHSOnline.IntegrationTests.Session.OnDemandGpSession
     [BusinessRule("BR-GEN-04.8", "Failure to obtain a GP session when the user has initiated another attempt to get a GP session via a try again displays a specific service unavailable shutter page to the user")]
     public class LinkedProfilesCreateOnDemandGpSessionFailedTests
     {
+        [NhsAppFlakyTest]
         [NhsAppAndroidTest]
         public void APatientSeesServiceSpecificGpSessionErrorScreensWhenTryingToAccessLinkedProfilesAndThereIsAFailureCreatingAGpSessionOnDemandAndroid(IAndroidDriverWrapper driver)
         {

@@ -53,6 +53,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
                 .AssertFileSelected();
         }
 
+        [NhsAppFlakyTest]
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanUploadAFileIOS(IIOSDriverWrapper driver)
         {
