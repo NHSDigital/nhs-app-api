@@ -9,6 +9,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
         private readonly IIOSInteractor _interactor;
         IOSLink AccountAndSettingsMenuItem => IOSLink.WithText(_interactor, "Account and settings");
 
+        IOSMenuItem LinkedProfilesMenuItem => IOSMenuItem.StartsWith(_interactor, "Linked profiles");
+
         private IOSMorePage(IIOSDriverWrapper driver)
         {
             _interactor = driver;
@@ -20,10 +22,16 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
 
         public MorePageContent PageContent { get; }
 
-        public static IOSMorePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSMorePage AssertOnPage(IIOSDriverWrapper driver,  bool screenshot = false)
         {
             var page = new IOSMorePage(driver);
             page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSMorePage));
+            }
+
             return page;
         }
 
@@ -36,5 +44,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.More
         }
 
         public void NavigateToAccountAndSettings() => AccountAndSettingsMenuItem.Touch();
+
+        public void NavigateToLinkedProfiles() => LinkedProfilesMenuItem.Click();
     }
 }

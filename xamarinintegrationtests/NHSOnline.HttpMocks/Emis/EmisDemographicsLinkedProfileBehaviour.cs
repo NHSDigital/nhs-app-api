@@ -3,7 +3,7 @@ using NHSOnline.HttpMocks.Domain;
 
 namespace NHSOnline.HttpMocks.Emis
 {
-    public class EmisDemographicsDefaultBehaviour : IEmisDemographicsBehaviour
+    public class EmisDemographicsLinkedProfileBehaviour: IEmisDemographicsLinkedProfileBehaviour
     {
         public IActionResult Behave(EmisPatient patient)
         {
@@ -13,9 +13,17 @@ namespace NHSOnline.HttpMocks.Emis
             {
                 nhsNumber = patient.NhsNumber,
                 patientName = $"{name.GivenName} {name.GivenName}",
+                firstName = name.GivenName,
+                surname = name.FamilyName,
                 dateOfBirth = patient.PersonalDetails.Age.DateOfBirthISO86012004,
                 sex = patient.PersonalDetails.Gender,
-                address = ""
+                address = "",
+                patientIdentifiers = new []{
+                    new {
+                        identifierValue = patient.NhsNumber.StringValue,
+                        identifierType = "NhsNumber"
+                    }
+                }
             });
         }
     }

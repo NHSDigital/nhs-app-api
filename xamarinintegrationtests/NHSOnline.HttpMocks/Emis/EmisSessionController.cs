@@ -31,11 +31,17 @@ namespace NHSOnline.HttpMocks.Emis
 
             string accessIdentityGuid = body.AccessIdentityGuid;
             var patient = _patients.LookupById(accessIdentityGuid);
-            
-            if (patient is EmisPatient emisPatient)
+
+            if (patient is EmisPatient emisPatient && patient.LinkedProfiles.Count == 0)
             {
                 var behaviour = emisPatient.Behaviours.Get<IEmisCreateSessionBehaviour>(() => new EmisCreateSessionDefaultBehaviour());
                 return behaviour.Behave(emisPatient);
+            }
+
+            if (patient is EmisPatient emisPatientLinkedProfile && patient.LinkedProfiles.Count > 0)
+            {
+                var behaviour = emisPatientLinkedProfile.Behaviours.Get<IEmisCreateSessionLinkedProfileBehaviour>(() => new EmisCreateSessionLinkedProfileBehaviour());
+                return behaviour.Behave(emisPatientLinkedProfile);
             }
 
             return BadRequest($"Patient '{accessIdentityGuid}' ({patient?.GetType().Name ?? "Unknown"}) is not an EMIS patient");

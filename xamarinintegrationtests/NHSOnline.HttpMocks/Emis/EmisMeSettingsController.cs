@@ -4,20 +4,22 @@ using NHSOnline.HttpMocks.Domain;
 
 namespace NHSOnline.HttpMocks.Emis
 {
-    [Route("emis/demographics")]
-    public class EmisDemographicsController : Controller
+    [Route("emis/me/settings")]
+    public class EmisMeSettingsController: Controller
     {
         private readonly IPatients _patients;
 
-        public EmisDemographicsController(IPatients patients)
+        public EmisMeSettingsController(IPatients patients)
         {
             _patients = patients;
         }
 
-        [HttpGet]
-        public IActionResult Demographics([FromQuery] string? userPatientLinkToken)
+        public IActionResult MeSettings([FromQuery] string? userPatientLinkToken)
         {
-            if (!ModelState.IsValid || userPatientLinkToken == null || !userPatientLinkToken.Contains("linktoken_", StringComparison.InvariantCulture))
+
+            if (!ModelState.IsValid ||
+                userPatientLinkToken == null ||
+                !userPatientLinkToken.Contains("linktoken_", StringComparison.InvariantCulture))
             {
                 return BadRequest(ModelState);
             }
@@ -27,13 +29,13 @@ namespace NHSOnline.HttpMocks.Emis
 
             if (patient is EmisPatient emisPatient && !patient.PersonalDetails.Name.GivenName.Contains("Proxy", StringComparison.InvariantCulture))
             {
-                var behaviour = emisPatient.Behaviours.Get<IEmisDemographicsBehaviour>(() => new EmisDemographicsDefaultBehaviour());
+                var behaviour = emisPatient.Behaviours.Get<IEmisMeSettingsBehaviour>(() => new EmisMeSettingsDefaultBehaviour());
                 return behaviour.Behave(emisPatient);
             }
 
             if (patient is EmisPatient emisPatientLinkedProfile && patient.PersonalDetails.Name.GivenName.Contains("Proxy", StringComparison.InvariantCulture))
             {
-                var behaviour = emisPatientLinkedProfile.Behaviours.Get<IEmisDemographicsLinkedProfileBehaviour>(() => new EmisDemographicsLinkedProfileBehaviour());
+                var behaviour = emisPatientLinkedProfile.Behaviours.Get<IEmisMeSettingsLinkedProfileBehaviour>(() => new EmisMeSettingsLinkedProfileBehaviour());
                 return behaviour.Behave(emisPatientLinkedProfile);
             }
 

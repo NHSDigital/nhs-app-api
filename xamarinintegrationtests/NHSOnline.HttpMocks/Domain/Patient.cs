@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace NHSOnline.HttpMocks.Domain
 {
@@ -25,6 +27,13 @@ namespace NHSOnline.HttpMocks.Domain
         internal Behaviours Behaviours { get; } = new Behaviours();
 
         public abstract string VectorOfTrust { get; internal set; }
+
         public abstract string ProofingLevel { get; internal set; }
+
+        public List<Patient> LinkedProfiles { get; } = new List<Patient>();
+
+        public string UserPatientLinkToken => $"linktoken_{Id}";
+
+        public string PatientActivityContextGuid { get; } = Guid.NewGuid().ToString();
     }
 }

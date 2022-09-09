@@ -43,6 +43,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             "p",
             _biometricsInfoText);
 
+        private WebText YellowProxyUserBannerText(string linkedPatientName) =>
+            WebText.WithTagAndText(_interactor, "p", $"Acting on behalf of {linkedPatientName}");
+
         private WebButton OpenSettingsButton => WebButton.WithText(_interactor, _biometricsButtonText);
 
         private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
@@ -79,7 +82,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             BiometricsPanelText.AssertVisible();
             OpenSettingsButton.AssertVisible();
             DismissBiometricsBanner.AssertVisible();
-
             return this;
         }
 
@@ -90,6 +92,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
             OpenSettingsButton.AssertNotVisible();
             DismissBiometricsBanner.AssertNotVisible();
         }
+
+        public void AssertLinkedProfileYellowBannerVisible(string linkedPatientName) =>
+            YellowProxyUserBannerText(linkedPatientName).AssertVisible();
 
         public void AssertUpliftPanelNotVisible() => UpliftPanel.AssertNotVisible();
 
