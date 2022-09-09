@@ -416,7 +416,6 @@ target:
     - F84087
     - G82006
     - G82100
-    - G83002
     - H81615
     - J82102
     - K81039
@@ -678,6 +677,8 @@ target:
     - F81640
     - H82055
     - F81186
+    - F81110
+    - F81181
 journeys:
   cdssAdvice:
     provider: eConsult

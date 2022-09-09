@@ -12,7 +12,6 @@ A82617,Kirkoswald Surgery
 A86040,St Anthonys Health Centre
 B81004,"Eastgate Medical Group, Hornsea"
 B81005,The Central Surgery Barton
-B81010,Hessle Grange Medical Practice
 B81012,Dr Ap Kumar
 B81015,Clee Medical Centre
 B81023,The Chantry Health Group
@@ -258,7 +257,6 @@ L84023,Church Street Practice
 L84045,Mitcheldean Surgery
 L84616,Prestbury Park
 L85014,Taunton Vale Healthcare
-L85015,"Preston Grove Medical Centre, Yeovil"
 L85019,Minehead Medical Centre
 L85021,College Way Surgery
 L85037,North Curry
@@ -388,7 +386,6 @@ P84690,Dam Head Medical Centre
 P85621,Sunvalley Medical Practice
 P88002,Marple Bridge Surgery
 P88003,Manor Medical Practice
-P88009,Woodley Village Surgery
 P89014,Haughton Thornley Medical Centres
 P89029,Market Street Medical Practice
 Y00411,Dearne Valley Group Practice
@@ -416,7 +413,6 @@ P81018,St Fillan's Medical Ctre
 N81088,Park Green Surgery
 P87016,The Sides Medical Practice
 F84619,The Riverside Practice
-N83608,Dr Maassarani & Partners
 L85012,Wellington Medical Centre
 F81015,Crocus Medical Practice
 P81047,Parkside Surgery
@@ -441,7 +437,6 @@ B82034,Quakers Lane Surgery
 F81078,Church Langley Medical Practice
 C83026,The Deepings Practice
 C82031,Johnson Medical Practice
-F81049,Ongar Health Centre
 C82028,Markfield Medical Centre
 M84062,Vale Of Red Horse
 G85705,The New Mill Street Surgery
@@ -452,28 +447,22 @@ P81655,The Village Surgeries Croston&Eccleston
 M81068,Aylmer Lodge Cookley Partnership
 M81005,Northumberland House Surgery
 M86624,Jubilee Health Centre
-M86017,Mansfield Medical Centre
 M86015,Kenyon Medical Centres
 M86020,Wood End Health Centre
 M84031,Revel Surgery
-M86012,Priory Gate Practice
-M86009,Engleton House Surgery
 M84004,Whitehall Medical Practice
 M81094,Abbey Medical Practice
 M81041,Hillview Medical Centre
-M86046,Copsewood Medical Centre
 M81604,Fownhope Medical Centre
 P81040,Longton Health Centre
 M81048,Nunwell Surgery
 M81010,Kidderminster Medical Centre
 M81092,The Bridge Surgery
-M83033,Hednesford Medical Practice
 M86035,Henley Green Medical Centre
 M84012,Park Leys Medical Practice
 M81020,The Dow Surgery
 M81001,St Stephens Surgery
 M86006,Jubilee Healthcare
-M86033,Willenhal Oak Medical Centre
 M86029,Broomfield Park Med.Ctr.
 M81076,Colwall Surgery
 M81002,Elgar House
@@ -482,7 +471,6 @@ M81018,Weobley & Staunton On Wye Surgeries
 M81043,The Mortimer Medical Prac
 M81054,Kington Medical Practice
 M84043,Trinity Court Surgery
-N83028,Aston Healthcare Limited
 M81029,Barn Close Surgery
 M81055,Cornhill Surgery
 M81090,Chaddesley Surgery
@@ -491,17 +479,13 @@ M83046,Biddulph Valley Surgery
 M81617,Crabbs Cross Surgery
 M81616,Crabbs Cross Medical Centre
 M83109,Dr Manickam & Partner
-N83015,Bluebell Lane Surgery
-N83031,Roseheath Surgery
 Y04968,Farrier House Surgery
 M81627,Demontfort Medical Centre
 M81011,Ombersley Medical Centre
 M81091,Corbett Medical Practice
 M81008,Spring Gardens Group Medical Practice
 M81629,New Court Surgery
-N83025,Cornerways Medical Centre
 M81006,Severn Valley Medical Practice
-M84020,Clifton Road Surgery
 Y03602,Grey Gable Surgery
 M81045,Knightwick Surgery
 M81049,Barbourne Health Centre
@@ -537,13 +521,11 @@ K82070,Stewkley Road Surgery
 M81078,Barnt Green Surgery
 M81608,Wolverley Surgery
 K82001,Rectory Meadow Surgery
-M81026,Hereford Medical Group
 M81084,Catshill Village Surgery
 M81077,The Ridgeway Surgery
 M81039,Whiteacres Medical Centre
 M81081,St Saviours Surgery
 M81009,Golden Valley Practice
-M84050,Market Quarter Medical Practice
 B84005,Rosegarth Surgery
 M81033,Great Witley Surgery
 M81093,Belmont Medical Centre
@@ -552,24 +534,18 @@ M81070,Churchfields Surgery
 F81207,Dr Bekas Medical Centre
 M81066,Wargrave House Surgery
 M84615,Chancery Lane Surgery
-M84037,The Grange Medical Centre
 M81037,Thorneloe Lodge Surgery
 P81096,Parbold Surgery
 G82235,Old School Surgery
-M84041,Riversley Road Surgery
-M84022,Manor Court Surgery
 M84007,Dordon & Polesworth Group Practice
 M81058,Merstow Green Medical Practice
 P87658,The Willows Medical Practice
 M81605,The Glebeland Surgery
-M84023,Central Surgery
 M86008,The Gables Medicentre
 M86039,Allesley Village Surgery
-M84051,Old Mill Surgery
 P81701,Preston Road Surgery
 M84001,Red Roofs Surgery
 M86622,Govind Health Centre
-M84003,Arbury Medical Centre
 M84612,Station Street Surgery
 M84609,Woodlands Surgery
 M84065,Beech Tree Medical Practice
@@ -619,13 +595,11 @@ K83015,Danetre Medical Practice
 C85614,Darton Health Centre Practice
 K83068,Denton Village Surgery
 K83031,Byfield Medical Centre
-C85023,Hollygreen Practice
 C85005,Royston Group Practice
 B82609,Ampleforth Surgery
 Y05291,Toftwood Medical Centre
 C85622,Monk Bretton Health Centre Practice
 K83625,Dr Oliver Dk
-Y04809,Lakeside Surgery
 K83009,Moulton Surgery
 C86002,The Ransome Practice
 D82046,Church Hill Surgery
@@ -668,7 +642,6 @@ P88024,Gatley Medical Centre
 N81069,Chelford Surgery
 L84058,St. Catherine's Surgery
 K83042,Park Ave Med Cnt & Kings Heath Practice
-E87745,Cavendish Health Centre
 J82050,St Paul's Surgery
 L81081,Pembroke Road Surgery
 E84014,Bacon Lane Surgery
@@ -680,79 +653,59 @@ L83052,Castle Place Practice
 M85021,Moseley Medical Centre
 L81094,The Merrywood Practice
 Y02578,Broadmead Medical Centre
-M85029,Granton Medical Centre
 L83055,Compass House Medical Centres
 M83718,Peel Croft
 M85074,Wake Green Surgery
 L83013,Brunel Medical Practice
 M86040,Walsgrave Health Centre
-M85176,Kirpal Medical Practice
 L83131,Pembroke Medical Group
 K82022,Kingswood Surgery
-M86018,Moseley Avenue Surgery
 L83094,Dartmouth Medical Practice
 L83029,Southover Medical Practice
 L83043,Leatside Surgery
 L83103,Corner Place Surgery
-N83055,Trentham Medical Centre
 L83118,Chelston Hall Surgery
-Y00412,Soho Health Centre
 M85721,Holyhead Primary Health Care Centre
 M86027,The Cheylesmore Surgery
-M86001,Willenhall Primary Care Centre - 1
 L82622,Westover Surgery
 E83637,Colindale Medical Centre Lp
 M86612,George Eliot Medical Centre
-M86041,Clay Lane Medical Practice
 M86038,Bredon Avenue Surgery
-M86016,Godiva Group Practice
 M86037,Quinton Park Medical Centre
 M84016,Wolston Surgery
 M84616,Brookside Surgery
-Y00159,Hall Green Health
-M85077,Northwood Medical Centre
 M85177,Swanswell Medical Centre
 M85600,Kings Norton Surgery
 Y00996,Meridian Practice
 M91642,Queslett Medical Centre
-M86030,Kensington Road Surgery
-M89010,Dorridge Surgery
 C81092,Evelyn Medical Centre
 L83049,Moretonhampstead Health Centre
 L83085,Amicus Health
 M86048,Windmill Surgery
-M86002,Longford Primary Care Centre
 N81071,Greenmoss Medical Centre
 Y02794,Oakleaf
 M86021,Springfield Medical Practice
 M85033,The Manor Practice
 G82200,Wateringbury
-M86003,Sky Blue Medical Group
-M85076,Hollymoor Medical Centre
 B86003,Dr G Lees & Partners
 L83014,Mayfield Medical Centre
 M85803,Pearl Medical Centre
 L83607,Old Farm Surgery
 L83015,Oakside Surgery
-M89017,Solihull Healthcare Partnership
 L83112,West Hoe Surgery
 C81075,Brailsford & Hulland Medical Practice
 L83113,Budshead Medical Practice
 Y04965,Malling Health At Foleshill
 M85686,Dr Kulshrestha Family Practice
-M89021,Coventry Road Practice
 Y02633,Bow Medical Practice
 L83071,Stoke Surgery
 L83648,Peverell Park Surgery
-M86627,Stoke Aldermoor Med Ctre
 M85020,Raydocs Newtown
 M85715,Soho Road Primary Care Centre
-M85778,Halcyon Medical
 M85098,Rotton Park Medical Centre
 L83072,Friary House Surgery
 L83016,St Thomas Medical Group
 M85684,City Road Medical Centre
-M86004,Allesley Park Medical Ctr
 C81086,The Surgery Clifton Road
 M86028,Central Medical Centre
 M85782,University Southgate Practice
@@ -760,11 +713,9 @@ M85043,Hawkesley Medical Practice
 Y02893,Iridium Medical Practice, Richmond Pcc
 M85008,The Poolway Medical Centre
 M85713,Highgate Medical Centre
-C82043,Station View Health Centre
 M86005,Hillfields Health Centre - 1
 M86617,City Of Coventry Health Centre
 M85766,Balsall Heath Health Centre (S)
-M85065,Dr Sn Clay And Partners
 M85701,Burbury Medical Centre
 M85123,Al-Shafa Medical Centre
 B86030,Burton Croft Surgery
@@ -775,16 +726,13 @@ M85060,The Oaks Medical Centre
 L83120,Channel View Surgery
 M85097,Cranes Park Road Surgery
 L83082,Chagford Health Centre
-C82005,Groby Road Medical Centre (Id Patchett)
 C82080,Shefa Medical Practice
 L83024,Barnfield Hill Surgery
 L83040,Pinhoe Surgery
 Y00492,Summerfield Group Practice
 C81653,Brook Medical Centre
-M86638,Woodway Medical Centre
 L83019,Elm Surgery
 L83657,Teign Estuary Medical Group
-M85056,Weoley Park Surgery
 Y06378,Heath Street Health Centre
 M85069,Laurie Pike Health Centre
 C86025,Frances Street Medical Centre
@@ -793,7 +741,6 @@ L83008,Pathfields Medical Group
 C82053,Hockley Farm Med Pract (A Nana)
 L83068,Lynton Health Centre
 C81039,Eyam Surgery
-M85058,Harborne Medical Practice
 L83027,Croft Hall Medical Practice
 L83111,Chilcote Practice
 N81016,Millcroft Medical Centre
@@ -807,15 +754,11 @@ Y03597,Hamd Medical Practice
 M85699,Coventry Road Medical Centre
 M85153,Weather Oak Medical Centre
 M85694,Garretts Green Lane Surgery
-C82014,Castle Medical Group
 N81027,Readesmoor Medical Group Practice
-M85134,West Heath Primary C Ctr
 L83051,Cricketfield Surgery
 M85034,Omnia Practice
 L83004,Kingsteignton Medical Practice
 M89013,Arran Medical Centre
-C82042,The County Practice
-M85730,Ley Hill Surgery
 L83073,Brannam Medical Centre
 M85178,Modality Enki Medical Practice
 M85002,Handsworth Wood Med.Ctr.
@@ -832,8 +775,6 @@ M89005,St. Margarets Medical Practice
 C82678,Thurmaston Health Centre
 M85167,University Medical Practice
 L82017,St Mary's Health Centre
-C82026,Bridge Street Medical Practice
-C81035,Village Surgery
 M85026,Ashfield Surgery
 M89003,Gps Healthcare
 Y04662,Cranbrook Medical Practice
@@ -846,27 +787,17 @@ L83096,Combe Coastal Practice
 L83075,South Brent Health Centre
 C81013,Baslow Health Centre
 L83147,Lisson Grove Medical Ctr.
-M85116,Fernley Medical Centre
-C81047,Alvaston Medical Centre
 L83021,Dean Cross Surgery
-M89030,Arden Medical Centre
 C86012,The Oakwood Surgery
-M85082,Handsworth Medical Pract.
-C81073,Macklin Street Surgery
 L83088,Redfern Health Centre
-M85007,West Heath Surgery
-C82100,The Hedges Medical Centre (Sa Bailey)
 L83673,Clock Tower Surgery
 M86044,Park House
-L81065,Combe Down Surgery
-C82078,The Jubilee Medical Practice
 M86605,Limbrick Wood Surgery
 M85001,Shah Zaman Surgery
 C82079,South Wigston Health Ctr.
 M89608,Hampton Surgery
 Y00471,Broadway Health Centre
 M85774,Springfield Surgery
-C81015,Newbold Surgery
 L83086,Modbury Health Centre
 C82020,De Montfort Surgery
 C82032,Dr Nw Osborne's Practice
@@ -877,15 +808,12 @@ B81616,Dr Gt Hendow's Practice
 C82639,Westcotes Health Centre (Rl Hazeldine)
 M89007,Richmond Medical Centre
 C85013,Wombwell Gms Practice
-C82066,Forest House Medical Ctr
 M85756,Springfield Medical Pract
 C82050,Dr Nr Pulman's Practice
 C82062,Barrow Health Centre
 M85146,The Khattak Memorial Surgery
-M85172,Ridgacre House Surgery
 L83018,Beaumont Villa Surgery
 L83030,North Road West Med.Ctr.
-M85063,Midlands Medical Partnership
 L83666,Buckland Surgery
 D81645,The Grange Medical Centre
 C82047,Maples Family Med.Pract.
@@ -895,17 +823,14 @@ C82052,Dr Am Lewis' Practice
 L83011,Budleigh Salterton Medical Practice
 Y05733,Parkfields Surgery
 M85035,Woodgate Valley Health Centre
-M85061,Yardley Green Medical Centre
 M85145,The Slieve Surgery
 L83064,Church View Surgery
 C82021,The Central Surgery
 L83136,Haldon House Surgery
 L83106,Wooda Surgery
 M85697,Church Road Surgery
-L83003,Queen's Medical Centre
 L83639,Wembury Surgery
 L83628,Imperial Surgery
-M85143,Jiggins Lane Medical Centre
 M85770,The Sheldon Medical Centre
 M85171,Rowlands Road Surgery
 M85757,Soho Road Health Centre
@@ -915,7 +840,6 @@ L83044,Blackdown Practice
 M85025,Bath Row Medical Practice
 M85154,Finch Road Primary Care Centre
 M85051,Firstcare Practice
-M81062,Frankley Health Centre
 L83070,Buckfastleigh Medical Centre
 L83059,Norton Brook Medical Centre
 L83035,Litchdon Medical Centre
@@ -923,35 +847,26 @@ C82025,The Wycliffe Medical Practice
 C82084,Dr B Modi
 L83134,Wyndham House Surgery
 M85142,Keynell Covert
-M85031,The Harlequin Surgery
 L83046,Devon Square Surgery
 L83036,Topsham Surgery
 C81062,Hannage Brook Medical Centre
 L83050,Northam Surgery
-M85706,Druid Group
 M85041,Bournbrook Varsity Medical Centre
 M85779,Aylesbury Surgery
 C81655,Family Friendly Surgery
 C82631,Enderby Medical Centre
 L83097,Caen Medical Centre
 M85624,Perry Park Surgery
-M88006,Cape Hill Medical Centre
 C81096,Dr Ws Riddell's Practice
 M85680,Cotterils Lane Surgery
-M89019,Hobs Moat Medical Centre
-M89026,The Castle Practice
-M85717,Downsfield Medical Centre
 C81097,College Street Medical Practice
 C81066,Overdale Medical Practice
-M85037,Kingsfield Medical Centre
 M85110,Saltley And Fernbank Medical Practice
 L82054,St. Agnes Surgery
 L83010,Ashburton Surgery
-M85087,College Road Surgery (Ks)
 C81010,The Moir Medical Centre
 C81046,West Hallam Medical Ctr
 M85084,The Wand Medical Centre
-M85671,Bournville Surgery
 M85735,Greet Medical Practice
 M85136,Druids Heath Surgery
 M85107,Firs Surgery
@@ -976,25 +891,15 @@ M89016,Balsall Common & Meriden Group Practice
 M85055,Selly Oak Health Centre
 Y05346,Westwood Primary Care Centre
 L83115,Whipton Surgery
-C82114,Dr U K Roy
-Y00140,Torcross Medical Centre
 M88020,Sherwood House Medical Practice
-M89012,Croft Medical Centre
 L83007,Seaton & Colyton Medical Practice
-M89008,Bosworth Medical Centre
 L83054,Townsend House Medical Centre
 M85711,City Health Centre
-M89009,Manor House Lane Surgery
 C82671,Dr Gandecha & Partner
-M85736,Acocks Green Medical Centre
-M89002,Kingshurst Medical Practice
 M85156,River Brook Medical Centre
-M89001,Parkfield Medical Centre
-C82013,Bushloe Surgery
 C82624,The Practice Beaumont Leys
 L83098,Cheriton Bishop Surgery
 C82094,Beaumont Lodge Medical Practice
-C82669,The Surgery @ Aylestone
 C82088,Evington Medical Centre (C Kumar)
 C82073,Merridale Medical Centre (Rp Tew)
 C82659,Dr R Kapur & Partners
@@ -1007,7 +912,6 @@ C82059,Westcotes Gp Surgery (One)
 C82653,Westcotes Gp Surgery (Two)
 M85722,Naseby Medical Centre
 E85029,The Medical Centre, Dr Jefferies & Partn
-C82033,Humberstone Medical Centre (Ip Jones)
 M85048,Church Road Surgery
 L83058,Southernhay House Surgery
 C82643,Community Health Centre (Zs Osama)
@@ -1021,21 +925,16 @@ M85079,Eden Court Medical Practice
 C81040,Park Lane Surgery
 M86032,Holbrooks Health Team
 C81017,Arthur Medical Centre
-C81089,Stubley Medical Centre
 Y02567,Hodge Hill Family Practice
 M85669,Tudor Practice Stockland Green
 C82019,Sturdee Road Health And Wellbeing Centre
-C82627,Silverdale Medical Centre
 C81638,Castle Street Medical Centre
 Y00568,Foxhayes Practice
-M85175,The Hawthorns Surgery
-C82009,Market Harborough Med.Ctr
 M85117,Bartley Green Medical Practice
 C81065,Buxton Medical Practice
 L83663,Black Torrington Surgery
 C81113,Mickleover Surgery
 M85797,Hockley Medical Practice
-C81014,Derwent Valley Medical Practice
 M85042,Selly Park Surgery
 C81616,Peartree Medical Centre
 C82119,Narborough Road Surgery
@@ -1051,13 +950,10 @@ C82039,Kingsway Surgery
 M89015,Northbrook Health Centre
 M85009,Hamstead Road Surgery
 M85164,Newport Medical Practice
-C81071,Osmaston Surgery
 C82109,Husbands Bosworth Medical Centre
 C82098,Hazelmere Medical Centre
-C81036,Friar Gate Surgery
 M85792,Cotmore Surgery
 M85013,Church Lane - Khan
-C81007,Vernon Street Medical Ctr
 C82002,Countesthorpe Health Centre
 M85716,Dr Khuroo's Practice
 C85024,High Street Practice
@@ -1066,14 +962,12 @@ M85170,Gate Medical Centre
 M84035,Westside Medical Centre
 M85174,The Brook Surgery
 M85141,Schoolacre Road Surgery
-M86019,Westwood Medical H/Centre
 M85732,Bloomsbury Surgery
 M85081,The Dove Medical Practice
 M85139,Alpha Medical Practice
 M85066,Ward End Medical Centre
 C82610,The Parks Medical Centre (B Hainsworth)
 C82662,Walnut St Med Ctr (Leicester Med Group)
-C82068,Northfield Medical Centre
 M85670,Greenfield Medical Centre
 C81652,Derwent Medical Centre
 M85118,Baldwins Lane Surgery
@@ -1102,12 +996,10 @@ F84717,Royal Docks Medical Practice
 F84741,Dr T Krishnamurthy
 F84053,Greengate Medical Centre
 F84030,Ruston Street Clinic
-Y00918,Granville Medical Centre
 F84635,Shoreditch Park Surgery
 F84720,Healy Medical Centre
 F84677,East End Medical Centre
 F84021,London Fields Medical Centre
-F84117,Queensbridge Group Practice
 F84632,The Greenhouse Walk-In
 F84694,The Surgery (Brooke Road)
 F84668,The Clapton Surgery
@@ -1117,7 +1009,6 @@ F84080,Fountayne Road Health Centre
 F84711,Rosewood Practice
 F82038,Dr Sz Haider's Practice
 F84074,The Graham Practice
-L82049,Falmouth Health Centre
 L85055,Axbridge Surgery
 A82646,Longtown Medical Centre
 M83123,Birches Head Medical Ctr.
@@ -1130,12 +1021,9 @@ A82004,Alston Medical Practice
 A82012,Brampton Medical Practice
 M83140,Higherland Surgery
 F81048,Loughton Health Centre
-F81034,Newport Surgery
 M83701,Talke Pits Clinic
 B82086,The Danby Practice
 C84023,The Univ Of Nottingham Health Serv
-H81076,Grayshott Surgery
-M83075,Norfolk Street Surgery
 F84041,Southgate Road Medical Centre
 F81009,The Gold Street Surgery
 M83625,Dr Vsr Chadalavada
@@ -1144,15 +1032,10 @@ M83670,Keele Practice
 F81619,Sydenham House Surgery
 A82631,Court Thorn Surgery
 F81027,Lister Medical Centre
-F81184,Abridge Surgery
 B81030,Scartho Medical Centre
 B82030,Dr Akester & Partners
 B87004,Warrengate Medical Centre
-F81062,Chigwell Medical Centre
-F81043,The Limes Medical Centre
-F81749,Market Square Surgery
 C83002,Navenby Cliff Villages Surgery
-P92615,Esa Surgery Ltd
 F81053,Stansted Surgery
 B82018,Escrick Surgery
 F84714,St. Paul's Way Medical Ctr
@@ -1164,27 +1047,21 @@ F84092,Glen Road Medical Centre
 F84735,The Azad Practice
 F82009,North Street Medical Care
 F84669,Newham Medical Centre
-F84115,The Statham Grove Surgery
 F84097,Claremont Clinic
 F84018,The Nightingale Practice
 F82674,Cranham Health Centre
 F82055,Hornchurch Healthcare
 F82016,Central Park Surgery
 F82660,Tulasi Medical Centre
-F84013,Stamford Hill Group Practice
 F84072,De Beauvoir Surgery
 C83080,The Harrowby Lane Surgery
 C88096,Hackenthorpe Medical Centre
 C88053,Falkland House Surgery
-C88034,Nethergreen Surgery
 D82056,Elmham Surgery
-C83007,Lakeside Healthcare Stamford
 C88062,Rustlings Road Medical Centre
 D82068,Howdale Surgery
-C83634,Tasburgh Lodge Surgery
 C83038,The Glebe Practice
 C83062,Church Walk Surgery
-C83014,Boultham Park Medical Practice
 C83029,Branston & Heighington Family Practice
 C83003,Beechfield Medical Centre
 C83631,The Spalding Gp Surgery
@@ -1194,18 +1071,12 @@ C83061,North Thoresby Surgery
 K83050,The Crescent Medical Ctr.
 K83005,Queensway Medical Centre
 K83044,Parklands Medical Centre
-K83030,The Cottons Medical Centre
 K83080,Higham Ferrers Surgery
 K83040,Woodview Medical Centre
 K83076,Weston Favell Medical Centre
 K83621,Maple Access Partnership Llp
 K83616,The Meadows Surgery
-K83043,Abington Medical Centre
-K83066,Greens Norton & Weedon Medical Practice
-K83011,The Redwell Medical Centre
-K83003,Queensview Medical Centre
 K83012,King Edward Road Surgery
-K83008,The Pines Surgery
 K83048,Brook Medical Centre
 K83601,Earls Barton Medical Centre
 K83055,Wootton Medical Centre
@@ -1213,20 +1084,15 @@ K83025,The Mounts Medical Centre
 K83019,The Long Buckby Practice
 K83065,Nene Valley Surgery
 K83618,Dr Abbas
-K83028,Spinney Brook Medical Centre
 K83607,Dr Sumira
 P89609,Stamford House
 E81612,Drs Mirza Sukhani & Partners
 P85606,Moorside Medical Practice
 M84019,The Atherstone Surgery
 M84042,Hazelwood Group Practice
-M84008,Spring Hill Medical Centre
 M84005,Chapel End Surgery
-M84055,Stockingford Medical Centre
 Y04882,Chaucer Surgery
 M84627,The Old Cole House Practice
-L85024,Polden Medical Practice
-L85018,Cannington Health Centre
 K84066,Luther Street Medical Practice
 P91019,Partington Central Surgery
 P91631,Riddings Family Health Centre
@@ -1238,20 +1104,114 @@ Y02713,Guide Bridge Medical Practice
 Y02936,Millbrook Medical Practice
 P89612,Mossley Medical Practice
 C81081,Manor House Surgery
-Y02663,Droylsden Medical Practice
 L85009,West Somerset Healthcare
-Y01655,The Vale Practice
 E83034,Colney Hatch Lane Surgery
 L85050,Luson
 P88017,Chadsfield Medical Practice
 P84663,The Neville Family Centre
-C82075,Castle Mead Medical Centre
 C82035,Park View Surgery
-C82082,The Centre Surgery
-C82121,Heath Lane Surgery
-C82120,Whitwick Health Centre
 C82097,Charnwood Surgery
-C82091,Birstall Medical Centre
-L85038,Lister House Partnership
 P87035,Ordsall Health Surgery
 Y03023,St Andrews Health Centre
+F81108,Laindon Medical Group
+F84034,St. Stephens Health Centre
+F84055,The Grove Road Surgery
+K84003,Islip Surgery
+F86652,The Drive Surgery
+F84710,Island Health
+F86042,Balfour Road Surgery
+F86625,Ll Medical Care Ltd
+F84025,Gough Walk Practice
+F86007,The Forest Edge Practice
+J82035,St Clements Partnership
+C84120,Chilwell Valley And Meadows Practice
+E82105,Abbotswood Medical Centre
+E82096,Sheepcot Medical Centre
+J82130,Friarsgate Practice
+E82077,Davenport House Surgery
+P81130,Padiham Group Practice
+P84014,Rk Medical Practice
+P81735,Dr A Hussain
+P81020,Burnley Group Practice
+P81015,Lytham Road Surgery
+P81095,Thursby Surgery
+P81197,Rosegrove Surgery
+P81694,Family Practice
+P81692,Beeches Medical Centre
+P81668,Fleetwood Surgery
+F82670,Jabbar
+P81062,Regent House Surgery
+C85007,The Dove Valley Pms Practice
+P81208,Excel Primary Care
+A82027,Station House Surgery
+P81010,Withnell Health Centre
+P81038,The Chorley Surgery
+P81136,Dr A Bisarya
+P81710,Tarleton Group Practice
+P81770,Avenham Surgery
+P81687,New Longton Surgery
+P81184,Ribbleton Medical Centre
+P81160,Oswald Medical Centre
+Y01008,Bay Medical Group
+P81780,Riverside Family Practice
+P81169,Fishergate Hill Surgery
+P81154,Granville House Med Ctre
+P84046,Cheetham Hill Primary Care Centre
+P81157,Fernbank Surgery
+P81044,Library House Surgery
+P81196,Issa Medical Centre - Patel
+P81737,The Old Links Surgery
+P81086,Broadway Medical Centre
+P81031,Poplar House Surgery
+P81053,Briercliffe Surgery
+P81036,Peel House Medical Practice
+P81704,Blakewater Health Centre
+A82053,Nutwood Medical Practice
+P81171,The Euxton Medical Centre
+P81181,Kingsfold Medical Centre
+N81053,Earnswood Medical Centre
+P81041,Parkgate Surgery
+A82003,Ulverston Health Centre (Murray)
+P81695,Aughton Surgery
+P81112,Beacon Primary Care
+P81033,Coppull Medical Practice
+A82039,Dalton Surgery
+P81138,Burscough Family Practice
+P81646,Lathom House Surgery
+C82040,Orchard Surgery
+A82072,Risedale Surgery
+A82062,Atkinson Health Centre
+A82009,Bridgegate Medical Centre
+D81061,George Clare Surgery
+A82025,Captain French Surgery
+A82010,Abbey Road Surgery
+P81771,Dr Rc Rautray's Practice
+A82007,Duke Street Surgery
+P81165,Ightenhill Medical Centre
+A82071,Burnett Edgar Medical Ctr
+A82068,Ulverston Community Health Centre
+A82077,Liverpool House Surgery
+L83081,Yealm Medical Centre
+A82033,Waterloo House Surgery
+P81067,The Healthcare Centre
+P81147,Blackburn Rd Medical Centre
+L83148,Chillington Health Centre
+B82628,Hunmanby Surgery
+P81738,Great Harwood Surgery
+E82132,Roysia Surgery
+P81107,Stonebridge Surgery
+P81201,Ashurst Primary Care
+P81055,Berry Lane Medical Centre
+C84035,Crown House Surgery
+Y00347,Dr R Baghdjian Surgery
+P81084,Hall Green Surgery
+A82046,Windermere Health Centre
+J81003,Winton Health Centre
+P81143,Whittle Surgery
+P81037,Ansdell Medical Centre
+L85022,Diamond Health Group
+A82647,Cartmel Surgery
+A82030,Lunesdale Surgery
+P81757,Barrowford Surgery
+A82651,Duddon Valley Medical Practice
+A82613,Wraysdale House Surgery
