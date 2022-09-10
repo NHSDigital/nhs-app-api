@@ -418,21 +418,25 @@ export default {
         serviceId: 'accurx',
         providerName: 'Accurx',
       },
-      ers: {
-        serviceId: 'ers',
-        providerName: 'Electronic Referral Service',
-      },
       drDoctor: {
         serviceId: 'drDoctor',
         providerName: 'DrDoctor',
       },
-      pkb: {
-        serviceId: 'pkb',
-        providerName: 'Patients Know Best',
+      ers: {
+        serviceId: 'ers',
+        providerName: 'Electronic Referral Service',
+      },
+      healthcarecomms: {
+        serviceId: 'healthcarecomms',
+        providerName: 'Healthcare Communications',
       },
       netcall: {
         serviceId: 'netcall',
         providerName: 'Netcall',
+      },
+      pkb: {
+        serviceId: 'pkb',
+        providerName: 'Patients Know Best',
       },
       zesty: {
         serviceId: 'zesty',

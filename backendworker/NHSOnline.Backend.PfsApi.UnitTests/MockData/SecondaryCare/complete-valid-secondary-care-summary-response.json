@@ -1068,6 +1068,102 @@
               "extension": [
                 {
                   "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": "Adult Mental Illness"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "Adult Mental Illness - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2022-12-03T09:30:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cea",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": ""
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2022-12-10T09:15:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
                   "valueUrl": "http://stubs.local.bitraft.io:8080/pkb/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D5b7082ba-5d0d-4963-ad62-96d9cadccab1%26nhsStyle%3Dtrue",
                   "extension": [
                     {
@@ -1265,6 +1361,54 @@
                     {
                       "url": "client-id",
                       "valueCode": "Accurx"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "booked"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": ""
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2022-12-15T09:45:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
                     }
                   ]
                 },
@@ -1937,6 +2081,246 @@
                     {
                       "url": "client-id",
                       "valueCode": "Accurx"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": "Cardiac Rehabilitation"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "Cardiac Rehabilitation - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2023-02-07T09:45:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cea",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "booked"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": "Allergy Service"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "Allergy Service - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2023-01-09T09:15:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "booked"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": ""
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2023-01-15T10:15:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "cancelled"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": ""
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2023-01-17T10:15:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
+                    }
+                  ]
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Appointment-Status",
+                  "valueCoding": {
+                    "system": "http://hl7.org/fhir/appointmentstatus",
+                    "code": "booked"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                  "valueCoding": {
+                    "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                    "display": "Diabetic Medicine"
+                  }
+                },
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Consultation-Medium",
+                  "valueCode": ""
+                }
+              ],
+              "description": "Diabetic Medicine - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+              "scheduledPeriod": {
+                "start": "2023-02-04T10:00:00+00:00",
+                "extension": [
+                  {
+                    "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                    "valueDuration": {
+                      "unit": "Days",
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "detail": {
+              "kind": "Appointment",
+              "extension": [
+                {
+                  "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link",
+                  "valueUrl": "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cee",
+                  "extension": [
+                    {
+                      "url": "client-id",
+                      "valueCode": "HealthcareComms"
                     }
                   ]
                 },

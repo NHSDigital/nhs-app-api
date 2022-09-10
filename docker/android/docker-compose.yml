@@ -19,6 +19,7 @@ services:
         -A /drdoctor.stubs.local.bitraft.io/10.0.2.2 \
         -A /engage.stubs.local.bitraft.io/10.0.2.2 \
         -A /ers.stubs.local.bitraft.io/10.0.2.2 \
+        -A /hcc.stubs.local.bitraft.io/10.0.2.2 \
         -A /gncr.stubs.local.bitraft.io/10.0.2.2 \
         -A /netcall.stubs.local.bitraft.io/10.0.2.2 \
         -A /netcompany.stubs.local.bitraft.io/10.0.2.2 \
@@ -31,5 +32,5 @@ services:
         -A /substrakt.stubs.local.bitraft.io/10.0.2.2 \
         -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /web.local.bitraft.io/10.0.2.2 \
-        -A /wellnessandprevention.stubs.local.bitraft.io/10.0.2.2
+        -A /wellnessandprevention.stubs.local.bitraft.io/10.0.2.2 \
         -A /zesty.stubs.local.bitraft.io/10.0.2.2 \

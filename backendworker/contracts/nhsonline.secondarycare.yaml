@@ -116,10 +116,11 @@ components:
           description: The linked referral or portal system.
           enum:
             - accurx
-            - pkb
-            - ers
             - drdoctor
+            - ers
+            - healthcarecomms
             - netcall
+            - pkb
             - zesty
         deepLinkUrl:
           type: string
@@ -163,10 +164,11 @@ components:
           description: The linked referral or portal system.
           enum:
             - accurx
-            - pkb
-            - ers
             - drdoctor
+            - ers
+            - healthcarecomms
             - netcall
+            - pkb
             - zesty
         deepLinkUrl:
           type: string
@@ -203,10 +205,11 @@ components:
           description: The linked referral or portal system.
           enum:
             - accurx
-            - pkb
-            - ers
             - drdoctor
+            - ers
+            - healthcarecomms
             - netcall
+            - pkb
             - zesty
         deepLinkUrl:
           type: string
@@ -238,10 +241,11 @@ components:
           description: The linked referral or portal system.
           enum:
             - accurx
-            - pkb
-            - ers
             - drdoctor
+            - ers
+            - healthcarecomms
             - netcall
+            - pkb
             - zesty
         deepLinkUrl:
           type: string

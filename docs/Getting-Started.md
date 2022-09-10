@@ -106,6 +106,7 @@ Before running the app locally, some entries need to be added to your machine's 
 127.0.0.1 drdoctor.stubs.local.bitraft.io
 127.0.0.1 engage.stubs.local.bitraft.io
 127.0.0.1 ers.stubs.local.bitraft.io
+127.0.0.1 hcc.stubs.local.bitraft.io
 127.0.0.1 gncr.stubs.local.bitraft.io
 127.0.0.1 log.local.bitraft.io
 127.0.0.1 messages.local.bitraft.io
@@ -145,6 +146,7 @@ If you have difficulty accessing web.local.bitraft.io:3000 and web is running in
 ::1 drdoctor.stubs.local.bitraft.io
 ::1 engage.stubs.local.bitraft.io
 ::1 ers.stubs.local.bitraft.io
+::1 hcc.stubs.local.bitraft.io
 ::1 gncr.stubs.local.bitraft.io
 ::1 log.local.bitraft.io
 ::1 messages.local.bitraft.io

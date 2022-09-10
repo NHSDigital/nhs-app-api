@@ -427,7 +427,38 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         Provider = WayfinderServiceProvider.Accurx.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/accurx/api/OpenIdConnect/AuthenticateManageAppointment?appointmentToken=04fa3491-4862-4828-b388-eb4d814f2164"
                     },
-
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2022-12-03T09:30:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "Adult Mental Illness - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cea"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2022-12-10T09:15:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599ceb"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2023-01-17T10:15:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cec"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2023-02-07T09:45:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Cancelled.GetLiteral(),
+                        LocationDescription = "Cardiac Rehabilitation - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599ced"
+                    },
                     new UpcomingAppointment
                     {
                         AppointmentDateTime = DateTimeOffset.Parse("2022-08-21T09:00:00+01:00", CultureInfo.CurrentCulture).UtcDateTime,
@@ -587,6 +618,38 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                         LocationDescription = "Diabetic Medicine - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
                         Provider = WayfinderServiceProvider.Zesty.ToString(),
                         DeepLinkUrl = "http://stubs.local.bitraft.io:8080/zesty/nhs/origin_appointment?resource_id=5f641f44-a881-40e3-a416-e9c212df42e6"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2022-12-15T09:45:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
+                        LocationDescription = "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599caa"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2023-01-09T09:15:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
+                        LocationDescription = "Allergy Service - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.HealthcareComms.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cab"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2023-01-15T10:15:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
+                        LocationDescription = "UNKNOWN-999 - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.Zesty.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cac"
+                    },
+                    new UpcomingAppointment
+                    {
+                        AppointmentDateTime = DateTimeOffset.Parse("2023-02-04T10:00:00+00:00", CultureInfo.CurrentCulture).UtcDateTime,
+                        AppointmentStatus = Appointment.AppointmentStatus.Booked.GetLiteral(),
+                        LocationDescription = "Diabetic Medicine - MILTON KEYNES UNIVERSITY HOSPITAL NHS FOUNDATION TRUST",
+                        Provider = WayfinderServiceProvider.Zesty.ToString(),
+                        DeepLinkUrl = "http://stubs.local.bitraft.io:8080/hcc/appointments/350667f5-1ba7-4253-ae2e-fd42c8599cad"
                     },
                 },
                 ReferralsInReviewNotOverdue = new []

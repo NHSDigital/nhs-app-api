@@ -3,10 +3,11 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Models
     public enum ServiceProvider
     {
         Accurx,
-        eRS,
-        PKB,
         DrDoctor,
+        eRS,
+        HealthcareComms,
         Netcall,
+        PKB,
         Zesty,
     }
 }

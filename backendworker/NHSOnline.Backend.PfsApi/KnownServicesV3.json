@@ -56,6 +56,10 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true
     },
+    "healthcarecomms": {
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
+    },
     "gncr": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true

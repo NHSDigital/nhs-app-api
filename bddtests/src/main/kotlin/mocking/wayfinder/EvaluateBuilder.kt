@@ -1005,6 +1005,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
                 "appointmentToken=XXXX"
             "DrDoctor" -> "http://drdoctor.stubs.local.bitraft.io:8080/appointments/" +
                 "123456?from=nhsApp"
+            "HealthcareComms" -> "http://hcc.stubs.local.bitraft.io:8080/appointments/987654321"            
             "PKB" -> "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?" +
                 "phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
             "Netcall" -> "http://netcall.stubs.local.bitraft.io:8080/Appointments?" +

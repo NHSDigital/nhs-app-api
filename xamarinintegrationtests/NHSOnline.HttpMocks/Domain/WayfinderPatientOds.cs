@@ -5,11 +5,12 @@ namespace NHSOnline.HttpMocks.Domain
     public enum WayfinderPatientOds
     {
         ACCURX,
-        ERS,
-        GNCR,
-        PKB,
-        ERSANDPKB,
         DRDOCTOR,
+        ERS,
+        ERSANDPKB,
+        GNCR,
+        HEALTHCARECOMMS,
+        PKB,
         NETCALL,
         ZESTY,
     }

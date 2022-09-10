@@ -61,7 +61,7 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAppointmentsUnderMinimumAgeResponse()
     }
 
-    @Given("^I have referrals and upcoming (AccurxWayfinder|DrDoctor|Netcall|PKB|Zesty) appointments$")
+    @Given("^I have referrals and upcoming (AccurxWayfinder|DrDoctor|HealthcareComms|Netcall|PKB|Zesty) appointments$")
     fun iHaveReferralsAndUpcomingAppointments(provider: String){
         wayfinderFactory.setupReferralsAndAppointments(provider)
     }

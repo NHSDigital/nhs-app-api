@@ -16,6 +16,7 @@ import mocking.thirdPartyProviders.accurx.AccurxRequestBuilder
 import mocking.thirdPartyProviders.accurxWayfinder.AccurxWayfinderRequestBuilder
 import mocking.thirdPartyProviders.drDoctor.DrDoctorRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
+import mocking.thirdPartyProviders.healthcarecomms.HealthcareCommsRequestBuilder
 import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
 import mocking.thirdPartyProviders.netCompany.NetCompanyRequestBuilder
 import mocking.thirdPartyProviders.netcall.NetcallRequestBuilder
@@ -56,6 +57,7 @@ class MockingClient(configuration: MockingConfiguration) {
     val forAccurxWayfinder = ExternalSupplierMockingClient(AccurxWayfinderRequestBuilder(), wiremockHelper)
     val forDrDoctor = ExternalSupplierMockingClient(DrDoctorRequestBuilder(), wiremockHelper)
     val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
+    val forHealthcareComms = ExternalSupplierMockingClient(HealthcareCommsRequestBuilder(), wiremockHelper)    
     val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)
     val forNetcall = ExternalSupplierMockingClient(NetcallRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)

@@ -227,6 +227,11 @@ const thirdPartyProvider = {
       acceptablePathsRegex: '^\\/appointments\\/.*$',
       redirectPath: '/appointments/',
     },
+    healthcarecomms: {
+      jumpOffId: 'healthcarecommsWayfinder',
+      acceptablePathsRegex: '^\\/appointments\\/.*$',
+      redirectPath: '/appointments/',
+    },
     pkb: {
       jumpOffId: 'pkbWayfinder',
       acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/diary\\/viewAppointment\\.action.*$',
