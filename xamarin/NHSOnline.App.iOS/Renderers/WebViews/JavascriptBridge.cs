@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Foundation;
+using Microsoft.Extensions.Logging;
+using NHSOnline.App.Logging;
 using WebKit;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews
@@ -24,6 +26,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private readonly string _javascriptObjectName;
 
+        private static ILogger Logger => NhsAppLogging.CreateLogger<JavascriptBridge>();
+
         // The webview does not exist at the point we instantiate the bridge, and so we pass an
         // accessor to ensure we can get hold of the instance at the point of command execution
         internal JavascriptBridge(Func<TWebView> webViewAccessor, string javascriptObjectName)
@@ -34,13 +38,31 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Action> action)
         {
-            _functions.Add(name, ScriptMessageHandler.For(() => action(_webViewAccessor())));
+            try
+            {
+                _functions.Add(name, ScriptMessageHandler.For(() => action(_webViewAccessor())));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error adding Javascript Function (action).\n Function Name: {0} \nWebView: {1}", name,
+                    _javascriptObjectName);
+                throw;
+            }
             return this;
         }
 
         public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Action<string>> command)
         {
-            _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
+            try
+            {
+                _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error adding Javascript Function (command).\n Function Name: {0} \nWebView: {1}", name,
+                    _javascriptObjectName);
+                throw;
+            }
             return this;
         }
 
