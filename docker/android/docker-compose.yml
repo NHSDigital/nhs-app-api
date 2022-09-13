@@ -33,4 +33,4 @@ services:
         -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
         -A /web.local.bitraft.io/10.0.2.2 \
         -A /wellnessandprevention.stubs.local.bitraft.io/10.0.2.2 \
-        -A /zesty.stubs.local.bitraft.io/10.0.2.2 \
+        -A /zesty.stubs.local.bitraft.io/10.0.2.2
