@@ -38,7 +38,6 @@
         id="replyButton"
         class="nhsuk-button"
         @click="onSendClicked">Send</button>
-      <a :class="$style.messageReply__dismiss" @click="onShowOptions">Dismiss</a>
     </div>
     <div v-else>
       <button
@@ -129,11 +128,6 @@ export default {
   methods: {
     onShowOptions() {
       this.showOptions = !this.showOptions;
-
-      if (!this.showOptions) {
-        this.selectedCheckboxValue = '';
-        this.selectedRadioValue = undefined;
-      }
     },
     onSendClicked() {
       if (this.selectedRadioValue) {

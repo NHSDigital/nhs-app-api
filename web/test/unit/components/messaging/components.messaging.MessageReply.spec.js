@@ -79,14 +79,6 @@ describe('message reply', () => {
           expect(wrapper.emitted().send_clicked.length).toBe(1);
         });
       });
-
-      describe('dismiss button is clicked', () => {
-        it('will reset the selected option', () => {
-          wrapper.setData({ selectedRadioValue: 'YES' });
-          wrapper.vm.onShowOptions();
-          expect(wrapper.vm.selectedRadioValue).toBe(undefined);
-        });
-      });
     });
   });
 
@@ -117,14 +109,6 @@ describe('message reply', () => {
           wrapper.setData({ selectedCheckboxValue: 'CANCEL' });
           wrapper.vm.onSendClicked();
           expect(wrapper.emitted().send_clicked.length).toBe(1);
-        });
-      });
-
-      describe('dismiss button is clicked', () => {
-        it('will reset the selected option', () => {
-          wrapper.setData({ selectedCheckboxValue: 'CANCEL' });
-          wrapper.vm.onShowOptions();
-          expect(wrapper.vm.selectedCheckboxValue).toBe('');
         });
       });
     });
