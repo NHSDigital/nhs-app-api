@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -13,7 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         }
 
         private AndroidLabel PermissionsText => AndroidLabel.WhichMatches(_driver,
-            "Allow .* to access this device's location\\?");
+            "Allow .* to access this device.*s location\\?");
 
         public static AndroidLocationServicesPermissionsDialog AssertDisplayed(IAndroidDriverWrapper driver)
         {

@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidLabel PicturesLabel => AndroidLabel.WhichMatches(_driver,
             "Pictures");
 
-        private AndroidLabel BrowserStackThumbnailLabel => AndroidLabel.WhichMatches(_driver,
+        private AndroidImageFrame BrowserStackThumbnailLabel => AndroidImageFrame.WithContentDescription(_driver,
             "BrowserStack.jpg");
 
         public static AndroidFileChooser AssertDisplayed(IAndroidDriverWrapper driver)
@@ -57,6 +57,6 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             return this;
         }
 
-        public void ChoosePhoto() => BrowserStackThumbnailLabel.Click();
+        public void ChoosePhoto() => BrowserStackThumbnailLabel.ClickByDesc();
     }
 }

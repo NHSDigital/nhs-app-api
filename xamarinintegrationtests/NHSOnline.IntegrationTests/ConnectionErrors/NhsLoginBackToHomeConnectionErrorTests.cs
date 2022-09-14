@@ -22,7 +22,8 @@ namespace NHSOnline.IntegrationTests.ConnectionErrors
     [BusinessRule("BR-IC-02.2", "When native back button is chosen while Internet connectivity error screen without try again button is displayed, back to NHS App view action is triggered to redirect the User to logged in Home view")]
     public class NhsLoginBackToHomeConnectionErrorTests
     {
-        [NhsAppAndroidTest]
+        // Setting to S10 and os 9 as the new default reset tested at 15+ seconds and still issues shown
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS10, OSVersion = AndroidOSVersion.Nine)]
         public async Task APatientCanGoBackToTheLoggedOutHomePageWhenThereIsAConnectionErrorDuringNhsLoginAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()

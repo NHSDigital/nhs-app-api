@@ -63,8 +63,6 @@ namespace NHSOnline.IntegrationTestAnalyser.Models
 
             yield return BasicErrorType.Create("Photo picker not working right",
                 "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeButton' AND label == 'Done')",
-                "No IOSElement found matching ByIosNSPredicate(type == 'XCUIElementTypeCell' AND name == 'test, txt')",
-                "No AndroidElement found matching ByAndroidUIAutomator(new UiSelector().className(\"android.widget.TextView\").text(\"NhsAppLogo.png\"))",
                 "No AndroidElement found matching ByAndroidUIAutomator(new UiSelector().className(\"android.widget.TextView\").textMatches(\"Images\"))");
 
             yield return BasicErrorType.Create("Probably internet wasn't turned off as expected",

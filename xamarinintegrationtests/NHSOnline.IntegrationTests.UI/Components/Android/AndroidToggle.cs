@@ -18,8 +18,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _locatorStrategy = locatorStrategy;
         }
 
-        public static AndroidToggle WithText(IAndroidInteractor interactor, string text)
-            => new AndroidToggle(interactor, new TextLocatorStrategy(text));
+        public static AndroidToggle WithTextMatches(IAndroidInteractor interactor, string pattern)
+            => new AndroidToggle(interactor, new TextLocatorStrategy(pattern));
 
         public void Click() => ActOnElement(e => e.Click());
 
@@ -32,13 +32,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         private sealed class TextLocatorStrategy : IAndroidLocatorStrategy
         {
-            private readonly string _text;
+            private readonly string _pattern;
 
-            public TextLocatorStrategy(string text) => _text = text;
+            public TextLocatorStrategy(string pattern) => _pattern = pattern;
 
-            public string Selector => $"new UiSelector().className(\"android.widget.Switch\").text({_text.QuoteUiAutomatorLiteral()})";
+            public string Selector => $"new UiSelector().className(\"android.widget.Switch\").textMatches({_pattern.QuoteUiAutomatorLiteral()})";
 
-            public string Description => $"{_text}";
+            public string Description => $"{_pattern}";
         }
     }
 }

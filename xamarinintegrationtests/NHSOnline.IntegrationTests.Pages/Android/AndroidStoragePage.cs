@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Recent");
 
-        private AndroidLabel FileLabel => AndroidLabel.WithText(_driver, "NhsAppLogo.png");
+        private AndroidLabel FileLabel => AndroidLabel.WhichMatches(_driver, ".*.jpg");
 
         private AndroidStoragePage(IAndroidDriverWrapper driver)
         {

@@ -13,9 +13,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidGLButton CameraShutterButton => AndroidGLButton.WithText(_driver,"Shutter");
+        private AndroidImageButton CameraShutterButton => AndroidImageButton.WithDescription(_driver,"Take picture");
 
-        private AndroidLabel OkLabel => AndroidLabel.WithText(_driver, "OK");
+        private AndroidButton OkLabel => AndroidButton.WithText(_driver, "OK");
 
         public static AndroidCamera AssertDisplayed(IAndroidDriverWrapper driver)
         {
@@ -24,7 +24,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             return camera;
         }
 
-        public void TakePhoto() => CameraShutterButton.Click();
+        public AndroidCamera TakePhoto()
+        {
+            CameraShutterButton.Click();
+            return this;
+        }
 
         public void ClickOk()
         {

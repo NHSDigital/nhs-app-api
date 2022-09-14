@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidSystemButton AllowButton => AndroidSystemButton.WhichMatches(_driver, "(ALLOW|Allow)");
+        private AndroidSystemButton AllowButton => AndroidSystemButton.WhichMatches(_driver, "(ALLOW|Allow|Only this time)");
 
         private AndroidSystemButton DenyButton => AndroidSystemButton.WhichMatches(_driver, "(DENY|Deny)");
 

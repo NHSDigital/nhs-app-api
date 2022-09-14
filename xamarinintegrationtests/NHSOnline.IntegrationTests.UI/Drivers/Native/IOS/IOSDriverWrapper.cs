@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,8 +16,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
     // https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
-        private const string DeviceFilePath = "@com.nhs.online.dev.browserstack:documents/test.txt";
-        private const string FileLocation = "../../../../NHSOnline.IntegrationTests.UI/Resources/test.txt";
 
         private readonly IIOSBrowserStackDriver _driver;
         private readonly IIOSInteractor _interactor;
@@ -155,29 +151,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             return new WaitForAction();
         }
 
-        public bool VerifyFilePushed()
-        {
-            var bytes = _driver.PullFile(DeviceFilePath);
-
-            if (bytes.Length < 1)
-            {
-                // file isn't there trying to push again
-                PushTestFile();
-
-                bytes = _driver.PullFile(DeviceFilePath);
-            }
-
-            return bytes.Length > 0;
-        }
-
-        public void PushTestFile()
-        {
-            _driver.PushFile(DeviceFilePath,
-                new FileInfo(FileLocation));
-
-            Thread.Sleep(TimeSpan.FromSeconds(4));
-        }
-
         async Task IIOSDriverWrapper.DisableNetwork()
         {
             var browserStackApiClient = new BrowserStackApiClient(_browserStackConfig);
@@ -206,7 +179,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         void IDriverWrapper.Cleanup(IDriverCleanupContext context)
         {
-            context.TryCleanUp("quit iOS driver", () => _driver?.Quit());
+            context.TryCleanUp("quit iOS driver", () => _driver.Quit());
         }
 
         void IDriverWrapper.UpdateBrowserStackStatusToFailed(IDriverCleanupContext context)

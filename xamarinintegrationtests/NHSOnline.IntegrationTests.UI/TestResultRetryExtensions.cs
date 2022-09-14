@@ -98,17 +98,6 @@ namespace NHSOnline.IntegrationTests.UI
             @"Web window handle not found after 00:00:20; Handles:*",
             RegexOptions.Compiled);
 
-        // Ios issue where the file is not there for the upload test
-        private static readonly Regex UnableToFindFileIos = new(
-            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeCell' AND name == 'test, txt'\)*",
-            RegexOptions.Compiled);
-
-        // There are UI variances between devices which make the tests flaky though the functionality works
-        // The variances will be addressed under NHSO-16258
-        private static readonly Regex FileUploadSelectorDeviceVariance = new(
-            @"No (?:IOS|Android)Element found matching By(?:IosNSPredicate|AndroidUIAutomator)\(.*?(?:label == 'Done'|name == 'test, txt'|text\(\\?""NhsAppLogo.png\\?""\)|textMatches\(\\?""Images\\?""\))\)",
-            RegexOptions.Compiled);
-
         // kAXErrorServerNotFound - iOS issue throws Appium error: " No webviews found"
         private static readonly Regex KAXErrorServerNotFound = new(
             "kAXErrorServerNotFound",
@@ -157,11 +146,6 @@ namespace NHSOnline.IntegrationTests.UI
             @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeButton' AND label == 'Choose'\)*",
             RegexOptions.Compiled);
 
-        // Issue where file is not uploaded and we fail the test
-        private static readonly Regex BrowserstackDidNotUploadFile = new(
-            @"Test could not find test file for upload*",
-            RegexOptions.Compiled);
-
         // ios11 is really flakey trying to consistently get past ts and cs page
         private static readonly Regex TermsAndConditionsContinueFailure = new(
             @"(?=.*No IWebElement found matching\b)(?=.*Help improve the NHS App\b).*",
@@ -190,8 +174,6 @@ namespace NHSOnline.IntegrationTests.UI
             (AppiumUnableToTranslateWebCoordinates, RetryStatus.Retry(nameof(AppiumUnableToTranslateWebCoordinates))),
             (AboutBlank, RetryStatus.Retry(nameof(AboutBlank))),
             (WindowHandleNotFound, RetryStatus.Retry(nameof(WindowHandleNotFound))),
-            (UnableToFindFileIos, RetryStatus.Retry(nameof(UnableToFindFileIos))),
-            (FileUploadSelectorDeviceVariance, RetryStatus.Retry(nameof(FileUploadSelectorDeviceVariance))),
             (KAXErrorServerNotFound, RetryStatus.Retry(nameof(KAXErrorServerNotFound))),
             (DeviceFailedVersionCheck, RetryStatus.Retry(nameof(DeviceFailedVersionCheck))),
             (UnusedWebContext, RetryStatus.Retry(nameof(UnusedWebContext))),
@@ -203,7 +185,6 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
             (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement))),
             (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure))),
-            (BrowserstackDidNotUploadFile, RetryStatus.Retry(nameof(BrowserstackDidNotUploadFile))),
             (TermsAndConditionsContinueFailure, RetryStatus.Retry(nameof(TermsAndConditionsContinueFailure))),
             (TermsAndConditionsBoxCheckedFailure, RetryStatus.Retry(nameof(TermsAndConditionsBoxCheckedFailure)))
         };

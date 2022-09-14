@@ -47,10 +47,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
 
             AndroidCamera
                 .AssertDisplayed(driver)
-                .TakePhoto();
-
-            AndroidCamera
-                .AssertDisplayed(driver)
+                .TakePhoto()
                 .ClickOk();
 
             AndroidStubbedLoginUpliftPage

@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration.Uplift
     [BusinessRule("BR-LOG-12.6", "Uploading a file allows the user to attach an image of their ID ")]
     public class P5FileUploadPermissionsAllowedTests
     {
-        [NhsAppAndroidTest]
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS21, OSVersion = AndroidOSVersion.Eleven)]
         public void APatientWithProofLevelFiveCanUploadAFileAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()

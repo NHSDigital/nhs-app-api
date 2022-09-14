@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.BrowserOverlay
         private AndroidBrowserOverlayContents ErrorCodeText(string errorCodeSubstring) =>
             AndroidBrowserOverlayContents.WithText(_driver, errorCodeSubstring);
 
-        private AndroidBrowserOverlayContents NoInternetText => AndroidBrowserOverlayContents.WithText(_driver, "No internet");
+        private AndroidLabel NoInternetText => AndroidLabel.WhichMatches(_driver, "(?i)No internet");
 
         private AndroidImageButton CloseTabButton => AndroidImageButton.WithDescription(_driver, "Close tab");
 

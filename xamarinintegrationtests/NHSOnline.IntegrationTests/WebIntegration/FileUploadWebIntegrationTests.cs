@@ -23,8 +23,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         public void APatientWithProofLevelNineCanUploadTheirFileToAWebIntegrationFileUploadScreenAndroid(
             IAndroidDriverWrapper driver)
         {
-            UploadAndVerifyFile(driver);
-
             var patient = new PkbPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
@@ -121,16 +119,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .AssertNativeHeader()
                 .PageContent.AssertFileSelected();
 
-        }
-
-        private static void UploadAndVerifyFile(INativeDriverWrapper driver)
-        {
-            driver.PushTestFile();
-
-            if (!driver.VerifyFilePushed())
-            {
-                Assert.Fail("Test could not find test file for upload");
-            }
         }
     }
 }

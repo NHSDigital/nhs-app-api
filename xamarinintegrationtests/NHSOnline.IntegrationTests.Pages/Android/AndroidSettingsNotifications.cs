@@ -11,14 +11,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidImageButton Back => AndroidImageButton.WithDescription(_driver, "Navigate up");
 
-        private AndroidLabel Title => AndroidLabel.WithText(_driver, "Settings");
+        private AndroidToggle NotificationsEnabled => AndroidToggle.WithTextMatches(_driver, "(?i)Notifications, Show notifications.*");
 
-        private AndroidToggle NotificationsEnabled => AndroidToggle.WithText(_driver, "Settings, Show notifications, On");
-
-        public static AndroidSettingsNotifications AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidSettingsNotifications  AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidSettingsNotifications(driver);
-            page.Title.AssertVisible();
+            page.NotificationsEnabled.AssertVisible();
             return page;
         }
 

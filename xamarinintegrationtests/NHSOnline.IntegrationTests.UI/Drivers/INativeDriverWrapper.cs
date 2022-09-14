@@ -8,7 +8,5 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void NhsAppWebViewClosed();
         string AppVersionNumber { get; }
         void Screenshot(string screenshotName);
-        void PushTestFile();
-        bool VerifyFilePushed();
     }
 }

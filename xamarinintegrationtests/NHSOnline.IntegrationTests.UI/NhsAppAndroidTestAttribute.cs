@@ -11,9 +11,9 @@ namespace NHSOnline.IntegrationTests.UI
     {
         internal AndroidBrowserStackCapability Capabilities { get; }
 
-        public AndroidDevice AndroidDevice { get; set; } = AndroidDevice.GalaxyS10;
+        public AndroidDevice AndroidDevice { get; set; } = AndroidDevice.GalaxyS21;
 
-        public AndroidOSVersion OSVersion { get; set; } = AndroidOSVersion.Nine;
+        public AndroidOSVersion OSVersion { get; set; } = AndroidOSVersion.Eleven;
 
         public NhsAppAndroidTestAttribute(params AndroidBrowserStackCapability[] capabilities)
         {

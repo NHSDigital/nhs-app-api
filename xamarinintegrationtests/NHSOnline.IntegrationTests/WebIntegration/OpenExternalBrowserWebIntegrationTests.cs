@@ -22,7 +22,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         private const string PageHeader = "111";
         private const string UrlText = "stubs.local.bitraft.io:8080/nhsuk/111";
 
-        [NhsAppAndroidTest]
+        // Setting to S10 and os 9 as the new default exposed an issue on differing versions
+        [NhsAppAndroidTest(AndroidDevice = AndroidDevice.GalaxyS10, OSVersion = AndroidOSVersion.Nine)]
         public void APatientCanAccessAWebIntegrationAndCallOpenExternalBrowserAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new PkbPatient()
