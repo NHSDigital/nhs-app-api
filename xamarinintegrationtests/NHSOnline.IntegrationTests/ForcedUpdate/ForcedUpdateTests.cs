@@ -49,17 +49,30 @@ namespace NHSOnline.IntegrationTests.ForcedUpdate
 
             androidNhsAppPlayStorePage.AssertPageElements();
 
+            var errorMessageToTriggerAlternateSelector =
+                $"A button with text: '{AndroidNhsAppPlayStorePage.InstallButtonTextIdentifier}' should be present.";
+
             TransitoryErrorHandler.HandleSpecificFailure()
                 .Alternate(() =>
                     {
-                        // Play store app has now changed layout and Button no longer has the text property.
-                        androidNhsAppPlayStorePage.InstallAvailableFallback();
+                        // Play store app in certain devices has changed layout and Button no longer has the text property
+                        androidNhsAppPlayStorePage.InstallAvailableAlternateVariation();
                     },
-                    "A button with text: 'Install' should be present.",
+                    errorMessageToTriggerAlternateSelector,
                     () =>
                     {
-                        // Old layout is now the fallback - may still be applicable on some devices
-                        androidNhsAppPlayStorePage.InstallAvailable();
+                        TransitoryErrorHandler.HandleSpecificFailure()
+                            .Alternate(() =>
+                                {
+                                    // This was the first alternate version seen in the wild
+                                    androidNhsAppPlayStorePage.InstallAvailableAlternate();
+                                },
+                                errorMessageToTriggerAlternateSelector,
+                                () =>
+                                {
+                                    // Original layout is the fallback - may still be applicable on some devices
+                                    androidNhsAppPlayStorePage.InstallAvailable();
+                                });
                     });
         }
 
