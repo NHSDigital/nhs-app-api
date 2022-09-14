@@ -10,36 +10,43 @@
       </shutter-container>
     </div>
     <div v-else>
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
-            <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
-              {{ $t('messages.messageFrom') }}
-            </span>
-            {{ senderName }}
-          </page-title>
+      <div class="nhsuk-u-visually-hidden" role="status" tabindex="-1"/>
+      <div class="nhsuk-grid-column-full">
+        <form-error-summary v-if="showErrors"
+                            :header-locale-ref="'messages.appMessage.errors.title'"
+                            :errors="validationErrorMessage"
+                            :errors-ids="validationErrorId"/>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+              <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
+                {{ $t('messages.messageFrom') }}
+              </span>
+              {{ senderName }}
+            </page-title>
+          </div>
         </div>
-      </div>
 
-      <div :class="$style['message-panel__item']">
-        <formatted-date-time :class="$style['message-panel__time']"
-                             :date-time="message.sentTime" />
-        <div :class="$style['message-panel__content']">
-          <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
-                            :message-id="message.id" />
-          <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
+        <div :class="$style['message-panel__item']">
+          <formatted-date-time :class="$style['message-panel__time']"
+                               :date-time="message.sentTime" />
+          <div :class="$style['message-panel__content']">
+            <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
+                              :message-id="message.id" />
+            <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
+          </div>
         </div>
+
+        <message-reply v-if="hasReplyOptions"
+                       :message-reply="messageReply"
+                       :sender-name="senderName"
+                       @send_clicked="sendClicked" />
+
+        <desktop-generic-back-link v-if="!isNativeApp"
+                                   data-purpose="back-link"
+                                   :path="backLink"
+                                   @clickAndPrevent="backClicked"/>
       </div>
-
-      <message-reply v-if="hasReplyOptions"
-                     :message-reply="messageReply"
-                     :sender-name="senderName"
-                     @send_clicked="sendClicked" />
-
-      <desktop-generic-back-link v-if="!isNativeApp"
-                                 data-purpose="back-link"
-                                 :path="backLink"
-                                 @clickAndPrevent="backClicked"/>
     </div>
   </div>
 </template>
@@ -59,6 +66,7 @@ import get from 'lodash/fp/get';
 import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH } from '@/router/paths';
 import { messageVersion, redirectTo } from '@/lib/utils';
 import MessageReply from '@/components/messaging/MessageReply';
+import FormErrorSummary from '@/components/FormErrorSummary';
 
 export default {
   name: 'AppMessagingAppMessagePage',
@@ -73,6 +81,7 @@ export default {
     MarkdownContent,
     PageTitle,
     MessageReply,
+    FormErrorSummary,
   },
   mixins: [ErrorPageMixin],
   data() {
@@ -80,6 +89,8 @@ export default {
       backLink: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
       isNativeApp: this.$store.state.device.isNativeApp,
       loaded: false,
+      hasValidationErrors: false,
+      isCheckbox: false,
     };
   },
   computed: {
@@ -110,6 +121,17 @@ export default {
     },
     senderName() {
       return get('sender')(this.message) || '';
+    },
+    showErrors() {
+      return this.hasValidationErrors;
+    },
+    validationErrorMessage() {
+      return (this.isCheckbox) ?
+        this.$t('messages.appMessage.errors.checkbox.message') :
+        this.$t('messages.appMessage.errors.radioButton.message');
+    },
+    validationErrorId() {
+      return (this.isCheckbox) ? 'checkboxOptions' : 'radioOptions';
     },
   },
   watch: {
@@ -148,9 +170,14 @@ export default {
     backClicked() {
       redirectTo(this, this.backLink, { senderId: this.sender });
     },
-    async sendClicked(response) {
-      await this.$store.dispatch('messaging/recordMessageResponse', { messageId: this.message.id, response });
-      await this.loadMessage();
+    async sendClicked(response, isValid, isCheckbox) {
+      this.hasValidationErrors = !isValid;
+      this.isCheckbox = isCheckbox;
+
+      if (isValid) {
+        await this.$store.dispatch('messaging/recordMessageResponse', { messageId: this.message.id, response });
+        await this.loadMessage();
+      }
     },
   },
 };

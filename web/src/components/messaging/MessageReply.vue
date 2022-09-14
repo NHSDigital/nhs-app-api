@@ -12,15 +12,20 @@
       <p>{{ $t('messages.messageReply.response.message', { senderName }) }}</p>
     </div>
     <div v-else-if="showOptions" :class="$style.messageReplyOptionsContainer">
-      <div v-if="options.length === 1" id="checkboxOptions">
+      <div v-if="isCheckboxOptions" id="checkboxOptions">
         <h4>{{ $t('messages.messageReply.checkboxOption.title') }}</h4>
-        <generic-checkbox
-          :key="checkboxOption"
-          name="replyoption"
-          :value="checkboxOption"
-          @onCheckedChanged="selectedCheckboxValueChanged">
-          <span>{{ checkboxOption }}</span>
-        </generic-checkbox>
+        <error-group :show-error="!isValidResponse">
+          <error-message v-if="!isValidResponse" id="reply-checkbox-error">
+            {{ $t('messages.appMessage.errors.checkbox.message') }}
+          </error-message>
+          <generic-checkbox
+            :key="checkboxOption"
+            name="replyoption"
+            :value="checkboxOption"
+            @input="onCheckboxChanged">
+            <span>{{ checkboxOption }}</span>
+          </generic-checkbox>
+        </error-group>
       </div>
       <div v-if="options.length > 1" id="radioOptions">
         <nhs-uk-radio-group
@@ -31,7 +36,9 @@
           name="replyoptions"
           :render-as-html="true"
           :current-value="currentRadioChoice"
-          @onselect="selectedRadio"
+          :error="!isValidResponse"
+          :error-text="$t('messages.appMessage.errors.radioButton.message')"
+          @onselect="onRadioButtonChanged"
         />
       </div>
       <button
@@ -57,6 +64,8 @@ import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import FormattedDateTime from '@/components/widgets/FormattedDateTime';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import { first, get } from 'lodash/fp';
+import ErrorGroup from '@/components/ErrorGroup';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 
 export default {
   name: 'MessageReply',
@@ -64,6 +73,8 @@ export default {
     GenericCheckbox,
     NhsUkRadioGroup,
     FormattedDateTime,
+    ErrorGroup,
+    ErrorMessage,
   },
   props: {
     messageReply: {
@@ -74,20 +85,13 @@ export default {
       type: String,
       required: true,
     },
-    radioValue: {
-      type: String,
-      default: undefined,
-    },
-    checkboxValue: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
-      selectedRadioValue: this.radioValue,
-      selectedCheckboxValue: this.checkboxValue,
+      selectedRadioValue: '',
+      selectedCheckboxValue: '',
       showOptions: false,
+      isValidResponse: true,
     };
   },
   computed: {
@@ -124,28 +128,34 @@ export default {
     responseDate() {
       return this.messageReply.responseSentDateTime;
     },
+    isCheckboxOptions() {
+      return this.options.length === 1;
+    },
   },
   methods: {
     onShowOptions() {
       this.showOptions = !this.showOptions;
     },
     onSendClicked() {
-      if (this.selectedRadioValue) {
-        this.$emit('send_clicked', this.selectedRadioValue);
-      }
-      if (this.selectedCheckboxValue !== '') {
-        this.$emit('send_clicked', this.selectedCheckboxValue);
-      }
+      this.$emit('send_clicked',
+        this.getResponseValue(),
+        this.validateResponse(),
+        this.isCheckboxOptions);
     },
-    selectedRadio(value) {
+    onRadioButtonChanged(value) {
       this.selectedRadioValue = value;
     },
-    selectedCheckboxValueChanged(checked) {
-      if (checked) {
-        this.selectedCheckboxValue = this.checkboxOption;
-      } else {
-        this.selectedCheckboxValue = '';
-      }
+    onCheckboxChanged(value) {
+      this.selectedCheckboxValue = (this.selectedCheckboxValue) ? '' : value;
+    },
+    validateResponse() {
+      this.isValidResponse = this.getResponseValue() !== '';
+      return this.isValidResponse;
+    },
+    getResponseValue() {
+      if (this.isCheckboxOptions) return this.selectedCheckboxValue;
+
+      return this.selectedRadioValue;
     },
   },
 };
@@ -171,9 +181,7 @@ export default {
 .nhsuk-radios .nhsuk-radios__item {
   margin-bottom: 26px;
 }
-
 .message-reply__formatted-time {
     display: inline-block !important;
 }
-
 </style>

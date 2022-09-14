@@ -7,6 +7,7 @@ utils.redirectTo = jest.fn();
 
 const panelItemClass = 'message-panel__item';
 const messageReplyContainerClass = 'messageReply';
+const errorPanelId = 'form-error-summary';
 
 let wrapper;
 let $store;
@@ -156,7 +157,7 @@ describe('messaging message', () => {
         });
       });
 
-      describe('has message with keyword replies', () => {
+      describe('has message with single keyword reply option', () => {
         beforeEach(async () => {
           wrapper = mountMessage({
             messageId,
@@ -183,10 +184,50 @@ describe('messaging message', () => {
         });
 
         it('will dispatch action to save message response and reload message', async () => {
-          await wrapper.vm.sendClicked('CANCEL');
+          await wrapper.vm.sendClicked('CANCEL', true, false);
           expect($store.dispatch).toBeCalledWith('messaging/recordMessageResponse', { messageId: '1234', response: 'CANCEL' });
           await wrapper.vm.$nextTick();
           expect($store.dispatch).toBeCalledWith('messaging/loadMessage', { messageId: '1234' });
+        });
+        it('will show checkbox error message when checkbox is empty', async () => {
+          await wrapper.vm.sendClicked('', false, true);
+          expect(wrapper.find(`#${errorPanelId}`).text()).toContain('Select the option if you want to reply to this message');
+        });
+      });
+
+      describe('has message with multiple keyword reply options', () => {
+        beforeEach(async () => {
+          wrapper = mountMessage({
+            messageId,
+            message: {
+              id: messageId,
+              body: 'read message 1',
+              sender: 'test sender',
+              version: 0,
+              read: true,
+              sentTime: '2019-09-14T02:15:12.356Z',
+              reply: {
+                options: [{
+                  code: 'YES',
+                  display: 'YES',
+                },
+                {
+                  code: 'NO',
+                  display: 'NO',
+                },
+                {
+                  code: 'NEVER',
+                  display: 'NEVER',
+                }],
+              },
+            },
+          });
+          await wrapper.vm.$nextTick();
+        });
+
+        it('will show radio button error message when radio button is empty', async () => {
+          await wrapper.vm.sendClicked('', false, false);
+          expect(wrapper.find(`#${errorPanelId}`).text()).toContain('Select an option if you want to reply to this message');
         });
       });
 

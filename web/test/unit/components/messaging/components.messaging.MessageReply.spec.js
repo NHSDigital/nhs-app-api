@@ -1,5 +1,5 @@
 import MessageReply from '@/components/messaging/MessageReply';
-import { mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.useFakeTimers().setSystemTime(new Date('2022-08-19T08:50:48.586'));
 
@@ -20,10 +20,17 @@ const mountComponent = ({
   replyOptions = replyMessageOptions,
   response = '',
   responseSentDateTime = null,
+  isNativeApp = false,
+  $store = createStore({
+    state: {
+      device: { isNativeApp },
+    },
+  }),
 } = {}) => mount(MessageReply, {
   $style: {
     [optionsContainerClass]: optionsContainerClass,
   },
+  $store,
   propsData: {
     messageReply: {
       options: replyOptions,
@@ -61,22 +68,22 @@ describe('message reply', () => {
       expect(wrapper.find(`#${checkboxOptionsContainerId}`).exists()).toBe(false);
     });
 
-    describe('no options is selected', () => {
-      describe('send button is clicked', () => {
-        it('will not emit a click event', () => {
-          wrapper.setData({ selectedRadioValue: null });
-          wrapper.vm.onSendClicked();
-          expect(wrapper.emitted().send_clicked).toBe(undefined);
-        });
-      });
-    });
-
     describe('an option is selected', () => {
       describe('send button is clicked', () => {
         it('will emit a click event', () => {
           wrapper.setData({ selectedRadioValue: 'YES' });
           wrapper.vm.onSendClicked();
           expect(wrapper.emitted().send_clicked.length).toBe(1);
+        });
+      });
+    });
+
+    describe('an option is not selected', () => {
+      describe('send button is clicked', () => {
+        it('will show an error message', () => {
+          wrapper.setData({ selectedRadioValue: '' });
+          wrapper.vm.onSendClicked();
+          expect(wrapper.find('#replyoptions-error').text()).toContain('Select an option if you want to reply to this message');
         });
       });
     });
@@ -93,22 +100,22 @@ describe('message reply', () => {
       expect(wrapper.find(`#${checkboxOptionsContainerId}`).exists()).toBe(true);
     });
 
-    describe('no options is selected', () => {
-      describe('send button is clicked', () => {
-        it('will not emit a click event', () => {
-          wrapper.setData({ selectedCheckboxValue: '' });
-          wrapper.vm.onSendClicked();
-          expect(wrapper.emitted().send_clicked).toBe(undefined);
-        });
-      });
-    });
-
     describe('an option is selected', () => {
       describe('send button is clicked', () => {
         it('will emit a click event', () => {
           wrapper.setData({ selectedCheckboxValue: 'CANCEL' });
           wrapper.vm.onSendClicked();
           expect(wrapper.emitted().send_clicked.length).toBe(1);
+        });
+      });
+    });
+
+    describe('an option is not selected', () => {
+      describe('send button is clicked', () => {
+        it('will show an error message', () => {
+          wrapper.setData({ selectedCheckboxValue: '' });
+          wrapper.vm.onSendClicked();
+          expect(wrapper.find('#reply-checkbox-error').text()).toContain('Select the option if you want to reply to this message');
         });
       });
     });

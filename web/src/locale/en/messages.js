@@ -96,6 +96,17 @@ export default {
     youCanTryOpeningYourMessageAgain: 'You can try opening your message again.',
     ifTheProblemContinues: 'If the problem continues, contact the person or organisation who sent the message.',
   },
+  appMessage: {
+    errors: {
+      title: 'There is a problem',
+      checkbox: {
+        message: 'Select the option if you want to reply to this message',
+      },
+      radioButton: {
+        message: 'Select an option if you want to reply to this message',
+      },
+    },
+  },
   gpMessagesError: {
     cannotShowMessage: 'Cannot show message',
     errorOpeningYourMessage: 'There was an error opening your message.',
