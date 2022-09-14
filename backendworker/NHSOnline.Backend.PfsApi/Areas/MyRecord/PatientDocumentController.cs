@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
                 var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
 
-                _logger.LogInformation("Fetching patient document");
+                _logger.LogInformation("Fetching patient document of type {FileType} for viewing", documentInfo.Type);
                 var result = await patientRecordService.GetPatientDocument(
                     gpLinkedAccountModel,
                     documentIdentifier,

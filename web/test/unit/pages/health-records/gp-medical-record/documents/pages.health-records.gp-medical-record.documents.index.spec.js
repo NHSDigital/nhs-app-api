@@ -25,6 +25,7 @@ const createDocument = ({
     eventGuid: 'fd2e843d-2a99-427a-a58f-f7d6d45c8f39',
     size,
     isValidFile: true,
+    isAvailable: true,
     comments: 'commenty boi',
     needMoreInformation: false,
     documentIdentifier,
@@ -134,7 +135,7 @@ describe('gp-medical-record documents', () => {
   });
 
   describe('methods', () => {
-    it('will set isViewable and isDownloadable to true', async () => {
+    it('will set isViewable to isValidFile and isDownloadable to isAvailable', async () => {
       // Arrange
       const defaultDocuments = [createDocument()];
       mountPage({ documentData: defaultDocuments });

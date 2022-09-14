@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 {
@@ -103,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
-                        IsAvailable = document1.Available,
+                        IsAvailable = true,
                         Extension = document1.Extension,
                         Size = document1.Size,
                         EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
@@ -114,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document2.DocumentGuid,
                         Term = document2.Observation.Term,
-                        IsAvailable = document2.Available,
+                        IsAvailable = true,
                         Extension = document2.Extension,
                         Size = document2.Size,
                         EffectiveDate = new MyRecordDate { Value = document2.Observation.EffectiveDate.Value, DatePart = document2.Observation.EffectiveDate.DatePart },
@@ -223,8 +224,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-        [TestMethod]
-        public void MapDocumentsRequestsGetResponseToDocumentListResponse_WithInvalidTypeXX2_ReturnsResultValues()
+        [DataTestMethod]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Bmp, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Dib, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Gif, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Jpg, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Jpeg, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Jpe, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Jfif, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Tif, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Tiff, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Png, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.ImageType.Xx2, true, false)]
+        [DataRow(Constants.FileConstants.FileTypes.DocumentType.Doc, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.DocumentType.Docx, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.DocumentType.Docm, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.DocumentType.Dot, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.DocumentType.Pdf, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.TextType.Txt, true, true)]
+        [DataRow(Constants.FileConstants.FileTypes.TextType.Rtf, true, true)]
+        public void MapDocumentsRequestsGetResponseToDocumentListResponse_ReturnsCorrectResultValuesForFileType(
+            string fileType, bool expectedIsValid, bool expectedIsAvailable)
         {
             // Arrange
             var today = DateTime.Now;
@@ -234,7 +254,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     Documents = new List<Document>
                     {
-                        CreateDocument(40000, "xx2", new EffectiveDate { DatePart = "Unknown",
+                        CreateDocument(40000, fileType, new EffectiveDate { DatePart = "Unknown",
                             Value = twoDaysAgo }
                         ),
                     },
@@ -258,12 +278,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
-                        IsAvailable = document1.Available,
+                        IsAvailable = expectedIsAvailable,
                         Extension = document1.Extension,
                         Size = document1.Size,
                         EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
                         Name = document1.Observation.AssociatedText[0].Text,
-                        IsValidFile = false
+                        IsValidFile = expectedIsValid
                     }
                 }
             };
@@ -303,7 +323,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
-                        IsAvailable = document1.Available,
+                        IsAvailable = true,
                         Extension = document1.Extension,
                         Size = document1.Size,
                         EffectiveDate = new MyRecordDate { Value = null, DatePart = null },
@@ -348,7 +368,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
-                        IsAvailable = document1.Available,
+                        IsAvailable = true,
                         Extension = document1.Extension,
                         Size = document1.Size,
                         EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },
@@ -397,7 +417,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     {
                         DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
-                        IsAvailable = document1.Available,
+                        IsAvailable = true,
                         Extension = document1.Extension,
                         Size = 0,
                         EffectiveDate = new MyRecordDate { Value = document1.Observation.EffectiveDate.Value, DatePart = document1.Observation.EffectiveDate.DatePart },

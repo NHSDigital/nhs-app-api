@@ -56,6 +56,7 @@ function mapDocumentInfo(document) {
     type,
     eventGuid,
     size,
+    isAvailable,
     isValidFile,
     comments,
     needMoreInformation,
@@ -73,8 +74,8 @@ function mapDocumentInfo(document) {
     comments,
     documentType: type,
     needMoreInformation,
-    isViewable: true,
-    isDownloadable: true,
+    isViewable: isValidFile,
+    isDownloadable: isAvailable,
   };
 }
 

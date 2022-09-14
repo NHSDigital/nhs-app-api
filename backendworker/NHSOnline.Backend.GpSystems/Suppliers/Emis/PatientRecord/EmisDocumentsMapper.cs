@@ -34,9 +34,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             };
 
             var docSize = document.Size ?? 0;
-            var isValid = docSize < Constants.FileConstants.EmisSizeLimit &&
-                          Constants.FileConstants.FileTypes.WhiteListTypes.Contains(
-                              document.Extension, StringComparer.OrdinalIgnoreCase);
+
+             var isValid = docSize < Constants.FileConstants.EmisSizeLimit &&
+                           Constants.FileConstants.FileTypes.EmisViewableWhiteListTypes.Contains(
+                               document.Extension, StringComparer.OrdinalIgnoreCase);
+
+             var isDownloadable = docSize < Constants.FileConstants.EmisSizeLimit &&
+                           Constants.FileConstants.FileTypes.WhiteListTypes.Contains(
+                               document.Extension, StringComparer.OrdinalIgnoreCase);
 
             return new DocumentItem
             {
@@ -48,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 Size = docSize,
                 EffectiveDate = effectiveDate,
                 CodeId = document.Observation.CodeId,
-                IsAvailable = document.Available,
+                IsAvailable = isDownloadable,
                 IsValidFile = isValid
             };
         }

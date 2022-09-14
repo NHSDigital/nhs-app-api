@@ -11,6 +11,7 @@ import org.joda.time.DateTime
 object DocumentsData {
 
     const val DEFAULT_NUMBER_OF_DOCUMENTS = 3
+    private const val DEFAULT_FILE_TYPE = "pdf"
     private const val LARGE_DOCUMENT_SIZE = 4000000L
     private const val REGULAR_DOCUMENT_SIZE = 1000000L
     private const val DATE_FOR_DOCUMENT_YEAR = 2018
@@ -26,11 +27,10 @@ object DocumentsData {
     }
 
     fun getDefaultDocumentsData(includeName: Boolean = true, includeTerm: Boolean = true,
-                                hasInvalidType: Boolean = false, hasSize: Boolean = true): DocumentsResponseModel {
+                                fileType: String = DEFAULT_FILE_TYPE, hasSize: Boolean = true): DocumentsResponseModel {
         val documents = mutableListOf<DocumentsResponse>()
         var nameFormat = "Name %d"
         var termFormat = "Letter %d"
-        var type = "pdf"
         var size: Long? = REGULAR_DOCUMENT_SIZE
 
         if (!includeName) {
@@ -45,10 +45,6 @@ object DocumentsData {
             termFormat = ""
         }
 
-        if (hasInvalidType) {
-            type = "tga"
-        }
-
         val date = DateTime().withDate(DATE_FOR_DOCUMENT_YEAR, DATE_FOR_DOCUMENT_MONTH,
                 DATE_FOR_DOCUMENT_DAY)
 
@@ -56,7 +52,7 @@ object DocumentsData {
             documents.add(DocumentsResponse(
                 "document-$documentNumber",
                 size,
-                type,
+                fileType,
                 true,
                 Observation(
                     String.format(termFormat, documentNumber),

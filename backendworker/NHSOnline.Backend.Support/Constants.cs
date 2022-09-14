@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -123,6 +124,7 @@ namespace NHSOnline.Backend.Support
                     public const string Png = "png";
                     public const string Tga = "tga";
                     public const string Tpic = "tpic";
+                    public const string Xx2 = "xx2";
                 }
 
                 public static readonly ImmutableList<string> ImageTypes = ImmutableList.Create(
@@ -205,6 +207,12 @@ namespace NHSOnline.Backend.Support
                     DocumentType.Pdf,
                     TextType.Txt,
                     TextType.Rtf);
+
+                public static readonly ImmutableList<string> EmisViewableWhiteListTypes =
+                    new List<string>(WhiteListTypes)
+                        .Concat(new [] { ImageType.Xx2 })
+                        .ToList()
+                        .ToImmutableList();
 
                 public static readonly ImmutableList<string> TppViewableWhiteListTypes = ImmutableList.Create(
                     ImageType.Bmp,

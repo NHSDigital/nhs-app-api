@@ -59,8 +59,13 @@ class DocumentsFactoryEmis: DocumentsFactory() {
     }
 
     override fun enabledWithDocuments(patient: Patient, documentStatus: DocumentStatus?) {
-        var documents = DocumentsData.getDefaultDocumentsData(
-                hasInvalidType = documentStatus == DocumentStatus.HasInvalidType)
+        var documents =
+            when (documentStatus) {
+                DocumentStatus.HasInvalidType -> DocumentsData.getDefaultDocumentsData(fileType =  "tga")
+                DocumentStatus.HasXX2Type -> DocumentsData.getDefaultDocumentsData(fileType =  "xx2")
+                else -> DocumentsData.getDefaultDocumentsData()
+            }
+
         val isLarge = documentStatus == DocumentStatus.IsLarge
         var expectedDocuments = getExpectedDocumentsFromEmisDocuments(
                 isLarge, documents.medicalRecord.documents, true)
@@ -148,7 +153,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         includeName: Boolean = true, includeTerm: Boolean = true, includeSize: Boolean = true)
             : List<ExpectedDocument> {
 
-        val expectedDocuments= mutableListOf<ExpectedDocument>()
+        val expectedDocuments = mutableListOf<ExpectedDocument>()
 
         for(documentNumber in 0..(DEFAULT_NUMBER_OF_DOCUMENTS-1)){
             var typeAndSize = "(${documents[documentNumber].extension.toUpperCase()})"

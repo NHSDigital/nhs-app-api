@@ -15,7 +15,6 @@ import pages.myrecord.MyRecordDocumentInformationPage
 import pages.myrecord.MyRecordDocumentPage
 import pages.myrecord.MyRecordDocumentsPage
 import utils.SerenityHelpers
-import java.lang.IllegalStateException
 
 open class V2MedicalRecordDocumentsStepDefinitions {
 
@@ -64,6 +63,13 @@ open class V2MedicalRecordDocumentsStepDefinitions {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithDocuments(SerenityHelpers.getPatient())
+    }
+
+    @Given("^the GP Practice has multiple xx2 documents$")
+    fun theGpPracticeHasMultipleXX2Documents() {
+        DocumentsFactory
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasXX2Type)
     }
 
     @Given("^the GP Practice has multiple large documents$")
@@ -166,25 +172,18 @@ open class V2MedicalRecordDocumentsStepDefinitions {
         }
     }
 
+    @Then("^I see the document information page with view action only$")
+    fun iSeeTheDocumentInformationPageWithViewActionOnly() {
+        myRecordDocumentInformationPage.viewActionLink.assertIsVisible()
+        myRecordDocumentInformationPage.downloadActionLink.assertElementNotPresent()
+        assertDocumentInformationPageHeader()
+    }
+
     @Then("^I see the document information page with download action only$")
     fun iSeeTheDocumentInformationPageWithDownloadActionOnly() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
-
         myRecordDocumentInformationPage.viewActionLink.assertElementNotPresent()
         myRecordDocumentInformationPage.downloadActionLink.assertIsVisible()
-
-        when (gpSystem) {
-            Supplier.EMIS -> {
-                throw IllegalStateException("This step has not been implemented for EMIS")
-            }
-            Supplier.TPP -> {
-                myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
-            }
-            else -> {
-                throw IllegalArgumentException("${gpSystem.supplierName} not implemented for Medical Record Documents")
-            }
-        }
+        assertDocumentInformationPageHeader()
     }
 
     @Then("^I see the document information page without actions")
@@ -249,11 +248,29 @@ open class V2MedicalRecordDocumentsStepDefinitions {
     }
 
     @Then("^I see the expected list of documents displayed with unknown date for the last result$")
-    fun thenISeeTheExpectedListOfDocumentsDisplayedWithUnknownDateForTheLastResult(){
+    fun thenISeeTheExpectedListOfDocumentsDisplayedWithUnknownDateForTheLastResult() {
         myRecordDocumentsPage
                 .assertDocumentItemsVisible(
                         SerenityHelpers.getValueOrNull<List<ExpectedDocument>>(SerenityVariable.EXPECTED_DOCUMENTS)!!)
 
+    }
+
+    private fun assertDocumentInformationPageHeader() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+
+        when (gpSystem) {
+            Supplier.EMIS -> {
+                myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
+                myRecordDocumentInformationPage.headerContainsText(selectedDocument.term!!)
+            }
+            Supplier.TPP -> {
+                myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
+            }
+            else -> {
+                throw IllegalArgumentException("${gpSystem.supplierName} not implemented for Medical Record Documents")
+            }
+        }
     }
 
     private fun clickDocumentBySerenityVariable(documentToClick: SerenityVariable) {

@@ -43,6 +43,25 @@ Feature: Documents Frontend - Medical Record v2
       | EMIS      | 3     |
       | TPP       | 4     |
 
+  Scenario Outline: An <GP System> user can view a list of XX2 Documents on their record - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
+    And the GP Practice has multiple xx2 documents
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
+    And I see the medical records with count of <Count> for Documents
+    And I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    And I see a message that no further information is available for this section in GP Medical Record
+    When I select an available document
+    Then I see the document information page with view action only
+    When I click the View action link on the document information page
+    Then I can see my document
+    Examples:
+      | GP System | Count |
+      | EMIS      | 3     |
+
   Scenario: An EMIS user can view a list of Documents on their record if the pageCount is null
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has a document with a null page count
