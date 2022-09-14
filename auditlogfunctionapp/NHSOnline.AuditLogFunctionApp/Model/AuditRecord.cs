@@ -35,6 +35,8 @@ namespace NHSOnline.AuditLogFunctionApp.Model
 
         public string IntegrationReferrer { get; set; }
 
+        public string ReferrerOrigin { get; set; }
+
         public string SessionId { get; set; }
 
         public string ProofLevel { get; set; }
@@ -51,6 +53,7 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             string auditId,
             string environment,
             string integrationReferrer,
+            string referrerOrigin,
             string sessionId,
             string proofLevel
         )
@@ -64,6 +67,7 @@ namespace NHSOnline.AuditLogFunctionApp.Model
             Operation = operation;
             Details = details;
             IntegrationReferrer = integrationReferrer;
+            ReferrerOrigin = referrerOrigin;
             Environment = environment;
             SessionId = sessionId;
             ProofLevel = proofLevel;

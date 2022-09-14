@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 var referrer = "";
                 var integrationReferrer = "";
+                var referrerOrigin = "";
 
                 if (model?.Referrer != null)
                 {
@@ -112,13 +113,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     integrationReferrer = model.IntegrationReferrer;
                 }
 
+                if (model?.ReferrerOrigin != null)
+                {
+                    referrerOrigin = model.ReferrerOrigin;
+                }
+
                 if (result is CreateSessionResult.Success success)
                 {
                     var jti = success.UserSession.Key.ToLoggableJti();
                     _logger.LogInformation($"User Session Key JTI ending: {jti}");
                 }
 
-                return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer, integrationReferrer);
+                return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer, integrationReferrer, referrerOrigin);
             }
             finally
             {

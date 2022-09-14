@@ -136,6 +136,8 @@ export const REDIRECT_PARAMETER = 'redirect_to';
 export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
 export const INTEGRATION_REFERRER_PARAMETER = 'integration_referrer';
 export const REFERRER_PARAMETER = 'referrer';
+export const REFERRER_ORIGIN_PARAMETER = 'referrer_origin';
+export const ORIGIN_PARAMETER = 'origin';
 export const SSO_PARAMETER = 'sso';
 export const WAYFINDER_NAME = 'wayfinder';
 export const WAYFINDER_HELP_NAME = 'wayfinder-help';
@@ -277,6 +279,8 @@ const names = [
   REDIRECT_PAGE_PARAMETER,
   INTEGRATION_REFERRER_PARAMETER,
   REFERRER_PARAMETER,
+  REFERRER_ORIGIN_PARAMETER,
+  ORIGIN_PARAMETER,
   SSO_PARAMETER,
   WAYFINDER_NAME,
   WAYFINDER_HELP_NAME,

@@ -3819,6 +3819,9 @@
                   integrationReferrer: 
                     type: "string"
                     description: "The source which attempted to initiate a single-sign-on to the NHS App via query parameter e.g. referrer=nhs_uk"
+                  referrerOrigin: 
+                    type: "string"
+                    description: "The origin of the users attempt to initiate a single-sign-on to the NHS App via query parameter e.g. origin=How_to_order_a_repeat_prescription_page"
                   nhsLoginError: 
                     type: "string"
                     description: "An error code."
@@ -4254,6 +4257,9 @@
                   integrationReferrer: 
                     type: "string"
                     description: "The source which attempted to initiate a single-sign-on to the NHS App via query parameter e.g. referrer=nhs_uk"
+                  referrerOrigin: 
+                    type: "string"
+                    description: "The origin of the users attempt to initiate a single-sign-on to the NHS App via query parameter e.g. origin=How_to_order_a_repeat_prescription_page"
                   nhsLoginError: 
                     type: "string"
                     description: "An error code."

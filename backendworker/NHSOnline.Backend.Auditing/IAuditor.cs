@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters);
 
         Task PostOperationAuditSessionEvent(string accessToken, string nhsNumber, Supplier supplier, string operation, string details,
-            string referrer, string integrationReferrer, params object[] parameters);
+            string referrer, string integrationReferrer, string referrerOrigin, params object[] parameters);
 
         Task PreOperationAuditGoldIntegrationEvent(string accessToken, string nhsNumber, string operation, string details,
             string providerId, string providerName, string jumpOffId, params object[] parameters);

@@ -7,6 +7,7 @@ import {
   INTERSTITIAL_REDIRECTOR_NAME,
   LOGIN_NAME,
   INTEGRATION_REFERRER_PARAMETER,
+  REFERRER_ORIGIN_PARAMETER,
   SSO_PARAMETER,
   LOGOUT_NAME,
 } from '@/router/names';
@@ -33,7 +34,11 @@ export default async ({ router, store, to, next }) => {
       if (to.query.referrer) {
         const integrationReferrer = `${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}`;
         const ssoParameter = `${SSO_PARAMETER}=${to.query.assertedLoginIdentity !== undefined}`;
-        const redirectPathWithReferrer = `${santizedPath || EMPTY_PATH}?${integrationReferrer}&${ssoParameter}`;
+        let referrerOrigin = `${REFERRER_ORIGIN_PARAMETER}=`;
+        if (to.query.origin) {
+          referrerOrigin = `${REFERRER_ORIGIN_PARAMETER}=${to.query.origin}`;
+        }
+        const redirectPathWithReferrer = `${santizedPath || EMPTY_PATH}?${integrationReferrer}&${referrerOrigin}&${ssoParameter}`;
 
         if (trustedReferrers.includes(to.query.referrer.toUpperCase())) {
           const authorisationService = new AuthorisationService(store.$env);

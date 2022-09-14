@@ -6,6 +6,7 @@ import {
   APPOINTMENTS_NAME,
   REDIRECT_PARAMETER,
   INTEGRATION_REFERRER_PARAMETER,
+  REFERRER_ORIGIN_PARAMETER,
 } from '@/router/names';
 import { EMPTY_PATH } from '@/router/paths';
 import { BEGIN_LOGIN, LOGIN } from '@/router/routes/login';
@@ -150,6 +151,7 @@ describe('middleware/auth', () => {
         meta: {},
         query: {
           referrer: 'NHS_UK',
+          origin: 'Test_Origin',
         },
       };
 
@@ -160,13 +162,13 @@ describe('middleware/auth', () => {
         window.location = {};
       });
 
-      describe('referrer is valid and is appended to path', () => {
-        it('will skip login page and referrer value is retained', async () => {
+      describe('referrer and origin are valid and are appended to path', () => {
+        it('will skip login page, referrer and origin values are retained', async () => {
           to.path = BOOKING.path;
           await callAuth(to);
           expect(generateLoginUrlMock).toBeCalledWith({
             cookies: store.$cookies,
-            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&sso=false`,
+            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&referrer_origin=Test_Origin&sso=false`,
             singleSignOnDetails: {
               assertedLoginIdentity: undefined,
               prompt: 'none',
@@ -177,14 +179,14 @@ describe('middleware/auth', () => {
         });
       });
 
-      describe('referrer is valid and is appended to path and assertedLoginIdentity is present', () => {
-        it('will skip the login page, retain the referrer param and attach the sso query param', async () => {
+      describe('referrer and origin are valid and assertedLoginIdentity is present', () => {
+        it('will skip the login page, retain the referrer and origin params, and attach the sso query param', async () => {
           to.path = BOOKING.path;
           to.query.assertedLoginIdentity = 'myToken';
           await callAuth(to);
           expect(generateLoginUrlMock).toBeCalledWith({
             cookies: store.$cookies,
-            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&sso=true`,
+            redirectTo: `/patient/${to.path}?integration_referrer=NHS_UK&referrer_origin=Test_Origin&sso=true`,
             singleSignOnDetails: {
               assertedLoginIdentity: to.query.assertedLoginIdentity,
               prompt: 'none',
@@ -201,6 +203,7 @@ describe('middleware/auth', () => {
         meta: {},
         query: {
           referrer: 'unknown',
+          origin: 'unknown',
         },
       };
 
@@ -213,40 +216,40 @@ describe('middleware/auth', () => {
       });
 
       describe('referrer is invalid and path is valid', () => {
-        it('will be redirected to logged out home page, referrer value is retained and sso is added', async () => {
+        it('will be redirected to logged out home page, referrer and origin values are retained and sso is added', async () => {
           to.path = BOOKING.path;
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
+          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&${REFERRER_ORIGIN_PARAMETER}=${to.query.origin}&sso=false` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });
 
       describe('referrer is invalid, path is valid and assertedLoginIdentity is present', () => {
-        it('will be redirected to logged out home page, referrer value is retained and sso will be true', async () => {
+        it('will be redirected to logged out home page, referrer and origin values are retained and sso will be true', async () => {
           to.path = BOOKING.path;
           to.query.assertedLoginIdentity = 'myToken';
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=true` };
+          const query = { [REDIRECT_PARAMETER]: `/patient/${BOOKING.path}?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&${REFERRER_ORIGIN_PARAMETER}=${to.query.origin}&sso=true` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });
 
       describe('referrer is invalid and path is invalid', () => {
-        it('will be redirected to logged out home page and referrer value is retained', async () => {
+        it('will be redirected to logged out home page, referrer and origin values are retained', async () => {
           to.path = 'invalid-path';
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&${REFERRER_ORIGIN_PARAMETER}=${to.query.origin}&sso=false` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });
 
       describe('referrer is invalid and path is empty', () => {
-        it('will be redirected to logged out home page and referrer value is retained', async () => {
+        it('will be redirected to logged out home page, referrer and origin values are retained', async () => {
           to.path = EMPTY_PATH;
           dependancy.pathWithPatientPrefixOrUndefined.mockImplementation(undefined);
           await callAuth(to);
-          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&sso=false` };
+          const query = { [REDIRECT_PARAMETER]: `/?${INTEGRATION_REFERRER_PARAMETER}=${to.query.referrer}&${REFERRER_ORIGIN_PARAMETER}=${to.query.origin}&sso=false` };
           expect(next).toBeCalledWith({ name: LOGIN_NAME, query });
         });
       });

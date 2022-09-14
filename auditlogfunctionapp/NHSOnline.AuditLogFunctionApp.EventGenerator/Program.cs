@@ -94,6 +94,7 @@ namespace NHSOnline.AuditLogFunctionApp.EventGenerator
                 Guid.NewGuid().ToString(),
                 "test",
                 "testIntegrationReferrer",
+                "testReferrerOrigin",
                 "sessionId",
                 "P9"
             );

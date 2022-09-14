@@ -48,7 +48,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                                                 HttpContext httpContext,
                                                 string sessionCookieExpiryToken,
                                                 string referrer,
-                                                string integrationReferrer)
+                                                string integrationReferrer,
+                                                string referrerOrigin)
         {
             var userSession = success.UserSession;
             var serviceJourneyRules = success.ServiceJourneyRules;
@@ -76,7 +77,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                                                             AuditingOperations.LoginSuccess,
                                                             $"Successful Login with SessionId: {userSession.Key}",
                                                             referrer,
-                                                            integrationReferrer);
+                                                            integrationReferrer,
+                                                            referrerOrigin);
 
             await _auditor.PostOperationAuditLoginDeviceEvent(responseBody.AccessToken,
                                                               nhsNumber,

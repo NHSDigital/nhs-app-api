@@ -219,11 +219,11 @@ describe('actions', () => {
 
   describe('will call postV1Session with correct params', () => {
     it.each([
-      ['', null],
-      ['/prescriptions', null],
-      ['/prescriptions?integration_referrer=test', 'test'],
-      ['/prescriptions?integration_referrer=', ''],
-    ])('handle auth response - integrationReferrer is sent correctly', async (nhsLoginState, expectedIntegrationReferrer) => {
+      ['', null, null],
+      ['/prescriptions', null, null],
+      ['/prescriptions?integration_referrer=test&referrer_origin=testOrigin', 'test', 'testOrigin'],
+      ['/prescriptions?integration_referrer=&referrer_origin=', '', ''],
+    ])('handle auth response - integrationReferrer and referrerOrigin  are sent correctly', async (nhsLoginState, expectedIntegrationReferrer, expectedReferrerOrigin) => {
       const rootState = {
         device: {
           referrer: 'test',
@@ -242,6 +242,7 @@ describe('actions', () => {
               nhsLoginErrorUri: undefined,
               redirectUrl: undefined,
               referrer: 'test',
+              referrerOrigin: expectedReferrerOrigin,
             },
           }),
         );
@@ -325,14 +326,14 @@ describe('actions', () => {
     });
 
     it('will log a message when sso is true', async () => {
-      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&sso=true';
+      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&referrer_origin=testOrigin&sso=true';
       await actions.handleAuthResponse({ commit, state, rootState }, nhsLoginResponse);
 
       expect(actions.dispatch).toHaveBeenCalledWith('log/onInfo', 'Failed SSO authentication attempt from referrer nhs_uk');
     });
 
     it('will not log a message when sso is false', async () => {
-      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&sso=false';
+      nhsLoginResponse.state = 'path?integration_referrer=nhs_uk&referrer_origin=testOrigin&sso=false';
       await actions.handleAuthResponse({ commit, state, rootState }, nhsLoginResponse);
 
       expect(actions.dispatch).not.toHaveBeenCalledWith('log/onInfo', 'Failed SSO authentication attempt from referrer nhs_uk');

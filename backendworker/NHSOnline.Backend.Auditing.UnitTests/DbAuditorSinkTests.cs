@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 new VersionTag("api","web","native"),
                 "test",
                 null,
+                null,
                 "SessionId",
                 "P9",
                 "odsCode",

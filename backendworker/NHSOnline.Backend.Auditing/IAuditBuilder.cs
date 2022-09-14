@@ -5,7 +5,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing
 {
-    public interface IAuditBuilder : IAuditBuilderAccessToken, IAuditBuilderNhsNumber, IAuditBuilderOperation, IAuditIntegrationReferrer, IAuditBuilderReferrer
+    public interface IAuditBuilder : IAuditBuilderAccessToken, IAuditBuilderNhsNumber, IAuditBuilderOperation, IAuditIntegrationReferrer, IAuditReferrerOrigin, IAuditBuilderReferrer
     {
     }
 
@@ -16,7 +16,12 @@ namespace NHSOnline.Backend.Auditing
 
     public interface IAuditIntegrationReferrer
     {
-        IAuditBuilderAccessToken IntegrationReferrer(string integrationReferrer);
+        IAuditReferrerOrigin IntegrationReferrer(string integrationReferrer);
+    }
+
+    public interface IAuditReferrerOrigin
+    {
+        IAuditBuilderAccessToken ReferrerOrigin(string referrerOrigin);
     }
 
     public interface IAuditBuilderAccessToken

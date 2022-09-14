@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.Auditing
             VersionTag version,
             string environment,
             string integrationReferrer,
+            string referrerOrigin,
             string sessionId,
             string proofLevel,
             string ods,
@@ -36,6 +37,7 @@ namespace NHSOnline.Backend.Auditing
             Operation = operation;
             Details = details;
             IntegrationReferrer = integrationReferrer;
+            ReferrerOrigin = referrerOrigin;
             SessionId = sessionId;
             ProofLevel = proofLevel;
             ODS = ods;
@@ -90,6 +92,9 @@ namespace NHSOnline.Backend.Auditing
 
         [BsonElement]
         public string IntegrationReferrer { get; private set; }
+
+        [BsonElement]
+        public string ReferrerOrigin { get; private set; }
 
         [BsonElement]
         public string SessionId { get; private set; }

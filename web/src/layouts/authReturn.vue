@@ -271,6 +271,8 @@ import {
   REDIRECT_PARAMETER,
   INTEGRATION_REFERRER_PARAMETER,
   REFERRER_PARAMETER,
+  REFERRER_ORIGIN_PARAMETER,
+  ORIGIN_PARAMETER,
 } from '@/router/names';
 import { CONSENT_NOT_GIVEN_DESCRIPTION } from '@/lib/utils';
 
@@ -353,8 +355,9 @@ export default {
             const redirectTo = stateInfo.substring(0, paramsIndex);
             const urlSearchParams = new URLSearchParams(stateInfo.substring(paramsIndex));
             const referrer = urlSearchParams.get(INTEGRATION_REFERRER_PARAMETER);
+            const origin = urlSearchParams.get(REFERRER_ORIGIN_PARAMETER);
 
-            return `${LOGIN_PATH}?${REDIRECT_PARAMETER}=${redirectTo}&${REFERRER_PARAMETER}=${referrer}`;
+            return `${LOGIN_PATH}?${REDIRECT_PARAMETER}=${redirectTo}&${REFERRER_PARAMETER}=${referrer}&${ORIGIN_PARAMETER}=${origin}`;
           }
         }
       }

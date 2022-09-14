@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .ReturnsAsync(resultMock);
 
             Context.Mocks.SessionResultVisitor.Setup(x => x.Visit(It.IsAny<CreateSessionResult.Success>(),
-                It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Func<IActionResult>(
+                It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Func<IActionResult>(
                 () => null));
 
             // Act

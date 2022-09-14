@@ -4,7 +4,6 @@ import { AUTH_RETURN_PATH } from '@/router/paths';
 import each from 'jest-each';
 import { mount, createStore } from '../helpers';
 
-
 jest.mock('@/lib/utils');
 
 describe('authReturn layout', () => {
@@ -106,19 +105,19 @@ describe('authReturn layout', () => {
           expect(goToUrl).toBeCalledWith('/login');
         });
 
-        it('will retain referrer and redirect_to parameters', () => {
+        it('will retain referrer, origin and redirect_to parameters', () => {
           wrapper = mountAuthReturnLayout({
             status,
             skippedLoggedOutPage: true,
             query: {
-              state: 'deep_link?integration_referrer=nhs_uk',
+              state: 'deep_link?integration_referrer=nhs_uk&referrer_origin=test_origin',
             },
           });
           screen = wrapper.find('[data-purpose=shutter-container]');
           link = screen.findAll('a').at(2);
 
           link.trigger('click');
-          expect(goToUrl).toBeCalledWith('/login?redirect_to=deep_link&referrer=nhs_uk');
+          expect(goToUrl).toBeCalledWith('/login?redirect_to=deep_link&referrer=nhs_uk&origin=test_origin');
         });
       });
 
@@ -387,19 +386,19 @@ describe('authReturn layout', () => {
           expect(goToUrl).toBeCalledWith('/login');
         });
 
-        it('will retain referrer and redirect_to parameters', () => {
+        it('will retain referrer, origin and redirect_to parameters', () => {
           wrapper = mountAuthReturnLayout({
             status: 999,
             skippedLoggedOutPage: true,
             query: {
-              state: 'deep_link?integration_referrer=nhs_uk',
+              state: 'deep_link?integration_referrer=nhs_uk&referrer_origin=test_origin',
             },
           });
           container = wrapper.find('[data-purpose=error-container]');
           link = container.findAll('a').at(2);
 
           link.trigger('click');
-          expect(goToUrl).toBeCalledWith('/login?redirect_to=deep_link&referrer=nhs_uk');
+          expect(goToUrl).toBeCalledWith('/login?redirect_to=deep_link&referrer=nhs_uk&origin=test_origin');
         });
       });
 

@@ -98,6 +98,7 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                     Guid.NewGuid().ToString(),
                     "test",
                     "testIntegrationReferrer",
+                    "testReferrerOrigin",
                     "sessionId",
                     "P9"));
 
@@ -122,6 +123,7 @@ namespace NHSOnline.AuditLogFunctionApp.UnitTests.Functions
                     Guid.NewGuid().ToString(),
                     "test",
                     "testIntegrationReferrer",
+                    "testReferrerOrigin",
                     "sessionId",
                     "P9"));
 

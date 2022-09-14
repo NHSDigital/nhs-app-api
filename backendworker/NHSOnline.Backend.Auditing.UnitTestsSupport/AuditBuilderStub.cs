@@ -15,6 +15,7 @@ namespace NHSOnline.Backend.Auditing.UnitTestsSupport
         public Supplier Supplier { get; set; }
         public string Operation { get; set; }
         public string IntegrationReferrer { get; set; }
+        public string ReferrerOrigin { get; set; }
         public string Details { get; set; }
         public List<object> Parameters { get; set; }
         public string ResponseDetails { get; set; }
@@ -26,9 +27,15 @@ namespace NHSOnline.Backend.Auditing.UnitTestsSupport
             return this;
         }
 
-        IAuditBuilderAccessToken IAuditIntegrationReferrer.IntegrationReferrer(string integrationReferrer)
+        IAuditReferrerOrigin IAuditIntegrationReferrer.IntegrationReferrer(string integrationReferrer)
         {
             IntegrationReferrer = integrationReferrer;
+            return this;
+        }
+
+        IAuditBuilderAccessToken IAuditReferrerOrigin.ReferrerOrigin(string referrerOrigin)
+        {
+            ReferrerOrigin = referrerOrigin;
             return this;
         }
 

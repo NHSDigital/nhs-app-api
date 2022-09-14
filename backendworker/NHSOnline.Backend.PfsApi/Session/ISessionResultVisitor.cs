@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 {
     public interface ISessionResultVisitor<out T>
     {
-        T Visit(CreateSessionResult.Success success, HttpContext httpContext, string sessionCookieExpiryToken, string referrer, string integrationReferrer);
+        T Visit(CreateSessionResult.Success success, HttpContext httpContext, string sessionCookieExpiryToken, string referrer, string integrationReferrer, string referrerOrigin);
 
         T Visit(CreateSessionResult.Success success, HttpContext httpContext, string referrer);
 

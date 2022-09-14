@@ -5,7 +5,7 @@ import { removeCookies } from '@/lib/cookie-manager';
 import get from 'lodash/fp/get';
 import { GP_SESSION_ERROR_STATUS, createLocalError } from '@/lib/utils';
 import generic from '@/locale/en/generic';
-import { INTEGRATION_REFERRER_PARAMETER, SSO_PARAMETER } from '@/router/names';
+import { INTEGRATION_REFERRER_PARAMETER, REFERRER_ORIGIN_PARAMETER, SSO_PARAMETER } from '@/router/names';
 import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG, ADD_GP_SESSION_ERROR } from './mutation-types';
 
 const thirtySeconds = 30000;
@@ -75,6 +75,9 @@ const getParamValue = (nhsLoginResponse, paramName) => {
 const getIntegrationReferrer = nhsLoginResponse =>
   getParamValue(nhsLoginResponse, INTEGRATION_REFERRER_PARAMETER);
 
+const getReferrerOrigin = nhsLoginResponse =>
+  getParamValue(nhsLoginResponse, REFERRER_ORIGIN_PARAMETER);
+
 const attemptedLoginWithSSO = nhsLoginResponse =>
   (getParamValue(nhsLoginResponse, SSO_PARAMETER) === 'true');
 
@@ -92,6 +95,7 @@ const createSessionRequest = (state, rootState, nhsLoginResponse) => {
       codeVerifier,
       redirectUrl,
       integrationReferrer: getIntegrationReferrer(nhsLoginResponse),
+      referrerOrigin: getReferrerOrigin(nhsLoginResponse),
     },
     ignoreError: true,
     returnResponse: true,

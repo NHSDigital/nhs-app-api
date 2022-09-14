@@ -53,6 +53,7 @@ namespace NHSOnline.Backend.Users.Registrations
                     _auditType,
                     _auditDetail,
                     null,
+                    null,
                     null);
             }
             catch (Exception e)

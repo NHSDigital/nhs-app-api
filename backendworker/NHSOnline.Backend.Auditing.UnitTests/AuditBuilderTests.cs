@@ -497,6 +497,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var accessToken = CreateAccessTokenString("subject");
             const string integrationReferrer = "nhs_uk";
             const string referrer = "testReferrer";
+            const string referrerOrigin = "How_to_order_a_repeat_prescription_page";
 
             using (auditor.BeginScope(new DefaultHttpContext() { RequestServices = _requestServices }))
             {
@@ -504,6 +505,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                     .Audit()
                     .Referrer(referrer)
                     .IntegrationReferrer(integrationReferrer)
+                    .ReferrerOrigin(referrerOrigin)
                     .AccessToken(accessToken)
                     .NhsNumber("NhsNumber")
                     .Supplier(Supplier.Unknown)
@@ -518,6 +520,40 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             mockAuditSink.Verify(
                 x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.IntegrationReferrer == integrationReferrer)),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task Execute_ReferrerOrigin_AuditsCorrectly()
+        {
+            var mockAuditSink = new Mock<IAuditSink>();
+            var auditor = CreateAuditor(mockAuditSink);
+            var accessToken = CreateAccessTokenString("subject");
+            const string integrationReferrer = "nhs_uk";
+            const string referrerOrigin = "How_to_order_a_repeat_prescription_page";
+            const string referrer = "testReferrer";
+
+            using (auditor.BeginScope(new DefaultHttpContext() { RequestServices = _requestServices }))
+            {
+                await auditor
+                    .Audit()
+                    .Referrer(referrer)
+                    .IntegrationReferrer(integrationReferrer)
+                    .ReferrerOrigin(referrerOrigin)
+                    .AccessToken(accessToken)
+                    .NhsNumber("NhsNumber")
+                    .Supplier(Supplier.Unknown)
+                    .Operation("operation")
+                    .Details("RequestDetails")
+                    .Execute(() => Task.FromResult(new AuditedResultStub { Details = "ResultDetails" }));
+            }
+
+            mockAuditSink.Verify(
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.ReferrerOrigin == referrerOrigin)),
+                Times.Once);
+
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.ReferrerOrigin == referrerOrigin)),
                 Times.Once);
         }
 

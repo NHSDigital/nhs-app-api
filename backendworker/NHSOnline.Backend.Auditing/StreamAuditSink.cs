@@ -65,6 +65,10 @@ namespace NHSOnline.Backend.Auditing
             {
                 auditStringBuilder.Append($" IntegrationReferrer: {auditRecord.IntegrationReferrer} |");
             }
+            if (!string.IsNullOrEmpty(auditRecord.ReferrerOrigin))
+            {
+                auditStringBuilder.Append($" ReferrerOrigin: {auditRecord.ReferrerOrigin} |");
+            }
             if (!string.IsNullOrEmpty(auditRecord.Referrer))
             {
                 auditStringBuilder.Append($" Referrer: {auditRecord.Referrer} |");

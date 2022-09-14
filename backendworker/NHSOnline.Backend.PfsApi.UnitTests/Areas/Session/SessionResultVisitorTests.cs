@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             };
 
             // Act
-            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer");
+            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer", "referrerOrigin");
 
             // Assert
             context.Mocks.ResponseCookies
@@ -46,11 +46,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var expectedJwtToken = "Jwt.To.Ken";
 
             // Act
-            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer");
+            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer", "referrerOrigin");
 
             // Assert
             context.Mocks.Auditor.Verify(x => x.PostOperationAuditSessionEvent(It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Supplier>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object[]>()));
+                It.IsAny<Supplier>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             };
 
             // Act
-            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer");
+            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer", "referrerOrigin");
 
             // Assert
             context.Mocks.ResponseCookies
@@ -90,11 +90,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var expectedJwtToken = "Jwt.To.Ken";
 
             // Act
-            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer");
+            await context.CreateSystemUnderTest().Visit(context.Data.SuccessResult, context.Mocks.HttpContext.Object, expectedJwtToken, "referrer", "integrationReferrer", "referrerOrigin");
 
             // Assert
             context.Mocks.Auditor.Verify(x => x.PostOperationAuditSessionEvent(It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Supplier>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object[]>()));
+                It.IsAny<Supplier>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object[]>()));
         }
     }
 }
