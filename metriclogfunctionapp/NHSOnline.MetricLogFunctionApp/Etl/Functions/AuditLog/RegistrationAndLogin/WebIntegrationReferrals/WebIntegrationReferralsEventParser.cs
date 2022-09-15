@@ -15,7 +15,8 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndL
                 Timestamp = source.Timestamp,
                 SessionId = source.SessionId,
                 AuditId = source.AuditId,
-                IntegrationReferrer = source.IntegrationReferrer
+                IntegrationReferrer = source.IntegrationReferrer,
+                ReferrerOrigin = source.ReferrerOrigin
             };
         }
 

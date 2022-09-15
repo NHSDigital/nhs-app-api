@@ -9,6 +9,7 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndL
     {
         public DateTimeOffset Timestamp { get; set; }
         public string IntegrationReferrer { get; set; }
+        public string ReferrerOrigin { get; set; }
         public string SessionId { get; set; }
         public string AuditId { get; set; }
     }

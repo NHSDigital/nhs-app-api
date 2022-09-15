@@ -7,6 +7,9 @@ BEGIN
                                                         "AuditId" character varying(36) NULL
     );
 
+    ALTER TABLE events."WebIntegrationReferrals"
+        ADD COLUMN IF NOT EXISTS "ReferrerOrigin" text NULL;
+
     CALL perms.apply_etl_table_permissions('events', 'WebIntegrationReferrals');
 
     IF NOT EXISTS (

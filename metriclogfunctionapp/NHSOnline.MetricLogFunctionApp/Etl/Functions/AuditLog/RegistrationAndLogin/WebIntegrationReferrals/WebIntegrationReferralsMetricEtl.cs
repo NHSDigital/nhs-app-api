@@ -13,13 +13,14 @@ namespace NHSOnline.MetricLogFunctionApp.Etl.Functions.AuditLog.RegistrationAndL
         }
 
         protected override string StoredProcedureName =>
-            "CALL events.WebIntegrationReferralsInsert({0},{1},{2},{3});";
+            "CALL events.WebIntegrationReferralsInsert({0},{1},{2},{3},{4});";
         protected override object[] ReturnParams(WebIntegrationReferralsMetric metric)
         {
             return new object[]
             {
                 metric.Timestamp,
                 metric.IntegrationReferrer,
+                metric.ReferrerOrigin,
                 metric.SessionId,
                 metric.AuditId
             };

@@ -62,11 +62,12 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
             eventsIds.ForEach(id =>
                 _repo.Verify(r =>
                     r.CallStoredProcedure(
-                        "CALL events.WebIntegrationReferralsInsert({0},{1},{2},{3});",
+                        "CALL events.WebIntegrationReferralsInsert({0},{1},{2},{3},{4});",
                         new object[]
                         {
                             new DateTimeOffset(DateTime.Parse(loginTimeStamp)),
                             $"Integration-Referrer-Test",
+                            $"RefOrigin-Test",
                             $"{id}-metric",
                             $"{id}-AuditId"
                         })
@@ -100,7 +101,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
                 ProofLevel = "P5",
                 ODS = "ods1",
                 Referrer = "ref1",
-                IntegrationReferrer = "IntRef1"
+                IntegrationReferrer = "IntRef1",
+                ReferrerOrigin = "RefOrigin1"
             };
         }
 
@@ -114,7 +116,8 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Regist
                 Timestamp = new DateTimeOffset(DateTime.Parse(timestamp)),
                 SessionId = sessionId,
                 AuditId = auditId,
-                IntegrationReferrer = "Integration-Referrer-Test"
+                IntegrationReferrer = "Integration-Referrer-Test",
+                ReferrerOrigin =  "RefOrigin-Test"
             };
         }
     }

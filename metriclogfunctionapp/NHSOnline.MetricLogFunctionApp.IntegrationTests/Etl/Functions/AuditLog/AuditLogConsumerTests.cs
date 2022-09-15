@@ -93,11 +93,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 webIntegrationReferralsMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.001Z"));
                 webIntegrationReferralsMetricRow1.Referrer.Should().Be("Int-ref1");
                 webIntegrationReferralsMetricRow1.AuditId.Should().Be("AuditId1");
+                webIntegrationReferralsMetricRow1.ReferrerOrigin.Should().Be("ref-Org1");
 
                 var webIntegrationReferralsMetricRow2 = webIntegrationReferralsMetricRows.First(r => r.SessionId == "TestSession2");
                 webIntegrationReferralsMetricRow2.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.002Z"));
                 webIntegrationReferralsMetricRow2.Referrer.Should().Be("Int-ref2");
                 webIntegrationReferralsMetricRow2.AuditId.Should().Be("AuditId2");
+                webIntegrationReferralsMetricRow2.ReferrerOrigin.Should().Be(null);
 
                 var consentMetricRow1 = consentMetricRows.First(r => r.SessionId == "TestSession3");
                 consentMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.003Z"));
@@ -253,11 +255,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 webIntegrationReferralsMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.001Z"));
                 webIntegrationReferralsMetricRow1.Referrer.Should().Be("Int-ref1");
                 webIntegrationReferralsMetricRow1.AuditId.Should().Be("AuditId1");
+                webIntegrationReferralsMetricRow1.ReferrerOrigin.Should().Be("ref-Org1");
 
                 var webIntegrationReferralsMetricRow2 = webIntegrationReferralsMetricRows.First(r => r.SessionId == "TestSession2");
                 webIntegrationReferralsMetricRow2.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.002Z"));
                 webIntegrationReferralsMetricRow2.Referrer.Should().Be("Int-ref2");
                 webIntegrationReferralsMetricRow2.AuditId.Should().Be("AuditId2");
+                webIntegrationReferralsMetricRow2.ReferrerOrigin.Should().Be(null);
 
                 var consentMetricRow1 = consentMetricRows.First(r => r.SessionId == "TestSession3");
                 consentMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.003Z"));
@@ -461,49 +465,48 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
                 BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1),
                     "Login_Success",
-                    "Successful Login with", "P5", "ods1", "ref1"),
+                    "Successful Login with", "P5", "ods1", "ref-Org1", "ref1"),
                 BuildEvent("AuditId2", "TestSession2", new DateTime(2021, 11, 01, 09, 00, 00, 2),
                     "TermsAndConditions_RecordConsent_Response",
-                    "Initial Consent Successfully recorded", "P5", "ods2", "ref2"),
+                    "Initial Consent Successfully recorded", "P5", "ods2", "ref-Org2", "ref2"),
                 BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3),
                     "SecondaryCare_GetSummary_Response",
                     "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456",
-                    "P9", "ods3", "ref3"),
+                    "P9", "ods3", "ref-Org3", "ref3"),
                 BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4),
                     "PatientRecord_View_Response",
                     "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False",
-                    "P9", "ods4", "ref4"),
+                    "P9", "ods4", "ref-Org4", "ref4"),
                 BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5),
-                    "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref5"),
+                    "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods5", "ref-Org5", "ref5"),
                 BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6),
                     "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5",
-                    "ods4", "ref4"),
+                    "ods4", "ref-Org6", "ref4"),
                 BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7),
                     "Appointments_Cancel_Response",
-                    "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods7", "ref7"),
+                    "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods7", "ref-Org7", "ref7"),
                 BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8),
                     "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710",
-                    "P9", "ods8", "ref8"),
+                    "P9", "ods8", "ref-Org8", "ref8"),
                 BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 9),
                     "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9",
-                    "ods9", "ref9"),
+                    "ods9", "ref-Org9", "ref9"),
                 BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10),
                     "OrganDonation_Registration_Response",
-                    "The organ donation decision has been successfully registered", "P10", "ods10", "ref10"),
+                    "The organ donation decision has been successfully registered", "P10", "ods10", "ref-Org10", "ref10"),
                 BuildEvent("AuditId11", "TestSession11", new DateTime(2021, 11, 01, 09, 00, 00, 11),
                     "RepeatPrescriptions_OrderRepeatMedications_Response",
-                    "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods11",
-                    "ref11"),
+                    "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods11", "ref-Org11", "ref11"),
                 BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12),
                     "OrganDonation_Withdraw_Response", "The organ donation decision has been successfully Withdrawn",
-                    "P9", "ods12", "ref12"),
+                    "P9", "ods12", "ref-Org12", "ref12"),
                 BuildEvent("AuditId13", "TestSession13", new DateTime(2021, 11, 01, 09, 00, 00, 13),
                     "OrganDonation_Update_Response", "The organ donation decision has been successfully updated", "P9",
-                    "ods13", "ref13"),
+                    "ods13", "ref-Org13", "ref13"),
                 BuildEvent("AuditId17", "TestSession17", new DateTime(2021, 11, 01, 09, 00, 00, 5),
-                    "BiometricsRegistration_Decision", "Biometrics toggled. optIn=true", "P5", "ods17", "ref17"),
+                    "BiometricsRegistration_Decision", "Biometrics toggled. optIn=true", "P5", "ods17", "ref-Org17", "ref17"),
                 BuildEvent("AuditId15", "TestSession15", new DateTime(2021, 11, 01, 09, 00, 00, 15),
-                    "PatientRecord_Section_View_Response", "Patient record TEST RESULTS successfully retrieved.", "P9", "ods15", "ref15"));
+                    "PatientRecord_Section_View_Response", "Patient record TEST RESULTS successfully retrieved.", "P9", "ods15", "ref-Org15", "ref15"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -569,6 +572,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 webIntegrationReferralsMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.001Z"));
                 webIntegrationReferralsMetricRow.Referrer.Should().Be("Int-ref1");
                 webIntegrationReferralsMetricRow.AuditId.Should().Be("AuditId1");
+                webIntegrationReferralsMetricRow.ReferrerOrigin.Should().Be("ref-Org1");
 
                 consentMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.002Z"));
                 consentMetricRow.SessionId.Should().Be("TestSession2");
@@ -644,7 +648,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
         public async Task AuditLog_AuditLogEventHubMessagesWithInvalidOperationField_AreNotLoaded(TestEnv env)
         {
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
-                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Test_Request", "Successful Login with", "P5", "ods1", "ref1"));
+                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Test_Request", "Successful Login with", "P5", "ods1", "ref-Org1", "ref1"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -701,7 +705,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
         public async Task AuditLog_AuditLogEventHubMessagesWithInvalidDetailsField_AreNotLoaded(TestEnv env)
         {
             var response = await env.HttpEndpointCallers.PostAuditLogConsumer(
-                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Login_Success", "Test Details", "P5", "ods1", "ref1"));
+                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Login_Success", "Test Details", "P5", "ods1", "ref-Org1", "ref1"));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -754,7 +758,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             medicalRecordSectionViewMetricRows.Should().BeEmpty();
         }
 
-        private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrer)
+        private static AuditRecord BuildEvent(string auditId, string sessionId, DateTime eventTimestamp, string operation, string details, string proofLevel, string odsCode, string referrerOrigin, string referrer)
         {
             var auditRecord = new AuditRecord()
             {
@@ -774,6 +778,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 ProofLevel = proofLevel,
                 ODS = odsCode,
                 Referrer = referrer,
+                ReferrerOrigin = referrerOrigin,
                 IntegrationReferrer = $"Int-{referrer}"
             };
 
@@ -783,24 +788,24 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
         private static AuditRecord[] BuildEvents() =>
             new[]
             {
-                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Login_Success", "Successful Login with", "P5", "ods1", "ref1"),
-                BuildEvent("AuditId2", "TestSession2", new DateTime(2021, 11, 01, 09, 00, 00, 2), "Login_Success", "Successful Login with", "P9", "ods2", "ref2"),
-                BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods3", "ref3"),
-                BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods4", "ref4"),
-                BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref5"),
-                BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref6"),
-                BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref7"),
-                BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref8"),
-                BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref7"),
-                BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10), "Appointments_Cancel_Response", "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods10", "ref10"),
-                BuildEvent("AuditId11", "TestSession11", new DateTime(2021, 11, 01, 09, 00, 00, 11), "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710", "P9", "ods11", "ref11"),
-                BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12), "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods12", "ref12"),
-                BuildEvent("AuditId13", "TestSession13", new DateTime(2021, 11, 01, 09, 00, 00, 13), "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods13", "ref13"),
-                BuildEvent("AuditId14", "TestSession14", new DateTime(2021, 11, 01, 09, 00, 00, 14), "RepeatPrescriptions_OrderRepeatMedications_Response", "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods14", "ref14"),
-                BuildEvent("AuditId15", "TestSession15", new DateTime(2021, 11, 01, 09, 00, 00, 15), "OrganDonation_Withdraw_Response", "The organ donation decision has been successfully Withdrawn", "P9", "ods15", "ref15"),
-                BuildEvent("AuditId16", "TestSession16", new DateTime(2021, 11, 01, 09, 00, 00, 16), "OrganDonation_Update_Response", "The organ donation decision has been successfully updated", "P9", "ods16", "ref16"),
-                BuildEvent("AuditId17", "TestSession17", new DateTime(2021, 11, 01, 09, 00, 00, 8), "BiometricsRegistration_Decision", "Biometrics toggled. optIn=True", "P5", "ods17", "ref17"),
-                BuildEvent("AuditId18", "TestSession18", new DateTime(2021, 11, 01, 09, 00, 00, 18), "PatientRecord_Section_View_Response", "Patient record TEST RESULTS successfully retrieved.", "P9", "ods18", "ref18"),
+                BuildEvent("AuditId1", "TestSession1", new DateTime(2021, 11, 01, 09, 00, 00, 1), "Login_Success", "Successful Login with", "P5", "ods1", "ref-Org1", "ref1"),
+                BuildEvent("AuditId2", "TestSession2", new DateTime(2021, 11, 01, 09, 00, 00, 2), "Login_Success", "Successful Login with", "P9", "ods2", null, "ref2"),
+                BuildEvent("AuditId3", "TestSession3", new DateTime(2021, 11, 01, 09, 00, 00, 3), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods3", "ref-Org3", "ref3"),
+                BuildEvent("AuditId4", "TestSession4", new DateTime(2021, 11, 01, 09, 00, 00, 4), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods4", "ref-Org4", "ref4"),
+                BuildEvent("AuditId5", "TestSession5", new DateTime(2021, 11, 01, 09, 00, 00, 5), "TermsAndConditions_RecordConsent_Response", "Initial Consent Successfully recorded", "P5", "ods5", "ref-Org5", "ref5"),
+                BuildEvent("AuditId6", "TestSession6", new DateTime(2021, 11, 01, 09, 00, 00, 6), "SecondaryCare_GetSummary_Response", "Secondary Care Summary successfully retrieved. Total Referrals: 123, Total Upcoming Appointments: 456", "P9", "ods6", "ref-Org6", "ref6"),
+                BuildEvent("AuditId7", "TestSession7", new DateTime(2021, 11, 01, 09, 00, 00, 7), "PatientRecord_View_Response", "Patient record successfully retrieved. hasSummaryRecordAccess=True, hasDetailedRecordAccess=False", "P9", "ods7", "ref-Org7", "ref7"),
+                BuildEvent("AuditId8", "TestSession8", new DateTime(2021, 11, 01, 09, 00, 00, 8), "NotificationToggle_Response", "Notification toggled. optIn=true", "P5", "ods8", "ref-Org8", "ref8"),
+                BuildEvent("AuditId9", "TestSession9", new DateTime(2021, 11, 01, 09, 00, 00, 7), "InitialNotificationPrompt_Decision", "Initial notification prompt decision made. optIn=true", "P5", "ods7", "ref-Org7", "ref7"),
+                BuildEvent("AuditId10", "TestSession10", new DateTime(2021, 11, 01, 09, 00, 00, 10), "Appointments_Cancel_Response", "Appointment successfully cancelled for appointment with id: 237710", "P9", "ods10", "refO-rg10", "ref10"),
+                BuildEvent("AuditId11", "TestSession11", new DateTime(2021, 11, 01, 09, 00, 00, 11), "Appointments_Book_Response", "Appointment successfully booked for appointment with id: 237710", "P9", "ods11", "ref-Org11", "ref11"),
+                BuildEvent("AuditId12", "TestSession12", new DateTime(2021, 11, 01, 09, 00, 00, 12), "OrganDonation_Get_Response", "A default organ donation registration has been generated", "P9", "ods12", "ref-Org12", "ref12"),
+                BuildEvent("AuditId13", "TestSession13", new DateTime(2021, 11, 01, 09, 00, 00, 13), "OrganDonation_Registration_Response", "The organ donation decision has been successfully registered", "P9", "ods13", "ref-Org13", "ref13"),
+                BuildEvent("AuditId14", "TestSession14", new DateTime(2021, 11, 01, 09, 00, 00, 14), "RepeatPrescriptions_OrderRepeatMedications_Response", "Repeat prescription request successfully created with course ids: FakeCourse1", "P9", "ods14", "ref-Org14", "ref14"),
+                BuildEvent("AuditId15", "TestSession15", new DateTime(2021, 11, 01, 09, 00, 00, 15), "OrganDonation_Withdraw_Response", "The organ donation decision has been successfully Withdrawn", "P9", "ods15", "ref-Org15", "ref15"),
+                BuildEvent("AuditId16", "TestSession16", new DateTime(2021, 11, 01, 09, 00, 00, 16), "OrganDonation_Update_Response", "The organ donation decision has been successfully updated", "P9", "ods16", "ref-Org16", "ref16"),
+                BuildEvent("AuditId17", "TestSession17", new DateTime(2021, 11, 01, 09, 00, 00, 8), "BiometricsRegistration_Decision", "Biometrics toggled. optIn=True", "P5", "ods17", "ref-Org17", "ref17"),
+                BuildEvent("AuditId18", "TestSession18", new DateTime(2021, 11, 01, 09, 00, 00, 18), "PatientRecord_Section_View_Response", "Patient record TEST RESULTS successfully retrieved.", "P9", "ods18", "ref-Org18", "ref18"),
             };
     }
 }
