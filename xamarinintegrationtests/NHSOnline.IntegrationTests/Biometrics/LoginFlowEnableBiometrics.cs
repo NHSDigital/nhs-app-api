@@ -92,7 +92,7 @@ namespace NHSOnline.IntegrationTests.Biometrics
                 .AssertPageElements();
         }
 
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone8, OSVersion = IOSVersion.Thirteen)]
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone8, OSVersion = IOSVersion.Fifteen)]
         public void APatientCanEnableTouchBiometricsDuringTheLoginFlowIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.NotificationsPromptEnabled)

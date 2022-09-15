@@ -44,7 +44,7 @@ namespace NHSOnline.IntegrationTests.Biometrics
                 .AssertPageElements();
         }
 
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone11Pro, OSVersion = IOSVersion.Thirteen)]
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone12Pro, OSVersion = IOSVersion.Fourteen)]
         public void APatientWithFaceIdWithCanNavigateToTheBiometricRegistrationScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
@@ -71,7 +71,7 @@ namespace NHSOnline.IntegrationTests.Biometrics
                 .AssertPageElements();
         }
 
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone8, OSVersion = IOSVersion.Thirteen)]
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone8, OSVersion = IOSVersion.Fifteen)]
         public void APatientWithTouchIdWithCanNavigateToTheBiometricRegistrationScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
