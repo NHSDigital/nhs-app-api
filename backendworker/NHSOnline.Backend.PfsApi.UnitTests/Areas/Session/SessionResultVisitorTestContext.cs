@@ -28,10 +28,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         internal TestData Data { get; }
         private ServiceProvider ServiceProvider { get; set; }
 
-        public SessionResultVisitorTestContext()
+        public SessionResultVisitorTestContext(ProofLevel proofLevel = ProofLevel.P9, string nhsNumber = "012 345 6789")
         {
             Mocks = new TestMocks();
-            Data = new TestData();
+            Data = new TestData(proofLevel, nhsNumber);
             InitializeServiceProvider();
         }
 
@@ -65,10 +65,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             internal CreateSessionResult.Success SuccessResult { get; }
             internal ConfigurationSettings ConfigurationSettings { get; }
 
-            internal TestData()
+            internal TestData(ProofLevel proofLevel = ProofLevel.P9, string nhsNumber = "012 345 6789")
             {
                 var odsCode = "A123456";
-                var nhsNumber = "012 345 6789";
 
                 var emisUserSession = new EmisUserSession
                 {
@@ -80,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 var citizenIdUserSession = new CitizenIdUserSession
                 {
                     AccessToken = "AccessToken",
-                    ProofLevel = ProofLevel.P9,
+                    ProofLevel = proofLevel,
                     OdsCode = odsCode,
                     RefreshToken = "RefreshToken",
                     GivenName = "Given",
@@ -106,6 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             internal Mock<HttpContext> HttpContext { get; } = new Mock<HttpContext>();
             internal Mock<IResponseCookies> ResponseCookies { get; } = new Mock<IResponseCookies>();
+            internal Mock<IAuditor> Auditor { get; } = new Mock<IAuditor>();
 
             public void ConfigureServices(IServiceCollection serviceCollection)
             {
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     .AddSingleton(new Mock<ISessionErrorResultBuilder>().Object)
                     .AddSingleton(new Mock<IAuthenticationService>().Object)
                     .AddSingleton(new AuthSigningConfig(new Mock<IConfiguration>().Object, new Mock<ILogger<AuthSigningConfig>>().Object))
-                    .AddSingleton(new Mock<IAuditor>().Object)
+                    .AddSingleton(Auditor.Object)
                     .AddMockLoggers();
             }
         }
