@@ -54,7 +54,7 @@ namespace NHSOnline.IntegrationTests
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
+                .OptInToUserResearch();
         }
 
         public static void LogIOSPatientInPreIos13(IIOSDriverWrapper driver, Patient patient)

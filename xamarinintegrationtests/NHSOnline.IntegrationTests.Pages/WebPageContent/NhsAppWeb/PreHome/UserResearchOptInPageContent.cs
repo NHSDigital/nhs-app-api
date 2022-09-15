@@ -86,7 +86,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
             "Can we contact you to take part in NHS App user research?",
             "No, do not contact me");
 
-        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+        internal WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         internal void AssertOnPage()
         {
