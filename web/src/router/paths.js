@@ -140,9 +140,7 @@ export const UPLIFT_MORE_PATH = 'uplift/more';
 export const UPLIFT_SILVER_INTEGRATION_PATH = 'uplift/silver-integration';
 export const USER_RESEARCH_PATH = '/user-research';
 export const WAYFINDER_PATH = 'wayfinder';
-export const WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH = 'wayfinder/help/referrals-or-appointments-help';
-export const WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH = 'wayfinder/help/confirmed-appointments-help';
-export const WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH = 'wayfinder/help/referrals-in-review-help';
+export const WAYFINDER_HELP_PATH = 'wayfinder/help/wayfinder-help';
 
 export default {
   EMPTY_PATH,
@@ -280,9 +278,7 @@ export default {
   UPLIFT_SILVER_INTEGRATION_PATH,
   USER_RESEARCH_PATH,
   WAYFINDER_PATH,
-  WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH,
-  WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH,
-  WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH,
+  WAYFINDER_HELP_PATH,
 };
 
 /**

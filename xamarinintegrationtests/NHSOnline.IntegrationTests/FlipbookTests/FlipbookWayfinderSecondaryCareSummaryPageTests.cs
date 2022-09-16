@@ -63,7 +63,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
             IOSSecondaryCareSummaryPage
                 .AssertOnPage(driver)
-                .ScrollToConfirmedAppointmentsHelpPageLinkAndScreenshotThenClick();
+                .ScrollToAppointmentsHelpPageLinkAndScreenshotThenClick();
 
             IOSWayfinderHelpPage
                 .AssertOnPage(driver, screenshot: true)

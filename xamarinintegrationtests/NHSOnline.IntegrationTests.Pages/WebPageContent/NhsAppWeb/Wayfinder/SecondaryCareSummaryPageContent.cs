@@ -31,27 +31,27 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
         private WebText GeneralErrorSubtext => WebText.WithTagAndText(
             _interactor,
             "p",
-            "Try again. If the problem continues and you need to access your referrals "
-            + "or appointments now you may be able to do this using other services.");
+            "Try again. If the problem continues and you need to access your referrals " +
+                "or appointments now you may be able to do this using other services.");
 
         private WebText UnderSixteenErrorSubtext => WebText.WithTagAndText(
             _interactor,
             "p",
-            "If you're aged 15 or under you may be able to access" +
-            "  your referrals and appointments using other services.");
+            "If you're aged 15 or under you may be able to access " +
+                "your referrals and appointments using other services.");
 
         private WebText NoOtherServicesShowingSubtext => WebText.WithTagAndText(
             _interactor,
             "p",
-            "If no other services are showing, you'll need to contact the relevant organisation" +
-            " or healthcare provider for more information.");
+            "If no other services are showing, you'll need to contact the relevant organisation " +
+                "or healthcare provider for more information.");
 
         private WebText BookOrManageReferralsOrAppointmentsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
             "Book or manage your referrals and appointments");
 
-        private WebText ConfirmedAppointmentsHeader => WebText.WithTagAndText(
+        private WebText AppointmentsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
             "Confirmed Appointments");
@@ -63,15 +63,15 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
 
         public WebMenuItem MissingOrIncorrectReferralsOrAppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing, incorrect or cancelled referrals or appointments");
+            "What to do if a referral or appointment is missing, incorrect or has not been cancelled");
 
-        public WebMenuItem ConfirmedAppointmentsMenuItem => WebMenuItem.WithTitle(
+        public WebMenuItem AppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing, incorrect or cancelled confirmed appointments");
+            "What to do if an appointment is missing, incorrect or has not been changed or cancelled");
 
         public WebMenuItem InReviewReferralsMenuItem => WebMenuItem.WithTitle(
             _interactor,
-            "Missing, incorrect or cancelled referrals in review");
+            "What to do if a referral being reviewed by a clinic is missing or incorrect");
 
         public  WebButton ReadyToConfirmAppointmentDeepLinkButton => WebButton.WithText(
             _interactor,
@@ -90,7 +90,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
                 _focusableElements = new IFocusable[]
                 {
                     MissingOrIncorrectReferralsOrAppointmentsMenuItem,
-                    ConfirmedAppointmentsMenuItem,
+                    AppointmentsMenuItem,
                     InReviewReferralsMenuItem,
                 };
 
@@ -116,16 +116,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
                     TitleText.AssertVisible();
                     BookOrManageReferralsOrAppointmentsHeader.AssertVisible();
                     MissingOrIncorrectReferralsOrAppointmentsMenuItem.AssertVisible();
-                    ConfirmedAppointmentsHeader.AssertVisible();
-                    ConfirmedAppointmentsMenuItem.AssertVisible();
+                    AppointmentsHeader.AssertVisible();
+                    AppointmentsMenuItem.AssertVisible();
                     InReviewReferralsHeader.AssertVisible();
                     InReviewReferralsMenuItem.AssertVisible();
                     break;
             }
         }
 
-        public void ScrollToConfirmedAppointmentsHeader() =>
-            ConfirmedAppointmentsHeader.ScrollTo();
+        public void ScrollToAppointmentsHeader() =>
+            AppointmentsHeader.ScrollTo();
     }
 }
 

@@ -4,7 +4,7 @@
       {{ $t('wayfinder.otherServices') }}
     </h2>
 
-    <menu-item-list>
+    <menu-item-list class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
       <third-party-jump-off-button
         v-if="showManageYourReferral"
         id="btn_manage_your_referral"

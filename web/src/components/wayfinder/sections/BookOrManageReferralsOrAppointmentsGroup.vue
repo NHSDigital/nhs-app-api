@@ -9,7 +9,6 @@
         :item="summaryItem" />
     </card-group-item>
   </card-group>
-
   <p v-else
      id="no-referrals-or-appointments-text">
     {{ $t('wayfinder.noReferralsOrAppointments') }}

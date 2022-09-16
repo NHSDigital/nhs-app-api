@@ -39,7 +39,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
 
             if (screenshot)
             {
-
                 driver.Screenshot(nameof(IOSSecondaryCareSummaryPage));
             }
 
@@ -53,12 +52,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
             PageContent.MissingOrIncorrectReferralsOrAppointmentsMenuItem.Click();
         }
 
-        public void ScrollToConfirmedAppointmentsHelpPageLinkAndScreenshotThenClick()
+        public void ScrollToAppointmentsHelpPageLinkAndScreenshotThenClick()
         {
             //need to scroll to the item below to get a clear screenshot here
             PageContent.InReviewReferralsMenuItem.ScrollTo();
             _driver.Screenshot($"{nameof(IOSSecondaryCareSummaryPage)}_scrolled");
-            PageContent.ConfirmedAppointmentsMenuItem.Click();
+            PageContent.AppointmentsMenuItem.Click();
         }
 
         public void ScrollToReferralsInReviewHelpPageLinkAndScreenshotThenClick()
@@ -77,7 +76,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
 
         public void ScrollToCancelledAppointmentDeepLinkButtonAndScreenshotThenClick()
         {
-            PageContent.ScrollToConfirmedAppointmentsHeader();
+            PageContent.ScrollToAppointmentsHeader();
             CancelledAppointmentDeepLink.ScrollIntoView();
             _driver.Screenshot($"{nameof(IOSSecondaryCareSummaryPage)}_scrolled");
             CancelledAppointmentDeepLink.Touch();

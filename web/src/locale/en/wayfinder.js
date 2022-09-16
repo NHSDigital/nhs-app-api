@@ -83,32 +83,28 @@ export default {
     noOtherServicesShowing: 'If no other services are showing, you\'ll need to contact the relevant organisation or healthcare provider for more information.',
   },
   wayfinderHelp: {
-    referralsOrAppointmentsHelp: {
-      missingAppointmentsHelpTitle: 'If something is missing',
-      missingAppointmentsHelpText: 'You may have referrals or appointments not shown that are in other services. Contact the relevant organisation or healthcare provider.',
-      under18HelpText: 'If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.',
-      changeNotShowingHelpTitle: 'Cancelled referrals',
-      changeNotShowingHelpText: 'If you have cancelled a referral and it’s still showing, you need to contact the healthcare provider that referred you.',
-      appointmentChangeOrCancellationNotShowingTitle: 'If an appointment change or cancellation is not showing',
-      changeOrCancellationTextOne: 'If you have requested to change or permanently cancel an appointment this request may not automatically be accepted.',
-      changeOrCancellationTextTwo: 'The appointment will show as pending while the request is reviewed by the relevant organisation or healthcare provider it’s booked with.',
-      changeOrCancellationTextThree: 'If the request to change or cancel the appointment is not accepted it will still show as booked.',
+    indexPageJumpOffLinks: {
+      referralsOrAppointments: 'What to do if a referral or appointment is missing, incorrect or has not been cancelled',
+      appointments: 'What to do if an appointment is missing, incorrect or has not been changed or cancelled',
+      referrals: 'What to do if a referral being reviewed by a clinic is missing or incorrect',
     },
-    confirmedAppointmentsHelp: {
-      missingAppointmentsHelpTitle: 'If something is missing',
-      missingAppointmentsHelpText: 'You may have appointments not shown that are in other services. Contact the healthcare provider the appointment is booked with.',
-      under18HelpText: 'If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.',
-      changeNotShowingHelpTitle: 'If a change or cancellation is not showing',
-      changeNotShowingHelpTextOne: 'You may have requested to change or permanently cancel a booked appointment. This request may not automatically be accepted.',
-      changeNotShowingHelpTextTwo: 'The appointment will show as pending while the request is reviewed by the relevant organisation or healthcare provider it’s booked with.',
-      changeNotShowingHelpTextThree: 'If the request to change or cancel the appointment is not accepted it will still show as booked.',
-
+    referralsHelp: {
+      referralsHelpTitle: 'Referrals',
+      missingReferralsExpanderTitle: 'Missing referrals',
+      missingReferralsText: 'You may have referrals not shown that are in other services. Contact the healthcare provider that referred you for more information.',
+      incorrectOrCancelledReferralsExpanderTitle: 'Incorrect or cancelled referrals',
+      cancelledReferralsContactText: 'If you have cancelled a referral and it\'s still showing, you need to contact the healthcare provider that referred you.',
     },
-    referralsInReviewHelp: {
-      somethingIsMissingTitle: 'If something is missing',
-      somethingIsMissingText1: 'You may have referrals being reviewed by a clinic that are not shown but are in other services. Contact the organisation that referred you.',
-      cancellationNotShowingTitle: 'If a cancellation is not showing',
-      cancellationNotShowingText: 'If you have cancelled a referral that’s being reviewed and it’s still showing you need to contact the healthcare provider that referred you.',
+    appointmentsHelp: {
+      appointmentsHelpTitle: 'Appointments',
+      missingAppointmentsExpanderTitle: 'Missing appointments',
+      missingAppointmentsTextOne: 'You may have appointments not shown that are in other services. Contact the relevant organisation or healthcare provider for more information.',
+      missingAppointmentsTextTwo: 'If you\'re aged 16 to 17, you may not be able to view or manage some of your hospital appointments. This is because some NHS Trusts require you to be aged 18 or over to access these appointments.',
+      incorrectChangedCancelledAppointmentsExpanderTitle: 'Incorrect, changed or cancelled appointments',
+      incorrectChangedCancelledAppointmentsTextOne: 'You may have requested to change or permanently cancel a confirmed appointment. This request may not automatically be accepted.',
+      incorrectChangedCancelledAppointmentsTextTwo: 'The appointment will show as pending while the request is reviewed by the relevant organisation or healthcare provider it\'s booked with.',
+      incorrectChangedCancelledAppointmentsTextThree: 'If the request to change or cancel the appointment is not accepted it will still show as booked in your confirmed appointments.',
+      incorrectChangedCancelledAppointmentsTextFour: 'If the cancellation is accepted the appointment will show as cancelled in your confirmed appointments.',
     },
   },
 };

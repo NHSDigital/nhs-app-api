@@ -171,9 +171,7 @@ export default {
       youHaveBeenLoggedOut: 'You have been logged out',
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
-      referralsOrAppointmentsHelp: 'Missing, incorrect or cancelled referrals or appointments',
-      confirmedAppointmentsHelp: 'Missing, incorrect or cancelled confirmed appointments',
-      referralsInReviewHelp: 'Missing, incorrect or cancelled referrals in review',
+      wayfinderHelp: 'What to do if something is missing, incorrect or has not been changed or cancelled',
     },
     titles: {
       accountAndSettings: 'Account and settings',
@@ -281,9 +279,7 @@ export default {
       youHaveBeenLoggedOut: 'You have been logged out',
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
-      referralsOrAppointmentsHelp: 'Missing, incorrect or cancelled referrals or appointments',
-      confirmedAppointmentsHelp: 'Missing, incorrect or cancelled confirmed appointments',
-      referralsInReviewHelp: 'Missing, incorrect or cancelled referrals in review',
+      wayfinderHelp: 'What to do if something is missing, incorrect or has not been changed or cancelled - NHS App',
     },
   },
 };

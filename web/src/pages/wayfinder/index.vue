@@ -1,6 +1,5 @@
 <template>
-  <div v-if="hasLoaded"
-       class="nhsuk-grid-row">
+  <div v-if="hasLoaded" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-padding-top-3">
 
@@ -37,11 +36,10 @@
             {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
           </h2>
           <wayfinder-help-link
-            id="btn_missingOrIncorrectReferralsOrAppointments"
-            :href="referralsOrAppointmentsHelpPath"
-            :click-func="redirectToReferralsOrAppointmentsHelp"
-            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
-              'ReferralsOrAppointments')"/>
+            id="wayfinder-help-jump-off-link-referrals-or-appointments"
+            :href="wayfinderHelpPath"
+            :click-func="redirectToWayfinderHelp"
+            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referralsOrAppointments')"/>
           <book-or-manage-referrals-or-appointments-group/>
 
           <h2 id="confirmed-appointments-title"
@@ -49,11 +47,10 @@
             {{ $t('wayfinder.confirmedAppointmentsTitle') }}
           </h2>
           <wayfinder-help-link
-            id="btn_missingOrIncorrectConfirmedAppointments"
-            :href="confirmedAppointmentsHelpPath"
-            :click-func="redirectToConfirmedAppointmentsHelp"
-            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
-              'ConfirmedAppointments')"/>
+            id="wayfinder-help-jump-off-link-appointments"
+            :href="wayfinderHelpPath"
+            :click-func="redirectToWayfinderHelp"
+            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.appointments')"/>
           <confirmed-appointments-group/>
 
           <h2 id="referrals-in-review-title"
@@ -61,11 +58,10 @@
             {{ $t('wayfinder.inReviewTitle') }}
           </h2>
           <wayfinder-help-link
-            id="btn_missingOrIncorrectReferralsInReview"
-            :href="referralsInReviewHelpPath"
-            :click-func="redirectToReferralsInReviewHelp"
-            :text="$t('appointments.guidance.missingOrIncorrectReferralsOrAppointments.' +
-              'ReferralsInReview')"/>
+            id="wayfinder-help-jump-off-link-referrals"
+            :href="wayfinderHelpPath"
+            :click-func="redirectToWayfinderHelp"
+            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referrals')"/>
           <referrals-in-review-group/>
 
           <other-available-services-menu-items
@@ -96,9 +92,7 @@ import WayfinderHelpLink from '@/components/wayfinder/WayfinderHelpLink';
 import { redirectTo } from '@/lib/utils';
 import {
   APPOINTMENTS_PATH,
-  WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH,
-  WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH,
-  WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH,
+  WAYFINDER_HELP_PATH,
 } from '@/router/paths';
 
 const loadData = async (store) => {
@@ -119,9 +113,7 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
-      referralsInReviewHelpPath: WAYFINDER_REFERRALS_IN_REVIEW_HELP_PATH,
-      confirmedAppointmentsHelpPath: WAYFINDER_CONFIRMED_APPOINTMENTS_HELP_PATH,
-      referralsOrAppointmentsHelpPath: WAYFINDER_REFERRALS_OR_APPOINTMENTS_HELP_PATH,
+      wayfinderHelpPath: WAYFINDER_HELP_PATH,
       appoinmentsHubPath: APPOINTMENTS_PATH,
     };
   },
@@ -172,14 +164,8 @@ export default {
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
-    redirectToReferralsOrAppointmentsHelp() {
-      redirectTo(this, this.referralsOrAppointmentsHelpPath);
-    },
-    redirectToConfirmedAppointmentsHelp() {
-      redirectTo(this, this.confirmedAppointmentsHelpPath);
-    },
-    redirectToReferralsInReviewHelp() {
-      redirectTo(this, this.referralsInReviewHelpPath);
+    redirectToWayfinderHelp() {
+      redirectTo(this, this.wayfinderHelpPath);
     },
   },
 };

@@ -8,7 +8,6 @@
                  :item="appointment" />
     </card-group-item>
   </card-group>
-
   <p v-else
      id="no-confirmed-appointments-text">
     {{ $t('wayfinder.noConfirmedAppointments') }}

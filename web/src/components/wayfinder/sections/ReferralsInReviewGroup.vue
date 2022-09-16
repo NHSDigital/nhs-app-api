@@ -7,7 +7,6 @@
       <referral-in-review-card :item="referral"/>
     </card-group-item>
   </card-group>
-
   <p v-else
      id="no-referrals-in-review-text">
     {{ $t('wayfinder.noReferralsInReview') }}

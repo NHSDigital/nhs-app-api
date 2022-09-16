@@ -11,9 +11,9 @@ import pages.sharedElements.LinksWithDescriptionsContent
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     private val noSpecialtyInReview = "Your healthcare provider has requested for you to be referred. " +
-        "This request is being reviewed. You do not need to do anything."
+                                      "This request is being reviewed. You do not need to do anything."
     private val noSpecialtyRebook = "You need to rebook your referral appointment " +
-        "as the one you had booked has been cancelled."
+                                    "as the one you had booked has been cancelled."
 
     private val pageTitle = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"Referrals, hospital and other appointments\")]",
@@ -82,26 +82,32 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     )
 
     private val referralsOrAppointmentsHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled referrals or appointments\")]",
+        webDesktopLocator = "//h2[contains(text(),\"What to do if a referral or appointment is missing, " +
+                                                   "incorrect or has not been cancelled\")]",
         page = this,
-        helpfulName = "Missing, incorrect or cancelled referrals or appointments - h2"
+        helpfulName = "Missing referral or appointment, incorrect or has not been cancelled - h2"
     )
 
-    private val confirmedAppointmentsHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled confirmed appointments\")]",
+    private val appointmentsHelpLink = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"What to do if an appointment is missing, " +
+                                                   "incorrect or has not been changed or cancelled\")]",
         page = this,
-        helpfulName = "Missing, incorrect or cancelled confirmed appointments - h2"
+        helpfulName = "Missing appointment, incorrect or has not been cancelled - h2"
     )
 
     private val referralsInReviewHelpLink = HybridPageElement(
-        webDesktopLocator = "//h2[contains(text(),\"Missing, incorrect or cancelled referrals in review\")]",
+        webDesktopLocator = "//h2[contains(text(),\"What to do if a referral being reviewed by " +
+                                                   "a clinic is missing or incorrect\")]",
         page = this,
-        helpfulName = "Missing, incorrect or cancelled referrals in review - h2"
+        helpfulName = "Missing referral in review or incorrect - h2"
     )
 
-    private val referralsOrAppointmentsHelpTitle = "Missing, incorrect or cancelled referrals or appointments"
-    private val confirmedAppointmentsHelpTitle = "Missing, incorrect or cancelled confirmed appointments"
-    private val referralsInReviewHelpTitle = "Missing, incorrect or cancelled referrals in review"
+    private val referralsOrAppointmentsHelpTitle = "What to do if a referral or appointment " +
+                                                   "is missing, incorrect or has not been cancelled"
+    private val confirmedAppointmentsHelpTitle = "What to do if an appointment is missing, " +
+                                                 "incorrect or has not been changed or cancelled"
+    private val referralsInReviewHelpTitle = "What to do if a referral being reviewed by " +
+                                             "a clinic is missing or incorrect"
 
     var content = LinksWithDescriptionsContent(
         linkBlockTitle = "Wayfinder Help links",
@@ -114,15 +120,15 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
     val links by lazy { LinksElement(this, content) }
 
     val missingOrIncorrectReferralsOrAppointmentsLink by lazy {
-        links.link("Missing, incorrect or cancelled referrals or appointments")
+        links.link("What to do if a referral or appointment is missing, incorrect or has not been cancelled")
     }
 
-    val confirmedAppointmentsLink by lazy {
-        links.link("Missing, incorrect or cancelled confirmed appointments")
+    val appointmentsLink by lazy {
+        links.link("What to do if an appointment is missing, incorrect or has not been changed or cancelled")
     }
 
     val referralsInReviewLink by lazy {
-        links.link("Missing, incorrect or cancelled referrals in review")
+        links.link("What to do if a referral being reviewed by a clinic is missing or incorrect")
     }
 
     fun assertWayfinderTitleIsDisplayed() {
@@ -173,8 +179,8 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         referralsOrAppointmentsHelpLink.assertIsVisible()
     }
 
-    fun assertConfirmedAppointmentsHelpLinkIsDisplayed(){
-        confirmedAppointmentsHelpLink.assertIsVisible()
+    fun assertAppointmentsHelpLinkIsDisplayed(){
+        appointmentsHelpLink.assertIsVisible()
     }
 
     fun assertReferralsInReviewHelpLinkIsDisplayed(){

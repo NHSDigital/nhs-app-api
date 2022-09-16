@@ -18,6 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
         public static IOSWayfinderHelpPage AssertOnPage(IIOSDriverWrapper driver, bool screenshot = false)
         {
             var page = new IOSWayfinderHelpPage(driver);
+            page.PageContent.AssertPageElements();
 
             if (screenshot)
             {

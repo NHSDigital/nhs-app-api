@@ -14,17 +14,13 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.wayfinder.WayfinderAggregatorErrorPage
 import pages.wayfinder.WayfinderReferralsAndAppointmentsPage
-import pages.wayfinder.help.ReferralsOrAppointmentsHelpPage
-import pages.wayfinder.help.ConfirmedAppointmentsHelpPage
-import pages.wayfinder.help.ReferralsInReviewHelpPage
+import pages.wayfinder.help.WayfinderHelpPage
 import utils.SerenityHelpers
 
 class WayfinderStepDefinitions {
     private lateinit var wayfinderReferralsAndAppointmentsPage: WayfinderReferralsAndAppointmentsPage
     private lateinit var wayfinderAggregatorErrorPage: WayfinderAggregatorErrorPage
-    private lateinit var referralsOrAppointmentsHelpPage: ReferralsOrAppointmentsHelpPage
-    private lateinit var confirmedAppointmentsHelpPage: ConfirmedAppointmentsHelpPage
-    private lateinit var referralsInReviewHelpPage: ReferralsInReviewHelpPage
+    private lateinit var wayfinderHelpPage: WayfinderHelpPage
 
     @Steps
     private lateinit var browser: BrowserSteps
@@ -66,17 +62,17 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAndAppointments(provider)
     }
 
-    @Given("^I see the Missing, incorrect or cancelled referrals or appointments link")
+    @Given("^I see the Missing, incorrect or not cancelled referrals or appointments link")
     fun iSeeTheMissingOrIncorrectReferralsOrAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsOrAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing, incorrect or cancelled confirmed appointments link")
-    fun iSeeTheMissingOrIncorrectConfirmedAppointmentsLink(){
-        wayfinderReferralsAndAppointmentsPage.assertConfirmedAppointmentsHelpLinkIsDisplayed()
+    @Given("^I see the Missing, incorrect or not cancelled appointments link")
+    fun iSeeTheMissingOrIncorrectAppointmentsLink(){
+        wayfinderReferralsAndAppointmentsPage.assertAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing, incorrect or cancelled referrals in review link")
+    @Given("^I see the Missing or incorrect referrals in review link")
     fun iSeeTheMissingOrIncorrectReferralsInReviewLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
     }
@@ -107,18 +103,18 @@ class WayfinderStepDefinitions {
         wayfinderAggregatorErrorPage.clickContactUsLinkWithPrefix(prefix)
     }
 
-    @When("^I click the Missing, incorrect or cancelled referrals or appointments link$")
-    fun iClickTheMissingOrIncorrectReferralsOrApppointmentslink() {
+    @When("^I click the Missing, incorrect or not cancelled referrals or appointments link$")
+    fun iClickTheMissingOrIncorrectReferralsOrApppointmentsLink() {
         wayfinderReferralsAndAppointmentsPage.missingOrIncorrectReferralsOrAppointmentsLink.click()
     }
 
-    @When("^I click the Missing, incorrect or cancelled confirmed appointments link")
-    fun iClickTheMissingOrIncorrectConfirmedApppointmentslink() {
-        wayfinderReferralsAndAppointmentsPage.confirmedAppointmentsLink.click()
+    @When("^I click the Missing, incorrect or not cancelled appointments link")
+    fun iClickTheMissingOrIncorrectAppointmentsLink() {
+        wayfinderReferralsAndAppointmentsPage.appointmentsLink.click()
     }
 
-    @When("^I click the Missing, incorrect or cancelled referrals in review link")
-    fun iClickTheMissingOrIncorrectReferralsInReviewlink() {
+    @When("^I click the Missing or incorrect referrals in review link")
+    fun iClickTheMissingOrIncorrectReferralsInReviewLink() {
         wayfinderReferralsAndAppointmentsPage.referralsInReviewLink.click()
     }
 
@@ -192,19 +188,9 @@ class WayfinderStepDefinitions {
         }
     }
 
-    @Then("^I am navigated to the help page for Missing, incorrect or cancelled referrals or appointments$")
-    fun assertReferralsOrAppointmentsHelpPageDisplayed() {
-        referralsOrAppointmentsHelpPage.assertHelpPageIsDisplayed()
-    }
-
-    @Then("^I am navigated to the help page for Missing, incorrect or cancelled confirmed appointments$")
-    fun assertConfirmedAppointmentsHelpPageDisplayed() {
-        confirmedAppointmentsHelpPage.assertHelpPageIsDisplayed()
-    }
-
-    @Then("^I am navigated to the help page for Missing, incorrect or cancelled referrals in review$")
-    fun assertReferralsInReviewHelpPageDisplayed() {
-        referralsInReviewHelpPage.assertHelpPageIsDisplayed()
+    @Then("^I am navigated to the Wayfinder help page$")
+    fun assertWayfinderHelpPageDisplayed() {
+        wayfinderHelpPage.assertHelpPageIsDisplayed()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

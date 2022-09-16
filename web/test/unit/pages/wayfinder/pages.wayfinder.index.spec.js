@@ -144,21 +144,21 @@ describe('Summary care response with each type of summary item', () => {
   });
 
   it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
-    referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+    referralsOrAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals-or-appointments');
 
-    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('What to do if a referral or appointment is missing, incorrect or has not been cancelled');
   });
 
   it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
-    confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+    confirmedAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-appointments');
 
-    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('What to do if an appointment is missing, incorrect or has not been changed or cancelled');
   });
 
   it('Missing, incorrect or cancelled referrals in review link is visible', () => {
-    referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+    referralsInReviewHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals');
 
-    expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('What to do if a referral being reviewed by a clinic is missing or incorrect');
   });
 
   it('show other available services menu items without eRS jump-off', () => {
@@ -213,15 +213,15 @@ describe('Summary care response with only actionable items', () => {
   });
 
   it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
-    referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+    referralsOrAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals-or-appointments');
 
-    expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
+    expect(referralsOrAppointmentsHelpLink.text()).toEqual('What to do if a referral or appointment is missing, incorrect or has not been cancelled');
   });
 
   it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
-    confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+    confirmedAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-appointments');
 
-    expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
+    expect(confirmedAppointmentsHelpLink.text()).toEqual('What to do if an appointment is missing, incorrect or has not been changed or cancelled');
   });
 
   it('show other available services menu items without eRS jump-off', () => {
@@ -233,9 +233,9 @@ describe('Summary care response with only actionable items', () => {
   });
 
   it('Missing, incorrect or cancelled referrals in review link is visible', () => {
-    referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+    referralsInReviewHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals');
 
-    expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
+    expect(referralsInReviewHelpLink.text()).toEqual('What to do if a referral being reviewed by a clinic is missing or incorrect');
   });
 
   describe('if there are no confirmed appointments', () => {
@@ -285,21 +285,21 @@ describe('Summary care response with no summary items', () => {
     });
 
     it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
-      referralsOrAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsOrAppointments');
+      referralsOrAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals-or-appointments');
 
-      expect(referralsOrAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals or appointments');
+      expect(referralsOrAppointmentsHelpLink.text()).toEqual('What to do if a referral or appointment is missing, incorrect or has not been cancelled');
     });
 
     it('Missing, incorrect or cancelled confirmed appointments link is visible', () => {
-      confirmedAppointmentsHelpLink = wrapper.find('#btn_missingOrIncorrectConfirmedAppointments');
+      confirmedAppointmentsHelpLink = wrapper.find('#wayfinder-help-jump-off-link-appointments');
 
-      expect(confirmedAppointmentsHelpLink.text()).toEqual('Missing, incorrect or cancelled confirmed appointments');
+      expect(confirmedAppointmentsHelpLink.text()).toEqual('What to do if an appointment is missing, incorrect or has not been changed or cancelled');
     });
 
     it('Missing, incorrect or cancelled referrals in review link is visible', () => {
-      referralsInReviewHelpLink = wrapper.find('#btn_missingOrIncorrectReferralsInReview');
+      referralsInReviewHelpLink = wrapper.find('#wayfinder-help-jump-off-link-referrals');
 
-      expect(referralsInReviewHelpLink.text()).toEqual('Missing, incorrect or cancelled referrals in review');
+      expect(referralsInReviewHelpLink.text()).toEqual('What to do if a referral being reviewed by a clinic is missing or incorrect');
     });
 
     it('show other available services menu items without eRS jump-off', () => {
