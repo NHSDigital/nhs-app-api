@@ -139,8 +139,8 @@ export const UPLIFT_PRESCRIPTIONS_PATH = 'uplift/prescriptions';
 export const UPLIFT_MORE_PATH = 'uplift/more';
 export const UPLIFT_SILVER_INTEGRATION_PATH = 'uplift/silver-integration';
 export const USER_RESEARCH_PATH = '/user-research';
-export const WAYFINDER_PATH = 'wayfinder';
-export const WAYFINDER_HELP_PATH = 'wayfinder/help/wayfinder-help';
+export const WAYFINDER_PATH = 'appointments/hospital-referrals-appointments/';
+export const WAYFINDER_HELP_PATH = 'appointments/hospital-referrals-appointments/help';
 
 export default {
   EMPTY_PATH,

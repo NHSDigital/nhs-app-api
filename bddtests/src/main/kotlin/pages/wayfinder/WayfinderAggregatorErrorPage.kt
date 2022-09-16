@@ -7,7 +7,7 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.text
 
-@DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/hospital-referrals-appointments")
 open class WayfinderAggregatorErrorPage : HybridPageObject() {
 
     private val pageTitle = HybridPageElement(

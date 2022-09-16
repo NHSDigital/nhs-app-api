@@ -1,5 +1,5 @@
-import wayfinderPage from '@/pages/wayfinder';
-import wayfinderHelpPage from '@/pages/wayfinder/help/wayfinder-help';
+import wayfinderPage from '@/pages/appointments/hospital-referrals-appointments/hospital-referrals-appointments';
+import wayfinderHelpPage from '@/pages/appointments/hospital-referrals-appointments/help';
 
 import breadcrumbs from '@/breadcrumbs/wayfinder';
 

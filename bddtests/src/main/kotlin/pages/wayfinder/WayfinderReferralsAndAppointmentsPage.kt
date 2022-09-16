@@ -7,7 +7,7 @@ import pages.assertIsVisible
 import pages.sharedElements.LinksElement
 import pages.sharedElements.LinksWithDescriptionsContent
 
-@DefaultUrl("http://web.local.bitraft.io:3000/wayfinder")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/hospital-referrals-appointments")
 open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     private val noSpecialtyInReview = "Your healthcare provider has requested for you to be referred. " +

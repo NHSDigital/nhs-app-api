@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 
-@DefaultUrl("http://web.local.bitraft.io:3000/wayfinder/help/wayfinder-help")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/hospital-referrals-appointments/help")
 open class WayfinderHelpPage : HybridPageObject() {
     private val referralsHelpTitle = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"Referrals\")]",
