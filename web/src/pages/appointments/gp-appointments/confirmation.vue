@@ -110,7 +110,7 @@
                                :text-area-classes="[defaultClasses, 'nhsuk-u-margin-bottom-0']"
                                :required="!bookingReasonOptional"
                                :a-described-by="showReasonError ?
-                                 'max-reason-desc reason-error-label' : 'max-reason-desc'"
+                                 'max-reason-desc reason-error-label' : ''"
                                :error.sync="showReasonError"
                                name="bookingReason"
                                :data-maxlength="`${reasonCharacterLimit}`"
