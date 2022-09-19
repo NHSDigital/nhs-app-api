@@ -1542,7 +1542,6 @@ walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,larkshallmedic
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,leytonhealthcare,Leyton Healthcare,F86074,13500
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,ltshealthcare,Lime Tree and Sinnott Healthcare Ltd,Y01839,6447
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,limetreesurgery,Lime Tree Surgery,F86650,7982
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,nhspenryhn,Penrhyn Surgery,F86005,7775
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,queensroadmedicalcentre,Queens Road Medical Centre,F86030,7828
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,seymourmedicalcentre,Seymour Medical Centre,F86006,6060
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,smamedicalcentre,SMA Medical Centre,F86038,11000
@@ -1647,7 +1646,6 @@ wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,liscardgrouppracticewirral,Lisc
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,manorhcwirral,Manor Health Centre,N85023,5900
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,marinelakemedicalpracticewirral,Marine Lake Medical Practice Or Estuary Medical Practice,N85002,16540
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,moretoncrossgpwirral,Moreton Cross Group Practice,N85028,7080
-wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,moretonhealthclinic,Moreton Health Clinic,N85040,6100
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,moretonmcwirral,Moreton Medical Centre,N85048,5600
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,riversidesurgerywirral,Riverside Surgery,N85016,7926
 wirral,Wirral,CCG,Wirral,Cheshire and Merseyside,somervillemedicalcentre,Somerville Medical Centre,N85024,8687
@@ -1984,7 +1982,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Ross Road Medical Centre,K81019,
 ,,,Other,,,Riverside Medical Practice,M82006,
 ,,,Other,,,Helsby & Elton Practice,N81005,
-,,,Other,,,DMC Albion Place Medical Practice,G82017,
 ,,,Other,,,Greggs Wood & Speldhurst Surgery,G82022,
 ,,,Other,,,Guildhall Surgery,G82091,
 ,,,Other,,,Woodlands Health Centre,G82118,
@@ -2237,7 +2234,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Rose Villa Surgery,F81645,
 ,,,Other,,,The Strand Surgery,H82011,
 ,,,Other,,,Armada Family Practice,L81031,
-,,,Other,,,The Rame Group Practice,Y00969,
 ,,,Other,,,Gibson Lane Practice,B86036,
 ,,,Other,,,Operations Test Practice,C12345,
 ,,,Other,,,The Island Surgery,F81739,
@@ -2339,3 +2335,4 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Felmores Medical Centre,F81186,
 ,,,Other,,,Tilbury Health Centre,F81110,
 ,,,Other,,,Addison House,F81181,
+,,,Other,,,Morland House Surgery,K84014,
