@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
         private IOSFullNavigation Navigation { get; }
 
-        public NominateANewPharmacyPageContent PageContent { get; }
+        private NominateANewPharmacyPageContent PageContent { get; }
 
         private IOSRadioButton StepChoosePharmacyHighStreetRadioButton =>
             IOSRadioButton.StartsWith(_driver, "High street pharmacies");
@@ -26,14 +26,18 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
         private IOSRadioButton StepChoosePharmacyOnlineRadioButton =>
             IOSRadioButton.StartsWith(_driver, "Online-only pharmacies");
 
-        public void TakeScreenshot() => _driver.Screenshot(nameof(IOSNominateANewPharmacyPage));
+        private void TakeScreenshot() => _driver.Screenshot(nameof(IOSNominateANewPharmacyPage));
 
-        public static IOSNominateANewPharmacyPage StepStart(IIOSDriverWrapper driver, bool continueClick)
+        public static IOSNominateANewPharmacyPage StepStart(IIOSDriverWrapper driver, bool takeScreenshot, bool continueClick)
         {
             var page = new IOSNominateANewPharmacyPage(driver);
 
             page.PageContent.StepStartHeading.AssertVisible();
-            page.TakeScreenshot();
+
+            if (takeScreenshot)
+            {
+                page.TakeScreenshot();
+            }
 
             if (continueClick)
             {
@@ -112,4 +116,3 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
         }
     }
 }
-

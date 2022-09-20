@@ -61,7 +61,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .NavigateToNominateANewPharmacy();
 
             IOSNominateANewPharmacyPage
-                .StepStart(driver, continueClick: false);
+                .StepStart(driver, takeScreenshot: true, continueClick: false);
         }
 
         [NhsAppIOSTest]
@@ -88,7 +88,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .NavigateToNominateANewPharmacy();
 
             var page = IOSNominateANewPharmacyPage
-                .StepStart(driver, continueClick: true)
+                .StepStart(driver, takeScreenshot: false, continueClick: true)
                 .StepChoosePharmacy(isOnlinePharmacy: false)
                 .StepFindAHighStreetPharmacy()
                 .StepSelectAHighStreetPharmacy();
@@ -124,7 +124,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .NavigateToNominateANewPharmacy();
 
             IOSNominateANewPharmacyPage
-                .StepStart(driver, continueClick: true)
+                .StepStart(driver, takeScreenshot: false, continueClick: true)
                 .StepChoosePharmacy(isOnlinePharmacy: true)
                 .StepOnlinePharmacyFinalShutter();
         }
