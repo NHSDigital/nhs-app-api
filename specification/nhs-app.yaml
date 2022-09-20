@@ -514,7 +514,7 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                $ref: components/examples/responses/communication/403permissionsMissingForEventReport.json
+                $ref: components/examples/responses/communication/403permissionsMissingForReceiptsReport.json
         "429":
           description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
@@ -636,7 +636,7 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                $ref: components/examples/responses/communication/403permissionsMissingForEventReport.json
+                $ref: components/examples/responses/communication/403permissionsMissingForEventsReport.json
         "429":
           description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
