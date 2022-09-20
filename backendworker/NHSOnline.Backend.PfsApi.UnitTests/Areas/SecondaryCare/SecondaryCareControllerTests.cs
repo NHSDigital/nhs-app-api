@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 
             // Assert
             var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>();
+            actionResult.Value.Should().Be(null);
             actionResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status470FailedSecondaryCareMinimumAgeRequirement);
 
             Context.Mocks.ServiceLogger.VerifyLogger(LogLevel.Information, "Aggregator Secondary Care Summary API failed minimum age requirement", Times.Once());

@@ -25,6 +25,8 @@ paths:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
         "401":
           description: User session has expired.
+        "470":
+          description: Custom error response to indicate user failed minimum age validation check.
         "500":
           description: An unexpected error occurred during the processing of the request.
           content:
