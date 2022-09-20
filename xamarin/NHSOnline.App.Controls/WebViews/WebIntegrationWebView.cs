@@ -38,7 +38,7 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty SslErrorCommandProperty =
             BindableProperty.Create(
                 nameof(SslErrorCommand),
-                typeof(AsyncCommand),
+                typeof(AsyncCommand<SslErrorDetails>),
                 typeof(WebIntegrationWebView));
 
         public event EventHandler<WebViewPageLoadEventArgs>? PageLoadComplete;
@@ -105,9 +105,9 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(StartDownloadCommandProperty, value);
         }
 
-        public AsyncCommand SslErrorCommand
+        public AsyncCommand<SslErrorDetails> SslErrorCommand
         {
-            get => (AsyncCommand) GetValue(SslErrorCommandProperty);
+            get => (AsyncCommand<SslErrorDetails>) GetValue(SslErrorCommandProperty);
             set => SetValue(SslErrorCommandProperty, value);
         }
 
@@ -167,9 +167,9 @@ namespace NHSOnline.App.Controls.WebViews
             PageLoadComplete?.Invoke(this, pageLoadEventArgs);
         }
 
-        public void OnSslError()
+        public void OnSslError(SslErrorDetails sslErrorDetails)
         {
-            SslErrorCommand.Execute(null);
+            SslErrorCommand.Execute(sslErrorDetails);
         }
 
         public async Task NavigateBack()

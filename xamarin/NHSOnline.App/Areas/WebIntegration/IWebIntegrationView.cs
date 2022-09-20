@@ -17,7 +17,7 @@ namespace NHSOnline.App.Areas.WebIntegration
             Action<WebNavigatingEventArgs>? Navigating { get; set; }
             Func<Task>? NavigationFailed { get; set; }
             Action<WebViewPageLoadEventArgs>? PageLoadComplete { get; set; }
-            Func<Task>? SslError { get; set; }
+            Func<SslErrorDetails, Task>? SslError { get; set; }
 
             Func<Task>? HelpRequested { get; set; }
             Func<Task>? HomeRequested { get; set; }

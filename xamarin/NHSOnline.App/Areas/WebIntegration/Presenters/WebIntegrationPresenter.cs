@@ -64,7 +64,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
                 .RegisterHandler(HelpRequested, (view, handler) => view.HelpRequested = handler)
                 .RegisterHandler<WebNavigatingEventArgs>(ViewOnNavigating, (view, handler) => view.Navigating = handler)
                 .RegisterHandler(ViewOnNavigationFailed, (view, handler) => view.NavigationFailed = handler)
-                .RegisterHandler(ViewOnSslError, (view, handler) => view.SslError = handler)
+                .RegisterHandler<SslErrorDetails>(ViewOnSslError, (view, handler) => view.SslError = handler)
                 .RegisterHandler<WebViewPageLoadEventArgs>(ViewOnPageLoadComplete, (view, handler) => view.PageLoadComplete = handler)
                 .RegisterHandler(model.NavigationHandler.MoreRequested, (view, handler) => view.MoreRequested = handler)
                 .RegisterHandler(model.NavigationHandler.HomeRequested, (view, handler) => view.HomeRequested = handler)
@@ -167,9 +167,19 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _singleSignOnMonitor.PageLoadComplete(pageLoadEventArgs);
         }
 
-        private Task ViewOnSslError()
+        private Task ViewOnSslError(SslErrorDetails sslErrorDetails)
         {
-            _logger.LogError("SSL Error encountered");
+            Uri? uri = null;
+            if (!string.IsNullOrEmpty(sslErrorDetails.Url))
+            {
+                Uri.TryCreate(sslErrorDetails.Url, UriKind.Absolute, out uri);
+            }
+
+            var pathWithoutQueryParams = uri != null ? uri.GetLeftPart(UriPartial.Path) : string.Empty;
+            _logger.LogError(
+                "SSL Error encountered - Path: {Url}, Error: {Error}",
+                pathWithoutQueryParams,
+                sslErrorDetails.Error);
 
             var model = new ServiceDownErrorModel(_model.NavigationHandler, _model.FooterItem);
             var page = _pageFactory.CreatePageFor(model);

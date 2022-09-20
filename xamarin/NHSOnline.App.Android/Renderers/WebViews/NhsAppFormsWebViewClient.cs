@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Webkit;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
 using Xamarin.Forms.Platform.Android;
 using Uri = Android.Net.Uri;
@@ -48,8 +49,14 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             if (_renderer?.Element is WebIntegrationWebView sslErrorResult)
             {
+                var sslErrorDetails = new SslErrorDetails
+                {
+                    Url = error?.Url,
+                    Error = error?.PrimaryError.ToString()
+                };
+
                 handler?.Cancel();
-                sslErrorResult.OnSslError();
+                sslErrorResult.OnSslError(sslErrorDetails);
                 return;
             }
 
