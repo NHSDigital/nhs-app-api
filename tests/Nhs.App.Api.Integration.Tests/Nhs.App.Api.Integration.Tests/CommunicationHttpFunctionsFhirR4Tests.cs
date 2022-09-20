@@ -36,7 +36,13 @@ namespace Nhs.App.Api.Integration.Tests
             ContentString,
             ContentReference
         }
-
+        
+        private enum MessageTypeKind
+        {
+            Normal,
+            Questionnaire
+        }
+        
         public class EndpointInfo
         {
             public string Path { get; set; }
