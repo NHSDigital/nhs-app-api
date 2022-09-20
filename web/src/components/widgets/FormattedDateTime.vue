@@ -25,22 +25,8 @@ export default {
   },
   computed: {
     formattedTime() {
-      let formattedTimeValue = '';
       const timeFormatValue = this.getTimeFormatValue;
-
-      if (timeFormatValue === 0) {
-        formattedTimeValue = formatIndividualMessageTime(this.dateTime, this.$t.bind(this));
-      }
-
-      if (timeFormatValue === 1) {
-        formattedTimeValue = formatInboxMessageTime(this.dateTime, this.$t.bind(this));
-      }
-
-      if (timeFormatValue === 2) {
-        formattedTimeValue = formatKeywordReplyMessageTime(this.dateTime, this.$t.bind(this));
-      }
-
-      return formattedTimeValue;
+      return this.mapTimeFormat(timeFormatValue);
     },
     getTimeFormatValue() {
       if (this.timeFormat === 0) {
@@ -48,6 +34,15 @@ export default {
       }
 
       return this.timeFormat;
+    },
+  },
+  methods: {
+    mapTimeFormat(timeFormat) {
+      return {
+        0: formatIndividualMessageTime(this.dateTime, this.$t.bind(this)),
+        1: formatInboxMessageTime(this.dateTime, this.$t.bind(this)),
+        2: formatKeywordReplyMessageTime(this.dateTime, this.$t.bind(this)),
+      }[timeFormat];
     },
   },
 };
