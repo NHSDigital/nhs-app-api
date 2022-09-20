@@ -26,6 +26,7 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertOnPage(driver);
         }
 
+        [Ignore("Issue being investigated, behaviour the same as above ios11 test")]
         [NhsAppIOSTest(IOSDevice = IOSDevice.iPhoneXR, OSVersion = IOSVersion.Twelve)]
         public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS12(IIOSDriverWrapper driver)
         {
