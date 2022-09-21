@@ -11,6 +11,7 @@ info:
 
     You can:
     * send in-app messages to specific users of the NHS App
+    * include keyword replies to in-app messages
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API
@@ -149,13 +150,17 @@ paths:
         required: true
         content:
           application/json:
+            schema:
+              $ref: components/schemas/requests/communication/communication-in-app.yaml
             examples:
               app-message:
                 summary: Sending an in-app message
                 value:
                   $ref: components/examples/requests/communication/in-app.json
-            schema:
-              $ref: components/schemas/requests/communication/communication-in-app.yaml
+              app-message-with-keyword-reply:
+                summary: Sending an in-app message with keyword reply
+                value:
+                  $ref: components/examples/requests/communication/in-app-with-keyword-reply.json
       tags:
         - communication
       responses:
@@ -173,8 +178,15 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/responses/communication/communication-in-app.yaml
-              example:
-                $ref: components/examples/responses/communication/201successInApp.json
+              examples:
+                in-app:
+                  summary: "In app message response without keyword reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInApp.json
+                in-app-with-keyword-reply:
+                  summary: "In app message response with keyword reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInAppWithKeywordReply.json
         "400":
           description: There is an error in your request.
           headers:
@@ -213,6 +225,18 @@ paths:
                   summary: The requester has an invalid identifier
                   value:
                     $ref: components/examples/responses/communication/400InvalidRequester.json
+                invalid-contained-resource-type:
+                  summary: The contained resource type of keyword reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedResourceType.json
+                invalid-contained-item-type:
+                  summary: The contained item type of keyword reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedItemType.json
+                invalid-contained-answer-options:
+                  summary: The contained answer options length of keyword reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedAnswerOptionLength.json
         "401":
           description: Authorisation issue, for example a missing or expired bearer token.
           headers:
