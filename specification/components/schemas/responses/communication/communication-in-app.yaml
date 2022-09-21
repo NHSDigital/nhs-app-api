@@ -37,6 +37,63 @@ properties:
           type: string
           description: The body text of the message to be displayed in the NHS App.
           example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)
+  contained:
+    type: array
+    description:  
+      An optional array of FHIR resource object. Will contain only one item in the array
+    items:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          description: FHIR Resource Type – this will be `Questionnaire`
+        id:
+          type: string
+          description: Id of the Questionnaire resource type sent in the request
+        status:
+          type: string
+          description: Questionnaire Status for the message. This will be `active` (case-sensitive)
+        item:
+          type: array
+          description: An array containing a single answerOptions
+          items:
+            type: object
+            properties:
+              linkId: 
+                type: string
+                description: Id sepecified in the request
+              type:
+                type: string
+                description: Will be `choice` type
+              answerOption:
+                type: array
+                description: An array containing valueCoding objects
+                items:
+                  type: object
+                  properties:
+                    valueCoding:
+                      type: object
+                      description: An object containing code (Keyword Replies)
+                      properties:
+                        code:
+                          type: string
+                          description: A string code 
+  extension:
+    type: array
+    description:
+      An optional array of FHIR extension resource. Will be present when contained field is present in the request
+    items:
+      type: object
+      properties:
+        url:
+          type: string
+          description: This will be `https://fhir.nhs.uk/NHSApp/answers`
+        valueReference:
+          type: object
+          properties:
+             reference:
+                type: string
+                description: The reference value will be same as Questionnaire resource id from request prefixed with '#'
   recipient:
     type: array
     description:
