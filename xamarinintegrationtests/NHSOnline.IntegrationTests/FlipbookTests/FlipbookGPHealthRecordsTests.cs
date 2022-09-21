@@ -73,7 +73,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
 
         [NhsAppIOSTest]
         [NhsAppFlipbookTest(ParentJourney = "View your GP Health Records - iOS",
-            FlipbookTestName = "View your GP health record - cannot view large file")]
+            FlipbookTestName = "Viewing a health record which cannot be downloaded to  maximum file size exceeded (TPP)")]
         public void APatientWithProofLevelNineCannotViewLargeFileFromHealthRecordIOSTpp(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
