@@ -58,6 +58,7 @@ describe('QuestionText.vue', () => {
       wrapper = mountQuestion();
 
       expect(wrapper.vm.value).toEqual(defaultPropsData.value);
+      expect(wrapper.vm.maxLength).toEqual(defaultPropsData.maxLength);
     });
   });
 
@@ -87,6 +88,23 @@ describe('QuestionText.vue', () => {
         // Assert
         expect(questionTextAnswerValid).toHaveBeenCalledWith('an answer longer than 20 characters', true, '20');
         expect(wrapper.emitted('validate')[1][0]).toEqual({ valid: false, message: 'too long' });
+      });
+    });
+  });
+
+  describe('watch', () => {
+    describe('textValue', () => {
+      it('will reduce the length of the text value to the maximum length', () => {
+        // Arrange
+        const newValue = 'abcdefghijklmnopqrstu';
+        const expectedValue = 'abcdefghijklmnopqrst';
+
+        // Act
+        wrapper.vm.$options.watch.textValue.call(wrapper.vm, newValue);
+
+        // Assert
+        expect(wrapper.vm.textValue).toBe(expectedValue);
+        expect(wrapper.vm.textValue).toHaveLength(20);
       });
     });
   });

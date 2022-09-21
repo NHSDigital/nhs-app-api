@@ -37,4 +37,5 @@ export const initialState = () => ({
   readIndex: 0,
   hasUnread: false,
   gpMessagingSessionUnavailable: false,
+  messageTextCharacterLimit: 450,
 });

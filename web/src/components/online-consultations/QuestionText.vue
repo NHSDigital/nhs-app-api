@@ -8,11 +8,15 @@
       </span>
     </div>
     <generic-text-area :id="id"
+                       ref="textValue"
                        v-model="textValue"
                        :required="required"
                        :name="name"
                        :error="error"
                        :maxlength="maxLength"
+                       :data-maxlength="maxLength"
+                       :text-area-classes="['nhsuk-u-margin-bottom-0']"
+                       text-area-ref="textValue"
                        :a-described-by="ariaDescribed"/>
   </div>
 </template>
@@ -71,9 +75,12 @@ export default {
     },
   },
   watch: {
-    textValue(to) {
-      this.checkAndEmitIsValueValid(to);
-      this.$emit('input', to);
+    textValue(value) {
+      if (value.length > this.maxLength) {
+        this.textValue = value.slice(0, this.maxLength);
+      }
+      this.checkAndEmitIsValueValid(this.textValue);
+      this.$emit('input', this.textValue);
     },
   },
   created() {

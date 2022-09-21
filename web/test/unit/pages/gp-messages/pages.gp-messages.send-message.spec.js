@@ -20,6 +20,7 @@ describe('patient messaging messages', () => {
     selectedMessageRecipient = undefined,
     messageSent = false,
     selectedId = undefined,
+    messageTextCharacterLimit = undefined,
     sendMessageSubjectEnabled = true } = {}) => {
     store = createStore({
       state: {
@@ -27,6 +28,7 @@ describe('patient messaging messages', () => {
           selectedMessageId: selectedId,
           messageSent,
           selectedMessageRecipient,
+          messageTextCharacterLimit,
         },
         device: { isNativeApp: false },
       },
@@ -162,6 +164,30 @@ describe('patient messaging messages', () => {
     it('will set the error class if there is an error within the message field', () => {
       wrapper.vm.messageTextError = true;
       expect(wrapper.vm.getMessageErrorClass).toBe('nhsuk-form-group--error');
+    });
+
+    it('will set the maximum character length for the message field', () => {
+      mountPage({ messageTextCharacterLimit: '5' });
+      expect(wrapper.vm.messageCharacterLimit).toBe('5');
+    });
+  });
+
+  describe('watch', () => {
+    describe('messageText', () => {
+      it('will reduce the length of the message text to the maximum length', () => {
+        // Arrange
+        const maximumLength = 5;
+        const newValue = 'tests1';
+        const expectedValue = 'tests';
+        mountPage({ messageTextCharacterLimit: maximumLength });
+
+        // Act
+        wrapper.vm.$options.watch.messageText.call(wrapper.vm, newValue);
+
+        // Assert
+        expect(wrapper.vm.messageText).toBe(expectedValue);
+        expect(wrapper.vm.messageText).toHaveLength(maximumLength);
+      });
     });
   });
 

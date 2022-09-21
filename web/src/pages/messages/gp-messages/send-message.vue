@@ -47,13 +47,16 @@
           </div>
         </label>
         <generic-text-area id="messageText"
+                           ref="messageText"
                            v-model="messageText"
-                           maxlength="450"
                            :rows="5"
                            :error="messageTextError"
                            :a-described-by="'text-must-be-shorter-than-450'"
                            :error-text="
                              $t('messages.enterAMessage')"
+                           :text-area-classes="['nhsuk-u-margin-bottom-0']"
+                           text-area-ref="messageText"
+                           :data-maxlength="`${messageCharacterLimit}`"
                            :required="true"/>
       </div>
     </div>
@@ -147,6 +150,16 @@ export default {
         errorsIds.push('messageText');
       }
       return errorsIds;
+    },
+    messageCharacterLimit() {
+      return this.$store.state.gpMessages.messageTextCharacterLimit;
+    },
+  },
+  watch: {
+    messageText(value) {
+      if (value.length > this.messageCharacterLimit) {
+        this.messageText = value.slice(0, this.messageCharacterLimit);
+      }
     },
   },
   created() {
