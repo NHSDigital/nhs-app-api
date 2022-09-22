@@ -47,6 +47,9 @@
     <Content Include="MockData\SecondaryCare\complete-valid-secondary-care-summary-response.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MockData\SecondaryCare\complete-valid-secondary-care-wait-times-response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MockData\SecondaryCare\invalid-referral.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

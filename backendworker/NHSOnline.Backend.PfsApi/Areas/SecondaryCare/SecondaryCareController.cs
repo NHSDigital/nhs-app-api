@@ -13,7 +13,7 @@ using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
 {
-    [ApiVersionRoute("patient/secondary-care/summary")]
+    [ApiVersionRoute("patient/secondary-care")]
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class SecondaryCareController : Controller
     {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
             _errorReferenceGenerator = errorReferenceGenerator;
         }
 
-        [HttpGet]
+        [HttpGet("summary")]
         public async Task<IActionResult> GetSummary([UserSession] P9UserSession userSession)
         {
             try
@@ -46,6 +46,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.SecondaryCare
 
                 await result.Accept(new SecondaryCareSummaryResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new SecondaryCareSummaryResultVisitor(_errorReferenceGenerator, Supplier.SecondaryCareAggregator));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet("waittimes")]
+        public async Task<IActionResult> GetWaitTimes([UserSession] P9UserSession userSession)
+        {
+            try
+            {
+                _logger.LogEnter();
+                await _auditor.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest, "Attempting to get Secondary Care Wait Times");
+
+                var result = await _secondaryCareService.GetWaitTimes(userSession);
+
+                await result.Accept(new SecondaryCareWaitTimesResultAuditingVisitor(_auditor, _logger));
+                return result.Accept(new SecondaryCareWaitTimesResultVisitor(_errorReferenceGenerator, Supplier.SecondaryCareAggregator));
             }
             finally
             {

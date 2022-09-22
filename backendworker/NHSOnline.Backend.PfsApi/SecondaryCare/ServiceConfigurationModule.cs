@@ -13,8 +13,10 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
             services.AddSingleton<ISecondaryCareService, SecondaryCareService>();
             services.AddSingleton<SecondaryCareSummaryService>();
-
+            services.AddSingleton<SecondaryCareWaitTimesService>();
+            services.AddSingleton<ISecondaryCareApimService, SecondaryCareApimService>();
             services.AddSingleton<ISecondaryCareSummaryMapper, SecondaryCareSummaryMapper>();
+            services.AddSingleton<ISecondaryCareWaitTimesMapper, SecondaryCareWaitTimesMapper>();
 
             services.AddSingleton<ISecondaryCareClient, SecondaryCareClient>();
 

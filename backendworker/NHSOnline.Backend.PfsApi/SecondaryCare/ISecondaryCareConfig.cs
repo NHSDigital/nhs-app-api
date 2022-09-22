@@ -6,5 +6,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
     {
         Uri BaseUrl { get; }
         string EventsPath { get; }
+        string WaitTimesPath { get; }
+        bool WaitTimesEnabled { get; }
     }
 }

@@ -18,3 +18,6 @@ secrets:
 
 web:
   thirdPartyJumpOffLoggingEnabled: true
+
+# Initially only enable Wait times on certain environments
+wayfinderWaitTimesEnabled: true

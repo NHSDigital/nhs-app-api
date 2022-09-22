@@ -64,17 +64,22 @@
             :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referrals')"/>
           <referrals-in-review-group/>
 
+          <wait-times-menu-item
+            id="wait-times-menu-item"
+            :is-wait-times-enabled="isWaitTimesEnabled"/>
+
           <other-available-services-menu-items
             id="other-available-services-menu-items"
             :show-ers="false"/>
         </template>
       </div>
 
-      <desktop-generic-back-link v-if="!isNativeApp"
-                                 id="desktopBackLink"
-                                 data-purpose="back-to-appointments-hub-button"
-                                 :path="appoinmentsHubPath"
-                                 :button-text="'generic.back'"/>
+      <desktop-generic-back-link
+        v-if="!isNativeApp"
+        id="desktopBackLink"
+        data-purpose="back-to-appointments-hub-button"
+        :path="appointmentsHubPath"
+        :button-text="'generic.back'"/>
     </div>
   </div>
 </template>
@@ -82,6 +87,7 @@
 <script>
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import GenericButton from '@/components/widgets/GenericButton';
+import WaitTimesMenuItem from '@/components/appointments/hospital-referrals-appointments/WaitTimesMenuItem';
 import OtherAvailableServicesMenuItems from '@/components/appointments/hospital-referrals-appointments/OtherAvailableServicesMenuItems';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import BookOrManageReferralsOrAppointmentsGroup from '@/components/appointments/hospital-referrals-appointments/sections/BookOrManageReferralsOrAppointmentsGroup';
@@ -89,7 +95,7 @@ import ConfirmedAppointmentsGroup from '@/components/appointments/hospital-refer
 import ReferralsInReviewGroup from '@/components/appointments/hospital-referrals-appointments/sections/ReferralsInReviewGroup';
 import HelpLink from '@/components/appointments/hospital-referrals-appointments/HelpLink';
 
-import { redirectTo } from '@/lib/utils';
+import { isTruthy, redirectTo } from '@/lib/utils';
 import {
   APPOINTMENTS_PATH,
   WAYFINDER_HELP_PATH,
@@ -106,6 +112,7 @@ export default {
     DesktopGenericBackLink,
     GenericButton,
     OtherAvailableServicesMenuItems,
+    WaitTimesMenuItem,
     BookOrManageReferralsOrAppointmentsGroup,
     ConfirmedAppointmentsGroup,
     ReferralsInReviewGroup,
@@ -113,6 +120,8 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
+      isWaitTimesEnabled: isTruthy(this.$store.$env.SECONDARY_CARE_WAIT_TIMES_ENABLED),
+      appointmentsHubPath: APPOINTMENTS_PATH,
       wayfinderHelpPath: WAYFINDER_HELP_PATH,
       appoinmentsHubPath: APPOINTMENTS_PATH,
     };

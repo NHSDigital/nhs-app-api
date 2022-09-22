@@ -27,22 +27,19 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         private readonly SecondaryCareHttpClient _httpClient;
         private readonly ILogger<SecondaryCareClient> _logger;
         private readonly IGuidCreator _guidCreator;
-        private readonly ISecondaryCareConfig _config;
 
         public SecondaryCareClient(
             SecondaryCareHttpClient httpClient,
             ILogger<SecondaryCareClient> logger,
-            IGuidCreator guidCreator,
-            ISecondaryCareConfig config)
+            IGuidCreator guidCreator)
         {
             _httpClient = httpClient;
             _logger = logger;
             _guidCreator = guidCreator;
-            _config = config;
         }
 
-        public async Task<SecondaryCareResponse> GetSummary(P9UserSession userSession, string accessToken)
-            => await Get(_config.EventsPath, userSession.NhsNumber.RemoveWhiteSpace(), accessToken);
+        public async Task<SecondaryCareResponse> GetResponse(P9UserSession userSession, string accessToken, string path)
+            => await Get(path, userSession.NhsNumber.RemoveWhiteSpace(), accessToken);
 
         private async Task<SecondaryCareResponse> Get(string path, string nhsNumber, string accessToken)
         {

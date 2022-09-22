@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
     public interface ISecondaryCareClient
     {
-        Task<SecondaryCareResponse> GetSummary(P9UserSession userSession, string accessToken);
+        Task<SecondaryCareResponse> GetResponse(P9UserSession userSession, string accessToken, string path);
     }
 }

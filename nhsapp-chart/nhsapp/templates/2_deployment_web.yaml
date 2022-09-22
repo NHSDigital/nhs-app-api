@@ -130,6 +130,8 @@ spec:
           value: "{{ $.Values.userResearchEnabled }}"
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
+        - name: SECONDARY_CARE_WAIT_TIMES_ENABLED
+          value: "{{ $.Values.wayfinderWaitTimesEnabled }}"
         - name: WELL_KNOWN_ANDROID_PACKAGE_NAME
           value: "{{ $.Values.wellKnownAndroidPackageName }}"
         - name: WELL_KNOWN_ANDROID_FINGERPRINT

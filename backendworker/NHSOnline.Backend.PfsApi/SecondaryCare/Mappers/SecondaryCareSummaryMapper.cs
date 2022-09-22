@@ -1,7 +1,6 @@
 extern alias r4;
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Hl7.Fhir.Utility;
@@ -12,13 +11,12 @@ using AppointmentStatus = r4::Hl7.Fhir.Model.Appointment.AppointmentStatus;
 using Date = Hl7.Fhir.Model.Date;
 using Code = Hl7.Fhir.Model.Code;
 using Coding = Hl7.Fhir.Model.Coding;
-using Extension = Hl7.Fhir.Model.Extension;
 using FhirUrl = Hl7.Fhir.Model.FhirUrl;
 using Period = Hl7.Fhir.Model.Period;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 {
-    public class SecondaryCareSummaryMapper : ISecondaryCareSummaryMapper
+    public class SecondaryCareSummaryMapper : SecondaryCareMapperBase, ISecondaryCareSummaryMapper
     {
         private const string PortalLinkResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-Portal-Link";
         private const string ReferralStateResourceUrl = "https://fhir.nhs.uk/StructureDefinition/Extension-eRS-ServiceRequest-State";
@@ -170,18 +168,18 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
         }
 
         private string MapReferralStatus(CarePlan.ActivityComponent activity)
-            => (GetValueFromExtensionWithUrl<Coding>(activity.Detail.Extension, ReferralStateResourceUrl) as Coding)?.Code;
+            => (GetValueFromExtensionWithUrl<Coding>(activity.Detail.Extension, ReferralStateResourceUrl, _logger) as Coding)?.Code;
 
         private (string provider, string deepLink) MapProviderAndDeepLink(CarePlan.ActivityComponent activity)
         {
-            var portalLinkExtension = GetExtensionByUrl(activity.Detail.Extension, PortalLinkResourceUrl);
+            var portalLinkExtension = GetExtensionByUrl(activity.Detail.Extension, PortalLinkResourceUrl, _logger);
 
             if (portalLinkExtension is null)
             {
                 return (null, null);
             }
 
-            var provider = (GetValueFromExtensionWithUrl<Code>(portalLinkExtension.Extension, "client-id") as Code)?.Value;
+            var provider = (GetValueFromExtensionWithUrl<Code>(portalLinkExtension.Extension, "client-id", _logger) as Code)?.Value;
             var deepLink = (portalLinkExtension.Value as FhirUrl)?.Value;
 
             if (provider is null)
@@ -207,7 +205,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
                 return null;
             }
 
-            var dateExtension = GetValueFromExtensionWithUrl<Date>(scheduledPeriod.Extension, ReviewDueDateResourceUrl, false);
+            var dateExtension = GetValueFromExtensionWithUrl<Date>(scheduledPeriod.Extension, ReviewDueDateResourceUrl, _logger, false);
 
             if (!(dateExtension is Date dueDate))
             {
@@ -231,7 +229,7 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
 
         private string MapUpcomingAppointmentStatus(CarePlan.ActivityComponent activity)
         {
-            var status = (GetValueFromExtensionWithUrl<Coding>(activity.Detail.Extension, AppointmentStatusResourceUrl) as Coding)?.Code;
+            var status = (GetValueFromExtensionWithUrl<Coding>(activity.Detail.Extension, AppointmentStatusResourceUrl, _logger) as Coding)?.Code;
 
             if (string.IsNullOrWhiteSpace(status))
             {
@@ -259,40 +257,6 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare.Mappers
             }
 
             return location;
-        }
-
-        private object GetValueFromExtensionWithUrl<T>(IList<Extension> extensions, string url, bool logError = true)
-        {
-            var extension = GetExtensionByUrl(extensions, url, logError);
-
-            if (extension?.Value is T value)
-            {
-                return value;
-            }
-
-            if (logError)
-            {
-                _logger.LogError("Expected Extension value to be of type {T} but was {TypeName}", typeof(T), extension?.Value.GetType());
-            }
-
-            return null;
-        }
-
-        private Extension GetExtensionByUrl(IList<Extension> extensions, string url, bool logErrors = true)
-        {
-            try
-            {
-                return extensions.First(e => string.Equals(e.Url, url, StringComparison.Ordinal));
-            }
-            catch (InvalidOperationException e)
-            {
-                if (logErrors)
-                {
-                    _logger.LogError(e, "Could not find Extension of type {Url}", url);
-                }
-            }
-
-            return null;
         }
     }
 }

@@ -80,6 +80,7 @@ services:
       - ./docker/health_checks_enabled.env
       - ./docker/organ_donation_desktop_enabled.env
       - ./docker/tpp_test_results.env
+      - ./docker/secondary_care_wait_times_enabled.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}
@@ -158,6 +159,7 @@ services:
       - ./docker/knownservicesV3.env
       - ./docker/tpp_test_results.env
       - ./docker/secondarycare_connectivity.env
+      - ./docker/secondary_care_wait_times_enabled.env
       - ./docker/apim_connectivity.env
       - ./docker/notificationhub_connectivity.env
       - ./docker/nhslogin_connectivity_ext.env

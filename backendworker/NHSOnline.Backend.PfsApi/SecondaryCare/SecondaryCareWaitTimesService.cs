@@ -14,20 +14,20 @@ using OperationOutcome = Hl7.Fhir.Model.OperationOutcome;
 
 namespace NHSOnline.Backend.PfsApi.SecondaryCare
 {
-    public class SecondaryCareSummaryService
+    public class SecondaryCareWaitTimesService
     {
-        private const string SecondaryCareLogPrefix = "Aggregator Secondary Care Summary API";
+        private const string SecondaryCareLogPrefix = "Aggregator Secondary Care WaitTimes API";
 
-        private readonly ILogger<SecondaryCareSummaryService> _logger;
-        private readonly ISecondaryCareSummaryMapper _mapper;
+        private readonly ILogger<SecondaryCareWaitTimesService> _logger;
+        private readonly ISecondaryCareWaitTimesMapper _mapper;
         private readonly ISecondaryCareApimService _secondaryCareApimService;
         private readonly ISecondaryCareClient _secondaryCareClient;
         private readonly IAuditor _auditor;
         private readonly ISecondaryCareConfig _config;
 
-        public SecondaryCareSummaryService(
-            ILogger<SecondaryCareSummaryService> logger,
-            ISecondaryCareSummaryMapper mapper,
+        public SecondaryCareWaitTimesService(
+            ILogger<SecondaryCareWaitTimesService> logger,
+            ISecondaryCareWaitTimesMapper mapper,
             ISecondaryCareApimService secondaryCareApimService,
             ISecondaryCareClient secondaryCareClient,
             IAuditor auditor,
@@ -41,36 +41,35 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
             _config = config;
         }
 
-        public async Task<SecondaryCareSummaryResult> GetSummary(P9UserSession userSession)
+        public async Task<SecondaryCareWaitTimesResult> GetWaitTimes(P9UserSession userSession)
         {
             try
             {
-                var authResponseResult = await _secondaryCareApimService.GetAuthToken(userSession, AuditingOperations.SecondaryCareGetSummaryRequest);
+                if (!_config.WaitTimesEnabled)
+                {
+                    return new SecondaryCareWaitTimesResult.NotEnabled();
+                }
+
+                var authResponseResult = await _secondaryCareApimService.GetAuthToken(userSession,AuditingOperations.SecondaryCareGetWaitTimesRequest);
 
                 if (!authResponseResult.isSuccess)
                 {
-                    return new SecondaryCareSummaryResult.BadGateway();
+                    return new SecondaryCareWaitTimesResult.BadGateway();
                 }
 
                 var aggregatorResponse =
-                    await _secondaryCareClient.GetResponse(userSession, authResponseResult.authToken.Body.AccessToken, _config.EventsPath);
+                    await _secondaryCareClient.GetResponse(userSession, authResponseResult.authToken.Body.AccessToken, _config.WaitTimesPath);
 
                 if (aggregatorResponse.FailedToParseResponse)
                 {
                     await AuditSecondaryCareResult("Failed - unable to parse response");
-                    return new SecondaryCareSummaryResult.BadGateway();
+                    return new SecondaryCareWaitTimesResult.BadGateway();
                 }
 
                 if (!aggregatorResponse.HasSuccessResponse)
                 {
-                    if (aggregatorResponse.IsUnder16Error())
-                    {
-                        _logger.LogInformation("{LogPrefix} failed minimum age requirement", SecondaryCareLogPrefix);
-                        return new SecondaryCareSummaryResult.FailedSecondaryCareMinimumAgeRequirement();
-                    }
-
                     await AuditSecondaryCareResult($"Failed - response code: {aggregatorResponse.StatusCode}");
-                    return new SecondaryCareSummaryResult.BadGateway();
+                    return new SecondaryCareWaitTimesResult.BadGateway();
                 }
 
                 if (aggregatorResponse.Issues.Any())
@@ -84,30 +83,30 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
 
                 if (summaryResponse is null)
                 {
-                    _logger.LogError("{LogPrefix} unsuccessfully mapped {Bundle} to {SummaryResponse}. See previous log entries for more detail", SecondaryCareLogPrefix, nameof(Bundle), nameof(ISummaryResponse));
+                    _logger.LogError("{LogPrefix} unsuccessfully mapped {Bundle} to {WaitTimesResponse}. See previous log entries for more detail", SecondaryCareLogPrefix, nameof(Bundle), nameof(WaitTimesResponse));
                     await AuditSecondaryCareResult("Failed - mapping failed for at least one entry");
-                    return new SecondaryCareSummaryResult.BadGateway();
+                    return new SecondaryCareWaitTimesResult.BadGateway();
                 }
 
-                return new SecondaryCareSummaryResult.Success(summaryResponse);
+                return new SecondaryCareWaitTimesResult.Success(summaryResponse);
             }
             catch (NhsTimeoutException e)
             {
                 _logger.LogError(e, "{LogPrefix} timed out", SecondaryCareLogPrefix);
                 await AuditSecondaryCareResult("Failed - request timed out");
-                return new SecondaryCareSummaryResult.Timeout();
+                return new SecondaryCareWaitTimesResult.Timeout();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "{LogPrefix} encountered an error", SecondaryCareLogPrefix);
                 await AuditSecondaryCareResult("Failed - HTTP error");
-                return new SecondaryCareSummaryResult.BadGateway();
+                return new SecondaryCareWaitTimesResult.BadGateway();
             }
         }
 
         private async System.Threading.Tasks.Task AuditSecondaryCareResult(string auditText)
         {
-            await _auditor.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, auditText);
+            await _auditor.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResult, auditText);
         }
 
         private string MapErrorForLogging(OperationOutcome.IssueComponent issueComponent) =>

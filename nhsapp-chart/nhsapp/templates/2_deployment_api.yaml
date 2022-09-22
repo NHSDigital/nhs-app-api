@@ -393,6 +393,10 @@ spec:
         {{- end }}
         - name: SECONDARY_CARE_AGGREGATOR_EVENTS_PATH
           value: "{{ $.Values.aggregatorEventsPath }}"
+        - name: SECONDARY_CARE_AGGREGATOR_WAIT_TIMES_PATH
+          value: "{{ $.Values.aggregatorWaitTimesPath }}"
+        - name: SECONDARY_CARE_WAIT_TIMES_ENABLED
+          value: "{{ $.Values.wayfinderWaitTimesEnabled }}"
         - name: NHSAPP_APIM_BASE_URL
         {{- if $.Values.environmentStubbed.wayfinderStubbed }}
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"

@@ -30,6 +30,7 @@ const setupStore = (
   isNativeApp,
   hasApiError,
   hasApiErrorForUnderAge,
+  isWaitTimesEnabled,
 ) => {
   let actionableReferralsAndAppointments = [];
   let confirmedAppointments = [];
@@ -88,6 +89,9 @@ const setupStore = (
   }
 
   return createStore({
+    $env: {
+      SECONDARY_CARE_WAIT_TIMES_ENABLED: isWaitTimesEnabled,
+    },
     state: {
       device: {
         isNativeApp,
@@ -112,6 +116,12 @@ const setupStore = (
 };
 
 const mountPage = () => mount(
+  WayfinderPage, {
+    $store,
+  },
+);
+
+const mountPageWithWaitTimesEnabled = () => mount(
   WayfinderPage, {
     $store,
   },
@@ -355,5 +365,29 @@ describe('Summary care response with API error for underage', () => {
       expect(noOtherServicesShowingMessage.exists()).toBe(true);
       expect(noOtherServicesShowingMessage.text()).toEqual('If no other services are showing, you\'ll need to contact the relevant organisation or healthcare provider for more information.');
     });
+  });
+});
+
+describe('Secondary care with wait times enabled', () => {
+  beforeEach(() => {
+    $store = setupStore(false, false, false, false, false, false, true);
+    wrapper = mountPageWithWaitTimesEnabled();
+  });
+  it('show wait time menu items', () => {
+    doesNotMeetMinimumAgeMessage = wrapper.find('#wait-times-menu-item');
+    expect(doesNotMeetMinimumAgeMessage.exists()).toBe(true);
+  });
+});
+
+
+describe('Secondary care with wait times disabled', () => {
+  beforeEach(() => {
+    $store = setupStore(false, false, false, false, false, false, false);
+    wrapper = mountPage();
+  });
+  it('do not show wait time menu items', () => {
+    doesNotMeetMinimumAgeMessage = wrapper.find('#wait-times-menu-item');
+
+    expect(doesNotMeetMinimumAgeMessage.exists()).toBe(false);
   });
 });

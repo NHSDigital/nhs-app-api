@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.PfsApi.SecondaryCare;
 using NHSOnline.Backend.PfsApi.SecondaryCare.Models;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
@@ -194,9 +195,125 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             VerifyNoOtherLoggerCalls();
         }
 
+        [TestMethod]
+        public async Task WhenOAuthTokenResponseFromAPIMIsUnsuccessfulThenGetWaitTimesReturns502BadGateway()
+        {
+            // Arrange APIM
+            Context.MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetWaitTimes(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest,"Attempting to get Secondary Care Wait Times"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest, "Failed to get Auth token - response code: BadRequest"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResponse, "Error retrieving Secondary Care WaitTimes: BadGateway"));
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
+        public async Task WhenGetWaitTimesResponseFromClientIsSuccessfulThenGetWaitTimesReturns200WithCompleteWaitTimesResponse()
+        {
+            // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
+            Context.MockSecondaryCareHttpClientGetWaitTimesReturnsSuccessfulResponseWithData(LoadAggregatorResponse("complete-valid-secondary-care-wait-times-response"));
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetWaitTimes(Context.Data.P9UserSession);
+            var objectResult = result.Should().BeAssignableTo<OkObjectResult>();
+            var waitTimesResponse = objectResult.Subject.Value as WaitTimesResponse;
+
+            //Assert
+            waitTimesResponse.Should().NotBeNull();
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest,
+                "Attempting to get Secondary Care Wait Times"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResponse,
+                "Secondary Care WaitTimes successfully retrieved. Total Wait Times: 2"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
+        public async Task WhenGetWaitTimesCalledAndFeatureNotEnabledThenGetWaitTimesReturnsNotImplementedStatus()
+        {
+            // Arrange
+            Context.Mocks.UpdateConfigurationKeyValue("SECONDARY_CARE_WAIT_TIMES_ENABLED", "false");
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetWaitTimes(Context.Data.P9UserSession);
+
+            //Assert
+            result.Should().BeAssignableTo<NotFoundResult>();
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest,
+                "Attempting to get Secondary Care Wait Times"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResponse,
+                $"Error retrieving Secondary Care WaitTimes: {nameof(SecondaryCareWaitTimesResult.NotEnabled)}"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
+        public async Task WhenGetWaitTimesResponseFromClientIsUnsuccessfulThenGetWaitTimesReturns502BadGateway()
+        {
+            // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
+            Context.MockSecondaryCareHttpClientGetWaitTimesReturnsUnsuccessfulResponse();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetWaitTimes(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest,"Attempting to get Secondary Care Wait Times"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResult, "Failed - response code: BadRequest"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResponse, "Error retrieving Secondary Care WaitTimes: BadGateway"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
+        public async Task WhenGetWaitTimesResponseFromClientTimesOutThenGetWaitTimesReturns504GatewayTimeout()
+        {
+            // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
+            Context.MockSecondaryCareHttpClientGetWaitTimesTimesOut();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetWaitTimes(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("zu");
+
+            Context.Mocks.WaitTimesServiceLogger.VerifyLogger(LogLevel.Error, "Aggregator Secondary Care WaitTimes API timed out", Times.Once());
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesRequest,"Attempting to get Secondary Care Wait Times"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResult, "Failed - request timed out"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetWaitTimesResponse, "Error retrieving Secondary Care WaitTimes: Timeout"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+
         private void VerifyNoOtherLoggerCalls()
         {
+            Context.Mocks.WaitTimesMapperLogger.VerifyNoOtherCalls();
             Context.Mocks.SummaryMapperLogger.VerifyNoOtherCalls();
+            Context.Mocks.WaitTimesServiceLogger.VerifyNoOtherCalls();
             Context.Mocks.ServiceLogger.VerifyNoOtherCalls();
             Context.Mocks.Auditor.VerifyNoOtherCalls();
         }

@@ -62,7 +62,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
         // Aggregator
         private const string SecondaryCareAggregatorBaseUrl = "http://stubs.local.bitraft.io:8080";
         private const string SecondaryCareAggregatorEventsPath = "patient-care-aggregator-api/aggregator/events";
+        private const string SecondaryCareAggregatorWaitTimesPath = "patient-care-aggregator-api/aggregator/waittimes";
         private static string SecondaryCareAggregatorEventsUrl => $"{SecondaryCareAggregatorBaseUrl}/{SecondaryCareAggregatorEventsPath}";
+        private static string SecondaryCareAggregatorWaitTimesUrl => $"{SecondaryCareAggregatorBaseUrl}/{SecondaryCareAggregatorWaitTimesPath}";
 
         // Aggregator Headers
         private const string OAuthAccessToken = "oauth-access-token";
@@ -130,6 +132,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .Respond("application/json", data);
         }
 
+        internal void MockSecondaryCareHttpClientGetWaitTimesReturnsSuccessfulResponseWithData(string data)
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareAggregatorWaitTimesUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Respond("application/json", data);
+        }
+
         internal void MockNhsApimHttpClientGetTokenReturnsUnsuccessfulResponse()
         {
             Mocks.MockHttpMessageHandler
@@ -161,10 +171,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .Respond(HttpStatusCode.BadRequest);
         }
 
+        internal void MockSecondaryCareHttpClientGetWaitTimesReturnsUnsuccessfulResponse()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareAggregatorWaitTimesUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Respond(HttpStatusCode.BadRequest);
+        }
+
         internal void MockSecondaryCareHttpClientGetSummaryTimesOut()
         {
             Mocks.MockHttpMessageHandler
                 .When(HttpMethod.Get, SecondaryCareAggregatorEventsUrl)
+                .WithHeaders(Data.RequestHeaders)
+                .Throw(new OperationCanceledException());
+        }
+
+        internal void MockSecondaryCareHttpClientGetWaitTimesTimesOut()
+        {
+            Mocks.MockHttpMessageHandler
+                .When(HttpMethod.Get, SecondaryCareAggregatorWaitTimesUrl)
                 .WithHeaders(Data.RequestHeaders)
                 .Throw(new OperationCanceledException());
         }
@@ -691,8 +717,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             internal Mock<ILogger<SecondaryCareSummaryService>> ServiceLogger { get; }
                 = new Mock<ILogger<SecondaryCareSummaryService>>();
 
+            internal Mock<ILogger<SecondaryCareWaitTimesService>> WaitTimesServiceLogger { get; }
+                = new Mock<ILogger<SecondaryCareWaitTimesService>>();
+
             internal Mock<ILogger<SecondaryCareSummaryMapper>> SummaryMapperLogger { get; }
                 = new Mock<ILogger<SecondaryCareSummaryMapper>>();
+
+            internal Mock<ILogger<SecondaryCareWaitTimesMapper>> WaitTimesMapperLogger { get; }
+                = new Mock<ILogger<SecondaryCareWaitTimesMapper>>();
+            
             internal Mock<IAuditor> Auditor { get; }
                 = new Mock<IAuditor>();
 
@@ -718,6 +751,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .Returns(SecondaryCareAggregatorEventsPath);
 
                 Configuration
+                    .SetupGet(x => x["SECONDARY_CARE_AGGREGATOR_WAIT_TIMES_PATH"])
+                    .Returns(SecondaryCareAggregatorWaitTimesPath);
+
+                Configuration
                     .SetupGet(x => x["NHSAPP_APIM_BASE_URL"])
                     .Returns(ApimBaseUrl);
 
@@ -737,6 +774,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .SetupGet(x => x["NHSAPP_APIM_KID"])
                     .Returns(ApimKid);
 
+                Configuration
+                    .SetupGet(x => x["SECONDARY_CARE_WAIT_TIMES_ENABLED"])
+                    .Returns("true");
+
                 HttpTimeoutConfigurationSettings
                     .Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);
 
@@ -755,13 +796,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                     .Returns(ClientAssertion);
             }
 
+            public void UpdateConfigurationKeyValue(string key, string value)
+            {
+                Configuration
+                    .SetupGet(x => x[key])
+                    .Returns(value);
+            }
+
             public void ConfigureServices(ServiceCollection serviceCollection)
             {
                 serviceCollection
                     .AddSingleton(Auditor.Object)
                     .AddSingleton(ControllerLogger.Object)
                     .AddSingleton(ServiceLogger.Object)
+                    .AddSingleton(WaitTimesServiceLogger.Object)
                     .AddSingleton(SummaryMapperLogger.Object)
+                    .AddSingleton(WaitTimesMapperLogger.Object)
                     .AddSingleton(Configuration.Object)
                     .AddSingleton(HttpTimeoutConfigurationSettings.Object)
                     .AddSingleton(ApimJwtHelper.Object)
