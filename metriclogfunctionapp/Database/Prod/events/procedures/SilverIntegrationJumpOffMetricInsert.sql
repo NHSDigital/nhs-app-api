@@ -12,7 +12,7 @@ CREATE PROCEDURE events.SilverIntegrationJumpOffMetricInsert (
 BEGIN
 INSERT INTO "events"."SilverIntegrationJumpOffMetric" ("Timestamp", "SessionId", "ProviderId", "ProviderName", "JumpOffId", "AuditId")
 VALUES (silverIntegrationTimestamp, sessionId, providerId, providerName, jumpOffId, auditId)
-    ON CONFLICT ON CONSTRAINT silverIntegrationJumpOffMetric_auditid_unique
+    ON CONFLICT ON CONSTRAINT silverintegrationjumpoffmetric_auditid_unique
     DO NOTHING;
 END;
 $$ LANGUAGE plpgsql;

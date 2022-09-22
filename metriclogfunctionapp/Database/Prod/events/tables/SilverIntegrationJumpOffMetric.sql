@@ -23,7 +23,7 @@ BEGIN
     )
     THEN
         ALTER TABLE events."SilverIntegrationJumpOffMetric"
-            ADD CONSTRAINT silverintegrationjumpoffmetric_auditid_unique UNIQUE ("AuditId");
+            ADD CONSTRAINT silverintegrationjumpoffmetric_auditid_unique UNIQUE ("Timestamp", "SessionId", "AuditId");
     END IF;
 
     CALL perms.apply_etl_table_permissions('events', 'SilverIntegrationJumpOffMetric');
