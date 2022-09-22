@@ -79,7 +79,7 @@ namespace NHSOnline.IntegrationTests.DeviceAndOperatingSystemCompatibility
                 .AssertOnPage(driver);
         }
 
-        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone12Pro, OSVersion = IOSVersion.SixteenBeta)]
+        [NhsAppIOSTest(IOSDevice = IOSDevice.iPhone12Pro, OSVersion = IOSVersion.Sixteen)]
         public void APatientWithProofLevelNineCanSuccessfullyLogInOnIOS16(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()

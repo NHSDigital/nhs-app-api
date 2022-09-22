@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.UI
         Thirteen,
         Fourteen,
         Fifteen,
-        SixteenBeta
+        Sixteen
     }
 
     public static class IOSVersionExtensions
@@ -23,7 +23,7 @@ namespace NHSOnline.IntegrationTests.UI
                 IOSVersion.Thirteen => "13",
                 IOSVersion.Fourteen => "14",
                 IOSVersion.Fifteen => "15",
-                IOSVersion.SixteenBeta => "16 Beta",
+                IOSVersion.Sixteen => "16",
                 _ => throw new ArgumentOutOfRangeException(nameof(osVersion), osVersion, null)
             };
         }
