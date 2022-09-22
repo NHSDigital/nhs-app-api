@@ -73,6 +73,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
         public IActionResult Visit(GetNominatedPharmacyResult.PharmacyDetailFailure result)
         {
+            if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = true });
+            }
             return new StatusCodeResult(
                 GetNominatedPharmacyResult.PharmacyRetrievalFailure.GetErrorStatusCode(result.StatusCode));
         }

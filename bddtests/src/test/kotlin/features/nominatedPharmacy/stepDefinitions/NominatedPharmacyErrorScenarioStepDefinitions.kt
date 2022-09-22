@@ -19,8 +19,8 @@ class NominatedPharmacyErrorScenarioStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupWiremockForNominatedPharmacyWhenSpineFails()
     }
 
-    @Given("^the request to Azure search to retrieve my nominated pharmacy fails$")
-    fun requestToNHSSearchToGetNominatedPharmacyDetailsFails() {
+    @Given("^the request to Azure search to retrieve my practice details fails$")
+    fun requestToNHSSearchToGetPracticeDetailsFails() {
         nominatedPharmacyDataSetupSteps.setupWiremockForNominatedPharmacyWhenAzureSearchFails()
     }
 

@@ -211,6 +211,34 @@ Feature: nominated pharmacy journey
       | GP System | search text |
       | EMIS      | se1       |
 
+  Scenario: Patient with nominated pharmacy for which details cannot be retrieved can nominate a pharmacy
+    Given I am a patient using the EMIS GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a nominated pharmacy with XX1 OdsCode whose details are not found
+    And I am logged in
+    When I navigate to prescriptions
+    And the Prescriptions Hub page is displayed
+    Then I see the nominated pharmacy panel on the prescriptions hub page
+    And I see that I haven't nominated a pharmacy on the prescriptions page
+    When I click the nominated pharmacy link on the Prescriptions Hub
+    Then I see the set nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    And I select high street pharmacy
+    And I click on the choose type continue button
+    Given searching for pharmacies with se1 has 10 results
+    When I search for a se1 and click on search button
+    Then I see list of pharmacies displayed on the result page
+    When I click on item 4 pharmacy from the list of pharmacies
+    Then I see confirm nominated page with selected pharmacy details
+    When I click on confirm button to change my nominated pharmacy
+    Then I see the change success page with my nominated pharmacy details
+    When I click on the go to your prescriptions link
+    Then the Prescriptions Hub page is displayed
+    And I see my updated nominated pharmacy on the prescriptions hub page
+
   Scenario Outline: Patient does not see nominated pharmacy when their gp practice is not enabled for EPS
     Given I am a patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
@@ -239,6 +267,17 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System |
       | EMIS      |
+
+  Scenario: Patient with nominated pharmacy for which details cannot be retrieved sees relevant text in View Orders Page
+    Given I am a patient using the EMIS GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a nominated pharmacy with XX1 OdsCode whose details are not found
+    And I am logged in
+    When I navigate to prescriptions
+    And I click the View Orders link
+    Then I see the help text for no set nominated pharmacy
 
   Scenario Outline: Patient does not see nominated pharmacy when gp practice is enabled but account is sensitive
     Given I am a patient using the <GP System> GP System
@@ -311,6 +350,18 @@ Feature: nominated pharmacy journey
       Examples:
         | GP System |
         | EMIS      |
+
+  Scenario: Patient with nominated pharmacy for which details cannot be retrieved sees relevant text in prescriptions confirmation Page
+    Given I am a EMIS patient
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And my GP Practice is EPS enabled
+    And I have a nominated pharmacy with XX1 OdsCode whose details are not found
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then I see the default nominated pharmacy text
 
   Scenario: Patient does not see nominated pharmacy when SJR is disabled
     Given I am a EMIS user where the journey configurations are:
@@ -421,3 +472,18 @@ Feature: nominated pharmacy journey
     And I click Confirm and order repeat prescription
     Then I see the Order Success page with a playback of my order and what happens next with no nominated pharmacy
     And I cannot see any nominated pharmacy information
+
+  Scenario: The EMIS user can see default advice on what happens next when they have a nominated pharmacy for which details cannot be retrieved
+    Given the scenario is submit prescription
+    And I am using EMIS GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And my GP Practice is EPS enabled
+    And I have a nominated pharmacy with XX1 OdsCode whose details are not found
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    And I click Confirm and order repeat prescription
+    Then I see the Order Success page with a playback of my order and what happens next with no nominated pharmacy
+    And I cannot see any nominated pharmacy information
+

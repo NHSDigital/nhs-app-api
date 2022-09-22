@@ -85,7 +85,8 @@ open class NominatedPharmacyDataSetupSteps {
     fun setupNominatedPharmacy(pharmacyType: String,
                                odsCode: String,
                                code: String? = null,
-                               dobWithHrsAndMins : Boolean = false) {
+                               dobWithHrsAndMins : Boolean = false,
+                               pharmacyDetailsNotFound: Boolean = false) {
         val  nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
         val surname = SerenityHelpers.getPatient().name.surname
         var dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
@@ -98,17 +99,24 @@ open class NominatedPharmacyDataSetupSteps {
         val responseStringForUpdatedPharmacy = GetNominatedPharmacyRequestBuilder.
                 getResponse(personalDetails, odsCode, arrayOf(pharmacyType), code)
 
-        setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy, odsCode)
+        setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy)
+        setupPharmacyDetailResponse(odsCode, pharmacyDetailsNotFound)
     }
 
-    private fun setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy: String, odsCode: String) {
+    private fun setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy: String) {
         mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
                     .inScenario("changeNominatedPharmacy")
                     .whenScenarioStateIs(Scenario.STARTED)
         }
+    }
 
+    private fun setupPharmacyDetailResponse(odsCode: String, emptyResponse: Boolean = false) {
+        if (emptyResponse) {
+            setupWiremockToNotReturnPharmacyWhenSearchedFor(odsCode)
+            return
+        }
         val data = NhsAzureSearchData.generatePharmacyData(1)
         val generatedPharmacy = data.value[0]
         generatedPharmacy.ODSCode = odsCode
@@ -191,6 +199,22 @@ open class NominatedPharmacyDataSetupSteps {
                     count = true
             )).respondWithSuccess(
                     NhsAzureSearchOrganisationReply(arrayListOf(organisation), 1)
+            )
+        }
+    }
+
+    private fun setupWiremockToNotReturnPharmacyWhenSearchedFor(odsCode: String) {
+        mockingClient.forAzure.forSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+                    top = 1,
+                    search = "*",
+                    select = null,
+                    searchFields = null,
+                    filter = "ODSCode eq '$odsCode'",
+                    queryType = null,
+                    count = true
+            )).respondWithSuccess(
+                    NhsAzureSearchOrganisationReply()
             )
         }
     }

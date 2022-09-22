@@ -78,6 +78,11 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode)
     }
 
+    @Given("^I have a nominated pharmacy with (.*) OdsCode whose details are not found$")
+    fun iHaveANominatedPharmacyWhoseDetailsAreNotFound(odsCode: String) {
+        nominatedPharmacyDataSetupSteps.setupNominatedPharmacy("P1", odsCode, pharmacyDetailsNotFound = true)
+    }
+
     @Given("^I have a (.*) typed nominated pharmacy$")
     fun iHaveANominatedPharmacy(pharmacyType: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, SerenityHelpers.getPatient().odsCode)
