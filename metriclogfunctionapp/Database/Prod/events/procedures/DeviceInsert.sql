@@ -34,7 +34,7 @@ BEGIN
         userAgent,
         auditId
         )
-    ON CONFLICT ON CONSTRAINT device_auditid_unique
+    ON CONFLICT ON CONSTRAINT device_timestamp_sessionid_auditid_unique
     DO NOTHING;
 END;
 
