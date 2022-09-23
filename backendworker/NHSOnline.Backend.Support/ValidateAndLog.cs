@@ -172,6 +172,17 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
+        public ValidateAndLog AreEqual<T>(T left, T right, string name, ValidationOptions options = ValidationOptions.None)
+            where T : IEquatable<T>
+        {
+            if(left != null && !left.Equals(right))
+            {
+                HandleError(name, $"Invalid {name} provided, possible data tampering attempt", options);
+            }
+
+            return this;
+        }
+
         private void HandleNullError(string name, ValidationOptions options)
             => HandleError(name, options, NotSuppliedErrorLogMessage, paramName => new ArgumentNullException(paramName));
 

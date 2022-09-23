@@ -10,6 +10,7 @@ using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private OrganDonationController _systemUnderTest;
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private P9UserSession _userSession;
+        private GpUserSession _gpUserSession;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IOrganDonationValidationService> _mockValidator;
 
@@ -37,18 +39,44 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
+            const string nhsNumber = "nhsNumber";
+            _userSession = new P9UserSession("csrfToken", nhsNumber, new CitizenIdUserSession(), "im1token", new EmisUserSession());
+            _userSession.PatientLookup.Add(_userSession.PatientSessionId, "A Patient");
+            _gpUserSession = new EmisUserSession
+            {
+                NhsNumber = nhsNumber
+            };
+
+            var organDonationRegistration = new OrganDonationRegistration
+            {
+                NhsNumber = nhsNumber,
+                Identifier = "The OD Identifier"
+            };
+
+            var organDonationResult = new OrganDonationResult.ExistingRegistration(organDonationRegistration);
             _mockOrganDonationService = new Mock<IOrganDonationService>();
+            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), It.IsAny<P9UserSession>()))
+                .Returns(Task.FromResult((OrganDonationResult) organDonationResult));
+
+            var mockDemographicsService = new Mock<IDemographicsService>();
+            var mockGpSystem = new Mock<IGpSystem>();
+            mockGpSystem.Setup(x => x.GetDemographicsService())
+                .Returns(mockDemographicsService.Object);
+            var mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            mockGpSystemFactory.Setup(x => x.CreateGpSystem(It.IsAny<Supplier>()))
+                .Returns(mockGpSystem.Object);
+
             _mockAuditor = new Mock<IAuditor>();
 
             _mockValidator = new Mock<IOrganDonationValidationService>();
             _mockValidator
-                .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>(),
+                                         It.IsAny<OrganDonationRegistration>()))
                 .Returns(true);
 
             _systemUnderTest = new OrganDonationController(
                 new Mock<ILogger<OrganDonationController>>().Object,
-                new Mock<IGpSystemFactory>().Object,
+                mockGpSystemFactory.Object,
                 _mockOrganDonationService.Object,
                 _mockAuditor.Object,
                 _mockValidator.Object,
@@ -67,7 +95,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
@@ -83,11 +111,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         {
             // Arrange
             _mockValidator
-                .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>(),
+                                         It.IsAny<OrganDonationRegistration>()))
                 .Returns(false);
 
             // Act
-            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
@@ -108,7 +137,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) timeoutResult));
 
             // Act
-            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -131,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) upstreamErrorResult));
 
             // Act
-            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession, _gpUserSession);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -158,7 +187,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) systemErrorResult));
 
             // Act
-            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
+            var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

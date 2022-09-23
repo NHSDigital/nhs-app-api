@@ -44,6 +44,8 @@ class OrganDonationErrorStepDefinitionsBackend {
     fun iAmRegisteredWithODButOnWithdrawalODThrowsRecoverableError(gpSystem: String, errorCode: Int){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
+        val existingRegistration = factory.existing.optOut()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
         factory.setupPatientForAppUse()
         factory.withdrawRegistration{
             request ->request.respondWithError(errorCode)

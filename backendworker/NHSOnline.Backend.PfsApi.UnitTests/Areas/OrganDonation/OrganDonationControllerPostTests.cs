@@ -43,7 +43,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockValidator = new Mock<IOrganDonationValidationService>();
             _mockValidator
-                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>(),
+                                          It.IsAny<P9UserSession>()))
                 .Returns(true);
 
             _systemUnderTest = new OrganDonationController(
@@ -88,7 +89,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         {
             // Arrange
             _mockValidator
-                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>(),
+                                          It.IsAny<P9UserSession>()))
                 .Returns(false);
 
             // Act

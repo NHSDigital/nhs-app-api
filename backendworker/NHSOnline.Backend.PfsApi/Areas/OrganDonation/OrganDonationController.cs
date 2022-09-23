@@ -63,16 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 _logger.LogInformation($"Fetching DemographicsService for supplier: {gpUserSession.Supplier.ToString()}");
 
-                var demographicsService = _gpSystemFactory
-                    .CreateGpSystem(gpUserSession.Supplier).GetDemographicsService();
-
-                _logger.LogDebug("Fetching Demographics");
-
-                var patientGpIdentifier = userSession.PatientLookup[userSession.PatientSessionId];
-                var demographicsResult = await demographicsService
-                    .GetDemographics(new GpLinkedAccountModel(gpUserSession, patientGpIdentifier));
-
-                var result = await _organDonationService.GetOrganDonation(demographicsResult, userSession);
+                var result = await GetCurrentOrganDonation(gpUserSession, userSession);
 
                 await result.Accept(new OrganDonationAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
                 return result.Accept(new OrganDonationResultVisitor());
@@ -113,7 +104,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         [HttpPut]
         public async Task<IActionResult> Put(
             [FromBody] OrganDonationRegistrationRequest model,
-            [UserSession] P9UserSession userSession)
+            [UserSession] P9UserSession userSession,
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
@@ -126,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.PreOperationAudit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
 
-                var result = await Update(model, userSession);
+                var result = await Update(model, userSession, gpUserSession);
 
                 await result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor, _metricLogger, userSession));
                 return result.Accept(new OrganDonationRegistrationUpdateVisitor());
@@ -140,7 +132,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         [HttpDelete]
         public async Task<IActionResult> Delete(
             [FromBody] OrganDonationWithdrawRequest model,
-            [UserSession] P9UserSession userSession)
+            [UserSession] P9UserSession userSession,
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
@@ -148,7 +141,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.PreOperationAudit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
 
-                var result = await Withdraw(model, userSession);
+                var result = await Withdraw(model, userSession, gpUserSession);
 
                 await result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor, _metricLogger, userSession));
 
@@ -160,11 +153,44 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             }
         }
 
-        private async Task<OrganDonationRegistrationResult> Update(
-            OrganDonationRegistrationRequest model,
+        private async Task<OrganDonationResult> GetCurrentOrganDonation(GpUserSession gpUserSession,
+                                                                        P9UserSession userSession)
+        {
+            var demographicsService = _gpSystemFactory
+                .CreateGpSystem(gpUserSession.Supplier).GetDemographicsService();
+
+            _logger.LogDebug("Fetching Demographics");
+
+            var patientGpIdentifier = userSession.PatientLookup[userSession.PatientSessionId];
+            var demographicsResult = await demographicsService
+                .GetDemographics(new GpLinkedAccountModel(gpUserSession, patientGpIdentifier));
+
+            return await _organDonationService.GetOrganDonation(demographicsResult, userSession);
+        }
+
+        private async Task<OrganDonationRegistration> GetOrganDonationRegistration(
+            GpUserSession gpUserSession,
             P9UserSession userSession)
         {
-            if (!_validator.IsPutValid(model))
+            var result = await GetCurrentOrganDonation(gpUserSession, userSession);
+            var actionResult =result.Accept( new OrganDonationResultVisitor());
+
+            if (actionResult is OkObjectResult { Value: OrganDonationRegistration organDonationRegistration })
+            {
+                return organDonationRegistration;
+            }
+
+            return null;
+        }
+
+        private async Task<OrganDonationRegistrationResult> Update(
+            OrganDonationRegistrationRequest model,
+            P9UserSession userSession,
+            GpUserSession gpUserSession)
+        {
+            var currentRegistration = await GetOrganDonationRegistration(gpUserSession, userSession);
+
+            if (currentRegistration == null || !_validator.IsPutValid(model, currentRegistration))
             {
                 _logger.LogError("Invalid request body supplied to registration update request");
                 return new OrganDonationRegistrationResult.BadRequest();
@@ -177,7 +203,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             OrganDonationRegistrationRequest model,
             P9UserSession userSession)
         {
-            if (!_validator.IsPostValid(model))
+            if (!_validator.IsPostValid(model, userSession))
             {
                 _logger.LogError("Invalid request body supplied to registration request");
                 return new OrganDonationRegistrationResult.BadRequest();
@@ -188,7 +214,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
         private async Task<OrganDonationWithdrawResult> Withdraw(
             OrganDonationWithdrawRequest model,
-            P9UserSession userSession)
+            P9UserSession userSession,
+            GpUserSession gpUserSession)
         {
             if (!ModelState.IsValid)
             {
@@ -196,7 +223,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 return new OrganDonationWithdrawResult.BadRequest();
             }
 
-            if (!_validator.IsDeleteValid(model))
+            var currentRegistration = await GetOrganDonationRegistration(gpUserSession, userSession);
+
+            if (currentRegistration == null || !_validator.IsDeleteValid(model, currentRegistration))
             {
                 _logger.LogError("Invalid request body supplied to withdraw request");
                 return new OrganDonationWithdrawResult.BadRequest();
