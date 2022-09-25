@@ -487,7 +487,6 @@ eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,bharanimedicalcen
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,binfieldsurgery,Binfield Surgery,K81060,11755
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,chapelmedicalcentreslough,Chapel Medical Centre,Y00265,8500
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,cippenhamsurgery,Cippenham Surgery,K81608,5500
-eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,claremontsurgery,Claremont and Holyport Practice,K81020,19000
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,clarencemedical,Clarence Medical Centre,k81074,16300
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,cookhammedicalcentre,Cookham Medical Centre,K81042,7827
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,crosbyhousesurgery,Crosby House Surgery,K81034,11500
@@ -660,7 +659,6 @@ havering,Havering,CCG,Havering,North East London,billetlanemedicalpractice,Bille
 havering,Havering,CCG,Havering,North East London,nhschasecrossmc,Chase Cross Medical Centre,F82630,6400
 havering,Havering,CCG,Havering,North East London,cranhamvillagesurgery,Cranham Village Surgery,F82006,12000
 havering,Havering,CCG,Havering,North East London,drcolinmarkssurgery,Dr Colin Marks Surgery,F82663,3655
-havering,Havering,CCG,Havering,North East London,drkuchhai-saheecha,Drs Kuchhai And Saheecha,F82014,7200
 havering,Havering,CCG,Havering,North East London,haiderian,Haiderian Medical Centre,F82002,6300
 havering,Havering,CCG,Havering,North East London,harlowroadsurgery,Harlow Road Surgery,F82619,0
 havering,Havering,CCG,Havering,North East London,highstreetsurgeryhavering,High Street Surgery Havering,F82023,3300
@@ -675,9 +673,7 @@ havering,Havering,CCG,Havering,North East London,dpsrgmc,Rush Green Medical Cent
 havering,Havering,CCG,Havering,North East London,springfarmsurgery,Spring Farm Surgery,F82607,5000
 havering,Havering,CCG,Havering,North East London,stedwardsmedicalcentre,St Edwards Medical Centre,F82011,10694
 havering,Havering,CCG,Havering,North East London,straightroadsurgery,Straight Road Surgery,F82671,2727
-havering,Havering,CCG,Havering,North East London,suttonsavenuesurgery,Suttons Avenue Surgery,F82609,4543
 havering,Havering,CCG,Havering,North East London,thegreenwoodpractice,The Greenwood Practice,F82007,11764
-havering,Havering,CCG,Havering,North East London,thenewmedicalcentre,The New Medical Centre,F82021,9800
 havering,Havering,CCG,Havering,North East London,drvpatelsurgery,The Surgery Dr Vijay Patel,F82033,3766
 havering,Havering,CCG,Havering,North East London,upminsterbridgesurgery,Upminster Bridge Surgery,F82624,3800
 havering,Havering,CCG,Havering,North East London,upminstermedicalcentre,Upminster Medical Centre,F82053,4272
@@ -1146,7 +1142,6 @@ redbridge,Redbridge,CCG,Redbridge,North East London,aldersbrookmedicalcentre,Ald
 redbridge,Redbridge,CCG,Redbridge,North East London,castletonroadhealthcentre,Castleton Road Health Centre,F86642,4449
 redbridge,Redbridge,CCG,Redbridge,North East London,chadwellheathsurgery,Chadwell Heath Surgery,F86028,9000
 redbridge,Redbridge,CCG,Redbridge,North East London,clayhallgrouppractice,Clayhall Group Practice,F86691,10150
-redbridge,Redbridge,CCG,Redbridge,North East London,cranbrooksurgery,Cranbrook Surgery,F86698,4000
 redbridge,Redbridge,CCG,Redbridge,North East London,easternavenuemedicalcentre,Eastern Avenue Medical Centre,F86083,7192
 redbridge,Redbridge,CCG,Redbridge,North East London,elmhurstpractice,Elmhurst Practice,F86064,4814
 redbridge,Redbridge,CCG,Redbridge,North East London,evergreensurgery,Evergreen Surgery,F86023,9000
@@ -1155,7 +1150,6 @@ redbridge,Redbridge,CCG,Redbridge,North East London,fullwellcrosscentre,Fullwell
 redbridge,Redbridge,CCG,Redbridge,North East London,gantshillmedical,Gants Hill Medical Centre,F86008,8900
 redbridge,Redbridge,CCG,Redbridge,North East London,glebelandspractice,Glebelands Practice,F86020,5983
 redbridge,Redbridge,CCG,Redbridge,North East London,goodmayesmc,Goodmayes Medical Centre - IG3 8XB,F86087,7224
-redbridge,Redbridge,CCG,Redbridge,North East London,goodmayesmedicalpractice,Goodmayes Medical Practice,F86034,5642
 redbridge,Redbridge,CCG,Redbridge,North East London,grovesurgerychadwellheathlane,Grove Surgery,Y00155,8800
 redbridge,Redbridge,CCG,Redbridge,North East London,hainaultsurgery,Hainault Surgery,F86085,3000
 redbridge,Redbridge,CCG,Redbridge,North East London,ilfordlanesurgery,Ilford Lane Surgery,F86082,5819
@@ -1170,7 +1164,6 @@ redbridge,Redbridge,CCG,Redbridge,North East London,thedoctorshouse,The Doctors 
 redbridge,Redbridge,CCG,Redbridge,North East London,fullwellavenuesurgery,The Fullwell Avenue Surgery,F86612,3329
 redbridge,Redbridge,CCG,Redbridge,North East London,theheathcoteprimarycarecentre,The Heathcote Primary Care Centre,F86624,3200
 redbridge,Redbridge,CCG,Redbridge,North East London,thepalmsmedicalcentre,The Palms Medical Centre,F86009,7706
-redbridge,Redbridge,CCG,Redbridge,North East London,redbridgesurgery,The Redbridge Surgery,F86703,3736
 redbridge,Redbridge,CCG,Redbridge,North East London,theshrubberiesmedicalcentre,The Shrubberies Medical Centre,F86641,7300
 redbridge,Redbridge,CCG,Redbridge,North East London,wansteadplacesurgery,Wanstead Place Surgery,F86032,9400
 redbridge,Redbridge,CCG,Redbridge,North East London,yorksurgeryilford,York Surgery,F86657,8267
@@ -1469,7 +1462,6 @@ thebankssurgery,The Banks Surgery,PRACTICE,West Leicestershire,Leicester Leicest
 compassmp,The Compass Medical Practice,PRACTICE,Blackpool,Lancashire and South Cumbria,compassmp,The Compass Medical Practice,Y05788,224
 thecottagesurgery,The Cottage Surgery,PRACTICE,West Leicestershire,Leicester Leicestershire and Rutland,thecottagesurgery,The Cottage Surgery,Y00252,3063
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,albionhealth,Albion Health Centre,F84012,9181
-towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,bethnalgreenhealthcentre,Bethnal Green Health Centre,F84083,8493
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,citywellbeingpractice,City Wellbeing Practice,F84114,7209
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,docklandsmedicalcentre,Docklands Medical Centre,F84656,8008
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,islandmedicalcentre,Island Medical Centre,F84647,6889
@@ -1523,7 +1515,6 @@ walsall,Walsall,CCG,Walsall,The Black Country and West Birmingham,sycamorehouses
 walsall,Walsall,CCG,Walsall,The Black Country and West Birmingham,limesmedicalcentre,The Limes Medical Centre,M91011,7036
 walsall,Walsall,CCG,Walsall,The Black Country and West Birmingham,walsallwoodhealthcentre,Walsall Wood Health Centre,M91639,1866
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,addisonroadmedicalpractice,Addison Road Medical Practice,F86607,14100
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,chingfordmedicalpractice,Chingford Medical Practice,Y01291,8854
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,claremontmedical,Claremont Medical Centre,F86708,2770
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,crawleyroadmedicalcentre,Crawley Road Medical Centre,F86044,7500
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,drdhitalpractice,Dr Dhital Practice,F86086,5863
@@ -1543,7 +1534,6 @@ walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,leytonhealthca
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,ltshealthcare,Lime Tree and Sinnott Healthcare Ltd,Y01839,6447
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,limetreesurgery,Lime Tree Surgery,F86650,7982
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,queensroadmedicalcentre,Queens Road Medical Centre,F86030,7828
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,seymourmedicalcentre,Seymour Medical Centre,F86006,6060
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,smamedicalcentre,SMA Medical Centre,F86038,11000
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,allumpractice,The Allum Practice,F86036,15500
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,thebaileypractice,The Bailey Practice,F86689,3816
@@ -1770,7 +1760,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Brayford Medical Practice,C83626,
 ,,,Other,,,Much Hadham Health Centre,E82021,
 ,,,Other,,,Penshurst Gardens Surgery,E83030,
-,,,Other,,,Western Road Medical Centre,F82013,
 ,,,Other,,,Lee Road Surgery,G85046,
 ,,,Other,,,The Parks Medical Practice,K83052,
 ,,,Other,,,Shirehampton Group Practice,L81008,
@@ -2189,7 +2178,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Birchwood Surgery,E82082,
 ,,,Other,,,Dolphin House Surgery,E82092,
 ,,,Other,,,Ritchie Street Group Practice,F83021,
-,,,Other,,,Goodmans Fields Health Centre,F84039,
 ,,,Other,,,West Green Surgery,F85669,
 ,,,Other,,,Woodingdean Medical Centre,G81065,
 ,,,Other,,,The Avenue Surgery,G81075,
@@ -2336,3 +2324,5 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Tilbury Health Centre,F81110,
 ,,,Other,,,Addison House,F81181,
 ,,,Other,,,Morland House Surgery,K84014,
+,,,Other,,,Garston Medical Centre,E82017,
+,,,Other,,,Beacon Health Group,F81100,
