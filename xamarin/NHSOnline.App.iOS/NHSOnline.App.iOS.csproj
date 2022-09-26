@@ -299,7 +299,7 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="iProov.iOS" Version="9.2.0" />
+    <PackageReference Include="iProov.iOS" Version="9.5.1" />
     <PackageReference Include="Xamarin.Swift" Version="1.0.11" />
   </ItemGroup>
 </Project>

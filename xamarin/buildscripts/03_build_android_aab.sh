@@ -14,4 +14,4 @@ source "buildscripts/lib/functions.sh"
 source "buildscripts/lib/set_android_env.sh"
 
 
-"${MSBUILD}" -p:AndroidPackageFormat=aab -p:AndroidUseAapt2=True "${MSBUILD_ARGS_ANDROID[@]}" -t:SignAndroidPackage NHSOnline.App.Android/NHSOnline.App.Android.csproj
+"${MSBUILD}" -p:JavaSdkDirectory="${JAVA_HOME}" -p:AndroidPackageFormat=aab -p:AndroidUseAapt2=True "${MSBUILD_ARGS_ANDROID[@]}" -t:SignAndroidPackage NHSOnline.App.Android/NHSOnline.App.Android.csproj

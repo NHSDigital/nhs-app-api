@@ -20,7 +20,7 @@
     <AndroidManifest>Properties\AndroidManifest.generated.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
@@ -205,7 +205,7 @@
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <ItemGroup>
-    <PackageReference Include="iProov.Android" Version="7.1.0" />
+    <PackageReference Include="iProov.Android" Version="7.5.0" />
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
@@ -363,11 +363,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.InstallReferrer" Version="1.0.1" />
-    <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.1.1.11" />
+    <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.1.1.13" />
     <PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0.3" />
-    <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="3.0.1.1" />
-    <PackageReference Include="Xamarin.Google.Dagger" Version="2.39.1" />
-    <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.6" />
+    <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="3.1.7" />
+    <PackageReference Include="Xamarin.Google.Dagger" Version="2.41.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.9" />
   </ItemGroup>
   <ItemGroup>
     <GoogleServicesJson Include="$(GoogleServicesFile)" />
