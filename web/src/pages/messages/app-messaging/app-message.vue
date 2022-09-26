@@ -99,7 +99,11 @@ export default {
       return get('reply')(this.message);
     },
     hasReplyOptions() {
-      return get('options')(this.messageReply)?.length > 0;
+      if (get('options')(this.messageReply) === null || get('options')(this.messageReply) === undefined) {
+        return false;
+      }
+
+      return get('options')(this.messageReply).length > 0;
     },
     sender() {
       return get('senderId')(this.message);
