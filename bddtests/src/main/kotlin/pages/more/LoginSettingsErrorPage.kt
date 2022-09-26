@@ -9,7 +9,7 @@ import pages.assertIsVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/more/login-settings/error")
 class LoginSettingsErrorPage : HybridPageObject() {
 
-    private val cannotFindTitleLocator = "//h1[normalize-space(text())='We cannot find your %s']"
+    private val cannotFindTitleLocator = "//h1[normalize-space(text())='Cannot find your %s']"
     private val cannotChangeTitleLocator = "//h1[normalize-space(text())='Cannot change your " +
             "%s" +
             " settings']"
