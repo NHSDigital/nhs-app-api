@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "7fdd18a3-125c-46cb-9d30-edae553e049d",
+		"_postman_id": "16aea557-0efc-48d9-a88b-76e3c7f7995f",
 		"name": "NHS App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "98471"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -250,6 +249,66 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional Campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional Request Reference\"\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentString\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        }\n    ],\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ],\n    \"requester\": {\n        \"type\": \"Organization\",\n        \"identifier\": {\n            \"system\": \"https://fhir.nhs.uk/Id/ods-organization-code\",\n            \"value\": \"B82041\"\n        },\n        \"display\": \"Beech Tree Medical Centre\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/nhs-app/communication/in-app/FHIR/R4/CommunicationRequest",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"nhs-app",
+						"communication",
+						"in-app",
+						"FHIR",
+						"R4",
+						"CommunicationRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Communication In-App Message with Keyword Replies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional Campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional Request Reference\"\n        }\n    ],\n    \"contained\": [\n        {\n            \"resourceType\": \"Questionnaire\",\n            \"id\": \"question\",\n            \"status\": \"active\",\n            \"item\": [\n                {\n                    \"linkId\": \"1\",\n                    \"type\": \"choice\",\n                    \"answerOption\": [\n                        {\n                            \"valueCoding\": {\n                                \"code\": \"YES\"\n                            }\n                        },\n                           {\n                            \"valueCoding\": {\n                                \"code\": \"NO\"\n                            }\n                        },\n                           {\n                            \"valueCoding\": {\n                                \"code\": \"DONOTKNOW\"\n                            }\n                        }\n                    ]\n                }\n            ]\n        }\n    ],\n    \"extension\": [\n        {\n            \"url\": \"https://fhir.nhs.uk/NHSApp/answers\",\n            \"valueReference\": {\n                \"reference\": \"#question\"\n            }\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentString\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        }\n    ],\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ],\n    \"requester\": {\n        \"type\": \"Organization\",\n        \"identifier\": {\n            \"system\": \"https://fhir.nhs.uk/Id/ods-organization-code\",\n            \"value\": \"B82041\"\n        },\n        \"display\": \"Beech Tree Medical Centre\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
