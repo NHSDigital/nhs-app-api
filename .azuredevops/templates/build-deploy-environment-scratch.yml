@@ -74,7 +74,7 @@ variables:
   - name: PROJECT_PATH
     value: nhsapp-ops-infra
   - name: SCRIPTS_PATH
-    value: ../nhsapp-ops-vault/scripts
+    value: ../nhsapp-ops-infra/scripts
   - name: TARGET_ZONE
     value: dev
   - name: backendAzureRmResourceGroupName
@@ -225,7 +225,7 @@ stages:
           - bash: |
               echo "##vso[task.setvariable variable=NAMESPACE]$(ENVIRONMENT_REF)"
               echo "##vso[task.setvariable variable=AKSCLUSTERNAME]nhsapp-dev-$(ENVIRONMENT_REF)uks1"
-          - template: .azuredevops/templates/steps/init_ci.yaml@nhsapp_ops_vault
+          - template: .azuredevops/templates/steps/init_ci.yaml@nhsapp_ops_infra
           - bash: |
               cd $(PROJECT_PATH) \
               && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker_new_scratch.sh
