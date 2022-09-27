@@ -136,7 +136,7 @@ export default {
         type: serviceDefinitionType,
       },
       provider,
-      demographicsConsentGiven: !!state?.demographicsConsentGiven,
+      demographicsConsentGiven: (state && state.demographicsConsentGiven) === true,
     }).then((response) => {
       commit(CLEAR);
       if (response === undefined) {
