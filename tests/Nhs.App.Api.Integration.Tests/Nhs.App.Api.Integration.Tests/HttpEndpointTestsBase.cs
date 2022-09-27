@@ -7,7 +7,7 @@ using Nhs.App.Api.Integration.Tests.Services.AccessTokenService;
 
 namespace Nhs.App.Api.Integration.Tests
 {
-    public abstract class CommunicationHttpFunctionBase
+    public abstract class HttpEndpointTestsBase
     {
         private static TestConfiguration _testConfiguration;
         private static IAccessTokenCacheService _accessTokenCacheService;
