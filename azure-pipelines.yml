@@ -407,24 +407,6 @@ stages:
               runUpgradeTests: true
               nativeVersion: '$(native.xamarin.version)'
 
-      - stage: xamarin_integration_flaky_tests
-        variables:
-          - group: IntegrationTests-CosmosSqlApiConnection
-        displayName: XIT - Flaky
-        ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['native.xamarin.runXamarinBuilds'], 'true')) }}:
-          condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-        dependsOn:
-          - web
-          - backend
-          - xamarin_browserstack
-          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-            - pr_changes
-        jobs:
-          - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-            parameters:
-              runFlakyTests: true
-              nativeVersion: '$(native.xamarin.version)'
-
     - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
         - stage: xamarin_integration_canary_tests
           variables:

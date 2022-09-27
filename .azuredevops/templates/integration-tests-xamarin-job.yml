@@ -11,9 +11,6 @@ parameters:
   - name: runFlipbookTests
     type: boolean
     default: false
-  - name: runFlakyTests
-    type: boolean
-    default: false
   - name: nativeVersion
     type: string
 
@@ -118,7 +115,6 @@ jobs:
           MAIN_RUN: ${{ parameters['runMainTests'] }}
           CANARY_RUN: ${{ parameters['runCanaryTests'] }}
           FLIPBOOK_RUN: ${{ parameters['runFlipbookTests'] }}
-          FLAKY_RUN: ${{ parameters['runFlakyTests'] }}
           JOB_ATTEMPT: $(System.JobAttempt)
           XIT_MAIN_PREVIOUS_ATTEMPT_FOLDER_PATH: "$(System.ArtifactsDirectory)/$(previous.xitmain.jobattempt.foldername)"
         inputs:
@@ -162,9 +158,7 @@ jobs:
             artifactName: 'Xamarin Integration Upgrade Test Files Attempt-$(System.JobAttempt)'
           ${{ if eq(parameters['runFlipbookTests'], true) }}:
             artifactName: 'Xamarin Integration Flipbook Test Files Attempt-$(System.JobAttempt)'
-          ${{ if eq(parameters['runFlakyTests'], true) }}:
-            artifactName: 'Xamarin Integration Flaky Test Files Attempt-$(System.JobAttempt)'
-          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false), eq(parameters['runFlakyTests'], false))  }}:
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlipbookTests'], false))  }}:
             artifactName: 'Xamarin Integration Test Files Attempt-$(System.JobAttempt)'
 
       - task: Bash@3
@@ -192,9 +186,7 @@ jobs:
             testRunTitle: 'Xamarin Integration Canary Tests'
           ${{ if eq(parameters['runUpgradeTests'], true) }}:
             testRunTitle: 'Xamarin Integration Upgrade Tests'
-          ${{ if eq(parameters['runFlakyTests'], true) }}:
-            testRunTitle: 'Xamarin Integration Flaky Tests'
-          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false), eq(parameters['runFlakyTests'], false))  }}:
+          ${{ if and(eq(parameters['runUpgradeTests'], false), eq(parameters['runCanaryTests'], false))  }}:
             testRunTitle: 'Xamarin Integration Tests'
           testResultsFormat: VSTest
           testResultsFiles: xamarinintegrationtests/TestResults/*.trx

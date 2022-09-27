@@ -43,9 +43,6 @@ elif [ "$FLIPBOOK_RUN" == 'True' ]
 then
   rm -rf flipbookgeneration/flipbook/
   TEST_FILTER="TestCategory=NhsAppFlipbookTest"
-elif [ "$FLAKY_RUN" == 'True' ]
-then
-  TEST_FILTER="TestCategory=NhsAppFlakyTest"
 elif [ "$JOB_ATTEMPT" != "1" ] && [ "$MAIN_RUN" == 'True' ]
 then
   dqt='"'
@@ -60,7 +57,7 @@ then
 
   TEST_FILTER="${dqt}${RETRIED_TEST_FILTER_STRING}${dqt}"
 else
-  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest&TestCategory!=NhsAppFlakyTest"'
+  TEST_FILTER='"TestCategory!=NhsAppUpgradeTest&TestCategory!=NhsAppCanaryTest&TestCategory!=NhsAppFlipbookTest"'
 fi
 
 info "Using test filter ${TEST_FILTER}"
