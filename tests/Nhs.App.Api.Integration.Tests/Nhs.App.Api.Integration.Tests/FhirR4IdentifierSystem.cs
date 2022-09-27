@@ -10,5 +10,7 @@ namespace Nhs.App.Api.Integration.Tests
         public const string RequestReference = "https://fhir.nhs.uk/NHSApp/request-id";
         public const string Requester = "https://fhir.nhs.uk/Id/ods-organization-code";
         public const string CommunicationId = "https://fhir.nhs.uk/Id/nhs-app-communication-id";
+        public const string ExtensionQuestionnaireUrl = "https://fhir.nhs.uk/NHSApp/answers";
+        
     }
 }

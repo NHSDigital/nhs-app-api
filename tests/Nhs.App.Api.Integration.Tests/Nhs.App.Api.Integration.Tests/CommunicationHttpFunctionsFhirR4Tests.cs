@@ -31,12 +31,19 @@ namespace Nhs.App.Api.Integration.Tests
             Path = "communication/notification/FHIR/R4/CommunicationRequest",
             DisplayName = "Notification"
         };
+        
         private enum PayloadContentKind
         {
             ContentString,
             ContentReference
         }
-
+        
+        public enum MessageContentKind
+        {
+            Normal,
+            Questionnaire
+        }
+        
         public class EndpointInfo
         {
             public string Path { get; set; }
@@ -244,6 +251,38 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldNotContainHeader("X-Correlation-ID");
         }
 
+        [TestMethod]
+        public async Task CommunicationPost_ValidCommunicationRequestWithQuestionnaire_ReturnsCreatedStatusCode()
+        {
+            // Arrange
+            var validPayload = BuildValidRequestBody(InApp.DisplayName, PayloadContentKind.ContentString, MessageContentKind.Questionnaire);
+
+            //Act & Assert
+            await CommunicationPost_ValidTest(validPayload, InApp.Path);
+        }
+        
+        [TestMethod]
+        public async Task CommunicationPost_CommunicationRequestWithInvalidQuestionnaire_Returns400BadRequest()
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+            var payload = BuildInvalidQuestionnaireRequestBody(InApp.DisplayName);
+            var httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
+
+            // Act
+            var response = await httpClient.PostAsync(InApp.Path, httpContent, correlationId);
+            
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            var operationOutcome = await ParseOperationOutcome(response);
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+            issue.Diagnostics.Should().Contain("url is invalid");
+        }
+        
+
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
         {
             // Arrange, continued.
@@ -272,16 +311,30 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{identifier.Value}");
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
+        
 
         private static string BuildValidRequestBody(string endpoint,
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
+            MessageContentKind messageContentKind = MessageContentKind.Normal
             )
         {
-            var communicationRequest = BuildValidCommunicationRequest(endpoint, payloadContentKind);
+            var communicationRequest = BuildValidCommunicationRequest(endpoint, payloadContentKind, messageContentKind);
 
             return BuildRequestBody(communicationRequest);
         }
 
+        
+        private static string BuildInvalidQuestionnaireRequestBody(string endpoint,
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
+            MessageContentKind messageContentKind = MessageContentKind.Questionnaire
+        )
+        {
+            var communicationRequest = BuildValidCommunicationRequest(endpoint, payloadContentKind, messageContentKind);
+            communicationRequest.Extension[0].Url = "";
+            return BuildRequestBody(communicationRequest);
+        }
+
+        
         private static string BuildRequestBody(CommunicationRequest communicationRequest)
         {
             var serializer = new FhirJsonSerializer();
@@ -291,7 +344,8 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         private static CommunicationRequest BuildValidCommunicationRequest(string endpoint,
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString, 
+            MessageContentKind messageContentKind = MessageContentKind.Normal)
         {
             var communicationRequest = new CommunicationRequest
             {
@@ -305,6 +359,47 @@ namespace Nhs.App.Api.Integration.Tests
                 Payload = BuildValidPayload(payloadContentKind),
                 Requester = endpoint.Equals(InApp.DisplayName, StringComparison.OrdinalIgnoreCase) ? BuildValidRequester() : null
             };
+
+            if (messageContentKind == MessageContentKind.Questionnaire)
+            {
+                communicationRequest.Contained = new List<Resource>
+                {
+                    new Questionnaire {
+                      Status = PublicationStatus.Active,
+                       Id="question",
+                       Item = new List<Questionnaire.ItemComponent>
+                       {
+                           new()
+                           {
+                               LinkId = "1",
+                               Type = Questionnaire.QuestionnaireItemType.Choice,
+                               AnswerOption = new List<Questionnaire.AnswerOptionComponent>
+                               {
+                                   new()
+                                   {
+                                       Value = new Coding {Code = "YES"}
+                                   },
+                                   new()
+                                   {
+                                       Value = new Coding {Code = "NO"}
+                                   }
+                               }
+                           }
+                       }
+                        
+                    }
+                };
+
+                communicationRequest.Extension = new List<Extension>
+                {
+                    new()
+                    {
+                         Url= FhirR4IdentifierSystem.ExtensionQuestionnaireUrl,
+                         Value = new ResourceReference("#question")
+                    }
+
+                };
+            }
 
             return communicationRequest;
         }
