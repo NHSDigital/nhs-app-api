@@ -22,11 +22,11 @@ BEGIN
             INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace
         WHERE nsp.nspname = 'events'
             AND rel.relname = 'Device'
-            AND con.conname = 'device_timestamp_sessionid_auditid_unique'
+            AND con.conname = 'device_auditid_unique'
     )
     THEN
         ALTER TABLE events."Device"
-            ADD CONSTRAINT device_timestamp_sessionid_auditid_unique UNIQUE ("Timestamp", "SessionId", "AuditId");
+            ADD CONSTRAINT device_auditid_unique UNIQUE ("Timestamp", "SessionId", "AuditId");
     END IF;
 
     CALL perms.apply_etl_table_permissions('events', 'Device');
