@@ -122,7 +122,7 @@ export default {
       return this.messageReply.response;
     },
     responseDate() {
-      return this.messageReply.responseDateTime;
+      return this.messageReply.responseSentDateTime;
     },
   },
   methods: {

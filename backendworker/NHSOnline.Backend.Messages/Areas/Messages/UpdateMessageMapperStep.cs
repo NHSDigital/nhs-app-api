@@ -33,11 +33,11 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                 case MessagePatchType.Reply:
                     var userResponse = Convert.ToString(operation.value, CultureInfo.InvariantCulture);
                     updates.Set(x => x.Reply.Response, !string.IsNullOrEmpty(userResponse) ? userResponse : null);
-                    updates.Set(x => x.Reply.ResponseDateTime,
+                    updates.Set(x => x.Reply.ResponseSentDateTime,
                         !string.IsNullOrEmpty(userResponse) ? DateTime.UtcNow : (DateTime?) null);
                     filters.Add(userMessage => userMessage.Reply != null &&
                                                userMessage.Reply.Response == null &&
-                                               userMessage.Reply.ResponseDateTime == null &&
+                                               userMessage.Reply.ResponseSentDateTime == null &&
                                                userMessage.Reply.Options.Any(s => s.Code == userResponse));
                     break;
             }

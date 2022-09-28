@@ -346,7 +346,7 @@ components:
                 $ref: "#/components/schemas/ReplyOption"
             response:
               type: string
-            responseDateTime:
+            responseSentDateTime:
               type: string
               format: date-time
               description: Response received time.

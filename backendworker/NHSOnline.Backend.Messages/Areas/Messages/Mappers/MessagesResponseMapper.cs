@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                 {
                     Options = MapMessageReplyOptions(userMessageReply.Options),
                     Response = userMessageReply.Response,
-                    ResponseDateTime = userMessageReply.ResponseDateTime
+                    ResponseSentDateTime = userMessageReply.ResponseSentDateTime
                 };
             }
             return null;

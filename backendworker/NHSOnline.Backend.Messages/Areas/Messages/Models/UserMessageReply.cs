@@ -14,6 +14,6 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
         public string Response { get; set; }
 
         [BsonElement]
-        public DateTime? ResponseDateTime { get; set; }
+        public DateTime? ResponseSentDateTime { get; set; }
     }
 }

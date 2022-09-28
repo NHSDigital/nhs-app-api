@@ -6314,7 +6314,7 @@
                                         type: "string"
                                 response: 
                                   type: "string"
-                                responseDateTime: 
+                                responseSentDateTime: 
                                   type: "string"
                                   format: "date-time"
                                   description: "Response received time."
@@ -6437,7 +6437,7 @@
                                 type: "string"
                         response: 
                           type: "string"
-                        responseDateTime: 
+                        responseSentDateTime: 
                           type: "string"
                           format: "date-time"
                           description: "Response received time."

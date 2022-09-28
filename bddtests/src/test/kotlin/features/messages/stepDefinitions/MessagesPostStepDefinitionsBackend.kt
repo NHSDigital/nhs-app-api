@@ -134,7 +134,7 @@ class MessagesPostStepDefinitionsBackend {
                     ReplyOption(code = "NEVER", display = "NEVER")
                 ),
                 response = null,
-                responseDateTime = null
+                responseSentDateTime = null
             )
         )
     }

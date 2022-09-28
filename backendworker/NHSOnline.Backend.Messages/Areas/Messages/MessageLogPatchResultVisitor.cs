@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
         }
 
         public Task Visit(MessagePatchResult.BadRequest result) => Task.CompletedTask;
-        
+
         public Task Visit(MessagePatchResult.NoChange result) => Task.CompletedTask;
 
         public async Task Visit(MessagePatchResult.Updated result)
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                     case MessagePatchType.Reply:
                         var messageReplySenderContextEventLogData =
                             _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
-                        tasks.Add(_eventHubLogger.MessageReply(new MessageReplyEventLogData(
+                        tasks.Add(_eventHubLogger.MessageReplySent(new MessageReplySentEventLogData(
                             result.UserMessage.Id.ToString(), result.UserMessage.Reply?.Response,
                             messageReplySenderContextEventLogData)));
                         break;
@@ -77,12 +77,12 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                 _logger.LogError(e, "Error when logging patch result");
             }
         }
-        
+
         public Task Visit(MessagePatchResult.NotFound result) => Task.CompletedTask;
-        
+
         public Task Visit(MessagePatchResult.BadGateway result) => Task.CompletedTask;
-        
+
         public Task Visit(MessagePatchResult.InternalServerError result) => Task.CompletedTask;
-        
+
     }
 }

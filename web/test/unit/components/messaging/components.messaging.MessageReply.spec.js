@@ -19,7 +19,7 @@ const replyMessageOptions = [
 const mountComponent = ({
   replyOptions = replyMessageOptions,
   response = '',
-  responseDateTime = null,
+  responseSentDateTime = null,
 } = {}) => mount(MessageReply, {
   $style: {
     [optionsContainerClass]: optionsContainerClass,
@@ -28,7 +28,7 @@ const mountComponent = ({
     messageReply: {
       options: replyOptions,
       response,
-      responseDateTime,
+      responseSentDateTime,
     },
     senderName: 'Test Sender',
   },
@@ -118,7 +118,7 @@ describe('message reply', () => {
     beforeEach(() => {
       wrapper = mountComponent({
         response: 'NEVER',
-        responseDateTime: '2022-08-19T08:50:48.586Z',
+        responseSentDateTime: '2022-08-19T08:50:48.586Z',
       });
     });
 
@@ -134,7 +134,7 @@ describe('message reply', () => {
       it(`will describe ${dateTime} correctly`, () => {
         wrapper = mountComponent({
           response: 'NEVER',
-          responseDateTime: dateTime,
+          responseSentDateTime: dateTime,
         });
 
         expect(wrapper.find('.message-reply__formatted-time').text()).toContain(description);

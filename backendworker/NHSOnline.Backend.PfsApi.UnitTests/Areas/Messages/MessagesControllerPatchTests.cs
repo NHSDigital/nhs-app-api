@@ -156,16 +156,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     Reply = new UserMessageReply()
                     {
                         Response = response,
-                        ResponseDateTime = DateTime.Now
+                        ResponseSentDateTime = DateTime.Now
                     },
                     SenderContext = new SenderContext()
                 }, MessagePatchType.Reply));
 
-            MessageReplyEventLogData messageReplyEventLogData = null;
-            _mockEventHubLogger.Setup(x => x.MessageReply(It.IsAny<MessageReplyEventLogData>()))
-                .Callback<MessageReplyEventLogData>(x => messageReplyEventLogData = x)
+            MessageReplySentEventLogData messageReplySentEventLogData = null;
+            _mockEventHubLogger.Setup(x => x.MessageReplySent(It.IsAny<MessageReplySentEventLogData>()))
+                .Callback<MessageReplySentEventLogData>(x => messageReplySentEventLogData = x)
                 .Returns(Task.CompletedTask);
-            
+
 
             // Act
             var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), MessageId);
@@ -176,9 +176,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             result.Should().BeAssignableTo<NoContentResult>();
 
-            messageReplyEventLogData.Should().NotBeNull();
+            messageReplySentEventLogData.Should().NotBeNull();
         }
-        
+
         [TestMethod]
         public async Task Patch_MessageServiceReturnsNoChange_ReturnsNoContent()
         {

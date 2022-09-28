@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
                             new UserReplyOption() { Code = "NO", Display = "No" }
                         },
                         Response = "YES",
-                        ResponseDateTime = DateTime.Now
+                        ResponseSentDateTime = DateTime.Now
                     }
                 }
             };

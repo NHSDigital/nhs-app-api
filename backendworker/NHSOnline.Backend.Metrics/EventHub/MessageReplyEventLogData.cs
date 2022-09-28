@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Metrics.EventHub
 {
-    public class MessageReplyEventLogData : IEventLogData
+    public class MessageReplySentEventLogData : IEventLogData
     {
         public string MessageId { get; }
         public string Response { get; }
         public SenderContextEventLogData SenderContextEventLogData { get; }
 
-        public MessageReplyEventLogData(string messageId, string response,
+        public MessageReplySentEventLogData(string messageId, string response,
             SenderContextEventLogData senderContextEventLogData)
         {
             MessageId = messageId;

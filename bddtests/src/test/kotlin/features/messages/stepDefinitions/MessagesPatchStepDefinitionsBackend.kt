@@ -83,7 +83,7 @@ class MessagesPatchStepDefinitionsBackend {
         val message = MongoDBConnection.MessagesCollection
                 .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
                 .first()
-        Assert.assertNotNull(message.Reply?.ResponseDateTime)
+        Assert.assertNotNull(message.Reply?.ResponseSentDateTime)
         Assert.assertNotNull(message.Reply?.Response)
     }
 
@@ -100,7 +100,7 @@ class MessagesPatchStepDefinitionsBackend {
         val message = MongoDBConnection.MessagesCollection
                 .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
                 .first()
-        Assert.assertEquals(expectedMessage.Reply?.ResponseDateTime,message.Reply?.ResponseDateTime)
+        Assert.assertEquals(expectedMessage.Reply?.ResponseSentDateTime,message.Reply?.ResponseSentDateTime)
         Assert.assertEquals(expectedMessage.Reply?.Response,message.Reply?.Response)
     }
 

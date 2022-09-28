@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     new UserReplyOption() { Code = "NEVER", Display = "NEVER" }
                 },
                 Response = "NO",
-                ResponseDateTime = DateTime.UtcNow
+                ResponseSentDateTime = DateTime.UtcNow
             };
             _noMessageReply = null;
             _noMessageReplyResponse = new UserMessageReply
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                 },
                 Response = string.Empty,
-                ResponseDateTime = null
+                ResponseSentDateTime = null
             };
         }
 
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     resultMessage.Reply.Options[1].Code.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.Options[2].Code.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.Response.Should().NotBeNullOrEmpty();
-                    resultMessage.Reply.ResponseDateTime.Should().NotBeNull();
+                    resultMessage.Reply.ResponseSentDateTime.Should().NotBeNull();
                     break;
                 case MessageReplyOptions.NoMessageReply:
                     resultMessage.Reply.Should().BeNull();
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     resultMessage.Reply.Options.Should().HaveCount(1);
                     resultMessage.Reply.Options[0].Code.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.Response.Should().BeNullOrEmpty();
-                    resultMessage.Reply.ResponseDateTime.Should().BeNull();
+                    resultMessage.Reply.ResponseSentDateTime.Should().BeNull();
                     break;
                 default:
                     break;
@@ -278,7 +278,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseDateTime = null
+                    ResponseSentDateTime = null
                 }
             };
 
@@ -321,7 +321,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseDateTime = null
+                    ResponseSentDateTime = null
                 }
             };
 
@@ -360,7 +360,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseDateTime = null
+                    ResponseSentDateTime = null
                 }
             };
 
@@ -417,7 +417,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 {
                     Options = MapMessageReplyOptions(userMessageReply.Options),
                     Response = userMessageReply.Response,
-                    ResponseDateTime = userMessageReply.ResponseDateTime
+                    ResponseSentDateTime = userMessageReply.ResponseSentDateTime
                 };
             }
             return null;

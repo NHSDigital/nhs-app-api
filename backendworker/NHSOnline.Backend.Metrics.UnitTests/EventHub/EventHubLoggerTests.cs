@@ -332,10 +332,10 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
         }
 
         [TestMethod]
-        public async Task MessageReply_LogsMessageReplyEventLogDataToPidAndNonPidEventHubs()
+        public async Task MessageReplySent_LogsMessageReplyEventLogDataToPidAndNonPidEventHubs()
         {
             // Arrange
-            var messageReplyEventLogData = new MessageReplyEventLogData("Message ID", "Message Response",
+            var messageReplySentEventLogData = new MessageReplySentEventLogData("Message ID", "Message Response",
                 new SenderContextEventLogData(
                     "Supplier ID",
                     "Sender ID",
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
                     "NHS Number",
                     "NHS Login ID"
                 ));
-            
+
             var loggedPidData = string.Empty;
             var loggedNonPidData = string.Empty;
 
@@ -363,14 +363,14 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             _mockPidEventHubClient.SetupGet(x => x.PidAllowed).Returns(true);
 
             // Act
-            await _systemUnderTest.MessageReply(messageReplyEventLogData);
+            await _systemUnderTest.MessageReplySent(messageReplySentEventLogData);
 
             // Assert
             VerifyMocks();
 
             loggedNonPidData.Split(' ').Should().HaveCount(14);
             AssertTimeStamp(loggedNonPidData);
-            AssertContains(loggedNonPidData, "Action=MessageReply");
+            AssertContains(loggedNonPidData, "Action=MessageReplySent");
             AssertContains(loggedNonPidData, "EnvironmentName=TestEnv");
             AssertContains(loggedNonPidData, "MessageId=Message+ID");
             AssertContains(loggedNonPidData, "Response=Message+Response");
@@ -387,7 +387,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
 
             loggedPidData.Split(' ').Should().HaveCount(15);
             AssertTimeStamp(loggedPidData);
-            AssertContains(loggedPidData, "Action=MessageReply");
+            AssertContains(loggedPidData, "Action=MessageReplySent");
             AssertContains(loggedPidData, "EnvironmentName=TestEnv");
             AssertContains(loggedPidData, "MessageId=Message+ID");
             AssertContains(loggedPidData, "Response=Message+Response");
@@ -402,7 +402,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests.EventHub
             AssertContains(loggedPidData, "NhsLoginId=NHS+Login+ID");
             AssertContains(loggedPidData, "NhsNumber=NHS+Number");
         }
-        
+
 
         private static void AssertContains(string logData, string expected)
         {

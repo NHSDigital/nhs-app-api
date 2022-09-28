@@ -46,7 +46,7 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
             val response =
                     if (message.reply?.response != null)
                         "\"Response\": \"${message.reply.response}\"," +
-                                "\"ResponseDateTime\":$responseDateTimeString"
+                                "\"ResponseSentDateTime\":$responseDateTimeString"
                     else ""
 
             return if (message.reply != null)
