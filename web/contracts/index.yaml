@@ -5590,10 +5590,11 @@
                             description: "The linked referral or portal system."
                             enum: 
                               - "accurx"
-                              - "pkb"
-                              - "ers"
                               - "drdoctor"
+                              - "ers"
+                              - "healthcarecomms"
                               - "netcall"
+                              - "pkb"
                               - "zesty"
                           deepLinkUrl: 
                             type: "string"
@@ -5640,10 +5641,11 @@
                             description: "The linked referral or portal system."
                             enum: 
                               - "accurx"
-                              - "pkb"
-                              - "ers"
                               - "drdoctor"
+                              - "ers"
+                              - "healthcarecomms"
                               - "netcall"
+                              - "pkb"
                               - "zesty"
                           deepLinkUrl: 
                             type: "string"
@@ -5680,10 +5682,11 @@
                                 description: "The linked referral or portal system."
                                 enum: 
                                   - "accurx"
-                                  - "pkb"
-                                  - "ers"
                                   - "drdoctor"
+                                  - "ers"
+                                  - "healthcarecomms"
                                   - "netcall"
+                                  - "pkb"
                                   - "zesty"
                               deepLinkUrl: 
                                 type: "string"
@@ -5728,10 +5731,11 @@
                                 description: "The linked referral or portal system."
                                 enum: 
                                   - "accurx"
-                                  - "pkb"
-                                  - "ers"
                                   - "drdoctor"
+                                  - "ers"
+                                  - "healthcarecomms"
                                   - "netcall"
+                                  - "pkb"
                                   - "zesty"
                               deepLinkUrl: 
                                 type: "string"
@@ -5775,10 +5779,11 @@
                                 description: "The linked referral or portal system."
                                 enum: 
                                   - "accurx"
-                                  - "pkb"
-                                  - "ers"
                                   - "drdoctor"
+                                  - "ers"
+                                  - "healthcarecomms"
                                   - "netcall"
+                                  - "pkb"
                                   - "zesty"
                               deepLinkUrl: 
                                 type: "string"
@@ -5802,6 +5807,8 @@
                       description: "Six character service desk reference code."
           401: 
             description: "User session has expired."
+          470: 
+            description: "Custom error response to indicate user failed minimum age validation check."
           500: 
             description: "An unexpected error occurred during the processing of the request."
             content: 
