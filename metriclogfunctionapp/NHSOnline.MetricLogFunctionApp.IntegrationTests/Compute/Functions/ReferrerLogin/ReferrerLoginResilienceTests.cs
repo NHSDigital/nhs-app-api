@@ -40,17 +40,18 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
         [NhsAppTest]
         public async Task ReferrerLogin_InsertDataFails_RetriesAndFails(TestEnv env)
         {
-            var startTime = "2022-05-17T00:00:00";
-            var endTime = "2022-05-18T00:00:00";
+            var startDateTime = "2022-05-17T00:00:00";
+            var endDateTime = "2022-05-18T00:00:00";
             const string loginId1 = "LoginId1";
             const string p9ProofLevel = "P9";
             const string sessionId1 = "SessionId1";
             const string referrerId = "ReferrerFailure";
+            const string referrerOrigin = "test";
 
             await AddMetricHelper.AddLoginMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), sessionId1);
             await AddMetricHelper.AddConsentMetric(env, loginId1, p9ProofLevel, new DateTimeOffset(2022, 05, 17, 11, 30, 00, TimeSpan.Zero), sessionId1);
             await AddMetricHelper.AddWebIntegrationReferralsMetric(env,
-                new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
+                new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, referrerOrigin, sessionId1);
 
             await env.Postgres.Compute.ReferrerLogin.SetupTrigger(@"
     IF NEW.""ReferrerId"" = 'ReferrerFailure' THEN
@@ -58,7 +59,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Refe
     END IF;
 ");
 
-            var response = await env.HttpEndpointCallers.PostReferrerLogin(startTime, endTime);
+            var response = await env.HttpEndpointCallers.PostReferrerLogin(startDateTime, endDateTime);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             await env.Queues.ReferrerLogin.WaitUntilEmpty();

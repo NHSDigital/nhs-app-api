@@ -39,11 +39,12 @@ public class ReferrerServiceJourneyResilienceTests
     [NhsAppTest]
     public async Task ReferrerServiceJourney_InsertDataFails_RetriesAndFails(TestEnv env)
     {
-        var startTime = "2022-05-17T00:00:00";
-        var endTime = "2022-05-18T00:00:00";
+        var startDateTime = "2022-05-17T00:00:00";
+        var endDateTime = "2022-05-18T00:00:00";
         const string sessionId1 = "SessionId1";
         const string loginId1 = "LoginId1";
         const string referrerId = "ReferrerFailure";
+        const string referrerOrigin = "test";
         const string covidPassProvider = "the Department of Health and Social Care";
         const string otherProvider = "Other Provider";
         const string auditId1 = "AuditId1";
@@ -60,7 +61,7 @@ public class ReferrerServiceJourneyResilienceTests
         await AddMetricHelper.AddMedicalRecordViewMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 09, TimeSpan.Zero), sessionId1, true, true, "auditId1");
         await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 10, TimeSpan.Zero), sessionId1, "Provider1-ID", covidPassProvider, "JumpOffId1", "auditId1");
         await AddMetricHelper.AddSilverIntegrationJumpOffMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 11, TimeSpan.Zero), sessionId1, "Provider2-ID", otherProvider, "JumpOffId2", "auditId2");
-        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, sessionId1);
+        await AddMetricHelper.AddWebIntegrationReferralsMetric(env, new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero), referrerId, referrerOrigin, sessionId1);
 
         await env.Postgres.Compute.ReferrerServiceJourney.SetupTrigger(@"
 IF NEW.""ReferrerId"" = 'ReferrerFailure' THEN
@@ -68,7 +69,7 @@ IF NEW.""ReferrerId"" = 'ReferrerFailure' THEN
 END IF;
 ");
 
-        var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startTime, endTime);
+        var response = await env.HttpEndpointCallers.PostReferrerServiceJourney(startDateTime, endDateTime);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         await env.Queues.ReferrerServiceJourney.WaitUntilEmpty();

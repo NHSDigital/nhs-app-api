@@ -17,14 +17,15 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Compute
         public int AppointmentsCancelled { get; set; }
         public int ODRegistrations { get; set; }
         public int ODWithdrawals { get; set; }
+        public string ReferralOrigin { get; set; }
 
         public string InsertSql(string tableName)
             => @$"INSERT INTO {tableName} (" +
-               @"""Date"", ""DeviceOS"", ""Referral"", ""Users"", ""Logins"", ""RecordViewsDCR"", ""RecordViewsSCR"", ""Prescriptions""," +
-               @"""NomPharmacy"",""AppointmentsBooked"", ""AppointmentsCancelled,"", ""ODRegistrations,"", ""ODWithdrawals""" +
+               @"""Date"", ""DeviceOS"", ""Referral"",  ""Users"", ""Logins"", ""RecordViewsDCR"", ""RecordViewsSCR"", ""Prescriptions""," +
+               @"""NomPharmacy"",""AppointmentsBooked"", ""AppointmentsCancelled,"", ""ODRegistrations,"",""ODWithdrawals,"" ""ReferralOrigin""" +
                ")" +
                "VALUES(" +
                @$"@Date, @DeviceOS, @Referral, @Users, @Logins, @RecordViewsDCR, @RecordViewsSCR, @Prescriptions," +
-               @$"@NomPharmacy,@AppointmentsBooked,@AppointmentsCancelled,, @ODRegistrations,, @ODWithdrawals";
+               @$"@NomPharmacy, @AppointmentsBooked, @AppointmentsCancelled, @ODRegistrations, @ODWithdrawals, @ReferralOrigin";
     }
 }

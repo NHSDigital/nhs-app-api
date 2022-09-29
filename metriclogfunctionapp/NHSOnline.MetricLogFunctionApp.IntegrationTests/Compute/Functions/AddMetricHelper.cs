@@ -8,12 +8,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
     public static class AddMetricHelper
     {
         public static async Task AddWebIntegrationReferralsMetric(TestEnv env, DateTimeOffset time, string referrer,
-            string sessionId)
+            string referrerOrigin, string sessionId)
         {
             await env.Postgres.Events.WebIntegrationReferrals.Insert(new WebIntegrationReferralsMetricRow()
             {
                 Timestamp = time,
                 Referrer = referrer,
+                ReferrerOrigin = referrerOrigin,
                 SessionId = sessionId,
                 AuditId = Guid.NewGuid().ToString()
             });
