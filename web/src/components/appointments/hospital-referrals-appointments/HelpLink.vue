@@ -1,20 +1,15 @@
 <template>
-  <div>
-    <!--Card group is currently the only way to get this to act as the other groups style wise !-->
-    <card-group class="nhsuk-grid-row">
-      <card-group-item class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
-        <menu-item-list>
-          <menu-item :id="id"
-                     header-tag="h2"
-                     data-purpose="text_link"
-                     :href="href"
-                     :click-func="clickFunc"
-                     :text="text"
-                     :description="body"
-                     :aria-label="ariaLabelCaption(text,body)"/>
-        </menu-item-list>
-      </card-group-item>
-    </card-group>
+  <div class="nhsuk-u-margin-bottom-5">
+    <menu-item-list>
+      <menu-item :id="id"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="href"
+                 :click-func="clickFunc"
+                 :text="text"
+                 :description="body"
+                 :aria-label="ariaLabelCaption(text,body)"/>
+    </menu-item-list>
   </div>
 </template>
 

@@ -31,37 +31,8 @@
         </template>
 
         <template v-else>
-          <h2 id="book-Or-Manage-Referrals-And-Appointments-Title"
-              class="nhsuk-u-padding-bottom-5">
-            {{ $t('wayfinder.bookOrManageReferralsAndAppointmentsTitle') }}
-          </h2>
-          <help-link
-            id="wayfinder-help-jump-off-link-referrals-or-appointments"
-            :href="wayfinderHelpPath"
-            :click-func="redirectToWayfinderHelp"
-            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referralsOrAppointments')"/>
           <book-or-manage-referrals-or-appointments-group/>
-
-          <h2 id="confirmed-appointments-title"
-              class="nhsuk-u-padding-bottom-5">
-            {{ $t('wayfinder.confirmedAppointmentsTitle') }}
-          </h2>
-          <help-link
-            id="wayfinder-help-jump-off-link-appointments"
-            :href="wayfinderHelpPath"
-            :click-func="redirectToWayfinderHelp"
-            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.appointments')"/>
           <confirmed-appointments-group/>
-
-          <h2 id="referrals-in-review-title"
-              class="nhsuk-u-padding-bottom-5">
-            {{ $t('wayfinder.inReviewTitle') }}
-          </h2>
-          <help-link
-            id="wayfinder-help-jump-off-link-referrals"
-            :href="wayfinderHelpPath"
-            :click-func="redirectToWayfinderHelp"
-            :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referrals')"/>
           <referrals-in-review-group/>
 
           <wait-times-menu-item
@@ -93,12 +64,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import BookOrManageReferralsOrAppointmentsGroup from '@/components/appointments/hospital-referrals-appointments/sections/BookOrManageReferralsOrAppointmentsGroup';
 import ConfirmedAppointmentsGroup from '@/components/appointments/hospital-referrals-appointments/sections/ConfirmedAppointmentsGroup';
 import ReferralsInReviewGroup from '@/components/appointments/hospital-referrals-appointments/sections/ReferralsInReviewGroup';
-import HelpLink from '@/components/appointments/hospital-referrals-appointments/HelpLink';
 
-import { isTruthy, redirectTo } from '@/lib/utils';
+import { isTruthy } from '@/lib/utils';
 import {
   APPOINTMENTS_PATH,
-  WAYFINDER_HELP_PATH,
 } from '@/router/paths';
 
 const loadData = async (store) => {
@@ -108,7 +77,6 @@ const loadData = async (store) => {
 export default {
   name: 'WayfinderPage',
   components: {
-    HelpLink,
     DesktopGenericBackLink,
     GenericButton,
     OtherAvailableServicesMenuItems,
@@ -122,8 +90,6 @@ export default {
       isNativeApp: this.$store.state.device.isNativeApp,
       isWaitTimesEnabled: isTruthy(this.$store.$env.SECONDARY_CARE_WAIT_TIMES_ENABLED),
       appointmentsHubPath: APPOINTMENTS_PATH,
-      wayfinderHelpPath: WAYFINDER_HELP_PATH,
-      appoinmentsHubPath: APPOINTMENTS_PATH,
     };
   },
   computed: {
@@ -172,9 +138,6 @@ export default {
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
-    },
-    redirectToWayfinderHelp() {
-      redirectTo(this, this.wayfinderHelpPath);
     },
   },
 };

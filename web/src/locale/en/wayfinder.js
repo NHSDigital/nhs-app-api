@@ -1,8 +1,8 @@
 
 export default {
-  bookOrManageReferralsAndAppointmentsTitle: 'Book or manage your referrals and appointments',
-  confirmedAppointmentsTitle: 'Confirmed Appointments',
-  inReviewTitle: 'Referrals being reviewed',
+  bookOrManageReferralsAndAppointmentsTitle: 'You have {count} referral{plural} or appointment{plural} you need to action',
+  confirmedAppointmentsTitle: 'You have {count} upcoming appointment{plural}',
+  inReviewTitle: 'You have {count} referral{plural} being reviewed',
   noConfirmedAppointments: 'You have no confirmed appointments to view or manage.',
   noReferralsOrAppointments: 'You have no referrals or appointments to view or manage.',
   noReferralsInReview: 'You have no referrals being reviewed.',

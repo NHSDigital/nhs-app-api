@@ -138,18 +138,21 @@ describe('Summary care response with each type of summary item', () => {
       bookOrManageReferralsAndAppointmentsTitle = wrapper.find('#book-Or-Manage-Referrals-And-Appointments-Title');
 
       expect(bookOrManageReferralsAndAppointmentsTitle.exists()).toBe(true);
+      expect(bookOrManageReferralsAndAppointmentsTitle.text()).toEqual('You have 3 referrals or appointments you need to action');
     });
 
     it('title text is shown for confirmed appointments section', () => {
       confirmedAppointmentsTitle = wrapper.find('#confirmed-appointments-title');
 
       expect(confirmedAppointmentsTitle.exists()).toBe(true);
+      expect(confirmedAppointmentsTitle.text()).toEqual('You have 1 upcoming appointment');
     });
 
     it('title text is shown for referrals in review section', () => {
       referralsInReviewNotOverdueTitle = wrapper.find('#referrals-in-review-title');
 
       expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
+      expect(referralsInReviewNotOverdueTitle.text()).toEqual('You have 1 referral being reviewed');
     });
   });
 
@@ -207,18 +210,21 @@ describe('Summary care response with only actionable items', () => {
       bookOrManageReferralsAndAppointmentsTitle = wrapper.find('#book-Or-Manage-Referrals-And-Appointments-Title');
 
       expect(bookOrManageReferralsAndAppointmentsTitle.exists()).toBe(true);
+      expect(bookOrManageReferralsAndAppointmentsTitle.text()).toEqual('You have 3 referrals or appointments you need to action');
     });
 
     it('title text is shown for confirmed appointments section', () => {
       confirmedAppointmentsTitle = wrapper.find('#confirmed-appointments-title');
 
       expect(confirmedAppointmentsTitle.exists()).toBe(true);
+      expect(confirmedAppointmentsTitle.text()).toEqual('You have 0 upcoming appointments');
     });
 
     it('title text is shown for referrals in review section', () => {
       referralsInReviewNotOverdueTitle = wrapper.find('#referrals-in-review-title');
 
       expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
+      expect(referralsInReviewNotOverdueTitle.text()).toEqual('You have 0 referrals being reviewed');
     });
   });
 
@@ -272,6 +278,27 @@ describe('Summary care response with no summary items', () => {
   });
 
   describe('if page loaded', () => {
+    it('title text is shown for book or manage appointments section', () => {
+      bookOrManageReferralsAndAppointmentsTitle = wrapper.find('#book-Or-Manage-Referrals-And-Appointments-Title');
+
+      expect(bookOrManageReferralsAndAppointmentsTitle.exists()).toBe(true);
+      expect(bookOrManageReferralsAndAppointmentsTitle.text()).toEqual('You have 0 referrals or appointments you need to action');
+    });
+
+    it('title text is shown for confirmed appointments section', () => {
+      confirmedAppointmentsTitle = wrapper.find('#confirmed-appointments-title');
+
+      expect(confirmedAppointmentsTitle.exists()).toBe(true);
+      expect(confirmedAppointmentsTitle.text()).toEqual('You have 0 upcoming appointments');
+    });
+
+    it('title text is shown for referrals in review section', () => {
+      referralsInReviewNotOverdueTitle = wrapper.find('#referrals-in-review-title');
+
+      expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
+      expect(referralsInReviewNotOverdueTitle.text()).toEqual('You have 0 referrals being reviewed');
+    });
+
     it('show no referrals or appointments text', () => {
       noReferralsOrAppointmentsText = wrapper.find('#no-referrals-or-appointments-text');
 

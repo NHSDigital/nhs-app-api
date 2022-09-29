@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.SecondaryCare;
@@ -148,7 +149,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
                 .PageContent.NavigateToSecondaryCareSummaryPage();
 
             IOSSecondaryCareSummaryPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot:false, errorType:WayfinderErrorType.none, totalReferralsOrAppointments:7, totalConfirmedAppointments:5, totalReferralsInReview:2)
                 .ScrollToReadyToConfirmAppointmentDeepLinkButtonAndScreenshotThenClick();
 
             IOSBlueScreenInterruptPage
@@ -157,7 +158,7 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             driver.SwipeBack();
 
             IOSSecondaryCareSummaryPage
-                .AssertOnPage(driver)
+                .AssertOnPage(driver, screenshot:false, errorType:WayfinderErrorType.none, totalReferralsOrAppointments:7, totalConfirmedAppointments:5, totalReferralsInReview:2)
                 .ScrollToCancelledAppointmentDeepLinkButtonAndScreenshotThenClick();
 
             IOSBlueScreenInterruptPage

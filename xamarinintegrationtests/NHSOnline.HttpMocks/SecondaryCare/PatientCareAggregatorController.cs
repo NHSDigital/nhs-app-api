@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.HttpMocks.SecondaryCare;
 using NHSOnline.HttpMocks.SecondaryCare.Builders;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Http;
 using FhirPatient = Hl7.Fhir.Model.Patient;
 
-namespace NHSOnline.HttpMocks.Controllers.SecondaryCare
+namespace NHSOnline.HttpMocks.SecondaryCare
 {
     [Route("patient-care-aggregator-api/aggregator")]
     public class PatientCareAggregatorController : Controller

@@ -9,13 +9,22 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
     public sealed class SecondaryCareSummaryPageContent
     {
         private readonly IWebInteractor _interactor;
-        private IEnumerable<IFocusable>? _focusableElements;
         private readonly WayfinderErrorType _errorType;
+        private readonly int _totalReferralsOrAppointments;
+        private readonly int _totalConfirmedAppointments;
+        private readonly int _totalReferralsInReview;
 
-        internal SecondaryCareSummaryPageContent(IWebInteractor interactor, WayfinderErrorType errorType)
+        internal SecondaryCareSummaryPageContent(IWebInteractor interactor,
+            WayfinderErrorType errorType,
+            int totalReferralsOrAppointments,
+            int totalConfirmedAppointments,
+            int totalReferralsInReview)
         {
             _interactor = interactor;
             _errorType = errorType;
+            _totalReferralsOrAppointments = totalReferralsOrAppointments;
+            _totalConfirmedAppointments = totalConfirmedAppointments;
+            _totalReferralsInReview = totalReferralsInReview;
         }
 
         private WebText TitleText => WebText.WithTagAndText(
@@ -49,17 +58,17 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
         private WebText BookOrManageReferralsOrAppointmentsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
-            "Book or manage your referrals and appointments");
+            $"You have {_totalReferralsOrAppointments} referrals or appointments you need to action");
 
         private WebText AppointmentsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
-            "Confirmed Appointments");
+            $"You have {_totalConfirmedAppointments} upcoming appointments");
 
         private WebText InReviewReferralsHeader => WebText.WithTagAndText(
             _interactor,
             "h2",
-            "Referrals being reviewed");
+            $"You have {_totalReferralsInReview} referrals being reviewed");
 
         public WebMenuItem MissingOrIncorrectReferralsOrAppointmentsMenuItem => WebMenuItem.WithTitle(
             _interactor,
@@ -72,31 +81,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
         public WebMenuItem InReviewReferralsMenuItem => WebMenuItem.WithTitle(
             _interactor,
             "What to do if a referral being reviewed by a clinic is missing or incorrect");
-
-        public  WebButton ReadyToConfirmAppointmentDeepLinkButton => WebButton.WithText(
-            _interactor,
-            "Contact the clinic to confirm"
-            );
-
-        public WebLink CancelledAppointmentDeepLinkButton => WebLink.WithText(
-            _interactor,
-            "View this appointment"
-        );
-
-        public IEnumerable<IFocusable> FocusableElements
-        {
-            get
-            {
-                _focusableElements = new IFocusable[]
-                {
-                    MissingOrIncorrectReferralsOrAppointmentsMenuItem,
-                    AppointmentsMenuItem,
-                    InReviewReferralsMenuItem,
-                };
-
-                return _focusableElements;
-            }
-        }
 
         public void AssertPageElements()
         {
