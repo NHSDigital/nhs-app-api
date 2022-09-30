@@ -8,6 +8,7 @@ module.exports = {
     'valid-target-usage': require('./rules/valid-target-usage'),
     'valid-role-usage': require('./rules/valid-role-usage'),
     'invalid-tags': require('./rules/invalid-tags'),
+    'deny-optional-chaining': require('./rules/deny-optional-chaining'),
   },
   configs: {
     default: {
@@ -21,6 +22,7 @@ module.exports = {
         'custom/valid-target-usage': 'error',
         'custom/valid-role-usage': 'error',
         'custom/invalid-tags': 'error',
+        'custom/deny-optional-chaining': 'error',
       },
     },
   },
