@@ -37,7 +37,6 @@ class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("G
     init {
         requestBuilder
             .andHeader("NHSD-Target-Identifier", NHSD_TARGET_IDENTIFIER)
-            .andQueryParameter(URLEncoder.encode("patient:identifier", "UTF-8"), getPatientIdQueryValue())
     }
 
     fun returnAfterThirtySecondsForTimeout(): Mapping {

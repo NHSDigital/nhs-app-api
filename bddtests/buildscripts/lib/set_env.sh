@@ -29,6 +29,7 @@ DOCKER_ARGS=()
 WORKING_DIR="${REPO_ROOT}/bddtests"
 GRADLE_PATH="${HOME}/.gradle"
 DOCKER_USER="browser"
+WIREMOCK_DOCKER_TAG='2.22.0-alpine'
 
 if [[ $(uname -s) =~ ^MING.* ]]; then
   GRADLE_PATH="${USERPROFILE}/.gradle"
@@ -39,6 +40,13 @@ if [ -n "${TF_BUILD}" ]; then
   mkdir -p "${GRADLE_PATH}"
 
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
+fi
+
+# If the test is running on an ARM based processor we need to use a newer version of Wiremock for Compatibilty
+# Unfortunately the 2.33.2 version of wiremock is incompatible with our Nominate Pharmacy Tests as detailed
+# in this GitHub Issue https://github.com/wiremock/wiremock/issues/1973
+if [[ $(uname -m) == 'arm64' ]]; then
+  WIREMOCK_DOCKER_TAG='2.33.2-alpine'
 fi
 
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")
@@ -61,3 +69,4 @@ export SJRCONFIG_DOCKER_TAG=${SJRCONFIG_DOCKER_TAG:-$APP_DOCKER_TAG}
 export SJRCONFIG_DOCKER_REGISTRY=${SJRCONFIG_DOCKER_REGISTRY:-$APP_DOCKER_REGISTRY}
 export SJRAPI_DOCKER_TAG=${SJRAPI_DOCKER_TAG:-$APP_DOCKER_TAG}
 export SJRAPI_DOCKER_REGISTRY=${SJRAPI_DOCKER_REGISTRY:-$APP_DOCKER_REGISTRY}
+export WIREMOCK_DOCKER_TAG

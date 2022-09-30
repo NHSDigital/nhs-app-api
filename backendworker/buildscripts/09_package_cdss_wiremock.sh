@@ -10,7 +10,7 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-pull_docker_image "rodolpheche/wiremock"
+pull_docker_image "wiremock/wiremock"
 
 docker build \
   --tag="${DOCKER_REGISTRY:-local}/nhsonline-backendcdsswiremock:${DOCKER_TAG:-latest}" \

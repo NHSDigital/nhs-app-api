@@ -14,7 +14,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata curl && \
     ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
-RUN mkdir -p /var/wiremock/lib/ && \
+RUN if [ $(uname -m) == 'arm64' ] ;then WIREMOCK_VERSION='2.33.2' \
+    mkdir -p /var/wiremock/lib/ && \
     wget https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/$WIREMOCK_VERSION/wiremock-jre8-standalone-$WIREMOCK_VERSION.jar \
     -O /var/wiremock/lib/wiremock-jre8-standalone.jar
 
