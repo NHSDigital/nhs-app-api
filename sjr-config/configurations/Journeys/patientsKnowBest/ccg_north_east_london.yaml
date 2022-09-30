@@ -278,13 +278,12 @@ target:
     - "Y03049"
     - "Y04273"
     - "Y06592"
-
 journeys:
   silverIntegrations:
     carePlans:
       - pkb
     healthTrackers:
-      - pkb  
+      - pkb
     libraries:
       - pkb
     medicines:
@@ -292,7 +291,7 @@ journeys:
     messages:
       - pkb
     recordSharing:
-      - pkb  
+      - pkb
     secondaryAppointments:
       - pkb
     testResults:

@@ -39,7 +39,13 @@
 	awk -F, '{print ",,,Other,,,"$2","$1","}' 220727-additions.csv > 220727-additions-reformatted.csv
 	```
 	to get a file in the appropriate format. Append the additional rows to `econsult.csv`.
-3. accuRx updates are provided by Matt Deaves or Pavandeep Sandhu. Note that these updates may also involve related changes to the eConsult config. The Sharepoint folder where requested changes are kept is [here](https://hscic365.sharepoint.com/sites/SJRWorkingGroup/Shared%20Documents/Forms/AllItems.aspx?RootFolder=%2Fsites%2FSJRWorkingGroup%2FShared%20Documents%2FGeneral%2FaccuRx). Update `sjr-config/utils/rulecreation/accurx.csv` with the practice changes required (both additions and deletions). 
+3. accuRx updates are provided by Matt Deaves or Pavandeep Sandhu. Note that these updates may also involve related changes to the eConsult config. The source data is usually taken from [here](https://docs.google.com/spreadsheets/d/1oqsrtKEyKv0xXZBoJtofkQSUoNyKNB3B2iKvREgoO_A/edit#gid=0). Download a copy so you have a defined cut of data. Then you need to work out the changes required using the following rules:
+
+	Additions are those ODS codes with Status == "NHS App On" that are not present in `accurx.csv` AND also not present in `econsult.csv`. 
+
+	Deletions are those ODS codes with Status == "NHS App Off" that are present in `accurx.csv`. 
+
+	The Sharepoint folder where requested changes are kept is [here](https://hscic365.sharepoint.com/sites/SJRWorkingGroup/Shared%20Documents/Forms/AllItems.aspx?RootFolder=%2Fsites%2FSJRWorkingGroup%2FShared%20Documents%2FGeneral%2FaccuRx). It may be useful to refer to the latest spreadsheet here to find the Excel formulae to work out the additions and deletions. Update `sjr-config/utils/rulecreation/accurx.csv` with the practice changes required. 
 4. If we have been directed to turn off on olc provider for a given ODS code in conjunction with enabling the other olc provider, update `sjr-config/utils/rulecreation/olcoverrides.csv` so that we know which should be enabled, the reason for this and the date the decision was made.
 5. Once both `econsult.csv` and `accurx.csv` are updated, run 
 	```bash
@@ -61,7 +67,12 @@
 	```
 ### PKB update
 1. The PKB updates are posted in the #sjr-third-party-updates Slack channel, usually by Matt Deaves.
-2. Update `sjr-config/configurations/Journeys/patientsKnowBest/*.yaml` with the practice changes - the files are usually at CCG level.
+2. Update `sjr-config/utils/rulecreation/pkb.csv` with the practice changes. The grouping column controls the name of the resulting yaml file. For removals, just delete the row where you find the ODS code to be removed. Additions should be added noting if they belong to an existing grouping.
+3. Run the following to update the PKB yaml files
+
+	```bash
+	python sjr-config/utils/rulecreation/processpkb.py
+	```
 
 ### Engage update
 

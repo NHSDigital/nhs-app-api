@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCodes: 
+  odsCodes:
     - "B81002"
     - "B81008"
     - "B81011"
@@ -33,7 +33,6 @@ target:
     - "B81675"
     - "Y02344"
     - "Y02747"
-
 journeys:
   silverIntegrations:
     carePlans:
@@ -47,7 +46,7 @@ journeys:
     messages:
       - pkb
     recordSharing:
-      - pkb  
+      - pkb
     secondaryAppointments:
       - pkb
     testResults:

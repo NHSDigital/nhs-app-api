@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCodes: 
+  odsCodes:
     - "C82040"
     - "C84004"
     - "C84005"
@@ -79,9 +79,7 @@ target:
     - "C84127"
     - "C84129"
     - "C84131"
-    - "C84135"
     - "C84136"
-    - "C84138"
     - "C84140"
     - "C84142"
     - "C84144"
@@ -96,7 +94,6 @@ target:
     - "C84629"
     - "C84637"
     - "C84646"
-    - "C84647"
     - "C84654"
     - "C84656"
     - "C84658"
@@ -127,7 +124,6 @@ target:
     - "Y06443"
     - "Y06507"
     - "Y06792"
-
 journeys:
   silverIntegrations:
     carePlans:
@@ -141,7 +137,7 @@ journeys:
     messages:
       - pkb
     recordSharing:
-      - pkb  
+      - pkb
     secondaryAppointments:
       - pkb
     testResults:

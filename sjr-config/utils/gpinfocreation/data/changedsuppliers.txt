@@ -1027,3 +1027,10 @@ P87004,"1/SALFORD MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INF
 ==================================================================
 Job Run - Sun Sep 25 11:19:14 GMTST 2022
 ==================================================================
+==================================================================
+Job Run - Sun Oct 2 09:20:56 GMTST 2022
+ODS,Organisation,PreviousSupplier,NewSupplier
+L82049,"FALMOUTH HEALTH CENTRE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+P87040,"SORREL BANK MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+P87040,"SORREL BANK MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
+==================================================================

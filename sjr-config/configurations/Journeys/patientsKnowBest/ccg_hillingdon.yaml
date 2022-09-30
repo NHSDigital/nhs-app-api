@@ -51,7 +51,7 @@ journeys:
     carePlans:
       - pkb
     healthTrackers:
-      - pkb  
+      - pkb
     libraries:
       - pkb
     medicines:
@@ -59,7 +59,7 @@ journeys:
     messages:
       - pkb
     recordSharing:
-      - pkb  
+      - pkb
     secondaryAppointments:
       - pkb
     testResults:

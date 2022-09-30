@@ -42,13 +42,12 @@ target:
     - "N81632"
     - "N81642"
     - "Y05750"
-
 journeys:
   silverIntegrations:
     carePlans:
       - pkb
     healthTrackers:
-      - pkb  
+      - pkb
     libraries:
       - pkb
     medicines:
@@ -56,7 +55,7 @@ journeys:
     messages:
       - pkb
     recordSharing:
-      - pkb  
+      - pkb
     secondaryAppointments:
       - pkb
     testResults:
