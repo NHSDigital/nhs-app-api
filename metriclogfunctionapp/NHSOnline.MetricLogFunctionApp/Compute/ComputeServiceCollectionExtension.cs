@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.MetricLogFunctionApp.Compute.DailyDeviceReferralUsage;
 using NHSOnline.MetricLogFunctionApp.Compute.DeviceInfo;
 using NHSOnline.MetricLogFunctionApp.Compute.FirstLogins;
+using NHSOnline.MetricLogFunctionApp.Compute.GPHealthRecord;
 using NHSOnline.MetricLogFunctionApp.Compute.Logging;
 using NHSOnline.MetricLogFunctionApp.Compute.ReferrerLogin;
 using NHSOnline.MetricLogFunctionApp.Compute.ReferrerServiceJourney;
@@ -23,6 +24,7 @@ namespace NHSOnline.MetricLogFunctionApp.Compute
             serviceCollection.AddDeviceInfo();
             serviceCollection.AddDailyDeviceReferralUsage();
             serviceCollection.AddFirstLogins();
+            serviceCollection.AddGPHealthRecord();
             serviceCollection.AddReferrerLogin();
             serviceCollection.AddReferrerServiceJourney();
             serviceCollection.AddWayfinder();

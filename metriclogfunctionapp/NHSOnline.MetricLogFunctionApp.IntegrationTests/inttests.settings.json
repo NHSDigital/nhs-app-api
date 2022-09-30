@@ -356,6 +356,10 @@
     "AzureFunctionsJobHost:functions:144": "Wayfinder_Compute_Queue",
     "AzureWebJobs.Wayfinder_Compute_Timer.Disabled": "true",
 
+    "AzureFunctionsJobHost:functions:145": "GPHealthRecord_Compute_Http",
+    "AzureFunctionsJobHost:functions:146": "GPHealthRecord_Compute_Queue",
+    "AzureWebJobs.GPHealthRecord_Compute_Timer.Disabled": "true",
+
     "AzureFunctionsJobHost:extensions:queues:maxPollingInterval": "00:00:01",
     "AzureFunctionsJobHost:extensions:queues:visibilityTimeout": "00:00:01",
 

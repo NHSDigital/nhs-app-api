@@ -49,6 +49,20 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
             });
         }
 
+        public static async Task AddMedicalRecordSectionMetric(TestEnv env, DateTimeOffset timestamp, string sessionId,
+            string supplier, bool isActingOnBehalfOfAnother, string section, string auditId)
+        {
+            await env.Postgres.Events.MedicalRecordSectionViewMetric.Insert(new MedicalRecordSectionViewMetricRow()
+            {
+                Timestamp = timestamp,
+                SessionId = sessionId,
+                Supplier = supplier,
+                IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother,
+                Section = section,
+                AuditId = auditId
+            });
+        }
+
         public static async Task AddAppointmentBookMetric(TestEnv env, string odsCode, DateTimeOffset dateTime, string sessionId)
         {
             await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow

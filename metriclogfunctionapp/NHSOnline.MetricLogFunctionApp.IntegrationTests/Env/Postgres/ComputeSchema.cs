@@ -26,6 +26,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
         internal PostgresTable<ReferrerServiceJourneyRow> ReferrerServiceJourney =>
             Table<ReferrerServiceJourneyRow>();
 
+        internal PostgresTable<GPRecordViewsRows> GPRecordViews =>
+            Table<GPRecordViewsRows>();
+
         internal PostgresTable<WayfinderRow> Wayfinder =>
             Table<WayfinderRow>();
 
