@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using CorrelationId.Abstractions;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
@@ -27,15 +28,18 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
         private readonly SecondaryCareHttpClient _httpClient;
         private readonly ILogger<SecondaryCareClient> _logger;
         private readonly IGuidCreator _guidCreator;
+        private readonly ICorrelationContextAccessor _correlationContext;
 
         public SecondaryCareClient(
             SecondaryCareHttpClient httpClient,
             ILogger<SecondaryCareClient> logger,
-            IGuidCreator guidCreator)
+            IGuidCreator guidCreator,
+            ICorrelationContextAccessor correlationContext)
         {
             _httpClient = httpClient;
             _logger = logger;
             _guidCreator = guidCreator;
+            _correlationContext = correlationContext;
         }
 
         public async Task<SecondaryCareResponse> GetResponse(P9UserSession userSession, string accessToken, string path)
@@ -48,13 +52,12 @@ namespace NHSOnline.Backend.PfsApi.SecondaryCare
                 { Constants.PatientIdentifierQuery, $"{Constants.PatientIdentifierPrefix}{nhsNumber}" }
             };
             var pathAndQuery = $"{path}{queryBuilder.ToQueryString()}";
-            var correlationId = _guidCreator.CreateGuid().ToString();
             var requestId = _guidCreator.CreateGuid().ToString();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, pathAndQuery);
 
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.Add(Constants.CorrelationIdHeaderKey, correlationId);
+            request.Headers.Add(Constants.CorrelationIdHeaderKey, _correlationContext.CorrelationContext.CorrelationId);
             request.Headers.Add(Constants.RequestIdHeaderKey, requestId);
             request.Headers.Add(Constants.NHSDTargetIdentifierHeaderKey, NHSDTargetIdentifier);
 

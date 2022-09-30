@@ -308,6 +308,51 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             VerifyNoOtherLoggerCalls();
         }
 
+        [TestMethod]
+        public async Task WhenOAuthTokenResponseCorrelationIdDoesNotMatchThenGetSummaryReturns502BadGateway()
+        {
+            // Arrange APIM
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseButMismatchCorrelationId();
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest, "Failed to get Auth token - response code: NotFound"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+
+            VerifyNoOtherLoggerCalls();
+        }
+
+        [TestMethod]
+        public async Task WhenGetSummaryResponseFromClientDoesNotMatchCorrelationIdHeaderThenShouldReturnBadResponse()
+        {
+            // Arrange
+            Context.MockNhsApimHttpClientGetTokenReturnsSuccessfulResponseWithAuthToken();
+            Context.MockSecondaryCareHttpClientGetSummaryCorrelationIdDoesNotMatch(LoadAggregatorResponse("partial-error-and-appointment"));
+
+            // Act
+            var result = await Context.CreateSystemUnderTest().GetSummary(Context.Data.P9UserSession);
+
+            // Assert
+            var actionResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            var pfsErrorResponse = actionResult.Value.Should().BeAssignableTo<PfsErrorResponse>().Subject;
+
+            actionResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            pfsErrorResponse.ServiceDeskReference.Should().StartWith("4u");
+
+            Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,"Attempting to get Secondary Care Summary"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResult, "Failed - response code: NotFound"));
+            Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse, "Error retrieving Secondary Care Summary: BadGateway"));
+            VerifyNoOtherLoggerCalls();
+        }
 
         private void VerifyNoOtherLoggerCalls()
         {
@@ -316,68 +361,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.WaitTimesServiceLogger.VerifyNoOtherCalls();
             Context.Mocks.ServiceLogger.VerifyNoOtherCalls();
             Context.Mocks.Auditor.VerifyNoOtherCalls();
-        }
-
-        private static IEnumerable<object[]> InvalidResponseData
-        {
-            get
-            {
-                yield return new object[]
-                {
-                    LoadAggregatorResponse("invalid-referral"),
-                    new List<string>
-                    {
-                        "Failed to get Referral Booking Reference from Reference Identifier",
-                        "Failed to get Referral Referred Date from Scheduled Period",
-                        "Could not find Referral Organisation in list of Performers",
-                        "Could not find Extension of type client-id",
-                        "Expected Extension value to be of type Hl7.Fhir.Model.Code but was (null)",
-                        "Failed to get Provider from extensions",
-                        "Failed to get Deep Link from extensions",
-                    },
-                    new List<string>
-                    {
-                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to ISummaryResponse. See previous log entries for more detail"
-                    },
-                    new List<string>
-                    {
-                        "Failed - mapping failed for at least one entry",
-                    }
-                };
-
-                yield return new object[]
-                {
-                    LoadAggregatorResponse("invalid-upcoming-appointment"),
-                    new List<string>
-                    {
-                        "Expected Extension value to be of type Hl7.Fhir.Model.Coding but was Hl7.Fhir.Model.Date",
-                        "Failed to get Upcoming Appointment Status from extensions",
-                        "Failed to get Upcoming Appointment Location from Description",
-                    },
-                    new List<string>
-                    {
-                        "Aggregator Secondary Care Summary API unsuccessfully mapped Bundle to ISummaryResponse. See previous log entries for more detail"
-                    },
-                    new List<string>
-                    {
-                        "Failed - mapping failed for at least one entry",
-                    }
-                };
-
-                yield return new object[]
-                {
-                    LoadAggregatorResponse("partial-success-secondary-care-summary-response"),
-                    new List<string>(),
-                    new List<string>
-                    {
-                        "Aggregator Secondary Care Summary API errors found in response: Reason: Response failed validation, Provider: company-1|Reason: HTTP-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3"
-                    },
-                    new List<string>
-                    {
-                        "Failed - errors in response: Reason: Response failed validation, Provider: company-1|Reason: HTTP-404 returned, Provider: company-2|Reason: Timeout occured, Provider: company-3"
-                    },
-                };
-            }
         }
 
         private static string LoadAggregatorResponse(string fileName)

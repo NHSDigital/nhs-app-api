@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CorrelationId.Abstractions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.APIM;
 using NHSOnline.Backend.PfsApi.NHSApim.Models;
 using NHSOnline.Backend.Support.ResponseParsers;
+using Constants = NHSOnline.Backend.Support.Constants.SecondaryCareConstants;
 
 namespace NHSOnline.Backend.PfsApi.NHSApim
 {
@@ -18,19 +20,22 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
         private readonly ILogger<NhsApimClient> _logger;
         private readonly IApimJwtHelper _apimJwtHelper;
         private readonly INhsApimConfig _config;
+        private readonly ICorrelationContextAccessor _correlationContext;
 
         public NhsApimClient(
             NhsApimHttpClient nhsApimHttpClient,
             IJsonResponseParser responseParser,
             ILogger<NhsApimClient> logger,
             IApimJwtHelper apimJwtHelper,
-            INhsApimConfig config)
+            INhsApimConfig config,
+            ICorrelationContextAccessor correlationContext)
         {
             _nhsApimHttpClient = nhsApimHttpClient;
             _responseParser = responseParser;
             _logger = logger;
             _apimJwtHelper = apimJwtHelper;
             _config = config;
+            _correlationContext = correlationContext;
         }
 
         public async Task<NhsApimAuthResponse<ApimAccessToken>> GetAuthToken(string nhsLoginIdToken)
@@ -57,6 +62,7 @@ namespace NHSOnline.Backend.PfsApi.NHSApim
 
             using var request = new HttpRequestMessage(HttpMethod.Post, path);
             request.Content = new FormUrlEncodedContent(dict);
+            request.Headers.Add(Constants.CorrelationIdHeaderKey, _correlationContext.CorrelationContext.CorrelationId);
 
             return await SendRequestAndParseResponse(request);
         }

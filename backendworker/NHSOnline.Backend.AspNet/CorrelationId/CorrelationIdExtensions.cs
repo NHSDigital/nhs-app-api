@@ -4,20 +4,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NHSOnline.Backend.AspNet.Middleware;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.AspNet.CorrelationId
 {
     public static class CorrelationIdExtensions
     {
-        private const string CorrelationIdentifier = "NHSO-Request-ID";
-
         public static void UseNhsAppCorrelationId(this IApplicationBuilder app)
         {
             app.UseCorrelationId();
 
             app.UseLogRequestHeader(new LogRequestHeaderOptions
             {
-                HeaderName = CorrelationIdentifier,
+                HeaderName = Constants.HttpHeaders.CorrelationId,
                 LogTemplate = "CorrelationId={value}"
             });
         }
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.AspNet.CorrelationId
                 options.AddToLoggingScope = false;
                 options.IgnoreRequestHeader = false;
                 options.IncludeInResponse = false;
-                options.RequestHeader = CorrelationIdentifier;
+                options.RequestHeader = Constants.HttpHeaders.CorrelationId;
                 options.UpdateTraceIdentifier = false;
             });
         }
@@ -44,7 +43,7 @@ namespace NHSOnline.Backend.AspNet.CorrelationId
             var correlationId = $"HealthCheck-{context.Registration.Name}";
             var _ = new CorrelationContextAccessor
             {
-                CorrelationContext = new CorrelationContext(correlationId, CorrelationIdentifier)
+                CorrelationContext = new CorrelationContext(correlationId, Constants.HttpHeaders.CorrelationId)
             };
         }
     }
