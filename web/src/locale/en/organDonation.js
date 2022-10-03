@@ -35,9 +35,9 @@ export default {
     confirmation: 'Confirmation',
     checkYourInformation: 'Confirm if your information is accurate',
     iConfirmTheInformation: 'I confirm that the information given in this form is true, complete and accurate',
-    readThePrivacyStatementAndConfirmConstent: 'Confirm if you agree to the privacy statement',
+    readThePrivacyPolicyAndConfirmConstent: 'Confirm if you agree to the privacy policy',
     iHaveReadThe: 'I have read the ',
-    privacyStatement: 'privacy statement',
+    privacyPolicy: 'privacy policy',
     andGiveConsent: ' and give consent for the use of my information in accordance with the terms',
   },
   contactDetails: {
@@ -166,7 +166,7 @@ export default {
   },
   reviewYourDecision: {
     checkInformationAndConfirm: 'Confirm if your information is accurate',
-    readPrivacyStatmentAndConsent: 'Confirm if you agree to the privacy statement',
+    readPrivacyPolicyAndConsent: 'Confirm if you agree to the privacy policy',
     aboutYou: 'About you',
     submitMyDecision: 'Submit my decision',
   },

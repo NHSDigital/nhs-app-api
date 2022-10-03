@@ -14,7 +14,7 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
     Examples:
@@ -36,7 +36,7 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then I see an appropriate Organ Donation error message without a retry option
 
@@ -51,7 +51,7 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then I see an appropriate Organ Donation error message with a retry option
     When I click the 'Try again' button on an Organ Donation page
@@ -98,7 +98,7 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     And I wait for 15 seconds
     Then I see an appropriate Organ Donation decision processing message without a retry option
@@ -136,7 +136,7 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my decision to withdraw is recorded on the Organ Donation Check Details page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
     When I click the link called 'More information about these changes to the law around organ donation' with a url of 'http://stubs.local.bitraft.io:8080/external/organdonation/app-law'

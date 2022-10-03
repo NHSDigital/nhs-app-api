@@ -111,7 +111,7 @@ describe('confirmation', () => {
         const span = wrapperFn().find('#privacy-checkbox-error span');
         expect(span.exists()).toBe(privacy);
         if (privacy) {
-          expect(span.text()).toBe('Confirm if you agree to the privacy statement');
+          expect(span.text()).toBe('Confirm if you agree to the privacy policy');
         }
       });
     };

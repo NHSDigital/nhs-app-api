@@ -50,7 +50,7 @@ Feature: Use the navigation header bar
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Back' breadcrumb
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Back' breadcrumb

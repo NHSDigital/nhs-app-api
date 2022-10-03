@@ -26,7 +26,7 @@ Feature: Organ donation accessibility
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the OrganDonation_CheckDetailsAndSubmit page is saved to disk
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the OrganDonation_AllOrgansConfirmation page is saved to disk
@@ -55,7 +55,7 @@ Feature: Organ donation accessibility
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the OrganDonation_CheckDetails_ChooseToWithdraw page is saved to disk
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     When I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
     And the OrganDonation_WithdrawDecisionConfirmation page is saved to disk
@@ -65,7 +65,7 @@ Feature: Organ donation accessibility
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I wait for 15 seconds
     And I see an appropriate Organ Donation decision processing message without a retry option
@@ -76,7 +76,7 @@ Feature: Organ donation accessibility
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message without a retry option
     And the OrganDonation_GenericError page is saved to disk

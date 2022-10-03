@@ -19,7 +19,7 @@ Feature: GP Session On Demand organ donation
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     And my choice of '<Option>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created

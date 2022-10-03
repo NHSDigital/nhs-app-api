@@ -104,7 +104,7 @@ export default {
       }
 
       if (!this.isPrivacyAccepted) {
-        errors.push(this.$t('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent'));
+        errors.push(this.$t('organDonation.reviewYourDecision.readPrivacyPolicyAndConsent'));
       }
       return errors;
     },

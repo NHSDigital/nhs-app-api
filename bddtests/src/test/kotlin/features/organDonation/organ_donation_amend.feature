@@ -15,7 +15,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
@@ -42,7 +42,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
@@ -67,7 +67,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
@@ -84,7 +84,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
@@ -108,7 +108,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
@@ -135,7 +135,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
@@ -162,7 +162,7 @@ Feature: Organ Donation Amend Frontend
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
@@ -187,7 +187,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
@@ -216,7 +216,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
@@ -259,7 +259,7 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message with a retry option
     And I click the 'Try again' button on an Organ Donation page
@@ -276,7 +276,7 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message without a retry option
     Examples:
@@ -291,7 +291,7 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
-    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy policy for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I wait for 15 seconds
     Then I see an appropriate Organ Donation decision processing message without a retry option

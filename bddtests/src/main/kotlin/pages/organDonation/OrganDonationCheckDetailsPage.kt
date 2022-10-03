@@ -14,7 +14,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
             "I confirm that the information given in this form is true, complete and accurate")
 
     val privacyStatementCheckBox = CheckBoxElement(this,
-            "I have read the privacy statement and give consent for the use of my information in " +
+            "I have read the privacy policy and give consent for the use of my information in " +
                     "accordance with the terms")
 
     fun assertPersonalDetailsSection(patient: Patient) {

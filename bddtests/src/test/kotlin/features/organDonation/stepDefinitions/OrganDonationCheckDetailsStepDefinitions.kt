@@ -13,8 +13,8 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
     lateinit var organDonationCheckDetailsPage: OrganDonationCheckDetailsPage
 
-    @When("^I confirm that my details are accurate, and accept the privacy statement for organ donation")
-    fun iConfirmThatMyDetailsAreAccurateAndAcceptThePrivacyStatement() {
+    @When("^I confirm that my details are accurate, and accept the privacy policy for organ donation")
+    fun iConfirmThatMyDetailsAreAccurateAndAcceptThePrivacyPolicy() {
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.privacyStatementCheckBox.click()
     }
@@ -93,7 +93,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
         val problem = "There is a problem"
         val accuracyValidationMessage = "Confirm if your information is accurate"
-        val privacyStatementValidationMessage = "Confirm if you agree to the privacy statement"
+        val privacyStatementValidationMessage = "Confirm if you agree to the privacy policy"
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertIsVisible()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertIsVisible()

@@ -171,7 +171,7 @@ describe('review your decision', () => {
           expect(wrapper.vm.validationErrors.length).toBe(2);
           expect(wrapper.findAll('#form-error-summary li').length).toBe(wrapper.vm.validationErrors.length);
           expect(wrapper.text()).toContain('Confirm if your information is accurate');
-          expect(wrapper.text()).toContain('Confirm if you agree to the privacy statement');
+          expect(wrapper.text()).toContain('Confirm if you agree to the privacy policy');
         });
 
         it('will set focus on the error component', () => {
@@ -234,8 +234,8 @@ describe('review your decision', () => {
           expect(wrapper.find('#form-error-summary').exists()).toBe(true);
         });
 
-        it('will add "organDonation.reviewYourDecision.readPrivacyStatmentAndConsent" to the validation errors', () => {
-          expect(wrapper.vm.validationErrors).toContain('Confirm if you agree to the privacy statement');
+        it('will add "organDonation.reviewYourDecision.readPrivacyPolicyAndConsent" to the validation errors', () => {
+          expect(wrapper.vm.validationErrors).toContain('Confirm if you agree to the privacy policy');
         });
 
         it('will set focus on the error component', () => {

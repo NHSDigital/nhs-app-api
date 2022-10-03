@@ -17,7 +17,7 @@
     </error-group>
     <error-group :show-error="showPrivacyError">
       <error-message v-if="showPrivacyError" id="privacy-checkbox-error">
-        {{ $t('organDonation.confirmation.readThePrivacyStatementAndConfirmConstent') }}
+        {{ $t('organDonation.confirmation.readThePrivacyPolicyAndConfirmConstent') }}
       </error-message>
       <generic-checkbox value="privacy-checkbox"
                         name="name"
@@ -27,7 +27,7 @@
                         @input="selectedValueChanged('privacy-checkbox')">
         {{ $t('organDonation.confirmation.iHaveReadThe') }}
         <a :href="privacyUrl" target="_blank" rel="noopener noreferrer">
-          {{ $t('organDonation.confirmation.privacyStatement') }}</a>
+          {{ $t('organDonation.confirmation.privacyPolicy') }}</a>
         {{ $t('organDonation.confirmation.andGiveConsent') }}
       </generic-checkbox>
     </error-group>
