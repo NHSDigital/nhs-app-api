@@ -72,6 +72,13 @@ open class HybridPageObject : PageObject() {
         return getElement("//a[@data-purpose='main-back-button']")
     }
 
+    fun clickOnExpanderLinkContainingText(text: String) {
+        getElement(
+            webDesktopLocator = "//div",
+            timeToWaitForElement = 30
+        ).withText(text, false).assertIsVisible().click()
+    }
+
     fun WebElementFacade.getTextWithoutUnicodeSuffix(): String{
         val charValToRemove = ("\u200B")
         return this.text.removeSuffix(charValToRemove)

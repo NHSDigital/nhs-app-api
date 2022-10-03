@@ -45,6 +45,7 @@ open class PageUrl {
                 "prescriptions success" to "/prescriptions/order-success",
                 "terms and conditions" to "/terms-and-conditions",
                 "wayfinder" to "/appointments/hospital-referrals-appointments",
+                "wayfinder help" to "/appointments/hospital-referrals-appointments/help",
                 "your gp appointments" to "/appointments/gp-appointments",
                 "your prescriptions" to "/prescriptions",
                 "choose test results" to "/health-records/gp-medical-record/choose-test-result-year",

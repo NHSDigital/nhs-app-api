@@ -2,11 +2,11 @@ package pages.wayfinder.help
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.HybridPageObject
 import pages.assertIsVisible
+import pages.wayfinder.WayfinderBasePage
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/hospital-referrals-appointments/help")
-open class WayfinderHelpPage : HybridPageObject() {
+open class WayfinderHelpPage : WayfinderBasePage() {
     private val referralsHelpTitle = HybridPageElement(
         webDesktopLocator = "//h2[contains(text(),\"Referrals\")]",
         page = this,
@@ -108,21 +108,41 @@ open class WayfinderHelpPage : HybridPageObject() {
         helpfulName = " p"
     )
 
-    fun assertHelpPageIsDisplayed(){
-        referralsHelpTitle.assertIsVisible()
+    fun assertMissingReferralsExpanderElementsDisplayed()
+    {
         missingReferralsExpanderTitle.assertIsVisible()
         missingReferralsText.assertIsVisible()
+    }
+
+    fun assertIncorrectOrCancelledReferralsExpanderElementsDisplayed()
+    {
         incorrectOrCancelledReferralsExpanderTitle.assertIsVisible()
         cancelledReferralsContactText.assertIsVisible()
-        appointmentsHelpTitle.assertIsVisible()
+    }
+
+    fun assertMissingAppointmentsExpanderExpanderElementsDisplayed()
+    {
         missingAppointmentsExpanderTitle.assertIsVisible()
         missingAppointmentsTextOne.assertIsVisible()
         missingAppointmentsTextTwo.assertIsVisible()
+    }
+
+    fun assertIncorrectChangedCancelledAppointmentsExpanderElementsDisplayed()
+    {
         incorrectChangedCancelledAppointmentsExpanderTitle.assertIsVisible()
         incorrectChangedCancelledAppointmentsTextOne.assertIsVisible()
         incorrectChangedCancelledAppointmentsTextTwo.assertIsVisible()
         incorrectChangedCancelledAppointmentsTextThree.assertIsVisible()
         incorrectChangedCancelledAppointmentsTextFour.assertIsVisible()
+    }
+
+    fun assertHelpPageIsDisplayed(){
+        referralsHelpTitle.assertIsVisible()
+        assertMissingReferralsExpanderElementsDisplayed()
+        assertIncorrectOrCancelledReferralsExpanderElementsDisplayed()
+        appointmentsHelpTitle.assertIsVisible()
+        assertMissingAppointmentsExpanderExpanderElementsDisplayed()
+        assertIncorrectChangedCancelledAppointmentsExpanderElementsDisplayed()
         getBackLink().assertIsVisible()
     }
 }

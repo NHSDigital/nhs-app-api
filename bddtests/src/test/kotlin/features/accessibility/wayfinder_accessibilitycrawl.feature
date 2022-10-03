@@ -36,3 +36,19 @@ Feature: Wayfinder accessibility
       | An Error              | Prefix | FileName                           |
       | timing out            | zu     | Wayfinder_Desktop_Timeout_Error    |
       | encountering an issue | 4u     | Wayfinder_Desktop_BadGateway_Error |
+
+  Scenario: The 'Wayfinder help' desktop page is captured
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
+    And I am logged in
+    When I retrieve the 'Wayfinder Help' page directly
+    Then I am navigated to the Wayfinder help page
+    When I click the 'Missing referrals' expander link on a Wayfinder Help page
+    Then I can see the missing referrals expander elements displayed
+    When I click the 'Incorrect or cancelled referrals' expander link on a Wayfinder Help page
+    Then I can see the incorrect or cancelled referrals expander elements displayed
+    When I click the 'Missing appointments' expander link on a Wayfinder Help page
+    Then I can see the missing appointments expander expander elements displayed
+    When I click the 'Incorrect, changed or cancelled appointments' expander link on a Wayfinder Help page
+    Then I can see the incorrect changed cancelled appointments expander elements displayed
+    And the Wayfinder_help_Desktop page is saved to disk

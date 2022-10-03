@@ -118,6 +118,11 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.referralsInReviewLink.click()
     }
 
+    @When("^I click the '(.*)' expander link on a Wayfinder Help page$")
+    fun iClickTheExpanderLinkOnThePage(expanderText: String) {
+        wayfinderHelpPage.clickExpanderLink(expanderText)
+    }
+
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
     fun assertReferralsAndAppointmentsWithDataPageIsDisplayed() {
         wayfinderReferralsAndAppointmentsPage.assertWayfinderTitleIsDisplayed()
@@ -191,6 +196,26 @@ class WayfinderStepDefinitions {
     @Then("^I am navigated to the Wayfinder help page$")
     fun assertWayfinderHelpPageDisplayed() {
         wayfinderHelpPage.assertHelpPageIsDisplayed()
+    }
+
+    @Then("^I can see the missing referrals expander elements displayed$")
+    fun assertWayfinderHelpMissingReferralsExpanderElementsDisplayed() {
+        wayfinderHelpPage.assertMissingReferralsExpanderElementsDisplayed()
+    }
+
+    @Then("^I can see the incorrect or cancelled referrals expander elements displayed$")
+    fun assertWayfinderHelpIncorrectOrCancelledReferralsExpanderElementsDisplayed() {
+        wayfinderHelpPage.assertIncorrectOrCancelledReferralsExpanderElementsDisplayed()
+    }
+
+    @Then("^I can see the missing appointments expander expander elements displayed$")
+    fun assertWayfinderHelpMissingAppointmentsExpanderExpanderElementsDisplayed() {
+        wayfinderHelpPage.assertMissingAppointmentsExpanderExpanderElementsDisplayed()
+    }
+
+    @Then("^I can see the incorrect changed cancelled appointments expander elements displayed$")
+    fun assertWayfinderHelpIncorrectChangedCancelledAppointmentsExpanderElementsDisplayed() {
+        wayfinderHelpPage.assertIncorrectChangedCancelledAppointmentsExpanderElementsDisplayed()
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

@@ -1,5 +1,5 @@
 <template>
-  <collapsible-details class="nhsuk-expander">
+  <collapsible-details :id="id" class="nhsuk-expander">
     <template slot="header">
       <slot name="header" />
     </template>
@@ -14,6 +14,13 @@ export default {
   name: 'CollapsibleDialog',
   components: {
     CollapsibleDetails,
+  },
+  props: {
+    id: {
+      type: String,
+      required: false,
+      default: 'nhsuk-details__text',
+    },
   },
 };
 </script>

@@ -3,7 +3,7 @@
     <h2 id="referralsHelpTitle">
       {{ $t('wayfinder.wayfinderHelp.referralsHelp.referralsHelpTitle') }}
     </h2>
-    <collapsible-dialog>
+    <collapsible-dialog id="missingReferralsExpander">
       <div id="missingReferralsExpanderTitle" slot="header">
         {{ $t('wayfinder.wayfinderHelp.referralsHelp.missingReferralsExpanderTitle') }}
       </div>
@@ -11,7 +11,7 @@
         {{ $t('wayfinder.wayfinderHelp.referralsHelp.missingReferralsText') }}
       </p>
     </collapsible-dialog>
-    <collapsible-dialog>
+    <collapsible-dialog id="incorrectOrCancelledReferralsExpander">
       <div id="incorrectOrCancelledReferralsExpanderTitle" slot="header">
         {{ $t('wayfinder.wayfinderHelp.referralsHelp.incorrectOrCancelledReferralsExpanderTitle') }}
       </div>
@@ -22,7 +22,7 @@
     <h2 id="appointmentsHelpTitle">
       {{ $t('wayfinder.wayfinderHelp.appointmentsHelp.appointmentsHelpTitle') }}
     </h2>
-    <collapsible-dialog>
+    <collapsible-dialog id="missingAppointmentsExpander">
       <div id="missingAppointmentsExpanderTitle" slot="header">
         {{ $t('wayfinder.wayfinderHelp.appointmentsHelp.missingAppointmentsExpanderTitle') }}
       </div>
@@ -33,7 +33,7 @@
         {{ $t('wayfinder.wayfinderHelp.appointmentsHelp.missingAppointmentsTextTwo') }}
       </p>
     </collapsible-dialog>
-    <collapsible-dialog>
+    <collapsible-dialog id="incorrectChangedCancelledAppointmentsExpander">
       <div id="incorrectChangedCancelledAppointmentsExpanderTitle" slot="header">
         {{ $t('wayfinder.wayfinderHelp.appointmentsHelp.incorrectChangedCancelledAppointmentsExpanderTitle') }}
       </div>
