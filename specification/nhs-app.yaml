@@ -144,7 +144,7 @@ paths:
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
 
-        The outcome of communication requests can be determined using the [daily communication event report endpoint](#api-Communication-get-event-report-fhir).
+        The outcome of communication requests can be determined using the [daily receipt report endpoint](#api-Communication-get-receipt-report) or by subscribing to realtime receipts.
       requestBody:
         required: true
         content:
@@ -292,7 +292,7 @@ paths:
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
 
-        The outcome of communication requests can be determined using the [daily communication event report endpoint](#api-Communication-get-event-report-fhir).
+        The outcome of communication requests can be determined using the [daily receipt report endpoint](#api-Communication-get-receipt-report) or by subscribing to realtime receipts.
       requestBody:
         required: true
         content:
@@ -419,8 +419,6 @@ paths:
         ## Overview
         Use this endpoint to get a daily report of receipts relating to in-app messages and push notifications that you have sent to NHS App users.
 
-        > This endpoint is currently in development and is not yet available for use. This documentation is provided to give early visibility of forthcoming functionality.
-      
         This report will include receipts detailing the outcome of an attempt to send each communication. For in-app messages, a receipts will also be included in this report if the recipient reads the message.
 
         The following five types of receipt may be included in this response:
@@ -515,128 +513,6 @@ paths:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForReceiptsReport.json
-        "429":
-          description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
-          headers:
-            X-Correlation-ID:
-              $ref: components/schemas/XCorrelationId.yaml
-          content:
-            application/fhir+json:
-              schema:
-                $ref: components/schemas/OperationOutcome.yaml          
-              examples:
-                exceeded-quota-per-app:
-                  summary: Your application has exceeded its quota
-                  value:
-                    $ref: components/examples/responses/communication/429throttled-quotaperapp.json
-                exceeded-spike-arrest:
-                  summary: Your application has created a spike in traffic
-                  value:
-                    $ref: components/examples/responses/communication/429throttled-spikearrestperapp.json
-                exceeded-quota-per-proxy:
-                  summary: API is receiving a high volume of requests
-                  value:
-                    $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
-  /communication/report/events:
-    parameters:
-      - $ref: '#/components/parameters/BearerAuthorization'
-      - $ref: "#/components/parameters/CorrelationId"
-    get:
-      summary: Get a daily communication event report
-      operationId: get-event-report
-      description: |
-        ## Overview
-        Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have sent to NHS App users.
-
-        > This endpoint is scheduled for deprecation. We are working on an [updated version](https://digital.nhs.uk/developer/api-catalogue/nhs-app#api-Communication-get-receipt-report) that will return responses represented as FHIR Task resources, and will provide richer information regarding the outcome of push notification requests. If you have not already begun integrating with this endpoint, we encourage you to consider waiting until the new endpoint is available.
-
-        This report will include events detailing the outcome of an attempt to send each communication. For in-app messages, an event will also be included in this report if the recipient reads the message.
-
-        The information provided by this endpoint is generated by a daily batch process.
-        Note that events in the report may pertain to communication requests that were submitted on earlier days.
-
-        ## Pagination
-        To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
-      parameters:
-        - name: day
-          description: The day for which to retrieve an event report.
-          example: "2021-08-25"
-          in: query
-          required: true
-          schema:
-            type: string
-            format: date
-        - name: page
-          description: The ordinal number of the page of results to be retrieved. If omitted, the first page of results will be returned. Use the Link header in the response to determine whether any further pages of results exist.
-          example: 2
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-      tags:
-        - communication
-      responses:
-        "200":
-          description: Information successfully returned.
-          headers:
-            Link:
-              $ref: components/schemas/Link.yaml
-            X-Correlation-ID:
-              $ref: components/schemas/XCorrelationId.yaml
-          content:
-            application/json:
-              schema:
-                $ref: components/schemas/responses/communication/report/events.yaml
-              example:
-                $ref: components/examples/responses/communication/report/200successEvents.json
-        "400":
-          description: There is an error in your request.
-          headers:
-            X-Correlation-ID:
-              $ref: components/schemas/XCorrelationId.yaml
-          content:
-            application/fhir+json:
-              schema:
-                $ref: components/schemas/OperationOutcome.yaml
-              examples:
-                no-day:
-                  summary: No day parameter has been specified
-                  value:
-                    $ref: components/examples/responses/communication/report/400noDay.json
-                invalid-day:
-                  summary: The supplied day parameter is not in the correct format.
-                  value:
-                    $ref: components/examples/responses/communication/400invalidDay.json
-        "401":
-          description: Authorisation issue, for example a missing or expired bearer token.
-          headers:
-            X-Correlation-ID:
-              $ref: components/schemas/XCorrelationId.yaml
-          content:
-            application/fhir+json:
-              schema:
-                $ref: components/schemas/OperationOutcome.yaml
-              examples:
-                invalid-access-token:
-                  summary: Invalid Access Token
-                  value:
-                    $ref: components/examples/responses/communication/401invalidAccessToken.json
-                expired-access-token:
-                  summary: Expired Access Token
-                  value:
-                    $ref: components/examples/responses/communication/401ExpiredAccessToken.json
-        "403":
-          description: You are not authorised to perform this operation. Some client applications may not be permitted to access the event report endpoint. To discuss granting your application access to this endpoint, [contact the NHS App team](mailto:app.onboarding@nhs.net).
-          headers:
-            X-Correlation-ID:
-              $ref: components/schemas/XCorrelationId.yaml
-          content:
-            application/fhir+json:
-              schema:
-                $ref: components/schemas/OperationOutcome.yaml
-              example:
-                $ref: components/examples/responses/communication/403permissionsMissingForEventsReport.json
         "429":
           description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
