@@ -22,18 +22,18 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.PreHome
 
         private WebLink UpdateCookiesPolicyLink => UpdatedConditionsOfUseText.WithChildLink("cookies policy");
 
-        private WebText DoNotAgreeText => WebText.WithTagAndText(_interactor, "p", "If you don't agree, you won't be able to continue accessing or using the NHS App.");
+        private WebText DoNotAgreeText => WebText.WithTagAndText(_interactor, "p", "If you do not agree, you will not be able to continue accessing or using the NHS App.");
 
         private WebCheckbox AcceptTermsAndConditionsCheckbox => WebCheckbox.WithLabel(
             _interactor,
             "I understand and agree to the updated terms of use and privacy policy. " +
-            "I agree to the use of 'strictly necessary' cookies as described in the updated cookies policy.");
+            "I agree to the use of \"strictly necessary\" cookies as described in the updated cookies policy.");
 
         private WebText AcceptTermsAndConditionsText => WebText.WithTagAndText(
             _interactor,
             "span",
             "I understand and agree to the updated terms of use and privacy policy. " +
-            "I agree to the use of 'strictly necessary' cookies as described in the updated cookies policy.");
+            "I agree to the use of \"strictly necessary\" cookies as described in the updated cookies policy.");
 
         private WebLink AcceptTermsOfUseLink => AcceptTermsAndConditionsText.WithChildLink("terms of use");
 

@@ -40,12 +40,12 @@ export default {
   },
   updated: {
     acceptConditionsCheckBox: {
-      acceptCookies: 'I agree to the use of \'strictly necessary\' cookies as described in the updated',
+      acceptCookies: 'I agree to the use of "strictly necessary" cookies as described in the updated',
       understandAndAgree: 'I understand and agree to the updated',
       youCannotUseWithoutAgreeing: 'Confirm if you agree with the terms of use and necessary cookies',
     },
     btnAccept: 'Continue',
-    ifYouDoNotAgree: 'If you don\'t agree, you won\'t be able to continue accessing or using the NHS App.',
+    ifYouDoNotAgree: 'If you do not agree, you will not be able to continue accessing or using the NHS App.',
     title: 'Updated conditions of use',
     weveMadeSomeChanges: 'We\'ve made some important changes to our conditions of use. To continue using the NHS App, you need to agree to our updated',
   },
