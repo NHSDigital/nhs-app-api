@@ -419,7 +419,7 @@ paths:
         ## Overview
         Use this endpoint to get a daily report of receipts relating to in-app messages and push notifications that you have sent to NHS App users.
 
-        This report will include receipts detailing the outcome of an attempt to send each communication. For in-app messages, a receipts will also be included in this report if the recipient reads the message.
+        This report will include receipts detailing the outcome of an attempt to send each communication. For in-app messages, a receipt will also be included in this report if the recipient reads the message.
 
         The following five types of receipt may be included in this response:
 
