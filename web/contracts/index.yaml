@@ -6430,6 +6430,12 @@
                                   type: "string"
                                   format: "date-time"
                                   description: "Response received time."
+                                status: 
+                                  type: "string"
+                                responseCompletedDateTime: 
+                                  type: "string"
+                                  format: "date-time"
+                                  description: "Response completed time."
                           example: 
                             id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
                             senderId: "B82041"
@@ -6553,6 +6559,12 @@
                           type: "string"
                           format: "date-time"
                           description: "Response received time."
+                        status: 
+                          type: "string"
+                        responseCompletedDateTime: 
+                          type: "string"
+                          format: "date-time"
+                          description: "Response completed time."
                   example: 
                     id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
                     senderId: "B82041"

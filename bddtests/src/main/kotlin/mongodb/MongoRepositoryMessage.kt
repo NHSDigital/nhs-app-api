@@ -43,10 +43,17 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
             else
                 null
 
+            val responseCompletedDateTimeString = if (message.reply?.response != null)
+                dateAsIsoDate(ZonedDateTime.now())
+            else
+                null
+
             val response =
                     if (message.reply?.response != null)
                         "\"Response\": \"${message.reply.response}\"," +
-                                "\"ResponseSentDateTime\":$responseDateTimeString"
+                                "\"ResponseSentDateTime\":$responseDateTimeString" +
+                        "\"Status\": \"${message.reply.status}\"," +
+                        "\"ResponseDateTime\":$responseCompletedDateTimeString"
                     else ""
 
             return if (message.reply != null)

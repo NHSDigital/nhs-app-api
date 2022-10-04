@@ -41,7 +41,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     new UserReplyOption() { Code = "NEVER", Display = "NEVER" }
                 },
                 Response = "NO",
-                ResponseSentDateTime = DateTime.UtcNow
+                ResponseSentDateTime = DateTime.UtcNow,
+                Status = "Sent",
+                ResponseCompletedDateTime = DateTime.UtcNow
             };
             _noMessageReply = null;
             _noMessageReplyResponse = new UserMessageReply
@@ -51,7 +53,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                 },
                 Response = string.Empty,
-                ResponseSentDateTime = null
+                ResponseSentDateTime = null,
+                Status = string.Empty,
+                ResponseCompletedDateTime = null
             };
         }
 
@@ -138,6 +142,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     resultMessage.Reply.Options[2].Code.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.Response.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.ResponseSentDateTime.Should().NotBeNull();
+                    resultMessage.Reply.Status.Should().NotBeNullOrEmpty();
+                    resultMessage.Reply.ResponseCompletedDateTime.Should().NotBeNull();
                     break;
                 case MessageReplyOptions.NoMessageReply:
                     resultMessage.Reply.Should().BeNull();
@@ -148,6 +154,8 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                     resultMessage.Reply.Options[0].Code.Should().NotBeNullOrEmpty();
                     resultMessage.Reply.Response.Should().BeNullOrEmpty();
                     resultMessage.Reply.ResponseSentDateTime.Should().BeNull();
+                    resultMessage.Reply.Status.Should().BeNullOrEmpty();
+                    resultMessage.Reply.ResponseCompletedDateTime.Should().BeNull();
                     break;
                 default:
                     break;
@@ -278,7 +286,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseSentDateTime = null
+                    ResponseSentDateTime = null,
+                    Status = string.Empty,
+                    ResponseCompletedDateTime = null
                 }
             };
 
@@ -321,7 +331,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseSentDateTime = null
+                    ResponseSentDateTime = null,
+                    Status = string.Empty,
+                    ResponseCompletedDateTime = null
                 }
             };
 
@@ -360,7 +372,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                         new UserReplyOption() { Code = "CANCEL", Display = "CANCEL" },
                     },
                     Response = string.Empty,
-                    ResponseSentDateTime = null
+                    ResponseSentDateTime = null,
+                    Status = string.Empty,
+                    ResponseCompletedDateTime = null
                 }
             };
 
@@ -417,7 +431,9 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
                 {
                     Options = MapMessageReplyOptions(userMessageReply.Options),
                     Response = userMessageReply.Response,
-                    ResponseSentDateTime = userMessageReply.ResponseSentDateTime
+                    ResponseSentDateTime = userMessageReply.ResponseSentDateTime,
+                    Status = userMessageReply.Status,
+                    ResponseCompletedDateTime = userMessageReply.ResponseCompletedDateTime
                 };
             }
             return null;

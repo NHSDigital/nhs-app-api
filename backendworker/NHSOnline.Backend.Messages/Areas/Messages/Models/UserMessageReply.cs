@@ -15,5 +15,11 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Models
 
         [BsonElement]
         public DateTime? ResponseSentDateTime { get; set; }
+
+        [BsonElement]
+        public string Status { get; set; }
+
+        [BsonElement]
+        public DateTime? ResponseCompletedDateTime { get; set; }
     }
 }
