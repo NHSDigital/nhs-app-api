@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  "*": "*"
+  odsCode: emis_with_nbs
 journeys:
   appointments:
     provider: im1
@@ -9,27 +9,28 @@ journeys:
   cdssAdvice:
     provider: none
   coronavirusInformation: true
-  documents: false
+  documents: true
   im1Messaging:
-    isEnabled: false
+    isEnabled: true
     canDeleteMessages: false
-    canUpdateReadStatus: false
-    requiresDetailsRequest: false
-    sendMessageSubject: false
+    canUpdateReadStatus: true
+    requiresDetailsRequest: true
+    sendMessageSubject: true
   medicalRecord:
-    provider: im1
     version: "2"
+    provider: im1
   messaging: true
   ndop: true
   nominatedPharmacy: true
   notifications: true
-  notificationPrompt: true
+  notificationPrompt: false
   oneOneOne: true
   prescriptions:
     provider: im1
   silverIntegrations:
     accountAdmin: []
-    appointmentBookings: []
+    appointmentBookings:
+      - nbs
     carePlans: []
     consultations: []
     consultationsAdmin: []
@@ -41,7 +42,11 @@ journeys:
     recordSharing: []
     secondaryAppointments: []
     testResults: []
-    vaccineRecord: []
+    vaccineRecord:
+      - netCompany
+      - nhsd
+      - netCompanyP5
+  supplier: Emis
   supportsLinkedProfiles: true
   userInfo: true
   wayfinder:

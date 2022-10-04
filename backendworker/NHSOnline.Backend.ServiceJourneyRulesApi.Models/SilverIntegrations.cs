@@ -14,6 +14,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public IList<AccountAdminProvider> AccountAdmin { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IList<AppointmentBookingsProvider> AppointmentBookings { get; set; }
+
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<CarePlansProvider> CarePlans { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
@@ -54,6 +57,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             var silverIntegrations = new SilverIntegrations
             {
                 AccountAdmin = Clone(AccountAdmin),
+                AppointmentBookings = Clone(AppointmentBookings),
                 CarePlans = Clone(CarePlans),
                 Consultations = Clone(Consultations),
                 ConsultationsAdmin = Clone(ConsultationsAdmin),
@@ -74,6 +78,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public void Merge(SilverIntegrations other)
         {
             AccountAdmin = Merge(AccountAdmin, other?.AccountAdmin);
+            AppointmentBookings = Merge(AppointmentBookings, other?.AppointmentBookings);
             CarePlans = Merge(CarePlans, other?.CarePlans);
             Consultations = Merge(Consultations, other?.Consultations);
             ConsultationsAdmin = Merge(ConsultationsAdmin, other?.ConsultationsAdmin);

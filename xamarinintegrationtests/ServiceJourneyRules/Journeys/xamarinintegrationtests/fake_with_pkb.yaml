@@ -29,6 +29,7 @@ journeys:
     provider: im1
   silverIntegrations:
     accountAdmin: []
+    appointmentBookings: []
     carePlans:
     - pkb
     consultations:

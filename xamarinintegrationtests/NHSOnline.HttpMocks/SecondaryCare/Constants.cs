@@ -11,6 +11,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
         private const string KnownServiceBaseUrlNetcall = "http://netcall.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlPkb = "https://pkb.securestubs.local.bitraft.io";
         private const string KnownServiceBaseUrlZesty = "http://zesty.stubs.local.bitraft.io:8080";
+        private const string KnownServiceBaseUrlNbs = "http://nbs.stubs.local.bitraft.io:8080";
 
         public static Dictionary<ServiceSpecialty, string> ServiceSpecialtyMappings { get; } =
             new()
@@ -31,6 +32,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 {ServiceProvider.DrDoctor, $"{KnownServiceBaseUrlDrDoctor}/appointments/{{0}}?from=nhsApp"},
                 {ServiceProvider.eRS, $"{KnownServiceBaseUrlErs}/nhslogin?ubrn={{0}}"},
                 {ServiceProvider.HealthcareComms, $"{KnownServiceBaseUrlHealthcareComms}/appointments/{{0}}"},
+                {ServiceProvider.NBS, $"{KnownServiceBaseUrlNbs}/nhs-login/start-page"},
                 {ServiceProvider.Netcall, $"{KnownServiceBaseUrlNetcall}/Appointments?id={{0}}&trust=789"},
                 {ServiceProvider.PKB, $"{KnownServiceBaseUrlPkb}/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D{{0}}%26nhsStyle%3Dtrue"},
                 {ServiceProvider.Zesty, $"{KnownServiceBaseUrlZesty}/nhs/origin_appointment?resource_id={{0}}"},

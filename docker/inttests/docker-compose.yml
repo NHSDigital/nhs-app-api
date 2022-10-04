@@ -27,6 +27,7 @@ services:
           - ers.stubs.local.bitraft.io
           - hcc.stubs.local.bitraft.io
           - gncr.stubs.local.bitraft.io
+          - nbs.stubs.local.bitraft.io
           - nhsd.stubs.local.bitraft.io
           - netcall.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io

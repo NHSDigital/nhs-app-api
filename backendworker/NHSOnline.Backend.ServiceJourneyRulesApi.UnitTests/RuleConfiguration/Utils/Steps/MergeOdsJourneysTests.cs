@@ -139,6 +139,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(true)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .SilverIntegrations(x => x
+                        .AppointmentBookings(AppointmentBookingsProvider.nbs)
                         .CarePlans(CarePlansProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
@@ -223,6 +224,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .OneOneOneEnabled(true)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .SilverIntegrations(x => x
+                        .AppointmentBookings(AppointmentBookingsProvider.nbs)
                         .CarePlans(CarePlansProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)

@@ -62,11 +62,14 @@ describe('appointments hub', () => {
     let linkElement;
 
     each([
-      ['engage', 'admin', true, false, true],
-      ['engage', 'admin', true, true, false],
-      ['engage', 'admin', false, false, false],
+      ['engage', true, false, true],
+      ['engage', true, true, false],
+      ['engage', false, false, false],
+      ['nbs', true, false, true],
+      ['nbs', true, true, false],
+      ['nbs', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
-      provider, _, silverIntegrationEnabled, isProxying, expectedResult,
+      provider, silverIntegrationEnabled, isProxying, expectedResult,
     ) => {
       beforeEach(() => {
         switch (provider) {
@@ -75,6 +78,9 @@ describe('appointments hub', () => {
             break;
           case 'accurx':
             linkElement = '#btn_accurx_admin';
+            break;
+          case 'nbs':
+            linkElement = '#btn_nbs_booking';
             break;
           default:
             break;

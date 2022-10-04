@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00016"
+journeys:
+  silverIntegrations:
+    appointmentBookings:
+      - nbs

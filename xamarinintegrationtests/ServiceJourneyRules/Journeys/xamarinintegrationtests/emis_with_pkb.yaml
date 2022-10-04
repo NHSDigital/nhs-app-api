@@ -29,6 +29,7 @@ journeys:
     provider: im1
   silverIntegrations:
     accountAdmin: []
+    appointmentBookings: []
     carePlans:
       - pkb
     consultations:
@@ -49,7 +50,7 @@ journeys:
       - pkb
     testResults:
       - pkb
-    vaccineRecord: 
+    vaccineRecord:
       - netCompany
       - nhsd
       - netCompanyP5

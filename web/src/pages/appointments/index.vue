@@ -41,6 +41,13 @@
                    :aria-label="ariaLabelCaption(
                      'appointments.hub.wayfinder',
                      'appointments.hub.viewAndManageReferralsAndAppointments')"/>
+
+        <third-party-jump-off-button v-if="hasNBS && !isProxying"
+                                     id="btn_nbs_booking"
+                                     provider-id="nbs"
+                                     :provider-configuration="thirdPartyProvider
+                                       .nbs.appointmentBookings"/>
+
       </menu-item-list>
     </div>
   </div>
@@ -80,6 +87,14 @@ export default {
         context: {
           provider: 'engage',
           serviceType: 'consultationsAdmin',
+        },
+      }),
+      hasNBS: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'nbs',
+          serviceType: 'appointmentBookings',
         },
       }),
       hasWayfinder: sjrIf({ $store: this.$store, journey: 'wayfinder' }),

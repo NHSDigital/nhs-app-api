@@ -90,6 +90,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(true)
                             .SilverIntegrations(x => x
                                 .AccountAdmin(AccountAdminProvider.gncr)
+                                .AppointmentBookings(AppointmentBookingsProvider.nbs)
                                 .CarePlans(CarePlansProvider.pkb)
                                 .Consultations(ConsultationsProvider.pkb)
                                 .ConsultationsAdmin(ConsultationsAdminProvider.engage)
@@ -126,6 +127,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(false)
                             .SilverIntegrations(x => x
                                 .AccountAdmin()
+                                .AppointmentBookings()
                                 .CarePlans()
                                 .Consultations()
                                 .ConsultationsAdmin()
@@ -161,6 +163,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(true)
                             .SilverIntegrations(x => x
                                 .AccountAdmin()
+                                .AppointmentBookings()
                                 .CarePlans()
                                 .Consultations()
                                 .ConsultationsAdmin()
@@ -218,6 +221,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(true)
                             .SilverIntegrations(x => x
                                 .AccountAdmin()
+                                .AppointmentBookings()
                                 .CarePlans()
                                 .Consultations()
                                 .ConsultationsAdmin()
@@ -253,6 +257,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(false)
                             .SilverIntegrations(x => x
                                 .AccountAdmin()
+                                .AppointmentBookings()
                                 .CarePlans()
                                 .Consultations()
                                 .ConsultationsAdmin()
@@ -288,6 +293,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .UserInfoEnabled(true)
                             .SilverIntegrations(x => x
                                 .AccountAdmin()
+                                .AppointmentBookings()
                                 .CarePlans()
                                 .Consultations()
                                 .ConsultationsAdmin()
@@ -401,117 +407,123 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     "A12",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments()
-                            .TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AppointmentBookings().CarePlans().Consultations()
+                            .ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A13",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments()
-                            .TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations()
+                            .ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A14",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().ConsultationsAdmin().HealthTrackers()
-                            .Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().Consultations()
+                            .ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A15",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().HealthTrackers()
-                            .Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A16",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .Libraries().Medicines().Messages().Participation().RecordSharing()
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().HealthTrackers().Libraries().Medicines().Messages().Participation().RecordSharing()
                             .SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A17",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().Libraries().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A18",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Medicines().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A19",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Messages().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A20",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().RecordSharing()
-                            .SecondaryAppointments().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Participation()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A21",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation()
-                            .TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages()
+                            .RecordSharing().SecondaryAppointments().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A22",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation()
-                            .RecordSharing().TestResults().VaccineRecord())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages()
+                            .Participation().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A23",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages()
+                            .Participation().RecordSharing().TestResults().VaccineRecord())
                         .Build()
                 },
                 {
                     "A24",
                     ValidJourneys()
-                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().Participation().RecordSharing()
-                            .SecondaryAppointments().TestResults())
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages()
+                            .Participation().RecordSharing().SecondaryAppointments())
                         .Build()
                 },
                 {
                     "A25",
                     ValidJourneys()
-                        .WayfinderEnabled(null)
+                        .SilverIntegrations(x => x.AccountAdmin().AppointmentBookings().CarePlans()
+                            .Consultations().ConsultationsAdmin().HealthTrackers().Libraries().Medicines().Messages()
+                            .Participation().RecordSharing().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A26",
+                    ValidJourneys()
+                        .WayfinderEnabled(null)
+                        .Build()
+                },
+                {
+                    "A27",
                     ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
@@ -534,20 +546,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A10", "journeys.Messaging");
             AssertError("A11", "journeys.UserInfo");
             AssertError("A12", "journeys.SilverIntegrations.AccountAdmin");
-            AssertError("A13", "journeys.SilverIntegrations.CarePlans");
-            AssertError("A14", "journeys.SilverIntegrations.Consultations");
-            AssertError("A15", "journeys.SilverIntegrations.ConsultationsAdmin");
-            AssertError("A16", "journeys.SilverIntegrations.HealthTrackers");
-            AssertError("A17", "journeys.SilverIntegrations.Libraries");
-            AssertError("A18", "journeys.SilverIntegrations.Medicines");
-            AssertError("A19", "journeys.SilverIntegrations.Messages");
-            AssertError("A20", "journeys.SilverIntegrations.Participation");
-            AssertError("A21", "journeys.SilverIntegrations.RecordSharing");
-            AssertError("A22", "journeys.SilverIntegrations.SecondaryAppointments");
-            AssertError("A23", "journeys.SilverIntegrations.TestResults");
-            AssertError("A24", "journeys.SilverIntegrations.VaccineRecord");
-            AssertError("A25", "journeys.Wayfinder.IsEnabled");
-            AssertError("A26", "journeys.Supplier");
+            AssertError("A13", "journeys.SilverIntegrations.AppointmentBookings");
+            AssertError("A14", "journeys.SilverIntegrations.CarePlans");
+            AssertError("A15", "journeys.SilverIntegrations.Consultations");
+            AssertError("A16", "journeys.SilverIntegrations.ConsultationsAdmin");
+            AssertError("A17", "journeys.SilverIntegrations.HealthTrackers");
+            AssertError("A18", "journeys.SilverIntegrations.Libraries");
+            AssertError("A19", "journeys.SilverIntegrations.Medicines");
+            AssertError("A20", "journeys.SilverIntegrations.Messages");
+            AssertError("A21", "journeys.SilverIntegrations.Participation");
+            AssertError("A22", "journeys.SilverIntegrations.RecordSharing");
+            AssertError("A23", "journeys.SilverIntegrations.SecondaryAppointments");
+            AssertError("A24", "journeys.SilverIntegrations.TestResults");
+            AssertError("A25", "journeys.SilverIntegrations.VaccineRecord");
+            AssertError("A26", "journeys.Wayfinder.IsEnabled");
+            AssertError("A27", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -574,6 +587,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                 .SilverIntegrations(x => x
                     .AccountAdmin()
+                    .AppointmentBookings()
                     .CarePlans()
                     .Consultations()
                     .ConsultationsAdmin()

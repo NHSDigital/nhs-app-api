@@ -5,6 +5,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
         Accurx,
         DrDoctor,
         eRS,
+        NBS,
         HealthcareComms,
         Netcall,
         PKB,

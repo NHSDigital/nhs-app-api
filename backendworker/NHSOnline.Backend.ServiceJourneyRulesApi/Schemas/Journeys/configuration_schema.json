@@ -209,6 +209,13 @@
             "enum": [ "gncr", "substraktPatientPack"]
           }
         },
+        "appointmentBookings":  {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["nbs"]
+          }
+        },
         "carePlans": {
           "type": "array",
           "items": {

@@ -30,6 +30,7 @@ journeys:
   silverIntegrations:
     accountAdmin:
       - substraktPatientPack
+    appointmentBookings: []
     carePlans: []
     consultations: []
     consultationsAdmin: []

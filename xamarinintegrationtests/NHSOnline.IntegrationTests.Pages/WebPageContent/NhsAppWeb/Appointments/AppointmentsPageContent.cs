@@ -37,6 +37,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
             _interactor,
             "Additional GP services");
 
+        private WebMenuItem NBSAppointmentBookingsMenuItem => WebMenuItem.WithTitle(
+            _interactor,
+            "Book or manage a coronavirus (COVID-19) vaccination");
+
         private WebText AdditionalGpServicesMenuText => WebText.WithTagAndText(
             _interactor,
             "p",
@@ -75,7 +79,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
                     AdditionalGpServicesMenuItem,
                     _isWayfinderEnabled
                         ? ReferralsHospitalAndOtherAppointmentsMenuItem
-                        : HospitalAndOtherAppointmentsMenuItem
+                        : HospitalAndOtherAppointmentsMenuItem,
+                    NBSAppointmentBookingsMenuItem
                 };
 
                 return _focusableElements;
@@ -109,6 +114,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
             return this;
         }
 
+        public AppointmentsPageContent AssertNbsElements()
+        {
+            NBSAppointmentBookingsMenuItem.AssertVisible();
+            return this;
+        }
+
         public AppointmentsPageContent AssertAdditionalGpServicesElements()
         {
             AdditionalGpServicesMenuItem.AssertVisible();
@@ -122,6 +133,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
 
         public void NavigateToAdditionalGpServices() => AdditionalGpServicesMenuItem.Click();
 
+        public void NavigateToNbsAdditionsBookings() => NBSAppointmentBookingsMenuItem.Click();
+
         public void NavigateToSecondaryCareSummaryPage() => ReferralsHospitalAndOtherAppointmentsMenuItem.Click();
 
         public void KeyboardNavigateToGpSurgeryAppointments(AndroidKeyboardNavigation navigation)
@@ -129,6 +142,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Appointments
 
         public void KeyboardNavigateToAdditionalGpServices(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(AdditionalGpServicesMenuItem, navigation);
+
+        public void KeyboardNavigateToNbsAppointmentBookings(AndroidKeyboardNavigation navigation)
+            => KeyboardNavigateToAndActivateMenuItem(NBSAppointmentBookingsMenuItem, navigation);
 
         public void KeyboardNavigateToHospitalAndOtherAppointments(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(HospitalAndOtherAppointmentsMenuItem, navigation);

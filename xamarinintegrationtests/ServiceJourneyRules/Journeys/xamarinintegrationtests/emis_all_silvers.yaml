@@ -31,6 +31,8 @@ journeys:
     accountAdmin:
     - substraktPatientPack
     - gncr
+    appointmentBookings:
+    - nbs
     carePlans:
     - pkb
     consultations:

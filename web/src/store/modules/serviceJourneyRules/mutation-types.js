@@ -38,6 +38,7 @@ export const initialState = () => ({
     },
     silverIntegrations: {
       accountAdmin: [],
+      appointmentBookings: [],
       carePlans: [],
       consultations: [],
       consultationsAdmin: [],

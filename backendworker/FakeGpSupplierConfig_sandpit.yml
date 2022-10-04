@@ -792,6 +792,61 @@ defaultUsers:
       dateOfBirth: "1983-09-09T00:00:00"
       sex: Female
 
+  nbs:
+    9998571242:
+      userId: 2eb93a2d-05a3-4bec-9fbf-7ff7da8800c4
+      emailAddress: onboarding.nhsapp+nbs.user1@gmail.com
+      odsCode: F00016
+      givenName: Marie
+      familyName: Smith
+      dateOfBirth: "1993-01-01T00:00:00"
+      sex: Female
+
+    9998571243:
+      userId: c2d6eb7c-ba9e-4d33-95d5-34e0bd389aec
+      emailAddress: onboarding.nhsapp+nbs.user2@gmail.com
+      odsCode: F00016
+      givenName: Joseph
+      familyName: Mackenzie
+      dateOfBirth: "1999-02-02T00:00:00"
+      sex: Male
+
+    9998571244:
+      userId: 00c5538c-4e0b-46b7-93b9-793b03b1ba7d
+      emailAddress: onboarding.nhsapp+nbs.user3@gmail.com
+      odsCode: F00016
+      givenName: Niammh
+      familyName: Devine
+      dateOfBirth: "2001-03-03T00:00:00"
+      sex: Female
+
+    9998571245:
+      userId: c950891c-fc3c-4c75-a453-5611c3b46df8
+      emailAddress: onboarding.nhsapp+nbs.user4@gmail.com
+      odsCode: F00016
+      givenName: Henry
+      familyName: Pearson
+      dateOfBirth: "1976-04-04T00:00:00"
+      sex: Male
+
+    9998571246:
+      userId: 28e40b2a-7278-463b-88a2-77eaab1053f1
+      emailAddress: onboarding.nhsapp+nbs.user5@gmail.com
+      odsCode: F00016
+      givenName: Joanne
+      familyName: Adams
+      dateOfBirth: "1986-05-05T00:00:00"
+      sex: Female
+
+    9998571247:
+      userId: f0f11e80-e609-4bcf-b2b6-4913cc958cc8
+      emailAddress: onboarding.nhsapp+nbs.user6@gmail.com
+      odsCode: F00016
+      givenName: Matt
+      familyName: Sanchez
+      dateOfBirth: "1993-06-06T00:00:00"
+      sex: Male
+
   vaccinerecord:
     9692237818:
       userId: 0965ec5a-68f4-4d69-acf7-67a3c603115d

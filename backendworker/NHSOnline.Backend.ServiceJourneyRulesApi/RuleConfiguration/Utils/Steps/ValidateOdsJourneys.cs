@@ -105,6 +105,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             journeysValidator
                 .Add(journeys => journeys.SilverIntegrations?.AccountAdmin != null,
                     "journeys.SilverIntegrations.AccountAdmin")
+                .Add(journeys => journeys.SilverIntegrations?.AppointmentBookings != null,
+                    "journeys.SilverIntegrations.AppointmentBookings")
                 .Add(journeys => journeys.SilverIntegrations?.CarePlans != null,
                     "journeys.SilverIntegrations.CarePlans")
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,

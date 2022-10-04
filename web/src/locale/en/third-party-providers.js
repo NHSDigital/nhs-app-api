@@ -407,6 +407,19 @@ export default {
       },
     ],
   },
+  nbs: {
+    serviceId: 'nbs',
+    providerName: 'National Booking Service',
+    jumpOffs: [
+      {
+        id: 'appointmentBookings',
+        jumpOffContent: {
+          headerText: 'Book or manage a coronavirus (COVID-19) vaccination',
+          descriptionText: '',
+        },
+      },
+    ],
+  },
   wayfinder: {
     id: 'wayfinder',
     jumpOffContent: {

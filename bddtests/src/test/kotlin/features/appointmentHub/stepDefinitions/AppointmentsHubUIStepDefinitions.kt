@@ -43,6 +43,11 @@ class AppointmentsHubUIStepDefinitions {
         appointmentHubPage.btnEngageAdminLinksWithDescriptionsContent.assertElementNotPresent()
     }
 
+    @Then("^the NBS link to Book Coronavirus Vaccinations is not available on the Appointments Hub")
+    fun theBookCoronavirusVaccinationsLinkIsNotDisplayed() {
+        appointmentHubPage.btnNbsBookAppointments.assertElementNotPresent()
+    }
+
     @Then("^the 'Hospital and other services' link is not available on the Appointments Hub$")
     fun theHospitalAndOtherServicesLinkIsNotAvailableOnTheAppointmentsHub() {
         appointmentHubPage.hospitalAppointmentsLink.assertElementNotPresent()

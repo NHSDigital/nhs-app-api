@@ -59,6 +59,7 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.NOTIFICATION_PROMPT_DISABLED,
                     SJRJourneyType.PRESCRIPTIONS_GPATHAND,
                     SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_NONE,
+                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
                     SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE,
@@ -230,6 +231,12 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ACCURX,
                     SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ACCURX
                     )
+            )
+            .add(
+                Supplier.EMIS, "F00016",
+                EnumSet.of(
+                    SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NBS
+                )
             )
 
         fun findPatientForConfiguration(

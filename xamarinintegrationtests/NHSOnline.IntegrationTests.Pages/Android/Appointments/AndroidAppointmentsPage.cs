@@ -58,6 +58,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Appointments
         public void KeyboardNavigateToHospitalAndOtherAppointments() =>
             PageContent.KeyboardNavigateToHospitalAndOtherAppointments(KeyboardPageContentNavigation);
 
+        public void KeyboardNavigateToNbsAppointmentBookings() =>
+            PageContent.KeyboardNavigateToNbsAppointmentBookings(KeyboardPageContentNavigation);
+
         // Focus needs to be set on webview on page load, NHSO-14668 and tabbing functionality needs to be updated before this can be removed.
         public AndroidAppointmentsPage TabIntoFocus()
         {

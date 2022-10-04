@@ -13,6 +13,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public SilverIntegrationsBuilder AppointmentBookings(params AppointmentBookingsProvider[] providers)
+        {
+            _silverIntegrations.AppointmentBookings = providers.ToList();
+            return this;
+        }
+
         public SilverIntegrationsBuilder CarePlans(params CarePlansProvider[] providers)
         {
             _silverIntegrations.CarePlans = providers.ToList();

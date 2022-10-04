@@ -211,6 +211,15 @@ const thirdPartyProvider = {
       serviceType: 'messages',
     },
   },
+  nbs: {
+    appointmentBookings: {
+      acceptablePathsRegex: '^\\/nhs-login\\/start-page$',
+      jumpOffId: 'appointmentBookings',
+      redirectPath: '/nhs-login/start-page',
+      provider: 'nbs',
+      serviceType: 'appointmentBookings',
+    },
+  },
   wayfinder: {
     accurxWayfinder: {
       jumpOffId: 'accurxWayfinder',

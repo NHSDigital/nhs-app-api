@@ -16,6 +16,8 @@ open class AppointmentHubPage : HybridPageObject() {
     private val olcAdminHelpTitle = "Additional GP services"
     private val olcAdminHelpDescription = "Get fit notes (sick notes) and GP letters or ask about recent tests"
 
+    private val nbsBookAppointmentsTitle = "Book or manage a coronavirus (COVID-19) vaccination"
+
     var content = LinksWithDescriptionsContent(
             linkBlockTitle = "Appointments",
             containerXPath = "//div[@class='nhsuk-grid-column-full']",
@@ -42,6 +44,10 @@ open class AppointmentHubPage : HybridPageObject() {
 
     val btnOlcAdminHelpLinkWithDescriptionsContent by lazy {
         links.link(olcAdminHelpTitle)
+    }
+
+    val btnNbsBookAppointments by lazy {
+        links.link(nbsBookAppointmentsTitle)
     }
 
     val hospitalAppointmentsLink by lazy {

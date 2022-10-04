@@ -115,6 +115,23 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
+
+    # Full NationalBookingService (NBS) config is (temporarily) defined here as we want to confine the NBS
+    # KnownService to the dev cluster for the moment, due to only having configuration details for sandpit
+    services__nbs__subServices: null
+    services__nbs__javaScriptInteractionMode: SilverThirdParty
+    services__nbs__menuTab: None
+    services__nbs__viewMode: WebView
+    services__nbs__integrationLevel: SilverWithWebNavigation
+    services__nbs__showSpinner: true
+    services__nbs__showThirdPartyWarning: true
+    services__nbs__requiresAssertedLoginIdentity: true
+    services__nbs__validateSession: false
+    services__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
+    servicesV3__nbs__showThirdPartyWarning: false
+    servicesV3__nbs__requiresAssertedLoginIdentity: true
+    servicesV3__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
+
   mockNotificationHubClient: false
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-preview
