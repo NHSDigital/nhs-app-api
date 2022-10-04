@@ -290,6 +290,168 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
+        [TestMethod]
+        public async Task Patch_MessageReplyStatus_MessageServiceReturnsUpdated_ReturnsNoContent()
+        {
+            // Arrange
+            const string status = "Succeeded";
+            var nhsLoginId = Guid.NewGuid().ToString();;
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.Updated(new UserMessage
+                {
+                    Id = new ObjectId(MessageId),
+                    Reply = new UserMessageReply()
+                    {
+                        Status = status,
+                        ResponseCompletedDateTime = DateTime.Now
+                    },
+                    SenderContext = new SenderContext()
+                }, MessagePatchType.ReplyStatus));
+
+            MessageReplyCompletedEventLogData messageReplyStatusSentEventLogData = null;
+            _mockEventHubLogger.Setup(x => x.MessageReplyCompleted(It.IsAny<MessageReplyCompletedEventLogData>()))
+                .Callback<MessageReplyCompletedEventLogData>(x => messageReplyStatusSentEventLogData = x)
+                .Returns(Task.CompletedTask);
+
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, MessageId);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+            _mockEventHubLogger.VerifyAll();
+
+            result.Should().BeAssignableTo<NoContentResult>();
+
+            messageReplyStatusSentEventLogData.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_MessageServiceReturnsNoChange_ReturnsNoContent()
+        {
+            // Arrange
+            const string messageId = "id_1234";
+            var nhsLoginId = Guid.NewGuid().ToString();
+            ;
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.NoChange());
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, messageId);
+
+            // Assert
+            _mockMessageService.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_MessageServiceReturnsNotFound_ReturnsNotFound()
+        {
+
+            // Arrange
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, "message id");
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
+        {
+            // Arrange
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.BadGateway());
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, "message id");
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
+        {
+            // Arrange
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.InternalServerError());
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, "message id");
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_MessageServiceThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            _mockMessageService.Setup(x =>
+                    x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(),
+                        It.IsAny<string>()))
+                .Throws<ArgumentException>();
+
+            // Act
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), nhsLoginId, "message id");
+
+            // Assert
+            _mockMessageService.VerifyAll();
+
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Patch_ReplyStatus_PatchRequestIsInvalid_ReturnsBadRequest()
+        {
+            // Arrange
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            // Act
+            _mockMessageService.Setup(x => x.UpdateMessage(
+                    It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new MessagePatchResult.BadRequest());
+
+            var result = await _systemUnderTest.Patch(null, nhsLoginId, "message id");
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
         [TestCleanup]
         public void Dispose() => _systemUnderTest?.Dispose();
     }

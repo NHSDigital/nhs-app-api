@@ -480,5 +480,59 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
 
             result.Should().BeAssignableTo<MessagePatchResult.BadRequest>();
         }
+
+        [TestMethod]
+        public async Task Patch_Updated_For_MessageReplyStatus()
+        {
+            // Arrange
+            var jsonPatchDoc = new JsonPatchDocument<Message>();
+            var nhsLoginId = Guid.NewGuid().ToString();
+
+            jsonPatchDoc.Operations.Add(new Operation<Message>("add", "/reply/status", null, "Succeeded"));
+
+            var userMessage = new UserMessage
+            {
+                Id = new ObjectId("ae0b4ffd40c44828b884961b5228128e"),
+                    Reply = new UserMessageReply
+                    {
+                        Status = null,
+                        ResponseCompletedDateTime = null
+                    }
+            };
+
+            _mockMessagesValidationService.Setup(x =>
+                    x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
+                .Returns(true);
+
+            _mockPatchMessageTypeMapper.Setup(s => s.Map(jsonPatchDoc.Operations.FirstOrDefault()))
+                .Returns(MessagePatchType.ReplyStatus);
+
+            List<Expression<Func<UserMessage, bool>>> filters = null;
+
+            _mockMessageRepository.Setup(x => x.UpdateOne(
+                    nhsLoginId,
+                    _userMessageId,
+                    It.IsAny<(List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>()))
+                .Callback<string, string, (List<Expression<Func<UserMessage, bool>>>, UpdateRecordBuilder<UserMessage>)>(
+                    (nhsLoginId, messageId, thing) => filters = thing.Item1)
+                .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.Updated());
+
+            _mockMessageRepository
+                .Setup(x => x.FindMessage(nhsLoginId, _userMessageId))
+                .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new[] { userMessage }));
+
+            // Act
+            var result = await _systemUnderTest.UpdateMessage(jsonPatchDoc, nhsLoginId, _userMessageId);
+
+            // Assert
+            _mockMessagesValidationService.VerifyAll();
+            _mockMessageRepository.VerifyAll();
+            _mockPatchMessageTypeMapper.VerifyAll();
+
+            filters.Should().HaveCount(1);
+
+            var subject = result.Should().BeAssignableTo<MessagePatchResult.Updated>().Subject;
+            subject.UserMessage.Should().Be(userMessage);
+        }
     }
 }

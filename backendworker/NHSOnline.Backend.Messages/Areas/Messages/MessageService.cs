@@ -243,6 +243,65 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
+        public async Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument,
+            string nhsLoginId, string messageId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                if (!_validator.IsPatchRequestValid(messagePatchDocument, messageId))
+                {
+                    return new MessagePatchResult.BadRequest();
+                }
+
+                var messagePatchType = _messagePatchTypeMapper.Map(messagePatchDocument.Operations.FirstOrDefault());
+                if (messagePatchType == MessagePatchType.Unknown)
+                {
+                    var operations = messagePatchDocument.Operations.Select(operation =>
+                        string.Join("-", new[] { "operation=" + operation.op, "path=" + operation.path }));
+                    _logger.LogError("Unsupported operations in Message Update: {Operations}",
+                        string.Join(",", operations));
+                    return new MessagePatchResult.BadRequest();
+                }
+
+                var filtersAndUpdates =
+                    new UpdateMessageMapperStep().Map(messagePatchDocument, messagePatchType);
+                if (filtersAndUpdates.Failed(out var repositoryUpdatesFailure))
+                {
+                    return repositoryUpdatesFailure;
+                }
+
+                var updateResult = await _messageRepository
+                    .UpdateOne(nhsLoginId, messageId, filtersAndUpdates);
+                if (!(updateResult is RepositoryUpdateResult<UserMessage>.Updated))
+                {
+                    _logger.LogWarning("Message Patch did not update message in repository");
+                    return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
+                }
+
+                var findResult = await _messageRepository.FindMessage(nhsLoginId, messageId);
+                if (!(findResult is RepositoryFindResult<UserMessage>.Found foundResult))
+                {
+                    _logger.LogWarning("Message Patch failed to find message in repository");
+                    return findResult.Accept(new RepositoryFindMessagePatchResultVisitor());
+                }
+
+                var record = foundResult.Records.First();
+
+                return new MessagePatchResult.Updated(record, messagePatchType);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Message Patch has failed with exception");
+                return new MessagePatchResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<UserSendersResult> GetSenders(AccessToken accessToken)
         {
             _logger.LogEnter();

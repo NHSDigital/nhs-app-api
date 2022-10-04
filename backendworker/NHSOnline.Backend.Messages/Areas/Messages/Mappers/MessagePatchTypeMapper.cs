@@ -17,6 +17,9 @@ namespace NHSOnline.Backend.Messages.Areas.Messages.Mappers
                 case { OperationType: OperationType.Add, path: "/reply/response" }:
                     patchType = MessagePatchType.Reply;
                     break;
+                case { OperationType: OperationType.Add, path: "/reply/status" }:
+                    patchType = MessagePatchType.ReplyStatus;
+                    break;
                 default:
                     patchType = MessagePatchType.Unknown;
                     break;

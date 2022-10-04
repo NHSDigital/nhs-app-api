@@ -104,8 +104,8 @@ data:
                 proxy_set_header Connection "";
             }
 
-            location ~* "^/v[1,2]/api/users/(.*)/messages" {
-                rewrite ^/v(.*)/api/users/(.*)/messages$ /v$1/api/$2/messages break;
+            location ~* "^/v[1,2]/api/users/(.*)/messages/?(.*)?" {
+                rewrite ^/v(.*)/api/users/(.*)/messages/?(.*)?$ /v$1/api/$2/messages/$3 break;
                 proxy_pass http://application;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;

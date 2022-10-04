@@ -202,6 +202,34 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
         }
 
+        [HttpPatch]
+        [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
+        [ApiVersionRoute("api/{nhsLoginId}/messages/{messageId}")]
+        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument, string nhsLoginId, string messageId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var messageResult =
+                    await _messageService.UpdateMessage(patchDocument, nhsLoginId, messageId);
+
+                await messageResult.Accept(
+                    new MessageLogPatchResultVisitor(_metricLogger, _eventHubLogger,
+                        _messageSenderContextEventLogDataMapper, _logger));
+                return await messageResult.Accept(new MessagePatchResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to update message with exception");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         private async Task<MessagesResult> GetUserMessages(string senderId, bool summary, AccessToken accessToken)
         {
             var hasSenderId = !string.IsNullOrWhiteSpace(senderId);

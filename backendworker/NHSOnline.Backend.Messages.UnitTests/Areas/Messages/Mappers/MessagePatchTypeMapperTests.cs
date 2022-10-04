@@ -39,6 +39,16 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages.Mappers
         }
 
         [TestMethod]
+        public void Map_TypeReplyStatus_WhenOperationIsAddAndPathIsResponse()
+        {
+            // Act
+            var result = _systemUnderTest.Map(new Operation<Message> { op = "add", path = "/reply/status" });
+
+            //Assert
+            result.Should().Be(MessagePatchType.ReplyStatus);
+        }
+
+        [TestMethod]
         public void Map_TypeUnknown_WhenOperationAndPathNotMapped()
         {
             // Act

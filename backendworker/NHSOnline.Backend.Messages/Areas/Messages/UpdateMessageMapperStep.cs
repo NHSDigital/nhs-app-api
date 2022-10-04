@@ -40,6 +40,13 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                                                userMessage.Reply.ResponseSentDateTime == null &&
                                                userMessage.Reply.Options.Any(s => s.Code == userResponse));
                     break;
+                case MessagePatchType.ReplyStatus:
+                    var userReplyStatusResponse = Convert.ToString(operation.value, CultureInfo.InvariantCulture);
+                    updates.Set(x => x.Reply.Status, !string.IsNullOrEmpty(userReplyStatusResponse) ? userReplyStatusResponse : null);
+                    updates.Set(x => x.Reply.ResponseCompletedDateTime,
+                        !string.IsNullOrEmpty(userReplyStatusResponse) ? DateTime.UtcNow : (DateTime?) null);
+                    filters.Add(userMessage => userMessage.Reply != null);
+                    break;
             }
 
             return (filters, updates);

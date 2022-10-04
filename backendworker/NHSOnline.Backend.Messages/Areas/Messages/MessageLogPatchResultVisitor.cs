@@ -68,6 +68,12 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                             result.UserMessage.Id.ToString(), result.UserMessage.Reply?.Response,
                             messageReplySenderContextEventLogData)));
                         break;
+                    case MessagePatchType.ReplyStatus:
+                        var messageReplyStatusSenderContextEventLogData =
+                            _messageSenderContextEventLogDataMapper.Map(result.UserMessage.SenderContext);
+                        tasks.Add(_eventHubLogger.MessageReplyCompleted(new MessageReplyCompletedEventLogData(
+                            result.UserMessage.Id.ToString(), messageReplyStatusSenderContextEventLogData)));
+                        break;
                 }
 
                 await Task.WhenAll(tasks);
