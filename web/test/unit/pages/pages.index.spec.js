@@ -1,4 +1,3 @@
-import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import Index from '@/pages/index';
 import { createStore, mount, createRouter } from '../helpers';
@@ -21,9 +20,6 @@ describe('index', () => {
     homeScreen = {},
     isNativeApp = false,
     isProofLevel9 = true,
-    hasUnreadAppMessages = false,
-    hasUnreadGpMessages = false,
-    messagesUnavailable = false,
     onDemandEnabled = false,
 
   } = {}) => {
@@ -33,11 +29,7 @@ describe('index', () => {
         practiceSettings: {
           im1MessagingEnabled: true,
         },
-        gpMessages: {
-          hasUnread: hasUnreadGpMessages,
-          gpMessagingSessionUnavailable: messagesUnavailable,
-        },
-        messaging: { hasUnread: hasUnreadAppMessages },
+        messaging: {},
         knownServices: {
           knownServices: [{
             id: 'pkb',
@@ -134,30 +126,12 @@ describe('index', () => {
   });
 
   describe('messaging link', () => {
-    const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
+    it('will have text \'View your messages\'', () => {
+      wrapper = mountAs({});
 
-    let messagesLink;
-
-    each([
-      ['will have text \'View your messages\' when there are unread messages', true, true, 'View your messages', false],
-      ['will have text \'View your messages\' when there are only unread app messages', false, true, 'View your messages', false],
-      ['will have text \'View your messages\' when there are only unread GP messages and OnDemand is enabled', true, false, 'View your messages', true],
-      ['will have text \'View your messages\' when there are only unread GP messages and OnDemand is disabled', true, false, 'View your messages', false],
-      ['will have text \'View your messages\' when there are no unread messages', false, false, 'View your messages', false],
-    ]).it('%s',
-      (_, hasUnreadGpMessages, hasUnreadAppMessages, expectedText, onDemandEnabled) => {
-        wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages, onDemandEnabled });
-        messagesLink = getMessagesLink(wrapper);
-        expect(messagesLink.exists()).toBe(true);
-        expect(messagesLink.text()).toBe(expectedText);
-      });
-
-    it('will not show messages link when messages unavailable', () => {
-      wrapper = mountAs({
-        messagesUnavailable: true,
-      });
-      messagesLink = getMessagesLink(wrapper);
-      expect(messagesLink.exists()).toBe(false);
+      const messagesLink = wrapper.find('#btn_messages');
+      expect(messagesLink.exists()).toBe(true);
+      expect(messagesLink.text()).toBe('View your messages');
     });
   });
 

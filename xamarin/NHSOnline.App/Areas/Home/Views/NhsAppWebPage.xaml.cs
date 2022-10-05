@@ -101,6 +101,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand<Uri> OpenBrowserOverlayCommand
             => new AsyncCommand<Uri>(() => OpenBrowserOverlayRequested);
 
+        public Func<string, Task>? SetBadgeCountRequested { get; set; }
+        public AsyncCommand<string> SetBadgeCountCommand
+            => new AsyncCommand<string>(() => SetBadgeCountRequested);
+
         public Func<Task>? OpenSettingsRequested { get; set; }
         public AsyncCommand OpenSettingsCommand
             => new AsyncCommand(() => OpenSettingsRequested);

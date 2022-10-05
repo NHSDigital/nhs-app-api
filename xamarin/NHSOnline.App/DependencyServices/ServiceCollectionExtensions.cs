@@ -27,7 +27,8 @@ namespace NHSOnline.App.DependencyServices
                 .AddTransient(_ => DependencyService.Get<IDialogPresenter>())
                 .AddTransient(_ => DependencyService.Get<IInstallReferrer>())
                 .AddTransient(_ => DependencyService.Get<IAccessibilityService>())
-                .AddTransient(_ => DependencyService.Get<IPlatformVersion>());
+                .AddTransient(_ => DependencyService.Get<IPlatformVersion>())
+                .AddTransient(_ => DependencyService.Get<IBadgeService>());
         }
     }
 }

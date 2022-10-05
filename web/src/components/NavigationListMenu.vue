@@ -15,8 +15,7 @@
                                    provider-id="netCompany"
                                    :provider-configuration="thirdPartyProvider.netCompany.
                                      vaccineRecordP5" />
-      <menu-item v-if="gpMessagingAvailable"
-                 id="btn_messages"
+      <menu-item id="btn_messages"
                  :header-tag="headerTag"
                  data-purpose="messages-menu-item"
                  :href="messagesPath"
@@ -86,10 +85,6 @@ export default {
       type: String,
       default: 'h2',
     },
-    hasMessageIndicator: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -125,9 +120,6 @@ export default {
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
-    gpMessagingAvailable() {
-      return !this.$store.state.gpMessages.gpMessagingSessionUnavailable;
-    },
     messagesLabel() {
       return this.$t('navigation.viewYourMessages');
     },
@@ -153,15 +145,7 @@ export default {
       return this.hasNetCompanyP5VaccineRecord && !this.isProxying && !this.isProofLevel9;
     },
     unreadMessagesCount() {
-      let total = 0;
-
-      if (this.$store.state.messaging && this.$store.state.messaging.senderMessages) {
-        this.$store.state.messaging.senderMessages.forEach((message) => {
-          if (message !== undefined) total += message.unreadCount;
-        });
-      }
-
-      return total === 0 ? undefined : total;
+      return this.$store.state.messaging.totalUnreadMessageCount || undefined;
     },
   },
   created() {

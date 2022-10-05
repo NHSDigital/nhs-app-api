@@ -226,6 +226,7 @@
     <Compile Include="DependencyServices\AndroidSettingsService.cs" />
     <Compile Include="DependencyServices\AndroidUpdateService.cs" />
     <Compile Include="DependencyServices\AndroidNativeAppVersionCheckService.cs" />
+    <Compile Include="DependencyServices\AndroidBadgeService.cs" />
     <Compile Include="DependencyServices\Biometrics\AndroidBiometrics.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthSigner.cs" />

@@ -10,6 +10,7 @@ import {
   LOADED_SENDERS,
   SET_HAS_UNREAD,
   SET_UNREADMESSAGE_SENDER_COUNT,
+  DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
 } from './mutation-types';
 
 export default {
@@ -52,5 +53,7 @@ export default {
       state.totalUnreadSendersCount = unreadSendersCount;
     }
   },
-
+  [DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT](state) {
+    state.totalUnreadMessageCount -= 1;
+  },
 };

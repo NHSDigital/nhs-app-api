@@ -7,6 +7,7 @@ import {
   LOADED,
   LOADED_MESSAGE,
   LOADED_SENDERS,
+  DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
 } from '@/store/modules/messaging/mutation-types';
 
 describe('messaging mutations', () => {
@@ -91,6 +92,13 @@ describe('messaging mutations', () => {
 
     it('will set the message state to the received value', () => {
       expect(state.message).toEqual(data);
+    });
+  });
+
+  describe('DECREMENT_UNREAD_MESSAGE_COUNT', () => {
+    it('will decrement the total unread message count in the state', () => {
+      mutations[DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT](state);
+      expect(state.totalUnreadMessageCount).toBe(-1);
     });
   });
 

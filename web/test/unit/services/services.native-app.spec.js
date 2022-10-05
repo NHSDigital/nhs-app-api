@@ -1,4 +1,4 @@
-import nativeApp from '@/services/native-app';
+import NativeApp from '@/services/native-app';
 
 describe('native app', () => {
   const callNative = (name, arg) => {
@@ -8,7 +8,7 @@ describe('native app', () => {
 
         beforeEach(() => {
           global.nativeApp[name] = jest.fn();
-          result = nativeApp[name](arg);
+          result = NativeApp[name](arg);
         });
 
         it('will call method', () => {
@@ -28,7 +28,7 @@ describe('native app', () => {
         let result;
 
         beforeEach(() => {
-          result = nativeApp[name](arg);
+          result = NativeApp[name](arg);
         });
 
         it('will return false', () => {
@@ -60,6 +60,7 @@ describe('native app', () => {
   callNative('setHelpUrl', 'helpUrl');
   callNative('showHeader');
   callNative('showHeaderSlim');
+  callNative('setBadgeCount', 3);
 
   describe('configureWebContext', () => {
     let result;
@@ -71,8 +72,8 @@ describe('native app', () => {
 
       beforeEach(() => {
         global.nativeApp.configureWebContext = jest.fn();
-        setHelpUrl = jest.spyOn(nativeApp, 'setHelpUrl');
-        result = nativeApp.configureWebContext(helpUrl, reloadPath);
+        setHelpUrl = jest.spyOn(NativeApp, 'setHelpUrl');
+        result = NativeApp.configureWebContext(helpUrl, reloadPath);
       });
 
       it('will call method', () => {
@@ -93,8 +94,8 @@ describe('native app', () => {
       const reloadPath = 'reloadPath';
 
       beforeEach(() => {
-        setHelpUrl = jest.spyOn(nativeApp, 'setHelpUrl');
-        result = nativeApp.configureWebContext(helpUrl, reloadPath);
+        setHelpUrl = jest.spyOn(NativeApp, 'setHelpUrl');
+        result = NativeApp.configureWebContext(helpUrl, reloadPath);
       });
 
       it('will call `setHelpUrl` with help URL', () => {
@@ -116,7 +117,7 @@ describe('native app', () => {
       beforeEach(() => {
         global.nativeApp.fetchNativeAppVersion = () => returnValue;
         fetchNativeAppVersion = jest.spyOn(global.nativeApp, 'fetchNativeAppVersion');
-        result = nativeApp.fetchNativeAppVersion();
+        result = NativeApp.fetchNativeAppVersion();
       });
 
       it('will call method', () => {
@@ -132,7 +133,7 @@ describe('native app', () => {
       let result;
 
       beforeEach(() => {
-        result = nativeApp.fetchNativeAppVersion();
+        result = NativeApp.fetchNativeAppVersion();
       });
 
       it('will return empty string', () => {
@@ -148,12 +149,12 @@ describe('native app', () => {
     let hideWhiteScreen;
 
     beforeEach(() => {
-      hideHeader = jest.spyOn(nativeApp, 'hideHeader');
-      hideHeaderSlim = jest.spyOn(nativeApp, 'hideHeaderSlim');
-      hideMenuBar = jest.spyOn(nativeApp, 'hideMenuBar');
-      hideWhiteScreen = jest.spyOn(nativeApp, 'hideWhiteScreen');
+      hideHeader = jest.spyOn(NativeApp, 'hideHeader');
+      hideHeaderSlim = jest.spyOn(NativeApp, 'hideHeaderSlim');
+      hideMenuBar = jest.spyOn(NativeApp, 'hideMenuBar');
+      hideWhiteScreen = jest.spyOn(NativeApp, 'hideWhiteScreen');
 
-      nativeApp.hideElements();
+      NativeApp.hideElements();
     });
 
     it('will call `hideHeader`', () => {
@@ -178,10 +179,10 @@ describe('native app', () => {
     let hideHeaderSlim;
 
     beforeEach(() => {
-      hideHeader = jest.spyOn(nativeApp, 'hideHeader');
-      hideHeaderSlim = jest.spyOn(nativeApp, 'hideHeaderSlim');
+      hideHeader = jest.spyOn(NativeApp, 'hideHeader');
+      hideHeaderSlim = jest.spyOn(NativeApp, 'hideHeaderSlim');
 
-      nativeApp.hideHeaders();
+      NativeApp.hideHeaders();
     });
 
     it('will call `hideHeader`', () => {
@@ -200,13 +201,13 @@ describe('native app', () => {
       });
 
       it('will return true', () => {
-        expect(nativeApp.goToLoginOptions()).toBe(true);
+        expect(NativeApp.goToLoginOptions()).toBe(true);
       });
     });
 
     describe('native method does not exist', () => {
       it('will return false', () => {
-        expect(nativeApp.goToLoginOptions()).toBe(false);
+        expect(NativeApp.goToLoginOptions()).toBe(false);
       });
     });
   });
@@ -217,11 +218,11 @@ describe('native app', () => {
       beforeEach(() => {
         global.nativeApp.startDownload = jest.fn();
         startDownload = jest.spyOn(global.nativeApp, 'startDownload');
-        nativeApp.startDownload('base64', 'example.jpg', 'image/jpg');
+        NativeApp.startDownload('base64', 'example.jpg', 'image/jpg');
       });
 
       it('will return true', () => {
-        expect(nativeApp.startDownload()).toBe(true);
+        expect(NativeApp.startDownload()).toBe(true);
       });
 
       it('will call the method', () => {
@@ -231,7 +232,7 @@ describe('native app', () => {
 
     describe('native method does not exist', () => {
       it('will return false', () => {
-        expect(nativeApp.startDownload()).toBe(false);
+        expect(NativeApp.startDownload()).toBe(false);
       });
     });
   });
@@ -242,7 +243,7 @@ describe('native app', () => {
       beforeEach(() => {
         global.nativeApp.updateBiometricRegistrationWithToken = jest.fn();
         global.nativeApp.updateBiometricRegistration = jest.fn();
-        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
+        result = NativeApp.updateBiometricRegistrationWithToken('accessToken');
       });
 
       it('will return true', () => {
@@ -263,7 +264,7 @@ describe('native app', () => {
       beforeEach(() => {
         global.nativeApp.updateBiometricRegistrationWithToken = undefined;
         global.nativeApp.updateBiometricRegistration = undefined;
-        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
+        result = NativeApp.updateBiometricRegistrationWithToken('accessToken');
       });
 
       it('will return false', () => {
@@ -277,7 +278,7 @@ describe('native app', () => {
       });
 
       it('shouldShowPreLoginHeader will return false', () => {
-        expect(nativeApp.shouldShowPreLoginHeader()).toBe(false);
+        expect(NativeApp.shouldShowPreLoginHeader()).toBe(false);
       });
     });
 
@@ -287,7 +288,7 @@ describe('native app', () => {
       });
 
       it('shouldShowPreLoginHeader will return true', () => {
-        expect(nativeApp.shouldShowPreLoginHeader()).toBe(true);
+        expect(NativeApp.shouldShowPreLoginHeader()).toBe(true);
       });
     });
   });

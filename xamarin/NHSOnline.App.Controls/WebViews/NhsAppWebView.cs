@@ -87,6 +87,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty CreateOnDemandGpSessionCommandProperty =
             BindableProperty.Create(nameof(CreateOnDemandGpSessionCommand), typeof(AsyncCommand<CreateOnDemandGpSessionRequest>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty SetBadgeCountCommandProperty =
+            BindableProperty.Create(nameof(SetBadgeCountCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
+
         private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void OpenWebIntegration(string json)
@@ -399,6 +402,15 @@ namespace NHSOnline.App.Controls.WebViews
 
         public async Task GetContextualHelpLink()
             => await EvaluateJavaScriptWithLoggingAsync("window.nativeAppCallbacks.getContextualHelpLink()").ResumeOnThreadPool();
+
+        public void SetBadgeCount(string count) => SetBadgeCountCommand.Execute(count);
+
+        public AsyncCommand<string> SetBadgeCountCommand
+        {
+            get => (AsyncCommand<string>)GetValue(SetBadgeCountCommandProperty);
+            set => SetValue(SetBadgeCountCommandProperty, value);
+        }
+
 
         private async Task EvaluateJavaScriptWithLoggingAsync(string script)
         {

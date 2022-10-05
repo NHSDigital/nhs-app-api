@@ -50,6 +50,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IDialogPresenter _dialogPresenter;
         private readonly FileDownloadService _fileDownloadService;
         private readonly IBiometrics _biometrics;
+        private readonly IBadgeService _badgeService;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -67,7 +68,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IFileHandler fileHandler,
             IDialogPresenter dialogPresenter,
             FileDownloadService fileDownloadService,
-            IBiometrics biometrics)
+            IBiometrics biometrics,
+            IBadgeService badgeService)
         {
             _model = model;
             _view = view;
@@ -86,6 +88,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _dialogPresenter = dialogPresenter;
             _fileDownloadService = fileDownloadService;
             _biometrics = biometrics;
+            _badgeService = badgeService;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -104,6 +107,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler<string>(FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
+                .RegisterHandler<string>(SetBadgeCountRequested, (view, handler) => view.SetBadgeCountRequested = handler)
                 .RegisterHandler<string>(SetMenuBarItemRequested, (view, handler) => view.SetMenuBarItemRequested = handler)
                 .RegisterHandler(FetchNativeAppVersionRequested, (view, handler) => view.FetchNativeAppVersionRequested = handler)
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
@@ -491,6 +495,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             await _browser
                 .OpenBrowserOverlay(overlayUri)
+                .PreserveThreadContext();
+        }
+
+        private async Task SetBadgeCountRequested(string count)
+        {
+            await _badgeService
+                .SetBadgeCount(count)
                 .PreserveThreadContext();
         }
 

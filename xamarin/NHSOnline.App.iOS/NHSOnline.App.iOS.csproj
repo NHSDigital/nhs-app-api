@@ -110,6 +110,7 @@
     <Compile Include="Controllers\IosViewController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="DependencyServices\AlertDialog\IosDialogPresenter.cs" />
+    <Compile Include="DependencyServices\IosBadgeService.cs" />
     <Compile Include="DependencyServices\IosPreHomeLogoutMonitor.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKey.cs" />
     <Compile Include="DependencyServices\Biometrics\BiometricAuthKeyProvider.cs" />

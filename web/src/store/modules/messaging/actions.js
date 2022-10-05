@@ -9,7 +9,9 @@ import {
   LOADED_SENDERS,
   SET_HAS_UNREAD,
   SET_UNREADMESSAGE_SENDER_COUNT,
+  DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
 } from './mutation-types';
+import NativeApp from '@/services/native-app';
 
 export default {
   init({ commit }) {
@@ -39,6 +41,10 @@ export default {
       const data = await this.app.$http.getV1ApiUsersMeMessages(request);
       commit(LOADED, data);
       commit(SET_HAS_UNREAD, data);
+      if (request.summary) {
+        commit(SET_UNREADMESSAGE_SENDER_COUNT, data || []);
+        this.dispatch('messaging/setBadgeCount');
+      }
     } catch (error) {
       commit(ADD_ERROR, createLocalError(error));
     } finally {
@@ -54,6 +60,7 @@ export default {
 
       commit(LOADED_SENDERS, senders);
       commit(SET_UNREADMESSAGE_SENDER_COUNT, senders);
+      this.dispatch('messaging/setBadgeCount');
     } catch (error) {
       commit(ADD_ERROR, createLocalError(error));
     }
@@ -70,7 +77,7 @@ export default {
       commit(ADD_ERROR, createLocalError(error));
     }
   },
-  markAsRead(_, messageId) {
+  async markAsRead({ commit }, messageId) {
     const request = {
       messageId,
       patchMessageRequest: [{
@@ -81,9 +88,10 @@ export default {
       ignoreError: true,
       ignoreLoading: true,
     };
-    this.app.$http.patchV1ApiUsersMeMessagesByMessageid(
-      request,
-    );
+    await this.app.$http.patchV1ApiUsersMeMessagesByMessageid(request);
+
+    commit(DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT);
+    this.dispatch('messaging/setBadgeCount');
   },
   async recordMessageResponse(_, { messageId, response }) {
     const request = {
@@ -99,5 +107,10 @@ export default {
     await this.app.$http.patchV1ApiUsersMeMessagesByMessageid(
       request,
     );
+  },
+  setBadgeCount({ state }) {
+    if (this.$env.IOS_BADGE_COUNT_ENABLED) {
+      NativeApp.setBadgeCount(state.totalUnreadMessageCount);
+    }
   },
 };

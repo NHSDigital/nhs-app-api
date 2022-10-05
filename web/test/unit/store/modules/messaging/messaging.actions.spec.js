@@ -7,7 +7,15 @@ import {
   LOADED_MESSAGE,
   LOADED_SENDERS,
   SET_HAS_UNREAD,
+  SET_UNREADMESSAGE_SENDER_COUNT,
+  DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
 } from '@/store/modules/messaging/mutation-types';
+import NativeApp from '@/services/native-app';
+
+jest.mock('@/services/native-app', () => ({
+  ...jest.requireActual('@/services/native-app'),
+  setBadgeCount: jest.fn(),
+}));
 
 describe('messaging actions', () => {
   const getResponse = 'get test response';
@@ -37,6 +45,7 @@ describe('messaging actions', () => {
       },
     };
     actions.dispatch = dispatch;
+    actions.$env = {};
   });
 
   describe('clear', () => {
@@ -76,6 +85,14 @@ describe('messaging actions', () => {
       expect(commit).toBeCalledWith(SET_HAS_UNREAD, getResponse);
     });
 
+    it('will not commit endpoint response to `SET_UNREADMESSAGE_SENDER_COUNT`', () => {
+      expect(commit).not.toBeCalledWith(SET_UNREADMESSAGE_SENDER_COUNT, getResponse);
+    });
+
+    it('will not dispatch `messaging/setBadgeCount` event', () => {
+      expect(dispatch).not.toBeCalledWith('messaging/setBadgeCount');
+    });
+
     it('will dispatch `device/unlockNavBar` event', () => {
       expect(dispatch).toBeCalledWith('device/unlockNavBar');
     });
@@ -89,6 +106,24 @@ describe('messaging actions', () => {
 
       it('will call the `getV1ApiUsersMeMessages` endpoint with sender', () => {
         expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ sender, ignoreError: true });
+      });
+    });
+
+    describe('with summary', () => {
+      beforeEach(async () => {
+        await actions.load({ commit }, { summary: true });
+      });
+
+      it('will call the `getV1ApiUsersMeMessages` endpoint adding ignoreError to the given request', () => {
+        expect($http.getV1ApiUsersMeMessages).toBeCalledWith({ summary: true, ignoreError: true });
+      });
+
+      it('will commit endpoint response to `SET_UNREADMESSAGE_SENDER_COUNT`', () => {
+        expect(commit).toBeCalledWith(SET_UNREADMESSAGE_SENDER_COUNT, getResponse);
+      });
+
+      it('will dispatch `messaging/setBadgeCount` event', () => {
+        expect(dispatch).toBeCalledWith('messaging/setBadgeCount');
       });
     });
 
@@ -181,7 +216,14 @@ describe('messaging actions', () => {
       });
 
       it('will commit endpoint response to `LOADED_SENDERS`', () => {
-        expect(commit).toBeCalledWith(LOADED_SENDERS, 'test sender');
+        expect(commit).toBeCalledWith(LOADED_SENDERS, response.senders);
+      });
+
+      it('will commit endpoint response to `SET_UNREADMESSAGE_SENDER_COUNT`', () => {
+        expect(commit).toBeCalledWith(SET_UNREADMESSAGE_SENDER_COUNT, response.senders);
+      });
+      it('will dispatch `messaging/setBadgeCount` event', () => {
+        expect(dispatch).toBeCalledWith('messaging/setBadgeCount');
       });
     });
 
@@ -224,6 +266,61 @@ describe('messaging actions', () => {
       await actions.recordMessageResponse({ commit }, { messageId: 123, response: 'user_response' });
 
       expect($http.patchV1ApiUsersMeMessagesByMessageid).toBeCalledWith(expectedPayload);
+    });
+  });
+
+  describe('markAsRead', () => {
+    const messageId = 123;
+    const expectedPayload = {
+      messageId,
+      patchMessageRequest: [{
+        op: 'add',
+        path: '/read',
+        value: true,
+      }],
+      ignoreError: true,
+      ignoreLoading: true,
+    };
+
+    beforeEach(async () => {
+      NativeApp.setBadgeCount.mockClear();
+
+      await actions.markAsRead({ commit }, messageId);
+    });
+
+    it('will send a patch message by message id request', async () => {
+      expect($http.patchV1ApiUsersMeMessagesByMessageid).toBeCalledWith(expectedPayload);
+    });
+
+    it('will update the stored total unread message count', () => {
+      expect(commit).toBeCalledWith(DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT);
+    });
+
+    it('will dispatch messaging/setBadgeCount', () => {
+      expect(dispatch).toBeCalledWith('messaging/setBadgeCount');
+    });
+  });
+
+  describe('setBadgeCount', () => {
+    beforeEach(() => {
+      NativeApp.setBadgeCount.mockClear();
+    });
+
+    it('will call the NativeApp.setBadgeCount with totalUnreadMessageCount state when the feature flag is enabled', () => {
+      actions.$env.IOS_BADGE_COUNT_ENABLED = true;
+      const totalUnreadMessageCount = 3;
+
+      actions.setBadgeCount({ state: { totalUnreadMessageCount } });
+
+      expect(NativeApp.setBadgeCount).toBeCalledWith(totalUnreadMessageCount);
+    });
+
+    it('will not call the NativeApp.setBadgeCount when the feature flag is not enabled', () => {
+      actions.$env.IOS_BADGE_COUNT_ENABLED = false;
+
+      actions.setBadgeCount({ state: { totalUnreadMessageCount: 3 } });
+
+      expect(NativeApp.setBadgeCount).not.toBeCalled();
     });
   });
 });

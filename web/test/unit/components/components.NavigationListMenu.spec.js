@@ -11,11 +11,10 @@ let goToUrl;
 const mountAs = ({
   isNativeApp = false,
   isProofLevel9 = true,
-  gpMessagingSessionUnavailable = false,
   supportsLinkedProfiles = true,
   integrationEnabled = true,
   isProxying = false,
-  unreadMessagesCount = 0,
+  totalUnreadMessageCount = 0,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -23,18 +22,13 @@ const mountAs = ({
       device: {
         isNativeApp,
       },
-      gpMessages: {
-        gpMessagingSessionUnavailable,
-      },
       serviceJourneyRules: {
         rules: {
           supportsLinkedProfiles,
         },
       },
       messaging: {
-        senderMessages: [{
-          unreadCount: unreadMessagesCount,
-        }],
+        totalUnreadMessageCount,
       },
     },
     getters: {
@@ -84,17 +78,6 @@ describe('Navigation Links ', () => {
       .it('A %s user that is %s, and has NetCompany vaccine record provider %s, will have NetCompany vaccine record link %s', (_, __, ___, ____, isProofLevel9, isProxying, integrationEnabled, isVisible) => {
         wrapper = mountAs({ isProofLevel9, isProxying, integrationEnabled });
         expect(wrapper.find('#btn_netCompanyP5_vaccine_record').exists()).toBe(isVisible);
-      });
-  });
-
-  describe('Messages Hub link', () => {
-    each([
-      ['shown', 'gpMessagingSession is available', false, true],
-      ['hidden', 'gpMessagingSession is unavailable', true, false],
-    ])
-      .it('messages hub link will be %s when user %s', (_, __, gpMessagingSessionUnavailable, isVisible) => {
-        wrapper = mountAs({ gpMessagingSessionUnavailable });
-        expect(wrapper.find('#btn_messages').exists()).toBe(isVisible);
       });
   });
 
@@ -151,7 +134,7 @@ describe('Navigation Links ', () => {
       ['show the indicator when there is unread messages', 1, true],
       ['not show the indicator when there is no unread messages', 0, false],
     ]).it('will %s', async (_, count, indicatorShown) => {
-      wrapper = mountAs({ unreadMessagesCount: count });
+      wrapper = mountAs({ totalUnreadMessageCount: count });
       expect(wrapper.find('#btn_messages_countIndicator').exists()).toBe(indicatorShown);
     });
   });

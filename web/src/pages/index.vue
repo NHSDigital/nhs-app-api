@@ -14,8 +14,7 @@
       :title="publicHealthNotification.title"
       :body="publicHealthNotification.body"/>
     <biometric-banner v-if="!isProxying" />
-    <navigation-list-menu v-if="!isProxying"
-                          :has-message-indicator="hasUnreadMessages"/>
+    <navigation-list-menu v-if="!isProxying" />
     <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
@@ -45,7 +44,6 @@ export default {
   data() {
     return {
       publicHealthNotifications: get('publicHealthNotifications', this.$store.state.serviceJourneyRules.rules.homeScreen),
-      hasUnreadMessages: false,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
     };
@@ -79,12 +77,6 @@ export default {
 
     if (this.appMessagingEnabled) {
       await this.$store.dispatch('messaging/load', { summary: true });
-    }
-
-    this.hasUnreadMessages = this.$store.state.messaging.hasUnread;
-
-    if (!this.$store.$env.GP_SESSION_ON_DEMAND_ENABLED) {
-      this.hasUnreadMessages = this.hasUnreadMessages || this.$store.state.gpMessages.hasUnread;
     }
 
     window.scrollTo(0, 0);

@@ -452,4 +452,13 @@ export default {
     const app = window.nativeApp;
     app.openBrowserOverlay(url);
   },
+
+  setBadgeCount: (count) => {
+    const app = window.nativeApp;
+    if (app && app.setBadgeCount) {
+      app.setBadgeCount(count);
+      return true;
+    }
+    return false;
+  },
 };
