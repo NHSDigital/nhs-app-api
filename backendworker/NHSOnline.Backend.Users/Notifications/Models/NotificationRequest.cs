@@ -20,7 +20,8 @@ namespace NHSOnline.Backend.Users.Notifications.Models
                 { "title", Title },
                 { "subtitle", Subtitle },
                 { "body", Body },
-                { "url", Url?.ToString() }
+                { "url", Url?.ToString() },
+                { "badgeCount", "0" }
             };
         }
 

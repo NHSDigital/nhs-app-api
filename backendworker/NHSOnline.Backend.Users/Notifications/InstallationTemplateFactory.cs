@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Users.Notifications
 {
     internal class InstallationTemplateFactory : IInstallationTemplateFactory
     {
-        private const string AppleTemplate = "{\"aps\": {\"alert\": { \"title\" : \"$(title)\", \"subtitle\" : \"$(subtitle)\", \"body\" : \"$(body)\" }, \"url\" : \"$(url)\", \"sound\" : \"default\"}}";
+        private const string AppleTemplate = "{\"aps\": {\"alert\": { \"title\" : \"$(title)\", \"subtitle\" : \"$(subtitle)\", \"body\" : \"$(body)\" }, \"url\" : \"$(url)\", \"sound\" : \"default\", \"badge\": \"#(badgeCount)\" }}";
         private const string AndroidTemplate = "{\"notification\": { \"title\" : \"$(title)\", \"body\" : \"$(body)\" }, \"data\":{ \"url\" : \"$(url)\"}}";
 
         public InstallationTemplate Create(DeviceType deviceType)

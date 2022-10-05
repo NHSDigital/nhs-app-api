@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications.Models
                 { "subtitle", "subtitle" },
                 { "body", "body" },
                 { "url", "https://www.example.com/" },
+                { "badgeCount", "0" }
             };
 
             // Act
@@ -54,6 +55,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications.Models
                 { "subtitle", "subtitle" },
                 { "body", "body" },
                 { "url", null },
+                { "badgeCount", "0" }
             };
 
             // Act
