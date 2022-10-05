@@ -19,15 +19,6 @@
           :item="summaryItem" />
       </card-group-item>
     </card-group>
-    <!--Card group is currently the only way to get this to act as the other groups style wise !-->
-    <card-group v-else class="nhsuk-grid-row">
-      <card-group-item class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
-        <p
-          id="no-referrals-or-appointments-text">
-          {{ $t('wayfinder.noReferralsOrAppointments') }}
-        </p>
-      </card-group-item>
-    </card-group>
   </div>
 </template>
 

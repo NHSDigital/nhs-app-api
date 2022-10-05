@@ -193,6 +193,13 @@ export default {
         },
       },
       {
+        id: 'appointmentsWayfinder',
+        jumpOffContent: {
+          headerText: 'Additional appointment information',
+          descriptionText: 'You may be able to get more details about your appointments, including past appointments',
+        },
+      },
+      {
         id: 'carePlans',
         jumpOffContent: {
           headerText: 'Care plans',

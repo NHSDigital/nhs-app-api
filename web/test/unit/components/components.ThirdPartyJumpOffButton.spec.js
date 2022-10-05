@@ -12,6 +12,22 @@ describe('ThirdParty Jumpoff Button', () => {
   let menuItem;
   let propsData;
   let wrapper;
+  let header;
+  let description;
+
+  const pkbAppointmentWayfinder = {
+    redirectPath: 'nhsRedirectPath',
+    jumpOffType: 'appointments',
+    provider: 'pkb',
+    jumpOffId: 'appointmentsWayfinder',
+  };
+
+  const pkbAppointment = {
+    redirectPath: 'nhsRedirectPath',
+    jumpOffType: 'appointments',
+    provider: 'pkb',
+    jumpOffId: 'appointments',
+  };
 
   const mountAs = ({
     id = 'btn_jumpoff',
@@ -66,8 +82,10 @@ describe('ThirdParty Jumpoff Button', () => {
   describe('menu item', () => {
     describe('is running in native app', () => {
       beforeEach(() => {
-        wrapper = mountAs();
+        wrapper = mountAs({ providerConfiguration: pkbAppointmentWayfinder });
         menuItem = wrapper.find('#btn_jumpoff');
+        header = wrapper.find('h2');
+        description = wrapper.find('p');
       });
 
       it('will have the expected uri', () => {
@@ -82,6 +100,31 @@ describe('ThirdParty Jumpoff Button', () => {
       it('will have no target set', () => {
         expect(menuItem.attributes().target)
           .toEqual(undefined);
+      });
+
+      it('will display pkb appointments wayfinder header text', () => {
+        expect(header.text()).toBe('Additional appointment information');
+      });
+
+      it('will display pkb appointments wayfinder description text', () => {
+        expect(description.text()).toBe('You may be able to get more details about your appointments, including past appointments');
+      });
+    });
+
+    describe('is running in native app and wayfinder is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ providerConfiguration: pkbAppointment });
+        menuItem = wrapper.find('#btn_jumpoff');
+        header = wrapper.find('h2');
+        description = wrapper.find('p');
+      });
+
+      it('will display pkb appointments header text', () => {
+        expect(header.text()).toBe('View appointments');
+      });
+
+      it('will display pkb appointments description text', () => {
+        expect(description.text()).toBe('See your upcoming and past hospital and other appointments');
       });
     });
 

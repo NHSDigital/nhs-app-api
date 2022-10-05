@@ -26,6 +26,13 @@ const thirdPartyProvider = {
       provider: 'pkb',
       serviceType: 'secondaryAppointments',
     },
+    appointmentsWayfinder: {
+      acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/diary\\/listAppointments\\.action.*$',
+      jumpOffId: 'appointmentsWayfinder',
+      redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FlistAppointments.action',
+      provider: 'pkb',
+      serviceType: 'secondaryAppointments',
+    },
     carePlans: {
       acceptablePathsRegex: '^\\/nhs-login\\/login\\?phrPath=\\/auth\\/listPlans\\.action.*$',
       jumpOffId: 'carePlans',

@@ -17,7 +17,7 @@
         id="btn_pkb_appointments"
         provider-id="pkb"
         :provider-configuration="thirdPartyProvider.pkb.
-          appointments" />
+          appointmentsWayfinder" />
 
       <third-party-jump-off-button
         v-if="showGncrAppointments"

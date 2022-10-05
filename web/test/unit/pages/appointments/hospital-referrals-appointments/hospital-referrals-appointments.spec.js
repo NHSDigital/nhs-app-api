@@ -11,9 +11,6 @@ let wrapper;
 let bookOrManageReferralsAndAppointmentsTitle;
 let confirmedAppointmentsTitle;
 let referralsInReviewNotOverdueTitle;
-let noReferralsOrAppointmentsText;
-let noConfirmedAppointmentsText;
-let noReferralsInReviewNotOverdueText;
 let referralsOrAppointmentsHelpLink;
 let confirmedAppointmentsHelpLink;
 let referralsInReviewHelpLink;
@@ -183,22 +180,6 @@ describe('Summary care response with each type of summary item', () => {
     expect(ersJumpOffMenuItem.exists()).toBe(false);
     expect(otherAvailableServicesMenuItems.exists()).toBe(true);
   });
-
-  describe('if there are confirmed appointments', () => {
-    it('hide resulting empty confirmed appointments text', () => {
-      noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
-
-      expect(noConfirmedAppointmentsText.exists()).toBe(false);
-    });
-  });
-
-  describe('if there are referrals in review', () => {
-    it('hide resulting empty no referrals in review text', () => {
-      noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
-
-      expect(noReferralsInReviewNotOverdueText.exists()).toBe(false);
-    });
-  });
 });
 
 describe('Summary care response with only actionable items', () => {
@@ -255,22 +236,6 @@ describe('Summary care response with only actionable items', () => {
 
     expect(referralsInReviewHelpLink.text()).toEqual('What to do if a referral being reviewed by a clinic is missing or incorrect');
   });
-
-  describe('if there are no confirmed appointments', () => {
-    it('show resulting empty confirmed appointments text', () => {
-      noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
-
-      expect(noConfirmedAppointmentsText.exists()).toBe(true);
-    });
-  });
-
-  describe('if there are no referrals in review', () => {
-    it('show resulting empty no referrals in review text', () => {
-      noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
-
-      expect(noReferralsInReviewNotOverdueText.text()).toBe('You have no referrals being reviewed.');
-    });
-  });
 });
 
 describe('Summary care response with no summary items', () => {
@@ -299,28 +264,6 @@ describe('Summary care response with no summary items', () => {
 
       expect(referralsInReviewNotOverdueTitle.exists()).toBe(true);
       expect(referralsInReviewNotOverdueTitle.text()).toEqual('You have 0 referrals being reviewed');
-    });
-
-    it('show no referrals or appointments text', () => {
-      noReferralsOrAppointmentsText = wrapper.find('#no-referrals-or-appointments-text');
-
-      expect(noReferralsOrAppointmentsText.text()).toBe('You have no referrals or appointments to view or manage.');
-    });
-
-    describe('if there are no confirmed appointments', () => {
-      it('show resulting empty confirmed appointments text', () => {
-        noConfirmedAppointmentsText = wrapper.find('#no-confirmed-appointments-text');
-
-        expect(noConfirmedAppointmentsText.exists()).toBe(true);
-      });
-    });
-
-    describe('if there are no referrals in review', () => {
-      it('show resulting empty no referrals in review text', () => {
-        noReferralsInReviewNotOverdueText = wrapper.find('#no-referrals-in-review-text');
-
-        expect(noReferralsInReviewNotOverdueText.text()).toBe('You have no referrals being reviewed.');
-      });
     });
 
     it('Missing, incorrect or cancelled referrals or appointments link is visible', () => {
@@ -410,7 +353,6 @@ describe('Secondary care with wait times enabled', () => {
     expect(waitingListsMenuItems.exists()).toBe(true);
   });
 });
-
 
 describe('Secondary care with wait times disabled', () => {
   beforeEach(() => {
