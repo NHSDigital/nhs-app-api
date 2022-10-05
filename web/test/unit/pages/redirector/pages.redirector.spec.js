@@ -315,12 +315,26 @@ describe('redirector page', () => {
       });
     });
 
+    it('will set isWayfinderUrl flag true', () => {
+      expect(wrapper.vm.isWayfinderUrl).toBe(true);
+    });
+
     it('warning section should be shown', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(true);
     });
 
     it('will not set tab title', () => {
       expect(wrapper.vm.$route.meta.titleKey).toBeUndefined();
+    });
+
+    describe('additional call to handleExternalRedirect will recalculate that isWayfinderUrl is false', () => {
+      beforeEach(() => {
+        wrapper.vm.handleExternalRedirect('http://www.url.com');
+      });
+
+      it('will set isWayfinderUrl flag to false', () => {
+        expect(wrapper.vm.isWayfinderUrl).toBe(false);
+      });
     });
 
     describe('on continue button click', () => {

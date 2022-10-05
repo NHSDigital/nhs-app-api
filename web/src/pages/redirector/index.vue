@@ -320,9 +320,7 @@ export default {
 
       let context = { url };
 
-      if (this.getWayfinderProvider(url) && this.hasWayfinder()) {
-        this.isWayfinderUrl = true;
-      }
+      this.isWayfinderUrl = !!(this.getWayfinderProvider(url) && this.hasWayfinder());
 
       const steps = [
         this.getThirdPartyConfig,
