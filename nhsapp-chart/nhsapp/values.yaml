@@ -30,6 +30,8 @@ clusterDNSNameservers:
   - 10.254.0.10
   - 172.28.160.10
 
+iosBadgeCountEnabled: false
+
 userResearchEnabled: false
 skipLoggedOutEnabled: true
 

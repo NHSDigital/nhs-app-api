@@ -405,6 +405,8 @@ spec:
         {{- else }}
           value: "{{ $.Values.nhsAppApimBaseUrl }}"
         {{- end }}
+        - name: IOS_BADGE_COUNT_ENABLED
+          value: "{{ $.Values.iosBadgeCountEnabled }}"
         - name: NHSAPP_API_KEY
           valueFrom:
             secretKeyRef:
