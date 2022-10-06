@@ -16,8 +16,8 @@ public class WayfinderTests
     [NhsAppTest]
     public async Task Wayfinder_SingleSecondaryCareSummaryMetricRecord_NewRecordIsAddedInComputeTable(TestEnv env)
     {
-        var startTime = "2022-05-17T00:00:00";
-        var endTime = "2022-05-18T00:00:00";
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
         const string loginId = "LoginId";
         const string sessionId = "SessionId";
         const string proofLevel = "P9";
@@ -38,7 +38,7 @@ public class WayfinderTests
             auditId);
 
         // Act
-        var response = await env.HttpEndpointCallers.PostWayfinder(startTime, endTime);
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -49,20 +49,19 @@ public class WayfinderTests
         {
             rows.Count.Should().Be(1);
 
-            var row = rows.Single(x => x.Date == DateTime.Parse(startTime));
-            row.TotalSessions.Should().Be(1);
-            row.TotalViews.Should().Be(1);
-            row.Users.Should().Be(1);
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(1);
+            row.Views.Should().Be(1);
             row.TotalReferrals.Should().Be(totalReferrals);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments);
         }
     }
 
     [NhsAppTest]
     public async Task Wayfinder_MultipleSecondaryCareSummaryMetricRecordsSameUserSession_NewRecordIsAddedInComputeTable(TestEnv env)
     {
-        var startTime = "2022-05-17T00:00:00";
-        var endTime = "2022-05-18T00:00:00";
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
         const string loginId = "LoginId";
         const string sessionId = "SessionId";
         const string proofLevel = "P9";
@@ -92,7 +91,7 @@ public class WayfinderTests
             auditId2);
 
         // Act
-        var response = await env.HttpEndpointCallers.PostWayfinder(startTime, endTime);
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -103,20 +102,19 @@ public class WayfinderTests
         {
             rows.Count.Should().Be(1);
 
-            var row = rows.Single(x => x.Date == DateTime.Parse(startTime));
-            row.TotalSessions.Should().Be(1);
-            row.TotalViews.Should().Be(2);
-            row.Users.Should().Be(1);
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(1);
+            row.Views.Should().Be(2);
             row.TotalReferrals.Should().Be(totalReferrals1 + totalReferrals2);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
         }
     }
 
     [NhsAppTest]
     public async Task Wayfinder_MultipleSecondaryCareSummaryMetricRecordsSameUserDifferentSessions_NewRecordIsAddedInComputeTable(TestEnv env)
     {
-        var startTime = "2022-05-17T00:00:00";
-        var endTime = "2022-05-18T00:00:00";
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
         const string loginId = "LoginId";
         const string sessionId1 = "SessionId1";
         const string sessionId2 = "SessionId2";
@@ -153,7 +151,7 @@ public class WayfinderTests
             auditId2);
 
         // Act
-        var response = await env.HttpEndpointCallers.PostWayfinder(startTime, endTime);
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -164,20 +162,19 @@ public class WayfinderTests
         {
             rows.Count.Should().Be(1);
 
-            var row = rows.Single(x => x.Date == DateTime.Parse(startTime));
-            row.TotalSessions.Should().Be(2);
-            row.TotalViews.Should().Be(2);
-            row.Users.Should().Be(1);
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(2);
+            row.Views.Should().Be(2);
             row.TotalReferrals.Should().Be(totalReferrals1 + totalReferrals2);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
         }
     }
 
     [NhsAppTest]
     public async Task Wayfinder_MultipleSecondaryCareSummaryMetricRecordsDifferentUsers_NewRecordIsAddedInComputeTable(TestEnv env)
     {
-        var startTime = "2022-05-17T00:00:00";
-        var endTime = "2022-05-18T00:00:00";
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
         const string loginId1 = "LoginId1";
         const string loginId2 = "LoginId2";
         const string sessionId1 = "SessionId1";
@@ -215,7 +212,7 @@ public class WayfinderTests
             auditId2);
 
         // Act
-        var response = await env.HttpEndpointCallers.PostWayfinder(startTime, endTime);
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -226,12 +223,11 @@ public class WayfinderTests
         {
             rows.Count.Should().Be(1);
 
-            var row = rows.Single(x => x.Date == DateTime.Parse(startTime));
-            row.TotalSessions.Should().Be(2);
-            row.TotalViews.Should().Be(2);
-            row.Users.Should().Be(2);
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(2);
+            row.Views.Should().Be(2);
             row.TotalReferrals.Should().Be(totalReferrals1 + totalReferrals2);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
         }
     }
 
@@ -239,9 +235,9 @@ public class WayfinderTests
     public async Task Wayfinder_When_UniqueConstraintIsViolated_Expect_RowToBeInsertedReplacesExistingRow(TestEnv env)
     {
         // Arrange
-        var endDate = new DateTimeOffset(2022, 05, 27, 00, 00, 00, 00, TimeSpan.Zero);
-        var endDateString = "2022-05-27T00:00:00";
-        var startDateString = "2022-05-26T00:00:00";
+        var endDateTime = new DateTimeOffset(2022, 05, 27, 00, 00, 00, 00, TimeSpan.Zero);
+        var endDateTimeString = "2022-05-27T00:00:00";
+        var startDateTimeString = "2022-05-26T00:00:00";
         const string loginId = "LoginId";
         const string sessionId1 = "SessionId1";
         const string sessionId2 = "SessionId2";
@@ -255,7 +251,7 @@ public class WayfinderTests
 
         // Arrange
         await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
-            endDate.AddHours(-1),
+            endDateTime.AddHours(-1),
             sessionId1,
             totalReferrals1,
             totalUpcomingAppointments1,
@@ -264,10 +260,10 @@ public class WayfinderTests
         await AddMetricHelper.AddLoginMetric(env,
             loginId,
             proofLevel,
-            endDate.AddHours(-1),
+            endDateTime.AddHours(-1),
             sessionId1);
 
-        var response = await env.HttpEndpointCallers.PostWayfinder(startDateString, endDateString);
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -276,16 +272,15 @@ public class WayfinderTests
         using (new AssertionScope())
         {
             rows.Count.Should().Be(1);
-            var row = rows.Single(x => x.Date == DateTime.Parse(startDateString));
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
 
-            row.TotalSessions.Should().Be(1);
-            row.TotalViews.Should().Be(1);
-            row.Users.Should().Be(1);
+            row.Sessions.Should().Be(1);
+            row.Views.Should().Be(1);
             row.TotalReferrals.Should().Be(totalReferrals1);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments1);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments1);
         }
         await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
-            endDate.AddHours(-1),
+            endDateTime.AddHours(-1),
             sessionId2,
             totalReferrals2,
             totalUpcomingAppointments2,
@@ -294,11 +289,11 @@ public class WayfinderTests
         await AddMetricHelper.AddLoginMetric(env,
             loginId,
             proofLevel,
-            endDate.AddHours(-1),
+            endDateTime.AddHours(-1),
             sessionId2);
 
         //Act
-        var secondResponse = await env.HttpEndpointCallers.PostWayfinder(startDateString, endDateString);
+        var secondResponse = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
         secondResponse.StatusCode.Should().Be(HttpStatusCode.Created);
         await env.Queues.Wayfinder.WaitUntilEmpty();
 
@@ -309,12 +304,294 @@ public class WayfinderTests
         {
             newRows.Count.Should().Be(1);
 
-            var row = newRows.Single(x => x.Date == DateTime.Parse(startDateString));
-            row.TotalSessions.Should().Be(2);
-            row.TotalViews.Should().Be(2);
-            row.Users.Should().Be(1);
+            var row = newRows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(2);
+            row.Views.Should().Be(2);
             row.TotalReferrals.Should().Be(totalReferrals1 + totalReferrals2);
-            row.TotalUpcomingAppointments.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments1 + totalUpcomingAppointments2);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task Wayfinder_SecondaryCareSummaryMetricRecordHasSessionsWithReferralsOrAppointments_TheyAreCountedCorrectly(TestEnv env)
+    {
+
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(3);
+            row.SessionsWithAppts.Should().Be(2);
+            row.SessionsWithReferrals.Should().Be(3);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task
+        Wayfinder_SecondaryCareSummaryMetricRecordHasViewsWithReferralsOrAppointments_TheyAreCountedCorrectly(
+            TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(3);
+            row.ViewsWithAppts.Should().Be(2);
+            row.ViewsWithReferrals.Should().Be(1);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task
+        Wayfinder_SingleSecondaryCareSummaryMetricRecordsWithNoReferralsOrAppointments_AreCountedCorrectly(
+            TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(3);
+            row.Neither.Should().Be(2);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task
+        Wayfinder_SingleSecondaryCareSummaryMetricRecordsWithAtleastOneReferralAndAppointment_AreCountedCorrectly(
+            TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(3);
+            row.Both.Should().Be(1);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task
+        Wayfinder_SingleSecondaryCareSummaryMetricRecordsWithEitherAtleastOneReferralOrAppointment_AreCountedCorrectly(
+            TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:0,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:0,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:1,
+            totalUpcomingAppointments:2,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(3);
+            row.Either.Should().Be(2);
+        }
+    }
+
+    [NhsAppTest]
+    public async Task
+        Wayfinder_SingleSecondaryCareSummaryMetricRecordWithTheMostAppointmentsOrReffereals_AreCountedCorrectly(
+            TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        // Arrange
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:9,
+            totalUpcomingAppointments:5,
+            Guid.NewGuid().ToString());
+
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            Guid.NewGuid().ToString(),
+            totalReferrals:3,
+            totalUpcomingAppointments:7,
+            Guid.NewGuid().ToString());
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(2);
+            row.MostReferrals.Should().Be(9);
+            row.MostAppts.Should().Be(7);
         }
     }
 }
