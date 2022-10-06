@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
     {
         private readonly ILogger<IEmisDocumentDownloadConverter> _logger;
         private readonly IGeneratePdf _generatePdf;
-        
+
         public EmisDocumentDownloadConverter(ILogger<IEmisDocumentDownloadConverter> logger, IGeneratePdf generatePdf)
         {
             _logger = logger;
@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _logger.LogInformation("Converting document content to text");
             return Encoding.UTF8.GetBytes(System.Net.WebUtility.HtmlDecode(htmlDocument.DocumentNode.InnerText));
         }
+
         public byte[] ConvertToImage(string content)
         {
             var htmlDocument = CreateHtmlDocument(content);
@@ -56,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 using (var document = WordprocessingDocument.Create(outputStream, WordprocessingDocumentType.Document))
                 {
                     var mainPart = document.MainDocumentPart;
-                    
+
                     if (mainPart == null)
                     {
                         mainPart = document.AddMainDocumentPart();
@@ -88,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 }
             }
 
-            return _generatePdf.GetPDF($"<html><body>${htmlDocument.DocumentNode.InnerHtml}</body></html>");
+            return _generatePdf.GetPDF($"<html><body>{htmlDocument.DocumentNode.InnerHtml}</body></html>");
         }
 
         private static HtmlDocument CreateHtmlDocument(string content)
