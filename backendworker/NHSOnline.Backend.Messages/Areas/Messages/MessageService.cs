@@ -163,6 +163,27 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
             }
         }
 
+        public async Task<UnreadMessageCountResult> GetUnreadMessageCount(string nhsLoginId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result = await _messageRepository.CountUnreadMessages(nhsLoginId);
+
+                return result.Accept(new RepositoryUnreadMessageCountResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Messages Unread Count Get has failed with exception");
+                return new UnreadMessageCountResult.Failure();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument,
             AccessToken accessToken, string messageId)
         {

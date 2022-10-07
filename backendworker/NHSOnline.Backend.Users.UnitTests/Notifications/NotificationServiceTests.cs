@@ -6,6 +6,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Messages.Areas.Messages;
+using NHSOnline.Backend.Messages.Areas.Messages.Models;
+using NHSOnline.Backend.Messages.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Users.Areas.Devices.Models;
 using NHSOnline.Backend.Users.Notifications;
 using NHSOnline.Backend.Users.Notifications.Models;
@@ -17,16 +21,30 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
     {
         private INotificationService _systemUnderTest;
         private Mock<INotificationClient> _mockNotificationClient;
+        private Mock<INotificationsConfiguration> _mockNotificationsConfiguration;
+        private Mock<IMessageService> _mockMessageService;
+
         private const string NhsLoginId = "NhsLoginId";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockNotificationClient = new Mock<INotificationClient>(MockBehavior.Strict);
+            _mockNotificationsConfiguration = new Mock<INotificationsConfiguration>(MockBehavior.Strict);
+            _mockMessageService = new Mock<IMessageService>(MockBehavior.Strict);
+
+            _mockNotificationsConfiguration
+                .SetupGet(c => c.IosBadgeCountEnabled)
+                .Returns(false);
+            _mockMessageService
+                .Setup(r => r.GetUnreadMessageCount(NhsLoginId))
+                .ReturnsAsync(new UnreadMessageCountResult.Success(5));
 
             _systemUnderTest = new NotificationService(
                 new Mock<ILogger<NotificationService>>().Object,
-                _mockNotificationClient.Object);
+                _mockNotificationClient.Object,
+                _mockNotificationsConfiguration.Object,
+                _mockMessageService.Object);
         }
 
         [TestMethod]
@@ -434,6 +452,160 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
             _mockNotificationClient.VerifyAll();
 
             result.Should().BeOfType<NotificationSendResult.Success>();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationSendResponse.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Send_SendsMinusOneBadgeCountAndDoesNotFetchUnreadCount_WhenFeatureDisabled()
+        {
+            // Arrange
+            const string title = "title";
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "https://www.example.com";
+
+            var request = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url,
+            };
+
+            var response = new NotificationSendResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                HubPath = "Hub Path"
+            };
+
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
+                        y.Title == title &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId &&
+                        y.BadgeCount == 0)))
+                .ReturnsAsync(response);
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+            _mockMessageService.VerifyNoOtherCalls();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationSendResponse.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Send_SendsMinusOneBadgeCount_WhenRepositoryReturnsError()
+        {
+            // Arrange
+            const string title = "title";
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "https://www.example.com";
+
+            var request = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url,
+            };
+
+            var response = new NotificationSendResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                HubPath = "Hub Path"
+            };
+
+            _mockNotificationsConfiguration
+                .SetupGet(c => c.IosBadgeCountEnabled)
+                .Returns(true);
+
+            _mockMessageService
+                .Setup(r => r.GetUnreadMessageCount(NhsLoginId))
+                .ReturnsAsync(new UnreadMessageCountResult.Failure());
+
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
+                        y.Title == title &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId &&
+                        y.BadgeCount == 0)))
+                .ReturnsAsync(response);
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+            _mockMessageService.VerifyAll();
+
+            var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
+            successResult.NotificationSendResponse.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Send_SendsCountUnreadMessages_WhenRepositoryReturnsFound()
+        {
+            // Arrange
+            const string title = "title";
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "https://www.example.com";
+
+            var request = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url,
+            };
+
+            var response = new NotificationSendResponse
+            {
+                Scheduled = false,
+                NotificationId = "Notification ID",
+                HubPath = "Hub Path"
+            };
+
+            _mockNotificationsConfiguration
+                .SetupGet(c => c.IosBadgeCountEnabled)
+                .Returns(true);
+
+            _mockMessageService
+                .Setup(r => r.GetUnreadMessageCount(NhsLoginId))
+                .ReturnsAsync(new UnreadMessageCountResult.Success(5));
+
+            _mockNotificationClient
+                .Setup(x => x.SendNotification(
+                    It.Is<NotificationRequest>(y =>
+                        y.Title == title &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url) &&
+                        y.NhsLoginId == NhsLoginId &&
+                        y.BadgeCount == 5)))
+                .ReturnsAsync(response);
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockNotificationClient.VerifyAll();
+            _mockMessageService.VerifyAll();
 
             var successResult = result.Should().BeOfType<NotificationSendResult.Success>().Subject;
             successResult.NotificationSendResponse.Should().BeEquivalentTo(response);

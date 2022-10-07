@@ -468,7 +468,7 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
         {
             // Arrange
             _mockMessageRepository
-                .Setup(x => x.CountUnreadMessages(NhsLoginId))
+                .Setup(x => x.CountUnreadMessages(_accessToken.Subject))
                 .ReturnsAsync(new RepositoryCountResult.RepositoryError());
 
             // Act
@@ -478,6 +478,63 @@ namespace NHSOnline.Backend.Messages.UnitTests.Areas.Messages
             VerifySetups();
 
             result.Should().BeAssignableTo<MessagesMetadataResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task GetUnreadMessageCount_WhenRepositoryResultFound_ReturnsSuccessResultWithUnreadCount()
+        {
+            // Arrange
+            const int unreadMessageCount = 4;
+
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(NhsLoginId))
+                .ReturnsAsync(new RepositoryCountResult.Found(unreadMessageCount));
+
+            // Act
+            var result = await _systemUnderTest.GetUnreadMessageCount(NhsLoginId);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<UnreadMessageCountResult.Success>()
+                .Subject.UnreadMessageCount.Should().Be(unreadMessageCount);
+        }
+
+        [TestMethod]
+        public async Task GetUnreadMessageCount_WhenRepositoryResultFoundZero_ReturnsSuccessResultWithZeroUnreadCount()
+        {
+            // Arrange
+            const int unreadMessageCount = 0;
+
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(NhsLoginId))
+                .ReturnsAsync(new RepositoryCountResult.Found(unreadMessageCount));
+
+            // Act
+            var result = await _systemUnderTest.GetUnreadMessageCount(NhsLoginId);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<UnreadMessageCountResult.Success>()
+                .Subject.UnreadMessageCount.Should().Be(unreadMessageCount);
+        }
+
+        [TestMethod]
+        public async Task GetUnreadMessageCount_WhenRepositoryResultErrors_ReturnsFailureResult()
+        {
+            // Arrange
+            _mockMessageRepository
+                .Setup(x => x.CountUnreadMessages(NhsLoginId))
+                .ReturnsAsync(new RepositoryCountResult.RepositoryError());
+
+            // Act
+            var result = await _systemUnderTest.GetUnreadMessageCount(NhsLoginId);
+
+            // Assert
+            VerifySetups();
+
+            result.Should().BeAssignableTo<UnreadMessageCountResult.Failure>();
         }
 
         [TestMethod]

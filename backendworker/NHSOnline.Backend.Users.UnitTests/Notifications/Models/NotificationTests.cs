@@ -18,7 +18,8 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications.Models
                 Title = "title",
                 Subtitle = "subtitle",
                 Body = "body",
-                Url = new Uri("https://www.example.com")
+                Url = new Uri("https://www.example.com"),
+                BadgeCount = 5,
             };
 
             var expectedDictionary = new Dictionary<string, string>
@@ -27,7 +28,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications.Models
                 { "subtitle", "subtitle" },
                 { "body", "body" },
                 { "url", "https://www.example.com/" },
-                { "badgeCount", "0" }
+                { "badgeCount", "5" }
             };
 
             // Act
@@ -46,7 +47,36 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications.Models
                 Title = "title",
                 Subtitle = "subtitle",
                 Body = "body",
-                Url = null
+                Url = null,
+                BadgeCount = 5,
+            };
+
+            var expectedDictionary = new Dictionary<string, string>
+            {
+                { "title", "title" },
+                { "subtitle", "subtitle" },
+                { "body", "body" },
+                { "url", null },
+                { "badgeCount", "5" }
+            };
+
+            // Act
+            var result = notification.ToDictionary();
+
+            // Assert
+            result.Should().BeEquivalentTo(expectedDictionary);
+        }
+
+        [TestMethod]
+        public void ToDictionary_WithNoBadgeCount_ReturnsZeroInDictionary()
+        {
+            // Arrange
+            var notification = new NotificationRequest
+            {
+                Title = "title",
+                Subtitle = "subtitle",
+                Body = "body",
+                Url = null,
             };
 
             var expectedDictionary = new Dictionary<string, string>

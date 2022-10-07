@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Users.Notifications.Models
         public Uri Url { get; set; }
         public string NhsLoginId { get; set; }
         public DateTimeOffset? ScheduledTime { get; set; }
+        public long BadgeCount { get; set; }
 
         public IDictionary<string, string> ToDictionary()
         {
@@ -21,7 +22,7 @@ namespace NHSOnline.Backend.Users.Notifications.Models
                 { "subtitle", Subtitle },
                 { "body", Body },
                 { "url", Url?.ToString() },
-                { "badgeCount", "0" }
+                { "badgeCount", $"{BadgeCount}" }
             };
         }
 
