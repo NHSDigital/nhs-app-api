@@ -33,9 +33,6 @@ spinePdsCIDR: "10.239.14.29/32"
 spinePdsHost: "msg.dev.spine2.ncrs.nhs.uk"
 spinePdsPath: "sync-service"
 
-iproxy:
-  n3enabled: true
-
 ndopClaimIssuer: https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
 ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
 contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
@@ -171,6 +168,7 @@ cdsswiremock:
   targetCPUUtilizationPercentage: 45
 
 iproxy:
+  n3enabled: true
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1

@@ -74,7 +74,9 @@ variables:
   - name: PROJECT_PATH
     value: nhsapp-ops-infra
   - name: SCRIPTS_PATH
-    value: ../nhsapp-ops-infra/scripts
+    value: $(Build.Repository.LocalPath)/nhsapp-ops-infra/scripts
+  - name: VAULT_REPO_PATH
+    value: $(Build.Repository.LocalPath)/nhsapp-ops-vault
   - name: TARGET_ZONE
     value: dev
   - name: backendAzureRmResourceGroupName
