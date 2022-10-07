@@ -28,7 +28,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
         private Mock<IMetricLogger<AccessTokenMetricContext>> _mockMetricLogger;
         private Mock<ILogger<DevicesController>> _mockLogger;
         private Mock<IAuditor> _mockAuditor;
-        private Mock<INotificationsDecisionAuditService> _mockNotificationsDecisionAuditService;
         private const string DevicePns = "PNS";
         private const DeviceType DeviceType = Backend.Users.Areas.Devices.Models.DeviceType.Android;
         private const string DeviceId = "DeviceId";
@@ -41,7 +40,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             _mockMetricLogger = new Mock<IMetricLogger<AccessTokenMetricContext>>();
             _mockRegistrationService = new Mock<IRegistrationService>();
             _mockAuditor = new Mock<IAuditor>();
-            _mockNotificationsDecisionAuditService = new Mock<INotificationsDecisionAuditService>();
 
             var mockAccessTokenProvider = new Mock<IAccessTokenProvider>();
             mockAccessTokenProvider.SetupGet(x => x.AccessToken)
@@ -50,7 +48,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             _systemUnderTest = new DevicesController(
                 _mockRegistrationService.Object,
                 _mockLogger.Object,
-                _mockNotificationsDecisionAuditService.Object,
                 _mockMetricLogger.Object,
                 mockAccessTokenProvider.Object);
         }

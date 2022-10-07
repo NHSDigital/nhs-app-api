@@ -24,19 +24,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Users.Devices
         private readonly IRegistrationService _registrationService;
         private readonly ILogger<DevicesController> _logger;
         private readonly IMetricLogger<AccessTokenMetricContext> _metricLogger;
-        private readonly INotificationsDecisionAuditService _notificationsDecisionAuditService;
 
         public DevicesController(
             IRegistrationService registrationService,
             ILogger<DevicesController> logger,
-            INotificationsDecisionAuditService notificationsDecisionAuditService,
             IMetricLogger<AccessTokenMetricContext> metricLogger,
             IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
             _registrationService = registrationService;
             _metricLogger = metricLogger;
-            _notificationsDecisionAuditService = notificationsDecisionAuditService;
             _accessTokenProvider = accessTokenProvider;
         }
 
