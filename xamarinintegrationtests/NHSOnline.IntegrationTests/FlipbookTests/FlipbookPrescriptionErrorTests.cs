@@ -1,8 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.Emis;
-using NHSOnline.IntegrationTests.Pages.Android.Home;
-using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.UI;
@@ -35,13 +33,11 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             var iosOrderARepeatPrescriptionPage =
                 IOSOrderARepeatPrescriptionPage.AssertOnPage(driver, screenshot: true);
 
-            iosOrderARepeatPrescriptionPage.PageContent.Continue();
+            iosOrderARepeatPrescriptionPage.Continue();
             iosOrderARepeatPrescriptionPage.ScreenshotError();
 
             iosOrderARepeatPrescriptionPage
-                .PageContent
-                .ChooseRepeat()
-                .Continue();
+                .ChooseRepeat();
 
             var iosChooseRepeatPrescriptionPage =
                 IOSChooseRepeatPrescriptionPage.AssertOnPage(driver, screenshot: true);

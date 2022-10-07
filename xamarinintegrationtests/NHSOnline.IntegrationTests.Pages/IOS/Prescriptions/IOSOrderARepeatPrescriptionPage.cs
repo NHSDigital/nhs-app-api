@@ -1,5 +1,5 @@
-
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescriptions;
+using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
@@ -19,6 +19,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
             PageContent = new OrderARepeatPrescriptionPageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
+        private IOSRadioButton PrescriptionType => IOSRadioButton.StartsWith(_driver,
+             "A repeat prescription");
+
+        private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue");
+
         public static IOSOrderARepeatPrescriptionPage AssertOnPage(IIOSDriverWrapper driver,
             bool screenshot = false)
         {
@@ -32,6 +37,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
 
             return page;
         }
+
+        public IOSOrderARepeatPrescriptionPage ChooseRepeat()
+        {
+            PrescriptionType.Click();
+            return this;
+        }
+
+        public void Continue() => ContinueButton.Click();
 
         public void ScreenshotError()
         {

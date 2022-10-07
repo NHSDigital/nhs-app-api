@@ -1,7 +1,6 @@
 using NHSOnline.HttpMocks.SecondaryCare;
 using NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
-using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
@@ -83,17 +82,20 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Wayfinder
 
         public void ScrollToReadyToConfirmAppointmentDeepLinkButtonAndScreenshotThenClick()
         {
-            IOSReadyToConfirmAppointmentDeepLinkButton.ScrollIntoView();
+            PageContent.ReadyToConfirmAppointmentDeepLinkButton.ScrollTo();
             _driver.Screenshot($"{nameof(IOSSecondaryCareSummaryPage)}_scrolled");
+            PageContent.ReadyToConfirmAppointmentHeader.ScrollTo();
+            IOSReadyToConfirmAppointmentDeepLinkButton.ScrollIntoView();
             IOSReadyToConfirmAppointmentDeepLinkButton.Click();
         }
 
         public void ScrollToCancelledAppointmentDeepLinkButtonAndScreenshotThenClick()
         {
-            IOSCancelledAppointmentDeepLink.ScrollIntoView();
+            PageContent.CancelledAppointmentDeepLink.ScrollTo();
             _driver.Screenshot($"{nameof(IOSSecondaryCareSummaryPage)}_scrolled");
-            IOSCancelledAppointmentDeepLink.Touch();
+            PageContent.CancelledAppointmentHeader.ScrollTo();
+            IOSCancelledAppointmentDeepLink.ScrollIntoView();
+            IOSCancelledAppointmentDeepLink.Click();
         }
     }
 }
-

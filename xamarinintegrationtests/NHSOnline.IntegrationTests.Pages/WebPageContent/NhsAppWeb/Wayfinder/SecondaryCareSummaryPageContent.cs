@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using NHSOnline.HttpMocks.SecondaryCare;
-using NHSOnline.IntegrationTests.UI.Components;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -82,6 +80,28 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
             _interactor,
             "What to do if a referral being reviewed by a clinic is missing or incorrect");
 
+        public WebText ReadyToConfirmAppointmentHeader => WebText.WithTagAndText(
+            _interactor,
+            "h3",
+            "Ready to confirm appointment"
+        );
+
+        public WebText CancelledAppointmentHeader => WebText.WithTagAndText(
+            _interactor,
+            "h3",
+            "Cancelled appointment"
+        );
+
+        public WebButton ReadyToConfirmAppointmentDeepLinkButton => WebButton.WithText(
+            _interactor,
+            "Contact the clinic to confirm"
+        );
+
+        public WebLink CancelledAppointmentDeepLink => WebLink.WithText(
+            _interactor,
+            "View this appointment"
+        );
+
         public void AssertPageElements()
         {
             switch (_errorType)
@@ -107,9 +127,5 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Wayfinder
                     break;
             }
         }
-
-        public void ScrollToAppointmentsHeader() =>
-            AppointmentsHeader.ScrollTo();
     }
 }
-

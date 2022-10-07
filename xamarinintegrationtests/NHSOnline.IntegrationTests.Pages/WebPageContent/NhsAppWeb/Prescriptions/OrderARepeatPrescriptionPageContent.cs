@@ -15,23 +15,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         private WebLink BackBreadcrumb => WebLink.WithText(_interactor, "Back");
 
-        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
-
         private WebText TitleText => WebText.WithTagAndText(
             _interactor,
             "h1",
             "What type of prescription do you want to order?");
-
-        private WebRadioOption PrescriptionType => WebRadioOption.InFieldsetLegendWithLabel(_interactor,
-            "What type of prescription do you want to order?", "A repeat prescription");
-
-        public OrderARepeatPrescriptionPageContent ChooseRepeat()
-        {
-            PrescriptionType.Click();
-            return this;
-        }
-
-        public void Continue() => ContinueButton.Click();
 
         internal void AssertOnPage()
         {

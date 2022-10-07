@@ -36,6 +36,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public void Touch() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Tap());
 
+        public void Click() => _interactor.ActOnElementContext(_locatorStrategy.FindBy, context=>context.Element.Click());
+
         private abstract class BaseLinkLocatorStrategy : IIOSLocatorStrategy
         {
             private readonly string _pattern;
