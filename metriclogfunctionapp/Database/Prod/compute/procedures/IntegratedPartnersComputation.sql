@@ -37,7 +37,7 @@ BEGIN
       AND "Timestamp" < "endDate";
 
     INSERT INTO JumpOffEvents ("Date","OdsCode","Provider","JumpOff")
-    SELECT  jumpOffs."Timestamp"        AS "Date"
+    SELECT DATE(jumpOffs."Timestamp")        AS "Date"
          ,logins."OdsCode"
          ,jumpOffs."ProviderName"    AS "Provider"
          ,jumpOffs."JumpOffId"       AS "JumpOff"
@@ -59,4 +59,6 @@ BEGIN
     GROUP BY  "Date"
            ,"OdsCode"
            ,"Provider"
-           ,"JumpOff"; END; $$ LANGUAGE plpgsql;
+           ,"JumpOff";
+ END;
+ $$ LANGUAGE plpgsql;
