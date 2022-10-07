@@ -12,6 +12,13 @@ export default {
   otherServices: 'Other services',
   referralsSectionTitle: 'Referrals',
   upcomingAppointmentsSectionTitle: 'Upcoming Appointments',
+  waitTimes: {
+    description: 'If you\'re waiting for a consultation, follow-up appointment, treatment or surgery',
+    title: 'Waiting lists',
+    youAreOnOneWaitingList: 'You\'re on a waiting list',
+    youAreOnMultipleWaitingLists: 'You\'re on {waitingListCount} waiting lists',
+    isSomethingWrong: 'Is something wrong?',
+  },
   appointments: {
     tagPromptText: 'The status of this appointment is',
     booked: {

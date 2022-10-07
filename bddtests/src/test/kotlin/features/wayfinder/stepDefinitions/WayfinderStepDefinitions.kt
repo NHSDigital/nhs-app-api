@@ -15,12 +15,14 @@ import net.thucydides.core.annotations.Steps
 import pages.wayfinder.WayfinderAggregatorErrorPage
 import pages.wayfinder.WayfinderReferralsAndAppointmentsPage
 import pages.wayfinder.help.WayfinderHelpPage
+import pages.wayfinder.waitTimes.WayfinderWaitTimesPage
 import utils.SerenityHelpers
 
 class WayfinderStepDefinitions {
     private lateinit var wayfinderReferralsAndAppointmentsPage: WayfinderReferralsAndAppointmentsPage
     private lateinit var wayfinderAggregatorErrorPage: WayfinderAggregatorErrorPage
     private lateinit var wayfinderHelpPage: WayfinderHelpPage
+    private lateinit var wayfinderWaitTimesPage: WayfinderWaitTimesPage
 
     @Steps
     private lateinit var browser: BrowserSteps
@@ -62,19 +64,29 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupReferralsAndAppointments(provider)
     }
 
-    @Given("^I see the Missing, incorrect or not cancelled referrals or appointments link")
+    @Given("^I see the Missing, incorrect or not cancelled referrals or appointments link$")
     fun iSeeTheMissingOrIncorrectReferralsOrAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsOrAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing, incorrect or not cancelled appointments link")
+    @Given("^I see the Missing, incorrect or not cancelled appointments link$")
     fun iSeeTheMissingOrIncorrectAppointmentsLink(){
         wayfinderReferralsAndAppointmentsPage.assertAppointmentsHelpLinkIsDisplayed()
     }
 
-    @Given("^I see the Missing or incorrect referrals in review link")
+    @Given("^I see the Missing or incorrect referrals in review link$")
     fun iSeeTheMissingOrIncorrectReferralsInReviewLink(){
         wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
+    }
+
+    @Given("^I have wait times available$")
+    fun iHaveWaitTimesAvailable(){
+        wayfinderFactory.setupWaitTimes()
+    }
+
+    @Given("^I see the wait times link$")
+    fun iSeeTheWaitTimesLink(){
+        wayfinderReferralsAndAppointmentsPage.assertWaitTimesLinkIsDisplayed()
     }
 
     @When("^the Wayfinder Aggregator API is timing out$")
@@ -108,12 +120,12 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.missingOrIncorrectReferralsOrAppointmentsLink.click()
     }
 
-    @When("^I click the Missing, incorrect or not cancelled appointments link")
+    @When("^I click the Missing, incorrect or not cancelled appointments link$")
     fun iClickTheMissingOrIncorrectAppointmentsLink() {
         wayfinderReferralsAndAppointmentsPage.appointmentsLink.click()
     }
 
-    @When("^I click the Missing or incorrect referrals in review link")
+    @When("^I click the Missing or incorrect referrals in review link$")
     fun iClickTheMissingOrIncorrectReferralsInReviewLink() {
         wayfinderReferralsAndAppointmentsPage.referralsInReviewLink.click()
     }
@@ -121,6 +133,11 @@ class WayfinderStepDefinitions {
     @When("^I click the '(.*)' expander link on a Wayfinder Help page$")
     fun iClickTheExpanderLinkOnThePage(expanderText: String) {
         wayfinderHelpPage.clickExpanderLink(expanderText)
+    }
+
+    @When("^I click the wait times jump off link$")
+    fun iClickTheWaitTimesJumpOffLink() {
+        wayfinderReferralsAndAppointmentsPage.waitTimesLink.click()
     }
 
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
@@ -196,6 +213,11 @@ class WayfinderStepDefinitions {
     @Then("^I am navigated to the Wayfinder help page$")
     fun assertWayfinderHelpPageDisplayed() {
         wayfinderHelpPage.assertHelpPageIsDisplayed()
+    }
+
+    @Then("^I am navigated to the Wayfinder wait times page$")
+    fun assertWayfinderWaitTimesPageDisplayed() {
+        wayfinderWaitTimesPage.assertWayfinderWaitTimesTitleIsDisplayed()
     }
 
     @Then("^I can see the missing referrals expander elements displayed$")

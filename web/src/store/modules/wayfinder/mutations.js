@@ -6,6 +6,7 @@ import {
   REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
+  WAIT_TIMES,
   initialState,
 } from './mutation-types';
 
@@ -30,6 +31,9 @@ export default {
   },
   [HAS_LOADED](state, hasLoaded) {
     state.hasLoaded = hasLoaded;
+  },
+  [WAIT_TIMES](state, waitTimes) {
+    state.waitTimes = waitTimes;
   },
 };
 

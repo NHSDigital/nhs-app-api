@@ -46,6 +46,47 @@ paths:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 
+  /secondary-care/waittimes:
+    get:
+      tags:
+        - secondary-care
+      summary: Gets a list of secondary care wait times.
+      description: Gets a list of secondary care wait times. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
+      responses:
+        "200":
+          description: Successfully retrieved secondary care wait times.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecondaryCareWaitTimesResponse"
+        "400":
+          description: Bad request. Supplied request is incomplete or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "401":
+          description: User session has expired.
+        "404":
+          description: Wait times not enabled.
+        "500":
+          description: An unexpected error occurred during the processing of the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Bad response received from upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "504":
+          description: Timeout when calling upstream system.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     SecondaryCareSummaryResponse:
@@ -252,3 +293,36 @@ components:
         deepLinkUrl:
           type: string
           description: Deep link url for the user to get more details on the appointment.
+    SecondaryCareWaitTimesResponse:
+      type: object
+      required:
+        - waitTimes
+      properties:
+        waitTimes:
+          type: array
+          description: An array of wait times for the authorized user.
+          items:
+            $ref: "#/components/schemas/WaitTimes"
+
+
+    WaitTimes:
+      type: object
+      required:
+        - referredDate
+        - plannedWaitTime
+        - providerName
+        - speciality
+      properties:
+        referredDate:
+          type: string
+          format: date-time
+          description: The date-time of the referral.
+        plannedWaitTime:
+          type: integer
+          description: State of the appointment. Initially only booked appointments will be returned.
+        providerName:
+          type: string
+          description: Name of the provider.
+        speciality:
+          type: string
+          description: Speciality.

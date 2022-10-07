@@ -141,6 +141,7 @@ export const ORIGIN_PARAMETER = 'origin';
 export const SSO_PARAMETER = 'sso';
 export const WAYFINDER_NAME = 'wayfinder';
 export const WAYFINDER_HELP_NAME = 'wayfinder-help';
+export const WAYFINDER_WAITING_LISTS_NAME = 'appointments-hospital-referrals-appointments-waiting-lists';
 
 const names = [
   INDEX_NAME,
@@ -281,6 +282,7 @@ const names = [
   SSO_PARAMETER,
   WAYFINDER_NAME,
   WAYFINDER_HELP_NAME,
+  WAYFINDER_WAITING_LISTS_NAME,
 ];
 
 export const GP_PRESCRIPTION_JOURNEY_NAME = 'GP_PRESCRIPTION_JOURNEY';

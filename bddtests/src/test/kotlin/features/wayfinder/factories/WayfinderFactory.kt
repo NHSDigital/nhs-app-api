@@ -89,4 +89,14 @@ class WayfinderFactory {
             wayfinderMappingBuilder.referralsAndUpcomingAppointments(provider)
         }
     }
+
+    fun setupWaitTimes() {
+        mockingClient.forWayfinder.mock {
+            apimMappingBuilder.successfulTokenRequest()
+        }
+
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.waitTimes()
+        }
+    }
 }

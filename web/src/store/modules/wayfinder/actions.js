@@ -6,6 +6,7 @@ import {
   REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED,
   SHOW_ERROR,
   HAS_LOADED,
+  WAIT_TIMES,
 } from './mutation-types';
 
 
@@ -34,6 +35,22 @@ export default {
       }
     } finally {
       commit(HAS_LOADED, true);
+    }
+  },
+  async loadWaitTimes({ commit }) {
+    try {
+      const response = await this.app.$http.getV1PatientSecondaryCareWaittimes();
+      if (response) {
+        commit(WAIT_TIMES, response);
+      }
+    } catch (error) {
+      const apiError = createLocalError(error);
+
+      if (apiError.status === 504 || apiError.status === 502 || apiError.status === 404) {
+        commit(SHOW_ERROR, apiError);
+      } else {
+        this.dispatch('errors/addApiError', error);
+      }
     }
   },
 };

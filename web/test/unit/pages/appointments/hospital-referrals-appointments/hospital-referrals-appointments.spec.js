@@ -22,6 +22,8 @@ let ersJumpOffMenuItem;
 let backButton;
 let doesNotMeetMinimumAgeMessage;
 let noOtherServicesShowingMessage;
+let waitTimesJumpOffMenuItem;
+let waitingListsMenuItems;
 
 const setupStore = (
   hasActionableReferralsAndAppointments,
@@ -401,8 +403,11 @@ describe('Secondary care with wait times enabled', () => {
     wrapper = mountPageWithWaitTimesEnabled();
   });
   it('show wait time menu items', () => {
-    doesNotMeetMinimumAgeMessage = wrapper.find('#wait-times-menu-item');
-    expect(doesNotMeetMinimumAgeMessage.exists()).toBe(true);
+    waitingListsMenuItems = wrapper.find('#wait-times-menu-item');
+    waitTimesJumpOffMenuItem = waitingListsMenuItems.find('#btn_wait_times');
+
+    expect(waitTimesJumpOffMenuItem.exists()).toBe(true);
+    expect(waitingListsMenuItems.exists()).toBe(true);
   });
 });
 
@@ -413,8 +418,7 @@ describe('Secondary care with wait times disabled', () => {
     wrapper = mountPage();
   });
   it('do not show wait time menu items', () => {
-    doesNotMeetMinimumAgeMessage = wrapper.find('#wait-times-menu-item');
-
-    expect(doesNotMeetMinimumAgeMessage.exists()).toBe(false);
+    waitTimesJumpOffMenuItem = wrapper.find('#wait-times-menu-item');
+    expect(waitTimesJumpOffMenuItem.exists()).toBe(false);
   });
 });

@@ -178,6 +178,7 @@ export default {
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
       wayfinderHelp: 'What to do if something is missing, incorrect or has not been changed or cancelled',
+      waitTimes: 'Waiting lists',
     },
     titles: {
       accountAndSettings: 'Account and settings',
@@ -286,6 +287,7 @@ export default {
       yourHealth: 'Your health',
       yourHealthServiceMessages: 'Your health service messages',
       wayfinderHelp: 'What to do if something is missing, incorrect or has not been changed or cancelled - NHS App',
+      waitTimes: 'Waiting lists',
     },
   },
 };

@@ -19,19 +19,20 @@ private const val TIMEOUT_DELAY_IN_MILLISECONDS = 30000;
  */
 private const val NHSD_TARGET_IDENTIFIER =
     "ewrCoCDCoCAic3lzdGVtIjogInVybjppZXRmOnJmYzozOTg2IiwKwqAgwqAgInZh" +
-    "bHVlIjogImRiNzE2OThiLWNkN2MtNGRkNS05NWM0LTBhYTk3NzY1OTVmNSIKfQ=="
+            "bHVlIjogImRiNzE2OThiLWNkN2MtNGRkNS05NWM0LTBhYTk3NzY1OTVmNSIKfQ=="
+private const val AGGREGATOR_PATH = "/patient-care-aggregator-api/aggregator/"
 
 private fun getEncodedPatientIdQueryName() = URLEncoder.encode("patient:identifier", "UTF-8")
 private fun getPatientIdQueryValue() = "https://fhir.nhs.uk/Id/nhs-number|${SerenityHelpers.getPatient().nhsNumbers[0]}"
-private fun getPath(): String {
-    val path = "/patient-care-aggregator-api/aggregator/events"
+private fun getPath(isWaitTimes: Boolean): String {
+    val path = AGGREGATOR_PATH + if (isWaitTimes) "waittimes" else "events"
     val queryName = getEncodedPatientIdQueryName()
     val queryValue = URLEncoder.encode(getPatientIdQueryValue(), "UTF-8")
 
     return "$path?$queryName=$queryValue"
 }
 
-class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
+class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("GET", getPath(isWaitTimes)) {
 
     init {
         requestBuilder
@@ -475,7 +476,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(response)
-                    .build()
+                .build()
         }
     }
 
@@ -570,7 +571,7 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(response)
-                    .build()
+                .build()
         }
     }
 
@@ -995,23 +996,23 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(response)
-                    .build()
+                .build()
         }
     }
 
     fun returnReferralsAndUpcomingAppointmentsForProvider(provider: String): Mapping {
         val deepLink = when(provider){
             "AccurxWayfinder" -> "http://accurxwayfinder.stubs.local.bitraft.io:8080/api/OpenIdConnect/AuthenticateManageAppointment?" +
-                "appointmentToken=XXXX"
+                    "appointmentToken=XXXX"
             "DrDoctor" -> "http://drdoctor.stubs.local.bitraft.io:8080/appointments/" +
-                "123456?from=nhsApp"
-            "HealthcareComms" -> "http://hcc.stubs.local.bitraft.io:8080/appointments/987654321"            
+                    "123456?from=nhsApp"
+            "HealthcareComms" -> "http://hcc.stubs.local.bitraft.io:8080/appointments/987654321"
             "PKB" -> "http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?" +
-                "phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
+                    "phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D8b8d1edc-8cb0-49b2-8fb0-4b7ab564a67e"
             "Netcall" -> "http://netcall.stubs.local.bitraft.io:8080/Appointments?" +
-                 "id=49482520-9026-4398-b3a0-2b738ebc1365&trust=789"
+                    "id=49482520-9026-4398-b3a0-2b738ebc1365&trust=789"
             "Zesty" -> "http://zesty.stubs.local.bitraft.io:8080/nhs/origin_appointment?" +
-                "resource_id=XXXX"
+                    "resource_id=XXXX"
             else -> "http://stubs.local.bitraft.io:8080"
         }
 
@@ -1113,7 +1114,121 @@ class EvaluateBuilder : WayfinderMappingBuilder("GET", getPath()) {
 
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(response)
-                    .build()
+                .build()
+        }
+    }
+
+    fun returnWaitTimes(): Mapping {
+        val response = """
+        {
+          "resourceType": "Bundle",
+          "entry": [
+            {
+              "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+              "resource": {
+                "resourceType": "CarePlan",
+                "status": "active",
+                "intent": "order",
+                "subject": {
+                  "identifier": {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9956865842"
+                  }
+                },
+                "activity": [
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
+                        "system": "https://fhir.nhs.uk/Id/UBRN",
+                        "value": "079593580834"
+                      }
+                    },
+                    "detail": {
+                      "extension": [
+                        {
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                            "display": "Neurology"
+                          }
+                        }
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
+                        "extension": [
+                          {
+                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                            "valueDuration": {
+                              "value": 40,
+                              "unit": "Days"
+                            }
+                          }
+                        ],
+                        "start": "2022-09-15T09:15:39+00:00"
+                      },
+                      "performer": [
+                        {
+                          "type": "Organization",
+                          "display": "Oak GP Surgery"
+                        }
+                      ],
+                      "description": "Neurology"
+                    }
+                  },
+                  {
+                    "reference": {
+                      "type": "ServiceRequest",
+                      "identifier": {
+                        "system": "https://fhir.nhs.uk/Id/UBRN",
+                        "value": "398286558107"
+                      }
+                    },
+                    "detail": {
+                      "extension": [
+                        {
+                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
+                          "valueCoding": {
+                            "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
+                            "display": "Paediatrics"
+                          }
+                        }
+                      ],
+                      "kind": "ServiceRequest",
+                      "scheduledPeriod": {
+                        "extension": [
+                          {
+                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
+                            "valueDuration": {
+                              "value": 60,
+                              "unit": "Days"
+                            }
+                          }
+                        ],
+                        "start": "2022-09-05T09:15:39+00:00"
+                      },
+                      "performer": [
+                        {
+                          "type": "Organization",
+                          "display": "Willow GP Surgery"
+                        }
+                      ],
+                      "description": "Paediatrics"
+                    }
+                  }
+                ]
+              },
+              "search": {
+                "mode": "match"
+              }
+            }
+          ]
+        }
+        """
+
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(response)
+                .build()
         }
     }
 }

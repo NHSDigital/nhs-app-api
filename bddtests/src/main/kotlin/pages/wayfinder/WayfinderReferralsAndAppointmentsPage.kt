@@ -102,12 +102,19 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         helpfulName = "Missing referral in review or incorrect - h2"
     )
 
+    private val waitTimesJumpLink = HybridPageElement(
+        webDesktopLocator = "//h2[contains(text(),\"Waiting lists\")]",
+        page = this,
+        helpfulName = "Wait times - h2"
+    )
+
     private val referralsOrAppointmentsHelpTitle = "What to do if a referral or appointment " +
                                                    "is missing, incorrect or has not been cancelled"
     private val confirmedAppointmentsHelpTitle = "What to do if an appointment is missing, " +
                                                  "incorrect or has not been changed or cancelled"
     private val referralsInReviewHelpTitle = "What to do if a referral being reviewed by " +
                                              "a clinic is missing or incorrect"
+    private val waitTimesTitle = "Waiting lists"
 
     var content = LinksWithDescriptionsContent(
         linkBlockTitle = "Wayfinder Help links",
@@ -116,6 +123,7 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
         .addLink(referralsOrAppointmentsHelpTitle, "")
         .addLink(confirmedAppointmentsHelpTitle, "")
         .addLink(referralsInReviewHelpTitle, "")
+        .addLink(waitTimesTitle, "")
 
     val links by lazy { LinksElement(this, content) }
 
@@ -129,6 +137,10 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     val referralsInReviewLink by lazy {
         links.link("What to do if a referral being reviewed by a clinic is missing or incorrect")
+    }
+
+    val waitTimesLink by lazy {
+        links.link("Waiting lists")
     }
 
     fun assertWayfinderTitleIsDisplayed() {
@@ -185,5 +197,9 @@ open class WayfinderReferralsAndAppointmentsPage : HybridPageObject() {
 
     fun assertReferralsInReviewHelpLinkIsDisplayed(){
         referralsInReviewHelpLink.assertIsVisible()
+    }
+
+    fun assertWaitTimesLinkIsDisplayed(){
+        waitTimesJumpLink.assertIsVisible()
     }
 }

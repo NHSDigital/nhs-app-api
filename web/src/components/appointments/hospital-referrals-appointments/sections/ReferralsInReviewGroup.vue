@@ -13,13 +13,13 @@
                 class="nhsuk-grid-row">
       <card-group-item v-for="(referral, index) in referralsInReviewNotOverdue"
                        :key="`referral-in-review-not-overdue-${index}`"
-                       class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+                       class="nhsuk-grid-column-full">
         <referral-in-review-card :item="referral"/>
       </card-group-item>
     </card-group>
     <!--Card group is currently the only way to get this to act as the other groups style wise !-->
     <card-group v-else class="nhsuk-grid-row">
-      <card-group-item class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+      <card-group-item class="nhsuk-grid-column-full">
         <p
           id="no-referrals-in-review-text">
           {{ $t('wayfinder.noReferralsInReview') }}

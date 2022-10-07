@@ -141,6 +141,7 @@ export const UPLIFT_SILVER_INTEGRATION_PATH = 'uplift/silver-integration';
 export const USER_RESEARCH_PATH = '/user-research';
 export const WAYFINDER_PATH = 'appointments/hospital-referrals-appointments/';
 export const WAYFINDER_HELP_PATH = 'appointments/hospital-referrals-appointments/help';
+export const WAYFINDER_WAITING_LISTS_PATH = 'appointments/hospital-referrals-appointments/waiting-lists';
 
 export default {
   EMPTY_PATH,
@@ -279,6 +280,7 @@ export default {
   USER_RESEARCH_PATH,
   WAYFINDER_PATH,
   WAYFINDER_HELP_PATH,
+  WAYFINDER_WAITING_LISTS_PATH,
 };
 
 /**
