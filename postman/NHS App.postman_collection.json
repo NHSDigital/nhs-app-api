@@ -393,66 +393,6 @@
 			"response": []
 		},
 		{
-			"name": "Event Report",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
-					}
-				],
-				"url": {
-					"raw": "{{base_url}}/nhs-app/communication/report/events/?day=2021-08-03&page=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"nhs-app",
-						"communication",
-						"report",
-						"events",
-						""
-					],
-					"query": [
-						{
-							"key": "day",
-							"value": "2021-08-03",
-							"description": "Day for which to retrieve daily event report."
-						},
-						{
-							"key": "page",
-							"value": "1",
-							"description": "Page of daily event report to retrieve."
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Receipt Report",
 			"event": [
 				{

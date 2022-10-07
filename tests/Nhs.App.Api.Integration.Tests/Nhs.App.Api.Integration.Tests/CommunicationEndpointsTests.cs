@@ -16,7 +16,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Nhs.App.Api.Integration.Tests
 {
     [TestClass]
-    public class CommunicationHttpFunctionsFhirR4Tests : CommunicationHttpFunctionBase
+    public class CommunicationEndpointsTests : HttpEndpointTestsBase
     {
         private static TestConfiguration _testConfiguration;
 
@@ -31,19 +31,19 @@ namespace Nhs.App.Api.Integration.Tests
             Path = "communication/notification/FHIR/R4/CommunicationRequest",
             DisplayName = "Notification"
         };
-        
+
         private enum PayloadContentKind
         {
             ContentString,
             ContentReference
         }
-        
+
         public enum MessageContentKind
         {
             Normal,
             Questionnaire
         }
-        
+
         public class EndpointInfo
         {
             public string Path { get; set; }
@@ -260,7 +260,7 @@ namespace Nhs.App.Api.Integration.Tests
             //Act & Assert
             await CommunicationPost_ValidTest(validPayload, InApp.Path);
         }
-        
+
         [TestMethod]
         public async Task CommunicationPost_CommunicationRequestWithInvalidQuestionnaire_Returns400BadRequest()
         {
@@ -272,7 +272,7 @@ namespace Nhs.App.Api.Integration.Tests
 
             // Act
             var response = await httpClient.PostAsync(InApp.Path, httpContent, correlationId);
-            
+
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var operationOutcome = await ParseOperationOutcome(response);
@@ -281,7 +281,7 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
             issue.Diagnostics.Should().Contain("url is invalid");
         }
-        
+
 
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
         {
@@ -311,7 +311,7 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{identifier.Value}");
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
-        
+
 
         private static string BuildValidRequestBody(string endpoint,
             PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
@@ -323,7 +323,7 @@ namespace Nhs.App.Api.Integration.Tests
             return BuildRequestBody(communicationRequest);
         }
 
-        
+
         private static string BuildInvalidQuestionnaireRequestBody(string endpoint,
             PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
             MessageContentKind messageContentKind = MessageContentKind.Questionnaire
@@ -334,7 +334,7 @@ namespace Nhs.App.Api.Integration.Tests
             return BuildRequestBody(communicationRequest);
         }
 
-        
+
         private static string BuildRequestBody(CommunicationRequest communicationRequest)
         {
             var serializer = new FhirJsonSerializer();
@@ -344,7 +344,7 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         private static CommunicationRequest BuildValidCommunicationRequest(string endpoint,
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString, 
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
             MessageContentKind messageContentKind = MessageContentKind.Normal)
         {
             var communicationRequest = new CommunicationRequest
@@ -386,7 +386,7 @@ namespace Nhs.App.Api.Integration.Tests
                                }
                            }
                        }
-                        
+
                     }
                 };
 
