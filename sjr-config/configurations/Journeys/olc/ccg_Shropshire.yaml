@@ -23,7 +23,6 @@ target:
     - M82032
     - M82014
     - M82620
-    - M82035
     - M82013
 journeys:
   cdssAdvice:

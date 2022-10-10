@@ -1034,3 +1034,8 @@ L82049,"FALMOUTH HEALTH CENTRE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","
 P87040,"SORREL BANK MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 P87040,"SORREL BANK MEDICAL PRACTICE","IN PRACTICE SYSTEMS LTD","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)"
 ==================================================================
+==================================================================
+Job Run - Mon 10 Oct 2022 09:50:43 BST
+ODS,Organisation,PreviousSupplier,NewSupplier
+B82033,"PICKERING MEDICAL PRACTICE","EGTON MEDICAL INFORMATION SYSTEMS LTD (EMIS)","THE PHOENIX PARTNERSHIP"
+==================================================================

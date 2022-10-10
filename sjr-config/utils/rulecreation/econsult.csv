@@ -79,7 +79,6 @@ basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,t
 basildon,Basildon and Brentwood,CCG,Basildon and Brentwood,Mid and South Essex,westernroadsurgery,The Western Road Surgery,F81013,10176
 bexley,Bexley,CCG,Bexley,South East London,barnardmedicalgroup,Barnard Medical Group Barnard Practice,G83004,15300
 bexley,Bexley,CCG,Bexley,South East London,bellegrovesurgery,Bellegrove Surgery,G83009,11430
-bexley,Bexley,CCG,Bexley,South East London,bexleygrouppractice,Bexley Group Practice,G83028,11818
 bexley,Bexley,CCG,Bexley,South East London,bexleymedicalgroup,Bexley Medical Group,G83053,17106
 bexley,Bexley,CCG,Bexley,South East London,burstedwoodsurgery,Bursted Wood Surgery,G83046,5012
 bexley,Bexley,CCG,Bexley,South East London,mycts,Crayford Town Surgery,G83642,7624
@@ -286,7 +285,6 @@ devon,Devon,CCG,Devon,Devon,beaconmedicalgroup,Beacon Medical Group,L83100,43000
 devon,Devon,CCG,Devon,Devon,towerhousesurgery,Bovey Tracey And Chudleigh Practice,L83045,14561
 devon,Devon,CCG,Devon,Devon,collegesurgery,College Surgery Partnership,L83092,18000
 devon,Devon,CCG,Devon,Devon,hillbartonsurgery,Hill Barton Surgery,L83143,3904
-devon,Devon,CCG,Devon,Devon,idelanesurgery,Ide Lane Surgery,L83079,7624
 devon,Devon,CCG,Devon,Devon,iscamp,Isca Medical Practice,L83099,5230
 devon,Devon,CCG,Devon,Devon,kkipp,Kingskerswell And Ipplepen Medical Practice,L83031,11025
 devon,Devon,CCG,Devon,Devon,accesshealthanddental,Mayflower Medical Group,L83006,31000
@@ -298,7 +296,6 @@ dorset,Dorset,CCG,Dorset,Dorset,corbinavenuesurgery,Barcellos Family Practice,J8
 dorset,Dorset,CCG,Dorset,Dorset,bartonhousemedicalpractice,Barton House Medical Practice,J81074,5330
 dorset,Dorset,CCG,Dorset,Dorset,beaufortroadsurgery,Beaufort Road Surgery,J81018,11500
 dorset,Dorset,CCG,Dorset,Dorset,bereregissurgery,Bere Regis Surgery,J81020,3600
-dorset,Dorset,CCG,Dorset,Dorset,blackmorevalesurgery,Blackmore Vale Partnership,J81620,25424
 dorset,Dorset,CCG,Dorset,Dorset,cerneabbassurgery,Cerne Abbas Surgery,J81053,4000
 dorset,Dorset,CCG,Dorset,Dorset,christchurchmedicalpractice,Christchurch Medical Practice,J81056,21000
 dorset,Dorset,CCG,Dorset,Dorset,corfecastlesurgery,Corfe Castle Surgery,J81612,2624
@@ -495,7 +492,6 @@ eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,datchetdoctor,Dat
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,drveenasharma,Dr Sharmas Surgery 240 Wexham Road Surgery,K81645,5644
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,easthampsteadsurgery,Easthampstead Surgery,K81087,5200
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,evergreenpracticegp,Evergreen Practice,K81657,5014
-eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,greathollandspractice,Great Hollands,K81094,4100
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,herschelmedicalcentre,Herschel Medical Centre,K81043,15739
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,kingscornersurgery,Kings Corner Surgery,K81010,7750
 eastberkshire,East Berkshire,CCG,East Berkshire,Frimley Health,kumarmedicalcentre,Kumar Medical Centre,K81616,4916
@@ -1189,7 +1185,6 @@ shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,radbrookg
 shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,severnfieldsmedicalpractice,Severn Fields Medical Practice,M82032,17262
 shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,stationdrivesurgery,Station Drive Surgery,M82014,8400
 shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,themeadowsmedicalpractice,The Meadows Medical Practice,M82620,3065
-shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,wemandpreeshealth,Wem and Prees Medical Practice,M82035,11673
 shropshire,Shropshire,CCG,Shropshire,Shropshire and Telford and Wrekin,westburymedicalcentre,Westbury Medical Centre,M82013,2827
 sehampshire,South Eastern Hampshire,CCG,South Eastern Hampshire,Hampshire and the Isle of Wight,theclanfieldpractice,Clanfield Practice,J82147,8036
 sehampshire,South Eastern Hampshire,CCG,South Eastern Hampshire,Hampshire and the Isle of Wight,horndeansurgery,Horndean Surgery,J82640,5300
@@ -1715,7 +1710,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Parkside Medical Centre,C83010,
 ,,,Other,,,Holbeach Medical Centre,C83028,
 ,,,Other,,,Longton Medical Centre,N83053,
-,,,Other,,,Mid Sussex Health Care,H82057,
 ,,,Other,,,Cornerways Surgery,H82076,
 ,,,Other,,,Launceston Close Surgery,N81074,
 ,,,Other,,,Chapeltown Family Surgery,B86108,
@@ -2159,7 +2153,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Ling House Medical Centre,B83008,
 ,,,Other,,,London Road Surgery,F81041,
 ,,,Other,,,Loxwood Medical Practice,H82031,
-,,,Other,,,Lindfield Medical Centre,H82035,
 ,,,Other,,,St Peter's Surgery,J82208,
 ,,,Other,,,Pinfold Medical,M91650,
 ,,,Other,,,Orchard Court Surgery,A83006,
@@ -2199,7 +2192,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Glebe Surgery,H82070,
 ,,,Other,,,New Pond Row Surgery,H82091,
 ,,,Other,,,The Village Surgery,H82092,
-,,,Other,,,Ouse Valley Practice,H82615,
 ,,,Other,,,Red and Green Practice,J82056,
 ,,,Other,,,Old Fire Station Surgery,J82128,
 ,,,Other,,,Crondall New Surgery,J82628,
@@ -2326,3 +2318,23 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Morland House Surgery,K84014,
 ,,,Other,,,Garston Medical Centre,E82017,
 ,,,Other,,,Beacon Health Group,F81100,
+,,,Other,,,Bridgewater Surgeries,E82013,
+,,,Other,,,The Lodge Health Partnership,E82014,
+,,,Other,,,Suthergrey House Medical Centre,E82015,
+,,,Other,,,Watford Health Centre,E82045,
+,,,Other,,,Grange Street Surgery,E82059,
+,,,Other,,,Haverfield Surgery,E82066,
+,,,Other,,,Gade Surgery,E82068,
+,,,Other,,,The Elms Surgery,E82069,
+,,,Other,,,Harvey Group Practice,E82084,
+,,,Other,,,Kings Langley Surgery,E82129,
+,,,Other,,,Highfield Surgery,E82640,
+,,,Other,,,Ongar War Memorial Medical Centre,F81049,
+,,,Other,,,Forest Practice Loughton,F81152,
+,,,Other,,,Abridge Surgery,F81184,
+,,,Other,,,Maynard Court Surgery,F81725,
+,,,Other,,,The Market Square Surgery,F81749,
+,,,Other,,,Bethnal Green Health Centre,F84083,
+,,,Other,,,Pilgrims Way Surgery,G82212,
+,,,Other,,,MPA Group Practice,G82741,
+,,,Other,,,Eltham Medical Practice,G83680,
