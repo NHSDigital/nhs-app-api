@@ -1,5 +1,5 @@
 <template>
-  <div class="nhsuk-u-margin-bottom-5">
+  <div class="nhsuk-u-margin-bottom-3">
     <menu-item-list>
       <menu-item :id="id"
                  header-tag="h2"

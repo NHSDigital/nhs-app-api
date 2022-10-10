@@ -1,21 +1,25 @@
 <template>
   <div>
     <h2 id="referrals-in-review-title"
-        class="nhsuk-u-padding-bottom-5">
+        class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
       {{ groupTitleWithCounter(totalReferralsInReviewNotOverdue) }}
     </h2>
-    <help-link
-      id="wayfinder-help-jump-off-link-referrals"
-      :path="wayfinderHelpPath"
-      :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referrals')"/>
+    <div class="nhsuk-u-padding-bottom-2">
+      <help-link
+        id="wayfinder-help-jump-off-link-referrals"
+        :path="wayfinderHelpPath"
+        :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referrals')"/>
+    </div>
     <card-group v-if="hasAny"
-                class="nhsuk-grid-row">
+                class="nhsuk-grid-row nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0"
+                :class="!hasAny ? 'nhsuk-u-padding-bottom-0' : ''">
       <card-group-item v-for="(referral, index) in referralsInReviewNotOverdue"
                        :key="`referral-in-review-not-overdue-${index}`"
-                       class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+                       class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
         <referral-in-review-card :item="referral"/>
       </card-group-item>
     </card-group>
+    <div v-else class="nhsuk-u-padding-bottom-4"/>
   </div>
 </template>
 

@@ -1,23 +1,33 @@
 <template v-if="hasLoaded">
-  <div id="wait-Times-Title">
-    <p id="wait-Times-Content">
-      {{ waitingListCount ===1 ? $t('wayfinder.waitTimes.youAreOnOneWaitingList') : $t('wayfinder.waitTimes.youAreOnMultipleWaitingLists',null,{waitingListCount}) }}
-    </p>
-    <help-link
-      id="wayfinder-help-jump-off-link-wait-times"
-      route-crumb="waitTimes"
-      :path="wayfinderHelpPath"
-      :back-link-override="wayfinderWaitingListsPath"
-      :text="$t('wayfinder.waitTimes.missingIncorrectOrNotChangedOrCancelled')"/>
+  <div>
     <template v-if="hasErrored">
       <p id="technicalProblem">{{ $t('wayfinder.waitTimes.errors.technicalProblem') }}</p>
       <p id="informationCurrentlyUnavailable">{{ $t('wayfinder.waitTimes.errors.informationCurrentlyUnavailable') }}</p>
       <p id="cannotViewTryAgain">{{ $t('wayfinder.waitTimes.errors.cannotViewTryAgain') }}</p>
     </template>
     <template v-else>
-      <p id="wait-Times-Content" class="nhsuk-u-padding-top-3">
-        {{ waitingListCount === 1 ? $t('wayfinder.waitTimes.youAreOnOneWaitingList') : $t('wayfinder.waitTimes.youAreOnMultipleWaitingLists',null,{waitingListCount}) }}
-      </p>
+      <div id="wait-times-title">
+        <p id="wait-times-content" class="nhsuk-u-padding-top-3">
+          {{ waitingListCount === 1 ? $t('wayfinder.waitTimes.youAreOnOneWaitingList') : $t('wayfinder.waitTimes.youAreOnMultipleWaitingLists',null,{waitingListCount}) }}
+        </p>
+      </div>
+      <card-group v-if="waitingListCount > 0" class="nhsuk-grid-row nhsuk-u-margin-bottom-3">
+        <card-group-item
+          v-for="(item, index) in waitingLists"
+          :key="`actionable-item-${index}`"
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+          <wait-times-card :item="item" />
+        </card-group-item>
+      </card-group>
+      <h2 id="something-wrong" class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
+        {{ $t('wayfinder.waitTimes.isSomethingWrong') }}
+      </h2>
+      <help-link
+        id="wayfinder-help-jump-off-link-wait-times"
+        route-crumb="waitTimes"
+        :path="wayfinderHelpPath"
+        :back-link-override="wayfinderWaitingListsPath"
+        :text="$t('wayfinder.waitTimes.missingIncorrectOrNotChangedOrCancelled')"/>
     </template>
     <desktop-generic-back-link
       v-if="!isNativeApp"
@@ -29,14 +39,26 @@
 </template>
 
 <script>
+
+import CardGroup from '@/components/widgets/card/CardGroup';
+import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import WaitTimesCard from '@/components/appointments/hospital-referrals-appointments/appointments/WaitTimesCard';
 import HelpLink from '@/components/appointments/hospital-referrals-appointments/HelpLink';
 import { WAYFINDER_HELP_PATH, WAYFINDER_WAITING_LISTS_PATH, WAYFINDER_PATH } from '@/router/paths';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
+const loadData = async (store) => {
+  store.dispatch('wayfinder/clearApiError');
+  await store.dispatch('wayfinder/loadWaitTimes');
+};
+
 export default {
   name: 'WayfinderWaitingLists',
   components: {
+    CardGroup,
+    CardGroupItem,
+    WaitTimesCard,
     HelpLink,
     DesktopGenericBackLink,
   },
@@ -46,15 +68,18 @@ export default {
       wayfinderHelpPath: WAYFINDER_HELP_PATH,
       wayfinderWaitingListsPath: WAYFINDER_WAITING_LISTS_PATH,
       isNativeApp: this.$store.state.device.isNativeApp,
-      waitTimesResults: null,
+      waitTimesResults: [],
     };
   },
   computed: {
-    waitingListCount() {
-      if (this.waitTimesResults) {
-        return this.waitTimesResults.length;
+    waitingLists() {
+      if (this.waitTimesResults && this.waitTimesResults.waitTimes) {
+        return this.waitTimesResults.waitTimes;
       }
-      return 0;
+      return [];
+    },
+    waitingListCount() {
+      return this.waitingLists.length;
     },
     apiError() {
       return this.$store.state.wayfinder.apiError;
@@ -67,8 +92,8 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('wayfinder/loadWaitTimes');
-    this.waitTimesResults = this.$store.state.wayfinder.waitTimes;
+    await loadData(this.$store);
+    this.waitTimesResults = this.$store.state.wayfinder;
 
     if (this.hasErrored) {
       const header = 'wayfinder.waitTimes.errors.cannotView';

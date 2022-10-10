@@ -1,6 +1,5 @@
 <template>
-  <Card class="nhsuk-u-margin-bottom-5">
-
+  <Card>
     <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
       <div class="nhs-app-card__title-text">
         <h3 class="nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0"
@@ -20,7 +19,6 @@
         {{ tagText }}
       </span>
     </div>
-
     <primary-button data-purpose="book-or-manage-referral-button"
                     @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.referrals.bookable.bookOrManageThisReferral') }}

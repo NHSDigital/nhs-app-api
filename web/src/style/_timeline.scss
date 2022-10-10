@@ -1,0 +1,63 @@
+.nhsuk-timeline__events {
+  list-style-type: none;
+  padding: 0;
+}
+
+.nhsuk-timeline__events--entry-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-start;
+  margin-bottom: 0;
+}
+
+.nhsuk-timeline__events--entry {
+  padding-left: 1em;
+}
+
+.nhsuk-timeline__events--visual-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2em;
+}
+
+.nhsuk-timeline__events--visual-terminal {
+  width: 1.4em;
+  height: 1.4em;
+  -moz-border-radius: 0.7em;
+  -webkit-border-radius: 0.7em;
+  border-radius: 0.7em;
+  background-color:#1d70b8;
+}
+
+.nhsuk-timeline__events--visual-terminal.alternate {
+  background-color:#fff;
+  border: 0.2em solid #1d70b8;
+}
+
+.nhsuk-timeline__events--visual-terminal.final {
+  width: 1em;
+  height: 1em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+  border-radius: 0.5em;
+  background-color:#fff;
+  border: 0.2em solid #adb7bd;
+}
+
+.nhsuk-timeline__events--visual-line {
+  background-color: #1d70b8;
+  width: 3px;
+  height: 100%;
+  align-self: center;
+  padding-bottom: 32px;
+}
+
+.nhsuk-timeline__events--visual-line.alternate {
+  background-image: linear-gradient(0deg, #f0f4f5 25%, #adb7bd 25%, #adb7bd 50%, #f0f4f5 50%, #f0f4f5 75%, #adb7bd 75%, #adb7bd 100%);
+  background-size: 30px 30px;
+}
+
+.nhsuk-timeline__events--entry {
+  margin-top: -4px;
+}

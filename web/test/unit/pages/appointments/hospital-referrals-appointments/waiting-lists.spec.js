@@ -25,6 +25,7 @@ const setupStore = (
 
   if (waitTimesCount === 1) {
     waitTimes = [{
+      estimatedWaitToTreatmentDisplayDate: 'February 2023',
       plannedWaitTime: '40',
       referredDate: '2022-04-18T10:00:00',
       providerName: 'Oak GP Surgery',
@@ -32,11 +33,13 @@ const setupStore = (
     }];
   } else if (waitTimesCount > 1) {
     waitTimes = [{
+      estimatedWaitToTreatmentDisplayDate: 'February 2023',
       plannedWaitTime: '40',
       referredDate: '2022-04-18T10:00:00',
       providerName: 'Oak GP Surgery',
       speciality: 'Neurology',
     }, {
+      estimatedWaitToTreatmentDisplayDate: 'February 2023',
       plannedWaitTime: '60',
       referredDate: '2022-07-18T10:00:00',
       providerName: 'Oak GP Surgery',
@@ -80,13 +83,17 @@ describe('Wait times page', () => {
   beforeEach(() => {
     $store = setupStore(0, false, true);
     wrapper = mountPage();
+
+    waitTimesText = wrapper.find('#wait-times-content');
   });
 
   describe('if page loaded', () => {
-    it('title text is shown for book or wait times', () => {
-      waitTimesTitle = wrapper.find('#wait-Times-Title');
+    it('title text and something wrong text shown for wait times', () => {
+      waitTimesTitle = wrapper.find('#wait-times-title');
+      const isSomethingWrongElement = wrapper.find('#something-wrong');
 
       expect(waitTimesTitle.exists()).toBe(true);
+      expect(isSomethingWrongElement.text()).toEqual('Is something wrong?');
     });
 
     it('missing appointment jump-off is visible and text correct', () => {
@@ -99,60 +106,61 @@ describe('Wait times page', () => {
 
   describe('waiting list with no wait times', () => {
     it('show zero waiting list text', () => {
-      waitTimesText = wrapper.find('#wait-Times-Content');
       expect(waitTimesText.text()).toEqual('You\'re on 0 waiting lists');
     });
   });
+});
 
-  describe('waiting list with single wait time', () => {
-    beforeEach(() => {
-      $store = setupStore(1);
-      wrapper = mountPage();
-    });
-    it('show single wait time text', () => {
-      waitTimesText = wrapper.find('#wait-Times-Content');
-      expect(waitTimesText.text()).toEqual('You\'re on a waiting list');
-    });
+describe('waiting list with single wait time', () => {
+  beforeEach(() => {
+    $store = setupStore(1);
+    wrapper = mountPage();
+
+    waitTimesText = wrapper.find('#wait-times-content');
+  });
+  it('show single wait time text', () => {
+    expect(waitTimesText.text()).toEqual('You\'re on a waiting list');
+  });
+});
+
+describe('waiting list with more than one wait times', () => {
+  beforeEach(() => {
+    $store = setupStore(2);
+    wrapper = mountPage();
+
+    waitTimesText = wrapper.find('#wait-times-content');
+  });
+  it('show multiple wait time text', () => {
+    expect(waitTimesText.text()).toEqual('You\'re on 2 waiting lists');
+  });
+});
+
+describe('WaitTimes with API error', () => {
+  beforeEach(() => {
+    $store = setupStore(0, true);
+    wrapper = mountPage();
   });
 
-  describe('waiting list with more than one wait times', () => {
-    beforeEach(() => {
-      $store = setupStore(2);
-      wrapper = mountPage();
-    });
-    it('show multiple wait time text', () => {
-      waitTimesText = wrapper.find('#wait-Times-Content');
-      expect(waitTimesText.text()).toEqual('You\'re on 2 waiting lists');
-    });
-  });
+  describe('if page errored', () => {
+    it('show error message for technical problem', () => {
+      technicalProblemMessage = wrapper.find('#technicalProblem');
 
-  describe('WaitTimes with API error', () => {
-    beforeEach(() => {
-      $store = setupStore(0, true);
-      wrapper = mountPage();
+      expect(technicalProblemMessage.exists()).toBe(true);
+      expect(technicalProblemMessage.text()).toEqual('There is a technical problem.');
     });
 
-    describe('if page errored', () => {
-      it('show error message for technical problem', () => {
-        technicalProblemMessage = wrapper.find('#technicalProblem');
+    it('show message for information currently unavailable', () => {
+      informationCurrentlyUnavailableMessage = wrapper.find('#informationCurrentlyUnavailable');
 
-        expect(technicalProblemMessage.exists()).toBe(true);
-        expect(technicalProblemMessage.text()).toEqual('There is a technical problem.');
-      });
+      expect(informationCurrentlyUnavailableMessage.exists()).toBe(true);
+      expect(informationCurrentlyUnavailableMessage.text()).toEqual('Information on waiting times is currently unavailable.');
+    });
 
-      it('show message for information currently unavailable', () => {
-        informationCurrentlyUnavailableMessage = wrapper.find('#informationCurrentlyUnavailable');
+    it('show message cannot view try again', () => {
+      cannotViewTryAgainMessage = wrapper.find('#cannotViewTryAgain');
 
-        expect(informationCurrentlyUnavailableMessage.exists()).toBe(true);
-        expect(informationCurrentlyUnavailableMessage.text()).toEqual('Information on waiting times is currently unavailable.');
-      });
-
-      it('show message cannot view try again', () => {
-        cannotViewTryAgainMessage = wrapper.find('#cannotViewTryAgain');
-
-        expect(cannotViewTryAgainMessage.exists()).toBe(true);
-        expect(cannotViewTryAgainMessage.text()).toEqual('Try again later.');
-      });
+      expect(cannotViewTryAgainMessage.exists()).toBe(true);
+      expect(cannotViewTryAgainMessage.text()).toEqual('Try again later.');
     });
   });
 });

@@ -1,4 +1,3 @@
-
 export default {
   bookOrManageReferralsAndAppointmentsTitle: 'You have {count} referral{plural} or appointment{plural} you need to action',
   confirmedAppointmentsTitle: 'You have {count} upcoming appointment{plural}',
@@ -14,6 +13,16 @@ export default {
     title: 'Waiting lists',
     youAreOnOneWaitingList: 'You\'re on a waiting list',
     youAreOnMultipleWaitingLists: 'You\'re on {waitingListCount} waiting lists',
+    isSomethingWrong: 'Is something wrong?',
+    card: {
+      title: 'Waiting list',
+      subtitle: 'You do not need to do anything. You\'ll be contacted by {providerName} when an appointment is available.',
+      youAreHere: 'You are here',
+      waitingForConsultOrFollowUp: 'Waiting for a consultation or follow-up appointment',
+      estimatedFinalTreatment: 'Estimated final treatment or surgery date, if needed',
+      waitingTimesReviewed: 'Waiting times are reviewed weekly and may change.',
+      averageWaitingTime: 'This is the average waiting time for this department at {providerName}.',
+    },
     missingIncorrectOrNotChangedOrCancelled: 'What to do if something is missing, incorrect or has not been changed or cancelled',
     errors: {
       cannotView: 'Cannot view waiting times',

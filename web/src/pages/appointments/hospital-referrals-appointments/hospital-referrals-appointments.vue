@@ -1,57 +1,54 @@
 <template>
-  <div v-if="hasLoaded" class="nhsuk-grid-row">
+  <div v-if="hasLoaded" class="nhsuk-grid-row nhsuk-u-padding-top-4">
     <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-u-padding-top-3">
-
-        <template v-if="hasErrored">
-          <template v-if="showDoesNotMeetMinimumAgeError">
-            <p id="doesNotMeetMinimumAge">{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
-            <p id="noOtherServicesShowing">{{ $t('wayfinder.errors.noOtherServicesShowing') }}</p>
-          </template>
-
-          <template v-else>
-            <p>{{ $t('wayfinder.errors.cannotViewTryAgain') }}</p>
-            <generic-button
-              id="try-again-button"
-              :class="['nhsuk-button', 'nhsuk-button--secondary']"
-              @click="tryAgainClicked">
-              {{ $t('generic.tryAgain') }}
-            </generic-button>
-            <p>
-              <a id="contact-us-link"
-                 :href="contactUsLink"
-                 :aria-label="contactUsAriaLabel"
-                 @click.stop.prevent="contactUsClicked">
-                {{ contactUsLinkText }}
-              </a>
-            </p>
-          </template>
-          <other-available-services-menu-items
-            id="other-available-services-menu-items"/>
+      <template v-if="hasErrored">
+        <template v-if="showDoesNotMeetMinimumAgeError">
+          <p id="doesNotMeetMinimumAge">{{ $t('wayfinder.errors.doesNotMeetMinimumAge') }}</p>
+          <p id="noOtherServicesShowing">{{ $t('wayfinder.errors.noOtherServicesShowing') }}</p>
         </template>
 
         <template v-else>
-          <book-or-manage-referrals-or-appointments-group/>
-          <confirmed-appointments-group/>
-          <referrals-in-review-group/>
-
-          <wait-times-menu-item
-            id="wait-times-menu-item"
-            :is-wait-times-enabled="isWaitTimesEnabled"/>
-
-          <other-available-services-menu-items
-            id="other-available-services-menu-items"
-            :show-ers="false"/>
+          <p>{{ $t('wayfinder.errors.cannotViewTryAgain') }}</p>
+          <generic-button
+            id="try-again-button"
+            :class="['nhsuk-button', 'nhsuk-button--secondary']"
+            @click="tryAgainClicked">
+            {{ $t('generic.tryAgain') }}
+          </generic-button>
+          <p>
+            <a id="contact-us-link"
+               :href="contactUsLink"
+               :aria-label="contactUsAriaLabel"
+               @click.stop.prevent="contactUsClicked">
+              {{ contactUsLinkText }}
+            </a>
+          </p>
         </template>
-      </div>
+        <other-available-services-menu-items
+          id="other-available-services-menu-items"/>
+      </template>
 
-      <desktop-generic-back-link
-        v-if="!isNativeApp"
-        id="desktopBackLink"
-        data-purpose="back-to-appointments-hub-button"
-        :path="appointmentsHubPath"
-        :button-text="'generic.back'"/>
+      <template v-else>
+        <book-or-manage-referrals-or-appointments-group/>
+        <confirmed-appointments-group/>
+        <referrals-in-review-group/>
+
+        <wait-times-menu-item
+          id="wait-times-menu-item"
+          :is-wait-times-enabled="isWaitTimesEnabled"/>
+
+        <other-available-services-menu-items
+          id="other-available-services-menu-items"
+          :show-ers="false"/>
+      </template>
     </div>
+
+    <desktop-generic-back-link
+      v-if="!isNativeApp"
+      id="desktopBackLink"
+      data-purpose="back-to-appointments-hub-button"
+      :path="appointmentsHubPath"
+      :button-text="'generic.back'"/>
   </div>
 </template>
 

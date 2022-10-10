@@ -14,6 +14,8 @@ import pages.clickOnActionContainingText
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 
+private const val MILLISECONDS_TO_WAIT_FOR_PAGE_LOAD: Long = 500
+
 class GenericPageStepDefinitions {
     private lateinit var notFoundErrorPage: NotFoundErrorPage
     private lateinit var genericPage: HybridPageObject
@@ -50,6 +52,8 @@ class GenericPageStepDefinitions {
     fun iRetrieveThePageDirectly(pageName:String) {
         val urlForPage = PageUrl.getRelativePagePath(pageName)
         browser.browseTo(urlForPage)
+
+        Thread.sleep(MILLISECONDS_TO_WAIT_FOR_PAGE_LOAD)
     }
 
     @When("^I see the Contact us link with a url of '(.*)'$")

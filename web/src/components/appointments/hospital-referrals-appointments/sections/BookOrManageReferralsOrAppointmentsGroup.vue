@@ -1,23 +1,28 @@
 <template>
   <div>
     <h2 id="book-Or-Manage-Referrals-And-Appointments-Title"
-        class="nhsuk-u-padding-bottom-5">
+        class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
       {{ groupTitleWithCounter(totalActionableReferralsAndAppointments) }}
     </h2>
-    <help-link
-      id="wayfinder-help-jump-off-link-referrals-or-appointments"
-      :path="wayfinderHelpPath"
-      :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referralsOrAppointments')"/>
-    <card-group v-if="hasAny" class="nhsuk-grid-row">
+    <div class="nhsuk-u-padding-bottom-2">
+      <help-link
+        id="wayfinder-help-jump-off-link-referrals-or-appointments"
+        :path="wayfinderHelpPath"
+        :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.referralsOrAppointments')"/>
+    </div>
+    <card-group v-if="hasAny"
+                class="nhsuk-grid-row nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0"
+                :class="!hasAny ? 'nhsuk-u-padding-bottom-0' : ''">
       <card-group-item
         v-for="(summaryItem, index) in actionableReferralsAndAppointments"
         :key="`actionable-item-${index}`"
-        class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
+        class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
         <component
           :is="getSummaryItemComponent(summaryItem)"
           :item="summaryItem" />
       </card-group-item>
     </card-group>
+    <div v-else class="nhsuk-u-padding-bottom-4" />
   </div>
 </template>
 

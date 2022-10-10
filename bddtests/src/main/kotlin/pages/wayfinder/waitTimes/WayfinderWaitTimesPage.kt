@@ -1,9 +1,11 @@
 package pages.wayfinder.waitTimes
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
+import net.thucydides.core.annotations.NotImplementedException
 import pages.HybridPageObject
+import pages.HybridPageElement
 import pages.assertIsVisible
+import pages.assertElementNotPresent
 import pages.sharedElements.LinksElement
 import pages.sharedElements.LinksWithDescriptionsContent
 
@@ -24,6 +26,22 @@ open class WayfinderWaitTimesPage : HybridPageObject() {
                 "has not been changed or cancelled\")]",
         page = this,
         helpfulName = "help link - h2"
+    )
+
+    private val waitTimeZeroHeaderText = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(), \"You're on 0 waiting lists\")]",
+        page = this
+    )
+
+    private val waitTimeOneHeaderText = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(), \"You're on a waiting list\")]",
+        page = this
+    )
+
+    private val waitTimeComponentCardHeader = HybridPageElement(
+        webDesktopLocator = "//h3[contains(text(),\"Waiting list\")]",
+        page = this,
+        helpfulName = "Wait time card header - h3"
     )
 
     var content = LinksWithDescriptionsContent(
@@ -68,6 +86,20 @@ open class WayfinderWaitTimesPage : HybridPageObject() {
 
     fun assertHelpLinkIsDisplayed() {
         helpLink.assertIsVisible()
+    }
+
+    fun assertWayfinderWaitTimesComponentDisplayed(numberOfWaitTimes: Int) {
+        if (numberOfWaitTimes == 0) {
+            waitTimeZeroHeaderText.assertIsVisible()
+            waitTimeComponentCardHeader.assertElementNotPresent()
+        }
+        else if (numberOfWaitTimes == 1) {
+            waitTimeOneHeaderText.assertIsVisible()
+            waitTimeComponentCardHeader.assertIsVisible()
+        }
+        else {
+            throw NotImplementedException("More than one Wait Time Component assertion not implemented")
+        }
     }
 
     fun assertWayfinderWaitTimesErrorPageTitleIsDisplayed() {

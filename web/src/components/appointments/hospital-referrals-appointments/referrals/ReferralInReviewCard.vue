@@ -1,6 +1,5 @@
 <template>
-  <Card class="nhsuk-u-margin-bottom-5">
-
+  <Card>
     <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
       <div class="nhs-app-card__title-text">
         <h3 class="nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0"
@@ -20,7 +19,6 @@
         {{ tagText }}
       </span>
     </div>
-
     <p v-if="hasSpecialty"
        data-purpose="specialty-info"
        class="nhsuk-body-s nhsuk-u-margin-bottom-3">
@@ -31,7 +29,6 @@
        class="nhsuk-body-s nhsuk-u-margin-bottom-3">
       {{ $t('wayfinder.referrals.inReview.yourHealthcareProviderHasRequestedNoSpecialty') }}
     </p>
-
     <p v-if="hasReviewDueDate" class="nhsuk-body nhsuk-u-margin-bottom-3">
       <strong>
         <span data-purpose="review-due-date-header">
@@ -43,7 +40,6 @@
         {{ reviewDueDate | longDate }}
       </span>
     </p>
-
     <p class="nhsuk-body nhsuk-u-margin-bottom-3">
       <strong>
         <a data-purpose="manage-referral-link"

@@ -1116,25 +1116,9 @@ class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("G
         }
     }
 
-    fun returnWaitTimes(): Mapping {
-        val response = """
-        {
-          "resourceType": "Bundle",
-          "entry": [
+    fun returnWaitTimes(numberOfWaitTimes: Int): Mapping {
+        val waitTimeObject = """
             {
-              "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
-              "resource": {
-                "resourceType": "CarePlan",
-                "status": "active",
-                "intent": "order",
-                "subject": {
-                  "identifier": {
-                    "system": "https://fhir.nhs.uk/Id/nhs-number",
-                    "value": "9956865842"
-                  }
-                },
-                "activity": [
-                  {
                     "reference": {
                       "type": "ServiceRequest",
                       "identifier": {
@@ -1174,47 +1158,30 @@ class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("G
                       "description": "Neurology"
                     }
                   },
-                  {
-                    "reference": {
-                      "type": "ServiceRequest",
-                      "identifier": {
-                        "system": "https://fhir.nhs.uk/Id/UBRN",
-                        "value": "398286558107"
-                      }
-                    },
-                    "detail": {
-                      "extension": [
-                        {
-                          "url": "https://fhir.nhs.uk/StructureDefinition/Extension-Specialty",
-                          "valueCoding": {
-                            "system": "https://fhir.nhs.uk/STU3/CodeSystem/Specialty-1",
-                            "display": "Paediatrics"
-                          }
-                        }
-                      ],
-                      "kind": "ServiceRequest",
-                      "scheduledPeriod": {
-                        "extension": [
-                          {
-                            "url": "https://fhir.nhs.uk/StructureDefinition/Extension-PlannedWaitTime",
-                            "valueDuration": {
-                              "value": 60,
-                              "unit": "Days"
-                            }
-                          }
-                        ],
-                        "start": "2022-09-05T09:15:39+00:00"
-                      },
-                      "performer": [
-                        {
-                          "type": "Organization",
-                          "display": "Willow GP Surgery"
-                        }
-                      ],
-                      "description": "Paediatrics"
-                    }
+        """
+
+        var waitTimesComponent = "";
+        repeat(numberOfWaitTimes) {
+            waitTimesComponent += waitTimeObject
+        }
+
+        val response = """
+        {
+          "resourceType": "Bundle",
+          "entry": [
+            {
+              "fullUrl": "https://servita-sandbox.co.uk/CarePlan/1",
+              "resource": {
+                "resourceType": "CarePlan",
+                "status": "active",
+                "intent": "order",
+                "subject": {
+                  "identifier": {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9956865842"
                   }
-                ]
+                },
+                "activity": [""" + waitTimesComponent + """]
               },
               "search": {
                 "mode": "match"

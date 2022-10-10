@@ -79,9 +79,14 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertReferralsInReviewHelpLinkIsDisplayed()
     }
 
-    @Given("^I have wait times available$")
+    @Given("^I have zero wait times available$")
+    fun iHaveZeroWaitTimesAvailable(){
+        wayfinderFactory.setupWaitTimes(0)
+    }
+
+    @Given("^I have one wait time available$")
     fun iHaveWaitTimesAvailable(){
-        wayfinderFactory.setupWaitTimes()
+        wayfinderFactory.setupWaitTimes(1)
     }
 
     @Given("^I get a wait times error$")
@@ -97,6 +102,16 @@ class WayfinderStepDefinitions {
     @Given("^I see the help link on the wait times page$")
     fun iSeeTheHelpLinkOnWaitTimesPage() {
         wayfinderWaitTimesPage.assertHelpLinkIsDisplayed()
+    }
+
+    @Given("^I see no Wait Time component cards$")
+    fun iSeeZeroWaitTimeComponent(){
+        wayfinderWaitTimesPage.assertWayfinderWaitTimesComponentDisplayed(0)
+    }
+
+    @Given("^I see a single Wait Time component card$")
+    fun iSeeASingleWaitTimeComponent(){
+        wayfinderWaitTimesPage.assertWayfinderWaitTimesComponentDisplayed(1)
     }
 
     @Given("^I see the correct error page elements$")

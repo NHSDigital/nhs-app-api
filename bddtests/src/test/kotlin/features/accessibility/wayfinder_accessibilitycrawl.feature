@@ -52,3 +52,21 @@ Feature: Wayfinder accessibility
     When I click the 'Incorrect, changed or cancelled appointments' expander link on a Wayfinder Help page
     Then I can see the incorrect changed cancelled appointments expander elements displayed
     And the Wayfinder_help_Desktop page is saved to disk
+
+  Scenario: The 'Wayfinder Wait times' desktop page is captured
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
+    And I have one wait time available
+    And I am logged in
+    When I retrieve the 'Wayfinder Wait Times' page directly
+    Then the Wayfinder_WaitTimes_Desktop page is saved to disk
+
+  Scenario: The 'Wayfinder Wait Times Error' desktop page is captured
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have no referrals or appointments
+    And I get a wait times error
+    And I am logged in
+    When I retrieve the 'Wayfinder Wait Times' page directly
+    Then I am navigated to the Wayfinder wait times error page
+    And I see the correct error page elements
+    And the Wayfinder_WaitTimes_Desktop_Error page is saved to disk

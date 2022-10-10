@@ -10,12 +10,12 @@ module.exports = {
   create(context) {
     return {
       ChainExpression(node) {
-        let message = "Pingdom currently doesn't support Optional chaining so lets not use it for now. If you are seeing this make sure and check if that's still the case.";
+        const message = "Pingdom currently doesn't support Optional chaining so lets not use it for now. If you are seeing this make sure and check if that's still the case.";
         context.report({
-          node: node,
+          node,
           message,
         });
-      }
-    }
-  }
+      },
+    };
+  },
 };

@@ -1,9 +1,8 @@
 <template>
   <div v-if="anyAvailableServices">
-    <h2 id="other-services-header">
+    <h2 id="other-services-header" class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
       {{ $t('wayfinder.otherServices') }}
     </h2>
-
     <menu-item-list class="nhsuk-grid-column-full nhsuk-u-padding-bottom-5">
       <third-party-jump-off-button
         v-if="showManageYourReferral"
@@ -11,14 +10,12 @@
         provider-id="ers"
         :provider-configuration="thirdPartyProvider.ers.
           manageYourReferralWayfinder" />
-
       <third-party-jump-off-button
         v-if="showPkbAppointments"
         id="btn_pkb_appointments"
         provider-id="pkb"
         :provider-configuration="thirdPartyProvider.pkb.
           appointmentsWayfinder" />
-
       <third-party-jump-off-button
         v-if="showGncrAppointments"
         id="btn_gncr_appointments"
@@ -26,7 +23,6 @@
         :provider-configuration="thirdPartyProvider.gncr.
           appointmentsWayfinder" />
     </menu-item-list>
-
   </div>
 </template>
 

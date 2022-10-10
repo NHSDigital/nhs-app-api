@@ -1,23 +1,19 @@
 <template>
-  <Card class="nhsuk-u-margin-bottom-5">
-
+  <Card>
     <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
       <h3 class="nhs-app-card__title-text nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
         {{ $t('wayfinder.appointments.booked.title') }}
       </h3>
     </div>
-
     <p data-purpose="appointment-date-time">
       <strong>
         <span class="nhsuk-body">{{ appointmentDateTime | fullDate }}</span><br>
         <span class="nhsuk-body-l">{{ appointmentDateTime | formatDate('h.mma') }}</span>
       </strong>
     </p>
-
     <p class="nhsuk-body-l nhsuk-u-margin-bottom-3" data-purpose="location-description">
       {{ locationDescription }}
     </p>
-
     <primary-button data-purpose="book-or-manage-appointment-button"
                     @click="goToUrlViaRedirector(deepLinkUrl)">
       {{ $t('wayfinder.appointments.booked.viewOrManageAppointment') }}

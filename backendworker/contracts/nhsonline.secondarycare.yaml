@@ -304,15 +304,19 @@ components:
           items:
             $ref: "#/components/schemas/WaitTimes"
 
-
     WaitTimes:
       type: object
       required:
+        - estimatedWaitToTreatmentDisplayDate
         - referredDate
         - plannedWaitTime
         - providerName
         - speciality
       properties:
+        estimatedWaitToTreatmentDisplayDate:
+          type: string
+          format: date-time
+          description: The 'MMMM yyyy' format date-time of the estimated wait to treatment.
         referredDate:
           type: string
           format: date-time

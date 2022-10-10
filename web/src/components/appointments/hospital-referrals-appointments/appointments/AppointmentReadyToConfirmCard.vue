@@ -1,6 +1,5 @@
 <template>
-  <Card class="nhsuk-u-margin-bottom-5">
-
+  <Card>
     <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
       <h3 class="nhs-app-card__title-text nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
         {{ $t('wayfinder.appointments.readyToConfirm.title') }}
@@ -12,7 +11,6 @@
         {{ tagText }}
       </span>
     </div>
-
     <p class="nhsuk-body-s nhsuk-u-margin-bottom-3" data-purpose="appointment-advice">
       {{ $t('wayfinder.appointments.readyToConfirm.anAppointmentHasBeenBooked') }}
     </p>

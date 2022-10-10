@@ -41,7 +41,9 @@ export default {
     state.hasWaitTimesLoaded = hasWaitTimesLoaded;
   },
   [WAIT_TIMES](state, waitTimes) {
-    state.waitTimes = waitTimes;
+    if (waitTimes && waitTimes.waitTimes) {
+      state.waitTimes = waitTimes.waitTimes;
+    }
   },
 };
 
