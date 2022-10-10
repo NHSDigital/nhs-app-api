@@ -1,4 +1,5 @@
 using System;
+using NHSOnline.App.ErrorReferences;
 using NHSOnline.App.NhsLogin;
 
 namespace NHSOnline.App.Areas.LoggedOut.Models

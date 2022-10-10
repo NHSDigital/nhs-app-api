@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Api.Logging;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Api.Client.Logging

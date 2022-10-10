@@ -1,10 +1,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NHSOnline.App.Api.Client;
 using NHSOnline.App.Threading;
 
-namespace NHSOnline.App.Api.Logging
+namespace NHSOnline.App.Api.Client.Logging
 {
     internal sealed class CreateLoggingMessageBuilder: IApiClientRequestMessageBuilder<ApiCreateLogRequest>
     {

@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace NHSOnline.App
+namespace NHSOnline.App.ErrorReferences
 {
     public static class RandomErrorReferenceGenerator
     {

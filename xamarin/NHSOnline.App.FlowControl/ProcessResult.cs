@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NHSOnline.App
+namespace NHSOnline.App.FlowControl
 {
     [SuppressMessage("Design", "CA1000:Do not declare static members on generic types",
         Justification = "Implicit operators apply to generic type")]

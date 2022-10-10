@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.DependencyServices.Biometrics;
+using NHSOnline.App.FlowControl;
 using NHSOnline.App.Logging;
 using NHSOnline.App.NhsLogin.Fido;
 using NHSOnline.App.Threading;

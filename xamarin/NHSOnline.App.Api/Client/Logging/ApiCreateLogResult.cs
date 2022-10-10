@@ -1,4 +1,4 @@
-namespace NHSOnline.App.Api.Logging
+namespace NHSOnline.App.Api.Client.Logging
 {
     public abstract class ApiCreateLogResult
     {

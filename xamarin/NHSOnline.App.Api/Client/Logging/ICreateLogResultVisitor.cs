@@ -1,5 +1,5 @@
 
-namespace NHSOnline.App.Api.Logging
+namespace NHSOnline.App.Api.Client.Logging
 {
     public interface ICreateLogResultVisitor<T>
     {

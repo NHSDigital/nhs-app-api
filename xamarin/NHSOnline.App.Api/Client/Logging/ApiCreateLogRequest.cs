@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace NHSOnline.App.Api.Logging
+namespace NHSOnline.App.Api.Client.Logging
 {
     public sealed class ApiCreateLogRequest
     {

@@ -29,9 +29,6 @@ namespace NHSOnline.App.Api.Client
 
         internal sealed class Invalid : ModelValidationResult<TResponse>
         {
-            public Invalid()
-            { }
-
             internal override TResult Accept<TResult>(IModelValidationResultVisitor<TResponse, TResult> visitor)
                 => visitor.Visit(this);
         }
