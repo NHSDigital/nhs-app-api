@@ -37,8 +37,8 @@ Feature: Errors part2 accessibility
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And the Sender One Canonical sender is displayed as unread
-    When I click on Sender One Canonical sender
+    And the BEECH TREE SURGERY sender is displayed as unread
+    When I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     And my messages from the sender are displayed
     And the Errors_Part2_HI02_SenderList page is saved to disk
@@ -51,8 +51,8 @@ Feature: Errors part2 accessibility
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And the Sender One Canonical sender is displayed as unread
-    When I click on Sender One Canonical sender
+    And the BEECH TREE SURGERY sender is displayed as unread
+    When I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     And my messages from the sender are displayed
     When I click on the unread message on the Sender Messages page

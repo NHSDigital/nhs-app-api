@@ -12,9 +12,9 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And the Sender One Canonical sender is displayed as unread
+    And the BEECH TREE SURGERY sender is displayed as unread
     And the unread message and sender count is displayed on the page
-    When I click on Sender One Canonical sender
+    When I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     And the unread messages title is displayed
     And my messages from the sender are displayed
@@ -28,7 +28,7 @@ Feature: Messages
     And my messages from the sender are displayed as read
     When I click the 'Back' breadcrumb
     Then the Message Senders page is displayed
-    And the Sender One Canonical sender is displayed as read
+    And the BEECH TREE SURGERY sender is displayed as read
 
   Scenario: A user with proof level 5 can access their messages
     Given I am using the native app user agent
@@ -68,7 +68,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -77,7 +77,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 2 message on the Sender Messages page
     Then the Message page is displayed
@@ -97,7 +97,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -119,7 +119,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -136,7 +136,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -158,7 +158,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -174,7 +174,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -190,7 +190,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -206,7 +206,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
     And the senders are displayed on the Messages Inbox page
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on message 1 message on the Sender Messages page
     Then the Message page is displayed
@@ -260,8 +260,8 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     Then the senders are displayed on the Messages Inbox page
     When retrieving the messages will cause a server error
-    And I click on Sender One Canonical sender
-    Then an error is displayed indicating that there was a problem getting messages from Sender One Canonical
+    And I click on BEECH TREE SURGERY sender
+    Then an error is displayed indicating that there was a problem getting messages from BEECH TREE SURGERY
     When the messages can be retrieved successfully
     And I click the 'Try again' button
     Then the Sender Messages page is displayed
@@ -274,7 +274,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     Then the senders are displayed on the Messages Inbox page
-    When I click on Sender One Canonical sender
+    When I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When retrieving the messages will cause a server error
     And I click on a message on the Sender Messages page
@@ -289,7 +289,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on a message on the Sender Messages page
     Then the Message page is displayed
@@ -308,7 +308,7 @@ Feature: Messages
     And I click the App Messages link on the messages hub page
     Then the Message Senders page is displayed
     And I can't see the Back link
-    When I click on Sender One Canonical sender
+    When I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     And I can't see the Back link
     When I click on a message on the Sender Messages page
@@ -321,7 +321,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on a message on the Sender Messages page
     Then the Message page is displayed
@@ -336,7 +336,7 @@ Feature: Messages
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Message Senders page is displayed
-    And I click on Sender One Canonical sender
+    And I click on BEECH TREE SURGERY sender
     Then the Sender Messages page is displayed
     When I click on a message on the Sender Messages page
     And I can see the response message

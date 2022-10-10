@@ -46,10 +46,10 @@ class MessagesFactory {
     private val oneMonthAgo = timeNow.minusMonths(ONE_MONTH)
     private val oneWeekAgo = timeNow.minusDays(SEVEN_DAYS)
 
-    private val senderOneId = "SENDERONEID"
+    private val senderOneId = "B82041"
     private val senderOneSenderContext = SenderContext(senderId = senderOneId)
-    private val senderOneName = "Sender One"
-    private val senderOneCanonicalName = "Sender One Canonical"
+    private val senderOneName = "Beech Tree"
+    private val senderOneCanonicalName = "BEECH TREE SURGERY"
 
     private val senderTwoName = "Sender Two"
 
@@ -86,7 +86,7 @@ class MessagesFactory {
         CitizenIdSessionCreateJourney().createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
             .createFor(patientToUse)
-        MessagesSerenityHelpers.TARGET_SENDER_NAME.set(senderOneName)
+        MessagesSerenityHelpers.TARGET_SENDER_NAME.set(senderOneCanonicalName)
         MessagesSerenityHelpers.TARGET_SENDER_ID.set(senderOneId)
         MessagesSerenityHelpers.TARGET_MESSAGE.set(messageOne)
         MessagesSerenityHelpers.TARGET_UNREAD_MESSAGE.set(messageTwo)
