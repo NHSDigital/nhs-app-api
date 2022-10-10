@@ -9,16 +9,16 @@ using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class BiometricLoginErrorPageDispatcher
+    internal sealed class BiometricLoginErrorPagePresenter
     {
         private readonly ILoggedOutHomeScreenView _view;
         private readonly IPageFactory _pageFactory;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
         private readonly IUserPreferencesService _userPreferencesService;
 
-        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(BiometricLoginErrorPageDispatcher));
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(BiometricLoginErrorPagePresenter));
 
-        public BiometricLoginErrorPageDispatcher(
+        public BiometricLoginErrorPagePresenter(
             ILoggedOutHomeScreenView view,
             IPageFactory pageFactory,
             IBiometricAuthenticationService biometricAuthenticationService,
@@ -104,11 +104,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private sealed class BiometricLoginFailedStatusResultVisitor : IBiometricStatusResultVisitor<Task>
         {
-            private readonly BiometricLoginErrorPageDispatcher _dispatcher;
+            private readonly BiometricLoginErrorPagePresenter _presenter;
 
-            public BiometricLoginFailedStatusResultVisitor(BiometricLoginErrorPageDispatcher dispatcher)
+            public BiometricLoginFailedStatusResultVisitor(BiometricLoginErrorPagePresenter presenter)
             {
-                _dispatcher = dispatcher;
+                _presenter = presenter;
             }
 
             public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
@@ -124,22 +124,22 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             }
 
             public async Task Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
-                => await _dispatcher.ShowBiometricLoginFingerprintFailed().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginFingerprintFailed().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.TouchId touchId)
-                => await _dispatcher.ShowBiometricLoginTouchIdFailed().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginTouchIdFailed().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.FaceId faceId)
-                => await _dispatcher.ShowBiometricLoginFaceIdFailed().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginFaceIdFailed().PreserveThreadContext();
         }
 
         private sealed class BiometricLoginPermanentLockoutStatusResultVisitor : IBiometricStatusResultVisitor<Task>
         {
-            private readonly BiometricLoginErrorPageDispatcher _dispatcher;
+            private readonly BiometricLoginErrorPagePresenter _presenter;
 
-            public BiometricLoginPermanentLockoutStatusResultVisitor(BiometricLoginErrorPageDispatcher dispatcher)
+            public BiometricLoginPermanentLockoutStatusResultVisitor(BiometricLoginErrorPagePresenter presenter)
             {
-                _dispatcher = dispatcher;
+                _presenter = presenter;
             }
 
             public Task Visit(BiometricStatusResult.HardwareNotPresent hardwareNotPresent)
@@ -155,13 +155,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             }
 
             public async Task Visit(BiometricStatusResult.FingerPrintFaceOrIris fingerPrintFaceOrIris)
-                => await _dispatcher.ShowBiometricLoginFingerprintPermanentlyLockedOut().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginFingerprintPermanentlyLockedOut().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.TouchId touchId)
-                => await _dispatcher.ShowBiometricLoginTouchIdPermanentlyLockedOut().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginTouchIdPermanentlyLockedOut().PreserveThreadContext();
 
             public async Task Visit(BiometricStatusResult.FaceId faceId)
-                => await _dispatcher.ShowBiometricLoginFaceIdPermanentlyLockedOut().PreserveThreadContext();
+                => await _presenter.ShowBiometricLoginFaceIdPermanentlyLockedOut().PreserveThreadContext();
         }
     }
 }

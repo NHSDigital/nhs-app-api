@@ -16,6 +16,7 @@ using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
+using NHSOnline.App.Navigation.Handlers;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;

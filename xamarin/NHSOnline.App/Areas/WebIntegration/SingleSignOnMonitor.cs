@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.WebIntegration.Presenters;
 using NHSOnline.App.Config;
 using NHSOnline.App.Controls.WebViews;
 
-namespace NHSOnline.App.Areas.WebIntegration.Presenters
+namespace NHSOnline.App.Areas.WebIntegration
 {
     internal class SingleSignOnMonitor
     {

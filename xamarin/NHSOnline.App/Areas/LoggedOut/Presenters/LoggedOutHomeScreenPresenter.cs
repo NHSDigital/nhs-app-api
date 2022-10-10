@@ -26,7 +26,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IBrowser _browser;
         private readonly IForcedUpdateCheckService _forcedUpdateCheckService;
         private readonly IDialogPresenter _dialogPresenterService;
-        private readonly BiometricLoginErrorPageDispatcher _biometricLoginErrorPageDispatcher;
+        private readonly BiometricLoginErrorPagePresenter _biometricLoginErrorPagePresenter;
         private readonly ICookieService _cookieService;
         private readonly LoggedOutHomeScreenModel _model;
 
@@ -63,7 +63,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _model = model;
             _cookieService = cookieService;
 
-            _biometricLoginErrorPageDispatcher = new BiometricLoginErrorPageDispatcher(_view, _pageFactory,
+            _biometricLoginErrorPagePresenter = new BiometricLoginErrorPagePresenter(_view, _pageFactory,
                 _biometricAuthenticationService, _userPreferencesService);
 
             _view.SetScreenState(_model.ScreenState);
@@ -148,21 +148,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         }
 
         private async Task ShowCouldNotLoginWithBiometrics()
-            => await _biometricLoginErrorPageDispatcher.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
+            => await _biometricLoginErrorPagePresenter.ShowCouldNotLoginWithBiometrics().PreserveThreadContext();
 
         private async Task ShowBiometricLoginFailed()
         {
-            await _biometricLoginErrorPageDispatcher.ShowBiometricLoginFailed().PreserveThreadContext();
+            await _biometricLoginErrorPagePresenter.ShowBiometricLoginFailed().PreserveThreadContext();
             _cancelBiometricLogin.Cancel();
         }
 
         private async Task ShowBiometricLoginPermanentlyLockedOut()
-            => await _biometricLoginErrorPageDispatcher.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
+            => await _biometricLoginErrorPagePresenter.ShowBiometricLoginPermanentlyLockedOut().PreserveThreadContext();
 
         private async Task ShowBiometricLoginLegacySensorNotValid()
         {
             Logger.LogInformation("Showing legacy sensor not valid shutter screen");
-            await _biometricLoginErrorPageDispatcher.ShowBiometricLoginLegacySensorNotValid().PreserveThreadContext();
+            await _biometricLoginErrorPagePresenter.ShowBiometricLoginLegacySensorNotValid().PreserveThreadContext();
         }
 
         private async Task LoadLoginHelpUrl()

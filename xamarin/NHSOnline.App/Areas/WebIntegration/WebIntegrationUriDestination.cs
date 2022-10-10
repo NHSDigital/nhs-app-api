@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.App.Config;
 
-namespace NHSOnline.App.Areas.WebIntegration.Presenters
+namespace NHSOnline.App.Areas.WebIntegration
 {
     internal sealed class WebIntegrationUriDestination
     {

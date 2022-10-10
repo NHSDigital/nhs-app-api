@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NHSOnline.App.Navigation;
+using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Threading;
 
-namespace NHSOnline.App.Areas.Home.Presenters
+namespace NHSOnline.App.Navigation.Handlers
 {
     internal sealed class NhsAppPopToRootNavigationHandler : INhsAppNavigationHandler
     {
