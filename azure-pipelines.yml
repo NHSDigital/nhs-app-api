@@ -98,7 +98,7 @@ variables:
   native.xamarin.runFlipbookTests: ${{ parameters.runFlipbookTests }}
   native.xamarin.flipbookInterimFolderName: 'FlipbookResources'
   native.xamarin.flipbookPdfName: ''
-  native.xamarin.version: '2.20.0'
+  native.xamarin.version: '2.21.0'
   native.xamarin.ios.build.number:  $[counter(variables['native.version.number'], 1)]
   native.xamarin.android.build.number: $[counter('android', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
