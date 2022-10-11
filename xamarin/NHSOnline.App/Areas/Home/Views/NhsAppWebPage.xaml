@@ -35,6 +35,7 @@
                                 SetMenuBarItemCommand="{Binding SetMenuBarItemCommand, Source={x:Reference Name=Page}}"
                                 ClearMenuBarItemCommand="{Binding ClearMenuBarItemCommand, Source={x:Reference Name=Page}}"
                                 DisplayPageLeaveWarningCommand="{Binding DisplayPageLeaveWarningCommand, Source={x:Reference Name=Page}}" 
+                                DisplayKeywordReplyPageLeaveWarningCommand="{Binding DisplayKeywordReplyPageLeaveWarningCommand, Source={x:Reference Name=Page}}" 
                                 OnSessionExpiringCommand="{Binding OnSessionExpiringCommand, Source={x:Reference Name=Page}}" 
                                 UpdateBiometricRegistrationCommand="{Binding UpdateBiometricRegistrationCommand, Source={x:Reference Name=Page}}"
                                 OpenBrowserOverlayCommand="{Binding OpenBrowserOverlayCommand, Source={x:Reference Name=Page}}"

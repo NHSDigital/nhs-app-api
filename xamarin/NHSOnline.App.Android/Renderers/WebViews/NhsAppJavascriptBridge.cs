@@ -130,6 +130,13 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("displayKeywordReplyPageLeaveWarning")]
+        public void DisplayKeywordReplyPageLeaveWarning()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.DisplayKeywordReplyPageLeaveWarning());
+        }
+
+        [JavascriptInterface]
         [Export("createOnDemandGpSession")]
         public void CreateOnDemandGpSession(string rawArgument)
         {

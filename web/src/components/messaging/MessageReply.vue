@@ -22,7 +22,8 @@
             :key="checkboxOption"
             name="replyoption"
             :value="checkboxOption"
-            @input="onCheckboxChanged">
+            @input="onCheckboxChanged"
+            @onCheckedChanged="selectedCheckboxValueChanged">
             <span>{{ checkboxOption }}</span>
           </generic-checkbox>
         </error-group>
@@ -144,6 +145,7 @@ export default {
     },
     onRadioButtonChanged(value) {
       this.selectedRadioValue = value;
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
     },
     onCheckboxChanged(value) {
       this.selectedCheckboxValue = (this.selectedCheckboxValue) ? '' : value;
@@ -156,6 +158,13 @@ export default {
       if (this.isCheckboxOptions) return this.selectedCheckboxValue;
 
       return this.selectedRadioValue;
+    },
+    selectedCheckboxValueChanged(checked) {
+      if (checked) {
+        this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+      } else {
+        this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+      }
     },
   },
 };

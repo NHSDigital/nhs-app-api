@@ -72,6 +72,9 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty DisplayPageLeaveWarningCommandProperty =
             BindableProperty.Create(nameof(DisplayPageLeaveWarningCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty DisplayKeywordReplyPageLeaveWarningCommandProperty =
+            BindableProperty.Create(nameof(DisplayKeywordReplyPageLeaveWarningCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public static readonly BindableProperty OnSessionExpiringCommandProperty =
             BindableProperty.Create(nameof(OnSessionExpiringCommandProperty), typeof(AsyncCommand), typeof(NhsAppWebView));
 
@@ -231,6 +234,14 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(DisplayPageLeaveWarningCommandProperty);
             set => SetValue(DisplayPageLeaveWarningCommandProperty, value);
+        }
+
+        public void DisplayKeywordReplyPageLeaveWarning() => DisplayKeywordReplyPageLeaveWarningCommand.Execute(null);
+
+        public AsyncCommand DisplayKeywordReplyPageLeaveWarningCommand
+        {
+            get => (AsyncCommand) GetValue(DisplayKeywordReplyPageLeaveWarningCommandProperty);
+            set => SetValue(DisplayKeywordReplyPageLeaveWarningCommandProperty, value);
         }
 
         public void OnSessionExpiring() => OnSessionExpiringCommand.Execute(null);

@@ -63,7 +63,7 @@ import LinkifyContent from '@/components/widgets/LinkifyContent';
 import MarkdownContent from '@/components/widgets/MarkdownContent';
 import PageTitle from '@/components/widgets/PageTitle';
 import get from 'lodash/fp/get';
-import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH } from '@/router/paths';
+import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, LOGIN_PATH } from '@/router/paths';
 import { messageVersion, redirectTo } from '@/lib/utils';
 import MessageReply from '@/components/messaging/MessageReply';
 import FormErrorSummary from '@/components/FormErrorSummary';
@@ -84,6 +84,26 @@ export default {
     FormErrorSummary,
   },
   mixins: [ErrorPageMixin],
+  beforeRouteLeave(to, from, next) {
+    let shouldContinue = true;
+
+    if (to.path === LOGIN_PATH) {
+      next(shouldContinue);
+    }
+
+    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
+      this.showModal();
+
+      shouldContinue = false;
+    }
+
+    if (shouldContinue && typeof window === 'object') {
+      window.onbeforeunload = null;
+    }
+
+    next(shouldContinue);
+  },
   data() {
     return {
       backLink: HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH,
@@ -151,6 +171,7 @@ export default {
     async loadMessage() {
       this.loaded = false;
       this.$store.dispatch('messaging/clear');
+      this.$store.dispatch('pageLeaveWarning/reset');
       const messageId = get('messageId')(this.$route.query);
 
       if (!messageId) {
@@ -178,6 +199,12 @@ export default {
         await this.$store.dispatch('messaging/recordMessageResponse', { messageId: this.message.id, response });
         await this.loadMessage();
       }
+    },
+    beforeDestroy() {
+      this.$store.dispatch('pageLeaveWarning/reset');
+    },
+    showModal() {
+      this.$store.dispatch('pageLeaveWarning/showKeywordReplyLeavingModal');
     },
   },
 };

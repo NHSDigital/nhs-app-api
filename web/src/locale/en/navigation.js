@@ -68,6 +68,12 @@ export default {
     stayOnThisPage: 'Stay on this page',
     leaveThisPage: 'Leave this page',
   },
+  keywordReplyLeavePage: {
+    title: 'You\'re about to leave this page',
+    message: 'Your reply to this message will not be sent.',
+    stayButton: 'Cancel',
+    leaveButton: 'Leave page',
+  },
   pages: {
     headers: {
       accountAndSettings: 'Account and settings',

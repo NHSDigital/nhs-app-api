@@ -1,4 +1,5 @@
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
+import KeywordReplyLeavingPageWarningModal from '@/components/modal/content/KeywordReplyLeavingPageWarningModal';
 import NativeApp from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
 import {
@@ -25,6 +26,18 @@ export default {
         NativeApp.displayPageLeaveWarning();
       } else {
         this.dispatch('modal/show', { content: LeavingPageWarningModal });
+      }
+    }
+  },
+
+  showKeywordReplyLeavingModal({ state, commit }) {
+    if (!state.showLeavingWarning) {
+      commit(SHOW_LEAVING_PAGE_WARNING);
+
+      if (window.nativeApp) {
+        NativeApp.displayKeywordReplyPageLeaveWarning();
+      } else {
+        this.dispatch('modal/show', { content: KeywordReplyLeavingPageWarningModal });
       }
     }
   },

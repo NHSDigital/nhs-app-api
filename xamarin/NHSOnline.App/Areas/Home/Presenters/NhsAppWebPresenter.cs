@@ -109,6 +109,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(ClearMenuBarItemRequested, (view, handler) => view.ClearMenuBarItemRequested = handler)
                 .RegisterHandler(OpenSettingsRequested, (view, handler) => view.OpenSettingsRequested = handler)
                 .RegisterHandler(DisplayPageLeaveWarningRequested, (view, handler) => view.DisplayPageLeaveWarningRequested = handler)
+                .RegisterHandler(DisplayKeywordReplyPageLeaveWarningRequested, (view, handler) => view.DisplayKeywordReplyPageLeaveWarningRequested = handler)
                 .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler(SessionExpiredRequested, (view, handler) => view.SessionExpiredRequested = handler)
@@ -140,6 +141,17 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
             await _dialogPresenter.DisplayAlertDialog(
                 new LeavePage(
+                    _view.SendLeavePage,
+                    _view.SendStayOnPage,
+                    _view.SendStayOnPage)).PreserveThreadContext();
+        }
+
+        private async Task DisplayKeywordReplyPageLeaveWarningRequested()
+        {
+            _logger.LogInformation("Display keyword reply page leave warning");
+
+            await _dialogPresenter.DisplayAlertDialog(
+                new KeywordReplyLeavePage(
                     _view.SendLeavePage,
                     _view.SendStayOnPage,
                     _view.SendStayOnPage)).PreserveThreadContext();

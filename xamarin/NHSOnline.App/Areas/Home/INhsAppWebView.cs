@@ -50,6 +50,7 @@ namespace NHSOnline.App.Areas.Home
             Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
             Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
+            Func<Task>? DisplayKeywordReplyPageLeaveWarningRequested { get; set; }
             Func<Task>? OnSessionExpiringRequested { get; set; }
         }
 

@@ -8,6 +8,7 @@ import {
 } from '@/store/modules/pageLeaveWarning/mutation-types';
 import NativeApp from '@/services/native-app';
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
+import KeywordReplyLeavingPageWarningModal from '@/components/modal/content/KeywordReplyLeavingPageWarningModal';
 import { redirectTo } from '@/lib/utils';
 import { createRouter } from '../../../helpers';
 
@@ -105,6 +106,53 @@ describe('actions', () => {
       });
       it('will dispatch call for showing the modal', () => {
         expect(app.dispatch).toBeCalledWith('modal/show', { content: LeavingPageWarningModal });
+      });
+    });
+  });
+
+  describe('showKeywordReplyLeavingModal', () => {
+    describe('using native app', () => {
+      let spy;
+
+      beforeEach(() => {
+        window.nativeApp = true;
+        spy = jest.spyOn(NativeApp, 'displayKeywordReplyPageLeaveWarning').mockImplementation(() => true);
+        actions.showKeywordReplyLeavingModal(mutation);
+      });
+
+      afterEach(() => {
+        (spy || {}).mockRestore();
+        window.nativeApp = undefined;
+      });
+
+      it('will call commit for the SHOW_LEAVING_PAGE_WARNING', () => {
+        expect(mutation.commit).toHaveBeenCalledWith(SHOW_LEAVING_PAGE_WARNING);
+      });
+      it('will call native function for showing the modal', () => {
+        expect(NativeApp.displayKeywordReplyPageLeaveWarning).toBeCalled();
+      });
+    });
+
+    describe('not using native app', () => {
+      let app;
+
+      beforeEach(() => {
+        window.nativeApp = false;
+        app = {
+          dispatch: jest.fn(),
+          showKeywordReplyLeavingModal: actions.showKeywordReplyLeavingModal,
+          app: {
+            $env: {},
+          },
+        };
+        app.showKeywordReplyLeavingModal(mutation);
+      });
+
+      it('will call commit for the SHOW_LEAVING_PAGE_WARNING', () => {
+        expect(mutation.commit).toHaveBeenCalledWith(SHOW_LEAVING_PAGE_WARNING);
+      });
+      it('will dispatch call for showing the modal', () => {
+        expect(app.dispatch).toBeCalledWith('modal/show', { content: KeywordReplyLeavingPageWarningModal });
       });
     });
   });

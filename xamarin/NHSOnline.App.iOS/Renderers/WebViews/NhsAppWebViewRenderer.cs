@@ -31,6 +31,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("startDownloadFromJson", webview => webview.StartDownload)
                 .AddFunction("addEventToCalendar", webView => webView.AddEventToCalendar)
                 .AddFunction("displayPageLeaveWarning", webView => webView.DisplayPageLeaveWarning)
+                .AddFunction("displayKeywordReplyPageLeaveWarning", webView => webView.DisplayKeywordReplyPageLeaveWarning)
                 .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
                 .AddFunction("createOnDemandGpSession", webView => webView.CreateOnDemandGpSession)
                 .AddFunction("logout", webView => webView.Logout)

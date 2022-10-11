@@ -85,6 +85,10 @@ namespace NHSOnline.App.Areas.Home.Views
         public AsyncCommand DisplayPageLeaveWarningCommand
             => new AsyncCommand(() => DisplayPageLeaveWarningRequested);
 
+        public Func<Task>? DisplayKeywordReplyPageLeaveWarningRequested { get; set; }
+        public AsyncCommand DisplayKeywordReplyPageLeaveWarningCommand
+            => new AsyncCommand(() => DisplayKeywordReplyPageLeaveWarningRequested);
+
         public Func<Task>? OnSessionExpiringRequested { get; set; }
         public AsyncCommand OnSessionExpiringCommand
             => new AsyncCommand(() => OnSessionExpiringRequested);

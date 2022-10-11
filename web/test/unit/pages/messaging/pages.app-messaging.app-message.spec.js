@@ -1,7 +1,8 @@
 import Message from '@/pages/messages/app-messaging/app-message';
-import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH } from '@/router/paths';
+import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESSAGES_PATH, INDEX_PATH, MESSAGES_PATH } from '@/router/paths';
 import * as utils from '@/lib/utils';
 import { createStore, mount, normaliseNewLines } from '../../helpers';
+import each from 'jest-each';
 
 utils.redirectTo = jest.fn();
 
@@ -22,6 +23,9 @@ const mountMessage = ({
     state: {
       messaging: { error, message },
       device: { isNativeApp },
+      pageLeaveWarning: {
+        shouldSkipDisplayingLeavingWarning: false,
+      },
     },
   });
 
@@ -189,9 +193,53 @@ describe('messaging message', () => {
           await wrapper.vm.$nextTick();
           expect($store.dispatch).toBeCalledWith('messaging/loadMessage', { messageId: '1234' });
         });
+
         it('will show checkbox error message when checkbox is empty', async () => {
           await wrapper.vm.sendClicked('', false, true);
           expect(wrapper.find(`#${errorPanelId}`).text()).toContain('Select the option if you want to reply to this message');
+        });
+
+        describe('beforeRouteLeave', () => {
+          describe('should show page leave modal', () => {
+            const next = jest.fn();
+
+            beforeEach(() => {
+              next.mockClear();
+              $store.dispatch.mockClear();
+              $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = false;
+              $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = true;
+            });
+            each([INDEX_PATH, MESSAGES_PATH])
+              .it('will show page leaving warning', (path) => {
+                const showModal = jest.fn();
+
+                Message.beforeRouteLeave.call({ $store, showModal }, { path }, undefined, next);
+
+                expect(next).toHaveBeenCalledWith(false);
+                expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', path);
+                expect(showModal).toHaveBeenCalled();
+              });
+          });
+
+          describe('should not show page leave modal', () => {
+            const next = jest.fn();
+
+            beforeEach(() => {
+              next.mockClear();
+              $store.dispatch.mockClear();
+              $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = true;
+              $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = false;
+            });
+            each([INDEX_PATH, MESSAGES_PATH])
+              .it('will not show page leaving warning', (path) => {
+                const showModal = jest.fn();
+
+                Message.beforeRouteLeave.call({ $store, showModal }, { path }, undefined, next);
+
+                expect(next).toHaveBeenCalledWith(true);
+                expect(showModal).toHaveBeenCalledTimes(0);
+              });
+          });
         });
       });
 

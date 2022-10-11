@@ -143,6 +143,15 @@ export default {
     return false;
   },
 
+  displayKeywordReplyPageLeaveWarning() {
+    const app = window.nativeApp;
+    if (app && app.displayKeywordReplyPageLeaveWarning) {
+      app.displayKeywordReplyPageLeaveWarning();
+      return true;
+    }
+    return false;
+  },
+
   fetchNativeAppVersion() {
     const app = window.nativeApp;
     if (app && app.fetchNativeAppVersion) {
