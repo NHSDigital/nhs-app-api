@@ -26,7 +26,7 @@ module.exports = {
 
   // properties found at https://webpack.js.org/configuration/dev-server/
   devServer: {
-    onBeforeSetupMiddleware: (devServer) => {
+    setupMiddlewares: (middlewares, devServer) => {
       devServer.app.get(
         /CONFIG_PATH\/config.json$/,
         (req, res) => res.send(
@@ -40,6 +40,7 @@ module.exports = {
           ),
         ),
       );
+      return middlewares;
     },
     allowedHosts: process.env.NODE_ENV !== 'production' ? 'all' : 'auto',
     port: process.env.PORT,
