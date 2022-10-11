@@ -29,6 +29,7 @@ journeys:
     sendMessageSubject: false
   silverIntegrations:
     accountAdmin: []
+    appointmentBookings: []
     carePlans: []
     consultations: []
     consultationsAdmin: []
