@@ -54,7 +54,8 @@
                                id="desktopBackLink"
                                data-purpose="back-to-wayfinder-button"
                                :path="wayfinderPath"
-                               :button-text="'generic.back'"/>
+                               :button-text="'generic.back'"
+                               @clickAndPrevent="backLinkClicked"/>
   </div>
 </template>
 
@@ -62,6 +63,9 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { WAYFINDER_PATH } from '@/router/paths';
 import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialog';
+import { redirectTo } from '@/lib/utils';
+
+let backLinkOverride;
 
 export default {
   name: 'WayfinderHelp',
@@ -77,6 +81,18 @@ export default {
   computed: {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
+    },
+  },
+  beforeDestroy() {
+    this.$store.dispatch('navigation/clearBackLinkOverride');
+    this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
+  },
+  methods: {
+    backLinkClicked() {
+      backLinkOverride = this.$store.state.navigation.backLinkOverride;
+      this.$store.dispatch('navigation/clearBackLinkOverride');
+      this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
+      redirectTo(this, backLinkOverride || this.wayfinderPath);
     },
   },
 };

@@ -14,4 +14,30 @@ Feature: Wayfinder Wait Times
     Then the Referrals, hospital and other appointments screen with data is displayed
     And  I see the wait times link
     When I click the wait times jump off link
-    Then I am navigated to the Wayfinder wait times page
+    Then the Wayfinder wait times page is displayed
+
+  Scenario: A user with access to wait times page can click the help link to visit help page then click back to return to wait times
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
+    And I have wait times available
+    And I am logged in
+    When I navigate to the Wayfinder Wait Times page
+    Then the Wayfinder wait times page is displayed
+    And I see the help link on the wait times page
+    When I click the help link from wait times page
+    Then I am navigated to the Wayfinder help page
+    When I click the Back link
+    Then the Wayfinder wait times page is displayed
+
+  Scenario: A user with access to wait times page can click the help link to visit help page then click the breadcrumb to return to wait times
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
+    And I have wait times available
+    And I am logged in
+    When I navigate to the Wayfinder Wait Times page
+    Then the Wayfinder wait times page is displayed
+    And I see the help link on the wait times page
+    When I click the help link from wait times page
+    Then I am navigated to the Wayfinder help page
+    When I click the 'Waiting Lists' breadcrumb
+    Then the Wayfinder wait times page is displayed

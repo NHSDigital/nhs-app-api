@@ -11,6 +11,7 @@ let wrapper;
 let waitTimesTitle;
 let somethingWrongText;
 let waitTimesText;
+let jumpOffLink;
 
 const setupStore = (
   waitTimesCount,
@@ -72,6 +73,13 @@ describe('Wait times page', () => {
       waitTimesTitle = wrapper.find('#wait-Times-Title');
 
       expect(waitTimesTitle.exists()).toBe(true);
+    });
+
+    it('missing appointment jump-off is visible and text correct', () => {
+      jumpOffLink = wrapper.find('#wayfinder-help-jump-off-link-wait-times');
+
+      expect(jumpOffLink.exists()).toBe(true);
+      expect(jumpOffLink.text()).toEqual('What to do if something is missing, incorrect or has not been changed or cancelled');
     });
   });
 

@@ -6,8 +6,7 @@
     </h2>
     <help-link
       id="wayfinder-help-jump-off-link-appointments"
-      :href="wayfinderHelpPath"
-      :click-func="redirectToWayfinderHelp"
+      :path="wayfinderHelpPath"
       :text="$t('wayfinder.wayfinderHelp.indexPageJumpOffLinks.appointments')"/>
     <card-group v-if="hasAny"
                 class="nhsuk-grid-row">

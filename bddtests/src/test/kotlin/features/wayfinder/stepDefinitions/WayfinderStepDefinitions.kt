@@ -89,6 +89,11 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertWaitTimesLinkIsDisplayed()
     }
 
+    @Given("^I see the help link on the wait times page$")
+    fun iSeeTheHelpLinkOnWaitTimesPage(){
+        wayfinderWaitTimesPage.assertHelpLinkIsDisplayed()
+    }
+
     @When("^the Wayfinder Aggregator API is timing out$")
     fun theAggregatorApiTimesOut(){
         wayfinderFactory.setupDelayedResponse()
@@ -138,6 +143,11 @@ class WayfinderStepDefinitions {
     @When("^I click the wait times jump off link$")
     fun iClickTheWaitTimesJumpOffLink() {
         wayfinderReferralsAndAppointmentsPage.waitTimesLink.click()
+    }
+
+    @When("^I click the help link from wait times page$")
+    fun iClickTheHelpLinkFromWaitTimesPage() {
+        wayfinderWaitTimesPage.clickableHelpLink.click()
     }
 
     @Then("^the Referrals, hospital and other appointments screen with data is displayed$")
@@ -221,7 +231,7 @@ class WayfinderStepDefinitions {
         wayfinderHelpPage.assertHelpPageIsDisplayed()
     }
 
-    @Then("^I am navigated to the Wayfinder wait times page$")
+    @Then("^the Wayfinder wait times page is displayed$")
     fun assertWayfinderWaitTimesPageDisplayed() {
         wayfinderWaitTimesPage.assertWayfinderWaitTimesTitleIsDisplayed()
     }

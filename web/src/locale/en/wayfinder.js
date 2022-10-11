@@ -15,6 +15,7 @@ export default {
     youAreOnOneWaitingList: 'You\'re on a waiting list',
     youAreOnMultipleWaitingLists: 'You\'re on {waitingListCount} waiting lists',
     isSomethingWrong: 'Is something wrong?',
+    missingIncorrectOrNotChangedOrCancelled: 'What to do if something is missing, incorrect or has not been changed or cancelled',
   },
   appointments: {
     tagPromptText: 'The status of this appointment is',

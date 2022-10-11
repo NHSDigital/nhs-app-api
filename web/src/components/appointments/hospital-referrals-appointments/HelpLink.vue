@@ -4,8 +4,8 @@
       <menu-item :id="id"
                  header-tag="h2"
                  data-purpose="text_link"
-                 :href="href"
-                 :click-func="clickFunc"
+                 :href="path"
+                 :click-func="onClickHelpLink"
                  :text="text"
                  :description="body"
                  :aria-label="ariaLabelCaption(text,body)"/>
@@ -18,6 +18,7 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'HelpLink',
@@ -40,21 +41,30 @@ export default {
       type: String,
       default: '',
     },
-    href: {
+    path: {
       type: String,
       required: true,
     },
-    clickFunc: {
-      type: Function,
-      required: true,
+    backLinkOverride: {
+      type: String,
+      default: undefined,
+    },
+    routeCrumb: {
+      type: String,
+      default: 'defaultCrumb',
     },
   },
   methods: {
     ariaLabelCaption(text, body) {
       if (this.body) {
-        return `${text}. ${body}`;
+        return `${text}.${body}`;
       }
       return this.text;
+    },
+    onClickHelpLink() {
+      this.$store.dispatch('navigation/setBackLinkOverride', this.backLinkOverride);
+      this.$store.dispatch('navigation/setRouteCrumb', this.routeCrumb);
+      redirectTo(this, this.path);
     },
   },
 };

@@ -46,6 +46,7 @@ open class PageUrl {
                 "terms and conditions" to "/terms-and-conditions",
                 "wayfinder" to "/appointments/hospital-referrals-appointments",
                 "wayfinder help" to "/appointments/hospital-referrals-appointments/help",
+                "wayfinder wait times" to "/appointments/hospital-referrals-appointments/waiting-lists",
                 "your gp appointments" to "/appointments/gp-appointments",
                 "your prescriptions" to "/prescriptions",
                 "choose test results" to "/health-records/gp-medical-record/choose-test-result-year",
