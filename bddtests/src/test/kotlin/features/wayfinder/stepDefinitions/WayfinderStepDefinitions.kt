@@ -155,9 +155,15 @@ class WayfinderStepDefinitions {
         wayfinderReferralsAndAppointmentsPage.assertReferralInReviewIsDisplayed()
     }
 
-    @Then("^I can see that I have no confirmed appointments$")
-    fun assertNoUpcomingAppointmentsIsDisplayed() {
-        wayfinderReferralsAndAppointmentsPage.assertNoConfirmedAppointmentsMessageIsDisplayed()
+    @Then("^I see a referral to action$")
+    fun assertReferralToActionIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertOneReferralToActionHeaderIsDisplayed()
+    }
+
+    @Then("^I can see that I have no referrals in review or upcoming appointments$")
+    fun assertNoReferralsInReviewOrUpcomingAppointmentsIsDisplayed() {
+        wayfinderReferralsAndAppointmentsPage.assertNoUpcomingAppointmentsMessageIsDisplayed()
+        wayfinderReferralsAndAppointmentsPage.assertNoReferralsInReviewMessageIsDisplayed()
     }
 
     @Then("^I see an appointment ready to confirm$")

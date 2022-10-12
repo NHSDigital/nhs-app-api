@@ -23,7 +23,7 @@ Feature: Wayfinder Appointments
     Then the Referrals, hospital and other appointments screen with data is displayed
     And I see a booked appointment
 
-  Scenario: A user with no confirmed appointments can see this on the wayfinder screen
+  Scenario: A user with a referral to action but none in review or upcoming apps can see this on the Wayfinder screen
     Given I am a user whose surgery has enabled Wayfinder
     And I have referrals but no upcoming appointments
     And I am logged in
@@ -31,9 +31,10 @@ Feature: Wayfinder Appointments
     Then the Appointment Hub page is displayed
     When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
     Then the Referrals, hospital and other appointments screen with data is displayed
-    And I can see that I have no confirmed appointments
+    And I see a referral to action
+    And I can see that I have no referrals in review or upcoming appointments
 
-  Scenario: A user with cancelled appointments can see this on the wayfinder screen
+  Scenario: A user with cancelled appointments can see this on the Wayfinder screen
     Given I am a user whose surgery has enabled Wayfinder
     And I have referrals and upcoming appointments
     And I am logged in
