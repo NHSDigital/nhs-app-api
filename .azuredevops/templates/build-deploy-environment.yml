@@ -47,6 +47,11 @@ parameters:
       - ops1
       - ops2
       - ops3
+      - ops4
+      - ops5
+      - ops6
+      - ops7
+      - ops8
       - onboardingsandpit
       - onboardingaos
       - authdevelopment
@@ -84,7 +89,7 @@ variables:
   - name: backendAzureRmStorageAccountName
     value: nhsappterraformnlv
   - name: tfVarFileName
-    value: ../zone/dev/devscratch.tfvars
+    value: ../zone/dev/devscratch_new.tfvars
   - name: backendAzureRmContainerName
     value: terraform
   - name: region
@@ -102,7 +107,7 @@ variables:
   - name: version
     value: develop
 pool:
- vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 stages:
   - stage: stage_check_image
     displayName: Check image exists in registry
@@ -177,7 +182,7 @@ stages:
       - deployment: terraform
         displayName: Run Terraform Plan And Apply
         timeoutInMinutes: 20
-        environment: scratch-dev
+        environment: scratch-dev-scratch
         strategy:
           runOnce:
             deploy:
@@ -197,7 +202,7 @@ stages:
                     backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
                     backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
                     backendAzureRmContainerName: $(backendAzureRmContainerName)
-                    tfExecutionDir: nhsapp-ops-terraform/src/cluster-only-environment
+                    tfExecutionDir: nhsapp-ops-terraform/src/cluster-only-environment-scratch
                     tfVarFileName: $(tfVarFileName)
                     deployReason: $(Build.Reason)
                     queuedBy: $(Build.QueuedBy)
@@ -207,7 +212,7 @@ stages:
     displayName: Bootstrap Cluster
     jobs:
       - job: bootstrap_k8s_job
-        timeoutInMinutes: 10
+        timeoutInMinutes: 5
         displayName: "[k8s] Bootstrap"
         variables:
           TARGET_ZONE: 'dev'
@@ -229,7 +234,7 @@ stages:
           - template: .azuredevops/templates/steps/init_ci.yaml@nhsapp_ops_infra
           - bash: |
               cd $(PROJECT_PATH) \
-              && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker_multicluster.sh
+              && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker_new_scratch.sh
             displayName: "[k8s] Bootstrap"
           - bash: |
               cd $(PROJECT_PATH) \
