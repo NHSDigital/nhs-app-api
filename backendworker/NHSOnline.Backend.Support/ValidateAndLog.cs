@@ -63,6 +63,16 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
+        public ValidateAndLog IsOptionalGuid(string value, string name, ValidationOptions options = ValidationOptions.None)
+        {
+            if (!(string.IsNullOrEmpty(value) || Guid.TryParse(value, out _)))
+            {
+                HandleError(name, $"Invalid {name} supplied", options);
+            }
+
+            return this;
+        }
+
         public ValidateAndLog IsUriOrNull(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (!string.IsNullOrWhiteSpace(value) && !Uri.IsWellFormedUriString(value, UriKind.RelativeOrAbsolute))
@@ -151,7 +161,7 @@ namespace NHSOnline.Backend.Support
 
             return this;
         }
-        
+
         public ValidateAndLog IsListValid<T>(IEnumerable<T> value, Func<T, bool> invalidItemsSelector, string name, ValidationOptions options = ValidationOptions.None)
         {
             if(value == null || value.Any(invalidItemsSelector))

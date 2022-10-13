@@ -7,7 +7,7 @@ Feature: Push Notifications Backend
     Given I am an api user wishing to register their device for push notifications
     And I have logged in and have a valid session cookie
     When I register the device for push notifications
-    Then I receive a "Created" success code
+    Then I receive an "OK" success code
     And I receive the newly created registered device details
     And the device registration is available in the device repository
 
@@ -28,11 +28,17 @@ Feature: Push Notifications Backend
     When I register the device for push notifications without a pns token
     Then I receive a "Bad Request" error
 
+  Scenario: An api user registering for push notifications with invalid installationId will receive a 400
+    Given I am an api user wishing to register their device for push notifications
+    And I have logged in and have a valid session cookie
+    When I register the device for push notifications with an invalid installationId
+    Then I receive a "Bad Request" error
+
   Scenario: An api user can register two different devices for push notifications
     Given I am an api user who has registered their device for notifications, and I have another device to register
     And I have logged in and have a valid session cookie
     When I register the device for push notifications
-    Then I receive a "Created" success code
+    Then I receive a "OK" success code
     And I receive the newly created registered device details
     And both device registrations are available in the device repository
 

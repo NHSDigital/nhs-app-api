@@ -153,6 +153,13 @@ class PushNotificationsStepDefinitionsBackend {
         NotificationsApi.postRegistration(authToken = authToken)
     }
 
+    @When("^I register the device for push notifications with an invalid installationId")
+    fun iRegisterTheDeviceForPushNotificationsWithInvalidInstallationId() {
+        PushNotificationsSerenityHelpers.EXPECTED_INSTALLATION_ID.set("3244")
+        val authToken = SerenityHelpers.getPatient().accessToken
+        NotificationsApi.postRegistration(authToken = authToken)
+    }
+
     @When("^a registration attempt with an invalid access token will return an Unauthorised error$")
     fun aRegistrationAttemptWithAnInvalidAccessTokenWillReturnAnUnauthorisedError() {
         InvalidAccessTokenTester.assertInvalidTokensThrowUnauthorised { accessToken ->
@@ -183,6 +190,7 @@ class PushNotificationsStepDefinitionsBackend {
 
         Assert.assertNotNull("Register User Devices response", response)
         Assert.assertNotNull("Register User Devices response DeviceId", response.deviceId)
+        Assert.assertNotNull("Register User Devices response InstallationId", response.installationId)
         Assert.assertEquals("Register User Devices response DeviceType",
                 expectedDeviceType,
                 response.deviceType)

@@ -26,14 +26,15 @@ namespace NHSOnline.Backend.Users.Areas.Devices
             var device = new Device
             {
                 DeviceId = result.UserDevice.DeviceId,
-                DeviceType = _initialRequest.DeviceType
+                DeviceType = _initialRequest.DeviceType,
+                InstallationId = result.UserDevice.RegistrationId
             };
 
             await _metricLogger.NotificationsEnabled();
 
             return new ObjectResult(device)
             {
-                StatusCode = StatusCodes.Status201Created
+                StatusCode = StatusCodes.Status200OK
             };
         }
 

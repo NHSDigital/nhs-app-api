@@ -148,6 +148,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Users.Devices
                 .IsNotNull(request, nameof(request))
                 .IsNotNullOrWhitespace(request?.DevicePns, nameof(request.DevicePns))
                 .IsNotNull(request?.DeviceType, nameof(request.DeviceType))
+                .IsOptionalGuid(request?.InstallationId, nameof(request.InstallationId))
                 .IsValid();
         }
     }

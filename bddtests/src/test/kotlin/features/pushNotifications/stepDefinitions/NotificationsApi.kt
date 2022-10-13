@@ -17,7 +17,8 @@ class NotificationsApi {
         fun postRegistration(authToken: String?) {
             val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
             val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>()
-            val request = RegisterUserDevicesRequest(pnsToken, deviceType)
+            val installationId = PushNotificationsSerenityHelpers.EXPECTED_INSTALLATION_ID.getOrFail<String>()
+            val request = RegisterUserDevicesRequest(pnsToken, deviceType, installationId)
             val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userDevices
                     .post(request, authToken)

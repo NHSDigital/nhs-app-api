@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
         private Mock<ILogger<DevicesController>> _mockLogger;
         private Mock<IAuditor> _mockAuditor;
         private const string DevicePns = "PNS";
+        private static readonly string InstallationId = Guid.NewGuid().ToString();
         private const DeviceType DeviceType = Backend.Users.Areas.Devices.Models.DeviceType.Android;
         private const string DeviceId = "DeviceId";
         private const string NhsNumber = "NhsNumber";
@@ -282,19 +283,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
         }
 
         [TestMethod]
-        public async Task Post_Success_ReturnsStatus201Created()
+        public async Task Post_Success_ReturnsStatus200Created()
         {
             // Arrange
             var registerRequest = CreateValidRegisterDeviceRequest();
             var expectedResult = new Device
             {
                 DeviceId = DeviceId,
-                DeviceType = DeviceType
+                DeviceType = DeviceType,
+                InstallationId = InstallationId,
             };
 
             _mockRegistrationService
                 .Setup(x => x.CreateRegistration(registerRequest, It.IsAny<AccessToken>()))
-                .ReturnsAsync(new RegisterDeviceResult.Created(new UserDevice { DeviceId = DeviceId }));
+                .ReturnsAsync(new RegisterDeviceResult.Created(new UserDevice { DeviceId = DeviceId, RegistrationId = InstallationId }));
 
             // Act
             var result = await _systemUnderTest.Post(registerRequest);
@@ -304,7 +306,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             _mockMetricLogger.Verify(x => x.NotificationsEnabled());
 
             var subject = result.Should().BeOfType<ObjectResult>().Subject;
-            subject.StatusCode.Should().Be(StatusCodes.Status201Created);
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
             subject.Value.Should().BeOfType<Device>().Subject.Should().BeEquivalentTo(expectedResult);
         }
 
@@ -382,6 +384,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             // Arrange
             var registerRequest = new RegisterDeviceRequest
             {
+                InstallationId = InstallationId,
                 DevicePns = devicePns,
                 DeviceType = DeviceType.Android
             };
@@ -401,6 +404,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             // Arrange
             var registerRequest = new RegisterDeviceRequest
             {
+                InstallationId = InstallationId,
                 DevicePns = DevicePns,
                 DeviceType = null
             };
@@ -414,9 +418,66 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Users.Devices
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
+        [DataTestMethod]
+        [DataRow("   ")]
+        [DataRow("34234")]
+        public async Task Post_InvalidInstallationId_ReturnsBadRequest(string installationId)
+        {
+            // Arrange
+            var registerRequest = new RegisterDeviceRequest
+            {
+                InstallationId = installationId,
+                DevicePns = DevicePns,
+                DeviceType = DeviceType.Android
+            };
+
+            // Act
+            var result = await _systemUnderTest.Post(registerRequest);
+
+            // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
+            _mockAuditor.VerifyNoOtherCalls();
+            result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Post_InstallationIdWithNullEmpty_ReturnsOK(string installationId)
+        {
+            // Arrange
+            var registerRequest = new RegisterDeviceRequest
+            {
+                InstallationId = installationId,
+                DevicePns = DevicePns,
+                DeviceType = DeviceType.Android
+            };
+            var expectedResult = new Device
+            {
+                DeviceId = DeviceId,
+                DeviceType = DeviceType
+            };
+
+            _mockRegistrationService
+                .Setup(x => x.CreateRegistration(registerRequest, It.IsAny<AccessToken>()))
+                .ReturnsAsync(new RegisterDeviceResult.Created(new UserDevice { DeviceId = DeviceId }));
+
+            // Act
+            var result = await _systemUnderTest.Post(registerRequest);
+
+            // Assert
+            _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.Verify(x => x.NotificationsEnabled());
+
+            var subject = result.Should().BeOfType<ObjectResult>().Subject;
+            subject.StatusCode.Should().Be(StatusCodes.Status200OK);
+            subject.Value.Should().BeOfType<Device>().Subject.Should().BeEquivalentTo(expectedResult);
+        }
+
         private RegisterDeviceRequest CreateValidRegisterDeviceRequest()
             => new RegisterDeviceRequest
             {
+                InstallationId = InstallationId,
                 DevicePns = DevicePns,
                 DeviceType = DeviceType
             };

@@ -267,6 +267,8 @@ components:
           type: string
         deviceType:
           $ref: '#/components/schemas/DeviceType'
+        installationId:
+            type: string
       example:
         devicePNS: b1f99cf0-278d-49ca-a325-0a1504799488
         deviceType: android
@@ -358,12 +360,12 @@ components:
       required:
         - notificationsRegistered
         - notificationsDecisionSource
-      properties: 
-        notificationsRegistered: 
+      properties:
+        notificationsRegistered:
           type: boolean
-        notificationsDecisionSource:                     
+        notificationsDecisionSource:
           type: string
-          enum: 
+          enum:
             - Prompt
             - Toggle
             - Unknown

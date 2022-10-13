@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.Users.Registrations
                 {
                     DevicePns = request.DevicePns,
                     DeviceType = request.DeviceType.Value,
-                    NhsLoginId = accessToken.Subject
+                    NhsLoginId = accessToken.Subject,
+                    InstallationId = request.InstallationId
                 };
 
                 var registrationResult = await _notificationService.Register(installationRequest);

@@ -4,5 +4,6 @@ namespace NHSOnline.Backend.Users.Areas.Devices.Models
     {
         public DeviceType? DeviceType { get; set; }
         public string DevicePns { get; set; }
+        public string InstallationId { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Users.Notifications.Models
         public string DevicePns { get; set; }
         public DeviceType DeviceType { get; set; }
         public string NhsLoginId { get; set; }
+        public string InstallationId { get; set; }
 
         public InstallationRequest()
         {
@@ -17,6 +18,7 @@ namespace NHSOnline.Backend.Users.Notifications.Models
             DevicePns = request.DevicePns;
             DeviceType = request.DeviceType;
             NhsLoginId = request.NhsLoginId;
+            InstallationId = request.InstallationId;
         }
     }
 }

@@ -16,6 +16,7 @@ import utils.addToList
 import utils.set
 import utils.getOrFail
 import worker.models.userDevices.UserDevice
+import java.util.*
 
 private const val REGISTRATION_ID: String = "ee4e986a-7abc-452c-be11-db5c1f780021"
 private const val INVALID_REGISTRATION_ID: Int = 1234
@@ -68,8 +69,10 @@ class NotificationsFactory {
     fun setUpDeviceValues(accessToken: String) {
         val devicePns = PnsTokenGenerator.generate()
         val deviceType = "Android"
+        val installationId = UUID.randomUUID().toString()
         PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
+        PushNotificationsSerenityHelpers.EXPECTED_INSTALLATION_ID.set(installationId)
         setUpDeletionAfterTest(devicePns, accessToken)
     }
 

@@ -9,5 +9,6 @@ namespace NHSOnline.Backend.Users.Areas.Devices.Models
 
         [JsonConverter(typeof(StringEnumConverter), false)]
         public DeviceType? DeviceType { get; set; }
+        public string InstallationId { get; set; }
     }
 }

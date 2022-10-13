@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Users.Notifications
         {
             return new Installation
             {
-                InstallationId = Guid.NewGuid().ToString(),
+                InstallationId = string.IsNullOrEmpty(request.InstallationId) ? Guid.NewGuid().ToString() : request.InstallationId,
                 PushChannel = request.DevicePns,
                 Tags = new List<string> { NhsLoginTagGenerator.Generate(request.NhsLoginId) },
                 Platform = GetNotificationPlatform(request.DeviceType),
