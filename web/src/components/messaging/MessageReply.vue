@@ -20,7 +20,7 @@
           </error-message>
           <generic-checkbox
             :key="checkboxOption"
-            name="replyoption"
+            checkbox-id="replyoption"
             :value="checkboxOption"
             @input="onCheckboxChanged"
             @onCheckedChanged="selectedCheckboxValueChanged">
@@ -89,8 +89,8 @@ export default {
   },
   data() {
     return {
-      selectedRadioValue: '',
-      selectedCheckboxValue: '',
+      selectedRadioValue: undefined,
+      selectedCheckboxValue: undefined,
       showOptions: false,
       isValidResponse: true,
     };
@@ -148,10 +148,10 @@ export default {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
     },
     onCheckboxChanged(value) {
-      this.selectedCheckboxValue = (this.selectedCheckboxValue) ? '' : value;
+      this.selectedCheckboxValue = (this.selectedCheckboxValue) ? undefined : value;
     },
     validateResponse() {
-      this.isValidResponse = this.getResponseValue() !== '';
+      this.isValidResponse = this.getResponseValue() !== undefined;
       return this.isValidResponse;
     },
     getResponseValue() {

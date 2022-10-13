@@ -4,6 +4,7 @@ import { createStore, mount } from '../../helpers';
 jest.useFakeTimers().setSystemTime(new Date('2022-08-19T08:50:48.586'));
 
 let wrapper;
+let $store;
 const replyToThisMessageButtonId = 'showKeywordReplies';
 const optionsContainerClass = 'messageReplyOptionsContainer';
 const radionOptionsContainerId = 'radioOptions';
@@ -21,25 +22,28 @@ const mountComponent = ({
   response = '',
   responseSentDateTime = null,
   isNativeApp = false,
+} = {}) => {
   $store = createStore({
     state: {
       device: { isNativeApp },
     },
-  }),
-} = {}) => mount(MessageReply, {
-  $style: {
-    [optionsContainerClass]: optionsContainerClass,
-  },
-  $store,
-  propsData: {
-    messageReply: {
-      options: replyOptions,
-      response,
-      responseSentDateTime,
+  });
+
+  return mount(MessageReply, {
+    $style: {
+      [optionsContainerClass]: optionsContainerClass,
     },
-    senderName: 'Test Sender',
-  },
-});
+    $store,
+    propsData: {
+      messageReply: {
+        options: replyOptions,
+        response,
+        responseSentDateTime,
+      },
+      senderName: 'Test Sender',
+    },
+  });
+};
 
 describe('message reply', () => {
   describe('showOptions property', () => {
@@ -72,6 +76,10 @@ describe('message reply', () => {
       describe('send button is clicked', () => {
         it('will emit a click event', () => {
           wrapper.setData({ selectedRadioValue: 'YES' });
+          wrapper.vm.onRadioButtonChanged('YES');
+
+          expect($store.dispatch).toBeCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+
           wrapper.vm.onSendClicked();
           expect(wrapper.emitted().send_clicked.length).toBe(1);
         });
@@ -81,7 +89,9 @@ describe('message reply', () => {
     describe('an option is not selected', () => {
       describe('send button is clicked', () => {
         it('will show an error message', () => {
-          wrapper.setData({ selectedRadioValue: '' });
+          wrapper.setData({ selectedRadioValue: undefined });
+          expect($store.dispatch).not.toHaveBeenCalled();
+
           wrapper.vm.onSendClicked();
           expect(wrapper.find('#replyoptions-error').text()).toContain('Select an option if you want to reply to this message');
         });
@@ -104,6 +114,9 @@ describe('message reply', () => {
       describe('send button is clicked', () => {
         it('will emit a click event', () => {
           wrapper.setData({ selectedCheckboxValue: 'CANCEL' });
+          wrapper.vm.onRadioButtonChanged('CANCEL');
+          expect($store.dispatch).toBeCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+
           wrapper.vm.onSendClicked();
           expect(wrapper.emitted().send_clicked.length).toBe(1);
         });
@@ -113,7 +126,10 @@ describe('message reply', () => {
     describe('an option is not selected', () => {
       describe('send button is clicked', () => {
         it('will show an error message', () => {
-          wrapper.setData({ selectedCheckboxValue: '' });
+          wrapper.setData({ selectedCheckboxValue: undefined });
+          wrapper.vm.onRadioButtonChanged(undefined);
+          expect($store.dispatch).toBeCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+
           wrapper.vm.onSendClicked();
           expect(wrapper.find('#reply-checkbox-error').text()).toContain('Select the option if you want to reply to this message');
         });
