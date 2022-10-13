@@ -10,10 +10,14 @@ namespace NHSOnline.Backend.Users.Notifications
     {
         private readonly IInstallationTemplateFactory _installationTemplateFactory;
         private const string PrimaryMessageTemplateName = "PrimaryMessageTemplate";
+        private readonly int _notificationInstallationExpiryMonths;
 
-        public InstallationFactory(IInstallationTemplateFactory installationTemplateFactory)
+        public InstallationFactory(
+            IInstallationTemplateFactory installationTemplateFactory,
+            int notificationInstallationExpiryMonths)
         {
             _installationTemplateFactory = installationTemplateFactory;
+            _notificationInstallationExpiryMonths = notificationInstallationExpiryMonths;
         }
 
         public Installation Create(InstallationRequest request)
@@ -24,7 +28,8 @@ namespace NHSOnline.Backend.Users.Notifications
                 PushChannel = request.DevicePns,
                 Tags = new List<string> { NhsLoginTagGenerator.Generate(request.NhsLoginId) },
                 Platform = GetNotificationPlatform(request.DeviceType),
-                Templates = GetNotificationTemplates(request.DeviceType, request.NhsLoginId)
+                Templates = GetNotificationTemplates(request.DeviceType, request.NhsLoginId),
+                ExpirationTime = DateTime.Now.AddMonths(_notificationInstallationExpiryMonths)
             };
         }
 

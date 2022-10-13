@@ -31,6 +31,7 @@ clusterDNSNameservers:
   - 172.28.160.10
 
 iosBadgeCountEnabled: false
+notificationInstallationExpiryMonths: 24
 
 userResearchEnabled: false
 skipLoggedOutEnabled: true

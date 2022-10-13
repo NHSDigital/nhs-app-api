@@ -1,16 +1,15 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
-
 namespace NHSOnline.Backend.Users.Notifications
 {
     public class NotificationsConfiguration : INotificationsConfiguration
     {
         public bool IosBadgeCountEnabled { get; }
+        public int NotificationInstallationExpiryMonths { get; }
 
-        public NotificationsConfiguration(ILogger<NotificationsConfiguration> logger, IConfiguration configuration)
+        public NotificationsConfiguration(bool iosBadgeCountEnabled, int notificationInstallationExpiryMonths)
         {
-            IosBadgeCountEnabled = configuration.GetBoolOrFallback("IOS_BADGE_COUNT_ENABLED", false, logger);
+            IosBadgeCountEnabled = iosBadgeCountEnabled;
+            NotificationInstallationExpiryMonths = notificationInstallationExpiryMonths;
         }
+
     }
 }

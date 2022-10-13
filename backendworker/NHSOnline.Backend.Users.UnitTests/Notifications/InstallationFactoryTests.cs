@@ -18,12 +18,13 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
         private Mock<IInstallationTemplateFactory> _mockInstallationTemplateFactory;
         private const string NhsLoginId = "NhsLoginId";
         private const string DevicePns = "DevicePns";
+        private readonly int NotificationExpiryMonths = 12;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockInstallationTemplateFactory = new Mock<IInstallationTemplateFactory>();
-            _systemUnderTest = new InstallationFactory(_mockInstallationTemplateFactory.Object);
+            _systemUnderTest = new InstallationFactory(_mockInstallationTemplateFactory.Object, NotificationExpiryMonths);
         }
 
         [TestMethod]
@@ -70,6 +71,7 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
             result.Platform.Should().Be(platform);
             result.Templates.Should().BeEquivalentTo(expectedTemplates);
             result.Tags.Should().BeEquivalentTo(expectedTags);
+            result.ExpirationTime.Should().BeCloseTo(DateTime.Now.AddMonths(NotificationExpiryMonths), TimeSpan.FromMinutes(1));
         }
     }
 }

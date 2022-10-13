@@ -26,11 +26,12 @@ namespace NHSOnline.Backend.Users.UnitTests.Notifications
                     It.IsAny<string>()))
                 .Returns(_mockNotificationHubClient.Object);
 
-            var configuration = new AzureNotificationHubConfiguration(string.Empty,
+            var hubConfiguration = new AzureNotificationHubConfiguration(string.Empty,
                 string.Empty, string.Empty,
                 string.Empty, string.Empty, int.MaxValue);
+            var notificationsConfiguration = new NotificationsConfiguration(true, 10);
 
-            _systemUnderTest = new AzureNotificationHubWrapper(configuration, _mockNotificationHubClientFactory.Object);
+            _systemUnderTest = new AzureNotificationHubWrapper(hubConfiguration, notificationsConfiguration, _mockNotificationHubClientFactory.Object);
         }
 
         [TestMethod]

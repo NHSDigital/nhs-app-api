@@ -7,7 +7,6 @@ using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Metrics.EventHub;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
@@ -25,7 +24,7 @@ namespace NHSOnline.Backend.Users
             services.AddSingleton<IUserDeviceRepository, UserDeviceRepository>();
             services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
             services.AddSingleton<IMapper<AddNotificationSenderContext, SenderContextEventLogData>, NotificationSenderContextEventLogDataMapper>();
-            
+
             ConfigureUserProfileServices(services);
 
             base.ConfigureServices(services, configuration);

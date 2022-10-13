@@ -485,6 +485,8 @@ spec:
           value: {{ $.Values.users.mongoDatabaseUserDeviceCollection }}
         - name: MOCK_NOTIFICATION_HUB_CLIENT
           value: "{{ $.Values.api.mockNotificationHubClient }}"
+        - name: NOTIFICATION_INSTALLATION_EXPIRY_MONTHS
+          value: "{{ $.Values.notificationInstallationExpiryMonths }}"
         {{- range $index, $notificationHub := .Values.api.notificationHubs }}
         - name: AZURE_NOTIFICATION_HUBS__{{ $index }}__AZURE_NOTIFICATION_HUB_PATH
           value: {{ $notificationHub.notificationHubPath }}

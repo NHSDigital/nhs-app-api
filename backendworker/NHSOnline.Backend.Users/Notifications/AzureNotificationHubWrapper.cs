@@ -21,25 +21,27 @@ namespace NHSOnline.Backend.Users.Notifications
         private readonly INhsLoginIdService _writeService;
 
         public AzureNotificationHubWrapper(
-            AzureNotificationHubConfiguration configuration,
+            AzureNotificationHubConfiguration hubConfiguration,
+            NotificationsConfiguration notificationsConfiguration,
             INotificationHubClientFactory notificationHubClientFactory)
         {
             _hubClient = notificationHubClientFactory.CreateClientFromConnectionString(
-                $"{configuration.ConnectionString}{configuration.SharedAccessKey}",
-                configuration.NotificationHubPath
+                $"{hubConfiguration.ConnectionString}{hubConfiguration.SharedAccessKey}",
+                hubConfiguration.NotificationHubPath
             );
 
-            _installationFactory = new InstallationFactory(new InstallationTemplateFactory());
-            _readService = new NhsLoginIdService(configuration.ReadCharacters);
-            _writeService = new NhsLoginIdService(configuration.WriteCharacters);
+            _installationFactory = new InstallationFactory(
+                new InstallationTemplateFactory(), notificationsConfiguration.NotificationInstallationExpiryMonths);
+            _readService = new NhsLoginIdService(hubConfiguration.ReadCharacters);
+            _writeService = new NhsLoginIdService(hubConfiguration.WriteCharacters);
 
-            _description = $"{configuration.NotificationHubPath} "
-                           + $"(Gen {configuration.Generation}: "
-                           + $"Reads [{configuration.ReadCharacters.ToUpperInvariant()}], "
-                           + $"Writes [{configuration.WriteCharacters.ToUpperInvariant()}])";
+            _description = $"{hubConfiguration.NotificationHubPath} "
+                           + $"(Gen {hubConfiguration.Generation}: "
+                           + $"Reads [{hubConfiguration.ReadCharacters.ToUpperInvariant()}], "
+                           + $"Writes [{hubConfiguration.WriteCharacters.ToUpperInvariant()}])";
 
-            Generation = configuration.Generation;
-            Path = configuration.NotificationHubPath;
+            Generation = hubConfiguration.Generation;
+            Path = hubConfiguration.NotificationHubPath;
         }
 
         public int Generation { get; }

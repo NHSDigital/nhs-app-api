@@ -191,14 +191,18 @@ namespace NHSOnline.Backend.PfsApi
                 clientFactory = new NotificationHubClientFactory();
             }
 
+            var notificationsConfiguration = CreateNotificationsConfiguration();
+
             services.AddSingleton(
                 CreateAzureNotificationHubConfigurations()
-                    .Select(x => new AzureNotificationHubWrapper(x, clientFactory))
+                    .Select(x =>
+                        new AzureNotificationHubWrapper(x, notificationsConfiguration, clientFactory))
                     .Cast<IAzureNotificationHubWrapper>()
             );
 
             var httpTimeoutConfig = CreateHttpTimeoutConfiguration();
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(httpTimeoutConfig);
+            services.AddSingleton<INotificationsConfiguration>(notificationsConfiguration);
         }
 
         private IEnumerable<AzureNotificationHubConfiguration> CreateAzureNotificationHubConfigurations()
@@ -234,6 +238,14 @@ namespace NHSOnline.Backend.PfsApi
             var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
             return config;
+        }
+
+        private NotificationsConfiguration CreateNotificationsConfiguration()
+        {
+            var iosBadgeCountEnabled = Configuration.GetBoolOrFallback("IOS_BADGE_COUNT_ENABLED", false, _logger);
+            var notificationInstallationExpiryMonths = Configuration.GetIntOrThrow("NOTIFICATION_INSTALLATION_EXPIRY_MONTHS", _logger);
+
+            return new NotificationsConfiguration(iosBadgeCountEnabled, notificationInstallationExpiryMonths);
         }
 
     }
