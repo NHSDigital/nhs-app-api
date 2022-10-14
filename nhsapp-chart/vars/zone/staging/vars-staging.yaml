@@ -94,6 +94,7 @@ api:
     services__ers__url: https://pat.sa.refer.nhs.uk
     services__gncr__url: https://my-sandpit.gncr.org.uk
     services__healthcarecomms__url: https://nhs-app.hctest.uk
+    services__healthcarecomms_alt__url: https://portal-api.hctest.uk
     services__http_status__url: https://httpstat.us
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
@@ -119,6 +120,7 @@ api:
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__gncr__url: https://my-sandpit.gncr.org.uk
     servicesV3__healthcarecomms__url: https://nhs-app.hctest.uk
+    servicesV3__healthcarecomms__domains__1: https://portal-api.hctest.uk
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
