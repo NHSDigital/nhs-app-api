@@ -32,4 +32,10 @@ open class HealthAdvicePage : HybridPageObject() {
                 "'Ask your GP for medical advice')]",
         page = this
     )
+
+    val patchsMedicalAdvice = HybridPageElement(
+        webDesktopLocator = "//*[@id='btn_patchs_medical_advice']//h2[contains(text()," +
+                "'Ask your GP for advice about a health problem')]",
+        page = this
+    )
 }

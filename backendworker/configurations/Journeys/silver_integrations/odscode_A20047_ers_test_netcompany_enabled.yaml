@@ -9,10 +9,12 @@ target:
   odsCode: "A20047"
 journeys:
   silverIntegrations:
+    consultations:
+      - patchs
     messages:
       - testSilverThirdPartyProvider
     secondaryAppointments:
       - ers
-    vaccineRecord: 
+    vaccineRecord:
       - netCompany
       - netCompanyP5

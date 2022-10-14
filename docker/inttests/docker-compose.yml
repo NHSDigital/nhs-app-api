@@ -31,6 +31,7 @@ services:
           - nhsd.stubs.local.bitraft.io
           - netcall.stubs.local.bitraft.io
           - netcompany.stubs.local.bitraft.io
+          - patchs.stubs.local.bitraft.io
           - paycasso.stubs.local.bitraft.io
           - pkb.stubs.local.bitraft.io
           - settings.nhslogin.stubs.local.bitraft.io

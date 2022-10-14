@@ -65,6 +65,7 @@ describe('showNoMatchingWarning', () => {
       },
       getters: {
         'serviceJourneyRules/silverIntegrationEnabled': () => true,
+        'knownServices/matchOneById': id => ({ id, url: 'www.url.com' }),
       },
     });
 

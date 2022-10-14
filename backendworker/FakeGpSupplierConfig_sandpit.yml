@@ -847,6 +847,61 @@ defaultUsers:
       dateOfBirth: "1993-06-06T00:00:00"
       sex: Male
 
+  patchs:
+    9998571248:
+      userId: 88f40d95-2d1a-4181-ab45-f8230ed8d3ca
+      emailAddress: onboarding.nhsapp+patchs.user1@gmail.com
+      odsCode: F00017
+      givenName: Susan
+      familyName: North
+      dateOfBirth: "1998-01-01T00:00:00"
+      sex: Female
+
+    9998571249:
+      userId: 365acd63-20fd-442d-bfc4-d4510acabb44
+      emailAddress: onboarding.nhsapp+patchs.user2@gmail.com
+      odsCode: F00017
+      givenName: Martin
+      familyName: Shannon
+      dateOfBirth: "1981-02-02T00:00:00"
+      sex: Male
+
+    9998571250:
+      userId: c1fc4789-fc95-4919-9b43-852bd9ecddb6
+      emailAddress: onboarding.nhsapp+patchs.user3@gmail.com
+      odsCode: F00017
+      givenName: Paula
+      familyName: Green
+      dateOfBirth: "1976-03-03T00:00:00"
+      sex: Female
+
+    9998571251:
+      userId: 803d6776-4f48-4977-a8a6-24e7594ea9c0
+      emailAddress: onboarding.nhsapp+patchs.user4@gmail.com
+      odsCode: F00017
+      givenName: Simon
+      familyName: Johnstone
+      dateOfBirth: "1999-04-04T00:00:00"
+      sex: Male
+
+    9998571252:
+      userId: a82f3b11-4c6f-4d2f-9b09-559d8885fb55
+      emailAddress: onboarding.nhsapp+patchs.user5@gmail.com
+      odsCode: F00017
+      givenName: Marie
+      familyName: Harris
+      dateOfBirth: "1979-05-05T00:00:00"
+      sex: Female
+
+    9998571253:
+      userId: a0f58c03-84d8-43f9-8f45-9d7be17aaa4f
+      emailAddress: onboarding.nhsapp+patchs.user6@gmail.com
+      odsCode: F00017
+      givenName: Peter
+      familyName: Harrington
+      dateOfBirth: "2002-06-06T00:00:00"
+      sex: Male
+
   vaccinerecord:
     9692237818:
       userId: 0965ec5a-68f4-4d69-acf7-67a3c603115d

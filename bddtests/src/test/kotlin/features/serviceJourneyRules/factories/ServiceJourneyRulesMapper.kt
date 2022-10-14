@@ -238,6 +238,12 @@ class ServiceJourneyRulesMapper {
                     SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NBS
                 )
             )
+            .add(
+                Supplier.EMIS, "F00017",
+                EnumSet.of(
+                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PATCHS
+                )
+            )
 
         fun findPatientForConfiguration(
             gpSystem: Supplier?,

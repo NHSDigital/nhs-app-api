@@ -227,7 +227,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "engage", "accurx" ]
+            "enum": [ "pkb", "engage", "accurx", "patchs" ]
           }
         },
         "consultationsAdmin": {

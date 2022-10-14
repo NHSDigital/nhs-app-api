@@ -51,6 +51,11 @@
                                    id="btn_accurx_medical_advice"
                                    provider-id="accurx"
                                    :provider-configuration="thirdPartyProvider.accurx.medical"/>
+
+      <third-party-jump-off-button v-if="isLoggedIn && showPatchsMedicalAdvice && isProofLevel9"
+                                   id="btn_patchs_medical_advice"
+                                   provider-id="patchs"
+                                   :provider-configuration="thirdPartyProvider.patchs.medical"/>
     </menu-item-list>
   </div>
 </template>
@@ -102,6 +107,14 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'accurx',
+          serviceType: 'consultations',
+        },
+      }),
+      showPatchsMedicalAdvice: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'patchs',
           serviceType: 'consultations',
         },
       }),

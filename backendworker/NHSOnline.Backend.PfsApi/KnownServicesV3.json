@@ -95,6 +95,10 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true
     },
+    "patchs": {
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true
+    },
     "pkb": {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true

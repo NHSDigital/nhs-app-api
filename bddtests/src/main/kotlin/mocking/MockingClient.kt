@@ -13,6 +13,7 @@ import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.qualtrics.QualtricsMappingBuilder
 import mocking.spine.SpineMappingBuilder
 import mocking.thirdPartyProviders.accurx.AccurxRequestBuilder
+import mocking.thirdPartyProviders.patchs.PatchsRequestBuilder
 import mocking.thirdPartyProviders.accurxWayfinder.AccurxWayfinderRequestBuilder
 import mocking.thirdPartyProviders.drDoctor.DrDoctorRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
@@ -64,6 +65,7 @@ class MockingClient(configuration: MockingConfiguration) {
     val forNetcall = ExternalSupplierMockingClient(NetcallRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)
     val forNhsd = ExternalSupplierMockingClient(NhsdRequestBuilder(), wiremockHelper)
+    val forPatchs = ExternalSupplierMockingClient(PatchsRequestBuilder(), wiremockHelper)
     val forPKB = ExternalSupplierMockingClient(PKBRequestBuilder(), wiremockHelper)
     val forSubstrakt = ExternalSupplierMockingClient(SubstraktRequestBuilder(), wiremockHelper)
     val forWellness = ExternalSupplierMockingClient(WellnessAndPreventionRequestBuilder(), wiremockHelper)

@@ -1050,3 +1050,58 @@ defaultUsers:
       familyName: Walker
       dateOfBirth: "1985-09-09T00:00:00"
       sex: Female
+
+  patchs:
+    9692113921:
+      userId: b44c9f21-6df4-42c6-a8e8-25e3c8189c57
+      emailAddress: nhsapp.aos+patchs.user1@gmail.com
+      odsCode: F00017
+      givenName: Marie
+      familyName: McDaid
+      dateOfBirth: "1998-01-01T00:00:00"
+      sex: Female
+
+    9692113922:
+      userId: e6ab4f81-7ec0-42e4-bd02-f6f309d7c0f3
+      emailAddress: nhsapp.aos+patchs.user2@gmail.com
+      odsCode: F00017
+      givenName: Henry
+      familyName: Potter
+      dateOfBirth: "1981-02-02T00:00:00"
+      sex: Male
+
+    9692113923:
+      userId: 6f5560fc-a95b-4e7a-b621-ada93908f03d
+      emailAddress: nhsapp.aos+patchs.user3@gmail.com
+      odsCode: F00017
+      givenName: Laura
+      familyName: Mortimer
+      dateOfBirth: "1976-03-03T00:00:00"
+      sex: Female
+
+    9692113924:
+      userId: 5b10e39a-b524-4423-a892-3fe4d60fde9c
+      emailAddress: nhsapp.aos+patchs.user4@gmail.com
+      odsCode: F00017
+      givenName: Ben
+      familyName: Moore
+      dateOfBirth: "1999-04-04T00:00:00"
+      sex: Male
+
+    9692113925:
+      userId: 64b08702-ca94-405e-8d26-678e622ad69a
+      emailAddress: nhsapp.aos+patchs.user5@gmail.com
+      odsCode: F00017
+      givenName: Gillian
+      familyName: Simpson
+      dateOfBirth: "1979-05-05T00:00:00"
+      sex: Female
+
+    9692113926:
+      userId: 9112b1b1-83cc-4e93-95b7-639c79bcdac9
+      emailAddress: nhsapp.aos+patchs.user6@gmail.com
+      odsCode: F00017
+      givenName: Adam
+      familyName: Morrison
+      dateOfBirth: "2002-06-06T00:00:00"
+      sex: Male

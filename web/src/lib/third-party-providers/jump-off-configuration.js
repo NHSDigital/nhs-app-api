@@ -227,6 +227,15 @@ const thirdPartyProvider = {
       serviceType: 'appointmentBookings',
     },
   },
+  patchs: {
+    medical: {
+      acceptablePathsRegex: '^\\/nhs-app-auth\\/submit-clinical-request$',
+      jumpOffId: 'medical',
+      redirectPath: '/nhs-app-auth/submit-clinical-request',
+      provider: 'patchs',
+      serviceType: 'consultations',
+    },
+  },
   wayfinder: {
     accurxWayfinder: {
       jumpOffId: 'accurxWayfinder',

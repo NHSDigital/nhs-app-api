@@ -95,6 +95,7 @@ api:
     services__gncr__url: https://my-sandpit.gncr.org.uk
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
+    services__patchs__url: https://sandbox.patchs.ai
     services__pkb__url: https://nhsapp.devstacks.pkb.io
     services__pkb_alt__url: https://nhsapp.devstacks.pkb.io:443
     services__substraktPatientPack__url: https://jump-point.test.substrakthealth.com
@@ -119,6 +120,7 @@ api:
     servicesV3__gncr__url: https://my-sandpit.gncr.org.uk
     servicesV3__netcall__url: https://phubloadtest-phubpatient-sandpit.oncreate.app
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
+    servicesV3__patchs__url: https://sandbox.patchs.ai
     servicesV3__pkb__url: https://nhsapp.devstacks.pkb.io
     servicesV3__pkb__domains__url: https://nhsapp.devstacks.pkb.io:443
     servicesV3__substraktPatientPack__url: https://jump-point.test.substrakthealth.com

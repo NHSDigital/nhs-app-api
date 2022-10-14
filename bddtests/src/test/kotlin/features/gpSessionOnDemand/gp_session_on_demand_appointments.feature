@@ -41,4 +41,15 @@ Feature: GP Session On Demand appointments
     And I click the GP Appointments link
     And I see appropriate warning message when there is no GP session
     When I click the 'Try again' button
-    Then I am shown a message and a list of actions I can perform
+    Then I am shown a message and a list of actions I can perform as an Accurx user
+
+  Scenario: A user with Patchs access trying to view appointments when the Gp System is unavailable is shown alternative options after retrying
+    Given I am a patient with access to all Patchs services
+    And GP session is unavailable
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
+    And I see appropriate warning message when there is no GP session
+    When I click the 'Try again' button
+    Then I am shown a message and a list of actions I can perform as a Patchs user

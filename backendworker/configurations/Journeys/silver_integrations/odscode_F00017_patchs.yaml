@@ -1,0 +1,7 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00017"
+journeys:
+  silverIntegrations:
+    consultations:
+      - patchs

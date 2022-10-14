@@ -29,6 +29,7 @@ describe('BookingConfirmationErrors', () => {
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
         'serviceJourneyRules/oneOneOneEnabled': oneOneOneEnabled,
+        'knownServices/matchOneById': id => ({ id, url: 'www.url.com' }),
       },
     }),
     propsData: {
@@ -66,8 +67,8 @@ describe('BookingConfirmationErrors', () => {
         expect(content.at(1).text()).toContain('or call 111.');
       });
 
-      it('will have 7 menu items', () => {
-        expect(menuItems.length).toBe(7);
+      it('will have 8 menu items', () => {
+        expect(menuItems.length).toBe(8);
       });
 
       it('will have a menu item for gp advice', () => {
@@ -133,12 +134,12 @@ describe('BookingConfirmationErrors', () => {
 
       it('will show the gp advice menu item', () => {
         expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
-        expect(menuItems.length).toBe(4);
+        expect(menuItems.length).toBe(5);
       });
 
       it('will show the admin help menu item', () => {
         expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
-        expect(menuItems.length).toBe(4);
+        expect(menuItems.length).toBe(5);
       });
     });
 

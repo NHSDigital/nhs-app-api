@@ -52,7 +52,7 @@ describe('Advice Check Menu', () => {
     });
 
     it('will contain the correct number of items ', () => {
-      expect(menuItems.length).toBe(6);
+      expect(menuItems.length).toBe(7);
     });
 
     each([
@@ -62,6 +62,7 @@ describe('Advice Check Menu', () => {
       ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery' }],
       ['Engage GP advice', 4, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
       ['Accurx GP advice', 5, { h2: 'Ask your GP for medical advice', p: 'Answer questions online and get a response from your GP surgery' }],
+      ['Patchs GP advice', 6, { h2: 'Ask your GP for advice about a health problem', p: 'Answer questions online and get a response from your GP surgery' }],
     ]).describe('%s menu item', (_, position, text) => {
       beforeEach(() => {
         menuItem = menuItems.at(position);
@@ -182,6 +183,10 @@ describe('Advice Check Menu', () => {
       it('will hide accurx medical advice', () => {
         expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(false);
       });
+
+      it('will hide patchs medical advice', () => {
+        expect(wrapper.find('#btn_patchs_medical_advice').exists()).toBe(false);
+      });
     });
 
     describe('and silver integration is enabled in SJR', () => {
@@ -199,6 +204,10 @@ describe('Advice Check Menu', () => {
         it('will show accurx medical advice', () => {
           expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(true);
         });
+
+        it('will show patchs medical advice', () => {
+          expect(wrapper.find('#btn_patchs_medical_advice').exists()).toBe(true);
+        });
       });
 
       describe('and user is not P9', () => {
@@ -212,6 +221,10 @@ describe('Advice Check Menu', () => {
 
         it('will hide accurx medical advice', () => {
           expect(wrapper.find('#btn_accurx_medical_advice').exists()).toBe(false);
+        });
+
+        it('will hide patchs medical advice', () => {
+          expect(wrapper.find('#btn_patchs_medical_advice').exists()).toBe(false);
         });
       });
     });

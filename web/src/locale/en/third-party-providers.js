@@ -427,6 +427,26 @@ export default {
       },
     ],
   },
+  patchs: {
+    serviceId: 'patchs',
+    providerName: 'PATCHS',
+    jumpOffs: [
+      {
+        id: 'medical',
+        jumpOffContent: {
+          headerText: 'Ask your GP for advice about a health problem',
+          descriptionText: 'Answer questions online and get a response from your GP surgery',
+        },
+        thirdPartyWarning: {
+          featureName: 'Ask your GP for advice about a health problem',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
+        },
+      },
+    ],
+  },
   wayfinder: {
     id: 'wayfinder',
     jumpOffContent: {

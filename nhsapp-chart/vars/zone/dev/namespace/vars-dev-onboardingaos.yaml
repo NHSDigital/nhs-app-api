@@ -44,6 +44,7 @@ api:
     services__netcall__url: https://integration.patienthub-mtps.co.uk
     services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    services__patchs__url: https://staging.patchs.ai
     services__pkb__url: https://rc.pkb.io
     services__pkb_alt__url: http://rc.pkb.io:443
     services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
@@ -67,6 +68,7 @@ api:
     servicesV3__netcall__url: https://integration.patienthub-mtps.co.uk
     servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk
+    servicesV3__patchs__url: https://staging.patchs.ai
     servicesV3__pkb__url: https://rc.pkb.io
     servicesV3__pkb__domains__1: http://rc.pkb.io:443
     servicesV3__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com

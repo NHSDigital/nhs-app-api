@@ -278,18 +278,31 @@ class YourAppointmentsStepDefinitions {
         appointmentGpSessionError.assertNHS111Online()
     }
 
-    @Then("^I am shown a message and a list of actions I can perform$")
+    @Then("^I am shown a message and a list of actions I can perform as an Accurx user$")
     fun iSeeGPAppointmentsUnavailableOptions(){
+        iSeeCommonContentWhenAppointmentsAreUnavailable()
+
+        appointmentGpSessionError
+            .assertGpMedicalAdviceMenuItem()
+            .assertAskYourGpSurgeryAQuestionMenuItem()
+            .assertNHS111Online()
+    }
+
+    @Then("^I am shown a message and a list of actions I can perform as a Patchs user$")
+    fun iSeeGPAppointmentsUnavailableOptionsForPatchsUsers(){
+        iSeeCommonContentWhenAppointmentsAreUnavailable()
+
+        appointmentGpSessionError
+            .assertAskYourGpForAdviceAboutAHeathProblemMenuItem()
+            .assertNHS111Online()
+    }
+
+    private fun iSeeCommonContentWhenAppointmentsAreUnavailable() {
         appointmentGpSessionError.assertPageHeader("Cannot book GP appointment")
             .assertMenuListHeader("What you can do next")
             .assertParagraphText("You are not currently able to book and manage GP appointments online.")
             .assertParagraphText("If you need to book an appointment now, contact your GP surgery.")
             .assertParagraphText("For urgent medical advice, go to ")
             .assertReportAProblemLink()
-
-        appointmentGpSessionError
-            .assertGpMedicalAdviceMenuItem()
-            .assertAskYourGpSurgeryAQuestionMenuItem()
-            .assertNHS111Online()
     }
 }

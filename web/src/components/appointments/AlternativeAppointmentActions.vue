@@ -16,6 +16,11 @@
       <messages-menu-item v-if="showAccurxAdminHelp"
                           text="messages.adminAdvice.accurx.text"
                           description="messages.adminAdvice.accurx.description" />
+
+      <third-party-jump-off-button v-if="showPatchsMedicalAdvice"
+                                   id="btn_patchs_medical_advice"
+                                   provider-id="patchs"
+                                   :provider-configuration="thirdPartyProvider.patchs.medical"/>
       <one-one-one-service-menu-item v-if="showOneOneOneItem" />
     </template>
   </error-screen-alternative-actions>
@@ -28,6 +33,8 @@ import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
 import MessagesMenuItem from '@/components/menuItems/MessagesMenuItem';
 import OneOneOneServiceMenuItem from '@/components/menuItems/OneOneOneServiceMenuItem';
 import ErrorScreenAlternativeActions from '@/components/errors/ErrorScreenAlternativeActions';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'AppointmentAlternativeActions',
@@ -37,6 +44,7 @@ export default {
     GpAdviceMenuItem,
     MessagesMenuItem,
     OneOneOneServiceMenuItem,
+    ThirdPartyJumpOffButton,
   },
   computed: {
     isCdssAdmin() {
@@ -85,12 +93,27 @@ export default {
         },
       });
     },
+    showPatchsMedicalAdvice() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'patchs',
+          serviceType: 'consultations',
+        },
+      });
+    },
     showOneOneOneItem() {
       return sjrIf({ $store: this.$store, journey: 'oneOneOne' });
     },
+    thirdPartyProvider() {
+      return jumpOffProperties.thirdPartyProvider;
+    },
     showAlternativeActions() {
       return this.isCdssAdvice || this.isCdssAdmin ||
-      this.showEngageMedicalAdvice || this.showEngageAdminHelp || this.showOneOneOneItem;
+      this.showEngageMedicalAdvice || this.showEngageAdminHelp ||
+      this.showAccurxMedicalAdvice || this.showAccurxAdminHelp ||
+      this.showOneOneOneItem || this.showPatchsMedicalAdvice;
     },
   },
 };
