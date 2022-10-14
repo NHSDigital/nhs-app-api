@@ -7,6 +7,7 @@ using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.FlowControl;
 using NHSOnline.App.Logging;
 using NHSOnline.App.NhsLogin.Fido;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Services.FIDO

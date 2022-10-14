@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
@@ -11,11 +8,10 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class WebIntegrationWebView : WebView, IRedirectFlowAwareWebView, IPostRequestCapableWebView
+    public sealed class WebIntegrationWebView : WebViewBase, IRedirectFlowAwareWebView, IPostRequestCapableWebView
     {
         public const string JavascriptObjectName = "nhsappNative";
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(WebIntegrationWebView));
-        private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public static readonly BindableProperty GoToNhsAppPageCommandProperty =
             BindableProperty.Create(
@@ -146,20 +142,6 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand) GetValue(BackCommandProperty);
             set => SetValue(BackCommandProperty, value);
-        }
-
-        private static T ConvertFromJsonString<T>(string json)
-            => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
-
-        private static JsonSerializerSettings CreateJsonSerializerSettings()
-        {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            return settings;
         }
 
         void IRedirectFlowAwareWebView.OnPageLoadComplete(WebViewPageLoadEventArgs pageLoadEventArgs)

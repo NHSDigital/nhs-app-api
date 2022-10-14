@@ -61,9 +61,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
                     var url = navigationAction.Request.Url;
 
-                    if ( url.Scheme?.ToUpperInvariant() == Mailto || url.Scheme?.ToUpperInvariant() == Tel)
+                    if (url.Scheme?.ToUpperInvariant() == Mailto || url.Scheme?.ToUpperInvariant() == Tel)
                     {
-
                         Launcher.OpenAsync(url);
                     }
 

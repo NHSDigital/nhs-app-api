@@ -6,6 +6,7 @@ using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters

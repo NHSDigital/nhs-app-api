@@ -156,5 +156,19 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.FetchNativeAppVersion());
         }
+
+        [JavascriptInterface]
+        [Export("requestNotificationsRegistration")]
+        public void RequestNotificationsRegistration(string nhsLoginId)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.RequestNotificationsRegistration(nhsLoginId));
+        }
+
+        [JavascriptInterface]
+        [Export("sendNotificationsRegistration")]
+        public void SendNotificationsRegistration(string payload)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => _nhsAppWebView.SetNotificationsRegistration(payload));
+        }
     }
 }

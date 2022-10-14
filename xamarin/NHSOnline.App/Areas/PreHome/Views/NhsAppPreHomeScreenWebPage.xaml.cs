@@ -51,6 +51,14 @@ namespace NHSOnline.App.Areas.PreHome.Views
         public AsyncCommand<string> RequestPnsTokenCommand
             => new AsyncCommand<string>(() => GetPnsTokenRequested);
 
+        public Func<string, Task>? NotificationsRegistrationRequested { get; set; }
+        public AsyncCommand<string> RequestNotificationsRegistrationCommand
+            => new AsyncCommand<string>(() => NotificationsRegistrationRequested);
+
+        public Func<SetNotificationsRegistrationRequest, Task>? SetNotificationsRegistrationRequested { get; set; }
+        public AsyncCommand<SetNotificationsRegistrationRequest> SetNotificationsRegistrationCommand
+            => new AsyncCommand<SetNotificationsRegistrationRequest>(() => SetNotificationsRegistrationRequested);
+
         public Func<Task>? GoToLoggedInHomeRequested { get; set; }
         public AsyncCommand GoToLoggedInHomeCommand
             => new AsyncCommand(() => GoToLoggedInHomeRequested);
@@ -186,6 +194,9 @@ namespace NHSOnline.App.Areas.PreHome.Views
 
         public async Task SendNotificationUnauthorised()
             => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+
+        public async Task SendNotificationsRegistration(NotificationsRegistration response)
+            => await WebView.SendNotificationsRegistration(response).ResumeOnThreadPool();
 
         public async Task SendSessionExtend()
             => await WebView.SendSessionExtend().PreserveThreadContext();

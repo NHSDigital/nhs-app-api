@@ -53,6 +53,8 @@ namespace NHSOnline.App.Areas.Home
             Func<Task>? DisplayPageLeaveWarningRequested { get; set; }
             Func<Task>? DisplayKeywordReplyPageLeaveWarningRequested { get; set; }
             Func<Task>? OnSessionExpiringRequested { get; set; }
+            Func<string, Task>? NotificationsRegistrationRequested { get; set; }
+            Func<SetNotificationsRegistrationRequest, Task>? SetNotificationsRegistrationRequested { get; set; }
         }
 
         NavigationFooterItem SelectedNavigationFooterItem { get; set; }
@@ -73,6 +75,7 @@ namespace NHSOnline.App.Areas.Home
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
+        Task SendNotificationsRegistration(NotificationsRegistration response);
         Task SendBiometricStatus(BiometricStatus biometricStatus);
         Task SendBiometricCompletion(BiometricCompletion completionDetails);
         Task SendSessionExtend();

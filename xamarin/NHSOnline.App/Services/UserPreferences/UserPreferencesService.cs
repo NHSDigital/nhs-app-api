@@ -1,7 +1,8 @@
 using System.Runtime.CompilerServices;
+using NHSOnline.App.Services.UserPreferences.Models;
 using Xamarin.Essentials;
 
-namespace NHSOnline.App.Services
+namespace NHSOnline.App.Services.UserPreferences
 {
     internal sealed class UserPreferencesService: IUserPreferencesService
     {
@@ -10,6 +11,9 @@ namespace NHSOnline.App.Services
 
         private const string BiometricsKeyIdKey = "FidoKeyID";
         private const string FidoUsernameKey = "fidoUsername";
+
+        private const string NotificationsLastPromptedDateTimePrefix = "NotificationsLastPromptedDateTime-";
+        private const string NotificationsInstallationIdPrefix = "NotificationsInstallationId-";
 
         public bool ShowGettingStarted
         {
@@ -56,6 +60,21 @@ namespace NHSOnline.App.Services
         {
             get => Preferences.Get(FidoUsernameKey, string.Empty);
             set => Preferences.Set(FidoUsernameKey, value);
+        }
+
+        public NotificationsRegistration GetNotificationsRegistration(string nhsLoginId)
+        {
+            return new NotificationsRegistration
+            {
+                LastPromptedDateTime = Preferences.Get($"{NotificationsLastPromptedDateTimePrefix}{nhsLoginId}", string.Empty),
+                InstallationId = Preferences.Get($"{NotificationsInstallationIdPrefix}{nhsLoginId}", string.Empty),
+            };
+        }
+
+        public void SetNotificationsRegistration(string nhsLoginId, NotificationsRegistration registration)
+        {
+            Preferences.Set($"{NotificationsLastPromptedDateTimePrefix}{nhsLoginId}", registration.LastPromptedDateTime);
+            Preferences.Set($"{NotificationsInstallationIdPrefix}{nhsLoginId}", registration.InstallationId);
         }
 
         private static string? GetLegacyBiometricsKeyId()

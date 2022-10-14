@@ -38,6 +38,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .AddFunction("fetchNativeAppVersion", webView => webView.FetchNativeAppVersion)
                 .AddFunction("setBadgeCount", webView => webView.SetBadgeCount)
+                .AddFunction("requestNotificationsRegistration", webView => webView.RequestNotificationsRegistration)
+                .AddFunction("sendNotificationsRegistration", webView => webView.SetNotificationsRegistration)
                 .Apply(config.UserContentController);
         }
 

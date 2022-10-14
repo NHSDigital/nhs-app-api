@@ -44,6 +44,8 @@
                                 CreateOnDemandGpSessionCommand="{Binding CreateOnDemandGpSessionRequestedCommand, Source={x:Reference Name=Page}}"
                                 LogoutCommand="{Binding LogoutCommand, Source={x:Reference Name=Page}}"
                                 SessionExpiredCommand="{Binding SessionExpiredCommand, Source={x:Reference Name=Page}}"
+                                RequestNotificationsRegistrationCommand="{Binding RequestNotificationsRegistrationCommand, Source={x:Reference Name=Page}}"
+                                SetNotificationsRegistrationCommand="{Binding SetNotificationsRegistrationCommand, Source={x:Reference Name=Page}}"
                                 Navigated="WebOnEndNavigating"/>
         
     </AbsoluteLayout>

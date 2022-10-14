@@ -23,6 +23,8 @@ namespace NHSOnline.App.Areas.PreHome
             Func<Task>? LogoutRequested { get; set; }
             Func<Task>? ResetAndShowErrorRequested { get; set; }
             Func<string, Task>? GetPnsTokenRequested { get; set; }
+            Func<string, Task>? NotificationsRegistrationRequested { get; set; }
+            Func<SetNotificationsRegistrationRequest, Task>? SetNotificationsRegistrationRequested { get; set; }
             Func<Uri, Task>? DeeplinkRequested { get; set; }
             Func<Task>? SessionExpiredRequested { get; set; }
             Func<Task>? OnSessionExpiringRequested { get; set; }
@@ -35,6 +37,7 @@ namespace NHSOnline.App.Areas.PreHome
         Task SendNotificationsStatus(string status);
         Task SendNotificationAuthorised(NotificationAuthorisedResponse authorisedResponse);
         Task SendNotificationUnauthorised();
+        Task SendNotificationsRegistration(NotificationsRegistration response);
         Task SendSessionExtend();
         Task Logout();
     }

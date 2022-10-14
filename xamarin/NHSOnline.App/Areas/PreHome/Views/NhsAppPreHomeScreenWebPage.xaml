@@ -28,6 +28,8 @@
                                              x:Name="WebView" 
                                              VerticalOptions="FillAndExpand" 
                                              RequestPnsTokenCommand="{Binding RequestPnsTokenCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
+                                             RequestNotificationsRegistrationCommand="{Binding RequestNotificationsRegistrationCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
+                                             SetNotificationsRegistrationCommand="{Binding SetNotificationsRegistrationCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              FetchBiometricStatusCommand="{Binding FetchBiometricStatusCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"
                                              UpdateBiometricRegistrationCommand="{Binding UpdateBiometricRegistrationCommand, Source={RelativeSource AncestorType={x:Type views:NhsAppPreHomeScreenWebPage}}}"

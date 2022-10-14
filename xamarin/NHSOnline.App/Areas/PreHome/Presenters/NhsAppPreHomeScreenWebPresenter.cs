@@ -17,8 +17,10 @@ using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
+using UserPreferencesModels = NHSOnline.App.Services.UserPreferences.Models;
 
 namespace NHSOnline.App.Areas.PreHome.Presenters
 {
@@ -38,6 +40,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
         private readonly IDialogPresenter _dialogPresenter;
         private readonly IPreHomeLogoutMonitor _preHomeLogoutMonitor;
         private readonly IBiometricAuthenticationService _biometricAuthenticationService;
+        private readonly IUserPreferencesService _userPreferencesService;
 
         private Uri? ResolveDeeplinkUrl => _deeplinkUrl ?? _model.DeeplinkUrl;
 
@@ -52,7 +55,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             IPreHomeLogoutMonitor preHomeLogoutMonitor,
             ICookieService cookieService,
             IDialogPresenter dialogPresenter,
-            IBiometricAuthenticationService biometricAuthenticationService)
+            IBiometricAuthenticationService biometricAuthenticationService,
+            IUserPreferencesService userPreferencesService)
         {
             _view = view;
             _model = model;
@@ -65,6 +69,7 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             _cookieService = cookieService;
             _dialogPresenter = dialogPresenter;
             _biometricAuthenticationService = biometricAuthenticationService;
+            _userPreferencesService = userPreferencesService;
 
             _preHomeLogoutMonitor.Begin();
 
@@ -79,6 +84,8 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
                 .RegisterHandler(GoToLoggedInHomeRequested, (view, handler) => view.GoToLoggedInHomeRequested = handler)
                 .RegisterHandler(LogoutRequested, (view, handler) => view.LogoutRequested = handler)
                 .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler<string>(RequestNotificationsRegistration, (view, handler) => view.NotificationsRegistrationRequested = handler)
+                .RegisterHandler<SetNotificationsRegistrationRequest>(SetNotificationsRegistration, (view, handler) => view.SetNotificationsRegistrationRequested = handler)
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
                 .RegisterHandler(OnSessionExpiringRequested, (view, handler) => view.OnSessionExpiringRequested = handler)
                 .RegisterHandler(SessionExpiredRequested, (view, handler) => view.SessionExpiredRequested = handler)
@@ -261,6 +268,32 @@ namespace NHSOnline.App.Areas.PreHome.Presenters
             {
                 await _view.SendNotificationUnauthorised().PreserveThreadContext();
             }
+        }
+
+        private async Task RequestNotificationsRegistration(string nhsLoginId)
+        {
+            var preferences = _userPreferencesService.GetNotificationsRegistration(nhsLoginId);
+
+            var response = new NotificationsRegistration
+            {
+                LastPromptedDateTime = preferences.LastPromptedDateTime,
+                InstallationId = preferences.InstallationId,
+            };
+
+            await _view.SendNotificationsRegistration(response).PreserveThreadContext();
+        }
+
+        private Task SetNotificationsRegistration(SetNotificationsRegistrationRequest request)
+        {
+            var registration = new UserPreferencesModels.NotificationsRegistration
+            {
+                LastPromptedDateTime = request.LastPromptedDateTime,
+                InstallationId = request.InstallationId,
+            };
+
+            _userPreferencesService.SetNotificationsRegistration(request.NhsLoginId, registration);
+
+            return Task.CompletedTask;
         }
 
         private async Task ResetAndShowErrorRequested()

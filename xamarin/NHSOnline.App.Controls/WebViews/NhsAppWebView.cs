@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
@@ -12,7 +10,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppWebView: WebView, IAccessibleControl
+    public sealed class NhsAppWebView: WebViewBase, IAccessibleControl
     {
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(NhsAppWebView));
 
@@ -90,7 +88,11 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty SetBadgeCountCommandProperty =
             BindableProperty.Create(nameof(SetBadgeCountCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
 
-        private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
+        public static readonly BindableProperty RequestNotificationsRegistrationCommandProperty =
+            BindableProperty.Create(nameof(RequestNotificationsRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppWebView));
+
+        public static readonly BindableProperty SetNotificationsRegistrationCommandProperty =
+            BindableProperty.Create(nameof(SetNotificationsRegistrationCommand), typeof(AsyncCommand<SetNotificationsRegistrationRequest>), typeof(NhsAppWebView));
 
         public void OpenWebIntegration(string json)
         {
@@ -190,6 +192,13 @@ namespace NHSOnline.App.Controls.WebViews
         }
         public async Task SendNotificationUnauthorised()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.notificationsUnauthorised()").ResumeOnThreadPool();
+
+        public async Task SendNotificationsRegistration(NotificationsRegistration response)
+        {
+            const string callbackName = "window.nativeAppCallbacks.setNotificationsRegistration";
+            var argumentJson = ConvertToJsonString(response);
+            await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
+        }
 
         public void RequestPnsToken(string argument) => RequestPnsTokenCommand.Execute(argument);
 
@@ -331,6 +340,27 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(SessionExpiredCommandProperty, value);
         }
 
+        public void RequestNotificationsRegistration(string nhsLoginId)
+            => RequestNotificationsRegistrationCommand.Execute(nhsLoginId);
+
+        public AsyncCommand<string> RequestNotificationsRegistrationCommand
+        {
+            get => (AsyncCommand<string>) GetValue(RequestNotificationsRegistrationCommandProperty);
+            set => SetValue(RequestNotificationsRegistrationCommandProperty, value);
+        }
+
+        public void SetNotificationsRegistration(string json)
+        {
+            var request = ConvertFromJsonString<SetNotificationsRegistrationRequest>(json);
+            SetNotificationsRegistrationCommand.Execute(request);
+        }
+
+        public AsyncCommand<SetNotificationsRegistrationRequest> SetNotificationsRegistrationCommand
+        {
+            get => (AsyncCommand<SetNotificationsRegistrationRequest>) GetValue(SetNotificationsRegistrationCommandProperty);
+            set => SetValue(SetNotificationsRegistrationCommandProperty, value);
+        }
+
         public async Task SendBiometricCompletion(BiometricCompletion biometricCompletion)
         {
             const string callbackName = "window.nativeAppCallbacks.loginSettingsBiometricCompletion";
@@ -422,23 +452,6 @@ namespace NHSOnline.App.Controls.WebViews
             {
                 Logger.LogError(e, "Error executing script: {Script}", script);
             }
-        }
-
-        private static T ConvertFromJsonString<T>(string json)
-            => JsonConvert.DeserializeObject<T>(json, Settings) ?? throw new ArgumentException($"Failed to deserialise JSON to {typeof(T).FullName}", nameof(json));
-
-        private static string ConvertToJsonString<T>(T value) => JsonConvert.SerializeObject(value, Settings);
-
-        private static JsonSerializerSettings CreateJsonSerializerSettings()
-        {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            settings.Converters.Add(new UriConverter());
-            return settings;
         }
 
         private class UriConverter : JsonConverter

@@ -26,6 +26,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 .AddFunction("onSessionExpiring", webView => webView.OnSessionExpiring)
                 .AddFunction("sessionExpired", webView => webView.SessionExpired)
                 .AddFunction("logout", webView => webView.Logout)
+                .AddFunction("requestNotificationsRegistration", webView => webView.RequestNotificationsRegistration)
+                .AddFunction("sendNotificationsRegistration", webView => webView.SetNotificationsRegistration)
                 .Apply(config.UserContentController);
 
             AddExtension(new PageNavigationAggregatorExtension(this));

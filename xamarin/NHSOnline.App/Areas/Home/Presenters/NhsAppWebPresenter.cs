@@ -12,7 +12,6 @@ using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
-using NHSOnline.App.DependencyServices.Biometrics;
 using NHSOnline.App.DependencyServices.Notifications;
 using NHSOnline.App.Dialogs;
 using NHSOnline.App.Navigation;
@@ -20,10 +19,12 @@ using NHSOnline.App.Navigation.Handlers;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using BiometricStatus = NHSOnline.App.Controls.WebViews.Payloads.BiometricStatus;
+using UserPreferencesModels = NHSOnline.App.Services.UserPreferences.Models;
 
 namespace NHSOnline.App.Areas.Home.Presenters
 {
@@ -49,8 +50,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly IFileHandler _fileHandler;
         private readonly IDialogPresenter _dialogPresenter;
         private readonly FileDownloadService _fileDownloadService;
-        private readonly IBiometrics _biometrics;
         private readonly IBadgeService _badgeService;
+        private readonly IUserPreferencesService _userPreferencesService;
 
         public NhsAppWebPresenter(
             NhsAppWebModel model,
@@ -68,8 +69,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             IFileHandler fileHandler,
             IDialogPresenter dialogPresenter,
             FileDownloadService fileDownloadService,
-            IBiometrics biometrics,
-            IBadgeService badgeService)
+            IBadgeService badgeService,
+            IUserPreferencesService userPreferencesService)
         {
             _model = model;
             _view = view;
@@ -87,8 +88,9 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _fileHandler = fileHandler;
             _dialogPresenter = dialogPresenter;
             _fileDownloadService = fileDownloadService;
-            _biometrics = biometrics;
             _badgeService = badgeService;
+            _userPreferencesService = userPreferencesService;
+
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.AppNavigation
@@ -104,6 +106,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .RegisterHandler(ResetAndShowErrorRequested, (view, handler) => view.ResetAndShowErrorRequested = handler)
                 .RegisterHandler(GetNotificationsStatusRequested, (view, handler) => view.GetNotificationsStatusRequested = handler)
                 .RegisterHandler<string>(RequestPnsToken, (view, handler) => view.GetPnsTokenRequested = handler)
+                .RegisterHandler<string>(RequestNotificationsRegistration, (view, handler) => view.NotificationsRegistrationRequested = handler)
+                .RegisterHandler<SetNotificationsRegistrationRequest>(SetNotificationsRegistration, (view, handler) => view.SetNotificationsRegistrationRequested = handler)
                 .RegisterHandler<string>(FetchBiometricStatusRequested, (view, handler) => view.FetchBiometricStatusRequested = handler)
                 .RegisterHandler<string>(UpdateBiometricRegistrationRequested, (view, handler) => view.UpdateBiometricRegistrationRequested = handler)
                 .RegisterHandler<Uri>(OpenBrowserOverlayRequested, (view, handler) => view.OpenBrowserOverlayRequested = handler)
@@ -344,6 +348,32 @@ namespace NHSOnline.App.Areas.Home.Presenters
             {
                 await _view.SendNotificationUnauthorised().PreserveThreadContext();
             }
+        }
+
+        private async Task RequestNotificationsRegistration(string nhsLoginId)
+        {
+            var preferences = _userPreferencesService.GetNotificationsRegistration(nhsLoginId);
+
+            var response = new NotificationsRegistration
+            {
+                LastPromptedDateTime = preferences.LastPromptedDateTime,
+                InstallationId = preferences.InstallationId,
+            };
+
+            await _view.SendNotificationsRegistration(response).PreserveThreadContext();
+        }
+
+        private Task SetNotificationsRegistration(SetNotificationsRegistrationRequest request)
+        {
+            var registration = new UserPreferencesModels.NotificationsRegistration
+            {
+                LastPromptedDateTime = request.LastPromptedDateTime,
+                InstallationId = request.InstallationId,
+            };
+
+            _userPreferencesService.SetNotificationsRegistration(request.NhsLoginId, registration);
+
+            return Task.CompletedTask;
         }
 
         private async Task FetchBiometricStatusRequested(string accessToken)

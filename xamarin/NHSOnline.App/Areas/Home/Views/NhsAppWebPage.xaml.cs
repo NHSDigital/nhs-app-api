@@ -19,13 +19,11 @@ namespace NHSOnline.App.Areas.Home.Views
     {
         private readonly ILogger _logger;
         private readonly AppNavigation<INhsAppWebView.IEvents> _appNavigation;
-        private readonly INavigationService _navigationService;
 
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger, IAccessibilityService accessibilityService, INavigationService navigationService): base(accessibilityService)
         {
             _logger = logger;
-            _navigationService = navigationService;
-            _appNavigation = new AppNavigation<INhsAppWebView.IEvents>(this, _navigationService);
+            _appNavigation = new AppNavigation<INhsAppWebView.IEvents>(this, navigationService);
 
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
@@ -120,6 +118,14 @@ namespace NHSOnline.App.Areas.Home.Views
         public Func<bool, Task>? BackRequested { get; set; }
         public AsyncCommand<bool> BackRequestedCommand
             => new AsyncCommand<bool>(() => BackRequested);
+
+        public Func<string, Task>? NotificationsRegistrationRequested { get; set; }
+        public AsyncCommand<string> RequestNotificationsRegistrationCommand
+            => new AsyncCommand<string>(() => NotificationsRegistrationRequested);
+
+        public Func<SetNotificationsRegistrationRequest, Task>? SetNotificationsRegistrationRequested { get; set; }
+        public AsyncCommand<SetNotificationsRegistrationRequest> SetNotificationsRegistrationCommand
+            => new AsyncCommand<SetNotificationsRegistrationRequest>(() => SetNotificationsRegistrationRequested);
 
         public Func<CreateOnDemandGpSessionRequest, Task>? CreateOnDemandGpSessionRequested { get; set; }
         public AsyncCommand<CreateOnDemandGpSessionRequest> CreateOnDemandGpSessionRequestedCommand
@@ -340,6 +346,9 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public async Task SendNotificationUnauthorised()
             => await WebView.SendNotificationUnauthorised().ResumeOnThreadPool();
+
+        public async Task SendNotificationsRegistration(NotificationsRegistration response)
+            => await WebView.SendNotificationsRegistration(response).ResumeOnThreadPool();
 
         public async Task ValidateSession()
             => await WebView.ValidateSession().PreserveThreadContext();

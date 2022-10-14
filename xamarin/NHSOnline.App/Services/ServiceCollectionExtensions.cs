@@ -3,6 +3,7 @@ using NHSOnline.App.DependencyServices.Navigation;
 using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Services.ForcedUpdate;
 using NHSOnline.App.Services.Media;
+using NHSOnline.App.Services.UserPreferences;
 
 namespace NHSOnline.App.Services
 {

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.DependencyServices.Biometrics;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Services.FIDO

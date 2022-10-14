@@ -1,15 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Controls.WebViews.Payloads;
 using NHSOnline.App.Threading;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
 {
-    public sealed class NhsAppPreHomeScreenWebview: WebView, IAccessibleControl, INavigationFlowAwareWebView
+    public sealed class NhsAppPreHomeScreenWebview: WebViewBase, IAccessibleControl, INavigationFlowAwareWebView
     {
         public event EventHandler<FocusRequestArgs> AccessibilityFocusChangeRequested = null!;
 
@@ -42,13 +39,17 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty LogoutCommandProperty =
             BindableProperty.Create(nameof(LogoutCommand), typeof(AsyncCommand), typeof(NhsAppPreHomeScreenWebview));
 
+        public static readonly BindableProperty RequestNotificationsRegistrationCommandProperty =
+            BindableProperty.Create(nameof(RequestNotificationsRegistrationCommand), typeof(AsyncCommand<string>), typeof(NhsAppPreHomeScreenWebview));
+
+        public static readonly BindableProperty SetNotificationsRegistrationCommandProperty =
+            BindableProperty.Create(nameof(SetNotificationsRegistrationCommand), typeof(AsyncCommand<SetNotificationsRegistrationRequest>), typeof(NhsAppPreHomeScreenWebview));
+
         public static readonly BindableProperty OnSessionExpiringCommandProperty =
             BindableProperty.Create(nameof(OnSessionExpiringCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
 
         public static readonly BindableProperty SessionExpiredCommandProperty =
             BindableProperty.Create(nameof(SessionExpiredCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
-
-        private static JsonSerializerSettings Settings { get; } = CreateJsonSerializerSettings();
 
         public void GetNotificationsStatus() => GetNotificationsStatusCommand.Execute(null);
 
@@ -113,6 +114,13 @@ namespace NHSOnline.App.Controls.WebViews
         public async Task SendNotificationUnauthorised()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.notificationsUnauthorised()").ResumeOnThreadPool();
 
+        public async Task SendNotificationsRegistration(NotificationsRegistration response)
+        {
+            const string callbackName = "window.nativeAppCallbacks.setNotificationsRegistration";
+            var argumentJson = ConvertToJsonString(response);
+            await EvaluateJavaScriptAsync($"{callbackName}({argumentJson})").ResumeOnThreadPool();
+        }
+
         public async Task AuthLogout()
             => await EvaluateJavaScriptAsync("window.nativeAppCallbacks.authLogout()").ResumeOnThreadPool();
 
@@ -138,6 +146,27 @@ namespace NHSOnline.App.Controls.WebViews
             set => SetValue(LogoutCommandProperty, value);
         }
 
+        public void RequestNotificationsRegistration(string nhsLoginId)
+            => RequestNotificationsRegistrationCommand.Execute(nhsLoginId);
+
+        public AsyncCommand<string> RequestNotificationsRegistrationCommand
+        {
+            get => (AsyncCommand<string>) GetValue(RequestNotificationsRegistrationCommandProperty);
+            set => SetValue(RequestNotificationsRegistrationCommandProperty, value);
+        }
+
+        public void SetNotificationsRegistration(string json)
+        {
+            var request = ConvertFromJsonString<SetNotificationsRegistrationRequest>(json);
+            SetNotificationsRegistrationCommand.Execute(request);
+        }
+
+        public AsyncCommand<SetNotificationsRegistrationRequest> SetNotificationsRegistrationCommand
+        {
+            get => (AsyncCommand<SetNotificationsRegistrationRequest>) GetValue(SetNotificationsRegistrationCommandProperty);
+            set => SetValue(SetNotificationsRegistrationCommandProperty, value);
+        }
+
         public void OnSessionExpiring() => OnSessionExpiringCommand.Execute(null);
 
         public AsyncCommand OnSessionExpiringCommand
@@ -152,19 +181,6 @@ namespace NHSOnline.App.Controls.WebViews
         {
             get => (AsyncCommand)GetValue(SessionExpiredCommandProperty);
             set => SetValue(SessionExpiredCommandProperty, value);
-        }
-
-        private static string ConvertToJsonString<T>(T value) => JsonConvert.SerializeObject(value, Settings);
-
-        private static JsonSerializerSettings CreateJsonSerializerSettings()
-        {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-            return settings;
         }
 
         void INavigationFlowAwareWebView.OnPageLoadComplete(WebViewPageNavigationEventArgs pageNavigationEventArgs)

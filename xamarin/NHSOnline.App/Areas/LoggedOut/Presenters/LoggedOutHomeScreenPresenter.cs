@@ -10,6 +10,7 @@ using NHSOnline.App.Logging;
 using NHSOnline.App.Services;
 using NHSOnline.App.Services.FIDO;
 using NHSOnline.App.Services.ForcedUpdate;
+using NHSOnline.App.Services.UserPreferences;
 using NHSOnline.App.Threading;
 using Xamarin.Essentials;
 
