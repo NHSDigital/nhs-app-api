@@ -23,7 +23,7 @@ RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config \
 # update nuget caches volume
 RUN --mount=type=cache,id=nuget-cache,dst=/tmp/nuget-cache \
     --mount=type=cache,id=nuget-packages,dst=/tmp/nuget-packages \
-    cp -r /root/.local/share/NuGet/v3-cache /tmp/nuget-cache \
+    cp -r /root/.local/share/NuGet/http-cache /tmp/nuget-cache \
       && cp -r /root/.local/share/NuGet/plugins-cache /tmp/nuget-cache \
       && cp -r /root/.nuget/packages /tmp/nuget-packages
 
