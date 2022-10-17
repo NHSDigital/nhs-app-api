@@ -117,26 +117,29 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             LoginProcess.LogIOSPatientIn(driver, patient);
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
+            var iosLoggedInHomePage = IOSLoggedInHomePage
+                .AssertOnPage(driver);
+
+            iosLoggedInHomePage
                 .Navigation.NavigateToAppointments();
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver, true);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
+            var iosGoToPage = IOSGoToPage
+                .AssertOnPage(driver);
+
+            iosGoToPage
                 .AssertNativeHeader()
                 .PageContent.GoToHome();
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
+            iosLoggedInHomePage
+                .AssertOnPage(iosLoggedInHomePage, driver)
                 .Navigation.NavigateToAppointments();
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToAdvice();
 
             IOSAdvicePage
@@ -145,16 +148,14 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToAppointments();
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToPrescriptions();
 
             IOSPrescriptionsPage
@@ -163,9 +164,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToHealthRecords();
 
             IOSYourHealthPage
@@ -174,9 +174,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToMore();
 
             IOSMorePage
@@ -185,9 +184,8 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToSettings();
 
             IOSMorePage
@@ -196,20 +194,18 @@ namespace NHSOnline.IntegrationTests.WebIntegration.TestProvider
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToInvalidPage();
 
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
+            iosLoggedInHomePage
+                .AssertOnPage(iosLoggedInHomePage, driver)
                 .Navigation.NavigateToAppointments();
 
             NavigateToHospitalAppointmentsGoToPageIOS(driver);
 
-            IOSGoToPage
-                .AssertOnPage(driver)
-                .AssertNativeHeaderHome()
+            iosGoToPage
+                .AssertOnPage(iosGoToPage)
                 .PageContent.GoToUplift();
 
             IOSUpliftShutterPage

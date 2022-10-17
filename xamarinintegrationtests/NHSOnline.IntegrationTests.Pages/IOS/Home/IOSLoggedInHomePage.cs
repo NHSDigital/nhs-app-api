@@ -29,6 +29,19 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             return page;
         }
 
+        public IOSLoggedInHomePage AssertOnPage(IOSLoggedInHomePage page, IIOSDriverWrapper driver,
+            bool screenshot = false)
+        {
+            page.PageContent.AssertOnPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(IOSLoggedInHomePage));
+            }
+
+            return page;
+        }
+
         public IOSLoggedInHomePage AssertPageDisplayedFor(string name)
         {
             Navigation.AssertNavigationIconsArePresent();

@@ -21,6 +21,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.WebIntegration
             return page;
         }
 
+        public IOSGoToPage AssertOnPage(IOSGoToPage page)
+        {
+            page.PageContent.AssertOnPage();
+            return page;
+        }
+
         public IOSGoToPage AssertNativeHeader()
         {
             Navigation.AssertNavigationIconsArePresent();
