@@ -84,14 +84,24 @@ class WayfinderStepDefinitions {
         wayfinderFactory.setupWaitTimes()
     }
 
+    @Given("^I get a wait times error$")
+    fun iGetAWaitTimesError(){
+        wayfinderFactory.setupWaitTimesError()
+    }
+
     @Given("^I see the wait times link$")
     fun iSeeTheWaitTimesLink(){
         wayfinderReferralsAndAppointmentsPage.assertWaitTimesLinkIsDisplayed()
     }
 
     @Given("^I see the help link on the wait times page$")
-    fun iSeeTheHelpLinkOnWaitTimesPage(){
+    fun iSeeTheHelpLinkOnWaitTimesPage() {
         wayfinderWaitTimesPage.assertHelpLinkIsDisplayed()
+    }
+
+    @Given("^I see the correct error page elements$")
+    fun iSeeTheCorrectErrorPageElements(){
+        wayfinderWaitTimesPage.assertWayfinderWaitTimesErrorPageDisplayed()
     }
 
     @When("^the Wayfinder Aggregator API is timing out$")
@@ -234,6 +244,11 @@ class WayfinderStepDefinitions {
     @Then("^the Wayfinder wait times page is displayed$")
     fun assertWayfinderWaitTimesPageDisplayed() {
         wayfinderWaitTimesPage.assertWayfinderWaitTimesTitleIsDisplayed()
+    }
+
+    @Then("^I am navigated to the Wayfinder wait times error page$")
+    fun assertWayfinderWaitTimesErrorPageDisplayed() {
+        wayfinderWaitTimesPage.assertWayfinderWaitTimesErrorPageTitleIsDisplayed()
     }
 
     @Then("^I can see the missing referrals expander elements displayed$")

@@ -3,8 +3,10 @@ export const ACTIONABLE_REFERRALS_AND_APPOINTMENTS_LOADED = 'ACTIONABLE_REFERRAL
 export const CONFIRMED_APPOINTMENTS_LOADED = 'CONFIRMED_APPOINTMENTS_LOADED';
 export const REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED = 'REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED';
 export const SHOW_ERROR = 'SHOW_ERROR';
+export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const HAS_LOADED = 'HAS_LOADED';
 export const WAIT_TIMES = 'WAIT_TIMES';
+export const HAS_WAIT_TIMES_LOADED = 'HAS_WAIT_TIMES_LOADED';
 
 export const initialState = () => ({
   summary: {
@@ -15,4 +17,5 @@ export const initialState = () => ({
   waitTimes: [],
   apiError: null,
   hasLoaded: false,
+  hasWaitTimesLoaded: false,
 });

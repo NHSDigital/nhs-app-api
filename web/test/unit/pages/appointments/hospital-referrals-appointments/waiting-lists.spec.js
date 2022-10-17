@@ -9,14 +9,19 @@ jest.mock('@/lib/utils', () => ({
 let $store;
 let wrapper;
 let waitTimesTitle;
-let somethingWrongText;
 let waitTimesText;
 let jumpOffLink;
+let technicalProblemMessage;
+let informationCurrentlyUnavailableMessage;
+let cannotViewTryAgainMessage;
 
 const setupStore = (
   waitTimesCount,
+  hasApiError,
+  isNativeApp,
 ) => {
   let waitTimes = [];
+  let apiError = null;
 
   if (waitTimesCount === 1) {
     waitTimes = [{
@@ -39,12 +44,21 @@ const setupStore = (
     }];
   }
 
+  if (hasApiError) {
+    apiError = {
+      status: 500,
+      serviceDeskReference: '521211',
+    };
+  }
+
   return createStore({
     state: {
+      device: {
+        isNativeApp,
+      },
       wayfinder: {
-        waitTimes: {
-          waitTimes,
-        },
+        waitTimes,
+        apiError,
       },
     },
     getters: {
@@ -64,7 +78,7 @@ const mountPage = () => mount(
 
 describe('Wait times page', () => {
   beforeEach(() => {
-    $store = setupStore(0);
+    $store = setupStore(0, false, true);
     wrapper = mountPage();
   });
 
@@ -81,12 +95,6 @@ describe('Wait times page', () => {
       expect(jumpOffLink.exists()).toBe(true);
       expect(jumpOffLink.text()).toEqual('What to do if something is missing, incorrect or has not been changed or cancelled');
     });
-  });
-
-  it('is something wrong text is visible', () => {
-    somethingWrongText = wrapper.find('#something-Wrong');
-
-    expect(somethingWrongText.text()).toEqual('Is something wrong?');
   });
 
   describe('waiting list with no wait times', () => {
@@ -115,6 +123,36 @@ describe('Wait times page', () => {
     it('show multiple wait time text', () => {
       waitTimesText = wrapper.find('#wait-Times-Content');
       expect(waitTimesText.text()).toEqual('You\'re on 2 waiting lists');
+    });
+  });
+
+  describe('WaitTimes with API error', () => {
+    beforeEach(() => {
+      $store = setupStore(0, true);
+      wrapper = mountPage();
+    });
+
+    describe('if page errored', () => {
+      it('show error message for technical problem', () => {
+        technicalProblemMessage = wrapper.find('#technicalProblem');
+
+        expect(technicalProblemMessage.exists()).toBe(true);
+        expect(technicalProblemMessage.text()).toEqual('There is a technical problem.');
+      });
+
+      it('show message for information currently unavailable', () => {
+        informationCurrentlyUnavailableMessage = wrapper.find('#informationCurrentlyUnavailable');
+
+        expect(informationCurrentlyUnavailableMessage.exists()).toBe(true);
+        expect(informationCurrentlyUnavailableMessage.text()).toEqual('Information on waiting times is currently unavailable.');
+      });
+
+      it('show message cannot view try again', () => {
+        cannotViewTryAgainMessage = wrapper.find('#cannotViewTryAgain');
+
+        expect(cannotViewTryAgainMessage.exists()).toBe(true);
+        expect(cannotViewTryAgainMessage.text()).toEqual('Try again later.');
+      });
     });
   });
 });

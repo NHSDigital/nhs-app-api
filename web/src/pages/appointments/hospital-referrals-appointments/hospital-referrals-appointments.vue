@@ -71,6 +71,7 @@ import {
 } from '@/router/paths';
 
 const loadData = async (store) => {
+  store.dispatch('wayfinder/clearApiError');
   await store.dispatch('wayfinder/load');
 };
 

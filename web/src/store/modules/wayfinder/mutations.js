@@ -5,8 +5,10 @@ import {
   CONFIRMED_APPOINTMENTS_LOADED,
   REFERRALS_IN_REVIEW_NOT_OVERDUE_LOADED,
   SHOW_ERROR,
+  CLEAR_API_ERROR,
   HAS_LOADED,
   WAIT_TIMES,
+  HAS_WAIT_TIMES_LOADED,
   initialState,
 } from './mutation-types';
 
@@ -29,8 +31,14 @@ export default {
   [SHOW_ERROR](state, apiError) {
     state.apiError = apiError;
   },
+  [CLEAR_API_ERROR](state) {
+    state.apiError = null;
+  },
   [HAS_LOADED](state, hasLoaded) {
     state.hasLoaded = hasLoaded;
+  },
+  [HAS_WAIT_TIMES_LOADED](state, hasWaitTimesLoaded) {
+    state.hasWaitTimesLoaded = hasWaitTimesLoaded;
   },
   [WAIT_TIMES](state, waitTimes) {
     state.waitTimes = waitTimes;

@@ -99,4 +99,14 @@ class WayfinderFactory {
             wayfinderMappingBuilder.waitTimes()
         }
     }
+
+    fun setupWaitTimesError() {
+        mockingClient.forWayfinder.mock {
+            apimMappingBuilder.successfulTokenRequest()
+        }
+
+        mockingClient.forWayfinder.mock {
+            wayfinderMappingBuilder.waitTimesError()
+        }
+    }
 }

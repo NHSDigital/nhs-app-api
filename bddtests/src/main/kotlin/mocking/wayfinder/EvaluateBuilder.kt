@@ -574,7 +574,6 @@ class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("G
         }
     }
 
-
     fun returnReferralsAndUpcomingAppointments(): Mapping {
         val response = """
         {
@@ -1226,6 +1225,15 @@ class EvaluateBuilder(isWaitTimes: Boolean = false) : WayfinderMappingBuilder("G
         """
 
         return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(response)
+                .build()
+        }
+    }
+
+    fun returnWaitTimesError() : Mapping {
+        val response = ""
+
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(response)
                 .build()
         }

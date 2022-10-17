@@ -7,8 +7,9 @@ import {
   SHOW_ERROR,
   HAS_LOADED,
   WAIT_TIMES,
+  CLEAR_API_ERROR,
+  HAS_WAIT_TIMES_LOADED,
 } from './mutation-types';
-
 
 export default {
   init({ commit }) {
@@ -39,7 +40,7 @@ export default {
   },
   async loadWaitTimes({ commit }) {
     try {
-      const response = await this.app.$http.getV1PatientSecondaryCareWaittimes();
+      const response = await this.app.$http.getV1PatientSecondaryCareWaittimes({ ignoreError: true });
       if (response) {
         commit(WAIT_TIMES, response);
       }
@@ -51,6 +52,11 @@ export default {
       } else {
         this.dispatch('errors/addApiError', error);
       }
+    } finally {
+      commit(HAS_WAIT_TIMES_LOADED, true);
     }
+  },
+  clearApiError({ commit }, error) {
+    commit(CLEAR_API_ERROR, error);
   },
 };

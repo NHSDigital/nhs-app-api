@@ -38,11 +38,45 @@ open class WayfinderWaitTimesPage : HybridPageObject() {
         links.link(helpLinkTitle)
     }
 
+    private val errorPageTitle = HybridPageElement(
+        webDesktopLocator = "//h1[contains(text(),\"Cannot view waiting times\")]",
+        page = this,
+        helpfulName = "Cannot view waiting times - h1"
+    )
+
+    private val errorPageTechnicalProblem = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"There is a technical problem.\")]",
+        page = this,
+        helpfulName = "There is a technical problem. - p"
+    )
+
+    private val errorPageWaitingTimesUnavailable = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"Information on waiting times is currently unavailable.\")]",
+        page = this,
+        helpfulName = "Information on waiting times is currently unavailable. - p"
+    )
+
+    private val errorPageTryAgainLater = HybridPageElement(
+        webDesktopLocator = "//p[contains(text(),\"Try again later.\")]",
+        page = this,
+        helpfulName = "Try again later. - p"
+    )
+
     fun assertWayfinderWaitTimesTitleIsDisplayed() {
         pageTitle.assertIsVisible()
     }
 
-    fun assertHelpLinkIsDisplayed(){
+    fun assertHelpLinkIsDisplayed() {
         helpLink.assertIsVisible()
+    }
+
+    fun assertWayfinderWaitTimesErrorPageTitleIsDisplayed() {
+        errorPageTitle.assertIsVisible()
+    }
+
+    fun assertWayfinderWaitTimesErrorPageDisplayed() {
+        errorPageTechnicalProblem.assertIsVisible()
+        errorPageWaitingTimesUnavailable.assertIsVisible()
+        errorPageTryAgainLater.assertIsVisible()
     }
 }

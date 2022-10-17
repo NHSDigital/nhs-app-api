@@ -25,4 +25,6 @@ open class WayfinderMappingBuilder(method: String = "GET", path: String = "")
         .returnReferralsAndUpcomingAppointmentsForProvider(provider)
 
     fun waitTimes() = EvaluateBuilder(true).returnWaitTimes()
+
+    fun waitTimesError() = EvaluateBuilder(true).returnWaitTimesError();
 }

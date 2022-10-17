@@ -41,3 +41,19 @@ Feature: Wayfinder Wait Times
     Then I am navigated to the Wayfinder help page
     When I click the 'Waiting Lists' breadcrumb
     Then the Wayfinder wait times page is displayed
+
+  Scenario: A user with access to wait times page page can follow the wait times link and see the error page
+    Given I am a user whose surgery has enabled Wayfinder
+    And I have referrals and upcoming appointments
+    And I get a wait times error
+    And I am logged in
+    When I navigate to the Appointment Hub page
+    Then the Appointments Hub page is displayed
+    When I click the 'Referrals, hospital and other appointments' link on the Appointments Hub
+    Then the Referrals, hospital and other appointments screen with data is displayed
+    And  I see the wait times link
+    When I click the wait times jump off link
+    Then I am navigated to the Wayfinder wait times error page
+    And I see the correct error page elements
+    When I click the Back link
+    Then the Referrals, hospital and other appointments screen with data is displayed
