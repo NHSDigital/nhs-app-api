@@ -232,14 +232,25 @@ stages:
               echo "##vso[task.setvariable variable=NAMESPACE]$(ENVIRONMENT_REF)"
               echo "##vso[task.setvariable variable=AKSCLUSTERNAME]nhsapp-dev-$(ENVIRONMENT_REF)uks1"
           - template: .azuredevops/templates/steps/init_ci.yaml@nhsapp_ops_infra
-          - bash: |
-              cd $(PROJECT_PATH) \
-              && $(SCRIPTS_PATH)/k8s/k8s_bootstrap_in_docker_new_scratch.sh
+          - task: AzureCLI@2
+            name: k8s_bootstrap
             displayName: "[k8s] Bootstrap"
-          - bash: |
-              cd $(PROJECT_PATH) \
-              && $(SCRIPTS_PATH)/k8s/validate_k8s_cluster_in_docker.sh
+            inputs:
+              azureSubscription: nhsapp-nonlive-terraform-sp
+              scriptType: bash
+              scriptLocation: scriptPath
+              scriptPath: $(SCRIPTS_PATH)/k8s/k8s_bootstrap_after_init_new_scratch.sh
+              arguments: '$(dockerRegistrySecret)'
+              workingDirectory: $(PROJECT_PATH)
+          - task: AzureCLI@2
+            name: k8s_smoke_test
             displayName: "[k8s] Smoke Test"
+            inputs:
+              azureSubscription: nhsapp-nonlive-terraform-sp
+              scriptType: bash
+              scriptLocation: scriptPath
+              scriptPath: $(SCRIPTS_PATH)/k8s/validate_k8s_cluster_after_init.sh
+              workingDirectory: $(PROJECT_PATH)
   - stage: stage_deploy_app
     displayName: Deploy app to the cluster
     jobs:
