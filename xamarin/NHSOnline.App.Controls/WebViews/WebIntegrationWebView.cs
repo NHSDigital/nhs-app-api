@@ -174,7 +174,7 @@ namespace NHSOnline.App.Controls.WebViews
 
         public async Task NavigateBack()
         {
-            await EvaluateJavaScriptAsync($"window.nhsapp.callbacks.back()")
+            await EvaluateJavaScriptAsync("window.nhsapp?.callbacks?.back()")
                 .ResumeOnThreadPool();
         }
     }
