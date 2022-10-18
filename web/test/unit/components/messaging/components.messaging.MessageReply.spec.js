@@ -7,7 +7,7 @@ let wrapper;
 let $store;
 const replyToThisMessageButtonId = 'showKeywordReplies';
 const optionsContainerClass = 'messageReplyOptionsContainer';
-const radionOptionsContainerId = 'radioOptions';
+const radioOptionsContainerId = 'radioOptions';
 const checkboxOptionsContainerId = 'checkboxOptions';
 const responseContainerId = 'messageReplyResponseContainer';
 
@@ -21,11 +21,13 @@ const mountComponent = ({
   replyOptions = replyMessageOptions,
   response = '',
   responseSentDateTime = null,
+  errorReplyCount = 0,
   isNativeApp = false,
 } = {}) => {
   $store = createStore({
     state: {
       device: { isNativeApp },
+      messaging: { errorReplyCount },
     },
   });
 
@@ -49,13 +51,13 @@ describe('message reply', () => {
   describe('showOptions property', () => {
     it('shows the "Reply to this Message" button when showOptions is false', () => {
       wrapper = mountComponent();
-      wrapper.setData({ showOptions: false });
+      wrapper.setData({ showOptionsReplyMessage: false });
       expect(wrapper.find(`#${replyToThisMessageButtonId}`).exists()).toBe(true);
     });
 
     it('shows the keyword options container when showOptions is true', () => {
       wrapper = mountComponent();
-      wrapper.setData({ showOptions: true });
+      wrapper.setData({ showOptionsReplyMessage: true });
       expect(wrapper.find(`#${replyToThisMessageButtonId}`).exists()).toBe(false);
       expect(wrapper.find(`.${optionsContainerClass}`).exists()).toBe(true);
     });
@@ -64,11 +66,11 @@ describe('message reply', () => {
   describe('has more than one reply option', () => {
     beforeEach(() => {
       wrapper = mountComponent();
-      wrapper.setData({ showOptions: true });
+      wrapper.setData({ showOptionsReplyMessage: true });
     });
 
     it('shows the reply options using radio buttons', () => {
-      expect(wrapper.find(`#${radionOptionsContainerId}`).exists()).toBe(true);
+      expect(wrapper.find(`#${radioOptionsContainerId}`).exists()).toBe(true);
       expect(wrapper.find(`#${checkboxOptionsContainerId}`).exists()).toBe(false);
     });
 
@@ -89,7 +91,7 @@ describe('message reply', () => {
     describe('an option is not selected', () => {
       describe('send button is clicked', () => {
         it('will show an error message', () => {
-          wrapper.setData({ selectedRadioValue: undefined });
+          wrapper.setData({ selectedRadioValue: '' });
           expect($store.dispatch).not.toHaveBeenCalled();
 
           wrapper.vm.onSendClicked();
@@ -101,12 +103,12 @@ describe('message reply', () => {
 
   describe('has only one reply option', () => {
     beforeEach(() => {
-      wrapper = mountComponent({ replyOptions: [{ code: 'CANCEL', disaply: 'CANCEL' }] });
-      wrapper.setData({ showOptions: true });
+      wrapper = mountComponent({ replyOptions: [{ code: 'CANCEL', display: 'CANCEL' }] });
+      wrapper.setData({ showOptionsReplyMessage: true });
     });
 
     it('shows the reply options using checkboxes', () => {
-      expect(wrapper.find(`#${radionOptionsContainerId}`).exists()).toBe(false);
+      expect(wrapper.find(`#${radioOptionsContainerId}`).exists()).toBe(false);
       expect(wrapper.find(`#${checkboxOptionsContainerId}`).exists()).toBe(true);
     });
 
@@ -126,8 +128,8 @@ describe('message reply', () => {
     describe('an option is not selected', () => {
       describe('send button is clicked', () => {
         it('will show an error message', () => {
-          wrapper.setData({ selectedCheckboxValue: undefined });
-          wrapper.vm.onRadioButtonChanged(undefined);
+          wrapper.setData({ selectedCheckboxValue: '' });
+          wrapper.vm.onRadioButtonChanged('');
           expect($store.dispatch).toBeCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
 
           wrapper.vm.onSendClicked();

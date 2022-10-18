@@ -1,6 +1,9 @@
 <template>
   <div v-if="showTemplate && loaded">
-    <div v-if="error">
+    <div v-if="errorReply">
+      <keyword-replies-error :error-count="errorReplyCount"/>
+    </div>
+    <div v-else-if="error">
       <shutter-container>
         <error-title title="messages.error.cannotShowMessage" />
         <error-paragraph from="messages.error.errorOpeningYourMessage" />
@@ -38,6 +41,8 @@
         </div>
 
         <message-reply v-if="hasReplyOptions"
+                       :show-options="shouldShowOptions()"
+                       :radio-value="getPreviousChoice()"
                        :message-reply="messageReply"
                        :sender-name="senderName"
                        @send_clicked="sendClicked" />
@@ -67,6 +72,8 @@ import { HEALTH_INFORMATION_UPDATES_PATH, HEALTH_INFORMATION_UPDATES_SENDER_MESS
 import { messageVersion, redirectTo } from '@/lib/utils';
 import MessageReply from '@/components/messaging/MessageReply';
 import FormErrorSummary from '@/components/FormErrorSummary';
+import KeywordRepliesError from '@/components/errors/pages/messages/KeywordRepliesError';
+import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 
 export default {
   name: 'AppMessagingAppMessagePage',
@@ -82,6 +89,7 @@ export default {
     PageTitle,
     MessageReply,
     FormErrorSummary,
+    KeywordRepliesError,
   },
   mixins: [ErrorPageMixin],
   beforeRouteLeave(to, from, next) {
@@ -92,7 +100,7 @@ export default {
     }
 
     if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
-      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.fullPath);
       this.showModal();
 
       shouldContinue = false;
@@ -117,6 +125,12 @@ export default {
     error() {
       return this.$store.state.messaging.error;
     },
+    errorReply() {
+      return this.$store.state.messaging.errorReply && this.$store.state.messaging.errorReply.status !== genericStatus.NO_CONTENT;
+    },
+    errorReplyCount() {
+      return this.$store.state.messaging.errorReplyCount;
+    },
     isMarkdown() {
       return get('version')(this.message) === messageVersion.Markdown;
     },
@@ -128,6 +142,9 @@ export default {
     },
     messageReply() {
       return get('reply')(this.message);
+    },
+    noInternet() {
+      return this.$store.state.messaging.errorReply && this.$store.state.messaging.errorReply.status === '';
     },
     hasReplyOptions() {
       if (get('options')(this.messageReply) === null || get('options')(this.messageReply) === undefined) {
@@ -192,19 +209,40 @@ export default {
       redirectTo(this, this.backLink, { senderId: this.sender });
     },
     async sendClicked(response, isValid, isCheckbox) {
+      await this.$store.dispatch('messaging/setPreviousChoice', response);
+
       this.hasValidationErrors = !isValid;
       this.isCheckbox = isCheckbox;
 
       if (isValid) {
         await this.$store.dispatch('messaging/recordMessageResponse', { messageId: this.message.id, response });
-        await this.loadMessage();
+
+        if (this.errorReplyCount > 1) {
+          this.$store.dispatch('pageLeaveWarning/reset');
+        }
+
+        if (this.noInternet) {
+          this.$store.dispatch('pageLeaveWarning/reset');
+          redirectTo(this, HEALTH_INFORMATION_UPDATES_PATH);
+        }
+
+        if (!this.errorReply) {
+          await this.loadMessage();
+        }
       }
     },
     beforeDestroy() {
       this.$store.dispatch('pageLeaveWarning/reset');
+      this.$store.dispatch('messaging/clear');
     },
     showModal() {
       this.$store.dispatch('pageLeaveWarning/showKeywordReplyLeavingModal');
+    },
+    shouldShowOptions() {
+      return this.$store.state.messaging.errorReplyCount > 0;
+    },
+    getPreviousChoice() {
+      return this.$store.state.messaging.previousChoice;
     },
   },
 };

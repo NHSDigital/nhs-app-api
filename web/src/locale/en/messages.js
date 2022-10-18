@@ -139,4 +139,17 @@ export default {
     },
     reply: 'Reply to this message',
   },
+  notificationErrorMessages: {
+    error: {
+      title: 'Cannot send your reply',
+      technicalError: {
+        message: 'There was a technical problem. This might be temporary.',
+      },
+      tryAgainMessage: 'Try again later.',
+      technicalMessageError: 'There was a technical problem sending your reply. We\'re aware of the problem and we\'re working to solve it.',
+      medicalAdviceHeading: 'Get medical advice',
+      medicalAdviceParagraph: 'If you need to discuss an appointment, prescription or medicine now, use your GP surgery\'s website or call the surgery directly.',
+      urgentMedicalAdvice: 'For urgent medical advice, go to',
+    },
+  },
 };

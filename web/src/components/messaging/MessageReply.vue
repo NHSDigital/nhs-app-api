@@ -11,7 +11,7 @@
       </p>
       <p>{{ $t('messages.messageReply.response.message', { senderName }) }}</p>
     </div>
-    <div v-else-if="showOptions" :class="$style.messageReplyOptionsContainer">
+    <div v-else-if="showOptionsReplyMessage" :class="$style.messageReplyOptionsContainer">
       <div v-if="isCheckboxOptions" id="checkboxOptions">
         <h4>{{ $t('messages.messageReply.checkboxOption.title') }}</h4>
         <error-group :show-error="!isValidResponse">
@@ -22,7 +22,7 @@
             :key="checkboxOption"
             checkbox-id="replyoption"
             :value="checkboxOption"
-            @input="onCheckboxChanged"
+            :is-selected="shouldBeSelected"
             @onCheckedChanged="selectedCheckboxValueChanged">
             <span>{{ checkboxOption }}</span>
           </generic-checkbox>
@@ -86,12 +86,24 @@ export default {
       type: String,
       required: true,
     },
+    radioValue: {
+      type: String,
+      default: '',
+    },
+    checkboxValue: {
+      type: String,
+      default: '',
+    },
+    showOptions: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      selectedRadioValue: undefined,
-      selectedCheckboxValue: undefined,
-      showOptions: false,
+      selectedRadioValue: this.radioValue,
+      selectedCheckboxValue: this.checkboxValue,
+      showOptionsReplyMessage: this.showOptions,
       isValidResponse: true,
     };
   },
@@ -110,6 +122,12 @@ export default {
     },
     checkboxOption() {
       return get('code')(first(this.options));
+    },
+    shouldBeSelected() {
+      if (this.$store.state.messaging.errorReplyCount > 0) {
+        return true;
+      }
+      return false;
     },
     checkboxOptions() {
       const replyOptions = [];
@@ -135,7 +153,7 @@ export default {
   },
   methods: {
     onShowOptions() {
-      this.showOptions = !this.showOptions;
+      this.showOptionsReplyMessage = !this.showOptionsReplyMessage;
     },
     onSendClicked() {
       this.$emit('send_clicked',
@@ -144,14 +162,14 @@ export default {
         this.isCheckboxOptions);
     },
     onRadioButtonChanged(value) {
-      this.selectedRadioValue = value;
-      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
-    },
-    onCheckboxChanged(value) {
-      this.selectedCheckboxValue = (this.selectedCheckboxValue) ? undefined : value;
+      this.selectedRadioValue = (value) || '';
+
+      if (this.selectedRadioValue !== '') {
+        this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+      }
     },
     validateResponse() {
-      this.isValidResponse = this.getResponseValue() !== undefined;
+      this.isValidResponse = this.getResponseValue() !== '';
       return this.isValidResponse;
     },
     getResponseValue() {
@@ -161,8 +179,10 @@ export default {
     },
     selectedCheckboxValueChanged(checked) {
       if (checked) {
+        this.selectedCheckboxValue = this.checkboxOption;
         this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
       } else {
+        this.selectedCheckboxValue = '';
         this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       }
     },

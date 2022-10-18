@@ -18,14 +18,22 @@ const mountMessage = ({
   message,
   isNativeApp = true,
   error = false,
+  errorReply = undefined,
+  errorReplyCount = 0,
 } = {}) => {
   $store = createStore({
     state: {
-      messaging: { error, message },
+      messaging: {
+        error,
+        message,
+        errorReply,
+        errorReplyCount,
+      },
       device: { isNativeApp },
       pageLeaveWarning: {
         shouldSkipDisplayingLeavingWarning: false,
       },
+      errors: undefined,
     },
   });
 
@@ -210,13 +218,13 @@ describe('messaging message', () => {
               $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = true;
             });
             each([INDEX_PATH, MESSAGES_PATH])
-              .it('will show page leaving warning', (path) => {
+              .it('will show page leaving warning', (fullPath) => {
                 const showModal = jest.fn();
 
-                Message.beforeRouteLeave.call({ $store, showModal }, { path }, undefined, next);
+                Message.beforeRouteLeave.call({ $store, showModal }, { fullPath }, undefined, next);
 
                 expect(next).toHaveBeenCalledWith(false);
-                expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', path);
+                expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', fullPath);
                 expect(showModal).toHaveBeenCalled();
               });
           });
@@ -239,6 +247,30 @@ describe('messaging message', () => {
                 expect(next).toHaveBeenCalledWith(true);
                 expect(showModal).toHaveBeenCalledTimes(0);
               });
+          });
+        });
+
+        describe('save message returns a server error', () => {
+          describe('first time error', () => {
+            beforeEach(() => {
+              $store.state.messaging.errorReply = { status: 500 };
+              $store.state.messaging.errorReplyCount = 1;
+            });
+
+            it('will show error with retry option', () => {
+              expect(wrapper.find('p').text()).toContain('There was a technical problem. This might be temporary.');
+            });
+          });
+
+          describe('second time error', () => {
+            beforeEach(() => {
+              $store.state.messaging.errorReply = { status: 500 };
+              $store.state.messaging.errorReplyCount = 2;
+            });
+
+            it('will show error without retry option', () => {
+              expect(wrapper.find('p').text()).toContain('Try again later');
+            });
           });
         });
       });

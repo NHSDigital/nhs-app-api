@@ -340,3 +340,19 @@ Feature: Messages
     Then the Sender Messages page is displayed
     When I click on a message on the Sender Messages page
     And I can see the response message
+
+  Scenario: A user can sees the appropriate error screen when failing to reply to a message
+    Given I am a user wishing to view messages that require a reply
+    And I am logged in
+    When I navigate to the Messages Hub page
+    And I click the App Messages link on the messages hub page
+    And the Message Senders page is displayed
+    And I click on BEECH TREE SURGERY sender
+    Then the Sender Messages page is displayed
+    When I click on a message on the Sender Messages page
+    Then the Message page is displayed
+    When I click on the 'Reply to this message' button
+    And I select an option to reply
+    And I send a reply that returns an error
+    And I click the 'Try again' button
+    And I send a reply that returns an error

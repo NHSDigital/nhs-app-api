@@ -1,5 +1,6 @@
 package features.messages.stepDefinitions
 
+import com.mongodb.client.model.Filters
 import config.Config
 import constants.Supplier
 import io.cucumber.datatable.DataTable
@@ -12,6 +13,8 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.IdentityProofingLevel
+import mongodb.MongoDBConnection
+import org.bson.Document
 import pages.ErrorDialogPage
 import pages.messages.MessagePage
 import pages.messages.MessageSendersPage
@@ -24,6 +27,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 50000
+private const val INVALID_MESSAGE_BODY: Int = 1234
 
 class MessagesStepDefinitions {
 
@@ -272,6 +276,16 @@ class MessagesStepDefinitions {
      fun iSendTheReply() {
          messagePage.sendTheReply()
      }
+
+    @Then("^I send a reply that returns an error$")
+    fun iSendTheReplyThatReturnsAnError() {
+        val targetMessage = MessagesSerenityHelpers.TARGET_MESSAGE.getOrFail<String>()
+        MongoDBConnection.MessagesCollection.updateOne(
+                Filters.eq("Body", targetMessage),
+                Document("\$set", Document("Body", INVALID_MESSAGE_BODY))
+        )
+        messagePage.sendTheReply()
+    }
     
      @Then("^I can see the response message$")
      fun iCanSeeTheResponseMessage() {

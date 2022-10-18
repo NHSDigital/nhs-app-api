@@ -1,6 +1,7 @@
 import { createLocalError } from '@/lib/utils';
 import {
   ADD_ERROR,
+  ADD_ERROR_REPLY,
   CLEAR,
   INIT,
   LOADED,
@@ -10,6 +11,8 @@ import {
   SET_HAS_UNREAD,
   SET_UNREADMESSAGE_SENDER_COUNT,
   DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
+  SET_PREVIOUS_CHOICE,
+  CLEAR_ERROR_REPLY,
 } from './mutation-types';
 import NativeApp from '@/services/native-app';
 
@@ -32,6 +35,9 @@ export default {
   },
   clear({ commit }) {
     commit(CLEAR);
+  },
+  clearErrorReply({ commit }) {
+    commit(CLEAR_ERROR_REPLY);
   },
   async load({ commit }, request = {}) {
     // eslint-disable-next-line no-param-reassign
@@ -93,7 +99,7 @@ export default {
     commit(DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT);
     this.dispatch('messaging/setBadgeCount');
   },
-  async recordMessageResponse(_, { messageId, response }) {
+  async recordMessageResponse({ commit }, { messageId, response }) {
     const request = {
       messageId,
       patchMessageRequest: [{
@@ -104,9 +110,16 @@ export default {
       ignoreError: true,
       ignoreLoading: true,
     };
-    await this.app.$http.patchV1ApiUsersMeMessagesByMessageid(
-      request,
-    );
+    try {
+      await this.app.$http.patchV1ApiUsersMeMessagesByMessageid(
+        request,
+      );
+    } catch (error) {
+      commit(ADD_ERROR_REPLY, createLocalError(error));
+    }
+  },
+  setPreviousChoice({ commit }, choice) {
+    commit(SET_PREVIOUS_CHOICE, choice);
   },
   setBadgeCount({ state }) {
     if (this.$env.IOS_BADGE_COUNT_ENABLED) {

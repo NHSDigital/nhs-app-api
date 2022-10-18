@@ -2,6 +2,7 @@ import mapKeys from 'lodash/fp/mapKeys';
 import {
   initialState,
   ADD_ERROR,
+  ADD_ERROR_REPLY,
   CLEAR,
   INIT,
   LOADED,
@@ -11,16 +12,28 @@ import {
   SET_HAS_UNREAD,
   SET_UNREADMESSAGE_SENDER_COUNT,
   DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
+  SET_PREVIOUS_CHOICE,
+  CLEAR_ERROR_REPLY,
 } from './mutation-types';
 
 export default {
   [ADD_ERROR](state, errorDetails) {
     state.error = errorDetails;
   },
+  [ADD_ERROR_REPLY](state, error) {
+    state.errorReplyCount += 1;
+    state.errorReply = error;
+  },
   [CLEAR](state) {
     state.error = null;
+    state.errorReply = null;
+    state.errorReplyCount = 0;
     state.message = null;
     state.senderMessagesLoaded = false;
+    state.previousChoice = null;
+  },
+  [CLEAR_ERROR_REPLY](state) {
+    state.errorReply = null;
   },
   [INIT](state) {
     const blank = initialState();
@@ -55,5 +68,8 @@ export default {
   },
   [DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT](state) {
     state.totalUnreadMessageCount -= 1;
+  },
+  [SET_PREVIOUS_CHOICE](state, choice) {
+    state.previousChoice = choice || '';
   },
 };
