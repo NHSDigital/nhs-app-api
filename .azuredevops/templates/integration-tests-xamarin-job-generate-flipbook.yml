@@ -38,7 +38,7 @@ jobs:
 
       - task: Bash@3
         displayName: 'Upload Release Tagged flipbook PDF to Slack'
-        condition: eq($(native.xamarin.runFlipbookTests), 'False')
+        condition: eq(variables['native.xamarin.runFlipbookTests'], 'False')
         inputs:
           targetType: 'inline'
           workingDirectory: xamarinintegrationtests/flipbookgeneration/flipbook
