@@ -4,7 +4,7 @@
       <form-error-summary v-if="showError"
                           :header-locale-ref="'biometricsRegistration.thereIsAProblem'"
                           :errors="biometricsErrorText"
-                          :errors-ids="`notifications-${getFirstChoiceValue('choices')}`"/>
+                          :errors-ids="`biometricsRegistration-${getFirstChoiceValue('choices')}`"/>
       <p> {{ biometricText }} </p>
       <message-dialog-generic message-type="warning" :icon-text="$t('biometricsRegistration.ifYouShareThisDevice')">
         <message-text>
