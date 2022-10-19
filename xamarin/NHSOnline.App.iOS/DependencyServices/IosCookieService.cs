@@ -19,7 +19,7 @@ namespace NHSOnline.App.iOS.DependencyServices
         {
             using var headerDictionary = new NSDictionary("Set-Cookie", apiCookie.Value);
 
-            var cookies = NSHttpCookie.CookiesWithResponseHeaderFields(headerDictionary, apiCookie.Uri);
+            var cookies = NSHttpCookie.CookiesWithResponseHeaderFields(headerDictionary, apiCookie.Uri!);
 
             var cookieStore = WKWebsiteDataStore.DefaultDataStore.HttpCookieStore;
             foreach (var nsHttpCookie in cookies)

@@ -11,12 +11,20 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            ViewController.NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+
+            if (ViewController.NavigationController != null)
+            {
+                ViewController.NavigationController.InteractivePopGestureRecognizer.Enabled = false;
+            }
         }
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
-            ViewController.NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+
+            if (ViewController.NavigationController != null)
+            {
+                ViewController.NavigationController.InteractivePopGestureRecognizer.Enabled = true;
+            }
         }
     }
 }

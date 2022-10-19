@@ -80,7 +80,7 @@ namespace NHSOnline.App.iOS.DependencyServices
                 {
                     response.Headers.Remove(setCookieHeaderKey);
 
-                    var cookiesForUrl = _cookieStorage.CookiesForUrl(request.RequestUri);
+                    var cookiesForUrl = _cookieStorage.CookiesForUrl(request.RequestUri!);
                     cookieHeaders = CopySameSiteAttribute(cookieHeaders, cookiesForUrl);
 
                     response.Headers.TryAddWithoutValidation(setCookieHeaderKey, cookieHeaders);

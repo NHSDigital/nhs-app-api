@@ -54,7 +54,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews.Extensions
 
         private static NSUrlRequest CreateRequest(WebIntegrationRequest request)
         {
-            var nsUrlRequest = new NSMutableUrlRequest(request.Url);
+            var nsUrlRequest = new NSMutableUrlRequest(request.Url!);
             nsUrlRequest.HttpMethod = request.Verb.Method;
 
             if (request.Verb == HttpMethod.Post)

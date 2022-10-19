@@ -70,7 +70,7 @@ namespace NHSOnline.App.iOS
             var url = userActivity.WebPageUrl;
             if (url != null)
             {
-                NhsApp?.HandleDeeplink(url.AbsoluteString);
+                NhsApp?.HandleDeeplink(url.AbsoluteString!);
             }
 
             return base.ContinueUserActivity(application, userActivity, completionHandler);
