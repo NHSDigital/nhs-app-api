@@ -122,7 +122,7 @@ api:
   knownServicesOverrides:
     services__111__url: https://111.nhs.uk
     services__accurx__url: https://accurx.nhs.uk
-    services__accurxWayfinder__url: https://accurxwayfinder.com
+    services__accurxWayfinder__url: https://patient.accurx.com
     services__ndop__url: https://app.your-data-matters.service.nhs.uk
     services__cid_settings__url: https://settings.login.nhs.uk
     services__cid_account__url: https://account.login.nhs.uk
@@ -139,7 +139,8 @@ api:
     services__substraktPatientPack_admin__url: https://admin-request.production.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.production.substrakthealth.com
     services__engage__url: https://nhsapp.engage.gp
-    services__healthcarecomms__url: https://hcc.nhs.uk
+    services__healthcarecomms__url: https://nhs-app.nhsportal.net
+    services__healthcarecomms_api__url: https://api.nhsportal.net
     services__nhsd__url: https://www.coronavirus-record.service.nhs.uk
     services__netCompany__url: https://covid-status.service.nhsx.nhs.uk
     services__drDoctor__url: https://my.drdoctor.co.uk
@@ -148,7 +149,7 @@ api:
     services__zesty__url: https://patient-portal.zesty.co.uk
     servicesV3__111__url: https://111.nhs.uk
     servicesV3__accurx__url: https://accurx.nhs.uk
-    servicesV3__accurxWayfinder__url: https://accurxwayfinder.com
+    servicesV3__accurxWayfinder__url: https://patient.accurx.com
     servicesV3__ndop__url: https://app.your-data-matters.service.nhs.uk
     servicesV3__cid_settings__url: https://settings.login.nhs.uk
     servicesV3__cid_account__url: https://account.login.nhs.uk
@@ -157,7 +158,8 @@ api:
     servicesV3__cid_access__url: https://access.login.nhs.uk
     servicesV3__cid_idvm__url: https://idvm.login.nhs.uk
     servicesV3__ers__url: https://refer.nhs.uk
-    servicesV3__healthcarecomms__url: https://hcc.nhs.uk
+    servicesV3__healthcarecomms__url: https://nhs-app.nhsportal.net
+    servicesV3__healthcarecomms__domains__1: https://api.nhsportal.net
     servicesV3__patchs__url: https://sandbox.patchs.ai   #For now - sandpit
     servicesV3__pkb__url: https://my.patientsknowbest.com
     servicesV3__pkb__domains__1: http://my.patientsknowbest.com:443
