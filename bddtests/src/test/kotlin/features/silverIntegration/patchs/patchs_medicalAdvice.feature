@@ -19,6 +19,15 @@ Feature: Patchs Medical Advice
     And I navigate to the advice page
     And the link to Patchs Medical Advice is not available on the Advice page
 
+  Scenario: A user can follow the link to find out more about personal health records
+    Given I am a user who can view Medical Advice from Patchs
+    And 'NHS UK' responds to requests for '/personal-health-records'
+    And I am logged in
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fpatchs.stubs.local.bitraft.io%3A8080%2Fnhs-app-auth%2Fsubmit-clinical-request'
+    And I am redirected to the redirector page with the header 'Ask your GP for advice about a health problem'
+    And I click the link called 'Find out more about personal health record services' with a url of 'http://stubs.local.bitraft.io:8080/external/nhsuk/personal-health-records'
+    Then a new tab has been opened by the link
+
   Scenario: A user navigates directly to the Patchs external partner site and will see a warning page
     Given I am a user who can view Medical Advice from Patchs
     And Patchs responds to requests for Medical Advice

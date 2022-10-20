@@ -241,7 +241,8 @@ class ServiceJourneyRulesMapper {
             .add(
                 Supplier.EMIS, "F00017",
                 EnumSet.of(
-                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PATCHS
+                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PATCHS,
+                    SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_PATCHS
                 )
             )
 

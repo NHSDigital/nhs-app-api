@@ -5,3 +5,5 @@ journeys:
   silverIntegrations:
     consultations:
       - patchs
+    consultationsAdmin:
+      - patchs

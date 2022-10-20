@@ -5,4 +5,6 @@ open class PatchsRequestBuilder(method: String ="GET", relativePath:String="")
     : MappingBuilder(method, "$relativePath") {
 
     fun patchsMedicalRequest() = PatchsMedicalRequestBuilder()
+
+    fun patchsAdminFitNotesRequest() = PatchsAdminFitNotesRequestBuilder()
 }

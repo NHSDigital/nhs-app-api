@@ -235,6 +235,13 @@ const thirdPartyProvider = {
       provider: 'patchs',
       serviceType: 'consultations',
     },
+    admin: {
+      acceptablePathsRegex: '^\\/nhs-app-auth\\/admin-hub$',
+      jumpOffId: 'admin',
+      redirectPath: '/nhs-app-auth/admin-hub',
+      provider: 'patchs',
+      serviceType: 'consultationsAdmin',
+    },
   },
   wayfinder: {
     accurxWayfinder: {

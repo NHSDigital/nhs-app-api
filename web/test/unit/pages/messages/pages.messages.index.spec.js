@@ -26,6 +26,9 @@ const knownServices = [{
 }, {
   id: 'accurx',
   url: 'www.url.com',
+}, {
+  id: 'patchs',
+  url: 'www.url.com',
 }];
 
 const mountPage = ({
@@ -193,6 +196,10 @@ describe('messages page', () => {
       ['accurx', true, false, false, false],
       ['accurx', true, true, true, false],
       ['accurx', false, false, true, false],
+      ['patchs', true, false, true, true],
+      ['patchs', true, false, false, false],
+      ['patchs', true, true, true, false],
+      ['patchs', false, false, true, false],
     ]).describe('%s messaging enabled is %s, proxy is %s', (
       provider, context, isProxying, isProofLevel9, expectedResult,
     ) => {
@@ -209,6 +216,9 @@ describe('messages page', () => {
             break;
           case 'accurx':
             linkElement = '#btn_accurx_messages';
+            break;
+          case 'patchs':
+            linkElement = '#btn_patchs_admin';
             break;
           default:
             break;

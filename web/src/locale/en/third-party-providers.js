@@ -442,7 +442,21 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'ONLINE_CONSULTATIONS_PRIVACY_URL',
+          linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
+        },
+      },
+      {
+        id: 'admin',
+        jumpOffContent: {
+          headerText: 'Fit notes (sick notes), other documents and responses to your requests',
+          descriptionText: 'Send a request to your GP surgery for a fit note or letter to write, or view your previous requests and responses to questions',
+        },
+        thirdPartyWarning: {
+          featureName: 'Ask for a fit note (sick note) or other documents',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'PERSONAL_HEALTH_RECORDS_PRIVACY_URL',
         },
       },
     ],

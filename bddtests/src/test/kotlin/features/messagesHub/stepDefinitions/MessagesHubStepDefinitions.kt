@@ -57,6 +57,11 @@ class MessagesHubStepDefinitions {
         messagesHubPage.assertMenuItemNotDisplayed("btn_substrakt_messages")
     }
 
+    @Then("^the link to Fit Notes Request is not available on the Messages Hub page")
+    fun theFitNotestRequestLinkIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_patchs_admin")
+    }
+
     @When("^the link to Engage Messages and consultations is not available on the Messages Hub page$")
     fun theMessagesConsultationsLinkForEngageIsNotDisplayed() {
         messagesHubPage.assertMenuItemNotDisplayed("btn_engage_messages")

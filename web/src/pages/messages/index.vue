@@ -29,6 +29,10 @@
                                      id="btn_pkb_messages_and_consultations"
                                      provider-id="pkb"
                                      :provider-configuration="thirdPartyProvider.pkb.messages" />
+        <third-party-jump-off-button v-if="patchsEnabled"
+                                     id="btn_patchs_admin"
+                                     provider-id="patchs"
+                                     :provider-configuration="thirdPartyProvider.patchs.admin" />
         <third-party-jump-off-button
           v-if="testProviderEnabled"
           id="btn_test_silver_messages"
@@ -121,6 +125,14 @@ export default {
           serviceType: 'messages',
         },
       }),
+      hasPatchsAdmin: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'patchs',
+          serviceType: 'consultationsAdmin',
+        },
+      }),
     };
   },
   computed: {
@@ -158,6 +170,9 @@ export default {
     },
     accurxEnabled() {
       return this.hasAccurxMessages && !this.isProxying && this.isProofLevel9;
+    },
+    patchsEnabled() {
+      return this.hasPatchsAdmin && !this.isProxying && this.isProofLevel9;
     },
     unreadMessagesCount() {
       let total = 0;
