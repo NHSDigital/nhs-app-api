@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
@@ -211,13 +212,16 @@ namespace NHSOnline.App.Areas.Home.Presenters
             }
             catch (UriFormatException e)
             {
-                var uriString = args.Url;
-                var queryIndex = uriString.IndexOf("?", StringComparison.Ordinal);
-                var urlSource = args.Source as UrlWebViewSource;
-                var url = urlSource?.Url;
-                _logger.LogError(e, "Failed to navigate to URI: {Uri} . Launched the failing URI from: {Url}",
-                    queryIndex.Equals(-1) ? uriString : uriString.Remove(queryIndex), url);
+                _logger.LogError(e, "Failed to navigate to URI: {Uri}", MaskedUri(args.Url));
             }
+        }
+
+        private static string MaskedUri(string uriString)
+        {
+            var queryIndex = uriString.IndexOf("?", StringComparison.Ordinal);
+            var uriWithoutQuery =  queryIndex.Equals(-1) ? uriString : uriString.Remove(queryIndex);
+            var regex = new Regex(@"(\.|[a-z]|[A-Z]|[0-9]|[/.-])*@");
+            return regex.Replace(uriWithoutQuery, match => new string('x',match.Length) +"@");
         }
 
         private NhsAppPopToRootNavigationHandler GetNewPopToRootHandler() => new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.AppNavigation);
