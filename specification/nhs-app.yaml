@@ -20,13 +20,11 @@ info:
     [Contact us](mailto:app.onboarding@nhs.net) before you begin any development work with this API, even if your service is already integrated.
 
     ## API status and roadmap
-    This API is in [private beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
-    - we might make breaking changes, but only if we cannot avoid it, and we'll give advance notice
-    - we cannot guarantee availability or performance
+    This API is [in production, beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#statuses).
 
     To see our roadmap, or to suggest, comment or vote on features for this API, see our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/?order=popular&filter=allexceptdone&tag=nhs-app-api).
 
-    If you have any queries, please [contact us](https://digital.nhs.uk/developer/help-and-support).
+    If you would like to be involved in our beta programme or have any other queries, [contact us](https://digital.nhs.uk/developer/help-and-support).
 
     ## Service level
     This API is a silver plus service, meaning it is operational 24 x 7 x 365 but only supported during business hours (8am to 6pm), Monday to Friday excluding bank holidays. However, we respond to severity 1 and severity 2 incidents outside of business hours.
