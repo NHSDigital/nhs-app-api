@@ -17,6 +17,9 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             this.InstallIProov();
 
+            config.MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None;
+            config.AllowsInlineMediaPlayback = true;
+
             _javascriptBridge = JavascriptBridge
                 .ForWebView(() => (NhsLoginUpliftWebView)Element, "nativeNhsLogin")
                 .Apply(config.UserContentController);
