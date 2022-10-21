@@ -365,7 +365,10 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.InstallReferrer" Version="1.0.1" />
     <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.1.1.13" />
-    <PackageReference Include="Xamarin.Firebase.Messaging" Version="122.0.0.3" />
+    <PackageReference Include="Xamarin.Firebase.Components" Version="117.0.1" />
+    <PackageReference Include="Xamarin.Firebase.Datatransport" Version="118.1.6" />
+    <PackageReference Include="Xamarin.Firebase.Installations" Version="117.0.2" />
+    <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.0.8" />
     <PackageReference Include="Xamarin.Google.Android.DataTransport.TransportRuntime" Version="3.1.7" />
     <PackageReference Include="Xamarin.Google.Dagger" Version="2.41.0.2" />
     <PackageReference Include="Xamarin.AndroidX.Biometric" Version="1.1.0.9" />

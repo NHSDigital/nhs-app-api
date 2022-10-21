@@ -13,14 +13,14 @@ using NHSOnline.App.Logging;
 
 namespace NHSOnline.App.Droid.AndroidServices
 {
-    [Service]
+    [Service(Exported = false)]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class AndroidNotificationMessagingService : FirebaseMessagingService
     {
         private const string NotificationUrlDataKey = "url";
 
         private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(AndroidNotificationMessagingService));
-        
+
         [SuppressMessage("Design", "CA1725: Parameter names should match base declaration",
             Justification = "p0 is not a descriptive name for the parameter")]
         public override void OnMessageReceived(RemoteMessage remoteMessage)

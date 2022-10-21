@@ -26,10 +26,12 @@
 		<meta-data
 				android:name="com.google.firebase.messaging.default_notification_channel_id"
 				android:value="@string/notificationChannel" />
-		<activity android:icon="@mipmap/ic_launcher" android:noHistory="true"
+		<activity android:icon="@mipmap/ic_launcher" 
+				  android:noHistory="true"
 				  android:roundIcon="@mipmap/ic_launcher_round"
 				  android:theme="@style/MainTheme.SplashScreen"
-				  android:name="crc64b7e535562fc6760f.SplashScreenActivity">
+				  android:name="crc64b7e535562fc6760f.SplashScreenActivity"
+				  android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
