@@ -25,12 +25,6 @@ class HomePage : HybridPageObject() {
         helpfulName = "Welcome info"
     )
 
-    val dismissButton = HybridPageElement(
-        webDesktopLocator = "//a[@id='btn_biometricBannerDismiss']",
-        page = this,
-        helpfulName = "Dismiss Button"
-    ).withText("Dismiss", false)
-
     private val unreadIndicator = HybridPageElement(
         webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
         page = this,

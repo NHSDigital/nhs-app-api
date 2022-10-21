@@ -104,11 +104,6 @@ class AccountAndSettingsHubStepDefinitions {
         accountAndSettingsLoginSettings.assertTitleDisplayed(biometricType)
     }
 
-    @Then("^The biometrics page url ends with (.*)$")
-    fun theBiometricsPageUrlEndsWith(biometricUrl: String) {
-        browser.shouldEndWithUrl(biometricUrl)
-    }
-
     @Then("^the Account and settings page settings links are available$")
     fun theAccountAndSettingsPageSettingsLinksAreAvailable() {
         accountAndSettingsPage.settings.assertLinksPresent()

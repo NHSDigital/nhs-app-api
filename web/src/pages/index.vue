@@ -13,14 +13,12 @@
       :urgency="publicHealthNotification.urgency"
       :title="publicHealthNotification.title"
       :body="publicHealthNotification.body"/>
-    <biometric-banner v-if="!isProxying" />
     <navigation-list-menu v-if="!isProxying" />
     <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
 
 <script>
-import BiometricBanner from '@/components/widgets/BiometricBanner';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 import get from 'lodash/fp/get';
 import NavigationListMenu from '@/components/NavigationListMenu';
@@ -33,7 +31,6 @@ import sjrIf from '@/lib/sjrIf';
 export default {
   name: 'IndexPage',
   components: {
-    BiometricBanner,
     NavigationListMenu,
     ProofLevelUpliftBanner,
     ProxyWelcomeSection,

@@ -63,7 +63,7 @@ describe('index', () => {
         GP_SESSION_ON_DEMAND_ENABLED: onDemandEnabled,
       },
     });
-    return mount(Index, { $store, $router, mountOpts: { i18n }, stubs: ['BiometricBanner'] });
+    return mount(Index, { $store, $router, mountOpts: { i18n } });
   };
 
   it('will display the navigation items when not proxying', () => {

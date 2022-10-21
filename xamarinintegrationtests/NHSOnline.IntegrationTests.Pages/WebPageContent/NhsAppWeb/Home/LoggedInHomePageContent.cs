@@ -10,24 +10,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 {
     public class LoggedInHomePageContent
     {
-        public const string BioFingerprint = "Set up fingerprint, face or iris";
-        public const string BoiFaceId = "Set up Face ID";
-
-        public const string AndroidInfoText =
-            "If your mobile device supports fingerprint, face or iris recognition and meets Google's increased security settings, you can use it to log in to the NHS App instead of a password and security code.";
-
-        public const string IOSInfoText =
-            "If your mobile device supports Touch ID or Face ID, you can use it to log in to the NHS App instead of a password and security code.";
-
-        private readonly string _biometricsButtonText;
-        private readonly string _biometricsInfoText;
         private readonly IWebInteractor _interactor;
 
-        internal LoggedInHomePageContent(IWebInteractor interactor, string biometricsButtonText, string biometricsInfoText)
+        internal LoggedInHomePageContent(IWebInteractor interactor)
         {
             _interactor = interactor;
-            _biometricsButtonText = biometricsButtonText;
-            _biometricsInfoText = biometricsInfoText;
         }
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "Home");
@@ -36,19 +23,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         private WebDefinitionTerm NhsNumberTerm => WebDefinitionTerm.WithTerm(_interactor, "NHS number:");
 
-        private WebText BiometricsPanelTitle => WebText.WithTagAndText(_interactor, "h2", "Login options");
-
-        private WebText BiometricsPanelText => WebText.WithTagAndText(
-            _interactor,
-            "p",
-            _biometricsInfoText);
-
         private WebText YellowProxyUserBannerText(string linkedPatientName) =>
             WebText.WithTagAndText(_interactor, "p", $"Acting on behalf of {linkedPatientName}");
-
-        private WebButton OpenSettingsButton => WebButton.WithText(_interactor, _biometricsButtonText);
-
-        private WebLink DismissBiometricsBanner => WebLink.WithText(_interactor, "Dismiss");
 
         private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
 
@@ -62,8 +38,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
-            OpenSettingsButton,
-            DismissBiometricsBanner,
             GetYourCovidPassMenuItem,
             MessagesMenuItem,
             LinkedProfilesMenuItem,
@@ -76,23 +50,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         public void AssertUserAgent(Platform platform) =>
             Assert.IsTrue(_interactor.GetUserAgent().Contains(platform.UserAgentDeviceTypePrefix(), StringComparison.InvariantCulture));
 
-        public LoggedInHomePageContent AssertBiometricPanelVisible()
-        {
-            BiometricsPanelTitle.AssertVisible();
-            BiometricsPanelText.AssertVisible();
-            OpenSettingsButton.AssertVisible();
-            DismissBiometricsBanner.AssertVisible();
-            return this;
-        }
-
-        public void AssertBiometricPanelNotVisible()
-        {
-            BiometricsPanelTitle.AssertNotVisible();
-            BiometricsPanelText.AssertNotVisible();
-            OpenSettingsButton.AssertNotVisible();
-            DismissBiometricsBanner.AssertNotVisible();
-        }
-
         public void AssertLinkedProfileYellowBannerVisible(string linkedPatientName) =>
             YellowProxyUserBannerText(linkedPatientName).AssertVisible();
 
@@ -101,12 +58,6 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         public void AssertNhsNumberNotVisible() => NhsNumberTerm.AssertNotVisible();
 
         public void ProveYourIdentityContinue() => Continue.Click();
-
-        public LoggedInHomePageContent DismissBiometricPanel()
-        {
-            DismissBiometricsBanner.Click();
-            return this;
-        }
 
         public void GetYourCovidPass() => GetYourCovidPassMenuItem.Click();
 

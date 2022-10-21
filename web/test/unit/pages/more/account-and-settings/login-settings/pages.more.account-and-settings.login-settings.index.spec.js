@@ -11,7 +11,6 @@ describe('login settings page', () => {
     biometricType = 'face',
     isNativeApp = true,
     hasBiometricType = true,
-    biometricsBannerDismissed = true,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -22,9 +21,6 @@ describe('login settings page', () => {
         },
         device: {
           isNativeApp,
-        },
-        biometricBanner: {
-          dismissed: biometricsBannerDismissed,
         },
       },
       getters: {
@@ -95,11 +91,6 @@ describe('login settings page', () => {
         it('will dispatch `loginSettings/updateRegistrationStatus` when clicked',
           () => {
             expect($store.dispatch).toHaveBeenCalledWith('loginSettings/updateRegistration');
-          });
-
-        it('will dispatch `biometricBanner/dismiss` when clicked',
-          () => {
-            expect($store.dispatch).toHaveBeenLastCalledWith('biometricBanner/dismiss');
           });
       });
     });

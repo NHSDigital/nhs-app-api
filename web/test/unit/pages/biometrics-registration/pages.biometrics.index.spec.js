@@ -23,7 +23,6 @@ describe('biometrics prompt page', () => {
       postV1ApiMetricsBiometricsOptIn: jest.fn(() => Promise.resolve()),
       postV1ApiMetricsBiometricsOptOut: jest.fn(() => Promise.resolve()),
     };
-    $store.state.biometricBanner.dismissed = false;
 
     conditionalRedirect = jest.fn();
 
@@ -50,9 +49,6 @@ describe('biometrics prompt page', () => {
           device: {
             isNativeApp: true,
           },
-          biometricBanner: {
-            dismissed: false,
-          },
         },
       });
     });
@@ -66,9 +62,6 @@ describe('biometrics prompt page', () => {
           state: {
             device: {
               isNativeApp: true,
-            },
-            biometricBanner: {
-              dismissed: false,
             },
           },
         },
@@ -91,9 +84,6 @@ describe('biometrics prompt page', () => {
             device: {
               isNativeApp: true,
             },
-            biometricBanner: {
-              dismissed: false,
-            },
           },
         },
         biometricRegistered,
@@ -114,9 +104,6 @@ describe('biometrics prompt page', () => {
           state: {
             device: {
               isNativeApp: true,
-            },
-            biometricBanner: {
-              dismissed: false,
             },
           },
         },
@@ -191,10 +178,6 @@ describe('biometrics prompt page', () => {
         expect($store.dispatch).toBeCalledWith('biometrics/addBiometricsCookie');
       });
 
-      it('will call biometricBanner/dismiss', () => {
-        expect($store.dispatch).toBeCalledWith('biometricBanner/dismiss');
-      });
-
       it('will call loginSettings/updateRegistration', () => {
         expect($store.dispatch).toBeCalledWith('loginSettings/updateRegistration');
       });
@@ -216,10 +199,6 @@ describe('biometrics prompt page', () => {
 
       it('will add the cookie', () => {
         expect($store.dispatch).toBeCalledWith('biometrics/addBiometricsCookie');
-      });
-
-      it('will call biometricBanner/dismiss', () => {
-        expect($store.dispatch).toBeCalledWith('biometricBanner/dismiss');
       });
 
       it('will call postV1ApiMetricsBiometricsOptOut', () => {

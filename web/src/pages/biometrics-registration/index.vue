@@ -59,7 +59,6 @@ export default {
       hasTriedToContinue: false,
       selectedValue: undefined,
       biometricType: this.$store.getters['loginSettings/biometricType'],
-      bannerDismissed: this.$store.state.biometricBanner.dismissed,
       biometricsRegistered: this.$store.getters['loginSettings/biometricRegistered'],
       biometricsSupported: this.$store.getters['loginSettings/biometricSupported'],
     };
@@ -108,9 +107,6 @@ export default {
       if (!this.showError) {
         await this.$store.dispatch('biometrics/showBiometricSpinner', true);
         await this.$store.dispatch('biometrics/addBiometricsCookie');
-        if (!this.bannerDismissed) {
-          this.$store.dispatch('biometricBanner/dismiss');
-        }
 
         if (this.selectedValue === true) {
           await this.$store.dispatch('loginSettings/updateRegistration');

@@ -12,9 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
         {
             Navigation = new IOSFullNavigation(driver);
             PageContent =
-                new LoggedInHomePageContent(driver.Web.NhsAppLoggedInWebView(),
-                    LoggedInHomePageContent.BoiFaceId,
-                    LoggedInHomePageContent.IOSInfoText);
+                new LoggedInHomePageContent(driver.Web.NhsAppLoggedInWebView());
         }
 
         public static IOSLoggedInHomePage AssertOnPage(IIOSDriverWrapper driver,

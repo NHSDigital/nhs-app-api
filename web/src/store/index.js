@@ -6,7 +6,6 @@ import appVersion from './modules/appVersion';
 import auth from './modules/auth';
 import availableAppointments from './modules/availableAppointments';
 import biometrics from './modules/biometrics';
-import biometricBanner from './modules/biometricBanner';
 import cookieBanner from './modules/cookieBanner';
 import device from './modules/device';
 import documents from './modules/documents';
@@ -57,7 +56,6 @@ export default new Vuex.Store({
     appVersion,
     auth,
     availableAppointments,
-    biometricBanner,
     biometrics,
     cookieBanner,
     device,
