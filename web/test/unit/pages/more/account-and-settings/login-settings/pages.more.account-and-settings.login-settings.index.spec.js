@@ -69,30 +69,6 @@ describe('login settings page', () => {
           expect(toggle.element.checked).toBeTruthy();
         });
       });
-
-      describe('biometric registration action, when banner has been dismissed', () => {
-        beforeEach(() => {
-          mountPage();
-        });
-
-        it('will dispatch `loginSettings/updateRegistrationStatus` when clicked',
-          () => {
-            wrapper.find('label').trigger('click');
-            expect($store.dispatch).toHaveBeenLastCalledWith('loginSettings/updateRegistration');
-          });
-      });
-
-      describe('biometric registration action, when banner has not been dismissed', () => {
-        beforeEach(() => {
-          mountPage({ biometricsBannerDismissed: false });
-          wrapper.find('label').trigger('click');
-        });
-
-        it('will dispatch `loginSettings/updateRegistrationStatus` when clicked',
-          () => {
-            expect($store.dispatch).toHaveBeenCalledWith('loginSettings/updateRegistration');
-          });
-      });
     });
     describe('page information text', () => {
       describe('device biometric type is face', () => {
