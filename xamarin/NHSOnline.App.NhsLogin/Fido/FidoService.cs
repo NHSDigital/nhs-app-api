@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
 using NHSOnline.App.Threading;
+using Polly;
 
 namespace NHSOnline.App.NhsLogin.Fido
 {
@@ -51,7 +52,12 @@ namespace NHSOnline.App.NhsLogin.Fido
         {
             try
             {
-                return await _authorisationService.Authorise(fidoKey).PreserveThreadContext();
+                var retry = Policy.Handle<Exception>()
+                    .WaitAndRetryAsync(1, i => TimeSpan.FromSeconds(2));
+
+                return await retry.ExecuteAsync(async () =>
+                    await _authorisationService.Authorise(fidoKey).PreserveThreadContext())
+                    .PreserveThreadContext();
             }
             catch (CrossPlatformException e) when (e.ErrorType is CrossPlatformErrorType.UnrecoverableKey)
             {
