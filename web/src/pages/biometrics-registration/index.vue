@@ -111,7 +111,11 @@ export default {
         if (this.selectedValue === true) {
           await this.$store.dispatch('loginSettings/updateRegistration');
         } else {
-          await this.$store.app.$http.postV1ApiMetricsBiometricsOptOut();
+          try {
+            await this.$store.app.$http.postV1ApiMetricsBiometricsOptOut();
+          } catch {
+            // do nothing as this is just logging
+          }
           this.conditionalRedirect();
         }
       }
