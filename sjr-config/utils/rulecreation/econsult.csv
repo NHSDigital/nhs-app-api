@@ -40,7 +40,6 @@ barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,shifamed
 barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,stalbanssurgery,St Albans Surgery,F82017,8052
 barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,thesurgerydeweyroad,The Surgery Dewey Road - Dr C Ola,F82621,3947
 barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,gpbarking-whitehousesurgery,The White House and The Green House Surgeries,F82612,5824
-barking,Barking And Dagenham,CCG,Barking And Dagenham,North East London,victoriamc,Victoria Medical Centre,F82034,5080
 barnet,Barnet,CCG,Barnet,North Central London,addingtonmedicalcentre,Addington Medical Centre,E83044,9428
 barnet,Barnet,CCG,Barnet,North Central London,brunswickparkmedicalpractice,Brunswick Park Medical Practice,E83621,8552
 barnet,Barnet,CCG,Barnet,North Central London,deanslanemedicalcentre,Deans Lane Medical Centre,E83668,4273
@@ -645,7 +644,6 @@ hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,D
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,woodbridgepractice,Woodbridge Practice,A81017,18863
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,woodlandsmedical,Woodlands Family Medical Centre,A81046,12767
 hartlepool,Hartlepool and Stockton-on-Tees,CCG,Hartlepool and Stockton-on-Tees,Durham Darligton Teeside Hambleton Richmondshire and Whitby,wynyardandhartfields,Wynyard Road and Hartfields Medical Centre,A81070,6991
-havering,Havering,CCG,Havering,North East London,berwicksurgeryrainham,Berwick Surgery,F82649,4788
 havering,Havering,CCG,Havering,North East London,billetlanemedicalpractice,Billet Lane Medical Practice,F82675,3799
 havering,Havering,CCG,Havering,North East London,nhschasecrossmc,Chase Cross Medical Centre,F82630,6400
 havering,Havering,CCG,Havering,North East London,cranhamvillagesurgery,Cranham Village Surgery,F82006,12000
@@ -752,7 +750,6 @@ kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,oldbridgesurgery,Old B
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,portviewsurgery,Port View Surgery,L82066,6600
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,quaylanesurgery,Quay Lane Surgery,L82043,4500
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,rosedeansurgery,Rosedean House Surgery,L82050,9200
-kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,saltashhealth,Saltash Health Centre,L82046,13000
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,theclayspractice,The Clays Practice,L82051,13060
 kernow,Kernow,CCG,Kernow,Cornwall and the Isles of Scilly,wadebridgedoctors,Wadebridge and Camel Estuary Practice,L82004,7150
 kilburnnetwork,Kilburn Network,ORGANISATION,Brent,North West London,mapesburymedicalgroup,Mapesbury Medical Group,E84012,9238
@@ -1133,15 +1130,12 @@ redbridge,Redbridge,CCG,Redbridge,North East London,easternavenuemedicalcentre,E
 redbridge,Redbridge,CCG,Redbridge,North East London,elmhurstpractice,Elmhurst Practice,F86064,4814
 redbridge,Redbridge,CCG,Redbridge,North East London,evergreensurgery,Evergreen Surgery,F86023,9000
 redbridge,Redbridge,CCG,Redbridge,North East London,fencepieceroadmedicalcentre,Fencepiece Road Medical Centre,F86707,6400
-redbridge,Redbridge,CCG,Redbridge,North East London,fullwellcrosscentre,Fullwell Cross Medical Centre,F86010,13400
 redbridge,Redbridge,CCG,Redbridge,North East London,gantshillmedical,Gants Hill Medical Centre,F86008,8900
 redbridge,Redbridge,CCG,Redbridge,North East London,glebelandspractice,Glebelands Practice,F86020,5983
 redbridge,Redbridge,CCG,Redbridge,North East London,goodmayesmc,Goodmayes Medical Centre - IG3 8XB,F86087,7224
 redbridge,Redbridge,CCG,Redbridge,North East London,grovesurgerychadwellheathlane,Grove Surgery,Y00155,8800
 redbridge,Redbridge,CCG,Redbridge,North East London,hainaultsurgery,Hainault Surgery,F86085,3000
-redbridge,Redbridge,CCG,Redbridge,North East London,ilfordlanesurgery,Ilford Lane Surgery,F86082,5819
 redbridge,Redbridge,CCG,Redbridge,North East London,mathukiasurgery,Mathukia Surgery,F86692,10228
-redbridge,Redbridge,CCG,Redbridge,North East London,oaktreemedicalcentre,Oak Tree Medical Centre,F86025,13085
 redbridge,Redbridge,CCG,Redbridge,North East London,queenmarypractice,Queen Mary Practice,F86658,4508
 redbridge,Redbridge,CCG,Redbridge,North East London,rydalgp,Rydal Group Practice,F86012,11003
 redbridge,Redbridge,CCG,Redbridge,North East London,sevenkingspractice,Seven Kings Practice,F86637,5500
@@ -1453,7 +1447,6 @@ towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North Ea
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,islandmedicalcentre,Island Medical Centre,F84647,6889
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,jubileestreetpractice,Jubilee Street Practice,F84031,11411
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,limehousepractice,Limehouse General Practice,F84054,11246
-towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,merchantstreet,Merchant Street,F84118,5359
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,stkatharinedocks,St. Katherine Dock Practice,F84731,1977
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,blithehalemedicalcentre,The Blithehale Health Centre,F84718,12115
 towerhamletsgpcg,Tower Hamlets GP Care Group,ORGANISATION,Tower Hamlets,North East London,thespitalfieldspractice,The Spitalfields Practice,F84081,13378
@@ -1514,11 +1507,8 @@ walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,highroadsurger
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,highamhillmedicalcentre,Higham Hill Medical Centre,F86679,5391
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,kingsheadmp,Kings Head Medical Practice,F86700,3750
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,kiyanimedicalpractice,Kiyani Medical Practice,F86701,3132
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,langthornesharmafamilypractice,Langthorne Sharma Family Practice,F86705,2916
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,larkshallmedicalcentre,Larkshall Medical Centre,F86664,8409
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,leytonhealthcare,Leyton Healthcare,F86074,13500
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,ltshealthcare,Lime Tree and Sinnott Healthcare Ltd,Y01839,6447
-walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,limetreesurgery,Lime Tree Surgery,F86650,7982
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,queensroadmedicalcentre,Queens Road Medical Centre,F86030,7828
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,smamedicalcentre,SMA Medical Centre,F86038,11000
 walthamforest,Waltham Forest,CCG,Waltham Forest,North East London,allumpractice,The Allum Practice,F86036,15500
@@ -1867,8 +1857,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Churchfield Surgery,E85640,
 ,,,Other,,,St Luke's Primary Care Centre,K83041,
 ,,,Other,,,Rosebank Health,L84050,
-,,,Other,,,Wootton Vale Healthy Living Centre,Y00560,
-,,,Other,,,Shortstown Surgery,Y00561,
 ,,,Other,,,Bridge View Medical Group,A89019,
 ,,,Other,,,Manor Park Surgery - Leeds,B86015,
 ,,,Other,,,Torrington Park Group Practice,E83021,
@@ -1995,7 +1983,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Birchwood Medical Practice,L81120,
 ,,,Other,,,Orchard 2000 Group,B81018,
 ,,,Other,,,Partnership Primary Care Centre,F83681,
-,,,Other,,,The Willows Medical Practice,F86057,
 ,,,Other,,,The Shrubbery Surgery,G82021,
 ,,,Other,,,The Grovehurst Surgery,G82026,
 ,,,Other,,,North Ridge Medical Practice,G82055,
@@ -2171,7 +2158,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,New Eltham Medical Centre,G83628,
 ,,,Other,,,Waverley Practice,G83635,
 ,,,Other,,,Waterloo Health Centre,G85136,
-,,,Other,,,Station Road Surgery,H81040,
 ,,,Other,,,Holly Tree Surgery,H81110,
 ,,,Other,,,Park Surgery,H82017,
 ,,,Other,,,Woodlands & Clerklands Partnership,H82025,
@@ -2209,7 +2195,6 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,Avisford Medical Group,H82048,
 ,,,Other,,,Pound Hill Medical Group,H82052,
 ,,,Other,,,Furnace Green,H82053,
-,,,Other,,,Brunswick Surgery,H84015,
 ,,,Other,,,Hook Surgery,H84025,
 ,,,Other,,,Holmwood Corner Surgery,H84042,
 ,,,Other,,,Red Lion Road Surgery,H84054,
@@ -2334,3 +2319,5 @@ woodlandsmedicalpractice,Woodlands Medical Practice,PRACTICE,Oldham,Greater Manc
 ,,,Other,,,The Limes Medical Centre,F81043,
 ,,,Other,,,Royton Medical Centre,P85019,
 ,,,Other,,,Medlock Medical Practice,P85610,
+,,,Other,,,Castle Medical Practice,G82653,
+,,,Other,,,Island City Practice,J82085,

@@ -307,7 +307,6 @@ N81085,Park Lane Surgery
 N83032,Millbrook Medical Centre
 N83049,Kenneth Macrae Med Centre
 P81008,Yorkshire Street Medical Centre
-P81025,The Richmond Hill Practice
 P81045,The Elms Practice
 P81179,Lostock Hall Medical Ctr.
 P81674,Stanley Court Surgery
@@ -569,12 +568,8 @@ C88022,Stonecroft Medical Centre
 C88074,Deepcar Medical Centre
 C88041,Woodseats Medical Centre
 C88082,Carrfield Medical Centre
-C88656,Stannington Medical Centre
-C85623,Kingswell Surgery Pms Practice
 C86626,Park View Surgery
-P85620,St Chads Medical Practice
 P85601,Jalal Practice
-P85602,Saraf Medical Practice
 K83056,County Surgery
 C85028,Lundwood Medical Centre Pms Practice
 P85615,Kapur Family Care
@@ -736,10 +731,8 @@ M85746,Mirfield Surgery
 Y03597,Hamd Medical Practice
 M85699,Coventry Road Medical Centre
 M85153,Weather Oak Medical Centre
-M85694,Garretts Green Lane Surgery
 N81027,Readesmoor Medical Group Practice
 L83051,Cricketfield Surgery
-M85034,Omnia Practice
 L83004,Kingsteignton Medical Practice
 M89013,Arran Medical Centre
 L83073,Brannam Medical Centre
@@ -840,7 +833,6 @@ M85107,Firs Surgery
 C81108,Melbourne & Chellaston Medical Practice
 M85028,Lordswood House Group Medical Practice
 M89024,Grafton Road Surgery
-C81642,Park View Medical Centre
 M85794,The Balaji Surgery
 C81095,Dr Hr Mcmurray's Practice
 Y05826,The Hill Gp Practice
@@ -910,7 +902,6 @@ M85141,Schoolacre Road Surgery
 M85732,Bloomsbury Surgery
 M85081,The Dove Medical Practice
 M85139,Alpha Medical Practice
-M85066,Ward End Medical Centre
 M85670,Greenfield Medical Centre
 C81652,Derwent Medical Centre
 M85118,Baldwins Lane Surgery
@@ -925,9 +916,7 @@ F84122,Xx Place Health Centre
 F84696,Tredegar Practice
 F84640,The Neaman Practice
 F84044,Harley Grove Medical Ctr.
-F84124,The Project Surgery
 F84006,The Shrewsbury Centre
-F84666,The Ruiz Medical Practice
 F84079,The Wapping Group Practice
 F84004,Market Street Health Group
 F86022,Ilford Medical Centre
@@ -939,10 +928,7 @@ F84720,Healy Medical Centre
 F84677,East End Medical Centre
 F84021,London Fields Medical Centre
 F84632,The Greenhouse Walk-In
-F84694,The Surgery (Brooke Road)
-F84668,The Clapton Surgery
 F82010,Petersfield Surgery
-F84685,The Elm Practice
 F84080,Fountayne Road Health Centre
 F84711,Rosewood Practice
 F82038,Dr Sz Haider's Practice
@@ -1008,7 +994,6 @@ K83005,Queensway Medical Centre
 K83044,Parklands Medical Centre
 K83080,Higham Ferrers Surgery
 K83040,Woodview Medical Centre
-K83076,Weston Favell Medical Centre
 K83621,Maple Access Partnership Llp
 K83616,The Meadows Surgery
 K83012,King Edward Road Surgery
@@ -1032,8 +1017,6 @@ P91631,Riddings Family Health Centre
 P91617,Family Surgery
 C81640,Simmondley Medical Practice
 P91011,Shay Lane Medical Centre (Patel)
-Y02713,Guide Bridge Medical Practice
-Y02936,Millbrook Medical Practice
 P89612,Mossley Medical Practice
 C81081,Manor House Surgery
 L85009,West Somerset Healthcare
@@ -1048,7 +1031,6 @@ Y03023,St Andrews Health Centre
 F81108,Laindon Medical Group
 F84034,St. Stephens Health Centre
 F84055,The Grove Road Surgery
-F86652,The Drive Surgery
 F84710,Island Health
 F86042,Balfour Road Surgery
 F86625,Ll Medical Care Ltd
@@ -1085,15 +1067,12 @@ P84046,Cheetham Hill Primary Care Centre
 P81157,Fernbank Surgery
 P81737,The Old Links Surgery
 P81086,Broadway Medical Centre
-P81031,Poplar House Surgery
 A82053,Nutwood Medical Practice
 P81171,The Euxton Medical Centre
-P81181,Kingsfold Medical Centre
 N81053,Earnswood Medical Centre
 P81695,Aughton Surgery
 A82039,Dalton Surgery
 P81138,Burscough Family Practice
-P81646,Lathom House Surgery
 C82040,Orchard Surgery
 A82072,Risedale Surgery
 A82062,Atkinson Health Centre
@@ -1127,7 +1106,6 @@ G82229,Sutton Valence Group Practice
 J82099,Richmond Surgery
 L85006,Crown Medical Centre
 G82085,Snodland Medical Practice
-G82083,Thornhills Medical Practice
 F86034,Green Lane Goodmayes Medical Practice
 F86698,Cranbrook Surgery
 F82021,The New Medical Centre
@@ -1150,3 +1128,13 @@ G82687,Dr S J Witts Practice
 G82023,Sheerness Health Centre
 P81069,Pendleside Medical Pract
 L84054,Mythe Medical Practice
+H81040,Station Road Surgery
+C85023,Hollygreen Practice
+Y04809,Lakeside Surgery
+F84118,Merchant Street Practice
+F86705,Langthorne Sharma Family Practice
+F86082,Ilford Lane Surgery
+F86025,Oak Tree Medical Centre
+L82046,Saltash Health Centre
+L82016,Oak Tree Surgery
+H84015,Brunswick Surgery
