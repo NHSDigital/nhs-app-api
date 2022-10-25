@@ -480,6 +480,10 @@ export default {
         serviceId: 'ers',
         providerName: 'Electronic Referral Service',
       },
+      gncr: {
+        serviceId: 'gncr',
+        providerName: 'Great North Care Record',
+      },
       healthcarecomms: {
         serviceId: 'healthcarecomms',
         providerName: 'Healthcare Communications',

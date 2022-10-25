@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
             Context.Mocks.Auditor.Verify(a => a.PreOperationAudit(AuditingOperations.SecondaryCareGetSummaryRequest,
                 "Attempting to get Secondary Care Summary"));
             Context.Mocks.Auditor.Verify(a => a.PostOperationAudit(AuditingOperations.SecondaryCareGetSummaryResponse,
-                "Secondary Care Summary successfully retrieved. Total Referrals: 8, Total Upcoming Appointments: 53"));
+                "Secondary Care Summary successfully retrieved. Total Referrals: 8, Total Upcoming Appointments: 60"));
 
             VerifyNoOtherLoggerCalls();
 
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
                 .Select(pair => pair.index)
                 .FirstOrDefault()
                 .Should()
-                .Be(27);
+                .Be(30);
 
             // Check sorting: ReferralsInReviewNotOverdue - earliest first
             summaryResponse?.ReferralsInReviewNotOverdue[0]

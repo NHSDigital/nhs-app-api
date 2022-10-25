@@ -7,6 +7,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
         private const string KnownServiceBaseUrlAccurx = "http://accurxwayfinder.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlDrDoctor = "http://drdoctor.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlErs = "http://ers.stubs.local.bitraft.io:8080";
+        private const string KnownServiceBaseUrlGncr = "http://gncr.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlHealthcareComms = "http://hcc.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlNetcall = "http://netcall.stubs.local.bitraft.io:8080";
         private const string KnownServiceBaseUrlPkb = "https://pkb.securestubs.local.bitraft.io";
@@ -31,6 +32,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 {ServiceProvider.Accurx, $"{KnownServiceBaseUrlAccurx}/api/OpenIdConnect/AuthenticateManageAppointment?appointmentToken={{0}}"},
                 {ServiceProvider.DrDoctor, $"{KnownServiceBaseUrlDrDoctor}/appointments/{{0}}?from=nhsApp"},
                 {ServiceProvider.eRS, $"{KnownServiceBaseUrlErs}/nhslogin?ubrn={{0}}"},
+                {ServiceProvider.Gncr, $"{KnownServiceBaseUrlGncr}/Appointment/{{0}}"},
                 {ServiceProvider.HealthcareComms, $"{KnownServiceBaseUrlHealthcareComms}/appointments/{{0}}"},
                 {ServiceProvider.NBS, $"{KnownServiceBaseUrlNbs}/nhs-login/start-page"},
                 {ServiceProvider.Netcall, $"{KnownServiceBaseUrlNetcall}/Appointments?id={{0}}&trust=789"},

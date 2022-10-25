@@ -27,7 +27,6 @@ using NHSOnline.Backend.Support.Settings;
 using RichardSzalay.MockHttp;
 using UnitTestHelper;
 using ServiceProvider = Microsoft.Extensions.DependencyInjection.ServiceProvider;
-using WayfinderServiceProvider = NHSOnline.Backend.PfsApi.SecondaryCare.Models.ServiceProvider;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.SecondaryCare
 {

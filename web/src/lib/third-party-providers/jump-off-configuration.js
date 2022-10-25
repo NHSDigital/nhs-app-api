@@ -259,6 +259,11 @@ const thirdPartyProvider = {
       acceptablePathsRegex: '^\\/appointments\\/.*$',
       redirectPath: '/appointments/',
     },
+    gncr: {
+      jumpOffId: 'gncrWayfinder',
+      acceptablePathsRegex: '^\\/Appointment\\/.*$',
+      redirectPath: '/Appointment',
+    },
     healthcarecomms: {
       jumpOffId: 'healthcarecommsWayfinder',
       acceptablePathsRegex: '^\\/appointments\\/.*$',

@@ -19,6 +19,7 @@ import mocking.thirdPartyProviders.drDoctor.DrDoctorRequestBuilder
 import mocking.thirdPartyProviders.engage.EngageRequestBuilder
 import mocking.thirdPartyProviders.healthcarecomms.HealthcareCommsRequestBuilder
 import mocking.thirdPartyProviders.gncr.GNCRRequestBuilder
+import mocking.thirdPartyProviders.gncr.GNCRWayfinderRequestBuilder
 import mocking.thirdPartyProviders.nationalBookingService.NBSRequestBuilder
 import mocking.thirdPartyProviders.netCompany.NetCompanyRequestBuilder
 import mocking.thirdPartyProviders.netcall.NetcallRequestBuilder
@@ -61,6 +62,7 @@ class MockingClient(configuration: MockingConfiguration) {
     val forEngage = ExternalSupplierMockingClient(EngageRequestBuilder(), wiremockHelper)
     val forHealthcareComms = ExternalSupplierMockingClient(HealthcareCommsRequestBuilder(), wiremockHelper)    
     val forGNCR = ExternalSupplierMockingClient(GNCRRequestBuilder(), wiremockHelper)
+    val forGNCRWayfinder = ExternalSupplierMockingClient(GNCRWayfinderRequestBuilder(), wiremockHelper)
     val forNBS = ExternalSupplierMockingClient(NBSRequestBuilder(), wiremockHelper)
     val forNetcall = ExternalSupplierMockingClient(NetcallRequestBuilder(), wiremockHelper)
     val forNetCompany = ExternalSupplierMockingClient(NetCompanyRequestBuilder(), wiremockHelper)

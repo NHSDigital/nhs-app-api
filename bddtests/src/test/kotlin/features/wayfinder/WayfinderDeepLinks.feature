@@ -34,6 +34,7 @@ Feature: Wayfinder DeepLinks
     | Provider        | DeepLink                                                                                                                 |
     | AccurxWayfinder | http://accurxwayfinder.stubs.local.bitraft.io:8080/api/OpenIdConnect/AuthenticateManageAppointment?appointmentToken=XXXX |
     | DrDoctor        | http://drdoctor.stubs.local.bitraft.io:8080/appointments/123456?from=nhsApp                                              |
+    | GNCRWayfinder   | http://gncr.stubs.local.bitraft.io:8080/Appointment/2c0c15c5-901c-ed11-bd6e-281878c707a7                                 |
     | HealthcareComms | http://hcc.stubs.local.bitraft.io:8080/appointments/987654321                                                            |
     | Netcall         | http://netcall.stubs.local.bitraft.io:8080/Appointments?id=49482520-9026-4398-b3a0-2b738ebc1365&trust=789                |
     | PKB             | http://pkb.stubs.local.bitraft.io:8080/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D           |

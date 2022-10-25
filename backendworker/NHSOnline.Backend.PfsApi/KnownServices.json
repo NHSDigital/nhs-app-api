@@ -193,17 +193,6 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    "healthcarecomms": {
-      "subServices": null,
-      "javaScriptInteractionMode": "SilverThirdParty",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": true,
-      "validateSession": true,
-      "requiresAssertedLoginIdentity": true,
-      "showThirdPartyWarning": true
-    },
     "gncr": {
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -214,6 +203,17 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
+    },
+    "healthcarecomms": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "validateSession": true,
+      "requiresAssertedLoginIdentity": true,
+      "showThirdPartyWarning": true
     },
     "hotjar": {
       "url": "https://in.hotjar.com",
