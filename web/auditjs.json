@@ -1,5 +1,6 @@
 {
   "ignore": [
-    { "id": "CVE-2022-21944", "reason": "Package is fb-watchman. Testing package dependency which requires migration (fix ticket NHSO-20931)" }
+    { "id": "CVE-2022-21944", "reason": "Package is fb-watchman. Testing package dependency which requires migration (fix ticket NHSO-20931)" },
+    { "id": "CVE-2022-37598", "reason": "Package is UglifyJS. This is a sub-dependency of swagger-node-codegen which is part of the build not client facing. (monitor ticket NHSO-23328)" }
    ]
 }
