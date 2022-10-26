@@ -24,7 +24,7 @@ jobs:
     displayName: Build Xamarin iOS - ${{ parameters.configuration }}
     dependsOn:
     pool:
-      vmImage: 'macos-11'
+      vmImage: 'macos-12'
 
     variables:
       output.directory: '$(build.binariesDirectory)/$(build.configuration)'
