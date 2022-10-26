@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData
@@ -8,6 +9,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData
         public string FileType { get; set; }
 
         [XmlElement("BinaryDataPage")]
-        public BinaryDataPage BinaryDataPage { get; set; }
+        public List<BinaryDataPage> BinaryDataPages { get; set; }
     }
 }

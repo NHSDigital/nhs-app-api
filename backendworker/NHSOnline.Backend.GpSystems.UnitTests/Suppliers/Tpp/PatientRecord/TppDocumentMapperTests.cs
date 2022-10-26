@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         public void TestInitialize()
         {
             _mockLogger = new Mock<ILogger<ITppDocumentMapper>>();
-            
+
             _mapper = new TppDocumentMapper(_mockLogger.Object);
         }
 
@@ -41,9 +42,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = "invalid",
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test"
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };
@@ -82,16 +86,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = fileType,
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test"
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };
 
             var expectedPatientDocument = new PatientDocument
             {
-                Content = $"<img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,test\"/>",
+                Content = $"<div id=\"document_0\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,test\"/></div>",
+                Type = binaryRequestResponse.BinaryData.FileType,
+                HasErrored = false,
+                IsViewable = true,
+                IsDownloadable = true
+            };
+
+            // Act
+            var patientDocument = _mapper.Map(binaryRequestResponse);
+
+            // Assert
+            patientDocument.Should().NotBeNull();
+            patientDocument.Should().BeEquivalentTo(expectedPatientDocument);
+        }
+
+        [DataTestMethod]
+        [DataRow("jpg", "image/jpg")]
+        [DataRow("bmp", "image/bmp")]
+        [DataRow("dib", "image/dib")]
+        [DataRow("gif", "image/gif")]
+        [DataRow("jpeg", "image/jpg")]
+        [DataRow("jpe", "image/jpg")]
+        [DataRow("jfif", "image/jpg")]
+        [DataRow("png", "image/png")]
+        public void Map_ViewableTypeWithMultiplePages_ReturnsSuccessfulResult(string fileType, string mimeType)
+        {
+            // Arrange
+            var binaryRequestResponse = new RequestBinaryDataReply
+            {
+                BinaryData = new BinaryDataElement
+                {
+                    FileType = fileType,
+                    BinaryDataPages = new List<BinaryDataPage>
+                    {
+                        new BinaryDataPage
+                        {
+                            BinaryData = "page1"
+                        },
+                        new BinaryDataPage
+                        {
+                            BinaryData = "page2"
+                        },
+                        new BinaryDataPage
+                        {
+                            BinaryData = "page3"
+                        }
+                    }
+                }
+            };
+
+            var expectedPatientDocument = new PatientDocument
+            {
+                Content = $"<div id=\"document_0\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,page1\"/></div><div id=\"document_1\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,page2\"/></div><div id=\"document_2\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,page3\"/></div>",
                 Type = binaryRequestResponse.BinaryData.FileType,
                 HasErrored = false,
                 IsViewable = true,
@@ -124,9 +183,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = fileType,
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test"
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };
@@ -164,9 +226,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = "invalid",
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test"
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };
@@ -189,9 +254,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = "jpg",
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = content
+                        new BinaryDataPage
+                        {
+                            BinaryData = content
+                        }
                     }
                 }
             };
@@ -247,9 +315,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 BinaryData = new BinaryDataElement
                 {
                     FileType = fileType,
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test"
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };

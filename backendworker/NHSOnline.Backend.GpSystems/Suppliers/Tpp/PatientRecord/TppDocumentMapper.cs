@@ -49,12 +49,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
             if (isViewable)
             {
-                content = string.Format(
-                    CultureInfo.InvariantCulture,
-                    Constants.FileConstants.ImageHtmlFormat,
-                    Constants.FileConstants.AltTagDescriptionForTpp,
-                    Constants.FileConstants.FileTypes.DocumentMimeTypes[type],
-                    requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData);
+                for (int i = 0; i < requestBinaryDataReply.BinaryData.BinaryDataPages.Count; i++)
+                {
+                    content += string.Format(
+                        CultureInfo.InvariantCulture,
+                        Constants.FileConstants.ImageHtmlFormat,
+                        Constants.FileConstants.AltTagDescriptionForTpp,
+                        Constants.FileConstants.FileTypes.DocumentMimeTypes[type],
+                        requestBinaryDataReply.BinaryData.BinaryDataPages[i].BinaryData,
+                        i);
+
+                }
             }
 
             return new PatientDocument
@@ -75,7 +80,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
 
             var type = MapFileTypeToDownloadType(requestBinaryDataReply.BinaryData.FileType);
-            var documentAsBase64 = requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData;
+
+            var documentAsBase64 = requestBinaryDataReply.BinaryData.BinaryDataPages.FirstOrDefault().BinaryData;
 
             if (!Constants.FileConstants.FileTypes.WhiteListTypes.Contains(type, StringComparer.OrdinalIgnoreCase))
             {

@@ -2,7 +2,9 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="documentData"/>
+      <div v-if="supplier === 'TPP'" id="documentContainer" v-html="documentData"/>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-else id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="documentData"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  :path="documentPath"/>
@@ -34,6 +36,7 @@ export default {
   data() {
     return {
       documentData: null,
+      supplier: null,
     };
   },
   computed: {
@@ -45,6 +48,7 @@ export default {
     },
   },
   async mounted() {
+    this.supplier = this.$store.state.myRecord.record.supplier;
     if (!this.$store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
       redirectTo(this, GP_MEDICAL_RECORD_PATH);
       return;

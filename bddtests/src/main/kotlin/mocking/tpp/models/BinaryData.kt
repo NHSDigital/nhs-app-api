@@ -9,12 +9,13 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 import javax.xml.bind.annotation.XmlElement
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 data class BinaryData(
         @XmlAttribute var fileType: String = "jpg",
-        @field:XmlElement(name = "BinaryDataPage") var binaryDataPage: BinaryDataPage = BinaryDataPage(
-                loadFile()
+        @XmlElement(name = "BinaryDataPage")
+        var BinaryDataPage: MutableList<BinaryDataPage> = arrayListOf(
+                BinaryDataPage(loadFile()),
+                BinaryDataPage(loadFile())
         )
 )
 

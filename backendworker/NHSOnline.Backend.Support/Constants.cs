@@ -226,7 +226,7 @@ namespace NHSOnline.Backend.Support
             }
 
             public const string ImageHtmlFormat =
-                "<img alt=\"{0}\" src=\"data:{1};base64,{2}\"/>";
+                "<div id=\"document_{3}\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{0}\" src=\"data:{1};base64,{2}\"/></div>";
 
             public const string AltTagDescriptionForTpp =
                 "This file has no description, please contact your GP surgery for more information";

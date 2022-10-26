@@ -63,9 +63,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 BinaryData = new BinaryDataElement
                 {
                     FileType = "jpg",
-                    BinaryDataPage = new BinaryDataPage
+                    BinaryDataPages = new List<BinaryDataPage>
                     {
-                        BinaryData = "test",
+                        new BinaryDataPage
+                        {
+                            BinaryData = "test"
+                        }
                     }
                 }
             };

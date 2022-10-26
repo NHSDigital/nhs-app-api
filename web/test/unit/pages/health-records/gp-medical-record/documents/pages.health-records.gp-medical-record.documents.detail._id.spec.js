@@ -156,6 +156,24 @@ describe('health-records documents', () => {
         expect(documentContent.exists()).toBe(true);
         expect(documentContent.find('h1').element.innerHTML).toEqual('This is a document');
       });
+      it('will display the correct container when supplier is TPP', () => {
+        $store.state.myRecord.record.supplier = 'TPP';
+        mountPage();
+        const documentContent = page.find('div[id="documentContainer"]');
+        expect(documentContent.exists()).toBe(true);
+      });
+      it('will display the correct container when supplier is EMIS', () => {
+        $store.state.myRecord.record.supplier = 'EMIS';
+        mountPage();
+        const documentContent = page.find('div[id="document"]');
+        expect(documentContent.exists()).toBe(true);
+      });
+      it('will display the correct container when supplier is VISION', () => {
+        $store.state.myRecord.record.supplier = 'VISION';
+        mountPage();
+        const documentContent = page.find('div[id="document"]');
+        expect(documentContent.exists()).toBe(true);
+      });
     });
   });
 });
