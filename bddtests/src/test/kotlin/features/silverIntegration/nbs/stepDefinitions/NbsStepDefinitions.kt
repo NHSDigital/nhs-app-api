@@ -19,7 +19,7 @@ class NbsStepDefinitions : HybridPageObject() {
             NBSRequestBuilder().appointmentBookingsRequest().respondWithPage()
         }
     }
-
+    
     @Given("^I am a user who can view Book Coronavirus Vaccinations from NBS$")
     fun iAmAUserWhoCanViewBookCoronavirusVaccinationsFromNBS(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NBS)
@@ -28,6 +28,11 @@ class NbsStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Book Coronavirus Vaccinations from NBS$")
     fun iAmAUserWhoCannotViewBookCoronavirusVaccinationsFromNBS() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NONE)
+    }
+
+    @Given("^I am a P5 user who cannot view Book Coronavirus Vaccinations from NBS$")
+    fun iAmAUserWhoCannotViewBookCoronavirusVaccinationsFromNBSWithP5Access() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_APPOINTMENTS_BOOKING_NBS, IdentityProofingLevel.P5)
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

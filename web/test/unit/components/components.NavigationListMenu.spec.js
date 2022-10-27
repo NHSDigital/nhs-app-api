@@ -81,6 +81,23 @@ describe('Navigation Links ', () => {
       });
   });
 
+  describe('NBS Vaccine Record link', () => {
+    each([
+      ['P9', 'not proxying', 'defined', 'shown', true, false, true, true],
+      ['P9', 'proxying', 'defined', 'hidden', true, true, true, false],
+      ['P9', 'not proxying', 'not defined', 'hidden', true, false, false, false],
+      ['P9', 'proxying', 'not defined', 'hidden', true, true, false, false],
+      ['P5', 'not proxying', 'defined', 'hidden', false, false, true, false],
+      ['P5', 'proxying', 'defined', 'hidden', false, true, true, false],
+      ['P5', 'not proxying', 'not defined', 'hidden', false, false, false, false],
+      ['P5', 'proxying', 'not defined', 'hidden', false, true, false, false],
+    ])
+      .it('A %s user that is %s, and has NBS vaccine record provider %s, will have NBS vaccine record link %s', (_, __, ___, ____, isProofLevel9, isProxying, integrationEnabled, isVisible) => {
+        wrapper = mountAs({ isProofLevel9, isProxying, integrationEnabled });
+        expect(wrapper.find('#btn_nbs_booking').exists()).toBe(isVisible);
+      });
+  });
+
   describe('Linked Accounts link', () => {
     each([
       ['shown', 'supports linked profiles', true, true],
@@ -112,6 +129,9 @@ describe('Navigation Links ', () => {
     it('will show linked profiles link', () => {
       expect(wrapper.find('#linked-profiles-link').exists()).toBe(true);
     });
+    it('will show nbs link', () => {
+      expect(wrapper.find('#btn_nbs_booking').exists()).toBe(true);
+    });
   });
 
   describe('P5 User', () => {
@@ -126,6 +146,9 @@ describe('Navigation Links ', () => {
     });
     it('will not show linked profiles link', () => {
       expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
+    });
+    it('will not show nbs link', () => {
+      expect(wrapper.find('#btn_nbs_booking').exists()).toBe(false);
     });
   });
 

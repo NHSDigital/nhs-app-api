@@ -24,6 +24,10 @@
                  :count="unreadMessagesCount"
                  :click-func="navigateToMessages"
                  :is-messaging="true"/>
+      <third-party-jump-off-button v-if="showNBSAppointmentBookings"
+                                   id="btn_nbs_booking"
+                                   provider-id="nbs"
+                                   :provider-configuration="thirdPartyProvider.nbs.appointmentBookings"/>
       <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
                  id="linked-profiles-link"
                  :header-tag="headerTag"
@@ -117,6 +121,16 @@ export default {
         },
       });
     },
+    hasNBS() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'nbs',
+          serviceType: 'appointmentBookings',
+        },
+      });
+    },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
@@ -140,6 +154,9 @@ export default {
     },
     showNetCompanyVaccineRecord() {
       return this.hasNetCompanyVaccineRecord && !this.isProxying && this.isProofLevel9;
+    },
+    showNBSAppointmentBookings() {
+      return this.hasNBS && !this.isProxying && this.isProofLevel9;
     },
     showNetCompanyP5VaccineRecord() {
       return this.hasNetCompanyP5VaccineRecord && !this.isProxying && !this.isProofLevel9;
