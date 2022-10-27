@@ -131,6 +131,7 @@ api:
     services__cid_access__url: https://access.login.nhs.uk
     services__cid_idvm__url: https://idvm.login.nhs.uk
     services__ers__url: https://refer.nhs.uk
+    services__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net  #For now - sandpit
     services__patchs__url: https://sandbox.patchs.ai   #For now - sandpit
     services__pkb__url: https://my.patientsknowbest.com
     services__pkb_alt__url: http://my.patientsknowbest.com:443
@@ -160,6 +161,7 @@ api:
     servicesV3__ers__url: https://refer.nhs.uk
     servicesV3__healthcarecomms__url: https://nhs-app.nhsportal.net
     servicesV3__healthcarecomms__domains__1: https://api.nhsportal.net
+    servicesV3__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net  #For now - sandpit
     servicesV3__patchs__url: https://sandbox.patchs.ai   #For now - sandpit
     servicesV3__pkb__url: https://my.patientsknowbest.com
     servicesV3__pkb__domains__1: http://my.patientsknowbest.com:443

@@ -1105,3 +1105,58 @@ defaultUsers:
       familyName: Morrison
       dateOfBirth: "2002-06-06T00:00:00"
       sex: Male
+
+  nbs:
+    9692113927:
+      userId: a24b9096-c27d-48b9-a89a-742a26fe9eb7
+      emailAddress: nhsapp.aos+nbs.user1@gmail.com
+      odsCode: F00016
+      givenName: Sharon
+      familyName: Carlin
+      dateOfBirth: "1998-01-01T00:00:00"
+      sex: Female
+
+    9692113928:
+      userId: 3e14acd7-74c4-4b6a-a8d3-049a12a4314a
+      emailAddress: nhsapp.aos+nbs.user2@gmail.com
+      odsCode: F00016
+      givenName: Thomas
+      familyName: Doherty
+      dateOfBirth: "1981-02-02T00:00:00"
+      sex: Male
+
+    9692113929:
+      userId: f585782f-5ee1-47b1-a1f8-2480b917b8ee
+      emailAddress: nhsapp.aos+nbs.user3@gmail.com
+      odsCode: F00016
+      givenName: Jessica
+      familyName: Pierson
+      dateOfBirth: "1976-03-03T00:00:00"
+      sex: Female
+
+    9692113930:
+      userId: 45bdf11a-f0ff-43d6-bfb2-0727dcdec3ee
+      emailAddress: nhsapp.aos+nbs.user4@gmail.com
+      odsCode: F00016
+      givenName: Fred
+      familyName: Walsh
+      dateOfBirth: "1999-04-04T00:00:00"
+      sex: Male
+
+    9692113931:
+      userId: 2fb60be5-0c02-49d9-b989-fd3b7b1d268c
+      emailAddress: nhsapp.aos+nbs.user5@gmail.com
+      odsCode: F00016
+      givenName: Anna
+      familyName: Worth
+      dateOfBirth: "1979-05-05T00:00:00"
+      sex: Female
+
+    9692113932:
+      userId: 8a398d1a-adaf-4390-a35e-dbbfbbfad7f0
+      emailAddress: nhsapp.aos+nbs.user6@gmail.com
+      odsCode: F00016
+      givenName: Gordon
+      familyName: Murray
+      dateOfBirth: "2002-06-06T00:00:00"
+      sex: Male

@@ -34,7 +34,7 @@ namespace NHSOnline.HttpMocks.SecondaryCare
                 {ServiceProvider.eRS, $"{KnownServiceBaseUrlErs}/nhslogin?ubrn={{0}}"},
                 {ServiceProvider.Gncr, $"{KnownServiceBaseUrlGncr}/Appointment/{{0}}"},
                 {ServiceProvider.HealthcareComms, $"{KnownServiceBaseUrlHealthcareComms}/appointments/{{0}}"},
-                {ServiceProvider.NBS, $"{KnownServiceBaseUrlNbs}/nhs-login/start-page"},
+                {ServiceProvider.NBS, $"{KnownServiceBaseUrlNbs}/book-a-coronavirus-vaccination/start-page"},
                 {ServiceProvider.Netcall, $"{KnownServiceBaseUrlNetcall}/Appointments?id={{0}}&trust=789"},
                 {ServiceProvider.PKB, $"{KnownServiceBaseUrlPkb}/nhs-login/login?phrPath=%2Fdiary%2FviewAppointment.action%3FuniqueId%3D{{0}}%26nhsStyle%3Dtrue"},
                 {ServiceProvider.Zesty, $"{KnownServiceBaseUrlZesty}/nhs/origin_appointment?resource_id={{0}}"},

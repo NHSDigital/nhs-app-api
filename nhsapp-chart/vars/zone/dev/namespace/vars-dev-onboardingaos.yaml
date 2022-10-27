@@ -43,6 +43,7 @@ api:
     services__gncr__url: https://my-aos.gncr.org.uk
     services__healthcarecomms__url: https://nhs-app.nhsportal-uat.net
     services__healthcarecomms_api__url: https://api.nhsportal-uat.net
+    services__nbs__url: https://app.nhswebsite-staging.nhs.uk
     services__netcall__url: https://integration.patienthub-mtps.co.uk
     services__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     services__nhsd__url: https://int.coronavirus-record.service.nhs.uk
@@ -68,6 +69,7 @@ api:
     servicesV3__healthcarecomms__domains__1: https://api.nhsportal-uat.net
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
     servicesV3__gncr__url: https://my-aos.gncr.org.uk
+    servicesV3__nbs__url: https://app.nhswebsite-staging.nhs.uk
     servicesV3__netcall__url: https://integration.patienthub-mtps.co.uk
     servicesV3__netCompany__url: https://stage.covid-status.service.nhsx.nhs.uk
     servicesV3__nhsd__url: https://int.coronavirus-record.service.nhs.uk

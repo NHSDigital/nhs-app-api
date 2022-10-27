@@ -4,7 +4,7 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
 class NBSRequestBuilder(queryStringEntries: HashMap<String, String> = hashMapOf())
-    : MappingBuilder("GET", "/nhs-login/start-page") {
+    : MappingBuilder("GET", "/book-a-coronavirus-vaccination/start-page") {
     init {
         if (queryStringEntries.isNotEmpty()) {
             queryStringEntries.entries.forEach {

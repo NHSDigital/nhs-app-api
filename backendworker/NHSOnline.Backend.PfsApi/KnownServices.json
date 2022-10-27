@@ -251,6 +251,17 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
+    "nbs": {
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true,
+    },
     "netcall": {
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",

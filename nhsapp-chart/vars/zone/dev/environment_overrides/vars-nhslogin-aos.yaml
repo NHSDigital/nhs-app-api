@@ -24,6 +24,7 @@ api:
     services__drDoctor_login__url: https://login.cqa.drdoctor.co.uk
     services__engage__url: https://pp-nhsapp.engage.gp
     services__ers__url: https://pat.sa.refer.nhs.uk
+    services__nbs__url: https://app.nhswebsite-staging.nhs.uk
     services__patchs__url: https://staging.patchs.ai
     services__pkb__url: https://rc.pkb.io
     services__pkb_alt__url: http://rc.pkb.io:443
@@ -44,6 +45,7 @@ api:
     servicesV3__drDoctor__domains__1: https://login.cqa.drdoctor.co.uk
     servicesV3__engage__url: https://pp-nhsapp.engage.gp
     servicesV3__ers__url: https://pat.sa.refer.nhs.uk
+    servicesV3__nbs__url: https://app.nhswebsite-staging.nhs.uk
     servicesV3__patchs__url: https://staging.patchs.ai
     servicesV3__pkb__url: https://rc.pkb.io
     servicesV3__pkb__domains__1: http://rc.pkb.io:443

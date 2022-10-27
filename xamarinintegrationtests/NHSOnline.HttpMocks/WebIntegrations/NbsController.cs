@@ -7,7 +7,7 @@ namespace NHSOnline.HttpMocks.WebIntegrations
     [Host("nbs.stubs.local.bitraft.io")]
     public class NbsController : Controller
     {
-        [HttpGet("nhs-login/start-page")]
+        [HttpGet("book-a-coronavirus-vaccination/start-page")]
         public IActionResult NbsInternalPage()
         {
             (string Title, HttpRequest Request) model = ("NBS Internal Page", Request);

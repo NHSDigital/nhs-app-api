@@ -15,7 +15,6 @@ namespace NHSOnline.IntegrationTests.Appointments
     public class NbsAppointmentBookingTests
     {
         [NhsAppAndroidTest]
-        [NhsAppFlakyTest]
         public void APatientCanAccessTheirNbsAdditionalBookingFromAppointmentsScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.Nbs)

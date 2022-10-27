@@ -78,6 +78,7 @@ api:
     services__healthcarecomms_alt__url: https://portal-api.hctest.uk
     services__gncr__url: https://my-sandpit.gncr.org.uk
     services__http_status__url: https://httpstat.us
+    services__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
     services__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     services__netcall__url: https://sandpit.patienthub-mtps.co.uk
     services__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
@@ -106,6 +107,7 @@ api:
     servicesV3__healthcarecomms__url: https://nhs-app.hctest.uk
     servicesV3__healthcarecomms__domains__1: https://portal-api.hctest.uk
     servicesV3__gncr__url: https://my-sandpit.gncr.org.uk
+    servicesV3__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
     servicesV3__ndop__url: https://ndopapp-int1.thunderbird.service.nhs.uk
     servicesV3__netcall__url: https://sandpit.patienthub-mtps.co.uk
     servicesV3__netCompany__url: https://stdevpistatic01.z33.web.core.windows.net
@@ -119,22 +121,6 @@ api:
     servicesV3__substraktPatientPack__domains__1: https://admin-request.test.substrakthealth.com
     servicesV3__substraktPatientPack__domains__2: https://auth.test.substrakthealth.com
     servicesV3__zesty__url: https://enterprise.ytsez-sandbox.co.uk
-
-    # Full NationalBookingService (NBS) config is (temporarily) defined here as we want to confine the NBS
-    # KnownService to the dev cluster for the moment, due to only having configuration details for sandpit
-    services__nbs__subServices: null
-    services__nbs__javaScriptInteractionMode: SilverThirdParty
-    services__nbs__menuTab: None
-    services__nbs__viewMode: WebView
-    services__nbs__integrationLevel: SilverWithWebNavigation
-    services__nbs__showSpinner: true
-    services__nbs__showThirdPartyWarning: true
-    services__nbs__requiresAssertedLoginIdentity: true
-    services__nbs__validateSession: false
-    services__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
-    servicesV3__nbs__showThirdPartyWarning: false
-    servicesV3__nbs__requiresAssertedLoginIdentity: true
-    servicesV3__nbs__url: https://covid19-booking-nhslogin-dev-uks.azurewebsites.net
 
   mockNotificationHubClient: false
   notificationHubs:

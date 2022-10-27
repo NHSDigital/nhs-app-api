@@ -69,6 +69,10 @@
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false
     },
+    "nbs": {
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true
+    },
     "ndop": {
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false

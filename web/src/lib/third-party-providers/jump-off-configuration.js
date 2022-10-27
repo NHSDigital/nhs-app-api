@@ -220,9 +220,9 @@ const thirdPartyProvider = {
   },
   nbs: {
     appointmentBookings: {
-      acceptablePathsRegex: '^\\/nhs-login\\/start-page$',
+      acceptablePathsRegex: '^\\/book-a-coronavirus-vaccination\\/start-page$',
       jumpOffId: 'appointmentBookings',
-      redirectPath: '/nhs-login/start-page',
+      redirectPath: '/book-a-coronavirus-vaccination/start-page',
       provider: 'nbs',
       serviceType: 'appointmentBookings',
     },
