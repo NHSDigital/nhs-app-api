@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Authorization
         private P5UserSession _userSession;
         private string RefreshToken = "Refresh Token";
         private string AccessToken = "Access Token";
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Authorization
 
             _mockCitizenIdService
                 .Setup(x => x.RefreshAccessToken(RefreshToken))
-                .ReturnsAsync(new RefreshAccessTokenResult.Success(AccessToken));
+                .ReturnsAsync(new RefreshAccessTokenResult.Success(AccessToken, RefreshToken));
 
             //Act
             var result = await _systemUnderTest.RefreshAccessToken(_userSession);

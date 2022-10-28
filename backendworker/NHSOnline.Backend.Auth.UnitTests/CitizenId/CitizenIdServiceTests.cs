@@ -352,7 +352,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         public async Task RefreshAccessToken_HappyPath_ReturnsSuccessResult()
         {
             // Arrange
-            var refreshToken = _fixture.Create<string>();
             var token = _fixture.Create<Token>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
@@ -362,7 +361,8 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             };
 
             var accessToken = tokenResponse.Body.AccessToken;
-            var refreshAccessTokenResponse = new RefreshAccessTokenResult.Success(accessToken);
+            var refreshToken = tokenResponse.Body.RefreshToken;
+            var refreshAccessTokenResponse = new RefreshAccessTokenResult.Success(accessToken, refreshToken);
 
             _citizenIdClientMock
                 .Setup(x => x.RefreshAccessToken(refreshToken))

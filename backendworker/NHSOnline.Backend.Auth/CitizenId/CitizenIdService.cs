@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
                 _logger.LogJwtExpiry(result.Body.AccessToken);
 
-                return new RefreshAccessTokenResult.Success(result.Body.AccessToken);
+                return new RefreshAccessTokenResult.Success(result.Body.AccessToken, result.Body.RefreshToken);
             }
             catch (Exception ex)
             {

@@ -27,8 +27,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Authorization
 
         public async Task<IActionResult> Visit(RefreshAccessTokenResult.Success result)
         {
-            _logger.LogInformation("Updating user's access token in session cache");
+            _logger.LogInformation("Updating user's access and refresh tokens in session cache");
+
             _userSession.CitizenIdUserSession.AccessToken = result.AccessToken;
+            _userSession.CitizenIdUserSession.RefreshToken = result.RefreshToken;
+
             await _sessionCacheService.UpdateUserSession(_userSession);
 
             return new OkObjectResult(new TokenRefreshResponse

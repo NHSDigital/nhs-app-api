@@ -66,6 +66,8 @@ namespace NHSOnline.Backend.PfsApi.Session
             }
 
             request.UserSession.Im1ConnectionToken = GetIm1ConnectionToken(citizenIdSession);
+            request.UserSession.CitizenIdUserSession.AccessToken = GetAccessToken(citizenIdSession);
+            request.UserSession.CitizenIdUserSession.RefreshToken = GetRefreshToken(citizenIdSession);
 
             var supplier = ((OnDemandGpSession) request.UserSession.GpUserSession).SessionSupplier;
 
@@ -86,6 +88,16 @@ namespace NHSOnline.Backend.PfsApi.Session
         private static string GetIm1ConnectionToken(CitizenIdSessionResult citizenIdSessionResult)
         {
             return citizenIdSessionResult.Im1ConnectionToken;
+        }
+
+        private static string GetAccessToken(CitizenIdSessionResult citizenIdSessionResult)
+        {
+            return citizenIdSessionResult.Session.AccessToken;
+        }
+
+        private static string GetRefreshToken(CitizenIdSessionResult citizenIdSessionResult)
+        {
+            return citizenIdSessionResult.Session.RefreshToken;
         }
     }
 }
