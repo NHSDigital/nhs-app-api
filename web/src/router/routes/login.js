@@ -1,5 +1,4 @@
 import LoginPage from '@/pages/Login';
-import LoginBiometricErrorPage from '@/pages/biometric-login-error';
 import PreRegistrationInformationPage from '@/pages/pre-registration-information/index';
 import AuthReturnPage from '@/pages/auth-return/index';
 import TermsAndConditionsPage from '@/pages/terms-and-conditions';
@@ -13,7 +12,6 @@ import {
   AUTH_RETURN_PATH,
   BEGINLOGIN_PATH, BIOMETRICS_ERROR_REGISTRATION_PATH,
   BIOMETRICS_REGISTRATION_PATH,
-  LOGIN_BIOMETRIC_ERROR_PATH,
   LOGIN_PATH,
   NOTIFICATIONS_GENERIC_FAILURE_PATH,
   NOTIFICATIONS_PATH,
@@ -25,7 +23,6 @@ import {
   AUTH_RETURN_NAME,
   BEGINLOGIN_NAME, BIOMETRICS_ERROR_REGISTRATION_NAME,
   BIOMETRICS_REGISTRATION_NAME,
-  LOGIN_BIOMETRIC_ERROR_NAME,
   LOGIN_NAME,
   NOTIFICATIONS_GENERIC_FAILURE_NAME,
   NOTIFICATIONS_NAME,
@@ -77,25 +74,6 @@ export const LOGIN = {
     shouldShowContentHeader: false,
     helpPath: APP_LOGIN_HELP_PATH,
     middleware: [nativeLogout],
-  },
-};
-
-export const LOGIN_BIOMETRIC_ERROR = {
-  path: LOGIN_BIOMETRIC_ERROR_PATH,
-  name: LOGIN_BIOMETRIC_ERROR_NAME,
-  component: LoginBiometricErrorPage,
-  meta: {
-    headerKey: 'navigation.pages.headers.loginBiometricError',
-    titleKey: 'navigation.pages.titles.loginBiometricError',
-    isAnonymous: true,
-    crumb: {},
-    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
-    helpPath: APP_LOGIN_HELP_PATH,
-    redirectRules: [{
-      condition: 'device/isNativeApp',
-      value: false,
-      route: LOGIN,
-    }],
   },
 };
 
@@ -216,7 +194,6 @@ export const BIOMETRICS_REGISTRATION_ERROR = {
 
 export default [
   LOGIN,
-  LOGIN_BIOMETRIC_ERROR,
   PRE_REGISTRATION,
   BEGIN_LOGIN,
   AUTH_RETURN,

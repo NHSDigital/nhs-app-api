@@ -16,7 +16,6 @@ import http from './modules/http';
 import knownServices from './modules/knownServices';
 import linkedAccounts from './modules/linkedAccounts';
 import log from './modules/log';
-import login from './modules/login';
 import loginSettings from './modules/loginSettings';
 import modal from './modules/modal';
 import messaging from './modules/messaging';
@@ -67,7 +66,6 @@ export default new Vuex.Store({
     knownServices,
     linkedAccounts,
     log,
-    login,
     loginSettings,
     messaging,
     modal,

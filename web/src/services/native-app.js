@@ -17,15 +17,6 @@ export default {
     return false;
   },
 
-  attemptBiometricLogin() {
-    const app = window.nativeApp;
-    if (app && app.attemptBiometricLogin) {
-      app.attemptBiometricLogin();
-      return true;
-    }
-    return false;
-  },
-
   fetchBiometricSpec() {
     const app = window.nativeApp;
     if (app && app.fetchBiometricSpec) {

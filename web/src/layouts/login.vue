@@ -73,7 +73,6 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HomeHeader from '@/components/HomeHeader';
-import NativeApp from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
@@ -119,11 +118,6 @@ export default {
     };
   },
   mounted() {
-    if (this.$store.state.device.isNativeApp) {
-      this.$nextTick(() => {
-        NativeApp.attemptBiometricLogin();
-      });
-    }
     NativeVersionSetup(this.$store);
     window.validateSession =
         window.validateSession || (() => this.$store.dispatch('session/validate'));

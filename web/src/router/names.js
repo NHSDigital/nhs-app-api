@@ -21,7 +21,6 @@ export const ADVICE_NAME = 'advice';
 export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
 export const INTERSTITIAL_REDIRECTOR_NAME = 'redirector';
-export const LOGIN_BIOMETRIC_ERROR_NAME = 'biometric-login-error';
 export const APPOINTMENTS_NAME = 'appointments';
 export const GP_APPOINTMENTS_NAME = 'appointments-gp-appointments';
 export const HEALTH_INFORMATION_UPDATES_NAMES = 'messages-app-messaging';
@@ -165,7 +164,6 @@ const names = [
   GET_HEALTH_ADVICE_NAME,
   CHECKYOURSYMPTOMS_NAME,
   INTERSTITIAL_REDIRECTOR_NAME,
-  LOGIN_BIOMETRIC_ERROR_NAME,
   APPOINTMENTS_NAME,
   GP_APPOINTMENTS_NAME,
   HOSPITAL_APPOINTMENTS_NAME,

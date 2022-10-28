@@ -42,7 +42,6 @@ describe('native app', () => {
     global.nativeApp = {};
   });
 
-  callNative('attemptBiometricLogin');
   callNative('clearMenuBarItem');
   callNative('getNotificationsStatus');
   callNative('goToLoginOptions');

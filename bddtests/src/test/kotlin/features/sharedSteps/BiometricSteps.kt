@@ -24,13 +24,6 @@ open class BiometricSteps {
         )
     }
 
-    @Step
-    fun triggerBiometricLoginError() {
-        triggerWindowDispatch(
-                "login/handleBiometricLoginFailure", "''"
-        )
-    }
-
     private fun triggerWindowDispatch(event: String, arg: String) {
         val jsExecutor = genericPage.driver as JavascriptExecutor
         jsExecutor.executeScript("""

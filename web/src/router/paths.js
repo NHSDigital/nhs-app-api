@@ -6,7 +6,6 @@ export const INDEX_PATH_PARAM = `:patientId(${PATIENT_ID_REGEX_PATTERN})?`;
 export const INDEX_PATH = `/patient/${INDEX_PATH_PARAM}/`;
 export const NOT_FOUND_PATH = '*';
 export const LOGIN_PATH = '/login';
-export const LOGIN_BIOMETRIC_ERROR_PATH = '/biometric-login-error';
 export const PRE_REGISTRATION_INFORMATION_PATH = '/pre-registration-information';
 export const BEGINLOGIN_PATH = '/begin-login';
 export const AUTH_RETURN_PATH = '/auth-return';
@@ -170,7 +169,6 @@ export default {
   GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,
   INTERSTITIAL_REDIRECTOR_PATH,
-  LOGIN_BIOMETRIC_ERROR_PATH,
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
   HOSPITAL_APPOINTMENTS_PATH,

@@ -25,13 +25,6 @@ Feature: Messages/Biometric authentication/Login/Registration errors accessibili
     And I see the appropriate forbidden error for patient practice messaging
     And the Errors_EME16_MessagingServiceDisabledForUser page is saved to disk
 
-  Scenario: 'E-BA30 Error: biometric login failed' page is captured
-    Given I am a patient using the native app
-    And I am on the login logged-out page
-    When I attempt biometric login and fail
-    Then I see the login biometric error page is displayed
-    And the Errors_EBA30_BiometricLoginFailed page is saved to disk
-
   Scenario: 'E-RL01 - No selection error message' page is captured
     Given I am a EMIS patient who has not already accepted terms and conditions
     And I am logged in expecting to see T&Cs
