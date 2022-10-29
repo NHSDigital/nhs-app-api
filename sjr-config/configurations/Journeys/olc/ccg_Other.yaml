@@ -698,6 +698,7 @@ target:
     - P85610
     - G82653
     - J82085
+    - G82687
 journeys:
   cdssAdvice:
     provider: eConsult
