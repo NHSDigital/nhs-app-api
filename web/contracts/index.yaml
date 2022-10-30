@@ -7314,6 +7314,9 @@
                     isDownloadable: 
                       type: "boolean"
                       description: "Indicates if the file is downloadable"
+                    pageCount: 
+                      type: "integer"
+                      description: "Number of pages (TPP-specific)"
           401: 
             description: "User session has expired."
           500: 

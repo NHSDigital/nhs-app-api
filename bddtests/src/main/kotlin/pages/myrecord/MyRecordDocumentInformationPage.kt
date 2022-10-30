@@ -2,10 +2,12 @@ package pages.myrecord
 
 import models.ExpectedDocument
 import org.junit.Assert.assertEquals
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 import pages.assertIsVisible
+import pages.withNormalisedText
 import pages.text
+
 import utils.DownloadHelpers
 import java.lang.IllegalArgumentException
 
@@ -87,11 +89,9 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
         return DownloadHelpers().downloadFile(expectedFileName)
     }
 
-
     fun headerContainsText(headerText: String) {
         header(headerText).waitForElement()
     }
-
 
     fun documentInfoContains(text: String) {
         documentInfo(text).waitForElement()
@@ -99,5 +99,14 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
 
     fun documentCommentContains(text: String) {
         documentComment(text).waitForElement()
+    }
+
+    fun iSeeADownloadDescription(description: String){
+        val webDesktopLocator = "//*[@id='btn_downloadDocument']//p"
+        HybridPageElement(
+                webDesktopLocator,
+                page = this)
+                .withNormalisedText(description)
+                .assertIsVisible()
     }
 }

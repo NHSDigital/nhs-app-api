@@ -158,6 +158,7 @@ describe('gp-medical-record documents', () => {
         needMoreInformation: false,
         isDownloadable: true,
         isViewable: true,
+        pageCount: 1,
       });
     });
   });

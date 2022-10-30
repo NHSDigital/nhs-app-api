@@ -11,12 +11,13 @@ import javax.xml.bind.annotation.XmlElement
 
 @XmlAccessorType(XmlAccessType.FIELD)
 data class BinaryData(
+        val multiPage: Boolean = false,
         @XmlAttribute var fileType: String = "jpg",
         @XmlElement(name = "BinaryDataPage")
-        var BinaryDataPage: MutableList<BinaryDataPage> = arrayListOf(
-                BinaryDataPage(loadFile()),
-                BinaryDataPage(loadFile())
-        )
+        var BinaryDataPage: MutableList<BinaryDataPage> = when(multiPage) {
+                true -> arrayListOf(BinaryDataPage(loadFile()), BinaryDataPage(loadFile()))
+                false -> arrayListOf(BinaryDataPage(loadFile()))
+        }
 )
 
 private fun loadFile(): String {

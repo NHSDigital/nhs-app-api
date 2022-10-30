@@ -96,8 +96,15 @@ open class V2MedicalRecordDocumentsStepDefinitions {
     @Given("^the GP Practice has multiple non-viewable documents$")
     fun theGpPracticeHasMultipleNoViewableDocuments() {
         DocumentsFactory
-            .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasNonViewableType)
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasNonViewableType)
+    }
+
+    @Given("^the GP Practice has multi-page documents$")
+    fun theGpPracticeHasMultiPageDocuments() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasMultiplePages)
     }
 
     @Given("^the GP practice has a file that is still uploading$")
@@ -253,6 +260,11 @@ open class V2MedicalRecordDocumentsStepDefinitions {
                 .assertDocumentItemsVisible(
                         SerenityHelpers.getValueOrNull<List<ExpectedDocument>>(SerenityVariable.EXPECTED_DOCUMENTS)!!)
 
+    }
+
+    @Then("^I see a download description of '(.*)'$")
+    fun iSeeADownloadDescriptionOf(description: String){
+        myRecordDocumentInformationPage.iSeeADownloadDescription(description)
     }
 
     private fun assertDocumentInformationPageHeader() {

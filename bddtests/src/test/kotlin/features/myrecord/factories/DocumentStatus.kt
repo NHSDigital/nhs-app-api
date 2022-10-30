@@ -6,5 +6,6 @@ enum class DocumentStatus{
     HasInvalidType,
     HasXX2Type,
     StillUploading,
-    HasNonViewableType
+    HasNonViewableType,
+    HasMultiplePages
 }

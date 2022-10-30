@@ -34,7 +34,7 @@
                        id="btn_downloadDocument"
                        header-tag="h2"
                        :click-func="startDownload"
-                       :description="documentDescriptionEmisCondition(type, size, supplier)"
+                       :description="displayedDownloadType"
                        :text="$t('myRecord.gpMedicalRecord.download')"
                        :aria-label="$t('myRecord.gpMedicalRecord.download')"/>
           </menu-item-list>
@@ -95,6 +95,10 @@ export default {
       isViewable: null,
       isDownloadable: null,
       loading: true,
+      supplier: null,
+      pageCount: null,
+      downloadType: null,
+      displayedDownloadType: null,
     };
   },
   computed: {
@@ -122,6 +126,7 @@ export default {
     }
 
     const size = get('state.documents.currentDocument.size', store);
+    const pageCount = get('state.documents.currentDocument.pageCount', store);
     const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
     const term = get('state.documents.currentDocument.term', store);
     const type = get('state.documents.currentDocument.type', store);
@@ -130,7 +135,7 @@ export default {
     const isDownloadable = get('state.documents.currentDocument.isDownloadable', store);
     const isValidFile = get('state.documents.currentDocument.isValidFile', store);
     const comments = loadComments(store);
-    const supplier = get('state.myRecord.record.supplier', this.$store);
+    const supplier = get('state.myRecord.record.supplier', store);
 
     let dateString;
 
@@ -151,7 +156,8 @@ export default {
     this.dateString = dateString;
     this.term = term;
     this.type = type;
-    this.downloadType = this.overrideEmisRtf(type, supplier);
+    this.downloadType = this.overrideDownloadType(type, supplier, pageCount, isViewable);
+    this.displayedDownloadType = this.getDisplayedDownloadType(type, size, supplier, pageCount, isViewable);
     this.supplier = supplier;
     this.comments = comments;
     this.size = size;
@@ -159,6 +165,7 @@ export default {
     this.isViewable = isViewable;
     this.isDownloadable = isDownloadable;
     this.loading = false;
+    this.pageCount = pageCount;
 
     if (store.$env.GP_MEDICAL_RECORD_DOCUMENT_INFO_LOGGING_ENABLED) {
       this.$store.dispatch(
@@ -168,17 +175,21 @@ export default {
     }
   },
   methods: {
-    documentDescriptionEmisCondition(type, size, supplier) {
+    getDisplayedDownloadType(type, size, supplier, pageCount, isViewable) {
       if (isBlankString(type)) {
         return '';
       }
 
-      if (!isNumber(size) || size < 1) {
-        return `(${type.toUpperCase()})`;
-      }
-
       if (supplier === 'EMIS' && type.toUpperCase() === 'RTF') {
         return '(PDF)';
+      }
+
+      if (supplier === 'TPP' && isNumber(pageCount) && pageCount > 1 && isViewable) {
+        return '(PDF)';
+      }
+
+      if (!isNumber(size) || size < 1) {
+        return `(${type.toUpperCase()})`;
       }
 
       return `(${type.toUpperCase()}, ${readableBytes(size)})`;
@@ -253,8 +264,11 @@ export default {
           return fileType;
       }
     },
-    overrideEmisRtf(fileType, supplier) {
+    overrideDownloadType(fileType, supplier, pageCount, isViewable) {
       if ((fileType || '').toLowerCase() === 'rtf' && supplier === 'EMIS') {
+        return 'pdf';
+      }
+      if (isViewable && supplier === 'TPP' && isNumber(pageCount) && pageCount > 1) {
         return 'pdf';
       }
       return fileType;

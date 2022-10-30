@@ -9,9 +9,10 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlRootElement(name = "RequestBinaryDataReply")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class RequestBinaryDataReply(
+        val multiPage: Boolean = false,
         @XmlAttribute var patientId: String = "default patientId",
         @XmlAttribute var onlineUserId: String = "default onlineUserId",
         @XmlAttribute var uuid: String = "default uuid",
         @field:XmlElement(name="BinaryData")
-        @XmlElement var event: BinaryData = BinaryData()
+        @XmlElement var event: BinaryData = BinaryData(multiPage)
 )

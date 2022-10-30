@@ -76,6 +76,7 @@ function mapDocumentInfo(document) {
     needMoreInformation,
     isViewable: isValidFile,
     isDownloadable: isAvailable,
+    pageCount: 1,
   };
 }
 

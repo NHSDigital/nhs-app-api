@@ -27,7 +27,7 @@ export default {
         name: state.currentDocument.name,
       },
     }) || {};
-    const { content, isViewable, isDownloadable, type } = response || {};
+    const { content, isViewable, isDownloadable, type, pageCount } = response || {};
 
     commit(LOADED_DOCUMENT, content);
     if (updateMetaData) {
@@ -37,6 +37,7 @@ export default {
         isViewable,
         isDownloadable,
         type,
+        pageCount,
       });
     }
   },

@@ -127,6 +127,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
         val documentData = when(documentStatus) {
             DocumentStatus.HasInvalidType -> TppDocumentData.getDocumentData("tga")
             DocumentStatus.HasNonViewableType -> TppDocumentData.getDocumentData("pdf")
+            DocumentStatus.HasMultiplePages -> TppDocumentData.getDocumentData("jpg", true)
             else -> TppDocumentData.getDocumentData()
         }
 

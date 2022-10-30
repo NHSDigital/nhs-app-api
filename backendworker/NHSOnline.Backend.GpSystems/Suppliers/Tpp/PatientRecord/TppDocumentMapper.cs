@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 using NHSOnline.Backend.Support;
+using Wkhtmltopdf.NetCore;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -20,10 +21,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
     public class TppDocumentMapper : ITppDocumentMapper
     {
         private readonly ILogger<ITppDocumentMapper> _logger;
+        private readonly IGeneratePdf _generatePdf;
 
-        public TppDocumentMapper(ILogger<ITppDocumentMapper> logger)
+        public TppDocumentMapper(ILogger<ITppDocumentMapper> logger, IGeneratePdf generatePdf)
         {
             _logger = logger;
+            _generatePdf = generatePdf;
         }
 
         public PatientDocument Map(RequestBinaryDataReply requestBinaryDataReply)
@@ -68,7 +71,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 Type = requestBinaryDataReply.BinaryData.FileType,
                 HasErrored = false,
                 IsViewable = isViewable,
-                IsDownloadable = isDownloadable
+                IsDownloadable = isDownloadable,
+                PageCount = requestBinaryDataReply.BinaryData.BinaryDataPages.Count
             };
         }
 
@@ -80,6 +84,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
 
             var type = MapFileTypeToDownloadType(requestBinaryDataReply.BinaryData.FileType);
+
+            var isViewable = Constants.FileConstants.FileTypes.TppViewableWhiteListTypes.Contains(
+                type, StringComparer.OrdinalIgnoreCase);
 
             var documentAsBase64 = requestBinaryDataReply.BinaryData.BinaryDataPages.FirstOrDefault().BinaryData;
 
@@ -95,14 +102,45 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 return null;
             }
 
-            var documentAsBytes = Convert.FromBase64String(documentAsBase64);
-            var mimeType = Constants.FileConstants.FileTypes.DocumentMimeTypes[type];
-            var fileName = $"{documentName}.{type}";
+            var isMultiImageFile = false;
+
+            if (requestBinaryDataReply.BinaryData.BinaryDataPages.Count > 1)
+            {
+                if (isViewable)
+                {
+                    isMultiImageFile = true;
+                }
+                else
+                {
+                    _logger.LogInformation($"Download of non image multi-page document type: {type} page count {requestBinaryDataReply.BinaryData.BinaryDataPages.Count}");
+                }
+            }
+
+            var documentAsBytes = isMultiImageFile ? ConvertImagesToPdf(requestBinaryDataReply, type) : Convert.FromBase64String(documentAsBase64);
+            var mimeType = isMultiImageFile ? "application/pdf" : Constants.FileConstants.FileTypes.DocumentMimeTypes[type];
+            var suffix = isMultiImageFile ? "pdf" : type;
+            var fileName = $"{documentName}.{suffix}";
 
             return new FileContentResult(documentAsBytes, mimeType)
             {
                 FileDownloadName = fileName
             };
+        }
+
+        private byte[] ConvertImagesToPdf(RequestBinaryDataReply response, string mappedType)
+        {
+            string content = string.Empty;
+
+            foreach (var image in response.BinaryData.BinaryDataPages)
+            {
+                content += string.Format(
+                CultureInfo.InvariantCulture,
+                Constants.FileConstants.ImageHtmlForPdfFormat,
+                Constants.FileConstants.FileTypes.DocumentMimeTypes[mappedType],
+                image.BinaryData);
+                content += Constants.FileConstants.PageBreakHtmlForPdf;
+            }
+            return _generatePdf.GetPDF($"<html><body>{content}</body></html>");
         }
 
         private string MapFileTypeToDownloadType(string fileType)

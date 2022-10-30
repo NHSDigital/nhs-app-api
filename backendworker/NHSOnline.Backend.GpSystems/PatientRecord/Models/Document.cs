@@ -7,5 +7,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public string Type { get; set; }
         public bool IsViewable { get; set; }
         public bool IsDownloadable { get; set; }
+        public int PageCount { get; set; }
     }
 }

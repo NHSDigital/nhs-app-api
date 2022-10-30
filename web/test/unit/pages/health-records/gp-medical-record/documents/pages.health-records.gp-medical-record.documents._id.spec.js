@@ -252,6 +252,31 @@ describe('document view', () => {
     });
 
     each([
+      ['viewable, multi-page and TPP', true, 3, 'TPP', 'Download (PDF)'],
+      ['viewable, single page and TPP', true, 1, 'TPP', 'Download (JPG, 1MB)'],
+      ['viewable, single page and EMIS', true, 1, 'EMIS', 'Download (JPG, 1MB)'],
+    ]).it('will display the correct action for the downloadable document when file is %s', async (_, isViewable, pageCount, supplierName, expected) => {
+      const document = {
+        name: undefined,
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+        isValidFile: true,
+        isViewable,
+        isDownloadable: true,
+        pageCount,
+      };
+      // Arrange
+      await mountPage({ $store: newStore({ document, supplierName }) });
+
+      // Act
+      const downloadItem = page.find('#btn_downloadDocument');
+
+      // Assert
+      expect(downloadItem.text()).toEqual(expected);
+    });
+
+    each([
       ['EMIS'],
       ['TPP'],
       ['VISION'],

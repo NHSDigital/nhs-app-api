@@ -227,7 +227,8 @@ namespace NHSOnline.Backend.Support
 
             public const string ImageHtmlFormat =
                 "<div id=\"document_{3}\" class=\"documentContainer nhsuk-u-margin-top-5\"><img alt=\"{0}\" src=\"data:{1};base64,{2}\"/></div>";
-
+            public const string ImageHtmlForPdfFormat = "<img src=\"data:{0};base64,{1}\"/>";
+            public const string PageBreakHtmlForPdf = "<p style=\"page-break-before: always\"/>";
             public const string AltTagDescriptionForTpp =
                 "This file has no description, please contact your GP surgery for more information";
         }

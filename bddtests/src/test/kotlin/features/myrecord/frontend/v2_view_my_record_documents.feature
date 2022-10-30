@@ -196,7 +196,7 @@ Feature: Documents Frontend - Medical Record v2
 
   Scenario: A TPP user can view multi page Document from their record - Medical Record v2
     Given I am a TPP user setup to use medical record version 2
-    And the GP Practice has multiple documents
+    And the GP Practice has multi-page documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
     Then the Medical Record Warning Page is displayed
@@ -270,3 +270,16 @@ Feature: Documents Frontend - Medical Record v2
     When I click the 'Continue' button
     And I click the Documents link on my record - Medical Record v2
     Then I see the expected list of documents displayed with unknown date for the last result
+
+  Scenario: A TPP user with a multi-page document will have the download type set to pdf
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multi-page documents
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
+    And I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page with actions
+    And I see a download description of '(PDF)'
