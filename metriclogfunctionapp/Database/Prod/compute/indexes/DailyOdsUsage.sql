@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS idx_date_odscode_dailyodsusage ON "compute"."DailyOdsUsage"("Date", "OdsCode");

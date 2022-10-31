@@ -9,5 +9,3 @@ CREATE TABLE IF NOT EXISTS events."GeneralPracticeSnapshot" (
 );
 
 CALL perms.apply_etl_table_permissions('events', 'GeneralPracticeSnapshot');
-
-CREATE INDEX IF NOT EXISTS GeneralPracticeSnapshot_Timestamp_OdsCode_CCGCode_Name_Stat_idx on events."GeneralPracticeSnapshot" ("Timestamp", "OdsCode", "CCGCode", "Name", "Status");

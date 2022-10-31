@@ -1,0 +1,2 @@
+CREATE INDEX IF NOT EXISTS FirstLoginMessages_MessageId_idx on "compute"."FirstLoginMessages" ("MessageId");
+CREATE INDEX IF NOT EXISTS FirstLoginMessages_UserFirstLoginTimestamp_idx on "compute"."FirstLoginMessages" ("UserFirstLoginTimestamp");

@@ -8,5 +8,3 @@ CREATE TABLE IF NOT EXISTS events."AppointmentBookingMetric" (
 );
 
 CALL perms.apply_etl_table_permissions('events', 'AppointmentBookingMetric');
-
-CREATE INDEX IF NOT EXISTS AppointmentBookingMetric_date_idx on events."AppointmentBookingMetric" ("Date");

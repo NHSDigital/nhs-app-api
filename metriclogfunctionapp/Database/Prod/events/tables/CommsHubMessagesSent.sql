@@ -12,6 +12,3 @@ CREATE TABLE IF NOT EXISTS events."CommsHubMessagesSent" (
 );
 
 CALL perms.apply_etl_table_permissions('events', 'CommsHubMessagesSent');
-
-CREATE INDEX IF NOT EXISTS ComsHubMessagesSent_LoginId_Timestamp_idx on events."CommsHubMessagesSent" ("LoginId", "Timestamp");
-CREATE INDEX IF NOT EXISTS ComsHubMessagesSent_RequestId_idx on events."CommsHubMessagesSent" ("RequestId");

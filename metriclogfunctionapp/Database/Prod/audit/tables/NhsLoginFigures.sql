@@ -7,6 +7,3 @@ CREATE TABLE IF NOT EXISTS audit."NhsLoginFigures" (
 );
 
 GRANT SELECT,INSERT,TRUNCATE ON audit."NhsLoginFigures" TO "AzureNhsAnalytics_DataFactory";
-
-CREATE INDEX IF NOT EXISTS NhsLoginFigures_NhsLoginId_idx on audit."NhsLoginFigures" ("NhsLoginId");
-CREATE INDEX IF NOT EXISTS NhsLoginFigures_NhsNumber_idx on audit."NhsLoginFigures" ("NhsNumber");

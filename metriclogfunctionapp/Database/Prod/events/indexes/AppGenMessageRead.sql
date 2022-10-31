@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS AppGenMessageRead_MessageId_idx on events."AppGenMessageRead" ("MessageId");

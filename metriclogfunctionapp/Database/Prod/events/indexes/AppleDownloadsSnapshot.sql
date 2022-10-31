@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS AppleDownloadsSnapshot_Timestamp_idx on "events"."AppleDownloadsSnapshot" ("Timestamp");

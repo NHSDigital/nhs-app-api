@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS AppGenMessageSent_MessageId_idx on events."AppGenMessageSent" ("MessageId");

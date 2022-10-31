@@ -6,6 +6,3 @@ CREATE TABLE IF NOT EXISTS events."LoginPatientIdentifier" (
 );
 
 CALL perms.apply_etl_table_permissions('events', 'LoginPatientIdentifier');
-
-CREATE INDEX IF NOT EXISTS LoginPatientIdentifier_LoginEventId_idx on events."LoginPatientIdentifier" ("LoginEventId");
-CREATE INDEX IF NOT EXISTS LoginPatientIdentifier_date_idx on events."LoginPatientIdentifier" ("Timestamp");

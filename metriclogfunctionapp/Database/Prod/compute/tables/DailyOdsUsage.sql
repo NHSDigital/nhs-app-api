@@ -17,6 +17,4 @@ CREATE TABLE IF NOT EXISTS "compute"."DailyOdsUsage"(
                                                      "RecordViewsDCR" INT DEFAULT 0,
                                                      "RecordViewsSCR" INT DEFAULT 0);
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_date_odscode_dailyodsusage ON "compute"."DailyOdsUsage"("Date", "OdsCode");
-
 CALL perms.apply_compute_table_permissions('compute', 'DailyOdsUsage');

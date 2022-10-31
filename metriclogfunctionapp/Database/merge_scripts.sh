@@ -5,7 +5,15 @@ set +e
 # Change current working directory to be the Database directory, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
 
-OUTPUT_FILE=${OUTPUT_FILE:-update.sql}
+if [[ $2 == "withSuffix" ]]; then
+  if [[ $1 == "withIndexes" || $# -eq 0 ]]; then
+    OUTPUT_FILE=${OUTPUT_FILE:-update_with_indexes.sql}
+  else
+    OUTPUT_FILE=${OUTPUT_FILE:-update_without_indexes.sql}
+  fi
+else
+  OUTPUT_FILE=${OUTPUT_FILE:-update.sql}
+fi
 
 echo "
 SET statement_timeout = 0;
@@ -63,6 +71,11 @@ function add_schema_script_files() {
 }
 
 add_schema_script_files "tables"
+
+if [[ $1 == "withIndexes" || $# -eq 0 ]]; then
+   add_schema_script_files "indexes"
+fi
+
 add_schema_script_files "views"
 add_schema_script_files "procedures"
 add_schema_script_files "functions"

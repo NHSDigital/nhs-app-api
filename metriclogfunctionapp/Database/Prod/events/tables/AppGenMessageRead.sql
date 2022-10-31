@@ -6,5 +6,3 @@ CREATE TABLE IF NOT EXISTS events."AppGenMessageRead" (
 );
 
 CALL perms.apply_etl_table_permissions('events', 'AppGenMessageRead');
-
-CREATE INDEX IF NOT EXISTS AppGenMessageRead_MessageId_idx on events."AppGenMessageRead" ("MessageId");
