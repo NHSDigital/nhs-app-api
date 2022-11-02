@@ -29,7 +29,8 @@ journeys:
     provider: im1
   silverIntegrations:
     accountAdmin: []
-    appointmentBookings: []
+    appointmentBookings:
+      - nbs
     carePlans:
       - pkb
     consultations:

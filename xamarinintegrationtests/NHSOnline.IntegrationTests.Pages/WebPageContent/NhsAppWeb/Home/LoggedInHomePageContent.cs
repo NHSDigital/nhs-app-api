@@ -28,6 +28,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
 
         private WebMenuItem GetYourCovidPassMenuItem => WebMenuItem.WithTitle(_interactor, "NHS COVID Pass");
 
+        private WebMenuItem BookYourCovidVaccinationMenuItem => WebMenuItem.WithTitle(_interactor, "Book or manage a coronavirus (COVID-19) vaccination");
+
         private WebMenuItem MessagesMenuItem => WebMenuItem.WithTitle(_interactor, "View your messages");
 
         private WebMenuItem LinkedProfilesMenuItem => WebMenuItem.WithTitle(_interactor, "Linked profiles");
@@ -39,6 +41,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Home
         public IEnumerable<IFocusable> FocusableElements => new IFocusable[]
         {
             GetYourCovidPassMenuItem,
+            BookYourCovidVaccinationMenuItem,
             MessagesMenuItem,
             LinkedProfilesMenuItem,
             GpHealthMenuItem,

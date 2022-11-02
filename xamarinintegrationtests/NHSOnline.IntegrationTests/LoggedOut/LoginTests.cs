@@ -13,6 +13,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     [TestClass]
     public class LoginTests
     {
+        [Ignore("Issue with links in ths stub view being looked at separately")]
         [NhsAppAndroidTest]
         public void APatientCanFollowInternalAndExternalLinksFromNhsLoginAndroid(IAndroidDriverWrapper driver)
         {

@@ -30,7 +30,8 @@ journeys:
   silverIntegrations:
     accountAdmin:
       - gncr
-    appointmentBookings: []
+    appointmentBookings:
+      - nbs
     carePlans: []
     consultations: []
     consultationsAdmin: []
