@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='grey'>
+<html>
 <head>
   <!-- Needed for proper scaling on hi-res devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
@@ -7,17 +7,6 @@
   <meta name="commit_id" content="<%= process.env.VUE_APP_COMMIT_ID %>">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <style>
-    .grey-body {
-      background-color: rgba(255, 255, 255, 0.8);
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-    .grey {
-      background-color: #F0F4F5 !important;
-    }
     .loading-spinner-background {
       position: fixed;
       z-index: 10;
@@ -58,42 +47,25 @@
       }
     }
     @font-face {
-      font-family: "FrutigerLTW01-45Light";
-      font-display: optional;
-      src: local("FrutigerLTW01-45Light"),
-          url("/fonts/FrutigerLTW01-45Light.eot"),
-          url("/fonts/FrutigerLTW01-45Light.eot") format("embedded-opentype"),
-          url("/fonts/FrutigerLTW01-45Light.woff2") format("woff2"),
-          url("/fonts/FrutigerLTW01-45Light.woff") format("woff"),
-          url("/fonts/FrutigerLTW01-45Light.ttf") format("truetype"),
-          url("/fonts/FrutigerLTW01-45Light.svg") format("svg");
+      font-display: swap;
+      font-family: Frutiger W01;
+      font-style: normal;
+      font-weight: 400;
+      src: url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.eot?#iefix);
+      src: url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.eot?#iefix) format("eot"),url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.woff2) format("woff2"),url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.woff) format("woff"),url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.ttf) format("truetype"),url(https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.svg#7def0e34-f28d-434f-b2ec-472bde847115) format("svg")
     }
     .warning-nojs-content-panel {
       position: fixed;
       text-align: center;
-      font-family:'FrutigerLTW01-45Light',Arial,sans-serif;
-      font-size: 0.9em;
-      color: white;
-      width: 250px;
+      font-family:'Frutiger W01',Arial,sans-serif;
+      font-size: 19px;
+      font-weight: 400;
       height: 10em;
       top: 20em;
       right: 0em;
       left: 0em;
       bottom: 5em;
       margin: auto;
-    }
-    .nojs-link {
-      color: white;
-      outline-color: white;
-      text-decoration: underline;
-      display: inline;
-      vertical-align: middle;
-    }
-    #nojs-alink {
-      color: white;
-    }
-    .inline-nojs-link-valign {
-      vertical-align: middle;
     }
   </style>
 </head>
@@ -110,10 +82,8 @@
       </div>
       <div class="warning-nojs-content-panel">
         <noscript>
-          <p>
-            <div aria-label="You need to enable JavaScript to access the NHS App on your browser, link">
-              <span class="inline-nojs-link-valign"> You need to </span><a id="nojs-alink" class="nojs-link" href="https://www.nhs.uk/nhs-app/nhs-app-help-and-support/nhs-app-technical-information/technical-issues-with-the-nhs-app/" target="_blank" rel="noopener noreferrer">enable JavaScript to access the NHS App on your browser</a>
-            </div>
+          <p class="nhsuk-body"> You need to
+            <a class="nhsuk-link" href="https://www.nhs.uk/nhs-app/nhs-app-help-and-support/nhs-app-technical-information/technical-issues-with-the-nhs-app/" target="_blank" rel="noopener noreferrer" aria-label="You need to enable JavaScript to access the NHS App on your browser">enable JavaScript to access the NHS App on your browser</a>
           </p>
         </noscript>
       </div>
