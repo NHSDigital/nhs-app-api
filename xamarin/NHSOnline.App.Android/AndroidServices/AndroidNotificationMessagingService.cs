@@ -73,7 +73,8 @@ namespace NHSOnline.App.Droid.AndroidServices
                 intent.AddDeepLink(url);
             }
 
-            return PendingIntent.GetActivity(this, notificationId, intent, PendingIntentFlags.OneShot);
+            var intentFlag = Build.VERSION.SdkInt >= BuildVersionCodes.S ? PendingIntentFlags.Immutable : PendingIntentFlags.OneShot;
+            return PendingIntent.GetActivity(this, notificationId, intent, intentFlag);
         }
 
         private Notification BuildNotification(PendingIntent intent, RemoteMessage.Notification notification)
