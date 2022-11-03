@@ -1,5 +1,3 @@
-DROP PROCEDURE IF EXISTS compute.FirstLoginsComputation(timestamp with time zone,timestamp with time zone);
-
 CREATE OR REPLACE PROCEDURE compute.FirstLoginsComputation(startDateTime timestamp with time zone, endDateTime timestamp with time zone)
 AS $$
 
@@ -9,6 +7,7 @@ DECLARE
     firstLogins_P5LogId int;
     firstLogins_p9LogId int;
     firstLogins_Consent_Insert_LogId int;
+    firstLogins_Insert_OptedIn int;
     firstLogins_Consent_Update_LogId int;
     logResult bool;
 
@@ -83,6 +82,28 @@ BEGIN
                    ,"ConsentProofLevel"
             ON CONFLICT("LoginId") DO NOTHING;
     logResult = audit.updateprocessduration(firstLogins_Consent_Insert_LogId);
+
+    firstLogins_Insert_OptedIn = audit.insertprocessduration('firstLogins_OptedIn');
+        INSERT INTO "compute"."FirstLogins" ("LoginId","OptedIn","OptedInTimestamp")
+            SELECT DISTINCT "LoginId"
+                   ,CASE WHEN "Update" = 'insert' THEN 'Y' WHEN "Update" = 'delete' THEN 'N' END AS "OptedIn"
+                   ,"Timestamp"
+            FROM "audit"."OptedInActiveUsersHistory" opt 
+            WHERE opt."Timestamp" >= startDateTime and opt."Timestamp" < endDateTime
+            ON CONFLICT ("LoginId") DO UPDATE
+                SET "OptedIn" =
+                    ( CASE
+                        WHEN ( "FirstLogins"."OptedIn" IS NULL or "FirstLogins"."OptedIn" <> Excluded."OptedIn")
+                            THEN Excluded."OptedIn"
+                        ELSE "FirstLogins"."OptedIn"
+                        END),
+                    "OptedInTimestamp" =
+                    ( CASE
+                        WHEN ( "FirstLogins"."OptedInTimestamp" IS NULL or "FirstLogins"."OptedInTimestamp" <> Excluded."OptedInTimestamp")
+                            THEN Excluded."OptedInTimestamp"
+                        ELSE "FirstLogins"."OptedInTimestamp"
+                        END);
+    logResult = audit.updateprocessduration(firstLogins_Insert_OptedIn);
 
     firstLogins_Consent_Update_LogId = audit.insertprocessduration('FirstLogins_Consent_Update');
         UPDATE "compute"."FirstLogins"

@@ -1,9 +1,6 @@
 DO $$
 BEGIN
 
-    CREATE INDEX IF NOT EXISTS organdonationregistrationwithdrawmetric_date_idx
-        on events."OrganDonationRegistrationWithdrawMetric" ("Timestamp");
-
     IF NOT EXISTS (
         SELECT con.*
         FROM pg_catalog.pg_constraint con
@@ -17,6 +14,15 @@ BEGIN
         ALTER TABLE events."OrganDonationRegistrationWithdrawMetric"
             ADD CONSTRAINT organdonationregistrationwithdrawmetric_auditid_unique UNIQUE ("AuditId");
     END IF;
+
+    CREATE INDEX IF NOT EXISTS OrganDonationRegistrationWithdrawMetric_SessionId_idx
+        ON events."OrganDonationRegistrationWithdrawMetric" ("SessionId");
+
+    CREATE INDEX IF NOT EXISTS OrganDonationRegistrationWithdrawMetric_Timestamp_idx
+        ON events."OrganDonationRegistrationWithdrawMetric" ("Timestamp");
+
+    CREATE INDEX IF NOT EXISTS OrganDonationRegistrationWithdrawMetric_Timestamp_SessionId_idx
+        ON events."OrganDonationRegistrationWithdrawMetric" ("Timestamp", "SessionId");
 
 END
 $$;

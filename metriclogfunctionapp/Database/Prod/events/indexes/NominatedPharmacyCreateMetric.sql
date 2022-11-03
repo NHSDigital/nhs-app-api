@@ -4,6 +4,9 @@ DO $$
         CREATE INDEX IF NOT EXISTS NominatedPharmacyCreateMetric_Timestamp_SessionId_idx on events."NominatedPharmacyCreateMetric" ("Timestamp", "SessionId");
         CREATE INDEX IF NOT EXISTS NominatedPharmacyCreateMetric_date_idx on events."NominatedPharmacyCreateMetric" ("Timestamp");
 
+        CREATE INDEX IF NOT EXISTS NominatedPharmacyCreateMetric_SessionId_idx
+            ON events."NominatedPharmacyCreateMetric" ("SessionId");
+
         IF NOT EXISTS (
             SELECT con.*
             FROM pg_catalog.pg_constraint con

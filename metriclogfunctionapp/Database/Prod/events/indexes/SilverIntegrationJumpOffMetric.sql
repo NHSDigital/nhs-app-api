@@ -15,10 +15,22 @@ BEGIN
             ADD CONSTRAINT silverintegrationjumpoffmetric_auditid_unique UNIQUE ("Timestamp", "SessionId", "AuditId");
     END IF;
 
-    CREATE INDEX IF NOT EXISTS silverjumpoffmetric_timestamp_idx on events."SilverIntegrationJumpOffMetric" ("Timestamp");
-    CREATE INDEX IF NOT EXISTS silverjumpoffmetric_sessionid_idx on events."SilverIntegrationJumpOffMetric" ("SessionId");
-    CREATE INDEX IF NOT EXISTS silverjumpoffmetric_timestamp_sessionid_idx on events."SilverIntegrationJumpOffMetric" ("Timestamp", "SessionId");
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_Timestamp_idx on events."SilverIntegrationJumpOffMetric" ("Timestamp");
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_Timestamp_SessionId_idx on events."SilverIntegrationJumpOffMetric" ("Timestamp", "SessionId");
 
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_SessionId_idx
+        ON events."SilverIntegrationJumpOffMetric" ("SessionId");
+
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_ProviderName_idx
+        ON events."SilverIntegrationJumpOffMetric" ("ProviderName");
+
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_SessionId_CovidJumpOff_idx
+        ON events."SilverIntegrationJumpOffMetric" ("SessionId")
+        WHERE "ProviderName" = 'the Department of Health and Social Care';
+
+    CREATE INDEX IF NOT EXISTS SilverIntegrationJumpOffMetric_SessionId_OtherJumpOff_idx
+        ON events."SilverIntegrationJumpOffMetric" ("SessionId")
+        WHERE "ProviderName" <> 'the Department of Health and Social Care';
 
 END
 $$;

@@ -2,6 +2,12 @@ DO $$
 BEGIN
     CREATE INDEX IF NOT EXISTS appointmentbookmetric_date_idx on events."AppointmentBookMetric" ("Timestamp");
 
+    CREATE INDEX IF NOT EXISTS AppointmentBookMetric_SessionId_idx
+        ON events."AppointmentBookMetric" ("SessionId");
+
+    CREATE INDEX IF NOT EXISTS AppointmentBookMetric_Timestamp_SessionId_idx
+        ON events."AppointmentBookMetric" ("Timestamp", "SessionId");
+
     IF NOT EXISTS (
         SELECT con.*
         FROM pg_catalog.pg_constraint con

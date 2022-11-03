@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS "compute"."FirstLogins" (
     "LatestOdsCode" character varying(6),
     "LatestProofLevel" character varying(2),
     "LatestLoginTimestamp" timestamp with time zone,
-    "SingleLoginFlag" character varying(1)
+    "SingleLoginFlag" character varying(1),
+    "OptedIn" character varying(1) NULL,
+    "OptedInTimestamp" timestamp with time zone NULL
 );
 
 CALL perms.apply_compute_table_permissions('compute', 'FirstLogins');
