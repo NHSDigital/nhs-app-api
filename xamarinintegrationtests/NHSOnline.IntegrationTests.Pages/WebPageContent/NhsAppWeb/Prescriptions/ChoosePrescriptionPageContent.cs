@@ -37,6 +37,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             return this;
         }
 
+        public ChoosePrescriptionPageContent InsertPotentiallyDangerousSpecialRequest()
+        {
+            SpecialRequestText.InsertText("<html>");
+            return this;
+        }
+
         internal void AssertOnPage()
         {
             // Extending timeout to allow SSO to complete

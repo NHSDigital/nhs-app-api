@@ -49,8 +49,72 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
         }
 
         [NhsAppIOSTest]
-        [NhsAppFlipbookTest(ParentJourney = "A user logs in to the app - iOS",
-            FlipbookTestName = "Attempting to order prescription when GP Services down")]
+        [NhsAppFlipbookTest(ParentJourney = "Accessing the prescriptions hub - iOS",
+            FlipbookTestName = "Repeat Prescriptions not available ", JourneyId = "P-RE-01")]
+        public void RepeatPrescriptionServiceNotOfferedByEmisGpShowsShutterScreenIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"))
+                .WithBehaviour(new EmisPrescriptionsForbiddenBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToPrescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToViewYourOrders();
+
+            IOSRepeatPrescriptionsUnavailablePage
+                .AssertOnPage(driver, screenshot: true);
+        }
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "Accessing the prescriptions hub - iOS",
+            FlipbookTestName = "Error submitting prescription order", JourneyId = "P-RE-04")]
+        public void APatientWithProofLevelNineCanOrderARepeatPrescriptionAndSeeErrorsIOS(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
+                .WithNhsNumber("2147483647")
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            LoginProcess.LogIOSPatientIn(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.NavigateToPrescriptions();
+
+            IOSPrescriptionsPage
+                .AssertOnPage(driver)
+                .PageContent.NavigateToOrderARepeatPrescription();
+
+            IOSOrderARepeatPrescriptionPage
+                .AssertOnPage(driver, screenshot: true)
+                .ChooseRepeat()
+                .Continue();
+
+            IOSChooseRepeatPrescriptionPage
+                .AssertOnPage(driver, screenshot: true)
+                .PageContent.ChoosePrescription()
+                .InsertPotentiallyDangerousSpecialRequest()
+                .Continue();
+
+            IOSCheckPrescriptionPage
+                .AssertOnPage(driver, screenshot: true)
+                .PageContent.Continue();
+
+            IOSPrescriptionConfirmedErrorPage
+                .AssertOnPage(driver, screenshot: true);
+        }
+
+        [NhsAppIOSTest]
+        [NhsAppFlipbookTest(ParentJourney = "Accessing the prescriptions hub - iOS",
+            FlipbookTestName = "Attempting to order prescription when GP Services down", JourneyId = "P-RE-07")]
         public void APatientWithProofLevelNineAttemptsToOrderPrescriptionWhenGPServicesAreDownIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient(EmisPatientOds.AllSilversEnabled)
@@ -62,11 +126,11 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             LoginProcess.LogIOSPatientIn(driver, patient);
 
             IOSLoggedInHomePage
-                .AssertOnPage(driver, screenshot:true)
+                .AssertOnPage(driver)
                 .Navigation.NavigateToPrescriptions();
 
             IOSPrescriptionsPage
-                .AssertOnPage(driver,screenshot:true)
+                .AssertOnPage(driver)
                 .PageContent.NavigateToOrderARepeatPrescription();
 
             IOSOrderARepeatPrescriptionErrorPage.AssertOnPage(driver, screenshot: true)

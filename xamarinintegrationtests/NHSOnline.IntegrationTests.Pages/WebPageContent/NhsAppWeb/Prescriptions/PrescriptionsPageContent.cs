@@ -92,6 +92,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
 
         public void NavigateToNominateANewPharmacy() => NominateANewPharmacyItem.Click();
 
+        public void NavigateToViewYourOrders() => ViewYourOrdersMenuItem.Click();
+
         public void KeyboardNavigateToOrderARepeatPrescription(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivateMenuItem(OrderARepeatPrescriptionButton, navigation);
 

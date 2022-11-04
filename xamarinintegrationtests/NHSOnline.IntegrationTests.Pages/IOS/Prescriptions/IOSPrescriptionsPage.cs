@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
             var page = new IOSPrescriptionsPage(driver);
 
             // API calls required to load this page
-            using var timeout = ExtendedTimeout.FromSeconds(20);
+            using var timeout = ExtendedTimeout.FromSeconds(10);
             page.PageContent.AssertOnPage();
 
             if (screenshot)
