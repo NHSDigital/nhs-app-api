@@ -1,7 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCodes:
-    - A00002
     - A10006
 journeys:
   homeScreen:
