@@ -146,6 +146,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeButton' AND label == 'Choose'\)*",
             RegexOptions.Compiled);
 
+        // Issue where the used device has no default files
+        private static readonly Regex CannotFindAnyPhotos = new(
+            @"No IOSElement found matching ByIosNSPredicate\(type == 'XCUIElementTypeImage' AND name MATCHES 'Photo,.\*'\)*",
+            RegexOptions.Compiled);
+
         // ios11 is really flakey trying to consistently get past ts and cs page
         private static readonly Regex TermsAndConditionsContinueFailure = new(
             @"(?=.*No IWebElement found matching\b)(?=.*Help improve the NHS App\b).*",
@@ -182,6 +187,7 @@ namespace NHSOnline.IntegrationTests.UI
             (CannotFindPhotosLabelInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosLabelInPhotoScreen))),
             (CannotFindPhotosButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotFindPhotosButtonInPhotoScreen))),
             (CannotChooseButtonInPhotoScreen, RetryStatus.Retry(nameof(CannotChooseButtonInPhotoScreen))),
+            (CannotFindAnyPhotos, RetryStatus.Retry(nameof(CannotFindAnyPhotos))),
             (CannotFindPhotoCaptured, RetryStatus.Retry(nameof(CannotFindPhotoCaptured))),
             (AppiumProxyIssuePostElement, RetryStatus.Retry(nameof(AppiumProxyIssuePostElement))),
             (GoogleServicesFailure, RetryStatus.Retry(nameof(GoogleServicesFailure))),
