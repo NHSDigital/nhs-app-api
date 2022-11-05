@@ -86,6 +86,18 @@
 	python sjr-config/utils/rulecreation/processengage.py
 	```
 
+### Wayfinder update
+
+1. The Wayfinder updates are being rolled out by NHS Trust (each Trust has it's own supplier). See the # wayfinder-sjr-release channel for latest updates required. Glenn Armitage provides the config and Paul Gribbin coordinates when releases are required.
+
+2. Update `sjr-config/utils/rulecreation/wayfinder.csv` with the practice changes. For removals, just delete the row where you find the ODS code to be removed. Additions should be added to the end of the file. The "Grouping" is there to help identify the group/file in which the data was provided.
+
+3. Run the following to update the Wayfinder yaml file
+
+	```bash
+	python sjr-config/utils/rulecreation/processwayfinder.py
+	```
+
 ## Getting configuration changes released
 
 1. Create a PR with the required changes. Submit for review and merge into the release branch (or `develop` if you did not need to create a release branch).
