@@ -208,6 +208,19 @@ describe('biometrics prompt page', () => {
       it('will call next with redirect route', () => {
         expect(conditionalRedirect).toBeCalled();
       });
+
+      describe('optout retuns 500', () => {
+        beforeEach(() => {
+          const error = { response: { status: 500 } };
+          $store.app.$http = {
+            postV1ApiMetricsBiometricsOptOut: jest.fn(() => Promise.reject(error)),
+          };
+        });
+        it('will not show error dialog', () => {
+          expect(wrapper.find('#message-dialog').exists()).toBe(false);
+          expect(conditionalRedirect).toBeCalled();
+        });
+      });
     });
   });
 });

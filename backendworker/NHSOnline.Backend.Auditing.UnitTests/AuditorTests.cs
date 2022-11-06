@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private static string _nhsNumber1;
         private static string _nhsNumber2;
         private const Supplier SupplierEmis = Supplier.Emis;
-        private static readonly string AccessToken = AuditorTestResources.AccessTokenValid;
+        private static readonly string AccessTokenValid = AuditorTestResources.AccessTokenValid;
+        private static readonly string AccessTokenWithNoNhsNumber = AuditorTestResources.AccessTokenWithNoNhsNumber;
         private static string _odsCode;
         private static string _referrer = "";
         private static string integrationReferrer = "";
@@ -106,7 +107,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 var mockUserSessionService = new Mock<IUserSessionService>();
                 mockUserSessionService
                     .Setup(x => x.GetUserSession<UserSession>())
-                    .Returns(Option.Some(CreateUserSession(_nhsNumber2, AuditorTestResources.AccessTokenValid, _odsCode)));
+                    .Returns(Option.Some(CreateUserSession(_nhsNumber2, AccessTokenValid, _odsCode)));
                 var requestServices = new ServiceCollection()
                     .AddSingleton(mockUserSessionService.Object)
                     .BuildServiceProvider();
@@ -256,7 +257,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             _mockUserSessionService = _fixture.Freeze<Mock<IUserSessionService>>();
             _mockUserSessionService
                 .Setup(x => x.GetUserSession<UserSession>())
-                .Returns(Option.Some(CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode)));
+                .Returns(Option.Some(CreateUserSession(_nhsNumber1, AccessTokenValid, _odsCode)));
 
             var mockServiceProvider = _fixture.Freeze<Mock<IServiceProvider>>();
             mockServiceProvider
@@ -370,7 +371,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task Audit_HappyPath()
         {
             await _systemUnderTest.Audit(
-                CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode),
+                CreateUserSession(_nhsNumber1, AccessTokenValid, _odsCode),
                 "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
@@ -384,7 +385,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task Audit_HappyPath_NoGpSession()
         {
             await _systemUnderTest.Audit(
-                CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenValid, _odsCode),
+                CreateUserSessionNoGpSystem(_nhsNumber1, AccessTokenValid, _odsCode),
                 "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
 
             _stream.Position = 0;
@@ -394,12 +395,31 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Audit_ParamNhsNumberNullOrEmpty_AccessTokenHasNhsNumberFallback_Success(string nhsNumber)
+        {
+            var userSession = CreateUserSession(nhsNumber, AccessTokenValid, _odsCode);
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit",
+                "SomeDetails '{0} {1}'",
+                "with", "parameters");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  AuditorTestResources.AccessTokenNhsNumber + " | False | Emis | Test Audit | SomeDetails 'with parameters' |  |  |  |  |");
+        }
+
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
         public async Task Audit_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
-            var userSession = CreateUserSession(nhsNumber, AuditorTestResources.AccessTokenValid, _odsCode);
+            var userSession = CreateUserSession(nhsNumber, AccessTokenWithNoNhsNumber, _odsCode);
             await _systemUnderTest.Audit(
                 userSession,
                 "Test Audit",
@@ -463,7 +483,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task AuditSessionEvent_HappyPath()
         {
             await _systemUnderTest.AuditSessionEvent(
-                AccessToken,
+                AccessTokenValid,
                 _nhsNumber1,
                 Supplier.Tpp, "Test Audit", "SomeDetails 'with parameters'",
                 _referrer);
@@ -475,13 +495,34 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' | " + _referrer + " |  |  |  |");
         }
 
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditSessionEvent_ParamNhsNumberNullOrEmpty_AccessTokenHasNhsNumberFallback_Success(string nhsNumber)
+        {
+            await _systemUnderTest.AuditSessionEvent(
+                AccessTokenValid,
+                nhsNumber,
+                Supplier.Vision,
+                "Test Audit",
+                "SomeDetails '{0} {1}'",
+                "with", "parameters",
+                _referrer);
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  AuditorTestResources.AccessTokenNhsNumber + " | False | Vision | Test Audit | SomeDetails 'parameters ' | with |  |  |  | Referrer: with |");
+        }
+
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
         public async Task AuditSessionEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
             await _systemUnderTest.AuditSessionEvent(
-                AccessToken,
+                AccessTokenWithNoNhsNumber,
                 nhsNumber,
                 Supplier.Vision,
                 "Test Audit",
@@ -548,7 +589,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task AuditGoldIntegrationEvent_HappyPath()
         {
             await _systemUnderTest.AuditGoldIntegrationEvent(
-                AccessToken,
+                AccessTokenValid,
                 _nhsNumber1,
                 "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
 
@@ -559,6 +600,23 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().Contain("Test ProviderId");
             testString.Should().Contain("Test ProviderName");
             testString.Should().Contain("Test JumpOffId");
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditGoldIntegrationEvent_ParamNhsNumberNullOrEmpty_AccessTokenHasNhsNumberFallback_Success(string nhsNumber)
+        {
+            await _systemUnderTest.AuditGoldIntegrationEvent(
+                AccessTokenValid,
+                nhsNumber,
+                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  AuditorTestResources.AccessTokenNhsNumber + " | False | Unknown | Test Operation | Test Details |  | Test ProviderId | Test ProviderName | Test JumpOffId |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -567,7 +625,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task AuditGoldIntegrationEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
             await _systemUnderTest.AuditGoldIntegrationEvent(
-               AccessToken,
+                AccessTokenWithNoNhsNumber,
                nhsNumber,
                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
         }
@@ -576,7 +634,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task AuditSilverIntegrationEvent_HappyPath()
         {
             await _systemUnderTest.AuditSilverIntegrationEvent(
-                AccessToken,
+                AccessTokenValid,
                 _nhsNumber1,
                 "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
 
@@ -589,13 +647,30 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().Contain("Test JumpOffId");
         }
 
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditSilverIntegrationEvent_ParamNhsNumberNullOrEmpty_AccessTokenHasNhsNumberFallback_Success(string nhsNumber)
+        {
+            await _systemUnderTest.AuditSilverIntegrationEvent(
+                AccessTokenValid,
+                nhsNumber,
+                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  AuditorTestResources.AccessTokenNhsNumber + " | False | Unknown | Test Operation | Test Details |  | Test ProviderId | Test ProviderName | Test JumpOffId |");
+        }
+
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
         public async Task AuditSilverIntegrationEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
             await _systemUnderTest.AuditSilverIntegrationEvent(
-               AccessToken,
+                AccessTokenWithNoNhsNumber,
                nhsNumber,
                "Test Operation", "Test Details", "Test ProviderId", "Test ProviderName", "Test JumpOffId");
         }
@@ -604,7 +679,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public async Task AuditLoginDeviceEvent_HappyPath()
         {
             await _systemUnderTest.AuditLoginDeviceEvent(
-                AccessToken,
+                AccessTokenValid,
                 _nhsNumber1, "Login Operation", "Test UserAgent");
 
             _stream.Position = 0;
@@ -614,12 +689,33 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().Contain("Test UserAgent");
         }
 
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AuditLoginDeviceEvent_ParamNhsNumberNullOrEmpty_AccessTokenHasNhsNumberFallback_Success(string nhsNumber)
+        {
+            await _systemUnderTest.AuditLoginDeviceEvent(
+                AccessTokenValid,
+                nhsNumber,
+                "Test Operation",
+                "Test UserAgent");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  AuditorTestResources.AccessTokenNhsNumber + " | False | Unknown | Test Operation | Device details returned: Test UserAgent |  |  |  |  |");
+        }
+
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
         public async Task AuditLoginDeviceEvent_NhsNumberNullOrEmpty_Throws(string nhsNumber)
         {
-            await _systemUnderTest.AuditLoginDeviceEvent(AccessToken, nhsNumber, "Test Operation",
+            await _systemUnderTest.AuditLoginDeviceEvent(
+                AccessTokenWithNoNhsNumber,
+                nhsNumber,
+                "Test Operation",
                 "Test UserAgent");
         }
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
@@ -101,10 +102,13 @@ namespace NHSOnline.Backend.Auditing
             var auditUserContext = _scopeProvider.Value?.UserContext()
                                    ?? throw new NoAuditKeyException("Cannot audit outside of HttpContextAuditorScope");
 
-            var nhsNumber = auditUserContext.NhsNumber;
             var supplier = auditUserContext.Supplier;
             var accessToken = auditUserContext.AccessToken;
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            var accessTokenDetails = DeriveAccessTokenDetails(accessToken);
+            var nhsLoginSubject = accessTokenDetails.NhsLoginSubject;
+
+            var nhsNumber = !auditUserContext.NhsNumber.IsNullOrEmpty() ?
+                auditUserContext.NhsNumber : accessTokenDetails.NhsNumber;
 
             var isProxying = auditUserContext.IsProxying;
 
@@ -141,7 +145,14 @@ namespace NHSOnline.Backend.Auditing
             string referrerOrigin,
             params object[] parameters)
         {
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            var accessTokenDetails = DeriveAccessTokenDetails(accessToken);
+            var nhsLoginSubject = accessTokenDetails.NhsLoginSubject;
+
+            if (nhsNumber.IsNullOrEmpty())
+            {
+                nhsNumber = accessTokenDetails.NhsNumber;
+            }
+
             await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, referrer,
                 integrationReferrer, referrerOrigin, null, null, null, parameters);
         }
@@ -157,7 +168,14 @@ namespace NHSOnline.Backend.Auditing
             string jumpOffId,
             params object[] parameters)
         {
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            var accessTokenDetails = DeriveAccessTokenDetails(accessToken);
+            var nhsLoginSubject = accessTokenDetails.NhsLoginSubject;
+
+            if (nhsNumber.IsNullOrEmpty())
+            {
+                nhsNumber = accessTokenDetails.NhsNumber;
+            }
+
             await AuditInternal(
                 auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details, null,
                 null, null, providerId, providerName, jumpOffId, parameters);
@@ -177,7 +195,14 @@ namespace NHSOnline.Backend.Auditing
             string jumpOffId,
             params object[] parameters)
         {
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            var accessTokenDetails = DeriveAccessTokenDetails(accessToken);
+            var nhsLoginSubject = accessTokenDetails.NhsLoginSubject;
+
+            if (nhsNumber.IsNullOrEmpty())
+            {
+                nhsNumber = accessTokenDetails.NhsNumber;
+            }
+
             await AuditInternal(
                 auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details, referrer,
                 integrationReferrer, referrerOrigin, providerId, providerName, jumpOffId, parameters);
@@ -191,7 +216,14 @@ namespace NHSOnline.Backend.Auditing
             string userAgent,
             params object[] parameters)
         {
-            var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
+            var accessTokenDetails = DeriveAccessTokenDetails(accessToken);
+            var nhsLoginSubject = accessTokenDetails.NhsLoginSubject;
+
+            if (nhsNumber.IsNullOrEmpty())
+            {
+                nhsNumber = accessTokenDetails.NhsNumber;
+            }
+
             var details = $"Device details returned: {userAgent}";
             await AuditInternal(
                 auditType, nhsLoginSubject, nhsNumber, false, Supplier.Unknown, operation, details,
@@ -325,12 +357,12 @@ namespace NHSOnline.Backend.Auditing
             return auditRecord;
         }
 
-        private string DeriveNhsLoginSubject(string accessToken)
+        private (string NhsLoginSubject, string NhsNumber) DeriveAccessTokenDetails(string accessToken)
         {
             try
             {
                 var token = AccessToken.Parse(_logger, accessToken);
-                return token.Subject;
+                return (token.Subject, token.NhsNumber);
             }
             catch (Exception e)
             {

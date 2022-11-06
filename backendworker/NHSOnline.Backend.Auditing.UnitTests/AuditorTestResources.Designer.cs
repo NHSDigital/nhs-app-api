@@ -10,21 +10,21 @@
 
 namespace NHSOnline.Backend.Auditing.UnitTests {
     using System;
-    
-    
+
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class AuditorTestResources {
-        
+
         private static System.Resources.ResourceManager resourceMan;
-        
+
         private static System.Globalization.CultureInfo resourceCulture;
-        
+
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal AuditorTestResources() {
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Resources.ResourceManager ResourceManager {
             get {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests {
                 return resourceMan;
             }
         }
-        
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Globalization.CultureInfo Culture {
             get {
@@ -45,22 +45,34 @@ namespace NHSOnline.Backend.Auditing.UnitTests {
                 resourceCulture = value;
             }
         }
-        
+
         public static string AccessTokenValid {
             get {
                 return ResourceManager.GetString("AccessTokenValid", resourceCulture);
             }
         }
-        
+
+        public static string AccessTokenWithNoNhsNumber {
+            get {
+                return ResourceManager.GetString("AccessTokenWithNoNhsNumber", resourceCulture);
+            }
+        }
+
         public static string AccessTokenInvalid {
             get {
                 return ResourceManager.GetString("AccessTokenInvalid", resourceCulture);
             }
         }
-        
+
         public static string AccessTokenSubject {
             get {
                 return ResourceManager.GetString("AccessTokenSubject", resourceCulture);
+            }
+        }
+
+        public static string AccessTokenNhsNumber {
+            get {
+                return ResourceManager.GetString("AccessTokenNhsNumber", resourceCulture);
             }
         }
     }
