@@ -12,6 +12,8 @@ const errorPanelId = 'form-error-summary';
 
 let wrapper;
 let $store;
+let loadMessage;
+let pollStatus;
 
 const mountMessage = ({
   messageId,
@@ -20,6 +22,7 @@ const mountMessage = ({
   error = false,
   errorReply = undefined,
   errorReplyCount = 0,
+  methods,
 } = {}) => {
   $store = createStore({
     state: {
@@ -51,6 +54,7 @@ const mountMessage = ({
     mocks: {
       reload: jest.fn(),
     },
+    methods,
   });
 };
 
@@ -247,6 +251,61 @@ describe('messaging message', () => {
                 expect(next).toHaveBeenCalledWith(true);
                 expect(showModal).toHaveBeenCalledTimes(0);
               });
+          });
+        });
+
+        describe('Check status', () => {
+          beforeEach(async () => {
+            loadMessage = jest.fn();
+            pollStatus = jest.fn();
+            wrapper = mountMessage({
+              messageId,
+              message: {},
+              methods: {
+                loadMessage,
+                pollStatus,
+              },
+            });
+            await wrapper.vm.$nextTick();
+          });
+          describe('Status is successful', () => {
+            beforeEach(() => {
+              $store.state.messaging.message.reply = {
+                status: 'Succeeded',
+              };
+            });
+            it('will clear the interval and load the message', async () => {
+              loadMessage.mockClear();
+              await wrapper.vm.checkStatus();
+              expect(loadMessage).toHaveBeenCalledTimes(1);
+            });
+          });
+
+          describe('Status is Failed and responseComplete is after responseSent', () => {
+            beforeEach(() => {
+              wrapper.setData({ showSpinner: true });
+              $store.state.messaging.message.reply = {
+                status: 'Failed',
+                responseCompletedDateTime: '21/10/2022',
+                responseSentDateTime: '20/10/2022',
+              };
+            });
+            it('will stop showing the spinner and dispatch to messaging/addErrorReply', async () => {
+              await wrapper.vm.checkStatus();
+              expect(wrapper.vm.showSpinner).toBe(false);
+              expect($store.dispatch).toBeCalledWith('messaging/addErrorReply', 'Supplier outcome status has failed');
+            });
+          });
+
+          describe('Check response when user clicks send', () => {
+            beforeEach(() => {
+              wrapper.setData({ showSpinner: false });
+              $store.state.messaging.errorReply = null;
+            });
+            it('will call pollStatus', async () => {
+              await wrapper.vm.sendClicked('', true, false);
+              expect(pollStatus).toHaveBeenCalledTimes(1);
+            });
           });
         });
 

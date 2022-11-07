@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.messageReply">
-    <div v-if="response" id="messageReplyResponseContainer" :class="$style.messageReplyResponseContainer">
+    <div v-if="showResponse" id="messageReplyResponseContainer" :class="$style.messageReplyResponseContainer">
       <h4>{{ $t('messages.messageReply.response.title') }}</h4>
       <p>{{ $t('messages.messageReply.response.reply', { response }) }}
         <formatted-date-time v-if="responseDate"
@@ -140,6 +140,9 @@ export default {
     },
     currentRadioChoice() {
       return this.selectedRadioValue;
+    },
+    showResponse() {
+      return this.messageReply.response && this.messageReply.status === 'Succeeded';
     },
     response() {
       return this.messageReply.response;

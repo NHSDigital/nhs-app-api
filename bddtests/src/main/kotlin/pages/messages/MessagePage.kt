@@ -23,7 +23,7 @@ class MessagePage : MessagesBasePage() {
 
     fun assertResponseContainerExists() {
         val path = "//div[@id='messageReplyResponseContainer']"
-        getElement(path).assertIsVisible()
+        getElement(path, timeToWaitForElement = 30).assertIsVisible()
     }
 
     fun selectAnOption() {

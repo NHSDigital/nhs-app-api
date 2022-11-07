@@ -154,6 +154,8 @@ spec:
           value: "false"
         - name: SESSION_EXPIRING_WARNING_SECONDS
           value: "60"
+        - name: MESSAGE_REPLY_INTERVAL_TIME
+          value: "3000"  
         - name: SYMPTOM_CHECKER_URL
           value: "{{ $.Values.web.oneOneOneUrl }}"
         - name: SYMPTOM_CHECKER_WALES_URL

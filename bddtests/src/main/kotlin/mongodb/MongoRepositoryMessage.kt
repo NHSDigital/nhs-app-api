@@ -12,7 +12,10 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
                                   val SenderContext: MongoRepositoryMessageSenderContext?,
                                   val Reply: MongoRepositoryMessageReply?,
                                   val _id: ObjectId?) {
+
     companion object {
+        private const val ADDITIONAL_MINUTES = 5L
+
         // We cannot serialise an object to create this because the ISODate objects cannot be created like that.
         fun createJson(message: SingleMessageFacade, nhsLoginId: String): String {
             val readString = if (!message.read) null else dateAsIsoDate(ZonedDateTime.now().minusDays(2))
@@ -46,15 +49,17 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
             val responseCompletedDateTimeString = if (message.reply?.response != null)
                 dateAsIsoDate(ZonedDateTime.now())
             else
-                null
+                dateAsIsoDate(ZonedDateTime.now().plusMinutes(ADDITIONAL_MINUTES))
+
+            val responseString = getResponse(message);
+
+            val statusString = getStatus(message);
 
             val response =
-                    if (message.reply?.response != null)
-                        "\"Response\": \"${message.reply.response}\"," +
+                        "$responseString" +
                         "\"ResponseSentDateTime\":$responseDateTimeString" +
-                        "\"Status\": \"${message.reply.status}\"," +
+                        "$statusString" +
                         "\"ResponseCompletedDateTime\":$responseCompletedDateTimeString"
-            else ""
 
             return if (message.reply != null)
                 ", \"Reply\": {\n" +
@@ -80,6 +85,20 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
 
         private fun dateAsIsoDate(date: ZonedDateTime?): String {
             return "ISODate(\"${MongoDBConnection.mongoDateFormatter.format(date)}\")"
+        }
+
+        private fun getResponse(message: SingleMessageFacade?): String? {
+            return if (message?.reply?.response == null)
+                "\"Response\": ${message?.reply?.response},"
+            else
+                "\"Response\": \"${message.reply.response}\","
+        }
+
+        private fun getStatus(message: SingleMessageFacade?): String? {
+            return if (message?.reply?.status == null)
+                "\"Status\": ${message?.reply?.status},"
+            else
+                "\"Status\": \"${message.reply.status}\","
         }
     }
 }

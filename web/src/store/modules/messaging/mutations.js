@@ -14,6 +14,7 @@ import {
   DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
   SET_PREVIOUS_CHOICE,
   CLEAR_ERROR_REPLY,
+  CLEAR_ALL_EXCEPT_MESSAGE_OBJ,
 } from './mutation-types';
 
 export default {
@@ -29,6 +30,13 @@ export default {
     state.errorReply = null;
     state.errorReplyCount = 0;
     state.message = null;
+    state.senderMessagesLoaded = false;
+    state.previousChoice = null;
+  },
+  [CLEAR_ALL_EXCEPT_MESSAGE_OBJ](state) {
+    state.error = null;
+    state.errorReply = null;
+    state.errorReplyCount = 0;
     state.senderMessagesLoaded = false;
     state.previousChoice = null;
   },

@@ -41,6 +41,7 @@ const mountComponent = ({
         options: replyOptions,
         response,
         responseSentDateTime,
+        status: 'Succeeded',
       },
       senderName: 'Test Sender',
     },

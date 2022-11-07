@@ -13,6 +13,7 @@ import {
   DECREMENT_TOTAL_UNREAD_MESSAGE_COUNT,
   SET_PREVIOUS_CHOICE,
   CLEAR_ERROR_REPLY,
+  CLEAR_ALL_EXCEPT_MESSAGE_OBJ,
 } from './mutation-types';
 import NativeApp from '@/services/native-app';
 
@@ -38,6 +39,9 @@ export default {
   },
   clearErrorReply({ commit }) {
     commit(CLEAR_ERROR_REPLY);
+  },
+  clearAllButMessage({ commit }) {
+    commit(CLEAR_ALL_EXCEPT_MESSAGE_OBJ);
   },
   async load({ commit }, request = {}) {
     // eslint-disable-next-line no-param-reassign
@@ -117,6 +121,9 @@ export default {
     } catch (error) {
       commit(ADD_ERROR_REPLY, createLocalError(error));
     }
+  },
+  addErrorReply({ commit }, message) {
+    commit(ADD_ERROR_REPLY, message);
   },
   setPreviousChoice({ commit }, choice) {
     commit(SET_PREVIOUS_CHOICE, choice);

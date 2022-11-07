@@ -316,7 +316,7 @@ Feature: Messages
     And I can't see the Back link
 
   Scenario: A user can see a message with a questionnaire and respond to it
-    Given I am a user wishing to view messages that require a reply
+    Given I am a user wishing to view messages that require a reply that returns a succeeded status
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
@@ -328,6 +328,7 @@ Feature: Messages
     When I click on the 'Reply to this message' button
     And I select an option to reply
     And I send the reply
+    And I get a successful response
     And I can see the response message
 
   Scenario: A user can see a message which has already been replied
@@ -342,7 +343,7 @@ Feature: Messages
     And I can see the response message
 
   Scenario: A user can sees the appropriate error screen when failing to reply to a message
-    Given I am a user wishing to view messages that require a reply
+    Given I am a user wishing to view messages that require a reply that returns failed status
     And I am logged in
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
@@ -353,6 +354,6 @@ Feature: Messages
     Then the Message page is displayed
     When I click on the 'Reply to this message' button
     And I select an option to reply
-    And I send a reply that returns an error
+    And I send the reply that returns and error
     And I click the 'Try again' button
-    And I send a reply that returns an error
+    And I send the reply

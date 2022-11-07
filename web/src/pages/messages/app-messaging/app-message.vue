@@ -30,27 +30,33 @@
           </div>
         </div>
 
-        <div :class="$style['message-panel__item']">
-          <formatted-date-time :class="$style['message-panel__time']"
-                               :date-time="message.sentTime" />
-          <div :class="$style['message-panel__content']">
-            <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
-                              :message-id="message.id" />
-            <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
-          </div>
+        <div v-if="showSpinner">
+          <spinner :always-show="true" />
         </div>
+        <div v-else>
+          <div :class="$style['message-panel__item']">
+            <formatted-date-time :class="$style['message-panel__time']"
+                                 :date-time="message.sentTime" />
+            <div :class="$style['message-panel__content']">
+              <markdown-content v-if="isMarkdown" class="panel-content" :content="message.body"
+                                :message-id="message.id" />
+              <linkify-content v-else class="panel-content" :content="message.body" tag="p" />
+            </div>
+          </div>
 
-        <message-reply v-if="hasReplyOptions"
-                       :show-options="shouldShowOptions()"
-                       :radio-value="getPreviousChoice()"
-                       :message-reply="messageReply"
-                       :sender-name="senderName"
-                       @send_clicked="sendClicked" />
+          <message-reply v-if="hasReplyOptions"
+                         :show-options="shouldShowOptions()"
+                         :radio-value="getPreviousChoice()"
+                         :message-reply="messageReply"
+                         :sender-name="senderName"
+                         @send_clicked="sendClicked" />
 
-        <desktop-generic-back-link v-if="!isNativeApp"
-                                   data-purpose="back-link"
-                                   :path="backLink"
-                                   @clickAndPrevent="backClicked"/>
+          <desktop-generic-back-link v-if="!isNativeApp"
+                                     data-purpose="back-link"
+                                     :path="backLink"
+                                     @clickAndPrevent="backClicked"/>
+
+        </div>
       </div>
     </div>
   </div>
@@ -74,6 +80,7 @@ import MessageReply from '@/components/messaging/MessageReply';
 import FormErrorSummary from '@/components/FormErrorSummary';
 import KeywordRepliesError from '@/components/errors/pages/messages/KeywordRepliesError';
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
+import Spinner from '@/components/widgets/Spinner';
 
 export default {
   name: 'AppMessagingAppMessagePage',
@@ -90,6 +97,7 @@ export default {
     MessageReply,
     FormErrorSummary,
     KeywordRepliesError,
+    Spinner,
   },
   mixins: [ErrorPageMixin],
   beforeRouteLeave(to, from, next) {
@@ -119,6 +127,9 @@ export default {
       loaded: false,
       hasValidationErrors: false,
       isCheckbox: false,
+      showSpinner: false,
+      polling: null,
+      messageReplyIntervalTime: this.$store.$env.MESSAGE_REPLY_INTERVAL_TIME,
     };
   },
   computed: {
@@ -145,6 +156,18 @@ export default {
     },
     noInternet() {
       return this.$store.state.messaging.errorReply && this.$store.state.messaging.errorReply.status === '';
+    },
+    messageStatus() {
+      return get('status')(this.messageReply);
+    },
+    messageId() {
+      return get('messageId')(this.$route.query);
+    },
+    responseSentDt() {
+      return get('responseSentDateTime')(this.messageReply);
+    },
+    responseCompleteDt() {
+      return get('responseCompletedDateTime')(this.messageReply);
     },
     hasReplyOptions() {
       if (get('options')(this.messageReply) === null || get('options')(this.messageReply) === undefined) {
@@ -185,18 +208,28 @@ export default {
     await this.loadMessage();
   },
   methods: {
-    async loadMessage() {
+    async loadMessage(shouldSkipGettingMessage = false) {
       this.loaded = false;
-      this.$store.dispatch('messaging/clear');
+
+      if (shouldSkipGettingMessage) {
+        this.$store.dispatch('messaging/clearAllExceptMessageObj');
+      } else {
+        this.$store.dispatch('messaging/clear');
+      }
+
       this.$store.dispatch('pageLeaveWarning/reset');
-      const messageId = get('messageId')(this.$route.query);
+      clearInterval(this.polling);
+
+      const { messageId } = this;
 
       if (!messageId) {
         redirectTo(this, HEALTH_INFORMATION_UPDATES_PATH);
         return;
       }
 
-      await this.$store.dispatch('messaging/loadMessage', { messageId });
+      if (!shouldSkipGettingMessage) {
+        await this.$store.dispatch('messaging/loadMessage', { messageId });
+      }
 
       if (!this.error && !this.message) {
         redirectTo(this, HEALTH_INFORMATION_UPDATES_PATH);
@@ -204,6 +237,7 @@ export default {
       }
 
       this.loaded = true;
+      this.showSpinner = false;
     },
     backClicked() {
       redirectTo(this, this.backLink, { senderId: this.sender });
@@ -227,13 +261,14 @@ export default {
         }
 
         if (!this.errorReply) {
-          await this.loadMessage();
+          await this.pollStatus();
         }
       }
     },
     beforeDestroy() {
       this.$store.dispatch('pageLeaveWarning/reset');
       this.$store.dispatch('messaging/clear');
+      clearInterval(this.polling);
     },
     showModal() {
       this.$store.dispatch('pageLeaveWarning/showKeywordReplyLeavingModal');
@@ -243,6 +278,34 @@ export default {
     },
     getPreviousChoice() {
       return this.$store.state.messaging.previousChoice;
+    },
+    async checkStatus() {
+      const { messageId } = this;
+      await this.$store.dispatch('messaging/loadMessage', { messageId });
+
+      if (this.messageStatus === 'Succeeded') {
+        clearInterval(this.polling);
+        await this.loadMessage(true);
+      }
+
+      if (this.messageStatus === 'Failed' && (this.responseCompleteDt > this.responseSentDt)) {
+        clearInterval(this.polling);
+        this.showSpinner = false;
+
+        this.$store.dispatch('messaging/addErrorReply', 'Supplier outcome status has failed');
+      }
+
+      if (this.error || this.errorReply) {
+        clearInterval(this.polling);
+        this.showSpinner = false;
+      }
+    },
+    async pollStatus() {
+      this.showSpinner = true;
+
+      this.polling = setInterval(() => {
+        this.checkStatus();
+      }, this.messageReplyIntervalTime);
     },
   },
 };

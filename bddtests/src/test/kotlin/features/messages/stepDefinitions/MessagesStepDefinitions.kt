@@ -27,7 +27,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 50000
-private const val INVALID_MESSAGE_BODY: Int = 1234
 
 class MessagesStepDefinitions {
 
@@ -257,6 +256,33 @@ class MessagesStepDefinitions {
         factory.setUpSingleMessageWithQuestionnaire()
     }
 
+    @Given("^I am a user wishing to view messages that require a reply that returns a succeeded status")
+    fun iAmAUserWishingToViewMessagesThatRequireAReplyThatReturnsASucceededStatus() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaire()
+    }
+
+    @Given("^I get a successful response")
+    fun iGetASuccessfulResponse() {
+        MongoDBConnection.MessagesCollection.updateOne(
+                Filters.eq("Reply.Status", null),
+                Document("\$set", Document("Reply.Status", "Succeeded"))
+        )
+    }
+
+    @Given("^I am a user wishing to view messages that require a reply that returns failed status")
+    fun iAmAUserWishingToViewMessagesThatRequireAReplyThatReturnsFailedStatus() {
+        val factory = MessagesFactory()
+        factory.setUpUser()
+        factory.setUpSingleMessageWithQuestionnaireAndFailedStatus()
+    }
+
+    @Then("^I send the reply that returns and error$")
+    fun iSendTheReplyThatReturnAnError() {
+        messagePage.sendTheReply()
+    }
+
     @When("^I click on the 'Reply to this message' button$")
     fun iClickOnTheReplyToThisMessageButton() {
         messagePage.clickReplyButtonElement()
@@ -276,16 +302,6 @@ class MessagesStepDefinitions {
      fun iSendTheReply() {
          messagePage.sendTheReply()
      }
-
-    @Then("^I send a reply that returns an error$")
-    fun iSendTheReplyThatReturnsAnError() {
-        val targetMessage = MessagesSerenityHelpers.TARGET_MESSAGE.getOrFail<String>()
-        MongoDBConnection.MessagesCollection.updateOne(
-                Filters.eq("Body", targetMessage),
-                Document("\$set", Document("Body", INVALID_MESSAGE_BODY))
-        )
-        messagePage.sendTheReply()
-    }
     
      @Then("^I can see the response message$")
      fun iCanSeeTheResponseMessage() {

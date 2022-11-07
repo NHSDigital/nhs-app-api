@@ -36,8 +36,7 @@ namespace NHSOnline.Backend.Messages.Areas.Messages
                     updates.Set(x => x.Reply.ResponseSentDateTime,
                         !string.IsNullOrEmpty(userResponse) ? DateTime.UtcNow : (DateTime?) null);
                     filters.Add(userMessage => userMessage.Reply != null &&
-                                               userMessage.Reply.Response == null &&
-                                               userMessage.Reply.ResponseSentDateTime == null &&
+                                               userMessage.Reply.Status != "Succeeded" &&
                                                userMessage.Reply.Options.Any(s => s.Code == userResponse));
                     break;
                 case MessagePatchType.ReplyStatus:

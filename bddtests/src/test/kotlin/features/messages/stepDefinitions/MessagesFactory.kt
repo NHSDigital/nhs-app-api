@@ -65,13 +65,21 @@ class MessagesFactory {
         ReplyOption(code = MESSAGE_SECOND_RESPONSE, display = "NEVER"),
         ReplyOption(code = "No", display = "NO")
         ),
-        response = MESSAGE_RESPONSE)
+        response = MESSAGE_RESPONSE,
+        status = "Succeeded")
 
     private val messageReplyWithQuestionnaire = Reply(options = arrayListOf(
             ReplyOption(code = MESSAGE_RESPONSE, display = "SMOKE"),
             ReplyOption(code = MESSAGE_SECOND_RESPONSE, display = "NEVER"),
-            ReplyOption(code = "No", display = "NO")
-    ))
+            ReplyOption(code = "No", display = "NO"))
+    )
+
+    private val messageReplyWithQuestionnaireAndFailedStatus = Reply(options = arrayListOf(
+            ReplyOption(code = MESSAGE_RESPONSE, display = "SMOKE"),
+            ReplyOption(code = MESSAGE_SECOND_RESPONSE, display = "NEVER"),
+            ReplyOption(code = "No", display = "NO")),
+            status = "Failed"
+    )
 
     private val unreadMessagesTitleId = "unreadCountMessagesTitle"
     private val readMessagesTitleId = "readMessagesTitle"
@@ -262,6 +270,25 @@ class MessagesFactory {
         val message = SingleMessageFacade(
                 "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(timeNow),
                 MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, messageReplyWithQuestionnaireAndResponse
+        )
+
+        val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
+        MongoDBConnection.MessagesCollection.clearAndInsertJson(arrayListOf(messageToInsert))
+
+        val insertedMessage = MongoDBConnection.MessagesCollection
+                .getValues<MongoRepositoryMessage>(MongoRepositoryMessage::class.java)
+                .first()
+        MessagesSerenityHelpers.MESSAGE_ID.set(insertedMessage._id?.toHexString())
+        MessagesSerenityHelpers.EXPECTED_MESSAGE.set(insertedMessage)
+    }
+
+    fun setUpSingleMessageWithQuestionnaireAndFailedStatus() {
+        val patient = SerenityHelpers.getPatient()
+        val nhsLoginId = patient.subject
+        MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
+        val message = SingleMessageFacade(
+                "1.1", senderOneName, messageOne, true, MongoDBConnection.mongoDateFormatter.format(timeNow),
+                MessageVersion.PLAIN_TEXT.value, senderOneSenderContext, messageReplyWithQuestionnaireAndFailedStatus
         )
 
         val messageToInsert = MongoRepositoryMessage.createJson(message, nhsLoginId)
