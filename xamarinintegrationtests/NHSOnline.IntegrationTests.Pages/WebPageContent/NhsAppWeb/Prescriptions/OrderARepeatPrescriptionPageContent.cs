@@ -32,6 +32,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.NhsAppWeb.Prescription
             BackBreadcrumb
         };
 
+        public WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
+
         public void KeyboardNavigateBack(AndroidKeyboardNavigation navigation)
             => KeyboardNavigateToAndActivate(BackBreadcrumb, navigation);
 

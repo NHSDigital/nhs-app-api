@@ -50,5 +50,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Prescriptions
         {
             _driver.Screenshot($"{nameof(IOSOrderARepeatPrescriptionPage)}_error");
         }
+
+        public void ScrollToContinueAndScreenshot()
+        {
+            PageContent.ContinueButton.ScrollTo();
+            _driver.Screenshot($"{nameof(IOSOrderARepeatPrescriptionPage)}_scrolled");
+        }
     }
 }

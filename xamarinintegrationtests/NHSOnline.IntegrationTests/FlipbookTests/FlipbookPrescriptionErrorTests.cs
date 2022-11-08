@@ -36,8 +36,10 @@ namespace NHSOnline.IntegrationTests.FlipbookTests
             iosOrderARepeatPrescriptionPage.Continue();
             iosOrderARepeatPrescriptionPage.ScreenshotError();
 
-            iosOrderARepeatPrescriptionPage
-                .ChooseRepeat();
+            iosOrderARepeatPrescriptionPage.ChooseRepeat();
+
+            iosOrderARepeatPrescriptionPage.ScrollToContinueAndScreenshot();
+            iosOrderARepeatPrescriptionPage.Continue();
 
             var iosChooseRepeatPrescriptionPage =
                 IOSChooseRepeatPrescriptionPage.AssertOnPage(driver, screenshot: true);
