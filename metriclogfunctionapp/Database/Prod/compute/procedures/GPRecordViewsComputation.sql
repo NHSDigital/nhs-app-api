@@ -41,7 +41,7 @@ BEGIN
         SELECT "Supplier", "IsActingOnBehalfOfAnother"::varchar FROM "RecSectionViews" rv
         WHERE rv."SessionId" = mr."SessionId" LIMIT 1
         ) AS rv ON TRUE
-    WHERE mr."Timestamp" >= "startDate"-INTERVAL '2 HOURS' AND mr."Timestamp" < "endDate"
+    WHERE mr."Timestamp" >= "startDate" AND mr."Timestamp" < "endDate"
     GROUP BY "SessionId", mr."Timestamp"::date, lm."OdsCode", lm."LoginId";
 
     CREATE INDEX ON "RecViews"("SessionId");
