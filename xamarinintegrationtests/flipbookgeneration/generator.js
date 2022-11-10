@@ -62,7 +62,7 @@ for (var idx = 0; idx < testDetails.length; idx++) {
                 outputHtml += `<span style="padding:10px;font-weight:bold;font-size:30px;">&rarr;</span>`;
             }
                 
-            outputHtml +=`<img src="${screenshotDir}/${files[screenshot]}" height="500px" width="250px" style="display:inline;vertical-align:middle;margin-bottom:1em;"/></div>`; 
+            outputHtml +=`<img src="${screenshotDir}/${files[screenshot]}" height="760px" width="350px" style="display:inline;vertical-align:middle;margin-bottom:1em;"/></div>`; 
         }
 
         outputHtml += '</div>'
