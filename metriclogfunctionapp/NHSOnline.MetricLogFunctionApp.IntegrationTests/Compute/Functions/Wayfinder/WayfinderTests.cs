@@ -594,4 +594,71 @@ public class WayfinderTests
             row.MostAppts.Should().Be(7);
         }
     }
+
+    [NhsAppTest]
+    public async Task Wayfinder_SingleSecondaryCareSummaryMetricRecord_NewRecordWithTestOdsCodeIsFilteredOutInComputeTable(TestEnv env)
+    {
+        var startDateTimeString = "2022-05-17T00:00:00";
+        var endDateTimeString = "2022-05-18T00:00:00";
+
+        const string loginId1 = "LoginId1";
+        const string sessionId1 = "SessionId1";
+        const string proofLevel = "P9";
+        const int totalReferrals = 1;
+        const int totalUpcomingAppointments = 2;
+        const string auditId1 = "auditId1";
+        const string testOds = "Test";
+
+        const string loginId2 = "LoginId2";
+        const string sessionId2 = "SessionId2";
+        const string auditId2 = "auditId2";
+        const string realOdsCode = "Real";
+
+        // Arrange
+        await AddMetricHelper.AddTestOdsCodes(env, testOds);
+        await AddMetricHelper.AddLoginMetric(env,
+            loginId1,
+            proofLevel,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            sessionId:sessionId1,
+            odsCode:testOds);
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            sessionId1,
+            totalReferrals,
+            totalUpcomingAppointments,
+            auditId1);
+
+        await AddMetricHelper.AddLoginMetric(env,
+            loginId2,
+            proofLevel,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            sessionId:sessionId2,
+            odsCode:realOdsCode);
+        await AddMetricHelper.AddSecondaryCareSummaryMetric(env,
+            new DateTimeOffset(2022, 05, 17, 10, 30, 00, TimeSpan.Zero),
+            sessionId2,
+            totalReferrals,
+            totalUpcomingAppointments,
+            auditId2);
+
+        // Act
+        var response = await env.HttpEndpointCallers.PostWayfinder(startDateTimeString, endDateTimeString);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        await env.Queues.Wayfinder.WaitUntilEmpty();
+
+        var rows = await env.Postgres.Compute.Wayfinder.FetchAll();
+
+        // Assert
+        using (new AssertionScope())
+        {
+            rows.Count.Should().Be(1);
+
+            var row = rows.Single(x => x.Date == DateTime.Parse(startDateTimeString));
+            row.Sessions.Should().Be(1);
+            row.Views.Should().Be(1);
+            row.TotalReferrals.Should().Be(totalReferrals);
+            row.TotalAppts.Should().Be(totalUpcomingAppointments);
+        }
+    }
 }

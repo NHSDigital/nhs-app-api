@@ -24,20 +24,25 @@ BEGIN
                    COUNT(distinct("SessionId")) AS "Sessions",
                    SUM("PageViews") AS "Views"
             FROM (
-                     SELECT DATE("Timestamp") AS "Date",
-                            "SessionId",
-                            COUNT("AuditId") AS "PageViews",
+                     SELECT DATE(secondCare."Timestamp") AS "Date",
+                            secondCare."SessionId", logins."OdsCode",
+                            COUNT(secondCare."AuditId") AS "PageViews",
                             SUM("TotalReferrals") AS "TotalReferrals",
                             SUM("TotalUpcomingAppointments") AS "TotalUpcomingAppointments",
                             MAX("TotalReferrals") AS "MaxRefs",
                             MAX("TotalUpcomingAppointments") AS "MaxAppts"
-                     FROM events."SecondaryCareSummaryMetric"
-                     WHERE "Timestamp" >= "startDate"
-                       AND "Timestamp" < "endDate"
-                     GROUP BY "Date", "SessionId") AS "Sessions"
+                     FROM events."SecondaryCareSummaryMetric" secondCare
+                        LEFT JOIN events."LoginMetric" logins
+                        ON secondCare."SessionId" = logins."SessionId"
+                     WHERE secondCare."Timestamp" >= "startDate" AND
+                           secondCare."Timestamp" < "endDate" AND
+                           NOT EXISTS (
+                            SELECT  "OdsCode"
+                            FROM compute."TestOdsCodes"
+                            WHERE "OdsCode" = logins."OdsCode")
+                     GROUP BY "Date", secondCare."SessionId", logins."OdsCode") AS "Sessions"
             GROUP BY "Date"
         );
-
 
     INSERT INTO compute."Wayfinder" (
         "Date",

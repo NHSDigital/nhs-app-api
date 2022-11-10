@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env;
+using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Compute;
 using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Events;
 
 namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
@@ -239,6 +240,14 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
                 TotalReferrals = totalReferrals,
                 TotalUpcomingAppointments = totalUpcomingAppointments,
                 AuditId = auditId
+            });
+        }
+
+        public static async Task AddTestOdsCodes(TestEnv env, string odsCode)
+        {
+            await env.Postgres.Compute.TestOdsCodes.Insert(new TestOdsCodesRow
+            {
+                OdsCode = odsCode
             });
         }
     }

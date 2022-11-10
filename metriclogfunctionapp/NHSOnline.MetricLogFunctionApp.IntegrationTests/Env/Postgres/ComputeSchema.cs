@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Compute;
+using NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Events;
 
 namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 {
@@ -28,6 +29,9 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres
 
         internal PostgresTable<GPRecordViewsRows> GPRecordViews =>
             Table<GPRecordViewsRows>();
+
+        internal PostgresTable<TestOdsCodesRow> TestOdsCodes =>
+            Table<TestOdsCodesRow>();
 
         internal PostgresTable<WayfinderRow> Wayfinder =>
             Table<WayfinderRow>();
