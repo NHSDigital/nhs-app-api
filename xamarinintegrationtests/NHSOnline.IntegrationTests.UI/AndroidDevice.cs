@@ -11,7 +11,8 @@ namespace NHSOnline.IntegrationTests.UI
         GalaxyS9,
         GalaxyS10,
         GalaxyS20Ultra,
-        GalaxyS21
+        GalaxyS21,
+        GalaxyTabS8
     }
 
     public static class AndroidDeviceExtensions
@@ -28,6 +29,7 @@ namespace NHSOnline.IntegrationTests.UI
                 AndroidDevice.GalaxyS10 => "Samsung Galaxy S10",
                 AndroidDevice.GalaxyS20Ultra => "Samsung Galaxy S20 Ultra",
                 AndroidDevice.GalaxyS21 => "Samsung Galaxy S21",
+                AndroidDevice.GalaxyTabS8 => "Samsung Galaxy Tab S8",
                 _ => throw new ArgumentOutOfRangeException(nameof(device), device, null)
             };
         }

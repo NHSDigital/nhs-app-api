@@ -48,6 +48,20 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             return page;
         }
 
+        public static AndroidLoggedInHomePage AssertOnTabletPage(IAndroidDriverWrapper driver,
+            bool screenshot = false)
+        {
+            var page = new AndroidLoggedInHomePage(driver);
+            page.PageContent.AssertOnTabletPage();
+
+            if (screenshot)
+            {
+                driver.Screenshot(nameof(AndroidLoggedInHomePage));
+            }
+
+            return page;
+        }
+
         public AndroidLoggedInHomePage AssertPageDisplayedFor(string name)
         {
             Navigation.AssertNavigationIconsArePresent();
