@@ -1,6 +1,4 @@
 ---
-iosBadgeCountEnabled: true
-
 api:
   notificationHubs:
     - notificationHubPath: nhsapp-nonlive-scratch1

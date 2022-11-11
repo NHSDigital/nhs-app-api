@@ -30,7 +30,7 @@ clusterDNSNameservers:
   - 10.254.0.10
   - 172.28.160.10
 
-iosBadgeCountEnabled: false
+iosBadgeCountEnabled: true
 notificationInstallationExpiryMonths: 24
 
 userResearchEnabled: false
