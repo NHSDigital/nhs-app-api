@@ -3,7 +3,6 @@ target:
   odsCodes:
     - G85698
     - G85076
-    - G85120
 journeys:
   cdssAdvice:
     provider: eConsult

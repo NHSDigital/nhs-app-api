@@ -4,4 +4,4 @@ target:
 journeys:
   appointments:
     provider: informatica
-    informaticaUrl: https://chapel-street-surgery.appointments-online.co.uk       
+    informaticaUrl: https://chapel-street-surgery.appointments-online.co.uk
