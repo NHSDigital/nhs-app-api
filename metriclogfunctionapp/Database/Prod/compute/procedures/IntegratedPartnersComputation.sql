@@ -59,6 +59,8 @@ BEGIN
     GROUP BY  "Date"
            ,"OdsCode"
            ,"Provider"
-           ,"JumpOff";
+           ,"JumpOff"
+	ON CONFLICT ON CONSTRAINT integratedpartners_date_odscode_provider_jumpoff_unique DO UPDATE
+		SET "Clicks" = Excluded."Clicks";
  END;
  $$ LANGUAGE plpgsql;
