@@ -43,6 +43,7 @@ import { redirectTo } from '@/lib/utils';
 import find from 'lodash/fp/find';
 import NoLinkedProfiles from '@/components/linked-profiles/NoLinkedProfiles';
 import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
+import FormatDisplayName from '@/plugins/mixinDefinitions/FormatDisplayName';
 
 export default {
   components: {
@@ -51,7 +52,10 @@ export default {
     NoLinkedProfiles,
     LinkedProfileErrors,
   },
-  mixins: [CalculateAgeInMonthsAndYears],
+  mixins: [
+    CalculateAgeInMonthsAndYears,
+    FormatDisplayName,
+  ],
   computed: {
     linkedAccounts() {
       return this.$store.state.linkedAccounts.items;
@@ -90,7 +94,7 @@ export default {
       return `${fullName}. ${age}`;
     },
     displayedName(fullName) {
-      return fullName.toUpperCase();
+      return this.getDisplayNameText(fullName);
     },
     onLinkedProfileClicked(id) {
       const selectedLinkedAccount = find(item => item.id === id)(this.linkedAccounts);

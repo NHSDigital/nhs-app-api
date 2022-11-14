@@ -64,6 +64,7 @@ import {
 } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import WarningBanner from './WarningBanner';
+import FormatDisplayName from '@/plugins/mixinDefinitions/FormatDisplayName';
 
 export default {
   name: 'ContentHeader',
@@ -72,7 +73,10 @@ export default {
     BreadCrumbTrail,
     PageTitle,
   },
-  mixins: [OnUpdateHeaderMixin],
+  mixins: [
+    OnUpdateHeaderMixin,
+    FormatDisplayName,
+  ],
   props: {
     showBreadCrumb: {
       type: Boolean,
@@ -137,7 +141,7 @@ export default {
       return warningBanner;
     },
     actingAsPersonName() {
-      return this.$store.state.linkedAccounts.actingAsUser.fullName.toUpperCase();
+      return this.getDisplayNameText(this.$store.state.linkedAccounts.actingAsUser.fullName);
     },
   },
   methods: {

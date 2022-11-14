@@ -9,6 +9,7 @@ export default {
         ageYears: rootState.linkedAccounts.actingAsUser.ageYears,
         givenName: rootState.linkedAccounts.actingAsUser.givenName,
         fullName: rootState.linkedAccounts.actingAsUser.fullName,
+        gpPracticeName: rootState.linkedAccounts.actingAsUser.gpPracticeName,
         displayPersonalizedContent:
           rootState.linkedAccounts.actingAsUser.displayPersonalizedContent,
       };

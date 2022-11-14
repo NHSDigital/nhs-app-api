@@ -7,7 +7,7 @@
                nhs-app-summary-list-inline nhsuk-u-margin-bottom-0">
       <div class="nhsuk-summary-list__row">
         <div data-sid="user-name" class="nhsuk-summary-list__value" data-hj-suppress >
-          {{ fullNameLine }}
+          {{ displayName }}
         </div>
       </div>
       <div v-if="nhsNumber" :class="[$style['info-key'], 'nhsuk-summary-list__row']">
@@ -32,11 +32,6 @@ export default {
     nhsNumber: {
       type: String,
       default: '',
-    },
-  },
-  computed: {
-    fullNameLine() {
-      return this.displayName.toUpperCase();
     },
   },
   updated() {

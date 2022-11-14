@@ -4,7 +4,7 @@ import { createStore, mount } from '../helpers';
 describe('ProxyWelcomeSection.vue', () => {
   let wrapper;
 
-  const mountProxyWelcomeSection = ({ proxyAge, proxyDetails }) => mount(ProxyWelcomeSection, {
+  const mountProxyWelcomeSection = ({ proxyAge, proxyDetails, displayName }) => mount(ProxyWelcomeSection, {
     $store: createStore({
       state: {
         device: {
@@ -15,6 +15,7 @@ describe('ProxyWelcomeSection.vue', () => {
     propsData: {
       proxyDetails,
       proxyAge,
+      displayName,
     },
   });
 
@@ -22,7 +23,7 @@ describe('ProxyWelcomeSection.vue', () => {
     describe('Proxy Details does have a value', () => {
       describe('Surgery does have value', () => {
         beforeEach(() => {
-          wrapper = mountProxyWelcomeSection({ proxyAge: '21', proxyDetails: { fullName: 'name', gpPracticeName: 'surgery' } });
+          wrapper = mountProxyWelcomeSection({ proxyAge: '21', proxyDetails: { fullName: 'proxy name', gpPracticeName: 'surgery' }, displayName: 'USER DISPLAY NAME' });
         });
 
         it('will display user surgery section', () => {
@@ -33,11 +34,21 @@ describe('ProxyWelcomeSection.vue', () => {
 
     describe('Age does have value', () => {
       beforeEach(() => {
-        wrapper = mountProxyWelcomeSection({ proxyAge: 'age', proxyDetails: { fullName: 'name', gpPracticeName: 'surgery' } });
+        wrapper = mountProxyWelcomeSection({ proxyAge: 'age', proxyDetails: { fullName: 'proxy name', gpPracticeName: 'surgery' }, displayName: 'USER DISPLAY NAME' });
       });
 
       it('will display user age section', () => {
         expect(wrapper.find('[data-sid="proxy-user-age"]').exists()).toBe(true);
+      });
+    });
+
+    describe('User name has value', () => {
+      beforeEach(() => {
+        wrapper = mountProxyWelcomeSection({ proxyAge: 'age', proxyDetails: { fullName: 'proxy name', gpPracticeName: 'surgery' }, displayName: 'USER DISPLAY NAME' });
+      });
+
+      it('will render sanitised displayName prop value not the proxy fullName value', () => {
+        expect(wrapper.find('[data-sid="proxy-name"]').text()).toBe('USER DISPLAY NAME');
       });
     });
   });

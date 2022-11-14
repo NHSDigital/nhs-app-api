@@ -45,5 +45,25 @@ describe('WelcomeSection.vue', () => {
         expect(wrapper.find('[data-sid="user-nhs-number"]').exists()).toBe(false);
       });
     });
+
+    describe('User name has value', () => {
+      beforeEach(() => {
+        wrapper = mountWelcomeSection({ displayName: 'USER DISPLAY NAME', nhsNumber: '123456789' });
+      });
+
+      it('will render displayName', () => {
+        expect(wrapper.find('[data-sid="user-name"]').text()).toBe('USER DISPLAY NAME');
+      });
+    });
+
+    describe('Display name does not have value', () => {
+      beforeEach(() => {
+        wrapper = mountWelcomeSection({ displayName: '', nhsNumber: '123456789' });
+      });
+
+      it('will render empty displayName', () => {
+        expect(wrapper.find('[data-sid="user-name"]').text()).toBe('');
+      });
+    });
   });
 });

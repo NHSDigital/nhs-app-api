@@ -7,7 +7,7 @@
                nhs-app-summary-list-inline nhsuk-u-margin-bottom-0">
       <div class="nhsuk-summary-list__row">
         <div data-sid="proxy-name" class="nhsuk-summary-list__value" data-hj-suppress>
-          {{ fullNameLine }}
+          {{ displayName }}
         </div>
       </div>
       <div v-if="proxyAge" class="nhsuk-summary-list__row">
@@ -37,10 +37,9 @@ export default {
       type: String,
       default: '',
     },
-  },
-  computed: {
-    fullNameLine() {
-      return this.proxyDetails.fullName.toUpperCase();
+    displayName: {
+      type: String,
+      required: true,
     },
   },
   updated() {

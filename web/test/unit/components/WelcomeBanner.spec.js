@@ -22,24 +22,16 @@ const createPage = ($store, route = INDEX) => {
   });
 };
 
-const createLayoutStore = (isProxying = false) => createStore({
-  $cookies: mockCookies(),
-  getters: {
-    'session/isProxying': isProxying,
-    'session/currentProfile': { name: 'name' },
-  },
-  state: {
-    linkedAccounts: {
-      actingAsUser: {
-        id: 'user-id-0',
-        fullName: 'mr user 0',
-        ageMonths: '10',
-        ageYears: '26',
-        gpPracticeName: 'practice x',
-      },
+const createLayoutStore = (isProxying = false) => {
+  const currentProfile = !isProxying ? { name: 'user display name' } : { fullName: 'mr proxy user 0' };
+  return createStore({
+    $cookies: mockCookies(),
+    getters: {
+      'session/isProxying': isProxying,
+      'session/currentProfile': currentProfile,
     },
-  },
-});
+  });
+};
 
 describe('Welcome Display', () => {
   let $store;
@@ -53,6 +45,7 @@ describe('Welcome Display', () => {
       wrapper = createPage($store, INDEX);
       const proxyWelcomeSection = wrapper.find('[id="proxy-welcome-section"]');
       expect(proxyWelcomeSection.exists()).toBe(true);
+      expect(wrapper.vm.displayNameText).toBe('MR PROXY USER 0');
     });
 
     it('will display the non proxy welcome section when not proxying', () => {
@@ -60,6 +53,7 @@ describe('Welcome Display', () => {
       wrapper = createPage($store, INDEX);
       const welcomeSection = wrapper.find('[id="welcome-section"]');
       expect(welcomeSection.exists()).toBe(true);
+      expect(wrapper.vm.displayNameText).toBe('USER DISPLAY NAME');
     });
   });
 
@@ -72,6 +66,7 @@ describe('Welcome Display', () => {
       wrapper = createPage($store, INDEX);
       const proxyWelcomeSection = wrapper.find('[id="proxy-picture-banner-section"]');
       expect(proxyWelcomeSection.exists()).toBe(true);
+      expect(wrapper.vm.displayNameText).toBe('MR PROXY USER 0');
     });
 
     it('will display the non proxy picture section when not proxying', () => {
@@ -79,6 +74,7 @@ describe('Welcome Display', () => {
       wrapper = createPage($store, INDEX);
       const welcomeSection = wrapper.find('[id="picture-banner-section"]');
       expect(welcomeSection.exists()).toBe(true);
+      expect(wrapper.vm.displayNameText).toBe('USER DISPLAY NAME');
     });
   });
 });

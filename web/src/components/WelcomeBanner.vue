@@ -4,22 +4,23 @@
     <div :class="['nhsuk-width-container']">
       <welcome-section v-if="!isProxying"
                        id="welcome-section"
-                       :display-name="currentProfile.name"
+                       :display-name="displayNameText"
                        :nhs-number="currentProfile.nhsNumber" />
       <proxy-welcome-section v-else
                              id="proxy-welcome-section"
                              :proxy-age="proxyAge"
-                             :proxy-details="currentProfile"/>
+                             :proxy-details="currentProfile"
+                             :display-name="displayNameText"/>
     </div>
   </div>
   <div v-else :class="[$style['heroBanner'], 'nhsuk-u-margin-bottom-8']">
     <picture-banner v-if="!isProxying"
                     id="picture-banner-section"
-                    :display-name="currentProfile.name"
+                    :display-name="displayNameText"
                     :nhs-number="currentProfile.nhsNumber" />
     <picture-banner v-else
                     id="proxy-picture-banner-section"
-                    :display-name="currentProfile.fullName"
+                    :display-name="displayNameText"
                     :age="proxyAge"
                     :practice="currentProfile.gpPracticeName" />
   </div>
@@ -31,6 +32,7 @@ import DefinedScreenSize from '@/lib/screen-sizes';
 import PictureBanner from '@/components/PictureBanner';
 import ProxyWelcomeSection from '@/components/ProxyWelcomeSection';
 import WelcomeSection from '@/components/WelcomeSection';
+import FormatDisplayName from '@/plugins/mixinDefinitions/FormatDisplayName';
 
 export default {
   name: 'WelcomeBanner',
@@ -41,25 +43,25 @@ export default {
   },
   mixins: [
     CalculateAgeInMonthsAndYears,
+    FormatDisplayName,
   ],
   data() {
+    const isProxying = this.$store.getters['session/isProxying'];
+    const currentProfile = this.$store.getters['session/currentProfile'];
+    const displayNameText = isProxying ?
+      this.getDisplayNameText(currentProfile.fullName)
+      : this.getDisplayNameText(currentProfile.name);
+    const proxyAge = isProxying ? this.getDisplayedAgeText(currentProfile) : '';
+
     return {
       isSmallScreen: false,
+      isProxying,
+      currentProfile,
+      displayNameText,
+      proxyAge,
     };
   },
   computed: {
-    isProxying() {
-      return this.$store.getters['session/isProxying'];
-    },
-    currentProfile() {
-      if (this.isProxying) {
-        return this.$store.state.linkedAccounts.actingAsUser;
-      }
-      return this.$store.getters['session/currentProfile'];
-    },
-    proxyAge() {
-      return this.getDisplayedAgeText(this.currentProfile);
-    },
     shouldShowWelcomeSection() {
       return this.isSmallScreen;
     },

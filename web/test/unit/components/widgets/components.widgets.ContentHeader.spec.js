@@ -3,6 +3,7 @@ import ContentHeader from '@/components/widgets/ContentHeader';
 import PageTitle from '@/components/widgets/PageTitle';
 import { APPOINTMENT_ADMIN_HELP_NAME } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
+import FormatDisplayName from '@/plugins/mixinDefinitions/FormatDisplayName';
 import { createStore, mount } from '../../helpers';
 
 describe('ContentHeader.vue', () => {
@@ -13,8 +14,8 @@ describe('ContentHeader.vue', () => {
   });
 
   describe('mixins', () => {
-    it('will include the OnUpdateHeaderMixin', () => {
-      expect(ContentHeader.mixins).toEqual([OnUpdateHeaderMixin]);
+    it('will include the OnUpdateHeaderMixin and FormatDisplayName', () => {
+      expect(ContentHeader.mixins).toEqual([OnUpdateHeaderMixin, FormatDisplayName]);
     });
   });
 
