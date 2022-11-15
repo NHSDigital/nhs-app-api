@@ -36,7 +36,7 @@ describe('Wait Times Card', () => {
   });
 
   it('will display the specialty', () => {
-    expect(specialityElement.find('strong').text()).toBe('Neurology');
+    expect(specialityElement.text()).toBe('Neurology');
   });
 
   it('will display the provider name', () => {

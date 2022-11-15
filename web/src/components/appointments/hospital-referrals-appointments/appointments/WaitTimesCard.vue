@@ -1,15 +1,17 @@
 <template>
   <Card>
+    <!-- additional div needed here !-->
     <div class="nhs-app-card__title nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
-      <h3 class="nhs-app-card__title-text nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
-        {{ $t('wayfinder.waitTimes.card.title') }}
-      </h3>
+      <div class="nhs-app-card__title-text">
+        <h3 class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
+          {{ $t('wayfinder.waitTimes.card.title') }}
+        </h3>
+        <h4 data-purpose="specialty"
+            class="nhsuk-body-l nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0">
+          {{ speciality }}
+        </h4>
+      </div>
     </div>
-
-    <h4 data-purpose="specialty"
-        class="nhsuk-body-l nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-3">
-      <strong>{{ speciality }}</strong>
-    </h4>
     <p class="nhsuk-body-s nhsuk-u-margin-bottom-5" data-purpose="provider-name">
       {{ $t('wayfinder.waitTimes.card.subtitle',null,{providerName}) }}
     </p>

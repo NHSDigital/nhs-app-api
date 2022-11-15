@@ -7,9 +7,9 @@
     </template>
     <template v-else>
       <div id="wait-times-title">
-        <p id="wait-times-content" class="nhsuk-u-padding-top-3">
+        <h2 id="wait-times-content" class="nhsuk-u-padding-top-3">
           {{ waitingListCount === 1 ? $t('wayfinder.waitTimes.youAreOnOneWaitingList') : $t('wayfinder.waitTimes.youAreOnMultipleWaitingLists',null,{waitingListCount}) }}
-        </p>
+        </h2>
       </div>
       <card-group v-if="waitingListCount > 0" class="nhsuk-grid-row nhsuk-u-margin-bottom-3">
         <card-group-item

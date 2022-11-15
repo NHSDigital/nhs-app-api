@@ -42,7 +42,7 @@
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em;
   background-color:#fff;
-  border: 0.2em solid #adb7bd;
+  border: 0.2em solid $color_nhsuk-grey-3;
 }
 
 .nhsuk-timeline__events--visual-line {
@@ -54,7 +54,7 @@
 }
 
 .nhsuk-timeline__events--visual-line.alternate {
-  background-image: linear-gradient(0deg, #f0f4f5 25%, #adb7bd 25%, #adb7bd 50%, #f0f4f5 50%, #f0f4f5 75%, #adb7bd 75%, #adb7bd 100%);
+  background-image: linear-gradient(0deg, #fff 25%, $color_nhsuk-grey-3 25%, $color_nhsuk-grey-3 50%, #fff 50%, #fff 75%, $color_nhsuk-grey-3 75%, $color_nhsuk-grey-3 100%);
   background-size: 30px 30px;
 }
 
