@@ -56,13 +56,13 @@ apigee:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: {{ ENV.quota | default(2400) }}
+                  limit: {{ ENV.quota | default(12000) }}
                   timeunit: minute
               app:
                 quota:
                   enabled: true
                   interval: 1
-                  limit: {{ ENV.appQuota | default(1200) }}
+                  limit: {{ ENV.appQuota | default(12000) }}
                   timeunit: minute
         description: {{ DESCRIPTION }}
         displayName: {{ TITLE }}
