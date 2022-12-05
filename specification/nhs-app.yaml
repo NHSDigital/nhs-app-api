@@ -576,6 +576,8 @@ paths:
 
         ## Pagination
         To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
+
+        In order to test the pagination feature in the development and integration environments, use the ODS code `T00001` to return a report with multiple pages.
       parameters:
         - name: ods-organisation-code
           description: |
