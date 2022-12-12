@@ -451,7 +451,7 @@ paths:
         * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
         * `Read` – a user has read an in-app message for the first time.
         
-        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.swg?raw=true)
+        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.svg?raw=true)
 
         A diagram of a finite state machine showing the transition between delivery states based on events occurring throughout the delivery process, such as successfully adding a message to a citizen’s inbox and displaying a notification on their mobile device.
 
