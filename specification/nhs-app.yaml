@@ -450,6 +450,10 @@ paths:
         * `Notified` – a push notification is reported as having been successfully relayed to one or more native devices. 
         * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
         * `Read` – a user has read an in-app message for the first time.
+        
+        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.swg?raw=true)
+
+        A diagram of a finite state machine showing the transition between delivery states based on events occurring throughout the delivery process, such as successfully adding a message to a citizen’s inbox and displaying a notification on their mobile device.
 
         In addition to this daily report endpoint, we also plan to offer the ability for onboarded partners to receive these receipts in realtime by having us push individual Task resources to an endpoint that you make available to us for this purpose. We call this feature "real-time receipts". [Contact the NHS App team](mailto:app.onboarding@nhs.net) for additional information on how to subscribe to real-time receipts.
 
