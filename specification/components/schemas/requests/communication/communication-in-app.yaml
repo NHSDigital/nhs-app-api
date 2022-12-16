@@ -55,7 +55,7 @@ properties:
   contained:
     type: array
     description:  
-      An optional array of FHIR resource object used for keyword reply. Must contain only one item in the array.
+      An optional array of FHIR resource object used for a keyword & free text replies. Must contain only one item in the array.
     minItems: 1
     maxItems: 1
     items:
@@ -80,43 +80,38 @@ properties:
           type: array
           minItems: 1
           maxItems: 1
-          description: An array containing a single answerOptions. Must contain only one item in the array
+          description: An array containing the type of the message reply. Must contain only one item in the array
           items:
             type: object
             required:
               - linkId
               - type
-              - answerOption
             properties:
               linkId: 
                 type: string
                 description: Any unique Id which must be a string
               type:
                 type: string
-                description: Type must be `choice`
+                description: Type must be `text` for the free text and `choice` for the keyword replies messages
               answerOption:
                 type: array
-                description: An array containing valueCoding objects
+                description: An optional array containing valueCoding objects for keyword replies. Only required for keyword reply messages
                 minItems: 1
                 maxItems: 6
                 items:
                   type: object
-                  required: 
-                    - valueCoding
                   properties:
                     valueCoding:
                       type: object
-                      required:
-                        - code
-                      description: An object containing code (Keyword Replies)
+                      description: An optional object contains code. Only required for keyword reply messages
                       properties:
                         code:
                           type: string
-                          description: A string code that would be shown to the patient for selection
+                          description: A string code that would be shown to the patient for selection. Only required for keyword reply messages
   extension:
     type: array
     description:
-      An optional array of FHIR extension resource used for keyword reply. Must be present when contained field is available in the request
+      An optional array of FHIR extension resource used for a keyword & free text replies. Must be present when the contained field is available in the request
     minItems: 1
     maxItems: 1
     items:

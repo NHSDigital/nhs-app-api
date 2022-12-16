@@ -12,6 +12,7 @@ info:
     You can:
     * send in-app messages to specific users of the NHS App
     * include keyword replies to in-app messages
+    * include free text replies to in-app messages
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API
@@ -159,6 +160,10 @@ paths:
                 summary: Sending an in-app message with keyword reply
                 value:
                   $ref: components/examples/requests/communication/in-app-with-keyword-reply.json
+              app-message-with-free-text-reply:
+                summary: Sending an in-app message with free text replies
+                value:
+                  $ref: components/examples/requests/communication/in-app-with-free-text-reply.json    
       tags:
         - communication
       responses:
@@ -185,6 +190,10 @@ paths:
                   summary: "In app message response with keyword reply"
                   value:
                     $ref: components/examples/responses/communication/201successInAppWithKeywordReply.json
+                in-app-with-free-text-reply:
+                  summary: "In app message response with free text reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInAppWithFreeTextReply.json    
         "400":
           description: There is an error in your request.
           headers:
@@ -228,7 +237,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400invalidContainedResourceType.json
                 invalid-contained-item-type:
-                  summary: The contained item type of keyword reply is invalid
+                  summary: The contained item type of keyword or free text reply is invalid
                   value:
                     $ref: components/examples/responses/communication/400invalidContainedItemType.json
                 invalid-contained-answer-options:
