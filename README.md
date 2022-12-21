@@ -72,6 +72,7 @@ Speccy does the lifting for the following npm scripts:
  * `test` -- Lints the definition
  * `publish` -- Outputs the specification as a **single file** into the `build/` directory
  * `serve` -- Serves a preview of the specification in human-readable format
+    * Please note, `serve` requires port 5000 to be available. Thus, in the case of macOS users, please disable the 'AirPlay Receiver' beforehand.
 
 (Workflow detailed in a [post](https://developerjack.com/blog/2018/maintaining-large-design-first-api-specs/) on the *developerjack* blog.)
 
