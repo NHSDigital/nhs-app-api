@@ -4,7 +4,7 @@
         {
             "severity": "error",
             "code": "invalid",
-            "diagnostics": "[0].item.type should be choice",
+            "diagnostics": "[0].item.type should be text or choice",
             "expression": [
                 "contained"
             ]
