@@ -1,0 +1,29 @@
+{
+    "resourceType": "Task",
+    "intent": "order",
+    "identifier": [
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+            "value": "optional campaign id"
+        },
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/request-id",
+            "value": "optional request reference"
+        }, 
+        {
+            "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+            "value" : "8f7ec136-66eb-4a9e-97ca-5c7a53d2710c"
+        }
+    ],
+    "status": "completed",
+    "code": {
+        "coding": [ 
+            {
+                "system": "https://fhir.nhs.uk/CodeSystem/NHSApp-Communication-Status",
+                "code": "Unnotified"
+            }
+        ]
+    },
+    "authoredOn": "2021-08-05T13:20:52+00:00",
+    "lastModified": "2021-08-05T13:22:52+00:00"
+}

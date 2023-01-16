@@ -1,0 +1,52 @@
+# This is an OpenAPI Specification (https://swagger.io/specification/)
+# describing a realtime receipt callback endpoint that suppliers integrating with the NHS App API's Realtime Receipts functionality should create.
+# This example spec is owned by NHS Digital (https://digital.nhs.uk/).
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: NHS App API
+  description: |
+    ## TODO
+paths:
+  /FHIR/R4/Task:
+    post:
+      summary: TODO
+      operationId: TODO
+      description: |
+        TODO
+        TODO mention mutual auth
+        TODO mention firewall
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: components/schemas/requests/task.yaml
+            examples:
+              rejected:
+                summary: A request to send a communication was rejected.
+                value:
+                  $ref: components/examples/requests/task/rejected.json
+              delivered:
+                summary: An in-app message has been successfully added to a user's inbox
+                value:
+                  $ref: components/examples/requests/task/delivered.json
+              notified:
+                summary: A push notification is reported as having been successfully relayed to one or more native devices.
+                value:
+                  $ref: components/examples/requests/task/notified.json
+              unnotified:
+                summary: It has been determined that a push notification has not been successfully relayed to any native devices.
+                value:
+                  $ref: components/examples/requests/task/unnotified.json
+              read:
+                summary: A user has read an in-app message for the first time.
+                value:
+                  $ref: components/examples/requests/task/read.json
+      responses:
+        "202":
+          description: The receipt has been successfully accepted.  
+        "400":
+          description: There is an error in the structure of the request.
+        "401":
+          description: Authorisation issue, for example the client certificate cannot be verified. TODO
