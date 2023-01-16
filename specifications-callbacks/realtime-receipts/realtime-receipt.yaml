@@ -1,0 +1,60 @@
+# This is an OpenAPI Specification (https://swagger.io/specification/)
+# describing a realtime receipt callback endpoint that suppliers integrating with the NHS App API's Realtime Receipts functionality should create.
+# This example spec is owned by NHS Digital (https://digital.nhs.uk/).
+openapi: "3.1.0"
+info:
+  version: "1.0.0"
+  title: NHS App Realtime Receipt Example API
+  description: |
+    This is an example OpenAPI specification detailing an endpoint to be created by a partner who has integrated with the NHS App API and wishes to use the "realtime receipts" feature. For context, please see the [NHS App API specification](https://digital.nhs.uk/developer/api-catalogue/nhs-app).
+tags:
+  - name: realtime-receipts
+paths:
+  /FHIR/R4/Task:
+    post:
+      summary: Send a real-time receipt 
+      operationId: create-realtime-receipt
+      tags:
+        - realtime-receipts
+      description: |
+        Use this endpoint to send a real-time receipt detailing the outcome of a communication request that has previously been sent using the [NHS App API](https://digital.nhs.uk/developer/api-catalogue/nhs-app).
+
+        The body of requests made to this endpoint are instances of [HL7 FHIR R4 Task resources](https://www.hl7.org/fhir/task.html). The schema describes which fields on that resource will be sent by NHS App.
+
+        The five types of receipt that may be included in requests to this endpoint are identical to those that are included in the overnight [NHS App API daily receipt report](https://digital.nhs.uk/developer/api-catalogue/nhs-app#api-Communication-get-receipt-report). If you do not wish to receive all five receipt types in realtime to this endpoint, NHS App team can configure the system to send only your chosen subset.
+
+        This endpoint must be secured using Mutual TLS. Further, NHS App will make requests to this endpoint from a static IP address, which should be added to a firewall allowlist. [Contact the NHS App onboarding team](mailto:app.onboarding@nhs.net) to request a Certificate Signing Request (CSR) and for details of the incoming IP address. 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: components/schemas/requests/task.yaml
+            examples:
+              rejected:
+                summary: A request to send a communication was rejected.
+                value:
+                  $ref: components/examples/requests/task/rejected.json
+              delivered:
+                summary: An in-app message has been successfully added to a user's inbox
+                value:
+                  $ref: components/examples/requests/task/delivered.json
+              notified:
+                summary: A push notification is reported as having been successfully relayed to one or more native devices.
+                value:
+                  $ref: components/examples/requests/task/notified.json
+              unnotified:
+                summary: It has been determined that a push notification has not been successfully relayed to any native devices.
+                value:
+                  $ref: components/examples/requests/task/unnotified.json
+              read:
+                summary: A user has read an in-app message for the first time.
+                value:
+                  $ref: components/examples/requests/task/read.json
+      responses:
+        "202":
+          description: The receipt has been successfully accepted.  
+        "400":
+          description: There is an error in the structure of the request.
+        "401":
+          description: Authorisation issue, for example the client certificate cannot be verified.
