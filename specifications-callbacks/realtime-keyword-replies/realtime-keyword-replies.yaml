@@ -1,0 +1,37 @@
+# This is an OpenAPI Specification (https://swagger.io/specification/)
+# describing a realtime receipt callback endpoint that suppliers integrating with the NHS App API's Realtime Receipts functionality should create.
+# This example spec is owned by NHS Digital (https://digital.nhs.uk/).
+
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: NHS App API
+  description: |
+    ## TODO
+paths:
+  /FHIR/R4/Task:
+    post:
+      summary: TODO
+      operationId: TODO
+      description: |
+        TODO
+        TODO mention mutual auth
+        TODO mention firewall
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: components/schemas/requests/communicationrequest.yaml
+            examples:
+              completed:
+                summary: A request to send a communication was completed.
+                value:
+                  $ref: components/examples/responses/completed.json
+      responses:
+        "202":
+          description: The receipt has been successfully accepted.
+        "400":
+          description: There is an error in the structure of the request.
+        "401":
+          description: Authorisation issue, for example the client certificate cannot be verified. TODO
