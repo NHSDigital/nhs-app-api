@@ -63,14 +63,15 @@ The `tests/` folder contains some .NET integration tests to verify that the API 
 
  * [**openapi-yaml-mode**](https://github.com/esc-emacs/openapi-yaml-mode) provides syntax highlighting, completion, and path help
 
-### Speccy
+### OpenAPI Generator
 
-> [Speccy](http://speccy.io/) *A handy toolkit for OpenAPI, with a linter to enforce quality rules, documentation rendering, and resolution.*
+> [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator-cli) *OpenAPI Generator allows generation of API client libraries (SDK generation), server stubs, documentation and configuration automatically given an OpenAPI Spec*
 
-Speccy does the lifting for the following npm scripts:
+OpenAPI Generator does the lifting for the following npm scripts:
 
  * `test` -- Lints the definition
- * `publish` -- Outputs the specification as a **single file** into the `build/` directory
+ * `publish` -- Outputs the specification as a **single file** into the `dist/` directory
+ * `lint` -- Lints the definition
  * `serve` -- Serves a preview of the specification in human-readable format
     * Please note, `serve` requires port 5000 to be available. Thus, in the case of macOS users, please disable the 'AirPlay Receiver' beforehand.
 
