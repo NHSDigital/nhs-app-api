@@ -69,7 +69,6 @@ The `tests/` folder contains some .NET integration tests to verify that the API 
 
 OpenAPI Generator does the lifting for the following npm scripts:
 
- * `test` -- Lints the definition
  * `publish` -- Outputs the specification as a **single file** into the `dist/` directory
  * `lint` -- Lints the definition
  * `serve` -- Serves a preview of the specification in human-readable format
