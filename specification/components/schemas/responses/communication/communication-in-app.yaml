@@ -55,25 +55,25 @@ properties:
           description: Questionnaire Status for the message. This will be `active` (case-sensitive)
         item:
           type: array
-          description: An array containing a single answerOptions
+          description: An array containing the type of the message reply
           items:
             type: object
             properties:
               linkId: 
                 type: string
-                description: Id sepecified in the request
+                description: Id specified in the request
               type:
                 type: string
-                description: Will be `choice` type
+                description: Type specified in the request
               answerOption:
                 type: array
-                description: An array containing valueCoding objects
+                description: An optional array containing valueCoding objects
                 items:
                   type: object
                   properties:
                     valueCoding:
                       type: object
-                      description: An object containing code (Keyword Replies)
+                      description: An optional object contains code
                       properties:
                         code:
                           type: string
@@ -81,7 +81,7 @@ properties:
   extension:
     type: array
     description:
-      An optional array of FHIR extension resource. Will be present when contained field is present in the request
+      An optional array of FHIR extension resource as specified in the request
     items:
       type: object
       properties:
