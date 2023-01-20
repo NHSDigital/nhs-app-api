@@ -74,6 +74,7 @@ apigee:
           - identity-service-int-no-smartcard
 {% endif %}
         scopes:
+          - 'urn:nhsd:apim:user-nhs-cis2:aal3:{{ SERVICE_NAME }}'
           - 'urn:nhsd:apim:app:level3:nhs-app'
           - 'urn:nhsd:apim:user-nhs-id:aal3:nhs-app'
         # An API Product requires a quota value but it is not used
