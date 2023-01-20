@@ -1,0 +1,60 @@
+{
+    "resourceType": "CommunicationRequest",
+    "identifier": [
+        {
+            "system": "https://fhir.nhs.uk/Id/nhs-app-communication-id",
+            "value": "8f7ec136-66eb-4a9e-97ca-5c7a53d2710c"
+        },
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+            "value": "Optional Campaign ID"
+        },
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/request-id",
+            "value": "Optional Request Reference"
+        }
+    ],
+    "status": "active",
+    "payload": [
+        {
+            "contentString": " Hello, we would like you to update us with your medical condition."
+        }
+    ],
+    "contained": [
+        {
+            "resourceType": "Questionnaire",
+            "id": "answer",
+            "status": "active",
+            "item": [
+                {
+                    "linkId": "1",
+                    "type": "text"                
+                }
+            ]
+        }
+    ],
+    "extension": [
+        {
+            "url": "https://fhir.nhs.uk/NHSApp/answers",
+            "valueReference": {
+                "reference": "#answer"
+            }
+        }
+    ],
+    "recipient": [
+        {
+            "type": "Patient",
+            "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                "value": "9692113841"
+            }
+        }
+    ],
+    "requester": {
+        "type": "Organization",
+        "identifier": {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "B82041"
+        }
+    }
+}

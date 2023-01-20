@@ -12,6 +12,7 @@ info:
     You can:
     * send in-app messages to specific users of the NHS App
     * include keyword replies to in-app messages
+    * include free text replies to in-app messages
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API
@@ -99,6 +100,15 @@ info:
     If your service is already integrated, and you now want to add notifications and messaging to your integration, you will need to take some extra steps before you can use this API. [Explore notifications and messaging in the NHS App](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app/explore-notifications-and-messaging) for guidelines and restrictions, and the documents you will need to complete.
 
     To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net).
+    
+    ## Errors
+    We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
+
+    * 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+    * 400 to 499 if it failed because of a client error by your application
+    * 500 to 599 if it failed because of an error on our server
+    
+    Errors specific to each API are shown in the Endpoints section, under Response. See our [reference guide](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#http-status-codes) for more on errors.
 
   contact:
     name: NHS App API Support
@@ -159,6 +169,10 @@ paths:
                 summary: Sending an in-app message with keyword reply
                 value:
                   $ref: components/examples/requests/communication/in-app-with-keyword-reply.json
+              app-message-with-free-text-reply:
+                summary: Sending an in-app message with free text replies
+                value:
+                  $ref: components/examples/requests/communication/in-app-with-free-text-reply.json    
       tags:
         - communication
       responses:
@@ -185,6 +199,10 @@ paths:
                   summary: "In app message response with keyword reply"
                   value:
                     $ref: components/examples/responses/communication/201successInAppWithKeywordReply.json
+                in-app-with-free-text-reply:
+                  summary: "In app message response with free text reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInAppWithFreeTextReply.json    
         "400":
           description: There is an error in your request.
           headers:
@@ -228,7 +246,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400invalidContainedResourceType.json
                 invalid-contained-item-type:
-                  summary: The contained item type of keyword reply is invalid
+                  summary: The contained item type of keyword or free text reply is invalid
                   value:
                     $ref: components/examples/responses/communication/400invalidContainedItemType.json
                 invalid-contained-answer-options:
@@ -451,7 +469,7 @@ paths:
         * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
         * `Read` – a user has read an in-app message for the first time.
         
-        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.swg?raw=true)
+        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.svg?raw=true)
 
         A diagram of a finite state machine showing the transition between delivery states based on events occurring throughout the delivery process, such as successfully adding a message to a citizen’s inbox and displaying a notification on their mobile device.
 

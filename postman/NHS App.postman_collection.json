@@ -333,6 +333,66 @@
 			"response": []
 		},
 		{
+			"name": "Communication In-App Message with Free Text Replies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional Campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional Request Reference\"\n        }\n    ],\n    \"contained\": [\n        {\n            \"resourceType\": \"Questionnaire\",\n            \"id\": \"question\",\n            \"status\": \"active\",\n            \"item\": [\n                {\n                    \"linkId\": \"1\",\n                    \"type\": \"text\"\n                }\n            ]\n        }\n    ],\n    \"extension\": [\n        {\n            \"url\": \"https://fhir.nhs.uk/NHSApp/answers\",\n            \"valueReference\": {\n                \"reference\": \"#question\"\n            }\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentString\": \"Hello, we would like you to update us with your medical condition.\"\n        }\n    ],\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ],\n    \"requester\": {\n        \"type\": \"Organization\",\n        \"identifier\": {\n            \"system\": \"https://fhir.nhs.uk/Id/ods-organization-code\",\n            \"value\": \"B82041\"\n        },\n        \"display\": \"Beech Tree Medical Centre\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/nhs-app/communication/in-app/FHIR/R4/CommunicationRequest",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"nhs-app",
+						"communication",
+						"in-app",
+						"FHIR",
+						"R4",
+						"CommunicationRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Communication Push Notification",
 			"event": [
 				{
