@@ -7,24 +7,46 @@
         },
         {
             "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
-            "value": "optional campaign id"
+            "value": "Optional Campaign ID"
         },
         {
             "system": "https://fhir.nhs.uk/NHSApp/request-id",
-            "value": "optional request reference"
+            "value": "Optional Request Reference"
         }
     ],
     "status": "active",
     "payload": [
         {
-            "contentString": "You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)"
+            "contentString": " Hello, we would like you to update us with your medical condition."
+        }
+    ],
+    "contained": [
+        {
+            "resourceType": "Questionnaire",
+            "id": "answer",
+            "status": "active",
+            "item": [
+                {
+                    "linkId": "1",
+                    "type": "text"                
+                }
+            ]
+        }
+    ],
+    "extension": [
+        {
+            "url": "https://fhir.nhs.uk/NHSApp/answers",
+            "valueReference": {
+                "reference": "#answer"
+            }
         }
     ],
     "recipient": [
         {
+            "type": "Patient",
             "identifier": {
                 "system": "https://fhir.nhs.uk/Id/nhs-number",
-                "value": "9903002157"
+                "value": "9692113841"
             }
         }
     ],

@@ -9,7 +9,7 @@ properties:
     description: |
       An array of identifiers used to identify this request.
 
-      This array will always include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`.
+      This array will always include a globally unique identifier assigned by the API, with the system `https://fhir.nhs.uk/Id/nhs-app-communication-id`.
 
       It will include optional identifiers that were provided in the request if the API recognised the identifier system name.
     items:
@@ -19,7 +19,7 @@ properties:
           type: string
           format: uri
           description: The namespace of the identifier value.
-          example: urn:ietf:rfc:3986
+          example: https://fhir.nhs.uk/Id/nhs-app-communication-id
         value:
           type: string
           description: The value of the identifier.
@@ -37,6 +37,63 @@ properties:
           type: string
           description: The body text of the message to be displayed in the NHS App.
           example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)
+  contained:
+    type: array
+    description:  
+      An optional array of FHIR resource object. Will contain only one item in the array
+    items:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          description: FHIR Resource Type – this will be `Questionnaire`
+        id:
+          type: string
+          description: Id of the Questionnaire resource type sent in the request
+        status:
+          type: string
+          description: Questionnaire Status for the message. This will be `active` (case-sensitive)
+        item:
+          type: array
+          description: An array containing the type of the message reply
+          items:
+            type: object
+            properties:
+              linkId: 
+                type: string
+                description: Id specified in the request
+              type:
+                type: string
+                description: Type specified in the request
+              answerOption:
+                type: array
+                description: An optional array containing valueCoding objects
+                items:
+                  type: object
+                  properties:
+                    valueCoding:
+                      type: object
+                      description: An optional object contains code
+                      properties:
+                        code:
+                          type: string
+                          description: A string code 
+  extension:
+    type: array
+    description:
+      An optional array of FHIR extension resource as specified in the request
+    items:
+      type: object
+      properties:
+        url:
+          type: string
+          description: This will be `https://fhir.nhs.uk/NHSApp/answers`
+        valueReference:
+          type: object
+          properties:
+             reference:
+                type: string
+                description: The reference value will be same as Questionnaire resource id from request prefixed with '#'
   recipient:
     type: array
     description:

@@ -4,7 +4,7 @@
         {
             "severity": "error",
             "code": "security",
-            "diagnostics": "Supplier with ID cdd248b8-cefb-404e-8da4-b79de3a9062a does not have event report access permission"
+            "diagnostics": "Supplier with ID cdd248b8-cefb-404e-8da4-b79de3a9062a does not have Receipts report access permission"
         }
     ]
 }

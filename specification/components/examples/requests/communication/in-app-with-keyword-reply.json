@@ -1,0 +1,73 @@
+{
+    "resourceType": "CommunicationRequest",
+    "identifier": [
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+            "value": "optional campaign id"
+        },
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/request-id",
+            "value": "optional request reference"
+        }
+    ],
+    "status": "active",
+    "payload": [
+        {
+            "contentString": " Hello, we would like to ask a few questions about smoking. If you smoke, select SMOKE.  If you're an ex-smoker, select EX. If you have never smoked, select NEVER."
+        }
+    ],
+    "contained": [
+        {
+            "resourceType": "Questionnaire",
+            "id": "answeroptions",
+            "status": "active",
+            "item": [
+                {
+                    "linkId": "1",
+                    "type": "choice",
+                    "answerOption": [
+                        {
+                            "valueCoding": {
+                                "code": "SMOKE"
+                            }
+                        },
+                        {
+                            "valueCoding": {
+                                "code": "EX"
+                             }
+                        },
+                        {
+                            "valueCoding": {
+                                "code": "NEVER"
+                             }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "extension": [
+        {
+            "url": "https://fhir.nhs.uk/NHSApp/answers",
+            "valueReference": {
+                "reference": "#answeroptions"
+            }
+        }
+    ],
+    "recipient": [
+        {
+            "type": "Patient",
+            "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                "value": "9692113841"
+            }
+        }
+    ],
+    "requester": {
+        "type": "Organization",
+        "identifier": {
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "B82041"
+        }
+    }
+}

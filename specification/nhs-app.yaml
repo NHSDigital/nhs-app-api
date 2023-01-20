@@ -11,6 +11,8 @@ info:
 
     You can:
     * send in-app messages to specific users of the NHS App
+    * include keyword replies to in-app messages
+    * include free text replies to in-app messages
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
     ## Who can use this API
@@ -19,13 +21,11 @@ info:
     [Contact us](mailto:app.onboarding@nhs.net) before you begin any development work with this API, even if your service is already integrated.
 
     ## API status and roadmap
-    This API is in [private beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
-    - we might make breaking changes, but only if we cannot avoid it, and we'll give advance notice
-    - we cannot guarantee availability or performance
+    This API is [in production, beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#statuses).
 
     To see our roadmap, or to suggest, comment or vote on features for this API, see our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/?order=popular&filter=allexceptdone&tag=nhs-app-api).
 
-    If you have any queries, please [contact us](https://digital.nhs.uk/developer/help-and-support).
+    If you would like to be involved in our beta programme or have any other queries, [contact us](https://digital.nhs.uk/developer/help-and-support).
 
     ## Service level
     This API is a silver plus service, meaning it is operational 24 x 7 x 365 but only supported during business hours (8am to 6pm), Monday to Friday excluding bank holidays. However, we respond to severity 1 and severity 2 incidents outside of business hours.
@@ -73,6 +73,7 @@ info:
     * includes authorisation
     * is for initial development and [integration testing](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing)
     * points to the [Onboarding Sandpit NHS App environment](https://www-onboardingsandpit.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Sandpit environment
+    * has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 20 requests per second per application
 
     We have created a [Postman collection](https://github.com/NHSDigital/nhs-app-api/tree/master/postman) during internal development and testing of the API, which you may find useful when working with this environment.
 
@@ -83,8 +84,12 @@ info:
     * includes authorisation
     * is for formal release testing and assurance when onboarding with NHS Login
     * points to the [Onboarding AOS NHS App environment](https://www-onboardingaos.nhsapp.service.nhs.uk/), which in turn is using the NHS Login Integration (AOS) environment
+    * has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 20 requests per second per application
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
+
+    ### Production
+    Our production environment has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 200 requests per second per application. 
 
     ## Onboarding
     You need to get your product or service approved by us before you can use this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
@@ -95,11 +100,23 @@ info:
     If your service is already integrated, and you now want to add notifications and messaging to your integration, you will need to take some extra steps before you can use this API. [Explore notifications and messaging in the NHS App](https://digital.nhs.uk/services/nhs-app/partners-and-developers/integrate-with-the-nhs-app/explore-notifications-and-messaging) for guidelines and restrictions, and the documents you will need to complete.
 
     To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net).
+    
+    ## Errors
+    We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
+
+    * 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+    * 400 to 499 if it failed because of a client error by your application
+    * 500 to 599 if it failed because of an error on our server
+    
+    Errors specific to each API are shown in the Endpoints section, under Response. See our [reference guide](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#http-status-codes) for more on errors.
 
   contact:
     name: NHS App API Support
     url: "https://digital.nhs.uk/developer/help-and-support"
     email: app.onboarding@nhs.net
+x-spec-publication:
+  try-this-api:
+    disabled: true
 servers:
   - url: "https://dev.api.service.nhs.uk/nhs-app"
     description: Development environment.
@@ -132,20 +149,30 @@ paths:
         
         When a recipient taps the native notification, the NHS App will open on the in-app messaging inbox page.
 
-        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
+        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. For details of the subset see the 'payload' property of the schema. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
+
+        The outcome of communication requests can be determined using the [daily receipt report endpoint](#api-Communication-get-receipt-report) or by subscribing to realtime receipts.
       requestBody:
         required: true
         content:
           application/json:
+            schema:
+              $ref: components/schemas/requests/communication/communication-in-app.yaml
             examples:
               app-message:
                 summary: Sending an in-app message
                 value:
                   $ref: components/examples/requests/communication/in-app.json
-            schema:
-              $ref: components/schemas/requests/communication/communication-in-app.yaml
+              app-message-with-keyword-reply:
+                summary: Sending an in-app message with keyword reply
+                value:
+                  $ref: components/examples/requests/communication/in-app-with-keyword-reply.json
+              app-message-with-free-text-reply:
+                summary: Sending an in-app message with free text replies
+                value:
+                  $ref: components/examples/requests/communication/in-app-with-free-text-reply.json    
       tags:
         - communication
       responses:
@@ -163,8 +190,19 @@ paths:
             application/fhir+json:
               schema:
                 $ref: components/schemas/responses/communication/communication-in-app.yaml
-              example:
-                $ref: components/examples/responses/communication/201successInApp.json
+              examples:
+                in-app:
+                  summary: "In app message response without keyword reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInApp.json
+                in-app-with-keyword-reply:
+                  summary: "In app message response with keyword reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInAppWithKeywordReply.json
+                in-app-with-free-text-reply:
+                  summary: "In app message response with free text reply"
+                  value:
+                    $ref: components/examples/responses/communication/201successInAppWithFreeTextReply.json    
         "400":
           description: There is an error in your request.
           headers:
@@ -203,6 +241,18 @@ paths:
                   summary: The requester has an invalid identifier
                   value:
                     $ref: components/examples/responses/communication/400InvalidRequester.json
+                invalid-contained-resource-type:
+                  summary: The contained resource type of keyword reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedResourceType.json
+                invalid-contained-item-type:
+                  summary: The contained item type of keyword or free text reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedItemType.json
+                invalid-contained-answer-options:
+                  summary: The contained answer options length of keyword reply is invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidContainedAnswerOptionLength.json
         "401":
           description: Authorisation issue, for example a missing or expired bearer token.
           headers:
@@ -233,7 +283,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForAppMessage.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
+          description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -274,7 +324,7 @@ paths:
         The body text of notifications can be up to 200 characters in length.
 
         They must not contain:
-          * personally identifiable information (for example, the name of a user's doctor)
+          * personally identifiable information (for example, the name of a user’s doctor)
           * sensitive information (for example, details about a health condition)
           * links to external websites
 
@@ -282,6 +332,7 @@ paths:
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
 
+        The outcome of communication requests can be determined using the [daily receipt report endpoint](#api-Communication-get-receipt-report) or by subscribing to realtime receipts.
       requestBody:
         required: true
         content:
@@ -376,7 +427,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForPushNotification.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
+          description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -397,29 +448,39 @@ paths:
                   summary: API is receiving a high volume of requests
                   value:
                     $ref: components/examples/responses/communication/429throttled-quotaperproxy.json
-  /communication/report/events:
+  /communication/report/receipts/FHIR/R4/Task:
     parameters:
       - $ref: '#/components/parameters/BearerAuthorization'
       - $ref: "#/components/parameters/CorrelationId"
     get:
-      summary: Get a daily communication event report
-      operationId: get-event-report
+      summary: Get a daily receipt report
+      operationId: get-receipt-report
       description: |
         ## Overview
-        Use this endpoint to get a daily report of events relating to in-app messages and push notifications that you have previously sent to NHS App users.
+        Use this endpoint to get a daily report of receipts relating to in-app messages and push notifications that you have sent to NHS App users.
 
-        An event will be included in this report detailing the outcome of attempting to send each communication to each individual recipient, for each channel (push notification or in-app message).
-        Additionally, for in-app messages only, an event will be included in this report if and when the recipient reads the message.
+        This report will include receipts detailing the outcome of an attempt to send each communication. For in-app messages, a receipt will also be included in this report if the recipient reads the message.
 
-        The information provided by this endpoint is generated by a daily batch process.
-        Note that events in the report may pertain to communication requests that were submitted on earlier days.
+        The following five types of receipt may be included in this response:
+
+        * `Rejected` – a request to send a communication was rejected. For example, this could happen if the NHS number of the intended recipient does not correspond to an NHS App user.
+        * `Delivered` – an in-app message has been successfully added to a user’s inbox.
+        * `Notified` – a push notification is reported as having been successfully relayed to one or more native devices. 
+        * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
+        * `Read` – a user has read an in-app message for the first time.
+        
+        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.svg?raw=true)
+
+        A diagram of a finite state machine showing the transition between delivery states based on events occurring throughout the delivery process, such as successfully adding a message to a citizen’s inbox and displaying a notification on their mobile device.
+
+        In addition to this daily report endpoint, we also plan to offer the ability for onboarded partners to receive these receipts in realtime by having us push individual Task resources to an endpoint that you make available to us for this purpose. We call this feature "real-time receipts". [Contact the NHS App team](mailto:app.onboarding@nhs.net) for additional information on how to subscribe to real-time receipts.
 
         ## Pagination
-        To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
+        To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header or `Link` array in the response body should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
       parameters:
         - name: day
-          description: The day for which to retrieve an event report.
-          example: "2021-08-25"
+          description: The day for which to retrieve a receipt report.
+          example: "2022-08-22"
           in: query
           required: true
           schema:
@@ -446,9 +507,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: components/schemas/responses/communication/report/events.yaml
+                $ref: components/schemas/responses/communication/report/receipts.yaml
               example:
-                $ref: components/examples/responses/communication/report/200successEvents.json
+                $ref: components/examples/responses/communication/report/200successReceipts.json
         "400":
           description: There is an error in your request.
           headers:
@@ -486,7 +547,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/401ExpiredAccessToken.json
         "403":
-          description: You are not authorised to perform this operation. Some client applications may not be permitted to access the event report endpoint. To discuss granting your application access to this endpoint, [contact the NHS App team](mailto:app.onboarding@nhs.net).
+          description: You are not authorised to perform this operation. Some client applications may not be permitted to access the receipt report endpoint. To discuss granting your application access to this endpoint, [contact the NHS App team](mailto:app.onboarding@nhs.net).
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -495,9 +556,9 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                $ref: components/examples/responses/communication/403permissionsMissingForEventReport.json
+                $ref: components/examples/responses/communication/403permissionsMissingForReceiptsReport.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
+          description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
@@ -537,6 +598,8 @@ paths:
 
         ## Pagination
         To avoid returning excessively large response bodies, the results may be split across multiple pages. On retrieving the response for the first page of results, the `Link` header should be inspected to determine whether any additional pages of results exist. If so, these can be retrieved by making additional request(s) with the optional `page` parameter specified.
+
+        In order to test the pagination feature in the development and integration environments, use the ODS code `T00001` to return a report with multiple pages.
       parameters:
         - name: ods-organisation-code
           description: |
@@ -620,7 +683,7 @@ paths:
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForPatientReport.json
         "429":
-          description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
+          description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
             X-Correlation-ID:
               $ref: components/schemas/XCorrelationId.yaml
