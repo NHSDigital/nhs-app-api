@@ -25,7 +25,7 @@ paths:
               $ref: components/schemas/requests/communicationrequest.yaml
             examples:
               completed:
-                summary: A request to send a communication was completed.
+                summary: A request to send a message reply communication was completed.
                 value:
                   $ref: components/examples/responses/completed.json
       responses:
