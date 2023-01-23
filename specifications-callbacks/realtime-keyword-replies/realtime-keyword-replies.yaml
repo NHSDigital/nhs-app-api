@@ -9,7 +9,7 @@ info:
   description: |
     ## TODO
 paths:
-  /FHIR/R4/Task:
+  /FHIR/R4/CommunicationRequest:
     post:
       summary: TODO
       operationId: TODO
