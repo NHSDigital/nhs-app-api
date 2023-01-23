@@ -1,6 +1,11 @@
 title: Communication Response
 type: object
-description: LATER.
+description: |
+      An array of identifiers used to identify the original communication request that is referenced by this receipt.
+
+      This array will always include a globally unique identifier for the communication request assigned by the API, with the system `https://fhir.nhs.uk/Id/nhs-app-communication-id`. Note that several receipts may be included for each communication ID – for example a single in-app message might generate a Delivered receipt and a Read receipt.
+
+      It will include optional identifiers that were provided in the original communication request if the API recognised the identifier system name.
 required:
   - resourceType
   - contained
