@@ -3,23 +3,25 @@
   "version": "0.0.1",
   "description": "OAS (Swagger v3) API Definition for Template API",
   "scripts": {
-    "lint": "node_modules/.bin/speccy lint specification/nhs-app.yaml --skip default-and-example-are-redundant",
-    "publish": "mkdir -p build && node_modules/.bin/speccy resolve specification/nhs-app.yaml -i | poetry run python scripts/yaml2json.py | poetry run python scripts/set_version.py > build/nhs-app.json",
-    "serve": "node_modules/.bin/speccy serve build/nhs-app.json",
+    "lint": "openapi-generator-cli validate -i specification/nhs-app.yaml",
+    "publish": "openapi-generator-cli generate -i specification/nhs-app.yaml --generator-key v3.0 -g openapi -o build && rm openapitools.json && mv build/openapi.json build/nhs-app.json",
     "check-licenses": "node_modules/.bin/license-checker --failOn GPL --failOn LGPL"
   },
   "author": "NHS Digital",
   "license": "MIT",
   "homepage": "https://github.com/NHSDigital/nhs-app",
-  "dependencies": {
-    "speccy": "^0.11.0"
-  },
   "devDependencies": {
     "newman": "^4.5.7",
     "newman-reporter-html": "^1.0.5",
     "newman-reporter-htmlextra": "^1.11.3",
     "apigeetool": "^0.16.1",
     "license-checker": "^25.0.1",
-    "minimist": "^1.2.6"
+    "minimist": "^1.2.6",
+    "newman": "^4.5.7",
+    "newman-reporter-html": "^1.0.5",
+    "newman-reporter-htmlextra": "^1.11.3"
+  },
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1"
   }
 }
