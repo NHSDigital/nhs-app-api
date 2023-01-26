@@ -110,6 +110,8 @@ info:
     
     Errors specific to each API are shown in the Endpoints section, under Response. See our [reference guide](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#http-status-codes) for more on errors.
 
+    ## Keyword Reply
+    [keyword reply](specifications-callbacks/realtime-keyword-replies/realtime-keyword-replies.yaml) is an option in NHS system which allow senders to send messages to their patients with multi choice options to get their response.
   contact:
     name: NHS App API Support
     url: "https://digital.nhs.uk/developer/help-and-support"
