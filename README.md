@@ -63,11 +63,11 @@ The `tests/` folder contains some .NET integration tests to verify that the API 
 
  * [**openapi-yaml-mode**](https://github.com/esc-emacs/openapi-yaml-mode) provides syntax highlighting, completion, and path help
 
-### OpenAPI Generator
+### Speccy
 
-> [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator-cli) *OpenAPI Generator allows generation of API client libraries (SDK generation), server stubs, documentation and configuration automatically given an OpenAPI Spec*
+> [Speccy](http://speccy.io/) *A handy toolkit for OpenAPI, with a linter to enforce quality rules, documentation rendering, and resolution.*
 
-OpenAPI Generator does the lifting for the following npm scripts:
+Speccy Generator does the lifting for the following npm scripts:
 
  * `publish` -- Outputs the specification as a **single file** into the `dist/` directory
  * `lint` -- Lints the definition
