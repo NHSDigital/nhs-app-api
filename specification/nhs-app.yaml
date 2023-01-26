@@ -155,7 +155,7 @@ paths:
         The outcome of communication requests can be determined using the [daily receipt report endpoint](#api-Communication-get-receipt-report) or by subscribing to realtime receipts.
 
         ## Keyword Reply
-        [keyword reply](#/specifications-callbacks/realtime-keyword-replies/realtime-keyword-replies.yaml) is a messaging option in NHS App that allows a sender to send messages to their patients and include a fixed set of reply options. Patients can only reply to the messages by selecting only one option as a response.
+        [keyword reply](specifications-callbacks/realtime-keyword-replies/realtime-keyword-replies.yaml) is a messaging option in NHS App that allows a sender to send messages to their patients and include a fixed set of reply options. Patients can only reply to the messages by selecting only one option as a response.
       requestBody:
         required: true
         content:
