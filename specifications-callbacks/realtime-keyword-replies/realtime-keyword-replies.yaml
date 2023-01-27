@@ -7,16 +7,15 @@ info:
   version: "1.0.0"
   title: NHS App API
   description: |
-    ## TODO
+    NHS app has a range of APIs that allows you to syndicate content from various partners. To implement the API will take some technical knowledge.
 paths:
   /FHIR/R4/CommunicationRequest:
     post:
-      summary: TODO
-      operationId: TODO
+      summary: |
+        Keyword reply is a messaging option in NHS App that allows a sender to send messages to their patients and include a fixed set of reply option(s). Patients can only reply to the messages by selecting only one option as a response.
+      operationId: This is a unique string used to identify an operation. These IDs must be unique among all operations described in NHS API.
       description: |
-        TODO
-        TODO mention mutual auth
-        TODO mention firewall
+        In this pattern, you authenticate your application by sending a signed JSON Web Token (JWT) to our OAuth 2.0 authorisation server. You provide us with your public key and sign the JWT with your private key. In return, we give you an access token, which you then include with each API request.
       requestBody:
         required: true
         content:
@@ -34,4 +33,4 @@ paths:
         "400":
           description: There is an error in the structure of the request.
         "401":
-          description: Authorisation issue, for example the client certificate cannot be verified. TODO
+          description: Authorisation issue, for example the client certificate cannot be verified.
