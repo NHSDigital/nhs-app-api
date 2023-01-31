@@ -1,0 +1,43 @@
+# This is an OpenAPI Specification (https://swagger.io/specification/)
+# describing a realtime receipt callback endpoint that suppliers integrating with the NHS App API's Realtime Receipts functionality should create.
+# This example spec is owned by NHS Digital (https://digital.nhs.uk/).
+
+openapi: "3.1.0"
+info:
+  version: "1.0.0"
+  title: NHS App Realtime keyword replies Example API
+  description: |
+    This is an example OpenAPI specification detailing an endpoint to be created by a partner who has integrated with the NHS App API and wishes to use the "realtime keyword replies" feature. For context, please see the [NHS App API specification](https://digital.nhs.uk/developer/api-catalogue/nhs-app).    
+tags:
+  - name: realtime-keyword-replies
+paths:
+  /FHIR/R4/CommunicationRequest:
+    post:
+      summary: Send a realtime keyword replies        
+      operationId: create-realtime-keyword-replies
+      tags:
+        - realtime-keyword-replies
+      description: |
+        Use this endpoint to send a real-time keyword replies detailing the outcome of a communication request that has previously been sent using the [NHS App API](https://digital.nhs.uk/developer/api-catalogue/nhs-app).
+        
+        The body of requests made to this endpoint are instances of [HL7 FHIR R4 communication request resources](https://www.hl7.org/fhir/communicationrequest.html). The schema describes which fields on that resource will be sent by NHS App.
+        
+        This endpoint must be secured using Mutual TLS. Further, NHS App will make requests to this endpoint from a static IP address, which should be added to a firewall allowlist. [Contact the NHS App onboarding team](mailto:app.onboarding@nhs.net) to request a Certificate Signing Request (CSR) and for details of the incoming IP address. 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: components/schemas/requests/communicationrequest.yaml
+            examples:
+              completed:
+                summary: A request to send a message reply communication was completed.
+                value:
+                  $ref: components/examples/responses/completed.json
+      responses:
+        "202":
+          description: The keyword reply has been successfully accepted.
+        "400":
+          description: There is an error in the structure of the request.
+        "401":
+          description: Authorisation issue, for example the client certificate cannot be verified.

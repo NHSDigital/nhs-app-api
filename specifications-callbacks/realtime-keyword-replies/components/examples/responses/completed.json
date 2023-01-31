@@ -1,0 +1,65 @@
+{
+    "resourceType": "CommunicationRequest", 
+    "contained": [
+        {
+            "resourceType": "QuestionnaireResponse", 
+            "id": "answers",
+            "status": "completed",
+            "authored": "2022-08-16T13:31:42+00:00",
+            "item": [ 
+                {
+                    "linkId": "1",
+                    "answer": [
+                        {
+                            "valueCoding": {
+                                "code": "SMOKE"
+                            }
+                        } 
+                    ]
+                }
+            ]
+        } 
+    ],
+    "status": "completed", 
+    "basedOn": [ {
+            "identifier": {
+                    "system": "http://fhir.nhs.uk/Id/nhs-app-communication-id", 
+                    "value": " 8f7ec136-66eb-4a9e-97ca-5c7a53d2710c"
+                    } 
+                }
+            ], 
+            "identifier": [
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+                    "value": "Optional Campaign ID" 
+                },
+                {
+                    "system": "https://fhir.nhs.uk/NHSApp/request-id", 
+                    "value": "Optional Request Reference"
+                } 
+            ],
+            "payload": [ 
+                {
+                    "contentReference": { 
+                        "reference": "#answers"
+                    }
+                }
+            ],
+            "recipient": [
+                {
+                    "type": "Organization",
+                    "identifier": {
+                        "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                        "value": "B82041"
+                    }
+                } 
+            ],
+            "requester": {
+                "type": "Patient",
+                "identifier": {
+                    "system": "https://fhir.nhs.uk/Id/nhs-number",
+                    "value": "9692113841"
+                }
+              },
+    "authoredOn": "2022-08-15T16:31:42+00:00"
+}

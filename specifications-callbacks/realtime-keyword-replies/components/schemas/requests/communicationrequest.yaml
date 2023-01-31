@@ -1,0 +1,187 @@
+title: Communication Response
+type: object
+description: |
+      An array of identifiers used to identify the original communication request that is referenced by this response.
+
+      This array will always include a globally unique identifier for the communication request assigned by the API, with the system `https://fhir.nhs.uk/Id/nhs-app-communication-id`. Note that several receipts may be included for each communication ID – for example a single in-app message might generate a Delivered receipt and a Read receipt.
+
+      It will include optional identifiers that were provided in the original communication request if the API recognised the identifier system name.
+required:
+  - resourceType
+  - contained
+  - status
+  - basedOn
+  - identifier
+  - payload
+  - recipient
+  - requester
+  - authoredOn  
+properties:
+  resourceType:
+    type: string
+    enum:
+      - CommunicationRequest
+    example: CommunicationRequest
+  contained:
+    type: array
+    description: This will contain only one item.
+    minItems: 1
+    maxItems: 1
+    items: 
+      type: object
+      required:
+        - resourceType
+        - id
+        - status
+        - authored
+        - item
+      properties:
+        resourceType:
+          type: string
+          description: This will be QuestionnaireResponse
+          example: QuestionnaireResponse
+        id:
+          type: string
+          description: This will refer to contentReferece in the payload field.
+          example: answers
+        status:
+          type: string
+          description: This will be completed.
+          example: completed
+        authored:
+          type: datetime
+          description: This will contain the datetime at what datetime response has given.
+          example: '2022-08-16T13:31:42+00:00'
+        item:
+          type: array
+          description: This will contain only one item.
+          minItems: 1
+          maxItems: 1
+          items: 
+            type: object
+            required:
+              - linkId
+              - answer
+            properties:
+              linkId:
+                type: string
+                description: This will be always 1.
+                example: 1
+              answer: 
+                type: array
+                description: This will contain only one entry.
+                minItems: 1
+                maxItems: 1
+                items: 
+                  type: object
+                  required:
+                    - valueCoding                    
+                  properties:
+                    valueCoding:
+                      type: object
+                      description: This will have code that patient has selected
+                      properties:
+                        code:
+                          type: string
+                          example: 'SMOKE'
+  status:
+    type: string
+    description: This will be `completed` for message reply.
+    enum:
+      - completed
+    example: completed
+  basedOn:
+    type: array
+    description: Contains the unique identifier of the communication, with system http://fhir.nhs.uk/Id/nhs-app-communication-id
+    minItems: 1
+    maxItems: 1
+    items:
+      type: object
+      required:
+      - identifier
+      properties:
+        identifier:
+          type: object
+          properties:
+            system:
+              type: string
+              format: uri
+              description: The namespace of the identifier value.
+              example: https://fhir.nhs.uk/Id/nhs-app-communication-id
+            value:
+              type: string
+              description: The value of the identifier.
+              example: 8f7ec136-66eb-4a9e-97ca-5c7a53d2710c  
+  identifier:
+    type: array
+    description: |
+      - May contain any Campaign ID associated with the communication request, with system https://fhir.nhs.uk/NHSApp/campaign-id
+      - May contain any Request Reference associated with the communication request, with system https://fhir.nhs.uk/NHSApp/request-id
+    items:
+      type: object          
+      properties:
+        system:
+          type: string
+          format: uri
+          description: The namespace of the identifier value.
+          example: https://fhir.nhs.uk/Id/nhs-app-communication-id
+        value:
+          type: string
+          description: The value of the identifier.
+          example: 882cc757-5096-4565-9779-af25a751a65f
+  payload:
+    type: array    
+    description: The payload's contentReference field will have reference to QuestionnaireResponse's Id field
+    items:
+      type: object
+      properties:
+        contentReference: 
+          type: object
+          properties:
+            reference:
+              type: string
+              example: '#answers'
+  recipient:
+    type: array
+    description: The recipient will be the organization that has sent an in-app message to the patient.
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          example: Organization
+        identifier:
+          type: object
+          properties:
+            system:
+              type: string            
+              example: https://fhir.nhs.uk/Id/ods-organization-code
+            value:
+              type: string   
+              pattern: "^([A-Z]\\d{5}|[A-Z]\\d[A-Z]\\d[A-Z])$"         
+              example: B82041
+  requester:
+    type: object
+    description: The requester will be who has sent the message response 'patient'.
+    properties:
+      type:
+        type: string
+        example: Patient
+      identifier:
+        type: object
+        properties:
+          system:
+            type: string
+            format: uri
+            description: The system that the identifier belongs to. This will be `https://fhir.nhs.uk/Id/nhs-number`. 
+            example: https://fhir.nhs.uk/Id/nhs-number
+          value:
+            type: string
+            pattern: "^\\d{10}$"
+            description: The patient's NHS number
+            example: '9692113841'
+  authoredOn:
+    type: string
+    format: date-time
+    description: Contains the UTC datetime at which the communication was created.
+    example: '2022-08-19T09:15:12+00:00'
