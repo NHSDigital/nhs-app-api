@@ -5,20 +5,20 @@
 openapi: "3.1.0"
 info:
   version: "1.0.0"
-  title: NHS App Realtime keyword replies Example API
+  title: NHS App Realtime replies Example API
   description: |
-    This is an example OpenAPI specification detailing an endpoint to be created by a partner who has integrated with the NHS App API and wishes to use the "realtime keyword replies" feature. For context, please see the [NHS App API specification](https://digital.nhs.uk/developer/api-catalogue/nhs-app).    
+    This is an example OpenAPI specification detailing an endpoint to be created by a partner who has integrated with the NHS App API and wishes to use the "realtime keyword replies" feature or "realtime freetext replies". For context, please see the [NHS App API specification](https://digital.nhs.uk/developer/api-catalogue/nhs-app).    
 tags:
-  - name: realtime-keyword-replies
+  - name: realtime-replies
 paths:
   /FHIR/R4/CommunicationRequest:
     post:
-      summary: Send a realtime keyword replies        
-      operationId: create-realtime-keyword-replies
+      summary: Send a realtime reply
+      operationId: create-realtime-replies
       tags:
-        - realtime-keyword-replies
+        - realtime-replies
       description: |
-        Use this endpoint to send a real-time keyword replies detailing the outcome of a communication request that has previously been sent using the [NHS App API](https://digital.nhs.uk/developer/api-catalogue/nhs-app).
+        Use this endpoint to send a real-time reply detailing the outcome of a communication request that has previously been sent using the [NHS App API](https://digital.nhs.uk/developer/api-catalogue/nhs-app).
         
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 communication request resources](https://www.hl7.org/fhir/communicationrequest.html). The schema describes which fields on that resource will be sent by NHS App.
         
@@ -30,13 +30,17 @@ paths:
             schema:
               $ref: components/schemas/requests/communicationrequest.yaml
             examples:
-              completed:
+              keyword-completed:
                 summary: A request to send a message reply communication was completed.
                 value:
-                  $ref: components/examples/responses/completed.json
+                  $ref: components/examples/responses/keyword-replies-completed.json
+              freetext-completed:
+                summary: A request to send a message reply communication was completed.
+                value:
+                  $ref: components/examples/responses/freetext-replies-completed.json
       responses:
         "202":
-          description: The keyword reply has been successfully accepted.
+          description: The reply has been successfully accepted.
         "400":
           description: There is an error in the structure of the request.
         "401":
