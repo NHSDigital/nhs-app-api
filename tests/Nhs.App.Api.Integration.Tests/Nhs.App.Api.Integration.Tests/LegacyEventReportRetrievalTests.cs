@@ -1,4 +1,6 @@
-using System;
+/*  NHSO-22206: Remove the Legacy Events Report functionality. Remove integration tests from APIGEE Proxy layer
+
+ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +15,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Nhs.App.Api.Integration.Tests
 {
-    [TestClass]
+   [TestClass]
     public class LegacyEventReportRetrievalTests : HttpEndpointTestsBase
     {
         private static TestConfiguration _testConfiguration;
@@ -306,4 +308,4 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
     }
-}
+}*/
