@@ -72,18 +72,18 @@ properties:
                 description: This will contain only one entry.
                 minItems: 1
                 maxItems: 1
-                items: 
-                  type: object
-                  required:
-                    - valueCoding                    
+                items:              
                   properties:
                     valueCoding:
                       type: object
-                      description: This will have code that patient has selected
+                      description: For keyword replies, this field will contain the code for the response that the patient has selected
                       properties:
                         code:
                           type: string
                           example: 'SMOKE'
+                    valueString:
+                      type: string
+                      description: For freetext replies, this field will contain the text response that the patient has entered
   status:
     type: string
     description: This will be `completed` for message reply.
