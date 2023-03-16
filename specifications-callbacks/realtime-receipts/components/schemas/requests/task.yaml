@@ -47,9 +47,14 @@ properties:
       - completed
     example: 'completed'
   statusReason:
-    type: string
+    type: object
     description: For rejected receipts only, this property will contain an explanation of why the rejection occurred.
-    example: 'NHS number not found'
+    required:
+     - text
+    properties:
+      text:
+        type: string
+        example: 'NHS number not found'
   code:
     type: object
     description: Indication of the type of event that occurred.
