@@ -27,7 +27,7 @@
                     "value": "optional request reference"
                 },
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "882cc757-5096-4565-9779-af25a751a65f"
                 }
             ],
@@ -60,7 +60,7 @@
                     "value": "optional request reference"
                 },
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "882cc757-5096-4565-9779-af25a751a65f"
                 }
             ],
@@ -93,7 +93,7 @@
                     "value": "optional request reference"
                 },
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "882cc757-5096-4565-9779-af25a751a65f"
                 }
             ],
@@ -118,7 +118,7 @@
             "intent": "order",
             "identifier": [
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
                 }
             ],
@@ -143,7 +143,7 @@
             "intent": "order",
             "identifier": [
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
                 }
             ],
@@ -168,7 +168,7 @@
             "intent": "order",
             "identifier": [
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "410baa9d-0b7e-4120-af1b-2f5b2656edf9"
                 }
             ],
@@ -197,7 +197,7 @@
                     "value": "flu campaign 202208"
                 },
                 {
-                    "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+                    "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
                     "value" : "01389fa3-2cb9-4440-b075-c4902b526fbc"
                 }
             ],

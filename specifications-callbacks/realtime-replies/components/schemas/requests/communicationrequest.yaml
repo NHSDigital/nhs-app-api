@@ -92,7 +92,7 @@ properties:
     example: completed
   basedOn:
     type: array
-    description: Contains the unique identifier of the communication, with system http://fhir.nhs.uk/Id/nhs-app-communication-id
+    description: Contains the unique identifier of the communication, with system https://fhir.nhs.uk/Id/nhs-app-communication-id
     minItems: 1
     maxItems: 1
     items:

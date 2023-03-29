@@ -11,7 +11,7 @@
             "value": "optional request reference"
         },
         {
-            "system" : "http://fhir.nhs.uk/Id/nhs-app-communication-id",
+            "system" : "https://fhir.nhs.uk/Id/nhs-app-communication-id",
             "value" : "8f7ec136-66eb-4a9e-97ca-5c7a53d2710c"
         } 
     ],
