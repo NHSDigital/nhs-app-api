@@ -57,6 +57,7 @@ namespace NHSOnline.MetricLogFunctionApp.UnitTests.Etl.Functions.AuditLog.Appoin
             parseResult.Timestamp.Should().Be(new DateTime(2021, 11, 1).AddHours(9).AddMilliseconds(123));
             parseResult.SessionId.Should().Be("SessionId-test");
             parseResult.AuditId.Should().Be("AuditId-Test");
+            parseResult.IsActingOnBehalfOfAnother.Should().Be(false);
         }
 
         private static AuditRecord BuildEvent(

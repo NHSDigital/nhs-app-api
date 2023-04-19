@@ -142,6 +142,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var appointmentBookMetricRow1 = appointmentBookMetricRows.First(r => r.SessionId == "TestSession11");
                 appointmentBookMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.011Z"));
                 appointmentBookMetricRow1.AuditId.Should().Be("AuditId11");
+                appointmentBookMetricRow1.IsActingOnBehalfOfAnother.Should().Be(false);
 
                 var organDonationRegistrationGetMetricRow1 = organDonationRegistrationGetMetricRows.First(r => r.SessionId == "TestSession12");
                 organDonationRegistrationGetMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
@@ -304,6 +305,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 var appointmentBookMetricRow1 = appointmentBookMetricRows.First(r => r.SessionId == "TestSession11");
                 appointmentBookMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.011Z"));
                 appointmentBookMetricRow1.AuditId.Should().Be("AuditId11");
+                appointmentBookMetricRow1.IsActingOnBehalfOfAnother.Should().Be(false);
 
                 var organDonationRegistrationGetMetricRow1 = organDonationRegistrationGetMetricRows.First(r => r.SessionId == "TestSession12");
                 organDonationRegistrationGetMetricRow1.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.012Z"));
@@ -406,7 +408,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
             await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow() {
                 Timestamp = new DateTime(2021, 11, 01, 09, 00, 00, 8),
                 SessionId = "TestSession8",
-                AuditId = "AuditId8"
+                AuditId = "AuditId8",
+                IsActingOnBehalfOfAnother = false
             });
 
             await env.Postgres.Events.OrganDonationRegistrationGetMetric.Insert(new OrganDonationRegistrationGetMetricRow()
@@ -609,6 +612,7 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Etl.Functions.AuditLog
                 appointmentBookMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.008Z"));
                 appointmentBookMetricRow.SessionId.Should().Be("TestSession8");
                 appointmentBookMetricRow.AuditId.Should().Be("AuditId8");
+                appointmentBookMetricRow.IsActingOnBehalfOfAnother.Should().Be(false);
 
                 organDonationRegistrationGetMetricRow.Timestamp.Should().Be(DateTime.Parse("2021-11-01T09:00:00.009Z"));
                 organDonationRegistrationGetMetricRow.SessionId.Should().Be("TestSession9");

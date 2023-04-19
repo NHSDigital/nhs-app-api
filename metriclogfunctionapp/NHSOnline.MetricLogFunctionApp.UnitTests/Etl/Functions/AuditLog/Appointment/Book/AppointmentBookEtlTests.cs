@@ -48,7 +48,8 @@ public class AppointmentBookEtlTests
                 .Returns(
                     BuildMetric(timeStamp,
                         $"{id}-SessionId",
-                        $"{id}-AuditId")
+                        $"{id}-AuditId",
+                        false)
                 );
         });
 
@@ -59,12 +60,13 @@ public class AppointmentBookEtlTests
         eventsIds.ForEach(id =>
             _repo.Verify(r =>
                 r.CallStoredProcedure(
-                    "CALL events.AppointmentBookMetricInsert({0},{1},{2})",
+                    "CALL events.AppointmentBookMetricInsert({0},{1},{2},{3})",
                     new object[]
                     {
                         new DateTimeOffset(DateTime.Parse(timeStamp)),
                         $"{id}-SessionId",
-                        $"{id}-AuditId"
+                        $"{id}-AuditId",
+                        false
                     })
             )
         );
@@ -103,13 +105,15 @@ public class AppointmentBookEtlTests
     private static AppointmentBookMetric BuildMetric(
         string timestamp,
         string sessionId,
-        string auditId)
+        string auditId,
+        bool isActingOnBehalfOfAnother)
     {
         return new AppointmentBookMetric
         {
             Timestamp = new DateTimeOffset(DateTime.Parse(timestamp)),
             SessionId = sessionId,
-            AuditId = auditId
+            AuditId = auditId,
+            IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother
         };
     }
 }

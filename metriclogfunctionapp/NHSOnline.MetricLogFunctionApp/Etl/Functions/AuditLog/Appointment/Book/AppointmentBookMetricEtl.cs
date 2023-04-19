@@ -11,7 +11,7 @@ public class AppointmentBookMetricEtl : AuditLogEtl<AppointmentBookMetric>
     {
     }
 
-    protected override string StoredProcedureName => "CALL events.AppointmentBookMetricInsert({0},{1},{2})";
+    protected override string StoredProcedureName => "CALL events.AppointmentBookMetricInsert({0},{1},{2},{3})";
 
     protected override object[] ReturnParams(AppointmentBookMetric metric)
     {
@@ -20,6 +20,7 @@ public class AppointmentBookMetricEtl : AuditLogEtl<AppointmentBookMetric>
             metric.Timestamp,
             metric.SessionId,
             metric.AuditId,
+            metric.IsActingOnBehalfOfAnother
         };
     }
 }

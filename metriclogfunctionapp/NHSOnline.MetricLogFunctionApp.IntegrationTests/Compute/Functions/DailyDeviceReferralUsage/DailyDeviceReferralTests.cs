@@ -105,8 +105,8 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions.Dail
             await AddMetricHelper.AddWebIntegrationReferralsMetric(env, endDateTime.AddHours(-1), "ref", "refOrigin", sessionid2);
 
             // Iv ran the SP straight onto the data this generates and it also says 4 and 4.
-            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDateTime.AddHours(-1), sessionid1);
-            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDateTime.AddHours(-1), sessionid1);
+            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDateTime.AddHours(-1), sessionid1, false);
+            await AddMetricHelper.AddAppointmentBookMetric(env, "AB123", endDateTime.AddHours(-1), sessionid1, true);
 
             await AddMetricHelper.AddAppointmentCancelMetric(env, "AB123", endDateTime.AddHours(-1), sessionid2);
             await AddMetricHelper.AddAppointmentCancelMetric(env, "AB123", endDateTime.AddHours(-1), sessionid2);

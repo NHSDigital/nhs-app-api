@@ -12,10 +12,11 @@ public class AppointmentBookEventParser : IAuditLogParser<AppointmentBookMetric>
         {
             Timestamp = source.Timestamp,
             SessionId = source.SessionId,
-            AuditId = source.AuditId
+            AuditId = source.AuditId,
+            IsActingOnBehalfOfAnother = source.IsActingOnBehalfOfAnother
         };
     }
-    
+
     private bool IsAppointmentBookMetric(AuditRecord source)
     {
         if (source == null) return false;

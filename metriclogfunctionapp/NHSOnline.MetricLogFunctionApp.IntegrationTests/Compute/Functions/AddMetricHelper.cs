@@ -65,12 +65,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
             });
         }
 
-        public static async Task AddAppointmentBookMetric(TestEnv env, string odsCode, DateTimeOffset dateTime, string sessionId)
+        public static async Task AddAppointmentBookMetric(TestEnv env, string odsCode, DateTimeOffset dateTime, string sessionId, bool isActingOnBehalfOfAnother)
         {
             await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow
             {
                 Timestamp = dateTime,
-                SessionId = sessionId
+                SessionId = sessionId,
+                IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother
             });
         }
 
@@ -198,12 +199,13 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Compute.Functions
             });
         }
 
-        public static async Task AddAppointmentBookMetric(TestEnv env, DateTimeOffset dateTime, string sessionId)
+        public static async Task AddAppointmentBookMetric(TestEnv env, DateTimeOffset dateTime, string sessionId, bool isActingOnBehalfOfAnother)
         {
             await env.Postgres.Events.AppointmentBookMetric.Insert(new AppointmentBookMetricRow
             {
                 Timestamp = dateTime,
-                SessionId = sessionId
+                SessionId = sessionId,
+                IsActingOnBehalfOfAnother = isActingOnBehalfOfAnother
             });
         }
 

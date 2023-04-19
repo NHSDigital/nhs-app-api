@@ -7,10 +7,11 @@ namespace NHSOnline.MetricLogFunctionApp.IntegrationTests.Env.Postgres.Events
         public DateTimeOffset Timestamp { get; set; }
         public string SessionId { get; set; }
         public string AuditId { get; set; }
+        public bool IsActingOnBehalfOfAnother { get; set; }
 
         public string InsertSql(string tableName) => @$"
-            INSERT INTO {tableName}(""Timestamp"", ""SessionId"", ""AuditId"")
-            VALUES(@Timestamp, @SessionId, @AuditId)
+            INSERT INTO {tableName}(""Timestamp"", ""SessionId"", ""AuditId"", ""IsActingOnBehalfOfAnother"")
+            VALUES(@Timestamp, @SessionId, @AuditId, @IsActingOnBehalfOfAnother)
             ";
     }
 }

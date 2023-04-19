@@ -10,4 +10,5 @@ public class AppointmentBookMetric : IEventRepositoryRow
     public DateTimeOffset Timestamp { get; set; }
     public string SessionId { get; set; }
     public string AuditId { get; set; }
+    public bool IsActingOnBehalfOfAnother { get; set; }
 }
