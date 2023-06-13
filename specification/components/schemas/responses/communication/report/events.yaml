@@ -19,12 +19,12 @@ items:
     campaignId:
       type: string
       description: If the original communication request included an optional Campaign ID denoted by system `https://fhir.nhs.uk/NHSApp/campaign-id`, it will be returned in this field.
-      maxLength: 50
+      maxLength: 128
       nullable: true
     requestReference:
       type: string
       description: If the original communication request included an optional Request Reference denoted by system `https://fhir.nhs.uk/NHSApp/request-id`, it will be returned in this field.
-      maxLength: 50
+      maxLength: 128
       nullable: true
     channel:
       type: string
