@@ -89,7 +89,7 @@ info:
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
     ### Production
-    Our production environment has a [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) of 200 requests per second per application. 
+    NHS England will work with you to define an appropriate [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) for your channel in our production environment, based on the anticipated traffic from your service. 
 
     ## Onboarding
     You need to get your product or service approved by us before you can use this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
