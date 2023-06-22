@@ -482,11 +482,12 @@ paths:
 
         * `Rejected` – a request to send a communication was rejected. For example, this could happen if the NHS number of the intended recipient does not correspond to an NHS App user.
         * `Delivered` – an in-app message has been successfully added to a user’s inbox.
-        * `Notified` – a push notification is reported as having been successfully relayed to one or more native devices. 
+        * `NotificationAttempted` - a push notification request has been accepted by Apple Push Notification Service or Firebase Cloud Messaging. This doesn't confirm whether the user ends up receiving the push notification or not, just that the request coming from the NHS has been accepted (as opposed to rejected, in which case the supplier will receive the `Unnotified` receipt).
+        * `Notified` – a push notification has been displayed by at least one native device. For iOS, if the user has enabled a notifications schedule, then this receipt will only be sent once the scheduled time has been reached.
         * `Unnotified` – it has been determined that a push notification has not been successfully relayed to any native devices.
         * `Read` – a user has read an in-app message for the first time.
         
-        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.svg?raw=true)
+        ![Message Overview](https://github.com/NHSDigital/nhs-app-api/blob/master/specification/diagrams/Message_Workflow.png?raw=true)
 
         A diagram of a finite state machine showing the transition between delivery states based on events occurring throughout the delivery process, such as successfully adding a message to a citizen’s inbox and displaying a notification on their mobile device.
 
