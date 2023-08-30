@@ -1,99 +1,102 @@
 <TargetEndpoint name="nhs-app-target">
-	<FaultRules>
-		<FaultRule name="access_token_expired">
-			<Step>
-				<Name>ExtractVariables.OAuthErrorFaultString</Name>
-			</Step>
-			<Step>
-				<Name>JavaScript.OAuthErrorCode</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.OAuthPolicyErrorResponse</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
-				<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
-			</Step>
-			<Condition>oauthV2.OauthV2.VerifyAccessToken.failed</Condition>
-		</FaultRule>
-		<FaultRule name="quota_limits_breached">
-			<Step>
-				<Name>ExtractVariables.RateLimitingError</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.QuotaLimitsBreachedErrorResponse</Name>
-			</Step>
-			<Condition>(error.status.code Equals "429")</Condition>
-		</FaultRule>
-	</FaultRules>
-	<PreFlow>
-		<Request>
-			<Step>
-				<Name>OauthV2.VerifyAccessToken</Name>
-			</Step>
-			<Step>
+    <FaultRules>
+        <FaultRule name="access_token_expired">
+            <Step>
+                <Name>ExtractVariables.OAuthErrorFaultString</Name>
+            </Step>
+            <Step>
+                <Name>JavaScript.OAuthErrorCode</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.OAuthPolicyErrorResponse</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+                <Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+            </Step>
+            <Condition>oauthV2.OauthV2.VerifyAccessToken.failed</Condition>
+        </FaultRule>
+        <FaultRule name="quota_limits_breached">
+            <Step>
+                <Name>ExtractVariables.RateLimitingError</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.QuotaLimitsBreachedErrorResponse</Name>
+            </Step>
+            <Condition>(error.status.code Equals "429")</Condition>
+        </FaultRule>
+    </FaultRules>
+    <PreFlow>
+        <Request>
+            <Step>
+                <Name>OauthV2.VerifyAccessToken</Name>
+            </Step>
+            <Step>
+                <Name>FlowCallout.ExtendedAttributes</Name>
+            </Step>
+            <Step>
                 <Name>FlowCallout.ApplyRateLimiting</Name>
             </Step>
-			<Step>
-				<Name>KeyValueMap.GetUpstreamApiKey</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.SetHeader.XApiKey</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.SetHeader.NhsdCorrelationId</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
-			</Step>
-			<Step>
-				<Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
-			</Step>
-		</Request>
-	</PreFlow>
-	<Flows>
-		<Flow name="RewriteLocationHeader">
-			<Description/>
-			<Request/>
-			<Response>
-				<Step>
-					<Name>JavaScript.Header.Rewrite.Location</Name>
-				</Step>
-			</Response>
-			<Condition>(response.header.Location != null)</Condition>
-		</Flow>
-		<Flow name="RewriteLinkHeader">
-			<Description/>
-			<Request/>
-			<Response>
-				<Step>
-					<Name>JavaScript.Header.Rewrite.Link</Name>
-				</Step>
-			</Response>
-			<Condition>(response.header.Link != null)</Condition>
-		</Flow>
-	</Flows>
-	<HTTPTargetConnection>
-		<Properties>
-			<!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
+            <Step>
+                <Name>KeyValueMap.GetUpstreamApiKey</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.SetHeader.XApiKey</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.SetHeader.NhsdCorrelationId</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
+            </Step>
+            <Step>
+                <Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
+            </Step>
+        </Request>
+    </PreFlow>
+    <Flows>
+        <Flow name="RewriteLocationHeader">
+            <Description/>
+            <Request/>
+            <Response>
+                <Step>
+                    <Name>JavaScript.Header.Rewrite.Location</Name>
+                </Step>
+            </Response>
+            <Condition>(response.header.Location != null)</Condition>
+        </Flow>
+        <Flow name="RewriteLinkHeader">
+            <Description/>
+            <Request/>
+            <Response>
+                <Step>
+                    <Name>JavaScript.Header.Rewrite.Link</Name>
+                </Step>
+            </Response>
+            <Condition>(response.header.Link != null)</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <Properties>
+            <!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
                  Anything unexpected will be sanitised by the DefaultFaultRule -
                  https://docs.apigee.com/api-platform/fundamentals/fault-handling#customhandlingofhttperrorcodesfromthetargetserver -->
-			<Property name="success.codes">1xx,2xx,3xx,4xx</Property>
-		</Properties>
-		<SSLInfo>
-			<Enabled>true</Enabled>
-		</SSLInfo>
-		<LoadBalancer>
-			<Server name="nhs-app"/>
-		</LoadBalancer>
-	</HTTPTargetConnection>
-	<DefaultFaultRule>
-		<Step>
-			<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
-			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
-		</Step>
-		<Step>
-			<Name>AssignMessage.CatchallErrorMessage</Name>
-		</Step>
-	</DefaultFaultRule>
+            <Property name="success.codes">1xx,2xx,3xx,4xx</Property>
+        </Properties>
+        <SSLInfo>
+            <Enabled>true</Enabled>
+        </SSLInfo>
+        <LoadBalancer>
+            <Server name="nhs-app"/>
+        </LoadBalancer>
+    </HTTPTargetConnection>
+    <DefaultFaultRule>
+        <Step>
+            <Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+            <Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+        </Step>
+        <Step>
+            <Name>AssignMessage.CatchallErrorMessage</Name>
+        </Step>
+    </DefaultFaultRule>
 </TargetEndpoint>
