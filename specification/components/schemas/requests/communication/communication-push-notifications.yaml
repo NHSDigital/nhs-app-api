@@ -12,15 +12,16 @@ properties:
   identifier:
     type: array
     description: |
-      An optional array of identifiers used to identify this request for later analysis.
+      An array of identifiers used to identify this request for later analysis.
       
-      We have defined the following two systems for identifiers that will be stored with the request:
+      We have defined the following systems for identifiers that will be stored with the request:
 
       * Campaign ID – denoted by system https://fhir.nhs.uk/NHSApp/campaign-id .  This is an optional campaign identifier, used for later identification of a group of multiple communication requests. For example, this could be used to identify all messages that pertain to invitations for a particular vaccination programme.
       * Request Reference – denoted by system https://fhir.nhs.uk/NHSApp/request-id . This is an optional request identifier, used for later identification of a specific request.
+      * On Behalf Of - denoted by system https://fhir.nhs.uk/NHSApp/on-behalf-of . This field is used to record the entity for which your communication is being sent on behalf of. This field is only applicable if your application is registered as an intermediary between suppliers and the NHS App. Such registration is handled during onboarding and cannot be changed without discussion with the NHS App team. It is an error to provide this field if your application is not registered as an intermediary.
 
-      Note that these identifier system names are case-sensitive. The values provided for each of these two identifiers are limited to 128 characters, and must not match the regular expression `<(.|\n)*?>`.
-      No more than one campaign ID and one request reference can be supplied with each request.
+      Note that these identifier system names are case-sensitive. The values provided for each of these identifiers are limited to 128 characters, and must not match the regular expression `<(.|\n)*?>`.
+      It is an error to provide duplicate fields in a single request.
 
       The API will not reject requests that contain other identifier systems, but these values will be ignored and not recorded against the request.
 
