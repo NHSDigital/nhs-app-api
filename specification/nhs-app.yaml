@@ -118,6 +118,17 @@ info:
 
     To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net).
     
+    ## Real-Time Receipts
+    We provide our onboarded suppliers with the capability to instantly receive the status of their sent communications in real-time. This is achieved by delivering individual Task resources directly to the endpoint that suppliers have designated for this purpose. This feature, aptly named 'Real-Time Receipts,' ensures swift and immediate updates on the outcome of their interactions.
+    
+    We have created an [OpenAPI specification](https://github.com/NHSDigital/nhs-app-api/tree/master/specifications-callbacks/realtime-receipts) detailing the behaviour of the endpoint that suppliers should create to subscribe to realtime receipts.
+    
+    Steps to setup real-time receipts
+    
+    * The NHS App team initiates the creation of a certificate for MTLS (Mutual Transport Layer Security) authentication. They will send the Certificate Signing Request (CSR) to the Supplier for signing and return
+    * The Supplier is responsible for configuring and sharing the callback endpoint with the NHS App team, which will manage the RTR (Real-Time Receipts) callback requests
+    * Upon receiving the signed certificate and endpoint url, the NHS App team will install it and incorporate the callback endpoint into the Supplier's App configuration
+    
     ## Errors
     We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
 
