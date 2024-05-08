@@ -43,6 +43,10 @@ paths:
                 summary: A push notification is reported as having been successfully relayed to one or more native devices.
                 value:
                   $ref: components/examples/requests/task/notified.json
+              notificationattempted:
+                summary: A push notification is reported as having been sent to one or more native devices. This does not indicate that the notification was received or displayed by any devices.
+                value:
+                  $ref: components/examples/requests/task/notificationattempted.json
               unnotified:
                 summary: It has been determined that a push notification has not been successfully relayed to any native devices.
                 value:
