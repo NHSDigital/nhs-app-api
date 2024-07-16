@@ -16,7 +16,7 @@ authors = [
 readme = 'README.md'
 
 repository = "https://github.com/NHSDigital/nhs-app"
-homepage = ""
+homepage = "https://digital.nhs.uk/developer/api-catalogue/nhs-app"
 
 keywords = ["healthcare", "uk", "nhs"] #TODO add additional keywords
 
