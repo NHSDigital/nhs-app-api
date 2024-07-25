@@ -711,6 +711,15 @@ paths:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
                 $ref: components/examples/responses/communication/403permissionsMissingForPatientReport.json
+        "404":
+          description: Report (or page of report) was not found. Ensure the ODS code for which you are requesting a report is valid and exists. Also make sure you are not requesting a page that is out of bounds of the report.
+          headers:
+            X-Correlation-ID:
+              $ref: components/schemas/XCorrelationId.yaml
+          content:
+            application/fhir+json:
+              schema:
+                $ref: components/schemas/OperationOutcome.yaml
         "429":
           description: You have exceeded your application’s [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits) or the API is currently receiving a high volume of requests.
           headers:
