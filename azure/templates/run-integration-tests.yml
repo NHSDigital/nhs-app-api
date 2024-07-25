@@ -15,7 +15,7 @@ steps:
     displayName: 'Use .NET Core sdk'
     inputs:
       packageType: sdk
-      version: 5.0.x
+      version: 8.0.x
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - task: DotNetCoreCLI@2
@@ -62,4 +62,3 @@ steps:
       testRunTitle: 'Integration Tests'
     continueOnError: true
     condition: succeededOrFailed()
-    
