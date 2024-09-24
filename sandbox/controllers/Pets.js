@@ -1,7 +1,7 @@
 'use strict';
 
-var utils = require('../utils/writer.js');
-var Pets = require('../service/PetsService');
+let utils = require('../utils/writer.js');
+let Pets = require('../service/PetsService');
 
 module.exports.createPets = function createPets (req, res, next) {
   Pets.createPets()

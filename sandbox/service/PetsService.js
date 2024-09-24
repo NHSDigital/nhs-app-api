@@ -21,7 +21,7 @@ exports.createPets = function() {
  **/
 exports.listPets = function(limit) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
+    let examples = {};
     examples['application/json'] = [ {
   "name" : "name",
   "id" : 0,
@@ -48,7 +48,7 @@ exports.listPets = function(limit) {
  **/
 exports.showPetById = function(petId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
+    let examples = {};
     examples['application/json'] = {
   "name" : "name",
   "id" : 0,

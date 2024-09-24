@@ -12,7 +12,7 @@ if(nhsa_response_code / 100 == 2){
     nhsa_status = "pass";
 }
 
-timeout = "false";
+var timeout = "false";
 
 if(nhsa_response_code === null && nhsa_request_has_failed){
     timeout = "true";
@@ -21,7 +21,7 @@ if(nhsa_response_code === null && nhsa_request_has_failed){
 var nhsa_service = {
 "nhsa:status" : [
     {
-    "status": nhsa_status, 
+    "status": nhsa_status,
     "timeout" : timeout,
     "responseCode" : nhsa_response_code,
     "outcome": nhsa_response,
@@ -35,11 +35,11 @@ if(nhsa_status != "pass"){
     apigee_status = "fail";
 }
 
-var response = {  
+var response = {
     "status" : apigee_status,
     "version" : "{{ DEPLOYED_VERSION }}" ,
-    "revision" : apiproxy_revision, 
-    "releaseId" : "{{ RELEASE_RELEASEID }}", 
+    "revision" : apiproxy_revision,
+    "releaseId" : "{{ RELEASE_RELEASEID }}",
     "commitId": "{{ SOURCE_COMMIT_ID }}",
     "checks" : nhsa_service
 };
