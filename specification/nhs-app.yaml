@@ -177,7 +177,7 @@ paths:
         
         When a recipient taps the native notification, the NHS App will open on the in-app messaging inbox page.
 
-        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. For details of the subset see the 'payload' property of the schema. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
+        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. For details of the subset see the 'payload' property of the schema. Note that HTML encoded characters will not be decoded on displaying them in the NHS App to the user. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
 
