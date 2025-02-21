@@ -35,7 +35,7 @@ description: |
     > Forcing a line-break &nbsp;&nbsp;<--(two spaces)  
     > Next line
 
-  Note that HTML encoded characters will not be decoded in the NHS App upon displaying them to the user.
+  Note that HTML encoded characters will be decoded in the NHS App upon displaying them to the user.
 maxLength: 5000
 pattern: must not match <(.|\n)*?>
 example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
