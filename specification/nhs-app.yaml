@@ -7,7 +7,7 @@ info:
   title: NHS App API
   description: |
     ## Overview
-    Use this API to engage with users of the [NHS App](https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/) - a simple and secure way for patients registered with a GP surgery in England to access a range of services on their smartphone or tablet.
+    Use this API to engage with users of the [NHS App](https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/). The NHS App is a simple and secure way for patients registered with a GP surgery in England to access a range of services on their smartphone, tablet or computer web browser.
 
     You can:
     * send in-app messages to specific users of the NHS App
