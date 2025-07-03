@@ -1,0 +1,3 @@
+rules:
+  info-license: off
+  #scalar-property-missing-example: warn
