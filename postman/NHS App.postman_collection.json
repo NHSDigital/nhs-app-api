@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "16aea557-0efc-48d9-a88b-76e3c7f7995f",
+		"_postman_id": "2cb2b32d-889b-4877-a69d-19601c36dd06",
 		"name": "NHS App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24000949"
 	},
 	"item": [
 		{
@@ -16,7 +17,8 @@
 							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -25,8 +27,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -62,8 +64,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					},
 					{
 						"key": "apikey",
@@ -91,14 +93,24 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"postman.setGlobalVariable(\"jsrsasign-js\", responseBody);",
-							"if (postman.getEnvironmentVariable(\"DEBUG\") == \"true\") { tests[\"[INFO] Request: \" + JSON.stringify(request)] = true; }",
+							"pm.globals.set(\"jsrsasign-js\", pm.response.text());",
+							"if (pm.environment.get(\"DEBUG\") == \"true\") { ",
+							"    pm.test(\"[INFO] Request: \" + JSON.stringify(pm.request), function() { return true; }) ",
+							"};",
 							"pm.test(\"response is Ok\", function(){ pm.response.to.have.status(200); });",
 							"pm.test(\"response has body\", function(){ pm.response.to.be.withBody; });",
 							"pm.test(\"response has body\", function(){ pm.response.to.be.withBody; });",
-							"pm.test(\"global variable contains response\", function(){ pm.expect(postman.getGlobalVariable(\"jsrsasign-js\")).to.equal(responseBody) });",
+							"pm.test(\"global variable contains response\", function(){ pm.expect(pm.globals.get(\"jsrsasign-js\")).to.equal(pm.response.text()) });",
 							""
 						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
 						"type": "text/javascript"
 					}
 				}
@@ -134,45 +146,50 @@
 							"var navigator = {}; //fake a navigator object for the lib",
 							"var window = {}; //fake a window object for the lib",
 							"var uniqueId = pm.variables.replaceIn('{{$guid}}');",
-							"eval(postman.getGlobalVariable(\"jsrsasign-js\")); //import jsrsasign lib",
+							"eval(pm.globals.get(\"jsrsasign-js\")); //import jsrsasign lib",
 							"",
 							"var header = {",
 							"    \"typ\": \"JWT\",",
 							"    \"alg\": \"RS512\",",
-							"    \"kid\": postman.getEnvironmentVariable(\"kid\")",
+							"    \"kid\": pm.environment.get(\"kid\")",
 							"}",
 							"",
 							"var data = {",
-							"    \"iss\": postman.getEnvironmentVariable(\"apiKey\"),",
-							"    \"sub\": postman.getEnvironmentVariable(\"apiKey\"),",
+							"    \"iss\": pm.environment.get(\"apiKey\"),",
+							"    \"sub\": pm.environment.get(\"apiKey\"),",
 							"    \"exp\": Math.floor(Date.now() / 1000) + 300,",
 							"    \"aud\": pm.variables.replaceIn(pm.request.url.toString()),",
 							"    \"jti\": uniqueId",
 							"};",
 							"",
-							"var key = postman.getEnvironmentVariable(\"RSAKEY\");",
+							"var key = pm.environment.get(\"RSAKEY\");",
 							"",
 							"var secret = KEYUTIL.getKey(key);",
 							"var sHeader = JSON.stringify(header);",
 							"var sPayload = JSON.stringify(data);",
 							"var sJWT = KJUR.jws.JWS.sign(\"RS512\", sHeader, sPayload, secret);",
-							"postman.setEnvironmentVariable(\"jwt_token\", sJWT);"
+							"pm.environment.set(\"jwt_token\", sJWT);"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				},
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"if (postman.getEnvironmentVariable(\"DEBUG\") == \"true\") { tests[\"[INFO] Request: \" + JSON.stringify(request)] = true; tests[\"[INFO] Response: \" + responseBody] = true; }",
-							"var data = JSON.parse(responseBody);",
+							"if (pm.environment.get(\"DEBUG\") != \"true\") { ",
+							"    pm.test(\"[INFO] Request: \" + JSON.stringify(pm.request), function() { return true; });",
+							"    pm.test(\"[INFO] Response: \" + pm.response.text(), function() { return true; });",
+							"}",
+							"var data = JSON.parse(pm.response.text());",
 							"pm.test(\"response is Ok\", function(){ pm.response.to.have.status(200); });",
 							"pm.test(\"response has JSON body\", function(){ pm.response.to.be.withBody; pm.response.to.be.json; });",
 							"pm.test(\"response JSON has access_token\", function(){ pm.expect(data).to.have.property('access_token'); });",
-							"postman.setEnvironmentVariable(\"ACCESS_TOKEN\", data.access_token);"
+							"pm.environment.set(\"ACCESS_TOKEN\", data.access_token);"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -242,8 +259,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -302,8 +319,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -362,8 +379,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -422,8 +439,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -480,8 +497,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -543,8 +560,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -606,8 +623,8 @@
 				"header": [
 					{
 						"key": "X-Correlation-ID",
-						"type": "text",
-						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
 					}
 				],
 				"url": {
