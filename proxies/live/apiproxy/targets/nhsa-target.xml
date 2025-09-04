@@ -46,6 +46,9 @@
 			<Step>
 				<Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
 			</Step>
+      <Step>
+        <Name>AssignMessage.SetHeader.NhsdSupplierAppName</Name>
+      </Step>
 			<Step>
 				<Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
 			</Step>
