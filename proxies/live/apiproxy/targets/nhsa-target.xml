@@ -32,8 +32,11 @@
 				<Name>OauthV2.VerifyAccessToken</Name>
 			</Step>
 			<Step>
-                <Name>FlowCallout.ApplyRateLimiting</Name>
-            </Step>
+        <Name>FlowCallout.ApplyRateLimiting</Name>
+      </Step>
+      <Step>
+        <Name>FlowCallout.ExtendedAttributes</Name>
+      </Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
 			</Step>
