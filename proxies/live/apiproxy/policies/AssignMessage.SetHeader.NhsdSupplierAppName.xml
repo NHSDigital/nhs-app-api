@@ -2,7 +2,7 @@
 <AssignMessage async="false" continueOnError="true" enabled="true" name="AssignMessage.SetHeader.NhsdSupplierAppName">
   <Set>
     <Headers>
-      <Header name="NHSD-Supplier-App-Name">{apim-app-flow-vars.nhsa.SupplierName}</Header>
+      <Header name="NHSD-Supplier-App-Name">{apim-app-flow-vars.nhsa.SupplierAppName}</Header>
     </Headers>
   </Set>
   <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
