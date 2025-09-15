@@ -38,6 +38,9 @@ extends:
       - environment: internal-dev
       - environment: internal-qa
       - environment: dev
+        service_name: "${{ variables.service_name }}-dep"
+        short_service_name: "${{ variables.short_service_name }}-dep"
+        service_base_path: "${{ variables.service_base_path }}-dep"
         depends_on:
           - internal_qa
       - environment: int
