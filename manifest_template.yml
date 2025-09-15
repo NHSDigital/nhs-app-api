@@ -13,7 +13,7 @@ APIGEE_ENVIRONMENTS:
   display_name: Internal QA
   make_spec_visible: true
 - name: dev
-  display_name: External Development
+  display_name: External Development DEP
   make_spec_visible: true
 - name: int
   display_name: Integration Testing
