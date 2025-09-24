@@ -32,8 +32,11 @@
 				<Name>OauthV2.VerifyAccessToken</Name>
 			</Step>
 			<Step>
-                <Name>FlowCallout.ApplyRateLimiting</Name>
-            </Step>
+        <Name>FlowCallout.ApplyRateLimiting</Name>
+      </Step>
+      <Step>
+        <Name>FlowCallout.ExtendedAttributes</Name>
+      </Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
 			</Step>
@@ -46,6 +49,9 @@
 			<Step>
 				<Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
 			</Step>
+      <Step>
+        <Name>AssignMessage.SetHeader.NhsdSupplierAppName</Name>
+      </Step>
 			<Step>
 				<Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
 			</Step>
