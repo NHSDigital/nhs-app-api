@@ -64,7 +64,7 @@ info:
     ## Environments and testing
     | API Environment      | NHS Login Environment | Base URL                                    |
     | -------------------- | --------------------- | ------------------------------------------- |
-    | Development          | Sandpit               | `https://dev.api.service.nhs.uk/nhs-app/`   |
+    | Development          | Sandpit               | `https://dep.api.service.nhs.uk/nhs-app-dep/`   |
     | Integration Testing  | Integration (AOS)     | `https://int.api.service.nhs.uk/nhs-app/`   |
     | Production           | Production            | `https://api.service.nhs.uk/nhs-app/`       |
 
@@ -146,7 +146,7 @@ x-spec-publication:
   try-this-api:
     disabled: true
 servers:
-  - url: "https://dev.api.service.nhs.uk/nhs-app"
+  - url: "https://dep.api.service.nhs.uk/nhs-app-dep"
     description: Development environment.
   - url: "https://int.api.service.nhs.uk/nhs-app"
     description: Integration test environment.
