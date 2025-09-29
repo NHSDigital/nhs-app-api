@@ -62,11 +62,11 @@ info:
     After following these steps to create an application and register the public key, the App ID should be provided to the [NHS App onboarding team](mailto:app.onboarding@nhs.net) to grant your application permissions to the features that are appropriate to your use cases. If this step is not completed, all calls to this API will return responses with status code 403 Forbidden.
     
     ## Environments and testing
-    | API Environment      | NHS Login Environment | Base URL                                    |
-    | -------------------- | --------------------- | ------------------------------------------- |
+    | API Environment      | NHS Login Environment | Base URL                                        |
+    | -------------------- | --------------------- | ----------------------------------------------- |
     | Development          | Sandpit               | `https://dep.api.service.nhs.uk/nhs-app-dep/`   |
-    | Integration Testing  | Integration (AOS)     | `https://int.api.service.nhs.uk/nhs-app/`   |
-    | Production           | Production            | `https://api.service.nhs.uk/nhs-app/`       |
+    | Integration Testing  | Integration (AOS)     | `https://int.api.service.nhs.uk/nhs-app/`       |
+    | Production           | Production            | `https://api.service.nhs.uk/nhs-app/`           |
 
     ### Development
     Our development environment:

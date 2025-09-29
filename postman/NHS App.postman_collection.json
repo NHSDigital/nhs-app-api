@@ -26,7 +26,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -76,7 +76,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -175,7 +175,7 @@
 							"eval(pm.globals.get(\"jsrsasign-js\")); //import jsrsasign lib",
 							"",
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"oauth2/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"oauth2/\", \"oauth2-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}",
@@ -280,7 +280,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -353,7 +353,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -426,7 +426,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -499,7 +499,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -570,7 +570,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -646,7 +646,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
@@ -722,7 +722,7 @@
 					"script": {
 						"exec": [
 							"var baseNhsAppApiUrl = pm.environment.get(\"base_url\").toString()",
-							"//replace base url for sandpit(dev) enviornment which uses dep api proxy(nhs-app-dep-dev)",
+							"//replace base url for sandpit(dev) environment which uses dep api proxy(nhs-app-dep-dev)",
 							"if(baseNhsAppApiUrl.includes(\"dep.api\") && pm.request.url.toString().includes(\"nhs-app/\")){",
 							"    pm.request.url = pm.request.url.toString().replace(\"nhs-app/\", \"nhs-app-dep/\").replace(\"{{base_url}}\", baseNhsAppApiUrl);",
 							"}"
