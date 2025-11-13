@@ -13,7 +13,7 @@ APIGEE_ENVIRONMENTS:
   display_name: Internal QA
   make_spec_visible: true
 - name: dev
-  display_name: External Development
+  display_name: External Development DEP
   make_spec_visible: true
 - name: int
   display_name: Integration Testing
@@ -26,7 +26,7 @@ APIGEE_ENVIRONMENTS:
 - name: prod
   display_name: Production
   approval_type: manual
-  make_spec_visible: true 
+  make_spec_visible: true
   quota: 60000
   appQuota: 24000
 ---
@@ -42,7 +42,7 @@ apigee:
 {% for ENV in APIGEE_ENVIRONMENTS %}
 {% set TITLE = 'NHS App (' + ENV.display_name + ')' %}
 {% set DESCRIPTION = 'NHS App - ' + ENV.display_name | lower + ' environment' %}
-{% set NAME = 'nhs-app-' + ENV.name %}
+{% set NAME = 'nhs-app-' + ('dep-' if ENV.name == 'dev' else '') + ENV.name %}
   - name: {{ ENV.name }}
     products:
       - name: {{ NAME }}
@@ -68,8 +68,8 @@ apigee:
         displayName: {{ TITLE }}
         environments: [ {{ ENV.name }} ]
         proxies:
-          - nhs-app-{{ ENV.name }}
-          - identity-service-{{ ENV.name }}
+          - nhs-app-{{ ('dep-' if ENV.name == 'dev' else '') + ENV.name }}
+          - identity-service-{{ ('dep-' if ENV.name == 'dev' else '') + ENV.name}}
 {% if ENV.name == 'int' %}
           - identity-service-int-no-smartcard
 {% endif %}
