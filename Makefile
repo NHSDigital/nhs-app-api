@@ -34,7 +34,7 @@ check-licenses:
 format:
 	poetry run black **/*.py
 
-sandbox: update-examples
+sandbox: 
 	cd sandbox && npm run start
 
 build-proxy:

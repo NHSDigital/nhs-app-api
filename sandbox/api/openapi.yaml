@@ -8,8 +8,6 @@ info:
   license:
     name: MIT
   version: 1.0.0
-servers:
-- url: http://petstore.swagger.io
 tags:
 - name: createPets
 - name: listPets
@@ -17,6 +15,7 @@ tags:
 paths:
   /pets:
     get:
+      x-router-controller: petsController
       tags:
       - pets
       summary: List all pets
@@ -53,6 +52,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Pets
     post:
+      x-router-controller: petsController
       tags:
       - pets
       summary: Create a pet
@@ -69,6 +69,7 @@ paths:
       x-swagger-router-controller: Pets
   /pets/{petId}:
     get:
+      x-router-controller: petsController
       tags:
       - pets
       summary: Info for a specific pet
