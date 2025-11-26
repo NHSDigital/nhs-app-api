@@ -187,7 +187,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: components/schemas/requests/communication/communication-in-app.yaml
+              $ref: components/schemas/requests/communication/communication-in-app-request.yaml
             examples:
               app-message:
                 summary: Sending an in-app message
@@ -217,7 +217,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                $ref: components/schemas/responses/communication/communication-in-app.yaml
+                $ref: components/schemas/responses/communication/communication-in-app-response.yaml
               examples:
                 in-app:
                   summary: "In app message response without keyword reply"
@@ -371,7 +371,7 @@ paths:
                 value:
                   $ref: components/examples/requests/communication/notification.json
             schema:
-              $ref: components/schemas/requests/communication/communication-push-notifications.yaml
+              $ref: components/schemas/requests/communication/communication-push-notifications-request.yaml
       tags:
         - communication
       responses:
@@ -388,7 +388,7 @@ paths:
           content:
             application/fhir+json:
               schema:
-                $ref: components/schemas/responses/communication/communication-push-notifications.yaml
+                $ref: components/schemas/responses/communication/communication-push-notifications-response.yaml
               example:
                 $ref: components/examples/responses/communication/201successNotification.json
         "400":

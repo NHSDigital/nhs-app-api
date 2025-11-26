@@ -1,23 +1,36 @@
 'use strict';
 
-var path = require('path');
-var http = require('http');
+const path = require('path');
+const http = require('http');
+const express = require('express');
+const oasTools = require('oas-tools');
+const fs = require('node:fs');
 
-var oas3Tools = require('oas3-tools');
-var serverPort = 9000;
+const serverPort = 9000;
 
-// swaggerRouter configuration
-var options = {
-    controllers: path.join(__dirname, './controllers')
+const app = express();
+
+const config = {
+    oasFile: path.resolve(__dirname, 'api/openapi.yaml'),
+    controllers: path.resolve(__dirname, './controllers'),
+    loglevel: 'info',
+    docs: true   // Enable Swagger UI at /docs
 };
 
-var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
-expressAppConfig.addValidator();
-var app = expressAppConfig.getApp();
+console.log("Using OpenAPI file:", config.oasFile);
+console.log("Exists?", fs.existsSync(config.oasFile));
 
-// Initialize the Swagger middleware
-http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
-});
+try {
+    // Initialize oas-tools (returns app wrapper)
+    oasTools.initialize(app, config);
+
+    // Start server
+    http.createServer(app).listen(serverPort, () => {
+        console.log(`Server listening on http://localhost:${serverPort}`);
+        console.log(`Swagger UI available at http://localhost:${serverPort}/docs`);
+    });
+
+} catch (err) {
+    console.error("Failed to initialize oas-tools:", err);
+}
 
