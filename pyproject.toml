@@ -1,5 +1,5 @@
 [project]
-python = "^3.11"
+python = "^3.13"
 name = "nhs-app"
 
 [tool.poetry]
