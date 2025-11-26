@@ -1,0 +1,30 @@
+---
+name: Gitleaks_DefenderforCloud
+on:   # yamllint disable-line rule:truthy
+
+  workflow_dispatch:
+  schedule:
+    - cron: "0 22 * * *"    # every day 22:00 UTC
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+  pull-requests: read
+
+concurrency:
+  group: gitleaks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    uses: NHSDigital/nhsapp-github-migration-tools/.github/workflows/gitleaks_secret_scan.yml@main
+    secrets:
+      NHSAPP_GITLEAKS_LICENSE: ${{ secrets.NHSAPP_GITLEAKS_LICENSE }}
+  scan2:
+    needs: scan
+    if: always()
+    uses: NHSDigital/nhsapp-github-migration-tools/.github/workflows/gitleaks_defenderforcloud.yml@main
+    with:
+      artifact_name: gitleaks-results.sarif
+      # yamllint disable-line rule:new-line-at-end-of-file
+      sarif_path: results.sarif
