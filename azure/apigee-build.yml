@@ -1,0 +1,298 @@
+parameters:
+  - name: service_name
+    type: string
+  - name: short_service_name
+    type: string
+  - name: variables
+    type: object
+    default: []
+  - name: secret_file_ids
+    type: object
+    default: []
+  - name: secret_ids
+    type: object
+    default: []
+  - name: config_ids
+    type: object
+    default: []
+  - name: test_steps
+    type: stepList
+    default: []
+  - name: post_ecs_push
+    type: stepList
+    default: []
+  - name: notify
+    type: boolean
+    default: true
+  - name: cache_steps
+    type: stepList
+    default: []
+  - name: python_version
+    type: string
+    default: "3.8"
+  - name: agent_pool
+    type: string
+    default: "AWS-ECS"
+
+jobs:
+  - job: build
+    displayName: Build & Test
+    timeoutInMinutes: 30
+    pool:
+      name: ${{ parameters.agent_pool }}
+    workspace:
+      clean: all
+    variables:
+      ${{ each var in parameters.variables }}:
+        ${{ var.key }}: ${{ var.value }}
+    steps:
+
+      - bash: |
+          if [ ! -z "$(ls -A \"$(Pipeline.Workspace)/s/${{ parameters.service_name }}\" 2>/dev/null)" ]; then
+            echo "workspace directory is not empty!"
+            exit 1
+          fi
+        displayName: "check workspace is clean"
+
+      - bash: |
+          instance_id="$(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
+          echo instance-id: "${instance_id}"
+          echo connect to: https://eu-west-2.console.aws.amazon.com/systems-manager/session-manager/${instance_id}
+          echo sudo su - ubuntu
+          or
+          echo ssh ubuntu@${instance_id}
+          echo working directory: $(System.DefaultWorkingDirectory)
+        displayName: print aws info
+
+      - template: azure/components/aws-clean-config.yml@common
+
+      - ${{ if parameters.notify }}:
+        - template: azure/components/aws-assume-role.yml@common
+          parameters:
+            role: "auto-ops"
+            profile: "apm_ptl"
+
+        - template: azure/components/get-aws-secrets-and-ssm-params.yml@common
+          parameters:
+            secret_file_ids:
+              - ${{ each secret_file_id in parameters.secret_file_ids }}:
+                - ${{ secret_file_id }}
+            secret_ids:
+              - ptl/access-tokens/github/repo-status-update/GITHUB_ACCESS_TOKEN
+              - ${{ each secret_id in parameters.secret_ids }}:
+                - ${{ secret_id }}
+            config_ids:
+              - /ptl/azure-devops/GITHUB_USER
+              - ${{ each config_id in parameters.config_ids }}:
+                - ${{ config_id }}
+
+        - bash: |
+            echo "Build.SourceBranch: $(Build.SourceBranch)"
+            echo "Build.SourceBranchName: $(Build.SourceBranchName)"
+            echo "Build.SourceVersion: $(Build.SourceVersion)"
+            echo "Build.SourceVersionMessage: $(Build.SourceVersionMessage)"
+
+            if [[ ! -z $(NOTIFY_COMMIT_SHA) ]]; then
+                echo "##[debug]Using already provided NOTIFY_COMMIT_SHA=$(NOTIFY_COMMIT_SHA)"
+            else
+                NOTIFY_COMMIT_SHA=""
+
+                if [[ "$(Build.SourceBranch)" =~ ^refs/tags/.+$ ]]; then
+                    echo "##[debug]Build appears to be a tag build"
+                    echo "##[debug]Using Build.SourceVersion as NOTIFY_COMMIT_SHA"
+                    NOTIFY_COMMIT_SHA="$(Build.SourceVersion)"
+                fi
+
+                if [[ "$(Build.SourceBranch)" =~ ^refs/pull/.+$ ]]; then
+                    echo "##[debug]Build appears to be a pull request build"
+                    echo "##[debug]Extracting NOTIFY_COMMIT_SHA from Build.SourceVersionMessage"
+                    NOTIFY_COMMIT_SHA=`echo "$(Build.SourceVersionMessage)" | cut -d' ' -f2`
+                fi
+
+                if [[ -z $NOTIFY_COMMIT_SHA ]]; then
+                    echo "##[debug]Build does not appear to be pull or tag build"
+                    echo "##[debug]Using Build.SourceVersion as NOTIFY_COMMIT_SHA"
+                    NOTIFY_COMMIT_SHA="$(Build.SourceVersion)"
+                fi
+
+                echo "##vso[task.setvariable variable=NOTIFY_COMMIT_SHA]$NOTIFY_COMMIT_SHA"
+            fi
+          displayName: Set NOTIFY_COMMIT_SHA
+          condition: always()
+
+        - template: 'azure/components/update-github-status.yml@common'
+          parameters:
+            state: pending
+            description: "Build started"
+
+      - bash: |
+          if [[ ! -z $(UTILS_PR_NUMBER) ]]; then
+            echo "##[debug]Triggered from utils repository, PR_NUMBER=$(UTILS_PR_NUMBER)"
+            echo "##vso[task.setvariable variable=PR_NUMBER]$(UTILS_PR_NUMBER)"
+          else
+            echo "##[debug]PR_NUMBER=$(System.PullRequest.PullRequestNumber)"
+            echo "##vso[task.setvariable variable=PR_NUMBER]$(System.PullRequest.PullRequestNumber)"
+          fi
+        displayName: Set PR_NUMBER
+
+      - checkout: self
+        path: "s/${{ parameters.service_name }}"
+        submodules: true
+
+      - template: azure/templates/setup-build-name.yml@common
+        parameters:
+          service_name: "${{ parameters.service_name }}"
+
+      - bash: |
+          PATCH=$(curl -s https://api.github.com/repos/actions/python-versions/releases \
+          | jq -r '[.[] | .tag_name | select(startswith("3.13"))] | .[]' \
+          | sort -V | tail -n 1 | cut -d- -f1)
+          echo "Resolved latest python version: $PATCH"
+          echo "##vso[task.setvariable variable=LD_LIBRARY_PATH;]/agent/_work/_tool/Python/${PATCH}/x64/lib/"
+        displayName: "Query and set python tool cache path"
+
+      - task: UsePythonVersion@0
+        displayName: "Use Python ${{ parameters.python_version }}"
+        inputs:
+          versionSpec: ${{ parameters.python_version }}
+
+      - ${{ each cache_step in parameters.cache_steps }}:
+          - ${{ cache_step }}
+
+      - bash: |
+          n=0
+          until [ "$n" -ge 3 ]
+          do
+            make install && break
+            n=$((n+1))
+          done
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: Install project dependencies
+
+      - bash: "make lint"
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: Lint
+
+      - ${{ each test_step in parameters.test_steps }}:
+          - ${{ test_step }}
+
+      - bash: "make publish"
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: Compile spec
+
+      - bash: "make release"
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: Build release package
+
+      - bash: |
+          if [[ -f ecs-proxies-containers.yml ]]; then
+            echo "##vso[task.setvariable variable=build_containers]true"
+          else
+            echo "##vso[task.setvariable variable=build_containers]false"
+          fi
+        workingDirectory: ${{ parameters.service_name }}
+        displayName: "Check for ECS proxy"
+
+      - checkout: common
+        path: "s/${{ parameters.service_name }}/utils"
+
+      - task: s3-cache-action@1
+        inputs:
+          key: poetry | $(System.DefaultWorkingDirectory) | ${{ parameters.service_name }}/utils/poetry.lock
+          location: "${{ parameters.service_name }}/utils/.venv"
+          debug: true
+          alias: 'Utils'
+        displayName: cache utils dependencies
+
+      - bash: |
+            make install
+            sleep 5
+        workingDirectory: "${{ parameters.service_name }}/utils"
+        condition: ne(variables['CacheRestored-Utils'], 'true')
+        displayName: "Install utils "
+
+      - bash: |
+          export out_dir="$(realpath ${{ parameters.service_name }}/dist)"
+          export commit_hash="$(git -C ${{ parameters.service_name }} rev-parse --short HEAD)"
+          # sha prefix is required docker gets upset if names contain -0 iirc
+          export build_label="$(Build.BuildId)-sha${commit_hash}"
+          export pr_number="$(PR_NUMBER)"
+          export service_name="${{ parameters.service_name }}"
+          export service_id="${{ parameters.short_service_name }}"
+          export ANSIBLE_FORCE_COLOR=yes
+          make --no-print-directory -C ${{ parameters.service_name }}/utils/ansible create-build-env-vars
+        displayName: output build env vars for artifact
+        condition: and(succeeded(), eq(variables['build_containers'], 'true'))
+
+      - bash: |
+          tfenv use 0.14.6
+        displayName: use terraforn
+        condition: and(succeeded(), eq(variables['build_containers'], 'true'))
+
+      - bash: |
+          source "${{ parameters.service_name }}/dist/.build_env_vars"
+          account=ptl make --no-print-directory -C ${{ parameters.service_name }}/utils/ansible create-ecr-build-role
+          echo "##vso[task.setvariable variable=BUILD_ROLE]build-${service_id}"
+        displayName: "ensure build role"
+        condition: and(succeeded(), eq(variables['build_containers'], 'true'))
+
+      - template: azure/components/aws-assume-role.yml@common
+        parameters:
+          role: "$(BUILD_ROLE)"
+          profile: "$(BUILD_ROLE)"
+
+      - bash: |
+          source "${{ parameters.service_name }}/dist/.build_env_vars"
+          CONTAINER_VARS_FILE="$(realpath ${{ parameters.service_name }}/ecs-proxies-containers.yml)" \
+          make --no-print-directory -C ${{ parameters.service_name }}/utils/ansible build-ecs-proxies
+        displayName: "Build and push ECS proxies"
+        condition: and(succeeded(), eq(variables['build_containers'], 'true'))
+
+      - ${{ each post_ecs_push in parameters.post_ecs_push }}:
+          - ${{ post_ecs_push }}
+
+      - bash: |
+          cp ${{ parameters.service_name }}/ecs-*.yml ${{ parameters.service_name }}/dist || true
+        displayName: "Copy ecs-proxies-deploy configs into build artifact"
+        condition: and(succeeded(), eq(variables['build_containers'], 'true'))
+
+      - bash: |
+          rsync -a utils dist --exclude .venv
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: "Copy utils into artifact"
+
+      - bash: |
+          set -euo pipefail
+          export DIST_DIR=`pwd`/dist
+          export ANSIBLE_FORCE_COLOR=yes
+          if [ -f manifest.yml ]; then
+             rsync -a manifest.yml dist
+             make -C utils/ansible validate-manifest
+          elif [ -f manifest_template.yml ]; then
+             rsync -a manifest_template.yml dist
+             make -C utils/ansible template-manifest
+             make -C utils/ansible validate-manifest
+          fi
+        workingDirectory: "${{ parameters.service_name }}"
+        displayName: "Validate manifest (template) and copy to artifact"
+
+      - bash: |
+          cd ${{ parameters.service_name }}/utils
+          git rev-parse HEAD > ../dist/.utils-version
+        displayName: Snapshot utils version
+
+      - publish: ${{ parameters.service_name}}/dist
+        artifact: "$(Build.BuildNumber)"
+
+      - ${{ if parameters.notify }}:
+        - template: 'azure/components/update-github-status.yml@common'
+          parameters:
+            state: success
+            on_success: true
+            description: "Build succeeded"
+
+        - template: 'azure/components/update-github-status.yml@common'
+          parameters:
+            state: failure
+            on_failure: true
+            description: "Build failed"

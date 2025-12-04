@@ -22,8 +22,9 @@ resources:
 
 variables:
   - template: project.yml
+
 extends:
-  template: azure/common/apigee-build.yml@common
+  template: apigee-build.yml
   parameters:
     python_version: 3.13
     service_name: ${{ variables.service_name }}
