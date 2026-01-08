@@ -25,6 +25,6 @@ variables:
 extends:
   template: azure/common/apigee-build.yml@common
   parameters:
-    python_version: 3.10
+    python_version: 3.13
     service_name: ${{ variables.service_name }}
     short_service_name: ${{ variables.short_service_name }}
