@@ -1,0 +1,16 @@
+---
+
+name: DevSecOps Security Scan
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:  # manual trigger only
+  schedule:
+    - cron: "0 22 * * *"    # every day 22:00 UTC
+permissions:
+  contents: read
+  actions: read
+  id-token: write  # Required for Defender for Cloud publishing
+  security-events: write
+jobs:
+  scan:
+    uses: NHSDigital/nhsapp-devsecops/.github/workflows/devsecops_security_scan_template.yml@develop
