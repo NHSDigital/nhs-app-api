@@ -37,6 +37,12 @@ steps:
       zipAfterPublish: false
       arguments: "--configuration Release -o Publish"
 
+  - task: Bash@3
+    displayName: Allow deployment to settle
+    inputs:
+      targetType: 'inline'
+      script: sleep 120s
+
   - task: DotNetCoreCLI@2
     displayName: Execute integration tests
     inputs:
