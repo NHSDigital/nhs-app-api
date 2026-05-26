@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.DataContracts;
 using Nhs.App.Api.Integration.Tests.Services.AccessTokenService;
 
 namespace Nhs.App.Api.Integration.Tests.Services
@@ -69,6 +70,10 @@ namespace Nhs.App.Api.Integration.Tests.Services
             {
                 request.Headers.Add("X-Correlation-ID", correlationId);
             }
+
+            Console.WriteLine("NhsAppApiJwtWrapperClient.SendAsync: baseAddress := " + BaseAddress +
+                              ", Headers := " + request.Headers +
+                              ", requestUri := " + request.RequestUri);
 
             return await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }
