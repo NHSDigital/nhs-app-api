@@ -3,6 +3,12 @@ update_configs:
   - package_manager: "javascript"
     directory: "/"
     update_schedule: "live"
+    schedule:
+        interval: "weekly"
+    groups:
+        all-dependencies:
+            patterns:
+                - "*"
     automerged_updates:
       - match:
           dependency_type: "all"
@@ -10,6 +16,12 @@ update_configs:
   - package_manager: "javascript"
     directory: "/sandbox"
     update_schedule: "live"
+    schedule:
+        interval: "weekly"
+    groups:
+        all-dependencies:
+            patterns:
+                - "*"
     automerged_updates:
       - match:
           dependency_type: "all"
@@ -17,6 +29,12 @@ update_configs:
   - package_manager: "python"
     directory: "/"
     update_schedule: "live"
+    schedule:
+        interval: "weekly"
+    groups:
+        all-dependencies:
+            patterns:
+                - "*"
     automerged_updates:
       - match:
           dependency_type: "all"
