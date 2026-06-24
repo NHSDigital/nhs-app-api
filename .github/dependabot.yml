@@ -1,41 +1,35 @@
-version: 1
-update_configs:
-  - package_manager: "javascript"
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
     directory: "/"
-    update_schedule: "live"
+    commit-message:
+      prefix: "DPDB: "
     schedule:
-        interval: "weekly"
+      interval: "weekly"
     groups:
-        all-dependencies:
-            patterns:
-                - "*"
-    automerged_updates:
-      - match:
-          dependency_type: "all"
-          update_type: "security:patch"
-  - package_manager: "javascript"
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
     directory: "/sandbox"
-    update_schedule: "live"
+    commit-message:
+      prefix: "DPDB: "
     schedule:
-        interval: "weekly"
+      interval: "weekly"
     groups:
-        all-dependencies:
-            patterns:
-                - "*"
-    automerged_updates:
-      - match:
-          dependency_type: "all"
-          update_type: "security:patch"
-  - package_manager: "python"
+      all-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pip"
     directory: "/"
-    update_schedule: "live"
+    commit-message:
+      prefix: "DPDB: "
     schedule:
-        interval: "weekly"
+      interval: "weekly"
     groups:
-        all-dependencies:
-            patterns:
-                - "*"
-    automerged_updates:
-      - match:
-          dependency_type: "all"
-          update_type: "security:patch"
+      all-dependencies:
+        patterns:
+          - "*"
