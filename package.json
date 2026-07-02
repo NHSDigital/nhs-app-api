@@ -12,6 +12,6 @@
   "license": "MIT",
   "homepage": "https://github.com/NHSDigital/nhs-app",
   "dependencies": {
-    "@redocly/cli": "^2.34.0"
+    "@redocly/cli": "^2.36.0"
   }
 }
