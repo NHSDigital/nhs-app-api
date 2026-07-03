@@ -13,4 +13,4 @@ permissions:
   security-events: write
 jobs:
   scan:
-    uses: NHSDigital/nhsapp-devsecops/.github/workflows/devsecops_security_scan_template.yml@develop
+    uses: NHSDigital/nhsapp-devsecops/.github/workflows/devsecops_security_scan_template.yml@b8dc1471a8a9e4e86bec06322c43668762c6b5b9
