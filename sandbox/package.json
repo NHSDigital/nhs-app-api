@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "connect": "^3.2.0",
-    "js-yaml": "^5.2.0",
+    "js-yaml": "^5.2.1",
     "oas-tools": "^3.1.0"
   }
 }
