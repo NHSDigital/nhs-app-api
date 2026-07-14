@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
-const http = require('http');
+const path = require('node:path');
+const http = require('node:http');
 const express = require('express');
 const oasTools = require('oas-tools');
 const fs = require('node:fs');

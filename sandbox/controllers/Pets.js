@@ -8,8 +8,8 @@ module.exports.createPets = function createPets (req, res, next) {
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error_) {
+      utils.writeJson(res, error_);
     });
 };
 
@@ -18,8 +18,8 @@ module.exports.listPets = function listPets (req, res, next, limit) {
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error_) {
+      utils.writeJson(res, error_);
     });
 };
 
@@ -28,7 +28,7 @@ module.exports.showPetById = function showPetById (req, res, next, petId) {
     .then(function (response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
-      utils.writeJson(res, response);
+    .catch(function (error_) {
+      utils.writeJson(res, error_);
     });
 };
