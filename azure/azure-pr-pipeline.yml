@@ -43,9 +43,3 @@ extends:
       - environment: internal-dev
         post_deploy:
           - template: ./templates/run-integration-tests.yml
-            parameters:
-              working_directory: $(Pipeline.Workspace)/s
-              test_folder_path: $(Pipeline.Workspace)/s/${{ variables.service_name }}/$(SERVICE_ARTIFACT_NAME)/tests
-              target_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/$(SERVICE_BASE_PATH)/
-              token_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/oauth2/token
-              private_key_file_path: $(Pipeline.Workspace)/secrets/$(JWT_TESTING_PRIVATE_KEY)
