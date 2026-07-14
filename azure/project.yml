@@ -2,3 +2,8 @@ variables:
   service_name: nhs-app
   short_service_name: nhsa
   service_base_path: nhs-app
+  WorkingDir: $(Pipeline.Workspace)/s
+  TargetUrl: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/$(SERVICE_BASE_PATH)/
+  TokenUrl: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/oauth2/token
+  TestFolderPath: $(Pipeline.Workspace)/s/${{ variables.service_name }}/$(SERVICE_ARTIFACT_NAME)/tests
+  PrivateKeyFilePath: $(Pipeline.Workspace)/secrets/$(JWT_TESTING_PRIVATE_KEY)
