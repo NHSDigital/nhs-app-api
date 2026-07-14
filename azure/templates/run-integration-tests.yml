@@ -10,6 +10,13 @@ parameters:
   - name: private_key_file_path
     type: string
 
+variables:
+  WorkingDir: ${{ parameters.working_directory }}
+  TargetUrl: ${{ parameters.target_url }}
+  TokenUrl: ${{ parameters.token_url }}
+  TestFolderPath: ${{ parameters.test_folder_path }}
+  PrivateKeyFilePath: ${{ parameters.private_key_file_path }}
+
 steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk'
@@ -22,9 +29,9 @@ steps:
     displayName: dotnet restore
     inputs:
       command: restore
-      projects: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
+      projects: '$(TestFolderPath)/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
       feedsToUse: 'config'
-      nugetConfigPath: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nuget.config'
+      nugetConfigPath: '$(TestFolderPath)/Nhs.App.Api.Integration.Tests/Nuget.config'
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
@@ -32,7 +39,7 @@ steps:
     inputs:
       command: 'publish'
       version: '5.0.x'
-      projects: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
+      projects: '$(TestFolderPath)/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
       publishWebProjects: false
       zipAfterPublish: false
       arguments: "--configuration Release -o Publish"
@@ -43,21 +50,21 @@ steps:
       command: 'custom'
       custom: vstest
       arguments: >
-        ${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.dll
-        --logger:"trx;LogFileName=${{ parameters.working_directory }}/IntegrationTests/Tests.trx"
-        --settings:${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/test.runsettings
+        $(WorkingDir)/Publish/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.dll
+        --logger:"trx;LogFileName=$(WorkingDir)/IntegrationTests/Tests.trx"
+        --settings:$(WorkingDir)/Publish/Nhs.App.Api.Integration.Tests/test.runsettings
         -- TestRunParameters.Parameter(name="\""ApigeeApiKey"\"",value="\""$(CLIENT_ID)"\"")
-        -- TestRunParameters.Parameter(name="\""ApplicationUrl"\"",value="\""${{ parameters.target_url }}"\"")
-        -- TestRunParameters.Parameter(name="\""TokenEndpoint"\"",value="\""${{ parameters.token_url }}"\"")
+        -- TestRunParameters.Parameter(name="\""ApplicationUrl"\"",value="\""$(TargetUrl)"\"")
+        -- TestRunParameters.Parameter(name="\""TokenEndpoint"\"",value="\""$(TokenUrl)"\"")
         -- TestRunParameters.Parameter(name="\""IssuerKey"\"",value="\""$(JWT_TESTING_API_KEY)"\"")
-        -- TestRunParameters.Parameter(name="\""PrivateKeyFilePath"\"",value="\""${{ parameters.private_key_file_path }}"\"")
+        -- TestRunParameters.Parameter(name="\""PrivateKeyFilePath"\"",value="\""$(PrivateKeyFilePath)"\"")
         -- TestRunParameters.Parameter(name="\""KidValue"\"",value="\"test-1\"")
 
   - task: PublishTestResults@2
-    displayName: 'Publish Test Results ${{ parameters.working_directory }}/IntegrationTests/Tests.trx'
+    displayName: 'Publish Test Results $(WorkingDir)/IntegrationTests/Tests.trx'
     inputs:
       testResultsFormat: VSTest
-      testResultsFiles: '${{ parameters.working_directory }}/IntegrationTests/Tests.trx'
+      testResultsFiles: '$(WorkingDir)/IntegrationTests/Tests.trx'
       mergeTestResults: true
       testRunTitle: 'Integration Tests'
     continueOnError: true
