@@ -32,7 +32,7 @@ gitpython = "^3.1.41"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^7.3.0"
-black = "^26.5"
+black = "^26.10"
 pip-licenses = "^5.5.5"
 jinja2 = "^3.1.5"
 
