@@ -28,7 +28,13 @@ jobs:
 
       - name: Install node
         run: |
-          curl --proto "=https" --tlsv1.2 -sSf -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo mkdir -p /etc/apt/keyrings
+
+          curl --proto "=https" --tlsv1.2 -sSf -L https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor --yes -o /etc/apt/keyrings/google-linux.gpg
+          sudo chmod 644 /etc/apt/keyrings/google-linux.gpg
+          echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-linux.gpg] https://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt update
+
           curl --proto "=https" --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_24.x | sudo -E bash -
           sudo apt-get install -y nodejs
 
