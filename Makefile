@@ -7,7 +7,6 @@ install-python:
 
 install-node:
 	npm install --legacy-peer-deps
-	cd sandbox && npm install --legacy-peer-deps
 
 install-hooks:
 	cp scripts/pre-commit .git/hooks/pre-commit
@@ -34,9 +33,6 @@ check-licenses:
 format:
 	poetry run black **/*.py
 
-sandbox: 
-	cd sandbox && npm run start
-
 build-proxy:
 	scripts/build_proxy.sh
 
@@ -44,9 +40,6 @@ release: clean publish build-proxy
 	mkdir -p dist
 	cp -r build/. dist
 	cp -r tests dist
-	cp ecs-proxies-deploy.yml dist/ecs-deploy-sandbox.yml
-	cp ecs-proxies-deploy.yml dist/ecs-deploy-internal-qa-sandbox.yml
-	cp ecs-proxies-deploy.yml dist/ecs-deploy-internal-dev-sandbox.yml
 
 test:
 	echo "TODO: add tests"
