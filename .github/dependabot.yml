@@ -12,17 +12,6 @@ updates:
         patterns:
           - "*"
 
-  - package-ecosystem: "npm"
-    directory: "/sandbox"
-    commit-message:
-      prefix: "DPDB: "
-    schedule:
-      interval: "weekly"
-    groups:
-      all-dependencies:
-        patterns:
-          - "*"
-
   - package-ecosystem: "pip"
     directory: "/"
     commit-message:

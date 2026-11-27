@@ -1,7 +1,0 @@
-<TargetEndpoint name="sandbox">
-  <FaultRules/>
-  <PreFlow/>
-  <HTTPTargetConnection>
-    {{ HOSTED_TARGET_CONNECTION }}
-  </HTTPTargetConnection>
-</TargetEndpoint>

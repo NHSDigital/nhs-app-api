@@ -98,8 +98,8 @@ Update the API Specification and derived documentation in the Portal.
 * `APIGEE_SPEC_ID`
 * `APIGEE_PORTAL_API_ID`
 
-### API Proxy & Sandbox Service
-Redeploy the API Proxy and hosted Sandbox service.
+### API Proxy
+Redeploy the API Proxy
 
 `make deploy-proxy` with environment variables:
 
@@ -119,5 +119,3 @@ Successful deployment of the API Proxy requires:
  1. A *Target Server* named `nhs-app-target`
  2. A *Key-Value Map* named `nhsa-variables`, containing any values you might need at proxy runtime
  2. A *Key-Value Map* named `nhsa-variables-encrypted`, containing any secrets you might need at proxy runtime
-
-:bulb: For Sandbox-running environments (`test`) these need to be present for successful deployment but can be set to empty/dummy values.
